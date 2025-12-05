@@ -89,8 +89,7 @@ def _iter_json_records(path: Path) -> Iterator[Mapping[str, Any]]:
                     data = json.load(f)
                 except json.JSONDecodeError as e:
                     raise ValueError(
-                        "Failed to parse Wikidata dump as JSON or NDJSON: "
-                        f"{path}"
+                        "Failed to parse Wikidata dump as JSON or NDJSON: " f"{path}"
                     ) from e
 
                 if isinstance(data, list):

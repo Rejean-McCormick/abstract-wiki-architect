@@ -51,12 +51,8 @@ class TransitiveEventConstruction(BaseConstruction):
         morph_api: Any,
     ) -> str:
         # 1. Realize Core Arguments
-        subject_surface = self._realize_np(
-            slots.get("subject"), "subject", morph_api
-        )
-        object_surface = self._realize_np(
-            slots.get("object"), "object", morph_api
-        )
+        subject_surface = self._realize_np(slots.get("subject"), "subject", morph_api)
+        object_surface = self._realize_np(slots.get("object"), "object", morph_api)
 
         # 2. Realize Verb
         # We pass the subject surface or features if the morph engine needs
@@ -92,12 +88,7 @@ class TransitiveEventConstruction(BaseConstruction):
     # Helpers
     # ------------------------------------------------------------------ #
 
-    def _realize_np(
-        self,
-        np_spec: Optional[NPInput],
-        role: str,
-        morph_api: Any
-    ) -> str:
+    def _realize_np(self, np_spec: Optional[NPInput], role: str, morph_api: Any) -> str:
         if not np_spec:
             return ""
 

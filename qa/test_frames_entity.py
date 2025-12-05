@@ -79,7 +79,7 @@ def test_entity_family_members_are_canonical_and_ordered() -> None:
         # 20. Project / program / initiative frame
         "entity.project_or_program",
         # 21. Fictional entity / universe / franchise frame
-        "entity.fictional",
+        "entity.fictional_entity",
     ]
 
     entity_types = FRAME_FAMILIES["entity"]

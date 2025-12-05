@@ -105,7 +105,9 @@ def test_timeline_chronology_basic_construction() -> None:
 
     entries = [
         TimelineEntry(event=birth, label="Born", phase="early_life", salience=1.0),
-        TimelineEntry(event=award, label="Receives major award", phase="career", salience=0.8),
+        TimelineEntry(
+            event=award, label="Receives major award", phase="career", salience=0.8
+        ),
     ]
 
     frame = TimelineChronologyFrame(
@@ -262,7 +264,7 @@ def test_reception_impact_basic() -> None:
         extra={"notes": "Test frame"},
     )
 
-    assert frame.frame_type == "reception-impact"
+    assert frame.frame_type == "aggregate.reception"
     assert frame.subject_id == "W1"
     assert len(frame.critical_reception) == 1
     assert frame.critical_reception[0].attributes["rating"] == 4.8
@@ -271,7 +273,7 @@ def test_reception_impact_basic() -> None:
     assert frame.awards[0].event_type == "award"
 
     data = asdict(frame)
-    assert data["frame_type"] == "reception-impact"
+    assert data["frame_type"] == "aggregate.reception"
     assert isinstance(data["impact_domains"], list)
 
 

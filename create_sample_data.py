@@ -10,7 +10,7 @@ data = {
     "name": "Marie Curie",
     "gender": "female",
     "profession": "physicist",
-    "nationality": "polish"
+    "nationality": "polish",
 }
 
 with open("data/samples/marie_curie.json", "w", encoding="utf-8") as f:

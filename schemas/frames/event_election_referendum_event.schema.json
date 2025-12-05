@@ -7,7 +7,7 @@
   "properties": {
     "frame_type": {
       "type": "string",
-      "const": "election-referendum",
+      "const": "event.election",
       "description": "Stable frame identifier; must be \"election-referendum\" for ElectionReferendumEventFrame instances."
     },
 

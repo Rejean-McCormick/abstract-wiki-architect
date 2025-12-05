@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Abstract Wikipedia Frame Schema — Entity: Fictional Entity",
-  "description": "JSON shape for the entity-level fictional entity frame, used for fictional characters, settings, universes, and franchises in encyclopedic lead sentences and short summaries. It corresponds to the 'fictional-entity' family in the frame inventory and the semantics/entity/fictional_entity_frame.py model.",
+  "description": "JSON shape for the entity-level fictional entity frame, used for fictional characters, settings, universes, and franchises in encyclopedic lead sentences and short summaries. It corresponds to the 'entity.fictional_entity' family in the frame inventory and the semantics/entity/fictional_entity_frame.py model.",
   "type": "object",
   "additionalProperties": false,
   "required": [

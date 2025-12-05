@@ -168,7 +168,9 @@ class RomanceMorphology:
         impure_triggers = self._phonetics.get("impure_triggers", []) or []
         if impure_triggers:
             is_s_consonant = (
-                word.startswith("s") and len(word) > 1 and word[1] not in _ROMANCE_VOWELS
+                word.startswith("s")
+                and len(word) > 1
+                and word[1] not in _ROMANCE_VOWELS
             )
 
             # any other clusters like z-, gn-, ps-, etc.

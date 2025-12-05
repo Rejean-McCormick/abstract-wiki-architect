@@ -160,7 +160,7 @@ def test_ownership_control_frame_basic_construction() -> None:
     # Optional quantitative fields default to None
     assert frame.ownership_share_pct is None
     # The frame discriminator for routing
-    assert frame.frame_type == "ownership-control"
+    assert frame.frame_type == "relation.ownership"
 
 
 def test_ownership_control_frame_with_share() -> None:
@@ -283,5 +283,3 @@ def test_temporal_relation_frame_basic() -> None:
     assert frame.left_time is left_event.time
     assert frame.right_time is right_event.time
     assert frame.certainty == pytest.approx(1.0)
-
-

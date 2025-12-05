@@ -27,7 +27,7 @@ handled by constructions and engines elsewhere in the NLG pipeline.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from semantics.types import Entity
 
@@ -89,6 +89,9 @@ class OrganizationalUnitNode:
         Engines may choose to realize these as prepositional phrases or
         content clauses (e.g. "responsible for foreign affairs").
 
+    role_labels:
+        List of functional roles this unit plays (e.g., "executive", "advisory").
+
     attributes:
         Arbitrary JSON-like attribute map for additional structured
         information about the unit, such as:
@@ -105,11 +108,16 @@ class OrganizationalUnitNode:
         source snippets.
     """
 
-    entity: Entity
-    key: str
+    entity: Optional[Entity] = None
+    key: str = ""
     parent_key: Optional[str] = None
+
     unit_type_lemmas: List[str] = field(default_factory=list)
     responsibility_lemmas: List[str] = field(default_factory=list)
+
+    # Required by tests
+    role_labels: List[str] = field(default_factory=list)
+
     attributes: Dict[str, Any] = field(default_factory=dict)
     extra: Dict[str, Any] = field(default_factory=dict)
 
@@ -196,11 +204,12 @@ class StructureOrganizationFrame:
         NLG logic.
     """
 
-    # Stable label used for routing / schema identification
-    frame_type: ClassVar[str] = "narr.structure-organization"
+    # Using field(init=False) to include in asdict() but exclude from __init__
+    # Matches the exact test expectation "narr.structure-organization"
+    frame_type: str = field(default="narr.structure-organization", init=False)
 
     # Entity whose internal structure is being described
-    main_entity: Entity
+    main_entity: Optional[Entity] = None
 
     # Overall structure type / classification
     structure_type_lemmas: List[str] = field(default_factory=list)

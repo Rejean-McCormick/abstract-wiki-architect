@@ -1,4 +1,5 @@
-# Event Frames (`frame_type = "event"`)
+
+# Event frames (frame_type family `event.*`)
 
 Event frames represent single events or episodes in time: things that happen to entities, at a time and optionally in a place, with some additional properties.
 
@@ -8,10 +9,13 @@ Event frames are used:
 * as standalone frames for historical events, discoveries, matches, etc.,
 * as building blocks for timelines and richer narrative structures.
 
-At runtime, the concrete Python type is `semantics.types.Event`.
+At runtime, the core generic event type is `semantics.types.Event`.  
 In the public NLG API, this is aliased as `EventFrame`.
 
-> Implementation status: the `event` pipeline and `generate_event` helper are wired at the API level but do not yet have a dedicated engine; callers should expect placeholder/empty output until an event engine is implemented.
+The canonical registry key for the generic event frame is `frame_type = "event.generic"`.  
+Other event-family frames (e.g. `event.life`, `event.historical`, `event.sports`) are thin specializations that reuse the same underlying `Event` structure.
+
+> Implementation status: the event-family frames (`event.*`) and the `generate_event` helper are wired at the API level but do not yet have a dedicated engine; callers should expect placeholder/empty output until an event engine is implemented.
 
 ---
 
@@ -19,7 +23,7 @@ In the public NLG API, this is aliased as `EventFrame`.
 
 ### 1.1 Runtime types
 
-Core types:
+Core semantic types:
 
 * `semantics.types.Entity`
 * `semantics.types.TimeSpan`
@@ -27,20 +31,25 @@ Core types:
 * `semantics.types.Event`
 * `semantics.types.BioFrame` (which embeds `Event` for birth/death/other-events)
 
+Event-family wrappers and specializations (non-exhaustive):
+
+* `semantics.event.life_event_frame.LifeEventFrame` – biographical life events (`frame_type = "event.life"`).
+* Other high-level event frames under `semantics.event.*` (historical, scientific milestone, sports, etc.) that either subclass `Event` or contain one or more `Event` instances as their core episodes.
+
 Exported via `nlg.semantics`:
 
 ```python
 from nlg.semantics import EventFrame  # alias for semantics.types.Event
-```
+````
 
 ### 1.2 Frontend API
 
 Frontend helpers:
 
 * `nlg.api.generate_event(lang: str, event: EventFrame, ...)`
-* Generic `nlg.api.generate(lang: str, frame: Frame, ...)` with `frame_type="event"`.
+* Generic `nlg.api.generate(lang: str, frame: Frame, ...)` with any event-family frame (i.e. `frame_type` starting with `"event."`, such as `"event.generic"`).
 
-`EventFrame` satisfies the `Frame` protocol via its `frame_type` field.
+`EventFrame` participates in the common `Frame` protocol via the frame-type registry; its canonical key in the registry is `"event.generic"`.
 
 ---
 
@@ -53,10 +62,12 @@ The semantic event object has the following fields (Python-level):
 * `id: Optional[str]`
 
   * Stable identifier for the event, if available (e.g. a Wikidata QID, timeline ID, or local ID).
+
 * `event_type: str`
 
   * High-level label for the event, e.g. `"birth"`, `"death"`, `"discovery"`, `"award"`, `"generic"`.
   * Inventory is intentionally open; projects can define their own controlled vocabularies.
+
 * `participants: dict[str, Entity]`
 
   * Mapping from role label to `Entity`.
@@ -69,15 +80,19 @@ The semantic event object has the following fields (Python-level):
         "beneficiary": Entity(...),
     }
     ```
+
 * `time: TimeSpan | None`
 
   * Optional time span describing when the event occurred.
+
 * `location: Location | None`
 
   * Optional location where the event took place.
+
 * `properties: dict[str, Any]`
 
   * Arbitrary additional semantic properties (instrument, manner, cause, etc.).
+
 * `extra: dict[str, Any]`
 
   * Arbitrary metadata (original source structures, debug info, etc.).
@@ -98,11 +113,11 @@ All three are designed to be tolerant of partial data and to accept additional u
 
 ### 3.1 Top-level shape
 
-The canonical JSON shape for an event frame (as seen by external callers, CLI, or bridges) is:
+The canonical JSON shape for a *generic* event frame (as seen by external callers, CLI, or bridges) is:
 
 ```json
 {
-  "frame_type": "event",
+  "frame_type": "event.generic",
 
   "id": "E1",
   "event_type": "birth",
@@ -145,7 +160,7 @@ The canonical JSON shape for an event frame (as seen by external callers, CLI, o
 Required top-level keys:
 
 * `frame_type`
-  Must be `"event"` so that CLI and routing layers select the right schema.
+  Must be an event-family key (string starting with `"event."`), typically `"event.generic"` for bare `Event` instances. Other specializations such as `"event.life"` reuse the same underlying fields.
 
 Optional but strongly recommended:
 
@@ -274,21 +289,27 @@ Core roles:
 * `subject`
 
   * Main entity the event is “about” (often the grammatical subject).
+
 * `agent`
 
   * Deliberate initiator of the action (if different from `subject`).
+
 * `patient`
 
   * Entity that undergoes change; roughly the thing affected.
+
 * `theme`
 
   * Entity that is moved, transferred, or discussed.
+
 * `recipient`
 
   * Entity that receives something.
+
 * `beneficiary`
 
   * Entity that benefits from the event.
+
 * `co_participant`
 
   * Entity that participates symmetrically with the subject (e.g. marriage partner, co-author).
@@ -321,6 +342,8 @@ Guidelines:
 
 `event_type` is an open string field. This section recommends a small shared inventory with suggested minimal slots. Projects may extend it as needed.
 
+The recommendations below apply both to bare `Event` instances (`frame_type: "event.generic"`) and to families that embed an `Event` in a field like `main_event` (e.g. scientific milestones, historical events, life events).
+
 ### 5.1 Biographical core
 
 Recommended event types for biographies:
@@ -330,41 +353,49 @@ Recommended event types for biographies:
   * Required:
 
     * `participants.subject` (entity being born)
+
   * Recommended:
 
     * `time` (date of birth)
     * `location` (place of birth)
     * `properties.parents` (list of entities)
+
 * `"death"`
 
   * Required:
 
     * `participants.subject`
+
   * Recommended:
 
     * `time` (date of death)
     * `location` (place of death)
     * `properties.cause` (string or entity)
+
 * `"appointment"`
 
   * Required:
 
     * `participants.subject` (appointee)
     * `properties.position` (entity or string)
+
   * Recommended:
 
     * `participants.organization` (employer/body)
     * `time` (start date)
+
 * `"award"`
 
   * Required:
 
     * `participants.recipient`
     * `properties.award` (entity or string)
+
   * Recommended:
 
     * `time`
     * `participants.organization` (awarding body)
+
 * `"education"`
 
   * Recommended:
@@ -373,6 +404,7 @@ Recommended event types for biographies:
     * `participants.institution`
     * `properties.field` (field of study)
     * `time`
+
 * `"marriage"`
 
   * Recommended:
@@ -382,7 +414,7 @@ Recommended event types for biographies:
     * `time`
     * `location`
 
-These event types are typically embedded inside `BioFrame` as `birth_event`, `death_event`, or appended to `other_events`.
+These event types are typically embedded inside biographical frames (e.g. via `LifeEventFrame` or as events inside `BioFrame`) as `birth_event`, `death_event`, or appended to `other_events`.
 
 ### 5.2 Scientific / technical events
 
@@ -393,16 +425,20 @@ Canonical examples:
   * `participants.agent` (discoverer)
   * `participants.theme` (thing discovered)
   * `time`, `location` optional.
+
 * `"invention"`
 
   * `participants.agent`
   * `participants.theme` (invention)
   * `time`, `location`.
+
 * `"publication"`
 
   * `participants.agent` (author or team)
   * `participants.work` (publication)
   * `time`.
+
+These are especially relevant for `event.scientific_milestone`-style frames where `main_event` is an `Event`.
 
 ### 5.3 Historical / political events
 
@@ -413,17 +449,20 @@ Examples:
   * `participants.subject` (entity founded: party, organization, city)
   * `participants.agent` or `properties.founders` (list) as needed
   * `time`, `location`.
+
 * `"treaty_signing"`
 
   * `participants.parties` (list in `properties` or separate participants)
   * `properties.treaty` (entity)
   * `time`, `location`.
+
 * `"election"`
 
   * `properties.office`
   * `properties.jurisdiction`
   * `time` (date or period)
   * participants for winners and main candidates.
+
 * `"battle"`
 
   * `properties.conflict` (war/operation)
@@ -441,6 +480,7 @@ For generic “verb + arguments” realizations:
   * `participants.subject`
   * `properties.verb_lemma` (e.g. `"arrive"`)
   * Optional: `time`, `location`, `properties.manner`, `properties.tense`, `properties.aspect`, etc.
+
 * `"generic_transitive"`
 
   * `participants.subject`
@@ -454,32 +494,38 @@ These generic event types are intended to map to constructions like `INTRANSITIV
 
 ## 6. Building event frames (step-by-step)
 
-General procedure for constructing an `EventFrame`:
+General procedure for constructing an `EventFrame` (i.e. an `Event` with `frame_type` in the `event.*` family, typically `"event.generic"`):
 
 1. **Choose `event_type`**
 
    * Prefer a stable value from a project-specific inventory (e.g. `"birth"`, `"award"`, `"discovery"`, `"generic_transitive"`).
+
 2. **Identify participants and assign roles**
 
    * Determine the main entities and assign them canonical role labels (`subject`, `agent`, `patient`, `recipient`, etc.).
    * Represent each participant as an `Entity`-shaped JSON object.
+
 3. **Fill `time` and `location`**
 
    * Use a `TimeSpan`-shaped object for dates / intervals.
    * Use a `Location`-shaped object for places.
+
 4. **Add properties**
 
    * Include lexical information where needed, e.g. `properties.verb_lemma`, `properties.tense`, `properties.aspect`.
    * Add additional semantic slots such as `instrument`, `manner`, `cause`, etc.
+
 5. **Set `id` (optional but recommended)**
 
    * Use a stable identifier from the upstream knowledge base if possible.
+
 6. **Attach metadata in `extra`**
 
    * Include original Z-objects, Wikidata statements, provenance, or debugging info here rather than inventing new top-level fields.
+
 7. **Validate**
 
-   * Ensure `frame_type == "event"`.
+   * Ensure `frame_type` is in the `event.*` family (typically `"event.generic"` for bare `Event` instances).
    * Ensure the event has at least one meaningful participant or a time/location; empty skeletons should be avoided.
 
 ---
@@ -490,7 +536,7 @@ General procedure for constructing an `EventFrame`:
 
 ```json
 {
-  "frame_type": "event",
+  "frame_type": "event.generic",
   "id": "E_birth_Q7186",
   "event_type": "birth",
 
@@ -537,11 +583,13 @@ Embedded into a `BioFrame`:
 }
 ```
 
+(A biographical specialization such as `LifeEventFrame` would use the same `Event` fields but may declare a more specific `frame_type` like `"event.life"`.)
+
 ### 7.2 Transitive discovery event
 
 ```json
 {
-  "frame_type": "event",
+  "frame_type": "event.generic",
   "id": "E_discovery_Q7186_radium",
   "event_type": "discovery",
 
@@ -592,7 +640,9 @@ slots = {
 ## 8. Summary
 
 * `EventFrame` is the generic event semantic type, implemented as `semantics.types.Event` and exported via `nlg.semantics`.
-* The JSON representation consists of a required `frame_type: "event"` plus `event_type`, `participants`, `time`, `location`, `properties`, and `extra`.
+* The JSON representation consists of a required `frame_type` in the `event.*` family (typically `"event.generic"`) plus `event_type`, `participants`, `time`, `location`, `properties`, and `extra`.
 * Participants are named by role labels mapped to `Entity` objects; a small shared inventory of role labels improves interoperability.
 * `event_type` is an open string field; this document recommends a core set for biographical, scientific, and historical use-cases.
 * Generic “clause-like” events are supported via properties like `verb_lemma`, aligning with constructions such as `TRANSITIVE_EVENT`.
+
+

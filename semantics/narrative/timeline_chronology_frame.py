@@ -169,6 +169,10 @@ class TimelineChronologyFrame:
         be sorted in chronological order according to `time_span` /
         `event.time`. Planners may reorder / filter as needed.
 
+    ordering:
+        Sorting strategy for the entries (e.g., "chronological", "reverse").
+        Defaults to "chronological".
+
     grouping_hint:
         Optional high-level hint about how entries should be grouped for
         presentation. Examples (project-specific, not enforced):
@@ -198,12 +202,18 @@ class TimelineChronologyFrame:
         not interpreted by language-neutral NLG logic.
     """
 
-    frame_type: str = "aggregate.timeline"
+    # Using field(default=..., init=False) ensures frame_type is:
+    # 1. Included in asdict() (unlike ClassVar)
+    # 2. Excluded from __init__ args (avoiding ordering errors)
+    frame_type: str = field(default="aggregate.timeline", init=False)
 
     subject: Optional[Entity] = None
     overall_span: Optional[TimeSpan] = None
     focus_interval: Optional[TimeSpan] = None
     entries: List[TimelineEntry] = field(default_factory=list)
+
+    ordering: str = "chronological"
+
     grouping_hint: Optional[str] = None
     attributes: Dict[str, Any] = field(default_factory=dict)
     extra: Dict[str, Any] = field(default_factory=dict)

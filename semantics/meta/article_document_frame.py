@@ -25,7 +25,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from semantics.types import Entity  # core semantic unit
-from nlg.semantics import Frame     # protocol base: has a frame_type attribute
+from nlg.semantics import Frame  # protocol base: has a frame_type attribute
 
 
 @dataclass
@@ -98,9 +98,9 @@ class ArticleDocumentFrame:
     subject: Optional[Entity] = None
 
     # Page-level metadata
-    title: Optional[str] = None           # canonical article title
-    language: Optional[str] = None        # ISO 639-1 (e.g. "en", "fr")
-    project: Optional[str] = None         # e.g. "wikipedia", "wikivoyage"
+    title: Optional[str] = None  # canonical article title
+    language: Optional[str] = None  # ISO 639-1 (e.g. "en", "fr")
+    project: Optional[str] = None  # e.g. "wikipedia", "wikivoyage"
     page_id: Optional[str] = None
     revision_id: Optional[str] = None
 
@@ -109,9 +109,7 @@ class ArticleDocumentFrame:
 
     # Sources
     sources: List["SourceCitationFrame"] = field(default_factory=list)
-    source_index: Dict[str, "SourceCitationFrame"] = field(
-        default_factory=dict
-    )
+    source_index: Dict[str, "SourceCitationFrame"] = field(default_factory=dict)
 
     # Arbitrary metadata
     extra: Dict[str, Any] = field(default_factory=dict)

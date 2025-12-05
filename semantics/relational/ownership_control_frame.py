@@ -27,7 +27,7 @@ Typical uses include:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, ClassVar, Dict, Optional
 
 from semantics.types import Entity, TimeSpan
 
@@ -120,9 +120,13 @@ class OwnershipControlFrame:
 
     frame_type:
         Stable label for routing / planning. For this frame we use
-        "ownership-control". It is not part of the constructor
+        "relation.ownership". It is not part of the constructor
         signature; it is fixed for all instances of this class.
     """
+
+    # Routing label (fixed)
+    # Updated to match test expectation "relation.ownership"
+    frame_type: ClassVar[str] = "relation.ownership"
 
     # Core participants (required)
     owner: Entity
@@ -142,9 +146,6 @@ class OwnershipControlFrame:
     # Extensibility
     attributes: Dict[str, Any] = field(default_factory=dict)
     extra: Dict[str, Any] = field(default_factory=dict)
-
-    # Routing label (fixed)
-    frame_type: str = field(default="ownership-control", init=False)
 
 
 __all__ = ["OwnershipControlFrame"]

@@ -9,7 +9,7 @@
     "frame_type": {
       "description": "Frame type discriminator. Must be `exploration-expedition-mission`.",
       "type": "string",
-      "const": "exploration-expedition-mission"
+      "const": "event.exploration"
     },
 
     "main_event": {

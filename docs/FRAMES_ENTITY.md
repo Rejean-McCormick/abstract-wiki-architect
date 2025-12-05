@@ -1,4 +1,4 @@
-````markdown
+
 # Entity Frames
 
 This document defines the **entity-level semantic frames** used (and planned) in Abstract Wiki Architect for encyclopedic subjects: people, organizations, places, works, products, etc.
@@ -36,7 +36,7 @@ This document only covers **entity-centric** families. Event, relational, aggreg
 
 - `docs/FRAMES_EVENT.md`
 - `docs/FRAMES_RELATIONAL.md`
-- `docs/FRAMES_TEMPORAL.md`
+- `docs/FRAMES_NARRATIVE.md`
 - `docs/FRAMES_META.md` (article / section level)
 
 ---
@@ -72,6 +72,7 @@ Design rules:
 
   * A **Python class name** (e.g. `OrgFrame`).
   * A **canonical `frame_type` string** (e.g. `"entity.organization"`).
+
 * Frame type strings use the pattern:
 
   * `bio.person` or `bio` for biography-style person frames.
@@ -145,8 +146,8 @@ The current planned entity frame families are:
 | 15 | Competition / tournament / league        | `entity.competition`           | Leagues, cups, championships, seasons         |
 | 16 | Language                                 | `entity.language`              | Natural languages, conlangs, dialects         |
 | 17 | Religion / belief system / ideology      | `entity.belief_system`         | Religions, denominations, ideologies          |
-| 18 | Academic discipline / field / theory     | `entity.discipline_or_theory`  | Fields (topology), theories (relativity)      |
-| 19 | Law / treaty / policy / constitution     | `entity.legal_instrument`      | Statutes, treaties, constitutions, policies   |
+| 18 | Academic discipline / field / theory     | `entity.academic_discipline`   | Fields (topology), theories (relativity)      |
+| 19 | Law / treaty / policy / constitution     | `entity.law_or_treaty`         | Statutes, treaties, constitutions, policies   |
 | 20 | Project / program / initiative           | `entity.project_or_program`    | Missions, campaigns, research projects        |
 | 21 | Fictional entity / universe / franchise  | `entity.fictional`             | Characters, settings, franchises, universes   |
 
@@ -201,23 +202,29 @@ For each family:
 #### Core fields
 
 * `frame_type: str = "bio"` (or `"bio.person"` in future)
+
 * `main_entity: Entity`
 
   * `entity_type` should be `"person"`.
   * `human` should be `True`.
+
 * `primary_profession_lemmas: list[str]`
 
   * Lemmas like `"physicist"`, `"writer"`, `"politician"`.
+
 * `nationality_lemmas: list[str]`
 
   * Lemmas like `"polish"`, `"Kenyan"`, `"Brazilian"`.
+
 * `birth_event: Event | None`
 
   * `event_type = "birth"`.
   * `participants["subject"] = main_entity`.
+
 * `death_event: Event | None`
 
   * `event_type = "death"`.
+
 * `other_events: list[Event]`
 
   * `event_type` values like `"award"`, `"appointment"`, `"discovery"`, `"office_holding"`.
@@ -261,22 +268,31 @@ Covers companies, NGOs, political parties, bands, clubs, informal groups.
 #### Core fields
 
 * `frame_type: str = "entity.organization"`
+
 * `main_entity: Entity`
 
   * `entity_type` should be `"organization"` (or a more specific subtype).
+
 * `org_kind: str | None`
 
   * e.g. `"company"`, `"political party"`, `"ngo"`, `"trade union"`, `"band"`.
+
 * `founded_event: Event | None`
 
   * `event_type = "founding"`.
+
 * `dissolved_event: Event | None`
 
   * `event_type = "dissolution"`.
+
 * `headquarters: Location | None`
+
 * `membership_size: int | None`
+
 * `industry_or_sector: list[str]`
+
 * `parent_org: Entity | None`
+
 * `subsidiaries: list[Entity]`
 
 #### Attributes keys
@@ -298,17 +314,25 @@ Countries, states, provinces, cities, municipalities, dependencies.
 #### Core fields
 
 * `frame_type: str = "entity.gpe"`
+
 * `main_entity: Entity`
 
   * `entity_type` values like `"country"`, `"city"`, `"province"`.
+
 * `gpe_kind: str` – `"country"`, `"province"`, `"region"`, `"city"`, `"municipality"`, etc.
+
 * `sovereign_state: Entity | None`
 
   * For subnational entities or dependencies.
+
 * `capital: Entity | None` – reference to a city entity.
+
 * `population: int | None`
+
 * `area_km2: float | None`
+
 * `official_languages: list[str]`
+
 * `timezones: list[str]`
 
 #### Attributes keys
@@ -330,18 +354,25 @@ Mountains, rivers, lakes, seas, islands, regions, parks, etc.
 #### Core fields
 
 * `frame_type: str = "entity.place"`
+
 * `main_entity: Entity`
+
 * `place_kind: str`
 
   * `"mountain"`, `"river"`, `"lake"`, `"island"`, `"sea"`, `"desert"`, `"national park"`, etc.
+
 * `located_in: list[Entity]`
 
   * Higher-level regions/countries.
+
 * `coords: dict | None`
 
   * e.g. `{"lat": 48.8584, "lon": 2.2945}`.
+
 * `area_km2: float | None`
+
 * `elevation_m: float | None`
+
 * `length_km: float | None` (for rivers).
 
 #### Attributes keys
@@ -360,14 +391,21 @@ Buildings, airports, stations, stadiums, bridges, dams, power plants.
 #### Core fields
 
 * `frame_type: str = "entity.facility"`
+
 * `main_entity: Entity`
+
 * `facility_kind: str`
 
   * `"airport"`, `"railway station"`, `"stadium"`, `"bridge"`, `"dam"`, `"power plant"`, etc.
+
 * `location: Location`
+
 * `owner_or_operator: Entity | None`
+
 * `capacity: int | None` – passengers per year, seats, MW, etc.
+
 * `opened_event: Event | None`
+
 * `closed_event: Event | None`
 
 #### Attributes keys
@@ -387,15 +425,23 @@ Planets, stars, galaxies, exoplanets, minor planets, moons, nebulae.
 #### Core fields
 
 * `frame_type: str = "entity.astronomical_object"`
+
 * `main_entity: Entity`
+
 * `astro_kind: str`
 
   * `"star"`, `"planet"`, `"moon"`, `"galaxy"`, `"nebula"`, `"asteroid"`, etc.
+
 * `mass_kg: float | None`
+
 * `radius_km: float | None`
+
 * `orbital_period_days: float | None` – for orbiting bodies.
+
 * `semi_major_axis_au: float | None`
+
 * `distance_ly: float | None`
+
 * `constellation: str | None` – for stars.
 
 #### Attributes keys
@@ -414,15 +460,21 @@ Biological taxa at any rank.
 #### Core fields
 
 * `frame_type: str = "entity.taxon"`
+
 * `main_entity: Entity`
 
   * `name` should be the scientific name where applicable.
+
 * `rank: str`
 
   * `"species"`, `"genus"`, `"family"`, `"order"`, etc.
+
 * `parent_taxon: Entity | None`
+
 * `common_names: list[str]`
+
 * `distribution_regions: list[Entity]` – continents, countries.
+
 * `conservation_status: str | None`
 
   * `"LC"`, `"EN"`, `"CR"`, etc. or full labels.
@@ -445,15 +497,23 @@ Individual chemical substances or classes of materials.
 #### Core fields
 
 * `frame_type: str = "entity.chemical"`
+
 * `main_entity: Entity`
+
 * `formula: str | None`
+
 * `iupac_name: str | None`
+
 * `cas_number: str | None`
+
 * `state_at_stp: str | None`
 
   * `"solid"`, `"liquid"`, `"gas"`.
+
 * `melting_point_c: float | None`
+
 * `boiling_point_c: float | None`
+
 * `density_g_cm3: float | None`
 
 #### Attributes keys
@@ -472,14 +532,21 @@ Individual artifacts or generic object types.
 #### Core fields
 
 * `frame_type: str = "entity.artifact"`
+
 * `main_entity: Entity`
+
 * `artifact_kind: str`
 
   * `"sword"`, `"painting"`, `"tool"`, `"machine"`, `"instrument"`.
+
 * `creator_or_maker: Entity | None`
+
 * `creation_timespan: TimeSpan | None`
+
 * `materials: list[str]`
+
 * `current_location: Location | None`
+
 * `dimensions: dict | None`
 
   * e.g. `{ "height_cm": 50, "width_cm": 30 }`.
@@ -501,19 +568,31 @@ Ships, aircraft, trains, spacecraft, car models, classes of vehicles.
 #### Core fields
 
 * `frame_type: str = "entity.vehicle"`
+
 * `main_entity: Entity`
+
 * `vehicle_kind: str`
 
   * `"ship"`, `"aircraft"`, `"train"`, `"locomotive"`, `"spacecraft"`, `"car model"`, etc.
+
 * `manufacturer: Entity | None`
+
 * `operator: Entity | None`
+
 * `entered_service: Event | None`
+
 * `retired_from_service: Event | None`
+
 * `crew_capacity: int | None`
+
 * `passenger_capacity: int | None`
+
 * `displacement_tonnes: float | None` – ships.
+
 * `mass_kg: float | None`
+
 * `top_speed_kmh: float | None`
+
 * `range_km: float | None`
 
 #### Attributes keys
@@ -531,20 +610,29 @@ Books, films, TV shows, episodes, albums, songs, comics, games, artworks.
 #### Core fields
 
 * `frame_type: str = "entity.creative_work"`
+
 * `main_entity: Entity`
+
 * `work_kind: str`
 
   * `"novel"`, `"film"`, `"television series"`, `"album"`, `"song"`, `"painting"`, `"video game"`, etc.
+
 * `creator_entities: list[Entity]`
 
   * Authors, directors, composers, artists, designers.
+
 * `release_event: Event | None`
 
   * `event_type = "release"`; time and place as appropriate.
+
 * `original_language: str | None`
+
 * `runtime_minutes: int | None` – films, episodes.
+
 * `page_count: int | None` – books.
+
 * `episode_count: int | None` – TV series.
+
 * `series_or_franchise: Entity | None`
 
 #### Attributes keys
@@ -564,16 +652,25 @@ Software packages, websites, internet protocols, standards.
 #### Core fields
 
 * `frame_type: str = "entity.software_or_standard"`
+
 * `main_entity: Entity`
+
 * `artifact_kind: str`
 
   * `"software"`, `"website"`, `"protocol"`, `"standard"`, etc.
+
 * `developer_or_maintainer: list[Entity]`
+
 * `initial_release_event: Event | None`
+
 * `latest_release_version: str | None`
+
 * `latest_release_time: TimeSpan | None`
+
 * `license: str | None`
+
 * `platforms: list[str]`
+
 * `supported_protocols_or_standards: list[str]`
 
 #### Attributes keys
@@ -592,13 +689,19 @@ Commercial products, product lines, brands.
 #### Core fields
 
 * `frame_type: str = "entity.product_or_brand"`
+
 * `main_entity: Entity`
+
 * `product_kind: str`
 
   * `"soft drink"`, `"car model"`, `"smartphone"`, `"clothing brand"`, etc.
+
 * `manufacturer_or_owner: Entity | None`
+
 * `launch_event: Event | None`
+
 * `discontinued_event: Event | None`
+
 * `markets: list[Entity]` – countries or regions where available.
 
 #### Attributes keys
@@ -641,14 +744,21 @@ Leagues, recurring tournaments, championships, seasons.
 #### Core fields
 
 * `frame_type: str = "entity.competition"`
+
 * `main_entity: Entity`
+
 * `competition_kind: str`
 
   * `"league"`, `"cup"`, `"tournament"`, `"championship"`, `"season"`.
+
 * `sport: str`
+
 * `organizing_body: Entity | None`
+
 * `founded_event: Event | None`
+
 * `number_of_teams_or_participants: int | None`
+
 * `season_structure: dict | None` – regular season, playoffs.
 
 #### Attributes keys
@@ -666,16 +776,23 @@ Natural languages, constructed languages, dialects, sign languages.
 #### Core fields
 
 * `frame_type: str = "entity.language"`
+
 * `main_entity: Entity`
+
 * `language_kind: str`
 
   * `"natural"`, `"constructed"`, `"sign"`, `"creole"`, etc.
+
 * `language_family: Entity | None`
+
 * `iso_codes: dict | None`
 
   * e.g. `{"iso_639_1": "fr", "iso_639_3": "fra"}`.
+
 * `number_of_speakers: int | None`
+
 * `regions: list[Entity]`
+
 * `writing_systems: list[str]`
 
 #### Attributes keys
@@ -693,13 +810,19 @@ Religions, denominations, philosophies, political ideologies.
 #### Core fields
 
 * `frame_type: str = "entity.belief_system"`
+
 * `main_entity: Entity`
+
 * `belief_kind: str`
 
   * `"religion"`, `"denomination"`, `"philosophy"`, `"political ideology"`.
+
 * `origin_place: Location | None`
+
 * `origin_timespan: TimeSpan | None`
+
 * `founder_entities: list[Entity]`
+
 * `primary_texts: list[Entity]`
 
 #### Attributes keys
@@ -711,18 +834,22 @@ Religions, denominations, philosophies, political ideologies.
 
 ---
 
-### 5.18 Academic discipline / field / theory (`entity.discipline_or_theory`)
+### 5.18 Academic discipline / field / theory (`entity.academic_discipline`)
 
 Disciplines, subfields, major theories.
 
 #### Core fields
 
-* `frame_type: str = "entity.discipline_or_theory"`
+* `frame_type: str = "entity.academic_discipline"`
+
 * `main_entity: Entity`
+
 * `discipline_kind: str`
 
   * `"discipline"`, `"subdiscipline"`, `"theory"`, `"hypothesis"`.
+
 * `parent_discipline: Entity | None`
+
 * `related_fields: list[Entity]`
 
 #### Attributes keys
@@ -734,21 +861,28 @@ Disciplines, subfields, major theories.
 
 ---
 
-### 5.19 Law / treaty / policy / constitution (`entity.legal_instrument`)
+### 5.19 Law / treaty / policy / constitution (`entity.law_or_treaty`)
 
 Statutes, treaties, constitutions, major policies.
 
 #### Core fields
 
-* `frame_type: str = "entity.legal_instrument"`
+* `frame_type: str = "entity.law_or_treaty"`
+
 * `main_entity: Entity`
+
 * `instrument_kind: str`
 
   * `"treaty"`, `"law"`, `"constitution"`, `"policy"`.
+
 * `jurisdiction: Entity | None`
+
 * `signing_event: Event | None`
+
 * `coming_into_force_event: Event | None`
+
 * `repeal_event: Event | None`
+
 * `status: str` – `"in force"`, `"repealed"`, etc.
 
 #### Attributes keys
@@ -767,13 +901,19 @@ Government programs, research projects, campaigns, missions.
 #### Core fields
 
 * `frame_type: str = "entity.project_or_program"`
+
 * `main_entity: Entity`
+
 * `project_kind: str`
 
   * `"space mission"`, `"research program"`, `"campaign"`, `"initiative"`.
+
 * `sponsors_or_organizations: list[Entity]`
+
 * `start_timespan: TimeSpan | None`
+
 * `end_timespan: TimeSpan | None`
+
 * `budget: dict | None`
 
   * value, currency, reference year.
@@ -794,12 +934,17 @@ Fictional characters, settings, universes, franchises.
 #### Core fields
 
 * `frame_type: str = "entity.fictional"`
+
 * `main_entity: Entity`
+
 * `fictional_kind: str`
 
   * `"character"`, `"location"`, `"organization"`, `"universe"`, `"franchise"`.
+
 * `source_works: list[Entity]`
+
 * `creators: list[Entity]`
+
 * `appears_in_works: list[Entity]`
 
 #### Attributes keys
@@ -816,15 +961,18 @@ Fictional characters, settings, universes, franchises.
 Entity frames interact with the rest of the system as follows:
 
 1. **Input:** A frontend (e.g. an AW/Z bridge) constructs an appropriate entity frame, using `Entity`, `Event`, `Location`, `TimeSpan` objects where needed.
+
 2. **Planning:** A discourse planner or simple heuristic picks:
 
    * Which entity frames (and possibly event frames) to use in the lead.
    * The order in which they should appear.
+
 3. **Construction selection:** Based on `frame_type` and available fields, the engine chooses:
 
    * Equative constructions (`X is a Y`) for definitions.
    * Locative constructions (`X is in Y`) for locations.
    * Possessive constructions (`X has Y`) for capacities, members, etc.
+
 4. **Morphology & realization:** Engines and constructions use generic roles (subject, predicate NP, location, etc.) plus feature maps from the frames to realize language-specific sentences.
 
 When adding a new entity-frame implementation:
@@ -854,6 +1002,7 @@ Each new frame should be accompanied by:
 
   * minimal input → simple lead sentence,
   * richer input → more informative sentences.
+
 * Construction / engine rules for the initial supported families.
 
 ---
@@ -864,10 +1013,8 @@ Each new frame should be accompanied by:
 * They build on the core semantic types (`Entity`, `Location`, `TimeSpan`, `Event`) and follow a common `Frame` protocol.
 * `BioFrame` already implements the **person** case; this document generalizes that idea to 20 additional entity families.
 * Implementations are kept **compact** (few explicit fields) plus an `attributes` map for extensibility.
-* The `frame_type` taxonomy (`bio.person`, `entity.organization`, `entity.gpe`, etc.) is the primary hook for:
+* The `frame_type` taxonomy (`bio.person`, `entity.organization`, `entity.gpe`, `entity.academic_discipline`, `entity.law_or_treaty`, etc.) is the primary hook for:
 
   * mapping AW/Z data into frames,
   * routing frames to appropriate constructions and engines.
 
-```
-```

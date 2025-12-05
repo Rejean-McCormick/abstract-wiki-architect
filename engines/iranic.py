@@ -39,18 +39,18 @@ def render_bio(name, gender, prof_lemma, nat_lemma, config):
     # 3. Assembly
     structure = config.get("structure", "{name} {predicate} {copula}.")
 
-    # The morphology engine returns 'noun_phrase' which contains the 
+    # The morphology engine returns 'noun_phrase' which contains the
     # fully linked "Profession-e Nationality" structure (plus indefinite markers).
     # We map this to {predicate} or {profession} depending on the template.
-    
+
     sentence = structure.replace("{name}", name)
     sentence = sentence.replace("{predicate}", parts["noun_phrase"])
-    
+
     # Fallback replacements if the structure template uses specific tags
     # Note: parts['noun_phrase'] is usually the whole block "X-e Y-i"
-    sentence = sentence.replace("{profession}", parts["noun_phrase"]) 
-    sentence = sentence.replace("{nationality}", "") # Consumed by noun_phrase
-    
+    sentence = sentence.replace("{profession}", parts["noun_phrase"])
+    sentence = sentence.replace("{nationality}", "")  # Consumed by noun_phrase
+
     sentence = sentence.replace("{copula}", parts["copula"])
 
     # Cleanup extra spaces

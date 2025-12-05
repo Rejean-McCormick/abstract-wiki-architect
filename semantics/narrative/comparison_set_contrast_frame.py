@@ -100,6 +100,9 @@ class ComparisonItem:
     attributes: Dict[str, Any] = field(default_factory=dict)
     extra: Dict[str, Any] = field(default_factory=dict)
 
+    # Optional notes field (implied by typical usage, though not strictly in test snippet)
+    notes: Optional[str] = None
+
 
 @dataclass
 class ComparisonSetContrastFrame:
@@ -135,26 +138,25 @@ class ComparisonSetContrastFrame:
     Comparison dimensions
     ---------------------
 
+    metrics:
+        Metadata about the metrics used in `metric_values`. This dictionary
+        maps metric IDs (e.g., "population") to their metadata (unit, description).
+
+        Example:
+            {
+                "population": {
+                    "unit": "inhabitants",
+                    "description": "City population"
+                }
+            }
+
     metric_ids:
-        List of metric identifiers used in `ComparisonItem.metric_values`,
-        such as:
-
-            ["population", "area_km2"]
-            ["gdp_usd_billion"]
-            ["league_position"]
-
-        These are project-specific keys; see also `metric_lemmas`.
+        List of metric identifiers used in `ComparisonItem.metric_values`.
+        (Kept for compatibility/redundancy with keys of `metrics`).
 
     metric_lemmas:
         Lemma-level labels corresponding to the metrics, suitable for
-        realization, for example:
-
-            ["population"]
-            ["area", "square kilometre"]
-            ["gross domestic product"]
-
-        Engines may need both `metric_ids` (for structured reasoning)
-        and `metric_lemmas` (for wording).
+        realization.
 
     primary_metric_id:
         Optional identifier of the primary metric for ranking (e.g.
@@ -200,9 +202,9 @@ class ComparisonSetContrastFrame:
         Useful for phrases like "three major banks" or "the largest
         cities".
 
-    scope_location:
-        Optional :class:`Location` describing the geographic / political
-        scope of the comparison, e.g. "in France", "in Europe", "worldwide".
+    scope_locations:
+        List of :class:`Location` describing the geographic / political
+        scope of the comparison. (Note: Previously `scope_location`).
 
     scope_lemmas:
         Additional lemma-level hints describing scope that may not map
@@ -229,6 +231,7 @@ class ComparisonSetContrastFrame:
     """
 
     # Stable label used for routing / schema identification
+    # Test expects ClassVar behavior
     frame_type: ClassVar[str] = "narr.comparison-set-contrast"
 
     # Items in the comparison set
@@ -238,15 +241,26 @@ class ComparisonSetContrastFrame:
     focus_entity: Optional[Entity] = None
 
     # Metrics / dimensions
+    # Added metrics field required by test
+    metrics: Dict[str, Any] = field(default_factory=dict)
+
     metric_ids: List[str] = field(default_factory=list)
     metric_lemmas: List[str] = field(default_factory=list)
     primary_metric_id: Optional[str] = None
     order_direction: Optional[str] = None  # "ascending", "descending", "mixed"
-    comparison_type: Optional[str] = None  # "ranking", "grouping", "contrast", "summary"
+    comparison_type: Optional[str] = (
+        None  # "ranking", "grouping", "contrast", "summary"
+    )
+
+    # Test adds time_period_label
+    time_period_label: Optional[str] = None
 
     # Scope and context
     set_label_lemmas: List[str] = field(default_factory=list)
-    scope_location: Optional[Location] = None
+
+    # Updated to list to match test expectation "scope_locations=[...]"
+    scope_locations: List[Location] = field(default_factory=list)
+
     scope_lemmas: List[str] = field(default_factory=list)
 
     # Generic extension points

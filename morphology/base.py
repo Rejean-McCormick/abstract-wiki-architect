@@ -86,6 +86,7 @@ class MorphResult:
 
 class MorphologyError(RuntimeError):
     """Raised when a morphology engine cannot satisfy a given request."""
+
     pass
 
 

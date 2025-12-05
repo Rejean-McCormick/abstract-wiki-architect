@@ -53,7 +53,7 @@ class IranicMorphology:
     def inflect_gender(self, word: str, gender: str) -> str:
         """
         Inflect a word for gender.
-        
+
         - Persian (fa): Usually returns word unchanged (has_gender=False).
         - Pashto/Kurdish: Applies suffixes based on config.
         """
@@ -95,7 +95,7 @@ class IranicMorphology:
     def apply_ezafe(self, head_noun: str) -> str:
         """
         Apply the Ezafe suffix to a noun if it links to a modifier.
-        
+
         Logic:
         - If word ends in Vowel -> usage specific suffix (e.g. -ye).
         - If word ends in Consonant -> usage specific suffix (e.g. -e).
@@ -117,7 +117,7 @@ class IranicMorphology:
 
         if last_char == "h" and silent_h_treatment == "vowel":
             is_vowel_ending = True
-        
+
         # Determine suffix
         if is_vowel_ending:
             suffix = self._morph.get("ezafe_vowel", "ye")  # e.g. "Daneshmand-e"
@@ -136,7 +136,7 @@ class IranicMorphology:
     def apply_indefinite(self, noun_phrase: str) -> str:
         """
         Apply indefinite marker (e.g. Persian 'Ya-ye Vahdat').
-        
+
         Can be a suffix ('-i') or a prefix particle ('Yek').
         """
         if not noun_phrase:
@@ -153,7 +153,7 @@ class IranicMorphology:
             # Add separate word (e.g. "Yek")
             particle = self._articles.get("indefinite", "")
             if particle:
-                 return f"{particle} {noun_phrase}"
+                return f"{particle} {noun_phrase}"
 
         return noun_phrase
 
@@ -173,14 +173,11 @@ class IranicMorphology:
     # ------------------------------------------------------------------
 
     def render_simple_bio_predicates(
-        self,
-        prof_lemma: str,
-        nat_lemma: str,
-        gender: str
+        self, prof_lemma: str, nat_lemma: str, gender: str
     ) -> Dict[str, str]:
         """
         Prepare components for a biography sentence, handling Ezafe chains.
-        
+
         Returns:
             {
                 "profession": <inflected profession noun>,
@@ -196,7 +193,7 @@ class IranicMorphology:
         # 2. Build the Ezafe chain: Profession links to Nationality
         # "Scientist [of] Polish" -> "Daneshmand-e Lahestani"
         prof_with_ezafe = self.apply_ezafe(prof_form)
-        
+
         # 3. Combine into Noun Phrase
         # Note: We assume standard "Head-Modifier" order typical of Iranic
         noun_phrase = f"{prof_with_ezafe} {nat_form}"
@@ -211,5 +208,5 @@ class IranicMorphology:
             "profession": prof_form,
             "nationality": nat_form,
             "noun_phrase": noun_phrase_final,
-            "copula": copula
+            "copula": copula,
         }

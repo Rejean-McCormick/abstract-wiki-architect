@@ -5,7 +5,7 @@ import sys
 from typing import Dict, Any
 
 # ---------------------------------------------------------------------------
-# Path setup: make sure project root is importable so we can use qa.config_extractor
+# Path setup: make sure project root is importable so we can use utils.config_extractor
 # ---------------------------------------------------------------------------
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -15,13 +15,13 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 # Shared loader for the Romance grammar matrix (with multiple fallback paths)
-# see: qa/config_extractor.py (DEFAULT_MATRIX_CANDIDATES + load_matrix)
-from qa.config_extractor import load_matrix
+# see: utils/config_extractor.py (DEFAULT_MATRIX_CANDIDATES + load_matrix)
+from utils.config_extractor import load_matrix
 
 
 def load_grammar_config(matrix_path: str | None = None) -> Dict[str, Any]:
     """
-    Load the Romance grammar matrix using the shared helper from qa.config_extractor.
+    Load the Romance grammar matrix using the shared helper from utils.config_extractor.
 
     This reuses the same search logic as the QA runner, trying (in order):
 
@@ -47,9 +47,7 @@ def generate_csv_templates(matrix_path: str | None = None) -> None:
     languages = config.get("languages", {})
 
     if not isinstance(languages, dict) or not languages:
-        raise ValueError(
-            "Grammar matrix must contain a non-empty 'languages' object."
-        )
+        raise ValueError("Grammar matrix must contain a non-empty 'languages' object.")
 
     # Output directory (always under project root, even if script is run elsewhere)
     output_dir = os.path.join(PROJECT_ROOT, "qa_tools", "generated_datasets")

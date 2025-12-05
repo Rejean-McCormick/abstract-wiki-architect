@@ -1,8 +1,11 @@
+
 # Frontend API
 
 This document describes the simple frontend API for generating text from semantic frames.
 
 The goal is to provide a small, stable set of entry points for integrators and linguists, while keeping the internal routing, engines, morphology, constructions, discourse, and lexicon modules as implementation details.
+
+Frame families, canonical `frame_type` strings, and their fields are specified in the `docs/FRAMES_*.md` documents and corresponding JSON schemas under `schemas/frames/`.
 
 > **Current implementation status**
 >
@@ -29,7 +32,14 @@ Coherent group of related frame types with similar semantics and target construc
 - temporal / aggregate frames (timelines, seasons, careers, etc.),
 - meta frames (article / section summaries, citation metadata).
 
-Each individual frame is a small dataclass (or equivalent) implementing the `Frame` protocol and carrying a `frame_type` string that identifies its family and subtype.
+Each individual frame is a small dataclass (or equivalent) implementing the `Frame` protocol and carrying a `frame_type` string that identifies its family and subtype. The intended inventory and canonical `frame_type` strings are described in detail in:
+
+- `docs/FRAMES_OVERVIEW.md`
+- `docs/FRAMES_ENTITY.md`
+- `docs/FRAMES_EVENT.md`
+- `docs/FRAMES_RELATIONAL.md`
+- `docs/FRAMES_NARRATIVE.md`
+- `docs/FRAMES_META.md`
 
 **Generation options (`GenerationOptions`)**  
 Optional high-level controls (style, length, discourse mode, etc.).
@@ -194,7 +204,7 @@ generate(lang=lang, frame=event, options=options, debug=debug)
 
 > **Status:** The function exists and routes through `generate`, but there is currently **no concrete event engine**. Until the event and other non-biography pipelines are implemented, you should expect empty strings / placeholder behavior for those frame families.
 
-As additional frame families become available (e.g. relational frames, timeline frames), more specialized helpers may be added, but the generic `generate` entry point will remain the primary and stable interface.
+As additional frame families become available (e.g. relational frames, timeline frames, narrative / meta frames), more specialized helpers may be added, but the generic `generate` entry point will remain the primary and stable interface.
 
 ---
 
@@ -250,7 +260,18 @@ result_fr = session.generate("fr", bio)
 
 ## 4. Data models
 
-The concrete semantic types live under `semantics.types` (and are re-exported from `nlg.semantics`). The snippets below illustrate the expected shape.
+The concrete semantic types live under the `semantics` package:
+
+* core shared types and legacy frames in `semantics.types`,
+* family-specific frames in:
+
+  * `semantics.entity.*`
+  * `semantics.event.*`
+  * `semantics.relational.*`
+  * `semantics.narrative.*`
+  * `semantics.meta.*`
+
+Selected core interfaces (`Frame`, `BioFrame`, `EventFrame`) are re-exported from `nlg.semantics`. The snippets below illustrate the expected shape; for full field inventories, see the `FRAMES_*.md` documents and the JSON schemas under `schemas/frames/`.
 
 ### 4.1 Frames
 
@@ -260,12 +281,12 @@ Frames implement a common protocol:
 from typing import Protocol
 
 class Frame(Protocol):
-    frame_type: str  # e.g. "bio", "event", "rel_membership", "timeline"
+    frame_type: str  # see docs/FRAMES_*.md for canonical values, e.g. "bio", "entity.organization", "event", "rel.membership", "narr.timeline"
 ```
 
 The `frame_type` string identifies the family and subtype. Engines and routers use this to choose the right family engine and constructions.
 
-Concrete frames are small dataclasses (or equivalent) defined in `semantics.types` (and typically re-exported from `nlg.semantics`). They are grouped into a finite inventory of frame families.
+Concrete frames are small dataclasses (or equivalent) defined in `semantics.types` and the family modules under `semantics.*`. They are grouped into a finite inventory of frame families.
 
 #### 4.1.1 Frame families (inventory overview)
 
@@ -276,7 +297,7 @@ Conceptually, the final system aims to cover the following families. Each bullet
 (Things that are “entities” you can write a lead sentence about.)
 
 1. **Person / biography frame**
-   Biographical subjects (real or fictional people). E.g. `BioFrame`.
+   Biographical subjects (real or fictional people). E.g. `BioFrame` / `PersonFrame`.
 
 2. **Organization / group frame**
    Companies, NGOs, political parties, sports clubs, bands, research groups.
@@ -490,7 +511,7 @@ class EventFrame(Frame):
     # Event-specific fields (participants, time, location, etc.)
 ```
 
-Concrete field sets are defined in `semantics.types` / `semantics.normalization` and should be treated as the source of truth.
+Concrete field sets are defined in the `semantics` package (primarily `semantics.types` and `semantics.normalization`, plus the family modules) and should be treated as the source of truth.
 
 ---
 
@@ -588,7 +609,7 @@ nlg-cli generate \
   Target language code, e.g. `en`, `fr`, `sw`.
 
 * `--frame-type`
-  Frame type, e.g. `bio`, `event`, `rel_membership`, `timeline`. If omitted, the JSON must contain `frame_type`.
+  Frame type, e.g. `bio`, `event`, or any other canonical `frame_type` string documented in `docs/FRAMES_*.md`. If omitted, the JSON must contain `frame_type`.
 
 * `--input`
   Path to a JSON file describing the frame. If omitted or `-`, input is read from stdin.
@@ -638,11 +659,12 @@ nlg-cli generate \
 ## 6. Integration guidelines
 
 * Use `nlg.api.generate` or `NLGSession.generate` as the only entry points for frontend or service code.
-* Construct frames using the models in `semantics.types` (e.g. `BioFrame`, `EventFrame`, and the other frame families listed above), or via your own JSON → frame conversion based on those types.
-* Always set a meaningful `frame_type` string on your frames to identify the frame family; this is how the router selects the appropriate family engine.
+* Construct frames using the models in the `semantics` package (e.g. `BioFrame`, `EventFrame`, and the other frame families described in `docs/FRAMES_*.md`), or via your own JSON → frame conversion based on those types.
+* Always set a meaningful `frame_type` string on your frames to identify the frame family; this is how the router selects the appropriate family engine. Canonical strings and their intended semantics are documented in the `FRAMES_*.md` files and enforced by schemas under `schemas/frames/`.
 * Prefer `GenerationOptions` to control output style and length; low-level morphological or discourse behavior is handled internally by engines and the router.
 * Treat `debug_info` as optional and implementation-specific; do not rely on it for core functionality.
 * For now, treat `EventFrame` and all non-biography frame families as **experimental** until their engines are wired. The biography pipeline is the reference implementation.
 
 This frontend API is intentionally thin: it presents a simple, stable surface over a complex multilingual NLG stack while keeping internal modules flexible and evolvable.
+
 

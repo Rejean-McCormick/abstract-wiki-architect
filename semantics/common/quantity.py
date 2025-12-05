@@ -44,23 +44,23 @@ Number = Union[int, float]
 # ---------------------------------------------------------------------------
 
 QuantityKind = Literal[
-    "count",       # plain counts: 5 people, 12 teams
-    "measure",     # physical / economic measures: 3.5 km, 2 kg, 1.2e6 USD
+    "count",  # plain counts: 5 people, 12 teams
+    "measure",  # physical / economic measures: 3.5 km, 2 kg, 1.2e6 USD
     "percentage",  # 42 %
-    "ratio",       # dimensionless or composite ratios
-    "index",       # abstract indices: HDI, CPI, etc.
-    "ordinal",     # 1st, 2nd, 3rd…
-    "rank",        # position in a ranking: #1, #2…
-    "other",       # fallback for anything not fitting above
+    "ratio",  # dimensionless or composite ratios
+    "index",  # abstract indices: HDI, CPI, etc.
+    "ordinal",  # 1st, 2nd, 3rd…
+    "rank",  # position in a ranking: #1, #2…
+    "other",  # fallback for anything not fitting above
 ]
 
 
 QuantityQualifier = Literal[
-    "exact",        # exactly 10 000
+    "exact",  # exactly 10 000
     "approximate",  # about / roughly / circa 10 000
-    "at_least",     # ≥ 10 000
-    "at_most",      # ≤ 10 000
-    "unknown",      # some number exists but we do not know how precise
+    "at_least",  # ≥ 10 000
+    "at_most",  # ≤ 10 000
+    "unknown",  # some number exists but we do not know how precise
 ]
 
 

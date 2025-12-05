@@ -8,7 +8,7 @@
   "properties": {
     "frame_type": {
       "description": "Stable frame type identifier.",
-      "const": "reception-impact"
+      "const": "aggregate.reception"
     },
     "subject_id": {
       "description": "Optional identifier of the subject whose reception / impact is described (e.g. Wikidata ID, internal ID).",

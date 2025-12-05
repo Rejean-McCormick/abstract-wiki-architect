@@ -250,9 +250,7 @@ def _apply_affixes(
     affixes_cfg: Mapping[str, Any] = config.get(
         "affixes", {}
     )  # type: ignore[assignment]
-    pos_cfg: Mapping[str, Any] = affixes_cfg.get(
-        pos, {}
-    )  # type: ignore[assignment]
+    pos_cfg: Mapping[str, Any] = affixes_cfg.get(pos, {})  # type: ignore[assignment]
 
     applied: List[str] = []
     surface = stem
@@ -293,9 +291,7 @@ def _apply_orthography(
     letters in Arabic. This is left intentionally simple and controlled
     by config.
     """
-    ortho: Mapping[str, Any] = config.get(
-        "orthography", {}
-    )  # type: ignore[assignment]
+    ortho: Mapping[str, Any] = config.get("orthography", {})  # type: ignore[assignment]
     if not ortho:
         return surface
 
@@ -537,9 +533,7 @@ class SemiticMorphologyEngine(MorphologyEngine):
 
         if not pos_patterns:
             debug["pattern"] = {
-                "error": (
-                    f"no patterns configured for pos '{request.pos}'"
-                )
+                "error": (f"no patterns configured for pos '{request.pos}'")
             }
             return None
 

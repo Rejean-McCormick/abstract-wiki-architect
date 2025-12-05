@@ -24,7 +24,19 @@ from __future__ import annotations
 
 import dataclasses
 from dataclasses import asdict
-from typing import Any, Dict, Iterable, Mapping, MutableMapping, Optional, Sequence, Type, TypeVar, Union, List
+from typing import (
+    Any,
+    Dict,
+    Iterable,
+    Mapping,
+    MutableMapping,
+    Optional,
+    Sequence,
+    Type,
+    TypeVar,
+    Union,
+    List,
+)
 
 from .types import BioFrame, Event
 
@@ -90,7 +102,6 @@ FRAME_FAMILIES: Dict[FrameFamily, List[FrameType]] = {
         # 21. Fictional entity / universe / franchise frame
         "entity.fictional_entity",
     ],
-
     # 22–33: Event-centric frames
     "event": [
         # 22. Generic event frame
@@ -118,7 +129,6 @@ FRAME_FAMILIES: Dict[FrameFamily, List[FrameType]] = {
         # 33. Life-event frame (biographical subfamily)
         "event.life",
     ],
-
     # 34–48: Relational / statement-level frames
     "relation": [
         # 34. Definition / classification frame
@@ -152,7 +162,6 @@ FRAME_FAMILIES: Dict[FrameFamily, List[FrameType]] = {
         # 48. Relation-bundle / multi-fact frame
         "relation.bundle",
     ],
-
     # 49–55: Temporal / narrative / aggregate frames
     "aggregate": [
         # 49. Timeline / chronology frame
@@ -170,7 +179,6 @@ FRAME_FAMILIES: Dict[FrameFamily, List[FrameType]] = {
         # 55. List / enumeration frame
         "aggregate.list",
     ],
-
     # 56–58: Meta / wrapper frames
     "meta": [
         # 56. Article / document frame
@@ -241,7 +249,9 @@ def infer_frame_type(frame: Any, default: FrameType = "other") -> FrameType:
     return default
 
 
-def family_for_frame(frame: Any, default: Optional[FrameFamily] = None) -> Optional[FrameFamily]:
+def family_for_frame(
+    frame: Any, default: Optional[FrameFamily] = None
+) -> Optional[FrameFamily]:
     """
     Convenience: given a frame object or mapping, return its family name.
 
@@ -294,7 +304,9 @@ def register_frame(
     frame_cls:
         The same class, to make this function usable as a decorator helper.
     """
-    ft: Any = frame_type if frame_type is not None else getattr(frame_cls, "frame_type", None)
+    ft: Any = (
+        frame_type if frame_type is not None else getattr(frame_cls, "frame_type", None)
+    )
     if not isinstance(ft, str) or not ft:
         raise ValueError(
             f"Cannot register frame class {frame_cls!r}: "

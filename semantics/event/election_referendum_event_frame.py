@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List, Optional
 
 from semantics.types import Entity, Location, TimeSpan
 
@@ -118,7 +118,7 @@ class ElectionReferendumEventFrame:
     """
     Event frame for elections and referendums.
 
-    This frame family corresponds to the `frame_type = "election-referendum"`
+    This frame family corresponds to the `frame_type = "event.election"`
     entry in the global taxonomy of frame families. It is intended for
     standalone articles about electoral events as well as embedded summaries
     inside biographies, timelines, or project frames.
@@ -150,7 +150,7 @@ class ElectionReferendumEventFrame:
     ------
 
     frame_type:
-        Stable identifier for this family. Always "election-referendum".
+        Stable identifier for this family. Always "event.election".
         Exposed so that the NLG router and normalization layer can dispatch
         correctly.
 
@@ -257,7 +257,7 @@ class ElectionReferendumEventFrame:
     """
 
     # Frame protocol discriminator
-    frame_type: str = "election-referendum"
+    frame_type: ClassVar[str] = "event.election"
 
     # Core identity
     id: Optional[str] = None

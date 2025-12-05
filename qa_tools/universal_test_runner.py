@@ -78,7 +78,7 @@ def run_universal_tests():
 
                 # Inputs
                 name = row["Name"]
-                
+
                 # Safely get gender from either possible column name
                 gender = row.get("Gender") or row.get("Gender (Male/Female)", "Unknown")
 

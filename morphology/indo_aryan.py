@@ -49,10 +49,7 @@ class IndoAryanMorphology:
     # ------------------------------------------------------------------
 
     def inflect_gender(
-        self,
-        word: str,
-        gender: str,
-        part_of_speech: str = "noun"
+        self, word: str, gender: str, part_of_speech: str = "noun"
     ) -> str:
         """
         Inflect a word (noun or adjective) for the target natural gender.
@@ -87,9 +84,7 @@ class IndoAryanMorphology:
         suffixes = self._morph.get("suffixes", [])
         # Sort by length descending to match longest suffix first
         sorted_suffixes = sorted(
-            suffixes,
-            key=lambda x: len(str(x.get("ends_with", ""))),
-            reverse=True
+            suffixes, key=lambda x: len(str(x.get("ends_with", ""))), reverse=True
         )
 
         for rule in sorted_suffixes:
@@ -104,11 +99,11 @@ class IndoAryanMorphology:
         # This is a safe default for many IA languages if rules are missing.
         if lemma.endswith("aa"):
             return lemma[:-2] + "ii"
-        
+
         # If word ends in 'a' (short), sometimes it changes to 'i'
         if lemma.endswith("a") and not lemma.endswith("aa"):
-             # This assumes strict transliteration; might need tuning per language
-             return lemma[:-1] + "i"
+            # This assumes strict transliteration; might need tuning per language
+            return lemma[:-1] + "i"
 
         return lemma
 
@@ -151,14 +146,11 @@ class IndoAryanMorphology:
     # ------------------------------------------------------------------
 
     def render_simple_bio_predicates(
-        self,
-        prof_lemma: str,
-        nat_lemma: str,
-        gender: str
+        self, prof_lemma: str, nat_lemma: str, gender: str
     ) -> Dict[str, str]:
         """
         Prepare the predicate components for a biography sentence.
-        
+
         Returns:
             {
                 "profession": <inflected profession noun>,
@@ -175,8 +167,4 @@ class IndoAryanMorphology:
         # Get Copula (Formal by default for bios)
         copula = self.get_copula(gender, formality="formal")
 
-        return {
-            "profession": prof_form,
-            "nationality": nat_form,
-            "copula": copula
-        }
+        return {"profession": prof_form, "nationality": nat_form, "copula": copula}

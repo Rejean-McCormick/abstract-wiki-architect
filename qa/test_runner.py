@@ -139,9 +139,9 @@ def _find_val_by_prefix(row: pd.Series, prefix: str) -> Optional[Any]:
     """Find value in first column starting with prefix."""
     for col in row.index:
         if str(col).startswith(prefix):
-             val = row[col]
-             if not pd.isna(val) and str(val).strip() != "":
-                 return val
+            val = row[col]
+            if not pd.isna(val) and str(val).strip() != "":
+                return val
     return None
 
 
@@ -191,7 +191,7 @@ def compute_output_from_row(row: pd.Series, lang_code: str) -> str:
 
     name = _first_present(row, NAME_COLUMN_CANDIDATES)
     gender = _first_present(row, GENDER_COLUMN_CANDIDATES)
-    
+
     prof = _first_present(row, PROF_COLUMN_CANDIDATES)
     if prof is None:
         prof = _find_val_by_prefix(row, "Profession_Lemma")
@@ -209,11 +209,11 @@ def compute_output_from_row(row: pd.Series, lang_code: str) -> str:
     # Convert to str to avoid pandas NA / float surprises
     name_str = str(name)
     gender_str = str(gender)
-    
+
     # Clean placeholder brackets from generator if present (e.g. "[Actor]" -> "Actor")
     prof_str = str(prof).replace("[", "").replace("]", "")
     nat_str = str(nat).replace("[", "").replace("]", "")
-    
+
     lang_str = str(lang_code)
 
     # Call the main entrypoint

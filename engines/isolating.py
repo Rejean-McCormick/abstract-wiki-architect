@@ -34,11 +34,11 @@ def render_bio(name, gender, prof_lemma, nat_lemma, config):
     # - Classifiers and Indefinite Articles (e.g., "yi ge ...")
     pred_features = {
         "adjectives": [nat_lemma],  # Nationality treated as adjective modifier
-        "is_human": True,           # Biographies imply human subjects
+        "is_human": True,  # Biographies imply human subjects
         "number": "sg",
-        "definiteness": "indef"     # Predicates are typically indefinite ("is a...")
+        "definiteness": "indef",  # Predicates are typically indefinite ("is a...")
     }
-    
+
     predicate_np = morph.realize_noun_phrase(prof_lemma, pred_features)
 
     # 3. Get Copula

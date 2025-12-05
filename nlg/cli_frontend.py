@@ -161,18 +161,26 @@ def _convert_to_bio_frame(normalized_semantics) -> BioFrame:
     entity = Entity(
         name=normalized_semantics.name,
         gender=normalized_semantics.gender,
-        human=True  # Bios are usually human
+        human=True,  # Bios are usually human
     )
-    
+
     # Create lists for lemmas (BioSemantics has strings, BioFrame expects lists)
-    prof_lemmas = [normalized_semantics.profession_lemma] if normalized_semantics.profession_lemma else []
-    nat_lemmas = [normalized_semantics.nationality_lemma] if normalized_semantics.nationality_lemma else []
-    
+    prof_lemmas = (
+        [normalized_semantics.profession_lemma]
+        if normalized_semantics.profession_lemma
+        else []
+    )
+    nat_lemmas = (
+        [normalized_semantics.nationality_lemma]
+        if normalized_semantics.nationality_lemma
+        else []
+    )
+
     return BioFrame(
         main_entity=entity,
         primary_profession_lemmas=prof_lemmas,
         nationality_lemmas=nat_lemmas,
-        extra=normalized_semantics.extra
+        extra=normalized_semantics.extra,
     )
 
 
@@ -190,7 +198,7 @@ def _cmd_generate(args: argparse.Namespace) -> int:
 
     # Normalize input based on frame type
     frame_type = payload.get("frame_type")
-    
+
     if frame_type == "bio":
         # 1. Normalize raw JSON to BioSemantics
         semantics = normalize_bio_semantics(payload)

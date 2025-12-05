@@ -97,7 +97,9 @@ class SlavicMorphology:
         if lemma in irregulars:
             return irregulars[lemma]
 
-        adj_rules = self._morph.get("gender_inflection", {}).get("adjective_suffixes", [])
+        adj_rules = self._morph.get("gender_inflection", {}).get(
+            "adjective_suffixes", []
+        )
         return self._apply_suffix_rules(lemma, adj_rules)
 
     # ---------------------------------------------------------------------------
@@ -180,10 +182,7 @@ class SlavicMorphology:
     # ---------------------------------------------------------------------------
 
     def render_simple_bio_predicates(
-        self,
-        prof_lemma: str,
-        nat_lemma: str,
-        gender: str
+        self, prof_lemma: str, nat_lemma: str, gender: str
     ) -> Dict[str, str]:
         """
         Convenience function for biographical sentences:

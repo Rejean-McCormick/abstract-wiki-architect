@@ -109,9 +109,9 @@ class AttributeFrame:
     """
 
     # Core semantic roles
-    subject: Entity                   # X
-    attribute: str                    # coarse attribute key
-    value: Any                        # canonical value
+    subject: Entity  # X
+    attribute: str  # coarse attribute key
+    value: Any  # canonical value
 
     # Frame discriminator for routing / planning
     frame_type: str = "rel_attribute"

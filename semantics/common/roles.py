@@ -98,7 +98,6 @@ _ROLE_ALIASES: Dict[str, str] = {
     "doer": AGENT,
     "coagent": CO_AGENT,
     "co-agent": CO_AGENT,
-
     # object / patient / theme-like
     "obj": OBJECT,
     "object": OBJECT,
@@ -112,16 +111,13 @@ _ROLE_ALIASES: Dict[str, str] = {
     "co-theme": CO_THEME,
     "copatient": CO_PATIENT,
     "co-patient": CO_PATIENT,
-
     # recipient / beneficiary
     "recipient": RECIPIENT,
     "beneficiary": BENEFICIARY,
     "benefactor": BENEFICIARY,
-
     # instrument
     "instrument": INSTRUMENT,
     "instr": INSTRUMENT,
-
     # locations / directions
     "loc": LOCATION,
     "location": LOCATION,
@@ -133,18 +129,15 @@ _ROLE_ALIASES: Dict[str, str] = {
     "to": GOAL,
     "destination": GOAL,
     "path": PATH,
-
     # discourse-ish
     "topic": TOPIC,
     "about": TOPIC,
-
     # generic participant
     "participant": PARTICIPANT,
     "arg": PARTICIPANT,
     "argx": PARTICIPANT,
     "argument": PARTICIPANT,
     "other": PARTICIPANT,
-
     # syntactic-ish
     "obl": OBLIQUE,
     "oblique": OBLIQUE,
@@ -244,9 +237,7 @@ def order_roles_for_realization(
     subject, object, etc., when generating a clause.
     """
     # Stable index for known roles
-    order_index: Dict[str, int] = {
-        r: i for i, r in enumerate(_CANONICAL_ROLE_ORDER)
-    }
+    order_index: Dict[str, int] = {r: i for i, r in enumerate(_CANONICAL_ROLE_ORDER)}
 
     def sort_key(role: str) -> tuple[int, int]:
         normalized = normalize_role_label(role)

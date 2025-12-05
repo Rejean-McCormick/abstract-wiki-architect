@@ -436,7 +436,9 @@ class CompetitionLeagueFrame:
             - extra: dict
         """
         if "main_entity" not in data:
-            raise ValueError("CompetitionLeagueFrame.from_loose_dict requires 'main_entity'")
+            raise ValueError(
+                "CompetitionLeagueFrame.from_loose_dict requires 'main_entity'"
+            )
 
         main_entity = cls._coerce_entity(data["main_entity"])
         if main_entity is None:
@@ -450,37 +452,27 @@ class CompetitionLeagueFrame:
         host_regions_raw = data.get("host_regions") or []
         host_regions = [
             loc
-            for loc in (
-                cls._coerce_location(v) for v in host_regions_raw
-            )
+            for loc in (cls._coerce_location(v) for v in host_regions_raw)
             if loc is not None
         ]
 
         participants_raw = data.get("participants") or []
         participants = [
             ent
-            for ent in (
-                cls._coerce_entity(v) for v in participants_raw
-            )
+            for ent in (cls._coerce_entity(v) for v in participants_raw)
             if ent is not None
         ]
 
         champions_raw = data.get("champions") or []
         champions = [
             ent
-            for ent in (
-                cls._coerce_entity(v) for v in champions_raw
-            )
+            for ent in (cls._coerce_entity(v) for v in champions_raw)
             if ent is not None
         ]
 
         msc_raw = data.get("most_successful_clubs") or []
         most_successful_clubs = [
-            ent
-            for ent in (
-                cls._coerce_entity(v) for v in msc_raw
-            )
-            if ent is not None
+            ent for ent in (cls._coerce_entity(v) for v in msc_raw) if ent is not None
         ]
 
         seasonal_scope = cls._coerce_timespan(data.get("seasonal_scope"))
@@ -520,6 +512,7 @@ class CompetitionLeagueFrame:
         The exact shape is not considered stable API for external callers;
         adapt as needed.
         """
+
         def _entity_repr(e: Optional[Entity]) -> Optional[Dict[str, Any]]:
             if e is None:
                 return None

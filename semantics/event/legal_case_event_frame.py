@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from typing import Any, ClassVar, Dict, List
 
 from semantics.types import Entity, Event, TimeSpan
 
@@ -42,17 +42,18 @@ class LegalCaseEventFrame:
     """
 
     # Stable frame identifier for routing / dispatch
-    frame_type: str = "event.legal_case"
+    # marked as ClassVar to exclude from __init__ order
+    frame_type: ClassVar[str] = "event.legal_case"
 
     # Core event semantics
     main_event: Event
 
     # Identification
-    case_id: str | None = None          # e.g. local ID or citation key
-    case_name: str | None = None        # neutral label, e.g. "Brown v. Board of Education"
+    case_id: str | None = None  # e.g. local ID or citation key
+    case_name: str | None = None  # neutral label, e.g. "Brown v. Board of Education"
 
     # Institutions and scope
-    court: Entity | None = None         # deciding court/tribunal
+    court: Entity | None = None  # deciding court/tribunal
     jurisdiction: Entity | None = None  # jurisdiction or country/region
 
     # Parties and roles in a case

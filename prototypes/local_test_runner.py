@@ -30,9 +30,7 @@ def load_config() -> Dict[str, object]:
 
 def _iter_test_files(test_dir: str) -> List[str]:
     """Return a sorted list of CSV test files under `test_dir`."""
-    return sorted(
-        f for f in os.listdir(test_dir) if f.lower().endswith(".csv")
-    )
+    return sorted(f for f in os.listdir(test_dir) if f.lower().endswith(".csv"))
 
 
 def _extract_lang_code(filename: str) -> str:
@@ -153,8 +151,7 @@ def run_tests() -> None:
 
     if total_failed == 0 and total_passed > 0:
         print(
-            "🎉 GREAT SUCCESS! The engine is consistent with the "
-            "Romance test data."
+            "🎉 GREAT SUCCESS! The engine is consistent with the " "Romance test data."
         )
 
 

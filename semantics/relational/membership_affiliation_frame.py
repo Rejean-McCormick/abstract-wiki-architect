@@ -68,7 +68,7 @@ class MembershipFrame:
 
     # Core participants (required)
     member: Entity  # X
-    group: Entity   # Y
+    group: Entity  # Y
 
     # Optional metadata / qualifiers
     id: Optional[str] = None

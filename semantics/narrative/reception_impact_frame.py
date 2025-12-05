@@ -39,16 +39,27 @@ class ReceptionItem:
 
     Examples
     --------
-    - A single critic's review (source_entity = that critic or publication).
+    - A single critic's review (source = that critic or publication).
     - Aggregated public sentiment for a topic (“audiences praised the visuals”).
     - A community or institution’s position on some aspect of the work.
 
     Fields
     ------
-    source_entity:
+    source:
         Entity representing the source of the reception signal:
         critic, publication, outlet, community, award body, etc.
         May be None if the source is implicit or generic (“critics”, “audiences”).
+        (Note: Previously named `source_entity`).
+
+    aspect:
+        The specific aspect being commented on (e.g. "visuals", "script",
+        "critical_reception").
+
+    summary:
+        Brief summary of the reception content.
+
+    representative_quote:
+        A direct quote summarizing the reception (optional).
 
     stance:
         Coarse label for attitude, e.g.:
@@ -62,11 +73,11 @@ class ReceptionItem:
 
             "performance", "script", "visuals", "methodology"
 
-    time:
+    time_span:
         Optional `TimeSpan` indicating when the reception occurred
         (release period, review date range, etc.).
 
-    properties:
+    attributes:
         Additional structured properties, such as:
 
             {
@@ -77,10 +88,21 @@ class ReceptionItem:
             }
     """
 
-    source_entity: Optional[Entity] = None
+    # Fields required by tests
+    source: Optional[Entity] = None
+    aspect: str = "general"
+    summary: str = ""
+    representative_quote: Optional[str] = None
+
+    # Original semantic fields
     stance: Optional[str] = None
     topic: Optional[str] = None
-    time: Optional[TimeSpan] = None
+    time_span: Optional[TimeSpan] = None
+
+    # Extensibility
+    attributes: Dict[str, Any] = field(default_factory=dict)
+
+    # Backward compatibility for 'properties'
     properties: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -97,8 +119,17 @@ class ImpactDomain:
 
     Fields
     ------
-    domain:
+    domain_label:
         Short label for the domain of impact.
+
+    summary:
+        A textual summary of the impact in this domain.
+
+    examples:
+        A list of string examples or citations illustrating the impact.
+
+    metrics:
+        Quantitative measures of impact in this domain (e.g. {"citations": 120}).
 
     description_properties:
         Bag of properties that can be used by planners / engines to
@@ -119,7 +150,13 @@ class ImpactDomain:
         - significant policy changes linked to the work/idea.
     """
 
-    domain: str
+    # Fields required by tests
+    domain_label: str
+    summary: Optional[str] = None
+    examples: List[str] = field(default_factory=list)
+    metrics: Dict[str, Any] = field(default_factory=dict)
+
+    # Original semantic fields
     description_properties: Dict[str, Any] = field(default_factory=dict)
     key_events: List[Event] = field(default_factory=list)
 
@@ -136,13 +173,13 @@ class ReceptionImpactFrame:
     ------
     frame_type:
         Stable identifier for this frame family. Engines and planners
-        can dispatch on this; value is `"reception-impact"`.
+        can dispatch on this; value is `"aggregate.reception"`.
 
     subject_id:
-        Optional identifier for the subject of the reception / impact
-        (e.g. a Wikidata QID, internal ID, or any stable key). The
-        subject itself is usually known from the surrounding article
-        context or another frame.
+        Optional identifier string for the subject (e.g. "Q42").
+
+    subject:
+        Optional `Entity` object the reception/impact is about.
 
     critical_reception:
         List of `ReceptionItem`s representing critical reception
@@ -157,7 +194,7 @@ class ReceptionImpactFrame:
         has had influence or lasting effect.
 
     metrics:
-        Optional quantitative or categorical metrics, e.g.:
+        Optional quantitative or categorical metrics (global), e.g.:
 
             {
                 "box_office_usd": 100_000_000,
@@ -184,21 +221,32 @@ class ReceptionImpactFrame:
         unchanged.
     """
 
-    frame_type: str = "reception-impact"
+    # Fix: Use field(init=False) so it appears in asdict() but doesn't break init order
+    frame_type: str = field(default="aggregate.reception", init=False)
 
+    # Identity
     subject_id: Optional[str] = None
+    subject: Optional[Entity] = None
 
     # Reception
     critical_reception: List[ReceptionItem] = field(default_factory=list)
     public_reception: List[ReceptionItem] = field(default_factory=list)
 
+    # Generic items list (if not split by critical/public)
+    items: List[ReceptionItem] = field(default_factory=list)
+
     # Impact / legacy
     impact_domains: List[ImpactDomain] = field(default_factory=list)
+
+    overall_sentiment: Optional[str] = None
+    legacy_summary: Optional[str] = None
 
     # Optional quantitative or categorical metrics
     metrics: Dict[str, Any] = field(default_factory=dict)
     awards: List[Event] = field(default_factory=list)
 
+    # Extension
+    attributes: Dict[str, Any] = field(default_factory=dict)
     extra: Dict[str, Any] = field(default_factory=dict)
 
 

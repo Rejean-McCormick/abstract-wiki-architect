@@ -336,7 +336,10 @@ class NLGRouter:
             return morph_family
 
         legacy_family = profile.get("family")
-        if isinstance(legacy_family, str) and legacy_family in MORPHOLOGY_CLASS_REGISTRY:
+        if (
+            isinstance(legacy_family, str)
+            and legacy_family in MORPHOLOGY_CLASS_REGISTRY
+        ):
             return legacy_family
 
         raise ValueError(
@@ -538,8 +541,7 @@ def _load_language_card(family: str, lang_code: str) -> Dict[str, Any]:
 
     if not isinstance(config, dict):
         raise ValueError(
-            f"Language card {config_path} must be a JSON object, "
-            f"got {type(config)}"
+            f"Language card {config_path} must be a JSON object, " f"got {type(config)}"
         )
 
     _LANG_CARD_CACHE[key] = config

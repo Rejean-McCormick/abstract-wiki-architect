@@ -1,3 +1,4 @@
+
 # Relational frames (statement-level frames)
 
 This document specifies the **relational / statement-level frames** used to express simple facts about entities and events:
@@ -28,9 +29,11 @@ The intention is that higher-level frames (e.g. `BioFrame`, entity frames) will 
 Recommended location for the concrete Python types:
 
 ```text
-semantics/types.py          # core dataclasses (Entity, TimeSpan, Event, BioFrame, …)
-semantics/relational.py    # optional: split-out module for relational frames
-```
+semantics/types.py                 # core dataclasses (Entity, TimeSpan, Event, BioFrame, …)
+semantics/common/quantity.py       # Quantity helper
+semantics/relational/*.py          # concrete relational frame dataclasses
+schemas/frames/relational_*.json   # JSON schemas for validation / public API
+````
 
 This document is the **schema**; the exact module layout is an implementation detail.
 
@@ -47,9 +50,9 @@ from semantics.types import Entity, Event, TimeSpan
 
 Where:
 
-* `Entity`: person, organization, place, abstract thing, etc. 
-* `Event`: semantic event or state. 
-* `TimeSpan`: coarse date / time interval. 
+* `Entity`: person, organization, place, abstract thing, etc.
+* `Event`: semantic event or state.
+* `TimeSpan`: coarse date / time interval.
 
 ### 1.3 Quantity helper
 
@@ -75,7 +78,7 @@ class Quantity:
     extra: Dict[str, Any] = field(default_factory=dict)
 ```
 
-You can inline this into `semantics/types.py` or keep it in a small helper module.
+In the codebase this lives in `semantics/common/quantity.py`; the definition above is included here for reference.
 
 ### 1.4 Common fields for all relational frames
 
@@ -303,7 +306,7 @@ class ComparativeFrame:
 
 **Typical mapping**
 
-* `constructions/comparative_superlative.py` (comparee, standard, domain, etc.). 
+* `constructions/comparative_superlative.py` (comparee, standard, domain, etc.).
 
 ---
 
@@ -539,7 +542,7 @@ class SpatialRelationFrame:
 
 **Typical mapping**
 
-* `constructions/copula_locative.py` or eventive constructions with locative roles. 
+* `constructions/copula_locative.py` or eventive constructions with locative roles.
 
 ---
 
@@ -630,7 +633,7 @@ class CausalFrame:
 
 **Typical mapping**
 
-* `constructions/causative_event.py` (“X caused Y”, “X made Y happen”). 
+* `constructions/causative_event.py` (“X caused Y”, “X made Y happen”).
 
 ---
 
@@ -846,7 +849,7 @@ The engine decides how aggressively to merge facts into single sentences vs sepa
    * For each relational frame type, engines map it to:
 
      * a **construction choice** (copular, comparative, causative, etc.), and
-     * a **ClauseInput** (roles + features) for that construction. 
+     * a **ClauseInput** (roles + features) for that construction.
 
 4. **Discourse and aggregation**
 
@@ -854,6 +857,8 @@ The engine decides how aggressively to merge facts into single sentences vs sepa
 
      * order relational frames,
      * decide which to bundle into `RelationBundleFrame`,
-     * choose pronouns vs full NPs using `DiscourseState`. 
+     * choose pronouns vs full NPs using `DiscourseState`.
 
 With this inventory, the system can express most of the simple factual content of lead sections and infobox-like statements in a uniform, language-agnostic way.
+
+

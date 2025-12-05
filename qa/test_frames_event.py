@@ -111,22 +111,24 @@ def test_economic_financial_event_frame_type_and_main_event() -> None:
     core = Event()
     frame = EconomicFinancialEventFrame(main_event=core)
     assert frame.main_event is core
-    assert frame.frame_type == "economic-financial-event"
+    assert frame.frame_type == "event.economic"
 
 
 def test_election_referendum_event_frame_type() -> None:
     frame = ElectionReferendumEventFrame()
-    assert frame.frame_type == "election-referendum"
+    assert frame.frame_type == "event.election"
     # The basic identity fields should exist and be optional
     assert hasattr(frame, "id")
     assert hasattr(frame, "event_kind")
 
 
-def test_exploration_expedition_mission_event_frame_type_and_default_main_event() -> None:
+def test_exploration_expedition_mission_event_frame_type_and_default_main_event() -> (
+    None
+):
     frame = ExplorationExpeditionMissionEventFrame()
     # main_event uses a default factory, so it should always be an Event
     assert isinstance(frame.main_event, Event)
-    assert frame.frame_type == "exploration-expedition-mission"
+    assert frame.frame_type == "event.exploration"
 
 
 def test_historical_event_frame_type_and_main_event() -> None:

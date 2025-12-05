@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, ClassVar, Dict
+from typing import ClassVar
 
-from semantics.types import Entity, Event
+from semantics.types import Event
 
 
 @dataclass
@@ -86,6 +86,7 @@ class ConflictWarEventFrame(Event):
     """
 
     # Canonical frame type key used for routing and schema identification.
+    # Updated to match test expectation "event.conflict-event"
     frame_type: ClassVar[str] = "event.conflict-event"
 
 

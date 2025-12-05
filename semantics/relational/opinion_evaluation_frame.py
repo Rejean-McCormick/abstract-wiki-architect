@@ -69,10 +69,10 @@ class OpinionFrame:
     # Core opinion structure
     evaluator: Optional[Entity] = None  # "critics", "scholars", "public", …
     subject: Entity = field(default_factory=Entity)  # thing being evaluated
-    aspect: Optional[str] = None        # "performance", "design", "story", …
+    aspect: Optional[str] = None  # "performance", "design", "story", …
 
     # Overall polarity of the evaluation
-    polarity: str = "positive"          # "positive", "negative", "mixed", …
+    polarity: str = "positive"  # "positive", "negative", "mixed", …
 
     # Optional scalar rating backing the opinion
     rating_value: Optional[float] = None
@@ -80,11 +80,11 @@ class OpinionFrame:
 
     # Temporal anchoring and basis
     time: Optional[TimeSpan] = None
-    basis: Optional[str] = None         # "reviews", "polls", "surveys", …
+    basis: Optional[str] = None  # "reviews", "polls", "surveys", …
 
     # Confidence / provenance
-    certainty: float = 1.0              # degree of support in the data
-    source_id: Optional[str] = None     # pointer to upstream source / statement
+    certainty: float = 1.0  # degree of support in the data
+    source_id: Optional[str] = None  # pointer to upstream source / statement
 
     # Free-form extension bag
     extra: Dict[str, Any] = field(default_factory=dict)

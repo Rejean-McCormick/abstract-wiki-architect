@@ -143,7 +143,7 @@ class GermanicMorphology:
             return "m"
         if nat == "female":
             return "f"
-        
+
         return defaults
 
     # ------------------------------------------------------------------
@@ -195,7 +195,7 @@ class GermanicMorphology:
         ind_map = self._articles.get("indefinite", {}) or {}
         if isinstance(ind_map, str):
             return ind_map
-        
+
         return ind_map.get(grammatical_gender, ind_map.get("default", ""))
 
     # ------------------------------------------------------------------
@@ -219,22 +219,19 @@ class GermanicMorphology:
             tense = features.get("tense", "present")
             verbs_cfg = self.config.get("verbs", {})
             copula_map = verbs_cfg.get("copula", {})
-            
+
             # Try to get specific form (e.g. '3sg' for present)
             tense_map = copula_map.get(tense, {})
             if isinstance(tense_map, dict):
                 return tense_map.get("3sg", tense_map.get("default", "is"))
-            
+
             # Fallback if structure is simpler
             return str(tense_map)
 
         return lemma
 
     def render_simple_bio_predicates(
-        self,
-        profession_lemma: str,
-        nationality_lemma: str,
-        gender: str
+        self, profession_lemma: str, nationality_lemma: str, gender: str
     ) -> Dict[str, str]:
         """
         High-level helper for the engine.
@@ -260,5 +257,5 @@ class GermanicMorphology:
             "profession": prof_form,
             "nationality": nat_form,
             "article": article,
-            "word_gender": gram_gender
+            "word_gender": gram_gender,
         }

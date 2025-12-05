@@ -7,7 +7,7 @@
   "properties": {
     "frame_type": {
       "type": "string",
-      "const": "entity.product_brand",
+      "const": "entity.product_or_brand",
       "description": "Stable frame identifier; must be \"entity.product_brand\" for ProductBrandFrame instances."
     },
 

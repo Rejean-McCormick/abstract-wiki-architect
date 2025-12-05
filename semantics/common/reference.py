@@ -154,7 +154,9 @@ class Reference:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any], *, default_kind: str = "generic") -> "Reference":
+    def from_dict(
+        cls, data: Dict[str, Any], *, default_kind: str = "generic"
+    ) -> "Reference":
         """
         Construct a `Reference` from a dict.
 
@@ -185,9 +187,7 @@ class Reference:
         # Start with a shallow copy so we can pop keys.
         raw = dict(data)
 
-        kind = str(
-            raw.pop("kind", raw.pop("type", default_kind)) or default_kind
-        )
+        kind = str(raw.pop("kind", raw.pop("type", default_kind)) or default_kind)
 
         target_id = raw.pop("target_id", raw.pop("id", None))
 
@@ -222,7 +222,9 @@ class Reference:
 # ----------------------------------------------------------------------
 
 
-def normalize_reference(obj: Any, *, default_kind: str = "generic") -> Optional[Reference]:
+def normalize_reference(
+    obj: Any, *, default_kind: str = "generic"
+) -> Optional[Reference]:
     """
     Normalize an arbitrary value into a `Reference` instance.
 

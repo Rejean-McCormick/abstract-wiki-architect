@@ -397,7 +397,11 @@ def timespan_debug_string(span: Optional[TimeSpan]) -> str:
         return f"{y}-{mm}-{dd}"
 
     start = _date_part(span.start_year, span.start_month, span.start_day)
-    end = _date_part(span.end_year, span.end_month, span.end_day) if span.end_year is not None else ""
+    end = (
+        _date_part(span.end_year, span.end_month, span.end_day)
+        if span.end_year is not None
+        else ""
+    )
 
     core = start if not end or start == end else f"{start}–{end}"
     if span.approximate and not core.startswith("~"):

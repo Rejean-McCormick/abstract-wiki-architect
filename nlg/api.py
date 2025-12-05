@@ -83,8 +83,7 @@ class Engine(Protocol):
         self,
         frame: Frame,
         **kwargs: Any,
-    ) -> Dict[str, Any]:
-        ...
+    ) -> Dict[str, Any]: ...
 
 
 # ---------------------------------------------------------------------------
@@ -204,11 +203,7 @@ class _RouterAdapter:
                 if frame.primary_profession_lemmas
                 else ""
             )
-            nat = (
-                frame.nationality_lemmas[0]
-                if frame.nationality_lemmas
-                else ""
-            )
+            nat = frame.nationality_lemmas[0] if frame.nationality_lemmas else ""
 
             # Guard against missing main entity to avoid AttributeError.
             name = getattr(frame.main_entity, "name", "") or ""

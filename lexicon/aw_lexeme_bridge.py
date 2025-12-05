@@ -242,10 +242,7 @@ def lexeme_from_z_object(z_lexeme: Any) -> Lexeme:
 
     # Senses
     raw_senses = (
-        raw.get("senses")
-        or raw.get("senseList")
-        or raw.get("lexemeSenses")
-        or []
+        raw.get("senses") or raw.get("senseList") or raw.get("lexemeSenses") or []
     )
     senses: List[Sense] = []
     if isinstance(raw_senses, list):
@@ -253,12 +250,7 @@ def lexeme_from_z_object(z_lexeme: Any) -> Lexeme:
             senses.append(_sense_from_raw(s))
 
     # Forms
-    raw_forms = (
-        raw.get("forms")
-        or raw.get("formList")
-        or raw.get("lexemeForms")
-        or []
-    )
+    raw_forms = raw.get("forms") or raw.get("formList") or raw.get("lexemeForms") or []
     forms: List[Form] = []
     if isinstance(raw_forms, list):
         for f in raw_forms:

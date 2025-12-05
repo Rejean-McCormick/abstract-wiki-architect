@@ -116,7 +116,7 @@ This module is **purely semantic**:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List, Optional
 
 from semantics.types import Entity, Event
 
@@ -130,8 +130,8 @@ class EconomicFinancialEventFrame:
     -------------
     frame_type:
         Stable label for routing / planning. For this family we use
-        ``"economic-financial-event"`` to distinguish it from other
-        event and relation frames.
+        ``"event.economic"`` to distinguish it from other event and
+        relation frames.
 
     main_event:
         The underlying :class:`Event` instance that carries the core
@@ -216,7 +216,8 @@ class EconomicFinancialEventFrame:
         debug data) that should not directly affect surface realization.
     """
 
-    frame_type: str = "economic-financial-event"
+    # Constant family identifier; excluded from the generated __init__
+    frame_type: ClassVar[str] = "event.economic"
 
     # Core event
     main_event: Event

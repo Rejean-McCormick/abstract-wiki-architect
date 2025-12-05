@@ -64,18 +64,18 @@ class ComparativeFrame:
     id: Optional[str] = None
 
     # Core comparative statement
-    subject: Optional[Entity] = None          # X
-    property: Optional[str] = None            # "population", "area", "age", …
-    comparison_type: Optional[str] = None     # "comparative" | "superlative" | "ranking"
+    subject: Optional[Entity] = None  # X
+    property: Optional[str] = None  # "population", "area", "age", …
+    comparison_type: Optional[str] = None  # "comparative" | "superlative" | "ranking"
 
     # Comparative:
-    standard: Optional[Entity] = None         # Y in "larger than Y"
-    direction: str = "greater"                # "greater" | "less"
+    standard: Optional[Entity] = None  # Y in "larger than Y"
+    direction: str = "greater"  # "greater" | "less"
 
     # Superlative / ranking:
-    rank: Optional[int] = None                # 1, 2, 3, …
-    domain: Optional[Entity] = None           # set/domain: country, region, league
-    domain_scope: Optional[str] = None        # "in", "among", "within" (prepositional flavor)
+    rank: Optional[int] = None  # 1, 2, 3, …
+    domain: Optional[Entity] = None  # set/domain: country, region, league
+    domain_scope: Optional[str] = None  # "in", "among", "within" (prepositional flavor)
 
     # Optional explicit numeric data, if available
     subject_quantity: Optional[Quantity] = None

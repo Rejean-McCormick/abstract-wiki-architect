@@ -9,7 +9,7 @@
   "properties": {
     "frame_type": {
       "type": "string",
-      "const": "discipline-theory",
+      "const": "entity.academic_discipline",
       "description": "Canonical frame family identifier for this frame."
     },
 

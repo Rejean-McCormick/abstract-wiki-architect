@@ -172,7 +172,9 @@ class CelticMorphology:
         if lemma in irregulars:
             return irregulars[lemma]
 
-        adj_rules = self._morph.get("gender_inflection", {}).get("adjective_suffixes", [])
+        adj_rules = self._morph.get("gender_inflection", {}).get(
+            "adjective_suffixes", []
+        )
         if adj_rules:
             return self._apply_suffix_rules(lemma, adj_rules)
 
