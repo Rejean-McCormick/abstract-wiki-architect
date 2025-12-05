@@ -513,36 +513,36 @@ class CompetitionLeagueFrame:
         adapt as needed.
         """
 
-        def _entity_repr(e: Optional[Entity]) -> Optional[Dict[str, Any]]:
-            if e is None:
+        def _entity_repr(entity: Optional[Entity]) -> Optional[Dict[str, Any]]:
+            if entity is None:
                 return None
             return {
-                "id": e.id,
-                "name": e.name,
-                "entity_type": e.entity_type,
+                "id": entity.id,
+                "name": entity.name,
+                "entity_type": entity.entity_type,
             }
 
-        def _location_repr(l: Optional[Location]) -> Optional[Dict[str, Any]]:
-            if l is None:
+        def _location_repr(location: Optional[Location]) -> Optional[Dict[str, Any]]:
+            if location is None:
                 return None
             return {
-                "id": l.id,
-                "name": l.name,
-                "kind": l.kind,
-                "country_code": l.country_code,
+                "id": location.id,
+                "name": location.name,
+                "kind": location.kind,
+                "country_code": location.country_code,
             }
 
-        def _timespan_repr(t: Optional[TimeSpan]) -> Optional[Dict[str, Any]]:
-            if t is None:
+        def _timespan_repr(timespan: Optional[TimeSpan]) -> Optional[Dict[str, Any]]:
+            if timespan is None:
                 return None
             return {
-                "start_year": t.start_year,
-                "end_year": t.end_year,
-                "start_month": t.start_month,
-                "start_day": t.start_day,
-                "end_month": t.end_month,
-                "end_day": t.end_day,
-                "approximate": t.approximate,
+                "start_year": timespan.start_year,
+                "end_year": timespan.end_year,
+                "start_month": timespan.start_month,
+                "start_day": timespan.start_day,
+                "end_month": timespan.end_month,
+                "end_day": timespan.end_day,
+                "approximate": timespan.approximate,
             }
 
         return {
@@ -553,18 +553,18 @@ class CompetitionLeagueFrame:
             "level": self.level,
             "organizing_body": _entity_repr(self.organizing_body),
             "confederation": _entity_repr(self.confederation),
-            "host_regions": [_location_repr(l) for l in self.host_regions],
+            "host_regions": [_location_repr(loc) for loc in self.host_regions],
             "seasonal_scope": _timespan_repr(self.seasonal_scope),
             "founded": _timespan_repr(self.founded),
             "number_of_teams": self.number_of_teams,
-            "participants": [_entity_repr(e) for e in self.participants],
+            "participants": [_entity_repr(ent) for ent in self.participants],
             "promotion_to": _entity_repr(self.promotion_to),
             "relegation_to": _entity_repr(self.relegation_to),
             "format_summary": self.format_summary,
             "frequency": self.frequency,
-            "champions": [_entity_repr(e) for e in self.champions],
+            "champions": [_entity_repr(ent) for ent in self.champions],
             "most_successful_clubs": [
-                _entity_repr(e) for e in self.most_successful_clubs
+                _entity_repr(ent) for ent in self.most_successful_clubs
             ],
             "attributes": dict(self.attributes),
             "extra": dict(self.extra),

@@ -20,9 +20,10 @@ if _project_root not in sys.path:
     sys.path.append(_project_root)
 # -----------------------------------------------
 
-from nlg.api import generate, GenerationOptions
-from semantics.normalization import normalize_bio_semantics
-from semantics.types import BioFrame, Entity
+# Local imports must come after sys.path setup
+from nlg.api import generate, GenerationOptions  # noqa: E402
+from semantics.normalization import normalize_bio_semantics  # noqa: E402
+from semantics.types import BioFrame, Entity  # noqa: E402
 
 
 # ---------------------------------------------------------------------------

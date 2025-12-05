@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from semantics.types import Entity, Event, TimeSpan
+from semantics.types import Entity, Event
 
 
 def normalize_instrument_kind(kind: Optional[str]) -> Optional[str]:

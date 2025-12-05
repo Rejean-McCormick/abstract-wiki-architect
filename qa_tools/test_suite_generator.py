@@ -1,8 +1,7 @@
-import json
 import csv
 import os
 import sys
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 # ---------------------------------------------------------------------------
 # Path setup: make sure project root is importable so we can use utils.config_extractor
@@ -16,10 +15,10 @@ if PROJECT_ROOT not in sys.path:
 
 # Shared loader for the Romance grammar matrix (with multiple fallback paths)
 # see: utils/config_extractor.py (DEFAULT_MATRIX_CANDIDATES + load_matrix)
-from utils.config_extractor import load_matrix
+from utils.config_extractor import load_matrix  # noqa: E402
 
 
-def load_grammar_config(matrix_path: str | None = None) -> Dict[str, Any]:
+def load_grammar_config(matrix_path: Optional[str] = None) -> Dict[str, Any]:
     """
     Load the Romance grammar matrix using the shared helper from utils.config_extractor.
 
@@ -34,7 +33,7 @@ def load_grammar_config(matrix_path: str | None = None) -> Dict[str, Any]:
     return load_matrix(matrix_path)
 
 
-def generate_csv_templates(matrix_path: str | None = None) -> None:
+def generate_csv_templates(matrix_path: Optional[str] = None) -> None:
     """
     Generates CSV testing templates for each Romance language defined
     in the grammar matrix.

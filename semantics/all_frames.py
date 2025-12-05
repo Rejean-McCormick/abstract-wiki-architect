@@ -27,15 +27,12 @@ from dataclasses import asdict
 from typing import (
     Any,
     Dict,
-    Iterable,
+    List,
     Mapping,
-    MutableMapping,
     Optional,
     Sequence,
     Type,
     TypeVar,
-    Union,
-    List,
 )
 
 from .types import BioFrame, Event
@@ -201,13 +198,14 @@ def _build_family_map(
     """
     mapping: Dict[FrameType, FrameFamily] = {}
     for family, types in families.items():
-        for t in types:
-            prev = mapping.get(t)
+        for frame_type in types:
+            prev = mapping.get(frame_type)
             if prev is not None and prev != family:
                 raise RuntimeError(
-                    f"Frame type {t!r} belongs to multiple families: {prev!r}, {family!r}"
+                    f"Frame type {frame_type!r} belongs to multiple families: "
+                    f"{prev!r}, {family!r}"
                 )
-            mapping[t] = family
+            mapping[frame_type] = family
     return mapping
 
 
@@ -217,7 +215,7 @@ FRAME_FAMILY_MAP: Dict[FrameType, FrameFamily] = _build_family_map(FRAME_FAMILIE
 
 def all_frame_types() -> List[FrameType]:
     """Return a flat list of all canonical frame_type strings."""
-    return [t for types in FRAME_FAMILIES.values() for t in types]
+    return [frame_type for types in FRAME_FAMILIES.values() for frame_type in types]
 
 
 def is_known_frame_type(frame_type: FrameType) -> bool:
@@ -239,11 +237,11 @@ def infer_frame_type(frame: Any, default: FrameType = "other") -> FrameType:
     - Otherwise, try `frame.frame_type`.
     - If missing or not a string, fall back to `default`.
     """
-    ft: Any
     if isinstance(frame, Mapping):
-        ft = frame.get("frame_type")
+        ft: Any = frame.get("frame_type")
     else:
         ft = getattr(frame, "frame_type", None)
+
     if isinstance(ft, str):
         return ft
     return default
@@ -267,7 +265,6 @@ def family_for_frame(
 # ---------------------------------------------------------------------------
 
 T = TypeVar("T")
-
 
 #: Runtime registry mapping `frame_type` strings to concrete Python classes.
 #:

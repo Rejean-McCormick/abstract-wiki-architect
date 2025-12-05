@@ -18,7 +18,7 @@ This module is stateless; all rules come from the `config` object.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict
 
 
 class IndoAryanMorphology:

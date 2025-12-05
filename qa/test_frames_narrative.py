@@ -17,7 +17,7 @@ families in `docs/FRAMES_NARRATIVE.md` and `semantics/all_frames.py`:
     - TimelineChronologyFrame                (aggregate.timeline)
     - CareerSeasonCampaignSummaryFrame       (aggregate.career_summary)
     - DevelopmentEvolutionFrame              (aggregate.development)
-    - ReceptionImpactFrame                   (reception-impact)
+    - ReceptionImpactFrame                   (aggregate.reception)
     - StructureOrganizationFrame             (narr.structure-organization)
     - ComparisonSetContrastFrame             (narr.comparison-set-contrast)
     - ListEnumerationFrame                   (aggregate.list)
@@ -26,8 +26,6 @@ families in `docs/FRAMES_NARRATIVE.md` and `semantics/all_frames.py`:
 from __future__ import annotations
 
 from dataclasses import asdict
-
-import pytest
 
 from semantics.types import Entity, Event, TimeSpan, Location
 from semantics.narrative.timeline_chronology_frame import (

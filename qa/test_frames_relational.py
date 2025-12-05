@@ -23,7 +23,7 @@ from dataclasses import asdict
 
 import pytest
 
-from semantics.types import Entity, Event, Location, TimeSpan
+from semantics.types import Entity, Event, TimeSpan
 from semantics.relational.attribute_property_frame import AttributeFrame
 from semantics.relational.definition_classification_frame import (
     DefinitionClassificationFrame,
@@ -33,9 +33,7 @@ from semantics.relational.ownership_control_frame import OwnershipControlFrame
 from semantics.relational.part_whole_composition_frame import (
     PartWholeCompositionFrame,
 )
-from semantics.relational.role_position_office_frame import (
-    RolePositionOfficeFrame,
-)
+from semantics.relational.role_position_office_frame import RolePositionOfficeFrame
 from semantics.relational.spatial_relation_frame import SpatialRelationFrame
 from semantics.relational.temporal_relation_frame import TemporalRelationFrame
 

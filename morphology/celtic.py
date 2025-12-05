@@ -18,7 +18,7 @@ encode as much or as little morphology as needed.
 """
 
 from __future__ import annotations
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 
 
 class CelticMorphology:

@@ -17,7 +17,7 @@ module which decides on word order, copula, punctuation, etc.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Literal, Optional, Tuple
+from typing import Any, Dict, Literal, Tuple
 
 Gender = Literal["male", "female"]
 

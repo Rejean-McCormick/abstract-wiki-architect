@@ -25,7 +25,8 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from semantics.types import Entity  # core semantic unit
-from nlg.semantics import Frame  # protocol base: has a frame_type attribute
+from semantics.meta.section_summary_frame import SectionSummaryFrame
+from semantics.meta.source_citation_frame import SourceCitationFrame
 
 
 @dataclass
@@ -105,11 +106,11 @@ class ArticleDocumentFrame:
     revision_id: Optional[str] = None
 
     # Structure
-    sections: List["SectionSummaryFrame"] = field(default_factory=list)
+    sections: List[SectionSummaryFrame] = field(default_factory=list)
 
     # Sources
-    sources: List["SourceCitationFrame"] = field(default_factory=list)
-    source_index: Dict[str, "SourceCitationFrame"] = field(default_factory=dict)
+    sources: List[SourceCitationFrame] = field(default_factory=list)
+    source_index: Dict[str, SourceCitationFrame] = field(default_factory=dict)
 
     # Arbitrary metadata
     extra: Dict[str, Any] = field(default_factory=dict)

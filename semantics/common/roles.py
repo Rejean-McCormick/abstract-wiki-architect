@@ -22,7 +22,7 @@ The goal is to keep event participant role handling consistent across:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Iterable, List, Mapping, Optional, Sequence
+from typing import Dict, Iterable, List, Optional, Sequence
 
 from semantics.types import Entity, Event
 

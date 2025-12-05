@@ -11,7 +11,7 @@ full entity-frame dataclasses or any NLG behaviour; those are covered elsewhere.
 
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import List
 
 from semantics.all_frames import (
     FRAME_FAMILIES,
