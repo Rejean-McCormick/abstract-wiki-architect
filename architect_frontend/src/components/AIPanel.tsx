@@ -1,68 +1,54 @@
 "use client";
 
 import React, { useCallback, useMemo, useState, FormEvent } from "react";
-import { sendArchitectRequest } from "../lib/aiApi";
+import { 
+  architectApi, 
+  IntentRequest, 
+  IntentResponse, 
+  AIMessage, 
+  AIFramePatch 
+} from "../lib/api";
 
 export type AIPanelMode = "guide" | "explain" | "suggest_fields";
 
 export interface AIPanelProps {
   /**
-   * Current frame slug (e.g. "bio", "event", "definition").
-   * Used to give the AI some semantic context.
+   * The type of entity being edited (e.g. "construction", "bio", "function").
    */
-  frameSlug: string;
+  entityType: string;
 
   /**
-   * Current form values for the selected frame.
-   * This is sent as context so the AI can suggest improvements or missing fields.
+   * ID of the entity if we are editing an existing one.
    */
-  frameValues: Record<string, unknown>;
+  entityId?: string;
 
   /**
-   * Target language code (e.g. "en", "fr", "sw").
+   * Current form values.
    */
-  language: string;
+  currentValues: Record<string, unknown>;
 
   /**
-   * Optional hook: apply AI-suggested updates back into the form.
+   * Target language code (e.g. "en", "fr").
+   */
+  language?: string;
+
+  /**
+   * Hook to apply AI-suggested updates back into the form.
    */
   onApplySuggestion?: (updates: Record<string, unknown>) => void;
 
-  /**
-   * Optional className to let parents control panel sizing/layout.
-   */
   className?: string;
-}
-
-interface AIMessage {
-  role: "user" | "assistant" | "system";
-  content: string;
-}
-
-export interface ArchitectAIRequestPayload {
-  mode: AIPanelMode;
-  userMessage: string;
-  frameSlug: string;
-  frameValues: Record<string, unknown>;
-  language: string;
-}
-
-export interface ArchitectAIResponsePayload {
-  assistantMessage: string;
-  /**
-   * Optional patch for frame values (e.g. fill missing fields, tweak lemmas).
-   */
-  suggestedFrameValues?: Record<string, unknown>;
 }
 
 /**
  * Right-side “Ask the Architect” helper panel.
- * Orchestrates interaction with the backend AI via `sendArchitectRequest`.
+ * Connects to POST /ai/intent via architectApi.
  */
 const AIPanel: React.FC<AIPanelProps> = ({
-  frameSlug,
-  frameValues,
-  language,
+  entityType,
+  entityId,
+  currentValues,
+  language = "en",
   onApplySuggestion,
   className,
 }) => {
@@ -71,7 +57,9 @@ const AIPanel: React.FC<AIPanelProps> = ({
   const [messages, setMessages] = useState<AIMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lastSuggestion, setLastSuggestion] =
+  
+  // Store the accumulated updates from patches
+  const [lastSuggestionPayload, setLastSuggestionPayload] =
     useState<Record<string, unknown> | null>(null);
 
   const trimmedInput = input.trim();
@@ -84,7 +72,7 @@ const AIPanel: React.FC<AIPanelProps> = ({
       case "explain":
         return "Explain current setup";
       case "suggest_fields":
-        return "Suggest / refine frame fields";
+        return "Suggest / refine fields";
       default:
         return mode;
     }
@@ -98,47 +86,74 @@ const AIPanel: React.FC<AIPanelProps> = ({
       setIsLoading(true);
       setError(null);
 
+      // 1. Add User Message to Chat
       const userMsg: AIMessage = { role: "user", content: trimmedInput };
-
       setMessages((prev) => [...prev, userMsg]);
       setInput("");
 
       try {
-        const payload: ArchitectAIRequestPayload = {
-          mode,
-          userMessage: trimmedInput,
-          frameSlug,
-          frameValues,
-          language,
+        // 2. Build Request
+        // Matches the IntentRequest interface in lib/api.ts
+        const requestPayload: IntentRequest = {
+          message: trimmedInput,
+          lang: language,
+          workspace_slug: entityId,
+          context_frame: {
+            frame_type: entityType,
+            payload: currentValues
+          }
         };
 
-        const response: ArchitectAIResponsePayload = await sendArchitectRequest(
-          payload
-        );
+        // 3. Call API
+        const response: IntentResponse = await architectApi.processIntent(requestPayload);
 
-        const assistantMsg: AIMessage = {
-          role: "assistant",
-          content: response.assistantMessage,
-        };
+        // 4. Handle Response
+        // The backend returns a list of messages (e.g. reasoning steps + final answer)
+        if (response.assistant_messages && response.assistant_messages.length > 0) {
+            setMessages((prev) => [...prev, ...response.assistant_messages]);
+        } else {
+            // Fallback if no messages returned
+            setMessages((prev) => [...prev, { role: "assistant", content: "Done." }]);
+        }
 
-        setMessages((prev) => [...prev, assistantMsg]);
-        setLastSuggestion(response.suggestedFrameValues ?? null);
+        // 5. Handle Patches
+        // Convert the list of patches into a simplified object for the parent form
+        if (response.patches && response.patches.length > 0) {
+          const updates: Record<string, unknown> = {};
+          
+          response.patches.forEach((patch: AIFramePatch) => {
+             // Basic support for top-level fields. 
+             // Note: Deep nested patching would require a more complex merger 
+             // or a library like immer/lodash.set, but this covers the 80% case.
+             updates[patch.path] = patch.value;
+          });
+
+          setLastSuggestionPayload(updates);
+        } else {
+          setLastSuggestionPayload(null);
+        }
+
       } catch (e: unknown) {
         console.error("AI panel error", e);
         setError(
-          "The Architect assistant could not be reached. Check the backend URL and try again."
+          e instanceof Error 
+            ? e.message 
+            : "The Architect assistant could not be reached."
         );
       } finally {
         setIsLoading(false);
       }
     },
-    [canSend, trimmedInput, mode, frameSlug, frameValues, language]
+    [canSend, trimmedInput, entityId, currentValues, language, entityType]
   );
 
   const handleApplySuggestion = useCallback(() => {
-    if (!lastSuggestion || !onApplySuggestion) return;
-    onApplySuggestion(lastSuggestion);
-  }, [lastSuggestion, onApplySuggestion]);
+    if (!lastSuggestionPayload || !onApplySuggestion) return;
+    onApplySuggestion(lastSuggestionPayload);
+    
+    setLastSuggestionPayload(null); 
+    setMessages(prev => [...prev, { role: "system", content: "Suggestion applied to form." }]);
+  }, [lastSuggestionPayload, onApplySuggestion]);
 
   const handleQuickPrompt = useCallback(
     (preset: "explain_frame" | "suggest_missing" | "improve_output") => {
@@ -146,19 +161,19 @@ const AIPanel: React.FC<AIPanelProps> = ({
         case "explain_frame":
           setMode("explain");
           setInput(
-            "Explain how this current semantic frame will be realized in the target language, and point out any suspicious or underspecified fields."
+            "Explain the current configuration of this entity. Are there any inconsistencies?"
           );
           break;
         case "suggest_missing":
           setMode("suggest_fields");
           setInput(
-            "Look at my current frame values and suggest any missing or low-quality fields, with concrete replacements."
+            "Check for missing or underspecified fields in this entity and suggest values."
           );
           break;
         case "improve_output":
           setMode("guide");
           setInput(
-            "I am not satisfied with the output. Suggest specific tweaks to the frame that would improve fluency and naturalness."
+            "I want to improve the quality of this definition. What should I change?"
           );
           break;
       }
@@ -179,11 +194,10 @@ const AIPanel: React.FC<AIPanelProps> = ({
       <header className="mb-3 flex items-center justify-between gap-2">
         <div>
           <h2 className="text-sm font-semibold text-slate-900">
-            Architect AI Panel
+            Architect AI
           </h2>
           <p className="text-xs text-slate-500">
-            Ask questions, get suggestions, and refine the frame with help from
-            the assistant.
+            Context: {entityType} {language ? `(${language})` : ""}
           </p>
         </div>
 
@@ -196,68 +210,74 @@ const AIPanel: React.FC<AIPanelProps> = ({
             onChange={(e) => setMode(e.target.value as AIPanelMode)}
             className="rounded border border-slate-200 bg-white px-2 py-1 text-xs text-slate-800 shadow-sm"
           >
-            <option value="guide">Guide / Q&amp;A</option>
-            <option value="explain">Explain setup</option>
-            <option value="suggest_fields">Suggest fields</option>
+            <option value="guide">Guide / Q&A</option>
+            <option value="explain">Explain</option>
+            <option value="suggest_fields">Suggest</option>
           </select>
         </div>
       </header>
 
+      {/* Quick Action Buttons */}
       <section className="mb-3 flex gap-2">
         <button
           type="button"
           onClick={() => handleQuickPrompt("explain_frame")}
           className="flex-1 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-700 hover:bg-slate-100"
         >
-          Explain this frame
+          Explain
         </button>
         <button
           type="button"
           onClick={() => handleQuickPrompt("suggest_missing")}
           className="flex-1 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-700 hover:bg-slate-100"
         >
-          Suggest missing fields
+          Suggest
         </button>
         <button
           type="button"
           onClick={() => handleQuickPrompt("improve_output")}
           className="flex-1 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-700 hover:bg-slate-100"
         >
-          Improve output
+          Improve
         </button>
       </section>
 
+      {/* Chat Area */}
       <section className="mb-3 flex-1 overflow-hidden rounded-md border border-slate-200 bg-slate-50">
         <div className="h-full max-h-64 overflow-y-auto p-2 text-xs">
           {messages.length === 0 ? (
-            <p className="text-slate-500">
-              No conversation yet. Choose a quick prompt above or type your own
-              question about this frame, the target language, or the generated
-              text.
+            <p className="text-slate-500 italic">
+              No conversation yet. Ask the Architect about this entity...
             </p>
           ) : (
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {messages.map((m, idx) => (
                 <li
                   key={idx}
-                  className={
-                    m.role === "user"
-                      ? "text-slate-800"
-                      : "rounded-md bg-white p-2 text-slate-900 shadow-sm"
-                  }
+                  className={`flex flex-col ${
+                    m.role === "user" ? "items-end" : "items-start"
+                  }`}
                 >
-                  <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                    {m.role === "user" ? "You" : "Architect"}
+                  <div className={`max-w-[90%] rounded-md p-2 shadow-sm ${
+                      m.role === "user" 
+                        ? "bg-sky-100 text-sky-900" 
+                        : m.role === "system"
+                        ? "bg-slate-200 text-slate-600 italic"
+                        : "bg-white text-slate-900"
+                    }`}
+                  >
+                    <div className="mb-1 text-[9px] font-bold uppercase tracking-wide opacity-50">
+                      {m.role === "user" ? "You" : "Architect"}
+                    </div>
+                    <div className="whitespace-pre-wrap leading-relaxed">{m.content}</div>
                   </div>
-                  <div className="whitespace-pre-wrap">{m.content}</div>
                 </li>
               ))}
               {isLoading && (
-                <li className="rounded-md bg-white p-2 text-slate-500 shadow-sm">
-                  <div className="text-[10px] font-semibold uppercase tracking-wide">
-                    Architect
-                  </div>
-                  <div className="mt-1 text-xs">Thinking…</div>
+                <li className="flex items-start">
+                   <div className="rounded-md bg-white p-2 text-slate-500 shadow-sm">
+                      <span className="animate-pulse">Thinking...</span>
+                   </div>
                 </li>
               )}
             </ul>
@@ -271,49 +291,47 @@ const AIPanel: React.FC<AIPanelProps> = ({
         </div>
       )}
 
-      {lastSuggestion && onApplySuggestion && (
-        <div className="mb-2 flex items-center justify-between rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1">
-          <p className="text-[11px] text-emerald-800">
-            This reply includes suggested updates for the current frame.
-          </p>
+      {/* Suggestion Banner */}
+      {lastSuggestionPayload && onApplySuggestion && (
+        <div className="mb-2 flex items-center justify-between rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 shadow-sm">
+          <div className="mr-2">
+            <p className="text-[11px] font-medium text-emerald-800">
+              Suggestion Available
+            </p>
+            <p className="text-[10px] text-emerald-600">
+              The Architect proposed updates to the form fields.
+            </p>
+          </div>
           <button
             type="button"
             onClick={handleApplySuggestion}
-            className="rounded-sm bg-emerald-600 px-2 py-1 text-[11px] font-medium text-white hover:bg-emerald-700"
+            className="whitespace-nowrap rounded bg-emerald-600 px-3 py-1.5 text-[11px] font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1"
           >
-            Apply suggestion
+            Apply Changes
           </button>
         </div>
       )}
 
+      {/* Input Area */}
       <form onSubmit={handleSubmit} className="mt-auto flex flex-col gap-2">
-        <label className="text-[11px] text-slate-600">
-          Ask the Architect
-          <span className="ml-1 text-[10px] text-slate-400">
-            ({modeLabel})
-          </span>
-        </label>
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={3}
-          className="w-full resize-none rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-900 shadow-inner focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400"
-          placeholder="Example: “Why did the system choose this word order?” or “Suggest a more natural wording for this biography.”"
+          className="w-full resize-none rounded-md border border-slate-200 bg-white px-2 py-2 text-xs text-slate-900 shadow-inner focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+          placeholder="Type your instructions..."
         />
-        <div className="flex items-center justify-between gap-2">
-          <div className="text-[10px] text-slate-400">
-            Context: frame <code>{frameSlug}</code>, lang {language}
-          </div>
+        <div className="flex items-center justify-end">
           <button
             type="submit"
             disabled={!canSend}
-            className={`rounded-md px-3 py-1 text-xs font-medium text-white ${
+            className={`rounded-md px-4 py-1.5 text-xs font-semibold text-white transition-colors ${
               canSend
-                ? "bg-sky-600 hover:bg-sky-700"
+                ? "bg-sky-600 hover:bg-sky-700 shadow-sm"
                 : "cursor-not-allowed bg-slate-300"
             }`}
           >
-            {isLoading ? "Sending…" : "Send to Architect"}
+            {isLoading ? "Sending..." : "Send"}
           </button>
         </div>
       </form>

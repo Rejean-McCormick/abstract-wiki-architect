@@ -1,25 +1,24 @@
 // architect_frontend/src/lib/api.ts
 
 /**
- * Thin typed wrapper around the Architect HTTP API.
- *
- * This module is intentionally small and stable:
- * - it hides URL construction and error handling
- * - it exposes typed entry points for the UI
+ * Typed wrapper around the Architect HTTP API.
+ * Aligned with backend: architect_http_api
+ * * Key alignments:
+ * - Base URL includes /api/v1
+ * - Entities use frame_type/frame_payload (matching schemas/entities.py)
+ * - AI uses Command/Patches pattern (matching ai/intent_handler.py)
+ * - Generation endpoint handles frame rendering
+ * - Frames endpoints handle dynamic registry discovery
  */
 
 /* -------------------------------------------------------------------------- */
 /* Base URL + low-level request helper                                        */
 /* -------------------------------------------------------------------------- */
 
-const DEFAULT_API_BASE_PATH = "/abstract_wiki_architect/api";
+// Backend default port is 4000 (from config.py), but often mapped to 8000 in dev.
+// We default to port 8000/api/v1 based on main.py.
+const DEFAULT_API_BASE_PATH = "http://127.0.0.1:8000/api/v1";
 
-/**
- * Base URL for the Architect API.
- *
- * Override in your deployment with:
- *   NEXT_PUBLIC_ARCHITECT_API_BASE_URL="https://konnaxion.com/abstract_wiki_architect/api"
- */
 const API_BASE_URL = (
   process.env.NEXT_PUBLIC_ARCHITECT_API_BASE_URL ?? DEFAULT_API_BASE_PATH
 ).replace(/\/$/, "");
@@ -42,6 +41,7 @@ async function request<T>(
 ): Promise<T> {
   const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
   const headers = new Headers(init.headers ?? {});
+  
   if (!headers.has("Accept")) {
     headers.set("Accept", "application/json");
   }
@@ -84,104 +84,144 @@ async function request<T>(
 }
 
 /* -------------------------------------------------------------------------- */
-/* Shared types (mirroring docs/FRONTEND_API.md, nlg.api)                     */
+/* Frame Registry Types                                                       */
 /* -------------------------------------------------------------------------- */
 
-/**
- * High-level generation controls.
- * Mirrors `nlg.api.GenerationOptions`.
- */
-export interface GenerationOptions {
-  register?: string | null;       // "neutral", "formal", "informal", etc.
-  max_sentences?: number | null;  // upper bound on number of sentences
-  discourse_mode?: string | null; // e.g. "intro", "summary"
-  seed?: number | null;           // reserved for future stochastic behavior
+export interface FrameTypeMeta {
+  frame_type: string;    // e.g. "bio", "event.generic"
+  family: string;        // e.g. "entity", "event"
+  title?: string;
+  description?: string;
+  status?: "implemented" | "experimental" | "planned";
+}
+
+/* -------------------------------------------------------------------------- */
+/* Domain Types (Entities)                                                    */
+/* Matches architect_http_api.schemas.entities.EntityRead                     */
+/* -------------------------------------------------------------------------- */
+
+export interface Entity {
+  id: number; // Backend uses Integer ID
+  name: string;
+  slug?: string;
+  lang: string; // e.g. "en", "fr"
+  
+  // Aligned with backend schemas/entities.py
+  frame_type?: string;     // e.g. 'entity.person', 'bio'
+  frame_payload?: Record<string, unknown>; // The actual content
+  
+  short_description?: string;
+  notes?: string;
+  tags?: string[];
+  metadata?: Record<string, unknown>;
+
+  created_at: string;
+  updated_at: string;
+}
+
+// Matches EntityCreate
+export interface EntityCreatePayload {
+  name: string;
+  slug?: string;
+  lang?: string;
+  frame_type?: string;
+  frame_payload?: Record<string, unknown>;
+  short_description?: string;
+  tags?: string[];
+}
+
+// Matches EntityUpdate
+export interface EntityUpdatePayload {
+  name?: string;
+  slug?: string;
+  lang?: string;
+  frame_type?: string;
+  frame_payload?: Record<string, unknown>;
+  short_description?: string;
+  notes?: string;
+  tags?: string[];
+}
+
+/* -------------------------------------------------------------------------- */
+/* AI / Intelligence Types                                                    */
+/* Matches architect_http_api.schemas.ai (AICommandRequest/Response)          */
+/* -------------------------------------------------------------------------- */
+
+export interface AIMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+export interface AIFramePatch {
+  path: string;  // e.g. "birth_date" or "relations.0.target"
+  value: unknown;
+  op?: "replace" | "add" | "remove"; 
 }
 
 /**
- * Generic semantic frame payload coming from the UI.
- *
- * This is the normalized JSON the backend will convert into an internal
- * frame object (BioFrame, Event, etc.). The exact fields depend on
- * `frame_type` and the semantics layer.
+ * Payload sent to POST /ai/intent
+ * (Maps to AICommandRequest in backend)
  */
-export interface GenericFramePayload {
-  frame_type: string; // e.g. "bio", "entity.person", "event.generic", ...
-  // Arbitrary additional fields:
-  [key: string]: unknown;
+export interface IntentRequest {
+  message: string;             // User's natural language input
+  lang?: string;
+  workspace_slug?: string;     // Context context
+  
+  // Context: the current state of the frame being edited
+  context_frame?: {
+    frame_type: string;
+    payload: Record<string, unknown>;
+  };
+  
+  debug?: boolean;
 }
 
 /**
- * Standard output from all generation calls.
- * Mirrors `nlg.api.GenerationResult` but with `frame` as raw JSON.
+ * Response from POST /ai/intent
+ * (Maps to AICommandResponse in backend)
  */
-export interface GenerationResult {
-  text: string;               // final realized text
-  sentences: string[];        // sentence-level split
-  lang: string;               // language code used
-  frame: GenericFramePayload; // original frame JSON
-  debug_info?: Record<string, unknown> | null;
+export interface IntentResponse {
+  intent_label: string;
+  assistant_messages: AIMessage[];
+  patches: AIFramePatch[];     // Proposed changes to the frame
+  debug?: Record<string, unknown>;
 }
 
 /**
- * Generic generate request to `/generate`.
- *
- * This is the main entry point the UI should use.
+ * Payload sent to POST /ai/suggest-fields
  */
+export interface SuggestionRequest {
+  frame_type: string;
+  current_payload?: Record<string, unknown>;
+  field_name?: string;        // If asking for specific field suggestions
+  partial_input?: string;     // What the user typed so far
+}
+
+export interface SuggestionResponse {
+  suggestions: Array<{
+    id: string;
+    title: string;
+    description: string;
+    value?: unknown;          // Suggested value
+    score?: number;
+  }>;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Generation Types (NLG)                                                     */
+/* -------------------------------------------------------------------------- */
+
 export interface GenerateRequest {
   lang: string;
-  frame: GenericFramePayload;
-  options?: GenerationOptions | null;
-  debug?: boolean;
+  frame_type: string;
+  frame_payload: Record<string, unknown>;
+  options?: Record<string, unknown>;
 }
 
-/**
- * Convenience type for a biography frame; this is just a typed
- * specialization of GenericFramePayload with frame_type = "bio".
- * You can extend it in the UI as needed.
- */
-export interface BioFramePayload extends GenericFramePayload {
-  frame_type: "bio";
-  name?: string;
-  gender?: string;
-  profession_lemma?: string;
-  nationality_lemma?: string;
-  // Add other bio fields as you expose them in the UI
-}
-
-export interface GenerateBioRequest {
-  lang: string;
-  bio: BioFramePayload;
-  options?: GenerationOptions | null;
-  debug?: boolean;
-}
-
-/* -------------------------------------------------------------------------- */
-/* Frames registry types (for dynamic forms / inspectors)                     */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Descriptor for a single frame field (for UI forms).
- * This mirrors what the Python `FramesRegistry` exposes.
- */
-export interface FrameFieldDescriptor {
-  name: string;
-  json_type: "string" | "number" | "boolean" | "object" | "array";
-  required: boolean;
-  description?: string | null;
-  enum?: string[] | null;
-  default?: unknown;
-}
-
-/**
- * Descriptor for a frame type (used to drive the UI for a given frame).
- */
-export interface FrameDescriptor {
-  frame_type: string; // canonical frame_type, e.g. "bio"
-  family: string;     // e.g. "biography", "event", "entity"
-  title: string;      // human-friendly name
-  description: string;
-  fields: FrameFieldDescriptor[];
+export interface GenerationResult {
+  surface_text: string;
+  // Backend may return additional debug info or metadata
+  meta?: Record<string, unknown>;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -190,66 +230,125 @@ export interface FrameDescriptor {
 
 export interface ArchitectApi {
   /**
-   * Health-check endpoint. Optional but useful for wiring tests.
-   * Returns true if the backend says it's healthy.
+   * Health-check endpoint.
    */
   health(): Promise<boolean>;
 
-  /**
-   * List all known frame types and their field schemas.
-   * Backed by the Python FramesRegistry.
-   */
-  listFrames(): Promise<FrameDescriptor[]>;
+  // --- Frame Registry (Dynamic Configuration) ---
+
+  /** Get list of all available frame types for menus/dashboards */
+  listFrameTypes(): Promise<FrameTypeMeta[]>;
+
+  /** Get the JSON Schema for a specific frame type to build the form */
+  getFrameSchema(frameType: string): Promise<Record<string, any>>;
+
+  // --- Entity Management ---
+
+  listEntities(params?: { search?: string; frame_type?: string }): Promise<Entity[]>;
+
+  getEntity(id: number | string): Promise<Entity>;
+
+  createEntity(data: EntityCreatePayload): Promise<Entity>;
+
+  updateEntity(id: number | string, data: EntityUpdatePayload): Promise<Entity>;
+
+  deleteEntity(id: number | string): Promise<void>;
+
+  // --- AI Features ---
 
   /**
-   * Fetch the descriptor for a single frame type.
+   * Process natural language instructions to mutate a frame.
    */
-  getFrame(frameType: string): Promise<FrameDescriptor>;
+  processIntent(req: IntentRequest): Promise<IntentResponse>;
 
   /**
-   * Generic entry point: turn a semantic frame into text.
-   * This should be the default for most UI flows.
+   * Get field value suggestions.
    */
-  generate(request: GenerateRequest): Promise<GenerationResult>;
+  getSuggestions(req: SuggestionRequest): Promise<SuggestionResponse>;
+
+  // --- Generation ---
 
   /**
-   * Convenience wrapper for biography frames.
-   * This is backed by the same engine as `generate` but fixes the
-   * frame family and input shape to `BioFrame`.
+   * Generate surface text from a frame.
    */
-  generateBio(request: GenerateBioRequest): Promise<GenerationResult>;
+  generate(req: GenerateRequest): Promise<GenerationResult>;
 }
 
 /**
- * Default implementation of the Architect API.
- *
- * Routes are assumed to be:
- *   GET  /health
- *   GET  /frames
- *   GET  /frames/{frame_type}
- *   POST /generate
- *   POST /generate/bio
- *
- * Adjust paths here if your HTTP API uses different routes.
+ * Implementation
  */
 export const architectApi: ArchitectApi = {
   async health(): Promise<boolean> {
     try {
       const data = await request<{ status: string }>("/health");
-      return data.status === "ok" || data.status === "healthy";
+      return data.status === "ok";
     } catch {
       return false;
     }
   },
 
-  listFrames(): Promise<FrameDescriptor[]> {
-    return request<FrameDescriptor[]>("/frames");
+  // --- Frames Registry ---
+
+  listFrameTypes(): Promise<FrameTypeMeta[]> {
+    return request<FrameTypeMeta[]>("/frames/types");
   },
 
-  getFrame(frameType: string): Promise<FrameDescriptor> {
-    const encoded = encodeURIComponent(frameType);
-    return request<FrameDescriptor>(`/frames/${encoded}`);
+  getFrameSchema(frameType: string): Promise<Record<string, any>> {
+    return request<Record<string, any>>(`/frames/schemas/${frameType}`);
   },
+
+  // --- Entities ---
+
+  listEntities(params): Promise<Entity[]> {
+    const query = new URLSearchParams();
+    if (params?.search) query.set("search", params.search);
+    if (params?.frame_type) query.set("frame_type", params.frame_type);
+    
+    const queryString = query.toString();
+    return request<Entity[]>(`/entities${queryString ? `?${queryString}` : ""}`);
+  },
+
+  getEntity(id: number | string): Promise<Entity> {
+    return request<Entity>(`/entities/${id}`);
+  },
+
+  createEntity(data: EntityCreatePayload): Promise<Entity> {
+    return request<Entity>("/entities", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  updateEntity(id: number | string, data: EntityUpdatePayload): Promise<Entity> {
+    return request<Entity>(`/entities/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteEntity(id: number | string): Promise<void> {
+    return request<void>(`/entities/${id}`, {
+      method: "DELETE",
+    });
+  },
+
+  // --- AI ---
+
+  processIntent(req: IntentRequest): Promise<IntentResponse> {
+    return request<IntentResponse>("/ai/intent", {
+      method: "POST",
+      body: JSON.stringify(req),
+    });
+  },
+
+  getSuggestions(req: SuggestionRequest): Promise<SuggestionResponse> {
+    return request<SuggestionResponse>("/ai/suggest-fields", {
+      method: "POST",
+      body: JSON.stringify(req),
+    });
+  },
+
+  // --- Generation ---
 
   generate(req: GenerateRequest): Promise<GenerationResult> {
     return request<GenerationResult>("/generate", {
@@ -257,17 +356,6 @@ export const architectApi: ArchitectApi = {
       body: JSON.stringify(req),
     });
   },
-
-  generateBio(req: GenerateBioRequest): Promise<GenerationResult> {
-    return request<GenerationResult>("/generate/bio", {
-      method: "POST",
-      body: JSON.stringify(req),
-    });
-  },
 };
-
-/* -------------------------------------------------------------------------- */
-/* Convenience re-exports                                                     */
-/* -------------------------------------------------------------------------- */
 
 export { API_BASE_URL };

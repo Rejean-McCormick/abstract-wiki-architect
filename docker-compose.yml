@@ -11,6 +11,8 @@ services:
     working_dir: /app
     expose:
       - "8000"
+    ports:
+      - "8000:8000"     # <── add this
     restart: unless-stopped
 
   frontend:

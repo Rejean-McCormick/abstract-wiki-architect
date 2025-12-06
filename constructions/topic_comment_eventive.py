@@ -1,3 +1,5 @@
+# constructions/topic_comment_eventive.py
+
 """
 TOPIC–COMMENT EVENTIVE CONSTRUCTION
 -----------------------------------
@@ -29,8 +31,17 @@ topic particles, etc. Those are expressed as feature bundles and passed
 to `morph_api`, and by templates in `lang_profile`.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any, Dict, Mapping, Optional, Protocol
+
+
+__all__ = [
+    "MorphologyAPI",
+    "TopicCommentEventiveSlots",
+    "realize_topic_comment_eventive",
+]
 
 
 class MorphologyAPI(Protocol):

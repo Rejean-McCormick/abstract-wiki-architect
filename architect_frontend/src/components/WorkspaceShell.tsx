@@ -1,7 +1,15 @@
 // architect_frontend/src/components/WorkspaceShell.tsx
 
 import type { ReactNode } from "react";
-import type { FrameContextConfig } from "@/config/frameConfigs";
+
+export type FrameContextConfig = {
+  // High-level grouping of the frame (e.g., "entity", "event", etc.)
+  family: string;
+  // Title shown in the workspace header
+  title: string;
+  // Optional description displayed under the title
+  description?: string;
+};
 
 export type WorkspaceShellProps = {
   // Frame context this workspace is editing (bio, event, etc.)
@@ -43,7 +51,9 @@ export default function WorkspaceShell({
           <h1 className="awa-workspace__title">{context.title}</h1>
         </div>
         {context.description && (
-          <p className="awa-workspace__description">{context.description}</p>
+          <p className="awa-workspace__description">
+            {context.description}
+          </p>
         )}
       </header>
 

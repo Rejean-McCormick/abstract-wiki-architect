@@ -1,10 +1,10 @@
 // architect_frontend/src/components/GenerationResult.tsx
 
 import type { FC } from "react";
-import type { GenericGenerateResponse } from "@/lib/api";
+import type { GenerationResult as GenerationResultData } from "@/lib/api";
 
 type GenerationResultProps = {
-  result: GenericGenerateResponse | null;
+  result: GenerationResultData | null;
   title?: string;
   className?: string;
 };
@@ -29,7 +29,10 @@ const GenerationResult: FC<GenerationResultProps> = ({
       }}
     >
       <h2 style={{ marginTop: 0 }}>{title}</h2>
-      <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.5 }}>{result.text}</p>
+      {/* Updated to match the 'surface_text' field from the new API response structure */}
+      <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.5 }}>
+        {result.surface_text}
+      </p>
     </section>
   );
 };

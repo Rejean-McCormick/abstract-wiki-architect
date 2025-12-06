@@ -1,3 +1,5 @@
+# constructions/copula_attributive_adj.py
+
 """
 COPULA ATTRIBUTIVE ADJECTIVE CONSTRUCTION
 ----------------------------------------
@@ -26,8 +28,17 @@ This module does not know about gender, case systems, agreement rules, etc.
 Those are expressed as feature bundles and passed to `morph_api`.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any, Dict, Mapping, Optional, Protocol
+
+
+__all__ = [
+    "MorphologyAPI",
+    "AttributiveAdjSlots",
+    "realize_attributive_adj",
+]
 
 
 class MorphologyAPI(Protocol):

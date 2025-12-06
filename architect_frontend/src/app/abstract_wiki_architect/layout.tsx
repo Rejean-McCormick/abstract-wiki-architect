@@ -2,14 +2,23 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-
-import { FRAME_CONTEXTS } from "@/config/frameConfigs";
+import { architectApi } from "@/lib/api";
 
 type Props = {
   children: ReactNode;
 };
 
-export default function AbstractWikiArchitectLayout({ children }: Props) {
+// Converted to Async Server Component to fetch menu items dynamically
+export default async function AbstractWikiArchitectLayout({ children }: Props) {
+  // Dynamic Fetch: Get the list of frames from the backend
+  let frameTypes: any[] = [];
+  try {
+    frameTypes = await architectApi.listFrameTypes();
+  } catch (e) {
+    console.error("Failed to load frame types for sidebar", e);
+    // Fallback allows the shell to render even if the API is down
+  }
+
   return (
     <main
       style={{
@@ -60,10 +69,11 @@ export default function AbstractWikiArchitectLayout({ children }: Props) {
             Contexts
           </h2>
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {FRAME_CONTEXTS.map((context) => (
-              <li key={context.slug} style={{ marginBottom: "0.35rem" }}>
+            {frameTypes.map((ft) => (
+              <li key={ft.frame_type} style={{ marginBottom: "0.35rem" }}>
                 <Link
-                  href={`/abstract_wiki_architect/${context.slug}`}
+                  // URL maps directly to frame_type (e.g. /bio, /event.generic)
+                  href={`/abstract_wiki_architect/${ft.frame_type}`}
                   style={{
                     display: "block",
                     padding: "0.3rem 0.2rem",
@@ -72,7 +82,7 @@ export default function AbstractWikiArchitectLayout({ children }: Props) {
                     fontSize: "0.95rem",
                   }}
                 >
-                  {context.title}
+                  {ft.title || ft.frame_type}
                 </Link>
               </li>
             ))}

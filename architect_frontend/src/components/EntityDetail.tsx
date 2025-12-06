@@ -1,264 +1,280 @@
 // architect_frontend/src/components/EntityDetail.tsx
 "use client";
 
-import React from "react";
-
-// If you already have shared types in src/lib/entityApi.ts, prefer importing them:
-// import type { EntityDetail, EntityFrameSummary, EntityGenerationSummary } from "@/lib/entityApi";
-
-export interface EntityFrameSummary {
-  id: string;
-  frameType: string;
-  family?: string | null;
-  lang?: string | null;
-  status?: "draft" | "approved" | "deprecated" | null;
-  updatedAt?: string | null;
-}
-
-export interface EntityGenerationSummary {
-  id: string;
-  frameId: string;
-  frameType: string;
-  lang: string;
-  createdAt: string;
-  description?: string | null;
-}
-
-export interface EntityDetailData {
-  id: string;
-  label: string;
-  description?: string | null;
-  entityType?: string | null; // e.g. "person", "organization"
-  language?: string | null;
-  createdAt?: string | null;
-  updatedAt?: string | null;
-  // Optional richer metadata
-  tags?: string[] | null;
-}
+import React, { useEffect, useState, useCallback } from "react";
+import { architectApi, type Entity, type GenerationResult as GenerationResultData } from "../lib/api";
+import AIPanel from "./AIPanel";
+import GenerationResult from "./GenerationResult";
 
 interface EntityDetailProps {
-  entity: EntityDetailData;
-  frames?: EntityFrameSummary[];
-  generations?: EntityGenerationSummary[];
-  isLoading?: boolean;
-  error?: string | null;
-  onOpenFrame?: (frame: EntityFrameSummary) => void;
-  onOpenGeneration?: (generation: EntityGenerationSummary) => void;
+  id: string; // Passed from the Next.js page params
 }
 
-/**
- * EntityDetail
- *
- * Presentation component for a single entity:
- * - basic metadata (label, type, language, timestamps),
- * - list of frames attached to this entity,
- * - list of past generations.
- *
- * Data fetching is expected to be handled by the page component
- * (e.g. /abstract_wiki_architect/entities/[id]/page.tsx).
- */
-export default function EntityDetail({
-  entity,
-  frames = [],
-  generations = [],
-  isLoading = false,
-  error = null,
-  onOpenFrame,
-  onOpenGeneration,
-}: EntityDetailProps) {
-  if (isLoading) {
+export default function EntityDetail({ id }: EntityDetailProps) {
+  // --- Data State ---
+  const [entity, setEntity] = useState<Entity | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // --- Editor State ---
+  const [localPayload, setLocalPayload] = useState<Record<string, unknown>>({});
+  const [payloadString, setPayloadString] = useState("{}");
+  const [jsonError, setJsonError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  // --- Generation State ---
+  const [generating, setGenerating] = useState(false);
+  const [genResult, setGenResult] = useState<GenerationResultData | null>(null);
+
+  // --- Fetch Data ---
+  useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true);
+        const data = await architectApi.getEntity(id);
+        setEntity(data);
+
+        // Initialize editor with current payload
+        const initialPayload = data.frame_payload || {};
+        setLocalPayload(initialPayload);
+        setPayloadString(JSON.stringify(initialPayload, null, 2));
+      } catch (e) {
+        console.error("Failed to load entity", e);
+        setError("Could not load entity. It may not exist or the backend is down.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [id]);
+
+  // --- Handlers ---
+   
+  // 1. Handle manual text edits in the JSON box
+  const handleJsonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newVal = e.target.value;
+    setPayloadString(newVal);
+    try {
+      const parsed = JSON.parse(newVal);
+      setLocalPayload(parsed);
+      setJsonError(null);
+    } catch (err) {
+      setJsonError("Invalid JSON");
+    }
+  };
+
+  // 2. Save changes to backend
+  const handleSave = async () => {
+    if (!entity) return;
+    if (jsonError) {
+      alert("Please fix JSON errors before saving.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const updated = await architectApi.updateEntity(id, {
+        frame_payload: localPayload,
+        // We could also update name/description here if we added fields for them
+      });
+      setEntity(updated);
+      alert("Saved successfully!");
+    } catch (e) {
+      console.error(e);
+      alert("Failed to save changes.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // 3. Handle AI Suggestions (Apply Patch)
+  const handleAISuggestion = useCallback((newPayload: Record<string, unknown>) => {
+    setLocalPayload((prev) => {
+      const merged = { ...prev, ...newPayload };
+      setPayloadString(JSON.stringify(merged, null, 2));
+      return merged;
+    });
+    setJsonError(null);
+  }, []);
+
+  // 4. Handle Generate Preview
+  const handleGenerate = async () => {
+    if (!entity) return;
+    if (jsonError) {
+      alert("Please fix JSON errors before generating.");
+      return;
+    }
+
+    setGenerating(true);
+    setGenResult(null);
+
+    try {
+      // Calls the /generate endpoint with the current *unsaved* payload
+      // allowing the user to test edits immediately.
+      const result = await architectApi.generate({
+        lang: entity.lang,
+        frame_type: entity.frame_type || "generic",
+        frame_payload: localPayload,
+      });
+      setGenResult(result);
+    } catch (e) {
+      console.error("Generation failed", e);
+      alert("Generation failed. See console for details.");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  // --- Render ---
+
+  if (loading) {
     return (
-      <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600">
-        Loading entity…
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
+        Loading entity editor...
       </div>
     );
   }
 
-  if (error) {
+  if (error || !entity) {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-        {error}
+        {error || "Entity not found."}
       </div>
     );
   }
 
-  const created = entity.createdAt
-    ? new Date(entity.createdAt).toLocaleString()
-    : null;
-  const updated = entity.updatedAt
-    ? new Date(entity.updatedAt).toLocaleString()
-    : null;
+  const created = entity.created_at
+    ? new Date(entity.created_at).toLocaleString()
+    : "—";
+  const updated = entity.updated_at
+    ? new Date(entity.updated_at).toLocaleString()
+    : "—";
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Header / basic info */}
+      {/* ------------------------------------------------------------------ */}
+      {/* 1. Header & Metadata                                               */}
+      {/* ------------------------------------------------------------------ */}
       <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900">
-              {entity.label}
-            </h1>
-            <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600">
-              {entity.entityType && (
-                <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5">
-                  {entity.entityType}
+            <h1 className="text-xl font-bold text-slate-900">{entity.name}</h1>
+            
+            {/* Metadata Badges */}
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-600">
+              {entity.frame_type && (
+                <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 font-medium text-slate-700">
+                  Type: {entity.frame_type}
                 </span>
               )}
-              {entity.language && (
-                <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5">
-                  Lang: {entity.language}
+              {entity.lang && (
+                <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 font-medium text-slate-700">
+                  Lang: {entity.lang}
                 </span>
               )}
-              {entity.tags?.length
-                ? entity.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5"
-                    >
-                      {t}
-                    </span>
-                  ))
-                : null}
+              {entity.tags && entity.tags.length > 0 && (
+                 <>
+                   <span className="text-slate-300">|</span>
+                   {entity.tags.map(tag => (
+                     <span key={tag} className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-blue-700">
+                       #{tag}
+                     </span>
+                   ))}
+                 </>
+              )}
             </div>
           </div>
-          <div className="text-right text-xs text-slate-500">
-            {created && (
-              <div>
-                <span className="font-medium">Created:</span> {created}
-              </div>
-            )}
-            {updated && (
-              <div>
-                <span className="font-medium">Updated:</span> {updated}
-              </div>
-            )}
-            <div className="mt-1 text-[10px] text-slate-400">
-              Entity ID: {entity.id}
+
+          {/* Timestamps & Actions */}
+          <div className="flex flex-col items-end gap-3">
+             <div className="text-right text-xs text-slate-500">
+              <div><span className="font-medium">Created:</span> {created}</div>
+              <div><span className="font-medium">Updated:</span> {updated}</div>
+              <div className="mt-1 font-mono text-[10px] text-slate-400">ID: {entity.id}</div>
             </div>
+            <button
+              onClick={handleSave}
+              disabled={saving || !!jsonError}
+              className="rounded bg-sky-600 px-4 py-1.5 text-sm font-semibold text-white shadow hover:bg-sky-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
           </div>
         </div>
 
-        {entity.description && (
-          <p className="mt-3 text-sm text-slate-700">{entity.description}</p>
+        {entity.short_description && (
+          <p className="mt-4 text-sm text-slate-700 border-t border-slate-100 pt-3">
+            {entity.short_description}
+          </p>
         )}
       </section>
 
-      {/* Frames list */}
-      <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-slate-900">
-            Frames for this entity
-          </h2>
-          <span className="text-xs text-slate-500">
-            {frames.length} frame{frames.length === 1 ? "" : "s"}
-          </span>
+      {/* ------------------------------------------------------------------ */}
+      {/* 2. Main Editor Area (JSON + AI)                                    */}
+      {/* ------------------------------------------------------------------ */}
+      <div className="flex h-[600px] gap-4">
+        
+        {/* Left: JSON Editor */}
+        <div className="flex flex-1 flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="mb-2 flex items-center justify-between">
+            <label className="text-xs font-semibold uppercase text-slate-500">
+              Frame Payload
+            </label>
+            {jsonError && (
+              <span className="text-xs font-bold text-red-600">{jsonError}</span>
+            )}
+          </div>
+          <textarea
+            className={`w-full flex-1 resize-none rounded border p-3 font-mono text-sm leading-relaxed focus:outline-none ${
+              jsonError 
+                ? "border-red-300 bg-red-50 focus:border-red-500" 
+                : "border-slate-300 focus:border-sky-500"
+            }`}
+            value={payloadString}
+            onChange={handleJsonChange}
+            spellCheck={false}
+          />
+          <p className="mt-2 text-xs text-slate-400">
+            * Direct edit mode. Use the Architect AI to generate structure.
+          </p>
         </div>
 
-        {frames.length === 0 ? (
-          <p className="text-xs text-slate-500">
-            No frames attached yet. Use the Architect workspaces to create one.
-          </p>
-        ) : (
-          <ul className="divide-y divide-slate-100 text-sm">
-            {frames.map((frame) => {
-              const updatedAt = frame.updatedAt
-                ? new Date(frame.updatedAt).toLocaleString()
-                : null;
-              const badge =
-                frame.status === "approved"
-                  ? "bg-emerald-100 text-emerald-800 border-emerald-200"
-                  : frame.status === "deprecated"
-                  ? "bg-slate-100 text-slate-500 border-slate-200"
-                  : "bg-blue-100 text-blue-800 border-blue-200";
+        {/* Right: AI Panel */}
+        <div className="w-80 shrink-0 sm:w-96">
+          <AIPanel
+            entityId={String(entity.id)}
+            entityType={entity.frame_type || "generic"}
+            currentValues={localPayload}
+            language={entity.lang}
+            onApplySuggestion={handleAISuggestion}
+            className="h-full"
+          />
+        </div>
+      </div>
 
-              const content = (
-                <div className="flex items-center justify-between px-2 py-2">
-                  <div>
-                    <div className="text-slate-900">
-                      <span className="font-medium">{frame.frameType}</span>
-                      {frame.family && (
-                        <span className="ml-2 text-xs text-slate-500">
-                          ({frame.family})
-                        </span>
-                      )}
-                    </div>
-                    <div className="mt-0.5 text-xs text-slate-500">
-                      {frame.lang && <span>Lang: {frame.lang}</span>}
-                      {updatedAt && (
-                        <span className="ml-2">Updated: {updatedAt}</span>
-                      )}
-                    </div>
-                  </div>
-                  {frame.status && (
-                    <span
-                      className={`rounded-full border px-2 py-0.5 text-[11px] ${badge}`}
-                    >
-                      {frame.status}
-                    </span>
-                  )}
-                </div>
-              );
-
-              return (
-                <li
-                  key={frame.id}
-                  className="cursor-pointer hover:bg-slate-50"
-                  onClick={() => onOpenFrame && onOpenFrame(frame)}
-                >
-                  {content}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
-
-      {/* Generations list */}
+      {/* ------------------------------------------------------------------ */}
+      {/* 3. Test Generation (Replaces History Placeholder)                  */}
+      {/* ------------------------------------------------------------------ */}
       <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="mb-2 flex items-center justify-between">
+        <div className="mb-4 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-slate-900">
-            Generated texts
+            Test Generation
           </h2>
-          <span className="text-xs text-slate-500">
-            {generations.length} generation
-            {generations.length === 1 ? "" : "s"}
-          </span>
+          <button
+            onClick={handleGenerate}
+            disabled={generating || !!jsonError}
+            className="rounded bg-indigo-600 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:bg-slate-300 disabled:cursor-not-allowed"
+          >
+            {generating ? "Generating..." : "Generate Preview"}
+          </button>
         </div>
 
-        {generations.length === 0 ? (
-          <p className="text-xs text-slate-500">
-            No generated texts recorded yet for this entity.
-          </p>
+        {genResult ? (
+          <GenerationResult result={genResult} className="!mt-0 !shadow-none !border !border-slate-100" />
         ) : (
-          <ul className="divide-y divide-slate-100 text-sm">
-            {generations.map((gen) => {
-              const createdAt = new Date(gen.createdAt).toLocaleString();
-              return (
-                <li
-                  key={gen.id}
-                  className="cursor-pointer px-2 py-2 hover:bg-slate-50"
-                  onClick={() => onOpenGeneration && onOpenGeneration(gen)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-slate-900">
-                        <span className="font-medium">{gen.frameType}</span>
-                        <span className="ml-2 text-xs text-slate-500">
-                          ({gen.lang})
-                        </span>
-                      </div>
-                      {gen.description && (
-                        <div className="mt-0.5 line-clamp-2 text-xs text-slate-600">
-                          {gen.description}
-                        </div>
-                      )}
-                    </div>
-                    <div className="text-xs text-slate-500">{createdAt}</div>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="py-8 text-center text-xs text-slate-500 bg-slate-50 rounded border border-dashed border-slate-200">
+            Click "Generate Preview" to test the current frame payload against the NLG engine.
+          </div>
         )}
       </section>
     </div>

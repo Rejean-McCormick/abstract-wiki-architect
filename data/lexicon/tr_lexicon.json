@@ -19,7 +19,7 @@
       "features": {
         "scientific_field": ["fizik"]
       },
-      "qid": "QTODO_FIZIKCI"
+      "qid": "Q169470"
     },
     "kimyager": {
       "lemma": "kimyager",
@@ -34,7 +34,7 @@
       "features": {
         "scientific_field": ["kimya"]
       },
-      "qid": "QTODO_KIMYAGER"
+      "qid": "Q593644"
     },
     "yazar": {
       "lemma": "yazar",
@@ -49,7 +49,7 @@
       "features": {
         "domain": ["edebiyat"]
       },
-      "qid": "QTODO_YAZAR"
+      "qid": "Q36180"
     },
     "siyasetci": {
       "lemma": "siyasetçi",
@@ -64,7 +64,7 @@
       "features": {
         "domain": ["siyaset"]
       },
-      "qid": "QTODO_SIYASETCI"
+      "qid": "Q82955"
     },
     "doktor": {
       "lemma": "doktor",
@@ -79,7 +79,7 @@
       "features": {
         "domain": ["tip"]
       },
-      "qid": "QTODO_DOKTOR"
+      "qid": "Q39631"
     },
     "muzisyen": {
       "lemma": "müzisyen",
@@ -94,7 +94,7 @@
       "features": {
         "domain": ["muzik"]
       },
-      "qid": "QTODO_MUZISYEN"
+      "qid": "Q639669"
     }
   },
 
@@ -112,7 +112,7 @@
       "features": {
         "country_qid": "Q43"
       },
-      "qid": "QTODO_TURK"
+      "qid": "Q1266100"
     },
     "polonyali": {
       "lemma": "Polonyalı",
@@ -127,7 +127,7 @@
       "features": {
         "country_qid": "Q36"
       },
-      "qid": "QTODO_POLONYALI"
+      "qid": "Q1026"
     },
     "fransiz": {
       "lemma": "Fransız",
@@ -142,7 +142,7 @@
       "features": {
         "country_qid": "Q142"
       },
-      "qid": "QTODO_FRANSIZ"
+      "qid": "Q121842"
     },
     "alman": {
       "lemma": "Alman",
@@ -157,7 +157,7 @@
       "features": {
         "country_qid": "Q183"
       },
-      "qid": "QTODO_ALMAN"
+      "qid": "Q42884"
     },
     "amerikali": {
       "lemma": "Amerikalı",
@@ -172,7 +172,7 @@
       "features": {
         "country_qid": "Q30"
       },
-      "qid": "QTODO_AMERIKALI"
+      "qid": "Q846570"
     }
   },
 
@@ -187,7 +187,7 @@
         "default": "kral",
         "plural": "krallar"
       },
-      "qid": "QTODO_KRAL"
+      "qid": "Q12097"
     },
     "kralice": {
       "lemma": "kraliçe",
@@ -199,7 +199,7 @@
         "default": "kraliçe",
         "plural": "kraliçeler"
       },
-      "qid": "QTODO_KRALICE"
+      "qid": "Q19643"
     },
     "cumhurbaskani": {
       "lemma": "cumhurbaşkanı",
@@ -211,7 +211,7 @@
         "default": "cumhurbaşkanı",
         "plural": "cumhurbaşkanları"
       },
-      "qid": "QTODO_CUMHURBASKANI"
+      "qid": "Q30461"
     }
   },
 
@@ -227,7 +227,7 @@
       "features": {
         "field": "fizik"
       },
-      "qid": "QTODO_NOBEL_FIZIK"
+      "qid": "Q38104"
     },
     "nobel_kimya_odulu": {
       "lemma": "Nobel Kimya Ödülü",
@@ -240,7 +240,7 @@
       "features": {
         "field": "kimya"
       },
-      "qid": "QTODO_NOBEL_KIMYA"
+      "qid": "Q44585"
     }
   }
 }

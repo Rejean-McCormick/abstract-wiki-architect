@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Protocol
 
 import router
 from .semantics import Frame, BioFrame, EventFrame
-
-import re
 
 
 # ---------------------------------------------------------------------------
@@ -83,7 +82,8 @@ class Engine(Protocol):
         self,
         frame: Frame,
         **kwargs: Any,
-    ) -> Dict[str, Any]: ...
+    ) -> Dict[str, Any]:
+        ...
 
 
 # ---------------------------------------------------------------------------

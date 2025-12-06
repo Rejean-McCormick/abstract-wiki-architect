@@ -1,3 +1,5 @@
+# constructions/base.py
+
 """
 Base abstractions for clause-level constructions.
 
@@ -24,6 +26,17 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Protocol, Optional
+
+
+__all__ = [
+    "ClauseInput",
+    "ClauseOutput",
+    "MorphologyAPI",
+    "Construction",
+    "get_role",
+    "bool_feature",
+    "str_feature",
+]
 
 
 # ---------------------------------------------------------------------------

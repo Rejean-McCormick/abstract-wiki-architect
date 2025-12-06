@@ -5,14 +5,21 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import AIPanel from "../components/AIPanel";
-import * as aiApi from "../lib/aiApi";
+import { architectApi } from "../lib/api";
 
-const mockRequestAISuggestions = jest.spyOn(aiApi, "requestAISuggestions");
-const mockRequestAIExplanation = jest.spyOn(aiApi, "requestAIExplanation");
+// Mock the API module to intercept calls
+jest.mock("../lib/api", () => ({
+  architectApi: {
+    processIntent: jest.fn(),
+  },
+}));
+
+// Helper to access the mock function with proper typing
+const mockProcessIntent = architectApi.processIntent as jest.Mock;
 
 const baseProps = {
-  frameType: "bio",
-  frameSlug: "person",
+  entityType: "bio",
+  entityId: "person",
   currentValues: { name: "Marie Curie" },
   onApplySuggestion: jest.fn(),
 };
@@ -25,28 +32,29 @@ describe("AIPanel", () => {
   it("renders basic AI controls", () => {
     render(<AIPanel {...baseProps} />);
 
-    expect(screen.getByText(/AI assistant/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /suggest fields/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /ask ai/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText(/ask ai about this frame/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Architect AI/i)).toBeInTheDocument();
+    
+    // Check for the "Suggest" button (mapped to 'suggest_missing' preset)
+    expect(screen.getByRole("button", { name: /Suggest/i })).toBeInTheDocument();
+    
+    // Check for "Explain" button
+    expect(screen.getByRole("button", { name: /Explain/i })).toBeInTheDocument();
+    
+    // Check input placeholder
+    expect(screen.getByPlaceholderText(/Type your instructions/i)).toBeInTheDocument();
   });
 
-  it("requests suggestions and renders them, allowing apply", async () => {
-    const suggestions = [
-      {
-        field: "profession",
-        value: "physicist",
-        reason: "Based on known data about Marie Curie.",
-      },
-    ];
-
-    mockRequestAISuggestions.mockResolvedValueOnce(suggestions);
+  it("sends a request and handles suggestions", async () => {
+    // 1. Mock a successful response from the backend with a patch
+    mockProcessIntent.mockResolvedValueOnce({
+      intent_label: "suggest_fields",
+      assistant_messages: [
+        { role: "assistant", content: "I suggest setting the profession." }
+      ],
+      patches: [
+        { path: "profession", value: "physicist", op: "add" }
+      ]
+    });
 
     const onApplySuggestion = jest.fn();
     render(
@@ -56,99 +64,36 @@ describe("AIPanel", () => {
       />
     );
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /suggest fields/i })
-    );
+    // 2. Click "Suggest" button to trigger the 'suggest_missing' preset
+    fireEvent.click(screen.getByRole("button", { name: /Suggest/i }));
 
+    // 3. Wait for API call to complete
     await waitFor(() =>
-      expect(mockRequestAISuggestions).toHaveBeenCalledTimes(1)
+      expect(mockProcessIntent).toHaveBeenCalledTimes(1)
     );
 
-    expect(mockRequestAISuggestions).toHaveBeenCalledWith({
-      frameType: "bio",
-      frameSlug: "person",
-      values: { name: "Marie Curie" },
-    });
+    // 4. Verify request payload matches the new API structure
+    expect(mockProcessIntent).toHaveBeenCalledWith(expect.objectContaining({
+      message: expect.stringContaining("missing or underspecified"), // The preset text
+      context_frame: {
+        frame_type: "bio",
+        payload: { name: "Marie Curie" }
+      }
+    }));
 
-    // Suggestion list should show the suggested field/value
-    expect(screen.getByText(/profession/i)).toBeInTheDocument();
-    expect(screen.getByText(/physicist/i)).toBeInTheDocument();
+    // 5. Verify response handling: 
+    // The assistant's message should appear in the chat
+    expect(await screen.findByText(/I suggest setting the profession/i)).toBeInTheDocument();
 
-    const applyButtons = screen.getAllByRole("button", {
-      name: /apply suggestion/i,
-    });
-    fireEvent.click(applyButtons[0]);
+    // The "Suggestion Available" banner should appear because we returned patches
+    expect(screen.getByText(/Suggestion Available/i)).toBeInTheDocument();
 
-    expect(onApplySuggestion).toHaveBeenCalledTimes(1);
+    // 6. Click "Apply Changes"
+    fireEvent.click(screen.getByRole("button", { name: /Apply Changes/i }));
+
+    // 7. Verify the callback was fired with the correct data
     expect(onApplySuggestion).toHaveBeenCalledWith({
-      profession: "physicist",
+      profession: "physicist"
     });
-  });
-
-  it("sends a question to the AI and renders the explanation", async () => {
-    const explanation =
-      "The biography focuses on Curie's pioneering work in radioactivity.";
-
-    mockRequestAIExplanation.mockResolvedValueOnce(explanation);
-
-    render(<AIPanel {...baseProps} />);
-
-    const questionInput = screen.getByPlaceholderText(
-      /ask ai about this frame/i
-    );
-    fireEvent.change(questionInput, {
-      target: { value: "Why is her work considered pioneering?" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /ask ai/i }));
-
-    await waitFor(() =>
-      expect(mockRequestAIExplanation).toHaveBeenCalledTimes(1)
-    );
-
-    expect(mockRequestAIExplanation).toHaveBeenCalledWith({
-      frameType: "bio",
-      frameSlug: "person",
-      values: { name: "Marie Curie" },
-      question: "Why is her work considered pioneering?",
-    });
-
-    await waitFor(() =>
-      expect(
-        screen.getByText(
-          /The biography focuses on Curie's pioneering work in radioactivity./i
-        )
-      ).toBeInTheDocument()
-    );
-  });
-
-  it("shows a loading indicator while waiting for AI", async () => {
-    let resolveSuggestions: ((value: any) => void) | null = null;
-
-    mockRequestAISuggestions.mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          resolveSuggestions = resolve;
-        })
-    );
-
-    render(<AIPanel {...baseProps} />);
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /suggest fields/i })
-    );
-
-    // While the promise is pending, a loading indicator should appear
-    expect(screen.getByText(/thinking/i)).toBeInTheDocument();
-
-    // Resolve the promise to finish the request
-    resolveSuggestions &&
-      resolveSuggestions([
-        { field: "profession", value: "physicist", reason: "test" },
-      ]);
-
-    await waitFor(() =>
-      expect(screen.queryByText(/thinking/i)).not.toBeInTheDocument()
-    );
   });
 });

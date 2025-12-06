@@ -1,3 +1,5 @@
+# constructions/copula_equative_classification.py
+
 """
 COPULA EQUATIVE CLASSIFICATION CONSTRUCTION
 -------------------------------------------
@@ -25,8 +27,17 @@ This module does not know about gender, case systems, articles, etc. Those are
 expressed as feature bundles and passed to `morph_api`.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any, Dict, Mapping, Optional, Protocol
+
+
+__all__ = [
+    "MorphologyAPI",
+    "EquativeClassificationSlots",
+    "realize_equative_classification",
+]
 
 
 class MorphologyAPI(Protocol):

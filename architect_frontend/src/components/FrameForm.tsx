@@ -3,9 +3,31 @@
 'use client';
 
 import React, { useCallback, useMemo, useState } from 'react';
-import type { FrameContextConfig, FrameFieldConfig } from '../config/frameConfigs';
-import type { GenerationResult } from '../lib/api';
-import { generateFrame } from '../lib/api';
+// FIX: Import architectApi instead of missing generateFrame
+import { architectApi, type GenerationResult } from '../lib/api';
+
+// FIX: Define types locally since ../config/frameConfigs is deleted
+export interface FrameFieldConfig {
+  name: string;
+  label: string;
+  inputType: 'text' | 'textarea' | 'number' | 'checkbox' | 'select' | 'json';
+  required?: boolean;
+  defaultValue?: unknown;
+  placeholder?: string;
+  helpText?: string;
+  rows?: number;
+  options?: { label: string; value: string }[];
+}
+
+export interface FrameContextConfig {
+  frameType: string;
+  label: string;
+  description?: string;
+  defaultLang: string;
+  languages: string[];
+  languageHint?: string;
+  fields: FrameFieldConfig[];
+}
 
 type FrameFormProps = {
   frameConfig: FrameContextConfig;
@@ -144,10 +166,12 @@ export const FrameForm: React.FC<FrameFormProps> = ({
         if (discourseMode.trim()) options.discourse_mode = discourseMode.trim();
         if (seed.trim()) options.seed = Number(seed.trim());
 
-        const result = await generateFrame({
+        // FIX: Use architectApi.generate and snake_case keys for the backend
+        // 
+        const result = await architectApi.generate({
           lang,
-          frameType: frameConfig.frameType,
-          frame: framePayload,
+          frame_type: frameConfig.frameType,
+          frame_payload: framePayload,
           options: Object.keys(options).length ? options : undefined,
         });
 

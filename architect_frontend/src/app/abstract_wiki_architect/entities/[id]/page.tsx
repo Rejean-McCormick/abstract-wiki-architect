@@ -1,8 +1,7 @@
 // architect_frontend/src/app/abstract_wiki_architect/entities/[id]/page.tsx
 
-import { notFound } from "next/navigation";
+import React from "react";
 import EntityDetail from "@/components/EntityDetail";
-import { getEntity } from "@/lib/entityApi";
 
 type PageProps = {
   params: {
@@ -13,25 +12,18 @@ type PageProps = {
 /**
  * Entity detail page.
  *
- * Server component that fetches a single entity by ID and renders it
- * using the shared <EntityDetail> component.
+ * This Server Component acts as a wrapper. It extracts the `id` from the route
+ * and renders the client-side <EntityDetail> editor.
+ * * Data fetching is now handled inside EntityDetail via architectApi
+ * to support the dynamic editor/AI workflows.
  */
-export default async function EntityPage({ params }: PageProps) {
+export default function EntityPage({ params }: PageProps) {
+  // In Next.js App Router, params are accessible here.
   const { id } = params;
 
-  if (!id) {
-    notFound();
-  }
-
-  const entity = await getEntity(id);
-
-  if (!entity) {
-    notFound();
-  }
-
   return (
-    <div>
-      <EntityDetail entity={entity} />
+    <div className="min-h-screen bg-slate-50 p-4 md:p-6">
+      <EntityDetail id={id} />
     </div>
   );
 }

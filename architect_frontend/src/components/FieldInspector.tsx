@@ -1,15 +1,31 @@
 // architect_frontend/src/components/FieldInspector.tsx
-'use client';
+"use client";
 
-import React from 'react';
-import type { FrameFieldConfig } from '@/config/frameConfigs';
+import React from "react";
+
+// We define a flexible interface that matches the backend's FrameFieldMetadata
+// (from architect_http_api/schemas/frames_metadata.py)
+// but can also tolerate simple string values if passed from legacy code.
+export interface FieldMeta {
+  name: string;
+  // Backend returns LocalizedLabel { text: string }, but we tolerate string
+  label?: { text: string } | string;
+  description?: { text: string } | string | null;
+  // Backend uses 'kind', legacy used 'type'
+  kind?: string;
+  type?: string; 
+  required?: boolean;
+  // Backend might pass examples as any JSON
+  example?: unknown;
+  group?: string;
+}
 
 interface FieldInspectorProps {
   /**
    * The field config for the currently focused/hovered field.
    * Pass `null` when no field is active.
    */
-  activeField: FrameFieldConfig | null;
+  activeField: FieldMeta | null;
 
   /**
    * Raw key of the field (e.g. "topic", "time_span").
@@ -33,6 +49,13 @@ interface FieldInspectorProps {
   extraHelp?: string | null;
 }
 
+// Helper to extract text from string or LocalizedLabel object
+function getLocalizedText(val: { text: string } | string | null | undefined): string {
+  if (!val) return "";
+  if (typeof val === "string") return val;
+  return val.text || "";
+}
+
 const FieldInspector: React.FC<FieldInspectorProps> = ({
   activeField,
   fieldKey,
@@ -44,7 +67,7 @@ const FieldInspector: React.FC<FieldInspectorProps> = ({
 
   if (!hasActiveField) {
     return (
-      <aside className="hidden xl:block w-80 border-l border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+      <aside className="hidden xl:block w-80 shrink-0 border-l border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
         <p className="text-xs text-slate-500">
           Focus a field in the form to see structured guidance here.
         </p>
@@ -52,25 +75,44 @@ const FieldInspector: React.FC<FieldInspectorProps> = ({
     );
   }
 
-  const label = activeField?.label ?? fieldKey ?? '';
-  const description = activeField?.description;
-  const type = activeField?.type;
+  // Normalize data from the potentially diverse activeField shape
+  const rawLabel = activeField?.label;
+  const label = rawLabel ? getLocalizedText(rawLabel) : (fieldKey ?? "");
+  
+  const description = getLocalizedText(activeField?.description);
+  
+  // Support both new 'kind' and old 'type' properties
+  const fieldType = activeField?.kind || activeField?.type;
+  
   const required = activeField?.required;
-  const example = (activeField as any)?.example as string | undefined;
-  const group = (activeField as any)?.group as string | undefined;
+  const group = activeField?.group;
+
+  // Example might be a string or a complex object in the new backend
+  const rawExample = activeField?.example;
+  const example =
+    typeof rawExample === "string"
+      ? rawExample
+      : rawExample
+      ? JSON.stringify(rawExample, null, 2)
+      : undefined;
 
   const hasMeta =
-    !!description || !!example || !!group || typeof value !== 'undefined' || !!error || !!extraHelp;
+    !!description ||
+    !!example ||
+    !!group ||
+    typeof value !== "undefined" ||
+    !!error ||
+    !!extraHelp;
 
   return (
-    <aside className="hidden xl:flex flex-col w-80 border-l border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+    <aside className="hidden xl:flex flex-col w-80 shrink-0 border-l border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 overflow-y-auto h-full">
       {/* Header */}
       <div className="mb-3">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="font-semibold text-slate-900 text-sm truncate">
+          <h2 className="font-semibold text-slate-900 text-sm truncate" title={label}>
             {label}
           </h2>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             {group && (
               <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-medium text-slate-500">
                 {group}
@@ -84,9 +126,9 @@ const FieldInspector: React.FC<FieldInspectorProps> = ({
           </div>
         </div>
         <div className="mt-0.5 flex items-center gap-2">
-          {type && (
+          {fieldType && (
             <span className="text-[11px] uppercase tracking-wide text-slate-400">
-              {type}
+              {fieldType}
             </span>
           )}
           {fieldKey && (
@@ -115,20 +157,20 @@ const FieldInspector: React.FC<FieldInspectorProps> = ({
           <h3 className="mb-1 text-[11px] font-medium uppercase tracking-wide text-slate-500">
             Example
           </h3>
-          <p className="text-xs text-slate-800 whitespace-pre-wrap">
+          <p className="text-xs text-slate-800 whitespace-pre-wrap font-mono">
             {example}
           </p>
         </section>
       )}
 
       {/* Current value */}
-      {typeof value !== 'undefined' && value !== null && value !== '' && (
+      {typeof value !== "undefined" && value !== null && value !== "" && (
         <section className="mb-3 rounded-md bg-white border border-slate-200 px-3 py-2">
           <h3 className="mb-1 text-[11px] font-medium uppercase tracking-wide text-slate-500">
             Current value
           </h3>
-          <p className="text-xs text-slate-800 break-words whitespace-pre-wrap max-h-32 overflow-auto">
-            {typeof value === 'string'
+          <p className="text-xs text-slate-800 break-words whitespace-pre-wrap max-h-32 overflow-auto font-mono">
+            {typeof value === "string"
               ? value
               : JSON.stringify(value, null, 2)}
           </p>

@@ -1,77 +1,58 @@
 // architect_frontend/src/app/abstract_wiki_architect/page.tsx
 
-import Link from "next/link";
-import { frameConfigs } from "@/config/frameConfigs";
+import React from "react";
+import { architectApi } from "@/lib/api";
+import EntityList from "@/components/EntityList";
+import CreateWorkspaceGrid from "./CreateWorkspaceGrid"; // Extracted Client Component
 
-export default function AbstractWikiArchitectHomePage() {
+export const dynamic = "force-dynamic"; // Ensure we fetch fresh data on navigation
+
+// Derive the frame types list type from the API helper
+type FrameTypeList = Awaited<ReturnType<typeof architectApi.listFrameTypes>>;
+
+export default async function AbstractWikiArchitectHomePage() {
+  let frameTypes: FrameTypeList = [];
+  try {
+    frameTypes = await architectApi.listFrameTypes();
+  } catch (e) {
+    console.error("Failed to load frame types", e);
+  }
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
-      <div className="mx-auto max-w-5xl px-4 py-10">
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        {/* ------------------------------------------------------------------ */}
+        {/* 1. Header & Templates                                              */}
+        {/* ------------------------------------------------------------------ */}
         <header className="mb-10 space-y-3">
           <p className="text-[11px] font-mono uppercase tracking-[0.25em] text-slate-400">
             Abstract Wiki Architect
           </p>
           <h1 className="text-3xl font-semibold tracking-tight">
-            Choose a frame workspace
+            Start a new workspace
           </h1>
           <p className="max-w-3xl text-sm text-slate-300">
-            Pick a semantic frame to open its generation workspace. Each frame
-            has its own dedicated form, defaults, and language options. You can
-            switch frames at any time from the workspace header.
+            Pick a semantic frame to open a generation workspace. Each frame
+            has its own dedicated form, defaults, and language options.
           </p>
         </header>
 
-        <section className="grid gap-4 md:grid-cols-2">
-          {frameConfigs.map((frame) => (
-            <Link
-              key={frame.slug}
-              href={`/abstract_wiki_architect/${frame.slug}`}
-              className="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/40 p-4 transition hover:border-sky-500 hover:bg-slate-900"
-            >
-              <div className="space-y-2">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      {frame.icon && (
-                        <span aria-hidden="true" className="text-lg">
-                          {frame.icon}
-                        </span>
-                      )}
-                      <h2 className="text-sm font-medium tracking-tight">
-                        {frame.title}
-                      </h2>
-                    </div>
-                    <p className="text-xs text-slate-300 line-clamp-3">
-                      {frame.description}
-                    </p>
-                  </div>
-                  <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-slate-500 group-hover:text-sky-400">
-                    Open
-                  </span>
-                </div>
-              </div>
+        {/* Dynamic Frame Grid (Client Component for Interactivity) */}
+        <CreateWorkspaceGrid frameTypes={frameTypes} />
 
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-slate-800/80 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wide text-slate-200">
-                  {frame.frameType}
-                </span>
-                {frame.availableLangs && frame.availableLangs.length > 0 && (
-                  <span className="rounded-full bg-slate-900/70 px-2 py-0.5 text-[10px] text-slate-400">
-                    {frame.availableLangs.join(" · ")}
-                  </span>
-                )}
-                {frame.tags &&
-                  frame.tags.map((tag: string) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-slate-900/40 px-2 py-0.5 text-[10px] text-slate-400"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-              </div>
-            </Link>
-          ))}
+        {/* ------------------------------------------------------------------ */}
+        {/* 2. Recent Work (The new EntityList)                                */}
+        {/* ------------------------------------------------------------------ */}
+        <section className="rounded-xl border border-slate-800 bg-slate-900/20 p-6">
+          <div className="mb-6 flex items-baseline justify-between">
+            <h2 className="text-xl font-semibold tracking-tight text-slate-200">
+              Recent Entities
+            </h2>
+          </div>
+
+          <div className="bg-slate-50 rounded-lg p-4 text-slate-900">
+            <EntityList />
+          </div>
         </section>
       </div>
     </main>

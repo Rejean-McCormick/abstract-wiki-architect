@@ -14,28 +14,28 @@ is a separate, thin frontend. The router here focuses on:
 
 Responsibilities
 ----------------
-- [cite_start]Load language profiles (language_profiles/profiles.json)[cite: 1725].
-- [cite_start]For a given language code, decide which **morphology family** to use[cite: 1725].
-- [cite_start]Instantiate the appropriate morphology module for that family[cite: 1725, 1728].
-- [cite_start]For a given construction ID, import and call the right construction function[cite: 1725, 1732].
+- Load language profiles (language_profiles/profiles.json).
+- For a given language code, decide which **morphology family** to use.
+- Instantiate the appropriate morphology module for that family.
+- For a given construction ID, import and call the right construction function.
 - Provide a simple entrypoint:
 
-[cite_start]      render(construction_id, slots, lang_code) -> str [cite: 1725]
+      render(construction_id, slots, lang_code) -> str
 
 This router is **family-agnostic** at the construction level: it only cares
-[cite_start]about which construction to call and which morphology module to bind to it[cite: 1725].
+about which construction to call and which morphology module to bind to it.
 All language-specific behavior lives in:
 
-- [cite_start]language profile (syntax & construction options)[cite: 1725, 1726],
-- [cite_start]morphology module (family-based)[cite: 1725, 1728],
-- [cite_start]construction module (family-agnostic)[cite: 1725, 1732].
+- language profile (syntax & construction options),
+- morphology module (family-based),
+- construction module (family-agnostic).
 
 Expected environment
 --------------------
 
-[cite_start]1) language_profiles/profiles.json [cite: 1726]
+1) language_profiles/profiles.json
 
-   [cite_start]A JSON object mapping language codes to profiles, e.g.: [cite: 1726]
+   A JSON object mapping language codes to profiles, e.g.:
 
        {
          "ja": {
@@ -54,51 +54,51 @@ Expected environment
         }
        }
 
-[cite_start]   The canonical field is `morphology_family`[cite: 1727]. A legacy field `family`
-[cite_start]   (with the same values) is also accepted for backwards compatibility[cite: 1727].
+   The canonical field is `morphology_family`. A legacy field `family`
+   (with the same values) is also accepted for backwards compatibility.
    An optional `morphology_family_override` can force a different family
-[cite_start]   for a particular language/profile if needed[cite: 1727].
+   for a particular language/profile if needed.
 
 2) Morphology modules:
 
-[cite_start]   Each family has a morphology module and a primary class, e.g.: [cite: 1728]
+   Each family has a morphology module and a primary class, e.g.:
 
-       [cite_start]morphology/romance.py       -> class RomanceMorphology [cite: 1728]
-       [cite_start]morphology/agglutinative.py -> class AgglutinativeMorphology [cite: 1728]
-       [cite_start]morphology/japonic.py       -> class JaponicMorphology [cite: 1728]
-       [cite_start]... [cite: 1728]
+       morphology/romance.py       -> class RomanceMorphology
+       morphology/agglutinative.py -> class AgglutinativeMorphology
+       morphology/japonic.py       -> class JaponicMorphology
+       ...
 
-   [cite_start]The router instantiates them as: [cite: 1728]
+   The router instantiates them as:
 
-       [cite_start]morph_cls(config_dict) [cite: 1728]
-       [cite_start]morph_api = morph_cls(config_dict) [cite: 1728]
+       morph_cls(config_dict)
+       morph_api = morph_cls(config_dict)
 
-   [cite_start]where `config_dict` is the language profile for the target language[cite: 1728].
+   where `config_dict` is the language profile for the target language.
 
 3) Construction modules:
 
-[cite_start]   Each construction module provides a `realize_*` function, e.g.: [cite: 1732]
+   Each construction module provides a `realize_*` function, e.g.:
 
-       [cite_start]constructions/possession_existential.py [cite: 1732]
-           [cite_start]-> realize_possession_existential(slots, lang_profile, morph_api) [cite: 1732]
+       constructions/possession_existential.py
+           -> realize_possession_existential(slots, lang_profile, morph_api)
 
-       [cite_start]constructions/coordination_clauses.py [cite: 1732]
-           [cite_start]-> realize_coordination_clauses(clauses, lang_profile, morph_api, ...) [cite: 1732]
+       constructions/coordination_clauses.py
+           -> realize_coordination_clauses(clauses, lang_profile, morph_api, ...)
 
    The router uses a registry from construction IDs to
-[cite_start]   (module_path, function_name)[cite: 1732].
+   (module_path, function_name).
 
 Extendibility
 -------------
 
 You can extend the registries below without changing router logic:
 
-- [cite_start]add new morphology families to `MORPHOLOGY_CLASS_REGISTRY`[cite: 1729],
-- [cite_start]add new constructions to `CONSTRUCTION_REGISTRY`[cite: 1729].
+- add new morphology families to `MORPHOLOGY_CLASS_REGISTRY`,
+- add new constructions to `CONSTRUCTION_REGISTRY`.
 
 Higher-level layers (e.g. frame-based generation, discourse planning)
 should call into this router via a thin abstraction, rather than poking
-[cite_start]directly at morphology or constructions[cite: 1729].
+directly at morphology or constructions.
 """
 
 from __future__ import annotations
