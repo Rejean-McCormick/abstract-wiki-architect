@@ -1,0 +1,65 @@
+# docker/Dockerfile.frontend
+#
+# Multi-stage build for the Abstract Wiki Architect Next.js frontend.
+# Exposes port 80 inside the container so you can map it to 4000 on the host:
+#   docker build -f docker/Dockerfile.frontend -t abstractwiki-architect-frontend .
+#   docker run -d -p 127.0.0.1:4000:80 abstractwiki-architect-frontend
+
+# ----------------------------
+# 1) Install dependencies
+# ----------------------------
+FROM node:20-alpine AS deps
+
+WORKDIR /app/architect_frontend
+
+# Only copy dependency manifests first for better caching
+COPY architect_frontend/package*.json ./
+
+# Use npm ci if a lockfile is present, otherwise fall back to npm install
+RUN if [ -f package-lock.json ]; then \
+      npm ci; \
+    else \
+      npm install; \
+    fi
+
+# ----------------------------
+# 2) Build the Next.js app
+# ----------------------------
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy the full frontend source
+COPY architect_frontend ./architect_frontend
+
+WORKDIR /app/architect_frontend
+
+# Reuse node_modules from deps stage
+COPY --from=deps /app/architect_frontend/node_modules ./node_modules
+
+# Build for production
+RUN npm run build
+
+# ----------------------------
+# 3) Runtime image
+# ----------------------------
+FROM node:20-alpine AS runner
+
+WORKDIR /app/architect_frontend
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+# Next.js will listen on this port
+ENV PORT=80
+
+# Copy the built artifacts and minimal runtime files
+COPY --from=builder /app/architect_frontend/.next ./.next
+COPY --from=builder /app/architect_frontend/public ./public
+COPY --from=builder /app/architect_frontend/next.config.mjs ./next.config.mjs
+COPY --from=builder /app/architect_frontend/package*.json ./
+COPY --from=deps /app/architect_frontend/node_modules ./node_modules
+
+EXPOSE 80
+
+# Start the production server
+CMD ["npm", "run", "start"]

@@ -14,7 +14,7 @@ authors = [
 ]
 
 # Core library is pure Python; engines/constructions depend only on stdlib.
-# Heavy / optional integrations (QA, LLMs, Wikidata) live in extras below.
+# Heavy / optional integrations (QA, LLMs, Wikidata, HTTP API) live in extras below.
 dependencies = []
 
 classifiers = [
@@ -58,9 +58,18 @@ wikidata = [
   "requests>=2.31.0"
 ]
 
+# Optional HTTP API + DB layer for the Architect backend service.
+api = [
+  "fastapi>=0.110.0",
+  "uvicorn[standard]>=0.27.0",
+  "sqlalchemy>=2.0.0",
+  "alembic>=1.12.0"
+]
+
 [project.scripts]
 nlg-cli = "nlg.cli_frontend:main"
 lexicon-cli = "lexicon.cli:main"
+architect-http-api = "architect_http_api.main:main"
 
 [project.urls]
 Homepage = "https://example.com/abstract-wiki-architect"
@@ -74,7 +83,7 @@ include-package-data = true
 where = ["."]
 # This will pick up any directories with __init__.py:
 # e.g. constructions, morphology, engines, qa_tools, utils, lexicon,
-# semantics, discourse, etc.
+# semantics, discourse, architect_http_api, etc.
 
 # -------------------------
 # Tool configuration
@@ -120,6 +129,6 @@ exclude = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["qa", "qa_tools"]
+testpaths = ["qa", "qa_tools", "tests"]
 python_files = ["test_*.py", "*_test.py"]
 addopts = "-ra"

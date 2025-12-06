@@ -1,3 +1,4 @@
+
 # NLG Frontend API Documentation
 
 This document describes the public interfaces that frontend integrators (and other callers) use to generate text from semantic frames.
@@ -29,7 +30,7 @@ from nlg.api import (
     GenerationResult,
 )
 from nlg.semantics import BioFrame, EventFrame
-```
+````
 
 ---
 
@@ -346,40 +347,59 @@ Flags:
   Type of frame (`bio`, `event`, etc.). Determines how the JSON is parsed.
 
 * `--input`
-  Path to a JSON file containing the frame data.
+  Path to a JSON file containing the frame data. If omitted or `-`, input is read from stdin.
 
 * `--max-sentences` (optional)
   Passed through to `GenerationOptions.max_sentences`.
 
+* `--register` (optional)
+  Passed through to `GenerationOptions.register` (`neutral`, `formal`, `informal`).
+
+* `--discourse-mode` (optional)
+  Passed through to `GenerationOptions.discourse_mode` (e.g. `"intro"`, `"summary"`).
+
 * `--debug` (optional)
   If present, prints debug information in addition to the final text.
 
-Example `BioFrame` JSON (`frame.json`):
+**Example frame JSON (`frame.json`)**
 
 ```json
 {
   "frame_type": "bio",
-  "person": { "qid": "Q42" },
-  "occupations": [{ "lemma": "writer" }],
-  "nationalities": [{ "lemma": "British" }]
+  "name": "Douglas Adams",
+  "gender": "male",
+  "profession_lemma": "writer",
+  "nationality_lemma": "British"
 }
 ```
 
-Command:
+(This is the normalized JSON shape expected by `semantics.normalization.normalize_bio_semantics`, which the CLI uses for `frame_type == "bio"`.)
+
+**Example command**
 
 ```bash
-nlg-cli generate --lang en --frame-type bio --input frame.json
+nlg-cli generate \
+  --lang en \
+  --frame-type bio \
+  --input frame.json
 ```
 
-Output:
+**Output**
 
-* Standard output: realized text.
-* If `--debug` is set: additional structured debug information (engine, constructions, etc.) printed or logged as configured.
+* Main text is printed to standard output.
+* If `--debug` is provided, additional debug information may be printed or logged.
 
 ---
 
 ## 7. Integration guidelines
 
-* Use `generate` (or `NLGSession.generate`) as the only entry point from frontend or service code.
-* Construct frames using `nlg.semantics` models (e.g. `BioFrame`, `EventFrame`) or via a JSON → frame conversion layer you control.
-* Prefer `GenerationOptions` for high-level knobs (style, length). Low-level morphology or discourse configuration should remain internal.
+* Use `nlg.api.generate` or `NLGSession.generate` as the only entry points for frontend or service code.
+* Construct frames using the models in the `semantics` / `nlg.semantics` packages (e.g. `BioFrame`, `EventFrame`, and other frame families described in `docs/FRAMES_*.md`), or via your own JSON → frame conversion based on those types.
+* Always set a meaningful `frame_type` string on your frames to identify the frame family; this is how the router selects the appropriate family engine. Canonical strings and their intended semantics are documented in the `FRAMES_*.md` files and enforced by schemas under `schemas/frames/`.
+* Prefer `GenerationOptions` to control output style and length; low-level morphological or discourse behavior is handled internally by engines and the router.
+* Treat `debug_info` as optional and implementation-specific; do not rely on it for core functionality.
+* For now, treat `EventFrame` and all non-biography frame families as **experimental** until their engines are wired. The biography pipeline is the reference implementation.
+
+This frontend API is intentionally thin: it presents a simple, stable surface over a complex multilingual NLG stack while keeping internal modules flexible and evolvable.
+
+
