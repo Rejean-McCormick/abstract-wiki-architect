@@ -1,13 +1,14 @@
 # architect_http_api/ai/intent_handler.py
 from __future__ import annotations
 
-from typing import List
+import json
+from typing import List, Tuple, Any, Dict
 
 from architect_http_api.schemas.ai import (
     AICommandRequest,
     AICommandResponse,
     AIFramePatch,
-    AIIntentModelResponse,
+    AIMessage,
 )
 from architect_http_api.services.ai_client import AIClient
 from architect_http_api.ai.frame_builder import build_frame_patches
@@ -16,53 +17,97 @@ from architect_http_api.ai.frame_builder import build_frame_patches
 class IntentHandler:
     """
     High-level coordinator for the natural-language AI panel.
-
-    Responsibility:
-      1. Take an AICommandRequest (user message + current frames/context).
-      2. Ask the LLM (via AIClient) to produce a structured "intent model".
-      3. Convert that model into concrete frame patches using frame_builder.
-      4. Return an AICommandResponse suitable for the /ai/intent HTTP route.
-
-    All LLM-specific prompting and vendor details live in AIClient.
-    All mapping from generic "actions" to concrete FramePatch objects
-    lives in frame_builder.
     """
 
     def __init__(self, ai_client: AIClient) -> None:
         self._ai_client = ai_client
 
+    async def infer_intent(self, request: AICommandRequest) -> AICommandResponse:
+        """
+        Alias for handle_command to satisfy Router usage.
+        """
+        return self.handle_command_sync(request)
+
     async def handle_command(self, request: AICommandRequest) -> AICommandResponse:
         """
-        Main entry point used by the /ai/intent router.
-
-        The basic flow is:
-
-          request (Pydantic model)  →  AIClient.infer_intent(...)
-                                    →  AIIntentModelResponse (generic actions)
-                                    →  build_frame_patches(...)
-                                    →  AICommandResponse (patches + messages)
+        Async wrapper for handle_command_sync.
         """
-        # 1. Let the AI backend interpret the user's natural-language command.
-        model_response: AIIntentModelResponse = await self._ai_client.infer_intent(
-            request=request
-        )
+        return self.handle_command_sync(request)
 
-        # 2. Turn generic "actions" from the model into concrete FramePatch objects.
+    def handle_command_sync(self, request: AICommandRequest) -> AICommandResponse:
+        """
+        Main logic for interpreting a user command.
+        
+        1. Calls AIClient (sync).
+        2. Parses response.
+        3. Builds patches.
+        """
+        # 1. Construct messages for the LLM
+        system_prompt = (
+            "You are an AI architect helper. "
+            "Analyze the user request and the current frame context. "
+            "Return a JSON object with keys: 'intent', 'actions' (list of field updates), 'explanation'."
+        )
+        
+        # Serialize context for the prompt
+        context_str = json.dumps(request.context_frame or {}, default=str, ensure_ascii=False)
+        user_content = f"User Request: {request.message}\n\nCurrent Frame Context:\n{context_str}"
+        
+        messages = [{"role": "user", "content": user_content}]
+
+        # 2. Call AI Client
+        # Note: AIClient.chat is synchronous in your codebase
+        ai_reply_text = self._ai_client.chat(messages, system_prompt=system_prompt)
+        
+        # 3. Parse LLM output (Mocking parsing logic for robustness)
+        # In a real implementation, we would robustly parse JSON from ai_reply_text.
+        # Here we assume a simple structure or fallback.
+        intent_label = "unknown"
+        actions: List[Dict[str, Any]] = []
+        explanation = ai_reply_text
+
+        # Basic heuristic parsing if LLM returned JSON
+        try:
+            # Find first '{' and last '}'
+            start = ai_reply_text.find("{")
+            end = ai_reply_text.rfind("}")
+            if start != -1 and end != -1:
+                json_str = ai_reply_text[start : end + 1]
+                data = json.loads(json_str)
+                intent_label = data.get("intent", intent_label)
+                actions = data.get("actions", [])
+                explanation = data.get("explanation", ai_reply_text)
+        except Exception:
+            pass # Fallback to raw text as explanation
+
+        # 4. Build Patches
         patches: List[AIFramePatch] = build_frame_patches(
-            model_actions=model_response.actions,
+            model_actions=actions,
             request=request,
         )
 
-        # 3. Build the high-level response for the HTTP API.
-        #    The exact fields here should mirror architect_http_api/schemas/ai.py
-        #    (AICommandResponse).
+        # 5. Construct Response
         return AICommandResponse(
             workspace_slug=request.workspace_slug,
             lang=request.lang,
             user_message=request.message,
-            assistant_messages=model_response.assistant_messages,
-            intent_label=model_response.intent_label,
+            assistant_messages=[AIMessage(role="assistant", content=explanation)],
+            intent_label=intent_label,
             patches=patches,
-            # Optional debug field – only populated when caller requested it.
-            debug=model_response.debug if request.debug else None,
+            debug={"raw_llm_response": ai_reply_text} if request.debug else None,
         )
+
+
+def interpret_command(command: AICommandRequest) -> Tuple[List[AIFramePatch], List[AIMessage]]:
+    """
+    Standalone entry point used by `architect_http_api.ai.__init__.py`.
+    
+    This instantiates a default AIClient and runs the handler synchronously.
+    Returns: (patches, messages)
+    """
+    client = AIClient()  # Uses env vars config
+    handler = IntentHandler(client)
+    
+    response = handler.handle_command_sync(command)
+    
+    return response.patches, response.assistant_messages

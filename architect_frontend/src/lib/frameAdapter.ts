@@ -1,7 +1,7 @@
 // architect_frontend/src/lib/frameAdapter.ts
 
 import type { FrameContextConfig, FrameFieldConfig } from "@/components/FrameForm";
-import type { FrameTypeMeta } from "@/lib/api";
+import { type FrameTypeMeta, getLabelText } from "@/lib/api";
 
 /**
  * Adapter to convert Backend Metadata + JSON Schema into Frontend Form Configuration.
@@ -68,8 +68,9 @@ export function adaptFrameConfig(
   // 4. Return the full context config
   return {
     frameType: meta.frame_type,
-    label: meta.title || meta.frame_type,
-    description: meta.description,
+    // FIX: Use helper to extract text string from LocalizedLabel
+    label: getLabelText(meta.title) || meta.frame_type,
+    description: getLabelText(meta.description),
     defaultLang: "en",
     // These could be fetched dynamically, but hardcoded list is safe for now
     languages: ["en", "fr", "tr", "ja"], 

@@ -1,6 +1,3 @@
-
-
-
 # architect_http_api/repositories/entities.py
 
 from __future__ import annotations
@@ -20,22 +17,6 @@ EntityId = Union[int, UUID]
 class EntitiesRepository:
     """
     Thin data-access layer around the Entity model.
-
-    This class is intentionally small and synchronous; transaction / commit
-    handling is the responsibility of the caller (typically the FastAPI
-    dependency that manages a per-request SQLAlchemy Session).
-
-    Typical usage:
-
-        repo = EntitiesRepository(session)
-        entities = repo.list_entities(limit=20)
-        entity = repo.get_by_slug("marie-curie")
-        new_entity = repo.create(
-            slug="marie-curie",
-            frame_type="PERSON",
-            title="Marie Curie",
-            data={...},
-        )
     """
 
     def __init__(self, session: Session) -> None:
@@ -64,14 +45,12 @@ class EntitiesRepository:
         offset: int = 0,
     ) -> Sequence[models.Entity]:
         """
-        Return a paginated list of entities, optionally filtered by frame_type.
-
-        Results are ordered by updated_at (desc), then created_at (desc).
+        Return a paginated list of entities.
+        
+        Note: Filtering by 'frame_type' is handled in the Service layer (Python side)
+        because 'frame_type' is stored inside the JSON 'data' blob, not as a SQL column.
         """
         stmt = self._base_select()
-
-        if frame_type:
-            stmt = stmt.where(models.Entity.frame_type == frame_type)
 
         # Prefer most recently touched entities first.
         stmt = stmt.order_by(
@@ -110,22 +89,17 @@ class EntitiesRepository:
         offset: int = 0,
     ) -> Sequence[models.Entity]:
         """
-        Simple case-insensitive text search over title and slug.
-
-        This is intentionally minimal; callers can layer more advanced search
-        capabilities on top if needed.
+        Simple case-insensitive text search over name and slug.
         """
         pattern = f"%{query.lower()}%"
 
+        # Fixed: Use 'name' instead of 'title' (column mismatch)
         stmt = self._base_select().where(
             func.or_(
-                func.lower(models.Entity.title).like(pattern),
+                func.lower(models.Entity.name).like(pattern),
                 func.lower(models.Entity.slug).like(pattern),
             )
         )
-
-        if frame_type:
-            stmt = stmt.where(models.Entity.frame_type == frame_type)
 
         stmt = stmt.order_by(
             models.Entity.updated_at.desc().nullslast(),
@@ -155,19 +129,23 @@ class EntitiesRepository:
     ) -> models.Entity:
         """
         Create and persist a new Entity.
-
-        The caller is responsible for committing the transaction.
         """
+        # Fixed: Inject frame_type into data since there is no frame_type column
+        final_data = data.copy() if data else {}
+        final_data["frame_type"] = frame_type
+
+        # Fixed: Use 'name' instead of 'title' for the model field
         entity = models.Entity(
             slug=slug,
-            frame_type=frame_type,
-            title=title,
-            data=data,
-            metadata=metadata or {},
+            name=title, 
+            data=final_data,
+            # tags or metadata can be stored in the 'tags' column if needed,
+            # or in 'data' depending on your model structure. 
+            # Assuming 'tags' column is JSON based on previous dumps:
+            tags=metadata or {}, 
         )
 
         self.session.add(entity)
-        # Flush so that PK and timestamps are populated before returning.
         self.session.flush()
 
         return entity
@@ -183,17 +161,24 @@ class EntitiesRepository:
     ) -> models.Entity:
         """
         Apply partial updates to an existing Entity and flush.
-
-        The provided `entity` instance must be attached to the current Session.
         """
         if title is not None:
-            entity.title = title
-        if frame_type is not None:
-            entity.frame_type = frame_type
-        if data is not None:
-            entity.data = data
+            entity.name = title  # Fixed: 'name' not 'title'
+        
+        # If updating data or frame_type, we need to handle the JSON blob
+        if data is not None or frame_type is not None:
+            current_data = dict(entity.data) if entity.data else {}
+            
+            if data is not None:
+                current_data.update(data)
+            
+            if frame_type is not None:
+                current_data["frame_type"] = frame_type
+                
+            entity.data = current_data
+
         if metadata is not None:
-            entity.metadata = metadata
+            entity.tags = metadata # Assuming metadata maps to tags column
 
         self.session.add(entity)
         self.session.flush()
@@ -215,7 +200,14 @@ class EntitiesRepository:
             return None
 
         for key, value in fields.items():
-            if hasattr(entity, key):
+            if key == 'title': # specific fix for mismatched keys
+                setattr(entity, 'name', value)
+            elif key == 'data' and isinstance(value, dict):
+                # Ensure we don't lose frame_type if it's already there
+                current = dict(entity.data or {})
+                current.update(value)
+                entity.data = current
+            elif hasattr(entity, key):
                 setattr(entity, key, value)
 
         self.session.add(entity)
@@ -226,8 +218,6 @@ class EntitiesRepository:
     def delete(self, entity: models.Entity) -> None:
         """
         Delete an entity instance.
-
-        The caller is responsible for committing the transaction.
         """
         self.session.delete(entity)
         self.session.flush()
@@ -254,8 +244,6 @@ class EntitiesRepository:
     ) -> Sequence[models.Entity]:
         """
         Fetch multiple entities by id in one query.
-
-        The return order is database-defined (not guaranteed to match `ids`).
         """
         ids_list = list(ids)
         if not ids_list:

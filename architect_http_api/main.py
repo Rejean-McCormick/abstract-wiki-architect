@@ -44,12 +44,17 @@ def _env(name: str, default: str) -> str:
 
 # Base prefix for all API endpoints inside this service.
 # The external path prefix (/abstract_wiki_architect) is handled by Nginx.
-API_PREFIX: str = _env("ARCHITECT_API_PREFIX", "/api")
-API_VERSION: str = _env("ARCHITECT_API_VERSION", "v1")
+API_PREFIX: str = _env("ARCHITECT_API_PREFIX", "")
+API_VERSION: str = _env("ARCHITECT_API_VERSION", "")
 
 # Normalize and build final prefix, e.g. "/api/v1"
 RAW_API_ROOT = f"{API_PREFIX.rstrip('/')}/{API_VERSION.lstrip('/')}"
 API_ROOT: str = RAW_API_ROOT if RAW_API_ROOT.startswith("/") else f"/{RAW_API_ROOT}"
+# Special case: if both are empty, we want "" not "//" or "/" for the prefix argument,
+# unless it's strictly root.
+# Actually, FastAPI treats prefix="" as root.
+if API_ROOT == "//" or API_ROOT == "/":
+    API_ROOT = ""
 
 
 def _parse_cors_origins(raw: str) -> List[str]:

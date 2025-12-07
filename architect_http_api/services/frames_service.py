@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional
 
-from ..schemas.frames_metadata import FrameMetadata
-from ..registry.frames_registry import (
+from architect_http_api.schemas.frames_metadata import FrameMetadata
+from architect_http_api.registry.frames_registry import (
     list_frames as registry_list_frames,
     get_frame as registry_get_frame,
 )
@@ -21,14 +21,18 @@ class FrameNotFoundError(KeyError):
         self.slug = slug
 
 
+# ---------------------------------------------------------------------------
+# Standalone functions (internal logic)
+# ---------------------------------------------------------------------------
+
 def list_frames(*, family: Optional[str] = None) -> List[FrameMetadata]:
     """
     Return all registered frames, optionally filtered by frame family.
-
     Args:
         family:
             Optional canonical frame family name (e.g. "bio", "entity",
-            "event", "meta"). Case-insensitive.
+            "event", "meta").
+            Case-insensitive.
 
     Returns:
         List of FrameMetadata entries.
@@ -45,10 +49,8 @@ def list_frames(*, family: Optional[str] = None) -> List[FrameMetadata]:
 def get_frame(slug: str) -> FrameMetadata:
     """
     Return metadata for a single frame identified by its slug.
-
     The slug is the stable identifier used by the frontend, typically
-    mirroring the `frame_type` (e.g. "bio", "entity.person",
-    "meta.article").
+    mirroring the `frame_type`.
 
     Args:
         slug:
@@ -69,7 +71,6 @@ def get_frame(slug: str) -> FrameMetadata:
 def get_families_index() -> Dict[str, List[FrameMetadata]]:
     """
     Return all frames grouped by family.
-
     This is convenient for UI menus and for debugging the registry.
 
     Returns:
@@ -79,3 +80,24 @@ def get_families_index() -> Dict[str, List[FrameMetadata]]:
     for frame in registry_list_frames():
         index.setdefault(frame.family, []).append(frame)
     return index
+
+
+# ---------------------------------------------------------------------------
+# Service Class (Required by __init__.py and Dependency Injection)
+# ---------------------------------------------------------------------------
+
+class FramesService:
+    """
+    Service layer for accessing frame metadata.
+    Wraps the registry functions in a class structure for consistency
+    with other services (like EntitiesService).
+    """
+
+    def list_frames(self, family: Optional[str] = None) -> List[FrameMetadata]:
+        return list_frames(family=family)
+
+    def get_frame(self, slug: str) -> FrameMetadata:
+        return get_frame(slug)
+
+    def get_families_index(self) -> Dict[str, List[FrameMetadata]]:
+        return get_families_index()

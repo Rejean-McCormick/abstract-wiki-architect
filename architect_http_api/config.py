@@ -1,5 +1,3 @@
-
-
 # architect_http_api/config.py
 
 """
@@ -10,8 +8,6 @@ with sensible defaults that can be overridden via environment variables.
 
 Environment variables
 =====================
-
-The following environment variables are recognized:
 
 - AW_HTTP_API_HOST
     Host/interface to bind the HTTP server to.
@@ -63,6 +59,9 @@ import os
 from dataclasses import dataclass, field
 from typing import List, Optional
 
+# Constants for defaults
+DEFAULT_CORS_ORIGINS = ["http://localhost:3000"]
+
 
 @dataclass
 class HTTPAPIConfig:
@@ -79,7 +78,7 @@ class HTTPAPIConfig:
     # If allow_all_cors is True, cors_origins is ignored and "*" should be used.
     allow_all_cors: bool = False
     cors_origins: List[str] = field(
-        default_factory=lambda: ["http://localhost:3000"]
+        default_factory=lambda: list(DEFAULT_CORS_ORIGINS)
     )
 
     @classmethod
@@ -88,7 +87,7 @@ class HTTPAPIConfig:
         Build an HTTPAPIConfig instance using environment variables as
         overrides on top of sensible defaults.
         """
-        host = os.getenv("AW_HTTP_API_HOST", cls.host)
+        host = os.getenv("AW_HTTP_API_HOST", "0.0.0.0")
 
         # Port
         port_raw = os.getenv("AW_HTTP_API_PORT", "").strip()
@@ -96,14 +95,14 @@ class HTTPAPIConfig:
             try:
                 port = int(port_raw)
                 if port <= 0 or port > 65535:
-                    port = cls.port
+                    port = 4000
             except ValueError:
-                port = cls.port
+                port = 4000
         else:
-            port = cls.port
+            port = 4000
 
         # Root path
-        root_path = os.getenv("AW_HTTP_API_ROOT_PATH", cls.root_path).strip()
+        root_path = os.getenv("AW_HTTP_API_ROOT_PATH", "").strip()
         # Normalize root_path: allow "", or ensure it starts with "/" and has no trailing "/"
         if root_path and not root_path.startswith("/"):
             root_path = "/" + root_path
@@ -111,7 +110,9 @@ class HTTPAPIConfig:
             root_path = root_path.rstrip("/")
 
         # Title
-        title = os.getenv("AW_HTTP_API_TITLE", cls.title).strip() or cls.title
+        title = os.getenv("AW_HTTP_API_TITLE", "Abstract Wiki Architect HTTP API").strip()
+        if not title:
+            title = "Abstract Wiki Architect HTTP API"
 
         # Debug flag
         debug_raw = os.getenv("AW_HTTP_API_DEBUG", "").strip().lower()
@@ -128,9 +129,9 @@ class HTTPAPIConfig:
                 cors_origins = []
             else:
                 parts = [p.strip() for p in cors_raw.split(",") if p.strip()]
-                cors_origins = parts or cls.cors_origins
+                cors_origins = parts or list(DEFAULT_CORS_ORIGINS)
         else:
-            cors_origins = cls.cors_origins
+            cors_origins = list(DEFAULT_CORS_ORIGINS)
 
         return cls(
             host=host,

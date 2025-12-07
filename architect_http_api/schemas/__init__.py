@@ -1,86 +1,88 @@
 """
 Top-level export module for HTTP API schemas.
-
-This package groups together all Pydantic models used by the
-`architect_http_api` service so they can be imported from a single place, e.g.:
-
-    from architect_http_api.schemas import GenerationRequest, GenerationResponse
-
-If you add new schema modules or public models, remember to:
-  1. Import them here, and
-  2. Add them to `__all__`.
 """
+# Import submodules
+from . import common
+from . import generic
+from . import ai
+from . import generations
+from . import entities
+from . import frames_metadata
 
-# Import submodules so tooling like `pkgutil.walk_packages` can see them.
-from . import common as common  # noqa: F401
-from . import generic as generic  # noqa: F401
-from . import ai as ai  # noqa: F401
-from . import generations as generations  # noqa: F401
-from . import entities as entities  # noqa: F401
-from . import frames_metadata as frames_metadata  # noqa: F401
-
-# ---------------------------------------------------------------------------
-# Re-export selected Pydantic models from submodules.
-# Adjust these names to whatever actually exists in your codebase.
-# ---------------------------------------------------------------------------
-
-# Common primitives / error envelope
-from .common import (  # type: ignore[attr-defined]
+# Common primitives
+from .common import (
     ErrorResponse,
+    Pagination,
 )
 
-# AI / intent / generation related
-from .ai import (  # type: ignore[attr-defined]
+# AI / intent
+from .ai import (
     IntentKind,
     IntentInput,
     IntentResult,
+    AICommandRequest,
+    AICommandResponse,
+    AIFramePatch,
+    AIMessage,
 )
-from .generations import (  # type: ignore[attr-defined]
+
+# Generations
+from .generations import (
     GenerationRequest,
     GenerationResponse,
     GenerationStatus,
+    GenerationResult,
+    GenerationOptions,
 )
 
 # Domain entities
-from .entities import (  # type: ignore[attr-defined]
-    FrameSummary,
-    PageSummary,
-    WikiEntity,
+from .entities import (
+    Entity,
+    EntityCreate,
+    EntityUpdate,
+    EntityListItem,
+    EntityListResponse,
+    EntityDeleteResponse,
+    # Helper alias we will add to entities.py
+    EntityRead, 
 )
 
 # Frames / metadata
-from .frames_metadata import (  # type: ignore[attr-defined]
+from .frames_metadata import (
+    FrameFieldMetadata,
+    FrameTypeMetadata,
+    FrameFamilyMetadata,
+    FramesCatalogue,
+    # Helper alias we will add to frames_metadata.py
     FrameMetadata,
-    FrameSource,
 )
 
+# Backward Compatibility Aliases 
+# (Maps old names to new structures to prevent other import errors)
+FrameSummary = EntityListItem
+WikiEntity = Entity
 
 __all__ = [
-    # subpackages
-    "common",
-    "generic",
-    "ai",
-    "generations",
-    "entities",
-    "frames_metadata",
-
-    # Common primitives / error envelope
-    "ErrorResponse",
-
-    # AI / intents / generations
-    "IntentKind",
-    "IntentInput",
-    "IntentResult",
-    "GenerationRequest",
-    "GenerationResponse",
-    "GenerationStatus",
-
+    # Submodules
+    "common", "generic", "ai", "generations", "entities", "frames_metadata",
+    
+    # Common
+    "ErrorResponse", "Pagination",
+    
+    # AI
+    "IntentKind", "IntentInput", "IntentResult", 
+    "AICommandRequest", "AICommandResponse", "AIFramePatch", "AIMessage",
+    
+    # Generation
+    "GenerationRequest", "GenerationResponse", "GenerationStatus", 
+    "GenerationResult", "GenerationOptions",
+    
     # Entities
-    "FrameSummary",
-    "PageSummary",
-    "WikiEntity",
-
-    # Frames / metadata
-    "FrameMetadata",
-    "FrameSource",
+    "Entity", "EntityCreate", "EntityUpdate", "EntityListItem", 
+    "EntityListResponse", "EntityDeleteResponse", "EntityRead",
+    "FrameSummary", "WikiEntity",
+    
+    # Frames
+    "FrameFieldMetadata", "FrameTypeMetadata", "FrameFamilyMetadata", 
+    "FramesCatalogue", "FrameMetadata",
 ]

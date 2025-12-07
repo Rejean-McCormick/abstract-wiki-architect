@@ -3,7 +3,6 @@ architect_http_api/ai/frame_builder.py
 
 Helpers for turning AI-suggested field values into concrete frame payloads
 that the HTTP API can persist and send to the NLG backend.
-
 The goal of this module is deliberately narrow:
 
 * Start from:
@@ -13,7 +12,6 @@ The goal of this module is deliberately narrow:
 * Return a normalized frame dict plus bookkeeping about:
     - which required fields are still missing,
     - which updates were ignored or coerced.
-
 This keeps all frame-shape knowledge in the registry / metadata layer and
 keeps the AI integration focused on *semantics*, not JSON minutiae.
 """
@@ -29,6 +27,8 @@ except Exception:  # pragma: no cover
     FrameMetadata = Any  # type: ignore[assignment]
     FrameFieldMetadata = Any  # type: ignore[assignment]
 
+from architect_http_api.schemas.ai import AICommandRequest, AIFramePatch
+
 
 # ---------------------------------------------------------------------------
 # Public result type
@@ -39,7 +39,6 @@ except Exception:  # pragma: no cover
 class FrameBuildResult:
     """
     Result of building a frame from metadata + updates.
-
     Attributes
     ----------
     frame_type:
@@ -125,8 +124,8 @@ def _coerce_scalar(value: Any, kind: str) -> Any:
     """
     Best-effort scalar coercion based on a simple `kind` string.
 
-    This is intentionally conservative and never raises on bad data; instead,
-    it returns the original value so that upstream layers can decide what to do.
+    This is intentionally conservative and never raises on bad data;
+    instead, it returns the original value so that upstream layers can decide what to do.
     """
     if value is None:
         return None
@@ -236,7 +235,6 @@ def initialise_frame(
 ) -> Dict[str, Any]:
     """
     Create a new frame dict initialized from metadata and an optional base.
-
     Parameters
     ----------
     metadata:
@@ -291,9 +289,7 @@ def apply_updates(
 ) -> Tuple[Dict[str, Any], List[str]]:
     """
     Apply AI-suggested updates to a frame dict, respecting metadata.
-
     Unknown fields are ignored and reported in the warnings list.
-
     Parameters
     ----------
     frame:
@@ -303,7 +299,6 @@ def apply_updates(
     updates:
         Mapping from field-name (optionally dotted, e.g. "time.start_year")
         to raw values.
-
     Returns
     -------
     (frame, warnings)
@@ -349,13 +344,11 @@ def build_frame(
 ) -> FrameBuildResult:
     """
     High-level helper: initialise a frame, apply updates, and report status.
-
     This is the main entry point used by the AI intent handler:
 
         1. Look up FrameMetadata for a given frame_type.
         2. Call `build_frame(metadata, updates, base=existing_frame)`.
         3. Persist the returned `frame` and/or send it to `generate`.
-
     Parameters
     ----------
     metadata:
@@ -368,7 +361,6 @@ def build_frame(
     enforce_required:
         If True, `missing_required` will be populated using the metadata’s
         `required` flags and the current frame content.
-
     Returns
     -------
     FrameBuildResult
@@ -404,3 +396,34 @@ def build_frame(
         missing_required=missing_required,
         warnings=warnings,
     )
+
+
+def build_frame_patches(
+    model_actions: list[dict[str, Any]],
+    request: AICommandRequest,
+) -> list[AIFramePatch]:
+    """
+    Convert generic AI model actions into concrete AIFramePatch objects.
+
+    This function bridges the gap between the raw dictionary output from the LLM
+    and the strict Pydantic model expected by the API response.
+    """
+    patches: list[AIFramePatch] = []
+
+    for action in model_actions:
+        # Extract fields from the AI's action dict
+        # We expect keys like "field", "value", "operation" from the LLM
+        path = action.get("field") or action.get("path")
+        value = action.get("value")
+        op = action.get("operation", "replace")
+
+        if path and value is not None:
+            patches.append(
+                AIFramePatch(
+                    path=path,
+                    value=value,
+                    op=op
+                )
+            )
+
+    return patches

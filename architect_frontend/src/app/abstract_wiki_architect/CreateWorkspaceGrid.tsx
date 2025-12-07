@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { architectApi } from "@/lib/api";
+import { architectApi, getLabelText } from "@/lib/api";
 import type { FrameTypeMeta } from "@/lib/api";
 
 export default function CreateWorkspaceGrid({ frameTypes }: { frameTypes: FrameTypeMeta[] }) {
@@ -43,11 +43,13 @@ export default function CreateWorkspaceGrid({ frameTypes }: { frameTypes: FrameT
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm font-medium tracking-tight text-slate-100">
-                    {frame.title || frame.frame_type}
+                    {/* FIX: Use helper to extract text string */}
+                    {getLabelText(frame.title) || frame.frame_type}
                   </h2>
                 </div>
                 <p className="text-xs text-slate-400 line-clamp-3">
-                  {frame.description || "No description available."}
+                  {/* FIX: Use helper to extract text string */}
+                  {getLabelText(frame.description) || "No description available."}
                 </p>
               </div>
               <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-slate-600 group-hover:text-sky-400">

@@ -240,3 +240,15 @@ class EntityDeleteResponse(APIModel):
         description="True if the entity was deleted.",
     )
 
+
+# ---------------------------------------------------------------------------
+# Backward Compatibility Aliases
+# ---------------------------------------------------------------------------
+
+# Routers (like routers/entities.py) import EntityRead.
+EntityRead = Entity
+
+# __init__.py imports these legacy names.
+FrameSummary = EntityListItem
+PageSummary = EntityListItem
+WikiEntity = Entity

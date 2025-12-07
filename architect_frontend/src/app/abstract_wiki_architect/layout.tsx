@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { architectApi } from "@/lib/api";
+import { architectApi, getLabelText } from "@/lib/api";
 
 type Props = {
   children: ReactNode;
@@ -82,7 +82,8 @@ export default async function AbstractWikiArchitectLayout({ children }: Props) {
                     fontSize: "0.95rem",
                   }}
                 >
-                  {ft.title || ft.frame_type}
+                  {/* FIX: Use helper to extract text string from LocalizedLabel */}
+                  {getLabelText(ft.title) || ft.frame_type}
                 </Link>
               </li>
             ))}

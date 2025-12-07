@@ -49,6 +49,15 @@ class FieldKind(str, Enum):
     OBJECT = "object"  # nested structure / JSON blob
 
 
+class FrameSource(str, Enum):
+    """
+    Origin of the frame definition.
+    """
+    BUILTIN = "builtin"  # Hardcoded in the system
+    DATABASE = "database"  # Loaded from DB (custom)
+    RUNTIME = "runtime"  # Dynamically generated
+
+
 class LocalizedLabel(BaseModel):
     """
     Optional localization wrapper for labels and descriptions.
@@ -162,6 +171,10 @@ class FrameTypeMetadata(BaseModel):
     family: FrameFamily = Field(
         ...,
         description="Frame family identifier (e.g. 'entity', 'event', 'relational').",
+    )
+    source: FrameSource = Field(
+        default=FrameSource.BUILTIN,
+        description="Origin of this frame definition.",
     )
 
     title: LocalizedLabel = Field(
@@ -283,12 +296,27 @@ class FramesCatalogue(BaseModel):
     )
 
 
+# ---------------------------------------------------------------------------
+# Compatibility Aliases
+# ---------------------------------------------------------------------------
+
+# Services (e.g. frames_service.py) expect FrameMetadata.
+# Routers (e.g. routers/frames.py) expect FrameTypeMeta / FrameFamilyMeta.
+FrameMetadata = FrameTypeMetadata
+FrameTypeMeta = FrameTypeMetadata
+FrameFamilyMeta = FrameFamilyMetadata
+
+
 __all__ = [
     "LangCode",
     "FieldKind",
+    "FrameSource",
     "LocalizedLabel",
     "FrameFieldMetadata",
     "FrameTypeMetadata",
+    "FrameMetadata",
+    "FrameTypeMeta",
     "FrameFamilyMetadata",
+    "FrameFamilyMeta",
     "FramesCatalogue",
 ]

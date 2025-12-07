@@ -48,7 +48,20 @@ or ad-hoc dictionaries.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
+
+
+# ---------------------------------------------------------------------------
+# Base Protocol
+# ---------------------------------------------------------------------------
+
+@runtime_checkable
+class Frame(Protocol):
+    """
+    Protocol for any semantic frame.
+    Must at least carry a canonical type identifier.
+    """
+    frame_type: str
 
 
 # ---------------------------------------------------------------------------
@@ -236,6 +249,8 @@ class BioFrame:
     Fields:
         main_entity:
             The entity the biography is about (e.g. Marie Curie).
+        frame_type:
+            Discriminator field ("bio") for the Frame protocol.
         primary_profession_lemmas:
             List of lemmas representing the primary profession(s)
             (e.g. ["physicist"]). These are language-neutral; the
@@ -261,6 +276,7 @@ class BioFrame:
     """
 
     main_entity: Entity
+    frame_type: str = "bio"
     primary_profession_lemmas: List[str] = field(default_factory=list)
     nationality_lemmas: List[str] = field(default_factory=list)
     birth_event: Optional[Event] = None
@@ -278,6 +294,7 @@ class BioFrame:
 SemanticFrame = BioFrame  # can be extended to a Union[.] in the future
 
 __all__ = [
+    "Frame",
     "Entity",
     "Location",
     "TimeSpan",

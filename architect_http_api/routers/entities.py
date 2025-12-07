@@ -14,6 +14,7 @@ from architect_http_api.schemas.entities import (
     EntityRead,
 )
 from architect_http_api.services.entities_service import EntitiesService
+from architect_http_api.repositories.entities import EntitiesRepository
 
 router = APIRouter(prefix="/entities", tags=["entities"])
 
@@ -26,7 +27,9 @@ def get_entities_service(session: Session = Depends(get_session)) -> EntitiesSer
     - swap the implementation in tests (override_dependency),
     - attach logging / tracing later.
     """
-    return EntitiesService(session=session)
+    # Fix: EntitiesService expects a repository, not a session directly.
+    repo = EntitiesRepository(session)
+    return EntitiesService(repo=repo)
 
 
 @router.get(

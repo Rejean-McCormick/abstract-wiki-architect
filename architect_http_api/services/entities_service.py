@@ -1,3 +1,5 @@
+# architect_http_api/services/entities_service.py
+
 from __future__ import annotations
 
 from typing import List, Optional
@@ -35,78 +37,126 @@ class EntitiesService:
     # Core CRUD operations
     # -------------------------------------------------------------------------
 
-    async def create_entity(self, payload: EntityCreate) -> EntityRead:
+    def create_entity(self, payload: EntityCreate) -> EntityRead:
         """
         Create a new entity.
-
-        Enforces:
-        - Slug uniqueness, if `payload.slug` is provided.
+        Enforces slug uniqueness.
         """
-        if payload.slug:
-            existing = await self._repo.get_by_slug(payload.slug)
-            if existing is not None:
-                raise DuplicateEntitySlugError(payload.slug)
+        # 1. Determine Slug
+        slug = payload.slug
+        if not slug:
+            # Simple auto-generation
+            slug = payload.name.lower().replace(" ", "-")
 
-        entity = await self._repo.create(payload)
+        # 2. Check Uniqueness
+        existing = self._repo.get_by_slug(slug)
+        if existing is not None:
+            raise DuplicateEntitySlugError(slug)
+
+        # 3. Create in DB
+        # Note: We map Pydantic fields to the Repository arguments here
+        entity = self._repo.create(
+            slug=slug,
+            frame_type=payload.frame_type or "generic",
+            title=payload.name,  # Mapping 'name' schema field to 'title' repo arg/column
+            data=payload.frame_payload or {},
+            metadata=payload.metadata
+        )
+        
+        # 4. Commit transaction
+        self._repo.session.commit()
+        
         return EntityRead.from_orm(entity)
 
-    async def get_entity(self, entity_id: int) -> EntityRead:
+    def get_entity(self, entity_id: int) -> EntityRead:
         """
         Retrieve a single entity by numeric ID.
         """
-        entity = await self._repo.get_by_id(entity_id)
+        entity = self._repo.get_by_id(entity_id)
         if entity is None:
             raise EntityNotFoundError(f"Entity with id={entity_id} not found.")
         return EntityRead.from_orm(entity)
 
-    async def get_entity_by_slug(self, slug: str) -> EntityRead:
+    def get_entity_by_slug(self, slug: str) -> EntityRead:
         """
         Retrieve a single entity by slug.
         """
-        entity = await self._repo.get_by_slug(slug)
+        entity = self._repo.get_by_slug(slug)
         if entity is None:
             raise EntityNotFoundError(f"Entity with slug='{slug}' not found.")
         return EntityRead.from_orm(entity)
 
-    async def list_entities(
+    def list_entities(
         self,
         *,
+        search: Optional[str] = None,
+        frame_type: Optional[str] = None,
         limit: int = 50,
         offset: int = 0,
     ) -> List[EntityRead]:
         """
-        List entities with simple pagination.
+        List entities with optional search and pagination.
         """
-        entities = await self._repo.list(limit=limit, offset=offset)
+        if search:
+            entities = self._repo.search(
+                query=search, 
+                frame_type=frame_type, 
+                limit=limit, 
+                offset=offset
+            )
+        else:
+            entities = self._repo.list_entities(
+                frame_type=frame_type, 
+                limit=limit, 
+                offset=offset
+            )
+            
         return [EntityRead.from_orm(e) for e in entities]
 
-    async def update_entity(self, entity_id: int, payload: EntityUpdate) -> EntityRead:
+    def update_entity(self, entity_id: int, payload: EntityUpdate) -> EntityRead:
         """
         Update an existing entity.
-
-        Enforces:
-        - Slug uniqueness, if `payload.slug` is set and different from the current one.
         """
-        # If a slug is being set/changed, make sure it's unique.
-        if payload.slug:
-            existing = await self._repo.get_by_slug(payload.slug)
-            if existing is not None and getattr(existing, "id", None) != entity_id:
+        entity = self._repo.get_by_id(entity_id)
+        if entity is None:
+            raise EntityNotFoundError(f"Entity with id={entity_id} not found.")
+
+        # Check slug uniqueness if changing
+        if payload.slug and payload.slug != entity.slug:
+            existing = self._repo.get_by_slug(payload.slug)
+            if existing is not None and existing.id != entity_id:
                 raise DuplicateEntitySlugError(payload.slug)
 
-        updated = await self._repo.update(entity_id, payload)
-        if updated is None:
-            raise EntityNotFoundError(f"Entity with id={entity_id} not found.")
+        # Build update dictionary
+        updates = {}
+        if payload.name is not None:
+            updates["title"] = payload.name  # Map schema 'name' to DB 'title'
+        if payload.slug is not None:
+            updates["slug"] = payload.slug
+        if payload.frame_type is not None:
+            updates["frame_type"] = payload.frame_type
+        if payload.frame_payload is not None:
+            updates["data"] = payload.frame_payload
+        if payload.metadata is not None:
+            updates["metadata"] = payload.metadata
 
-        return EntityRead.from_orm(updated)
+        if updates:
+            self._repo.update_fields(entity_id, fields=updates)
+            self._repo.session.commit()
+            # Refresh to get updated object
+            entity = self._repo.get_by_id(entity_id)
 
-    async def delete_entity(self, entity_id: int) -> None:
+        return EntityRead.from_orm(entity)
+
+    def delete_entity(self, entity_id: int) -> bool:
         """
         Delete an entity by ID.
-
-        The underlying repository is expected to return:
-        - True if a row was deleted.
-        - False if nothing matched.
         """
-        deleted = await self._repo.delete(entity_id)
+        deleted = self._repo.delete_by_id(entity_id)
         if not deleted:
-            raise EntityNotFoundError(f"Entity with id={entity_id} not found.")
+            # Depending on preference, raise error or return False
+            # Here we follow the requested interface to return False or raise
+            return False
+        
+        self._repo.session.commit()
+        return True

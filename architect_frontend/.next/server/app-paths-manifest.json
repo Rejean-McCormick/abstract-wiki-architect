@@ -1,4 +1,4 @@
 {
-  "/page": "app/page.js",
-  "/abstract_wiki_architect/page": "app/abstract_wiki_architect/page.js"
+  "/abstract_wiki_architect/page": "app/abstract_wiki_architect/page.js",
+  "/abstract_wiki_architect/[slug]/page": "app/abstract_wiki_architect/[slug]/page.js"
 }

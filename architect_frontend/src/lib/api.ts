@@ -4,7 +4,7 @@
  * Typed wrapper around the Architect HTTP API.
  * Aligned with backend: architect_http_api
  * * Key alignments:
- * - Base URL includes /api/v1
+ * - Base URL includes /api/v1 (or root depending on config)
  * - Entities use frame_type/frame_payload (matching schemas/entities.py)
  * - AI uses Command/Patches pattern (matching ai/intent_handler.py)
  * - Generation endpoint handles frame rendering
@@ -16,8 +16,8 @@
 /* -------------------------------------------------------------------------- */
 
 // Backend default port is 4000 (from config.py), but often mapped to 8000 in dev.
-// We default to port 8000/api/v1 based on main.py.
-const DEFAULT_API_BASE_PATH = "http://127.0.0.1:8000/api/v1";
+// We default to root since we updated main.py to serve at root.
+const DEFAULT_API_BASE_PATH = "http://127.0.0.1:8000";
 
 const API_BASE_URL = (
   process.env.NEXT_PUBLIC_ARCHITECT_API_BASE_URL ?? DEFAULT_API_BASE_PATH
@@ -73,6 +73,7 @@ async function request<T>(
   }
 
   if (!response.ok) {
+    console.error("API Request Failed:", url, response.status, parsed);
     const message =
       typeof parsed === "object" && parsed !== null && "detail" in parsed
         ? String((parsed as any).detail)
@@ -87,12 +88,27 @@ async function request<T>(
 /* Frame Registry Types                                                       */
 /* -------------------------------------------------------------------------- */
 
+export interface LocalizedLabel {
+  text: string;
+  translations?: Record<string, string>;
+}
+
 export interface FrameTypeMeta {
   frame_type: string;    // e.g. "bio", "event.generic"
   family: string;        // e.g. "entity", "event"
-  title?: string;
-  description?: string;
+  // Title/Description can be a string (legacy) or LocalizedLabel (new)
+  title?: string | LocalizedLabel;
+  description?: string | LocalizedLabel;
   status?: "implemented" | "experimental" | "planned";
+}
+
+/**
+ * Helper to safely extract text from a label that might be a string or object.
+ */
+export function getLabelText(val: string | LocalizedLabel | undefined | null): string {
+  if (!val) return "";
+  if (typeof val === "string") return val;
+  return val.text || "";
 }
 
 /* -------------------------------------------------------------------------- */
@@ -219,9 +235,13 @@ export interface GenerateRequest {
 }
 
 export interface GenerationResult {
-  surface_text: string;
-  // Backend may return additional debug info or metadata
-  meta?: Record<string, unknown>;
+  text: string; // The backend returns 'text' (matches pydantic schema)
+  sentences?: string[];
+  lang?: string;
+  frame?: Record<string, unknown>;
+  debug_info?: Record<string, unknown>;
+  // Fallback for older interface usage
+  surface_text?: string; 
 }
 
 /* -------------------------------------------------------------------------- */
@@ -305,7 +325,8 @@ export const architectApi: ArchitectApi = {
     if (params?.frame_type) query.set("frame_type", params.frame_type);
     
     const queryString = query.toString();
-    return request<Entity[]>(`/entities${queryString ? `?${queryString}` : ""}`);
+    // FIX: Added trailing slash to avoid 307 Redirect -> 422 Error
+    return request<Entity[]>(`/entities/?${queryString}`);
   },
 
   getEntity(id: number | string): Promise<Entity> {
@@ -313,7 +334,8 @@ export const architectApi: ArchitectApi = {
   },
 
   createEntity(data: EntityCreatePayload): Promise<Entity> {
-    return request<Entity>("/entities", {
+    // FIX: Added trailing slash to avoid 307 Redirect -> 422 Error
+    return request<Entity>("/entities/", {
       method: "POST",
       body: JSON.stringify(data),
     });

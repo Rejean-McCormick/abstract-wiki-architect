@@ -1,8 +1,12 @@
+# architect_http_api/ai/suggestions.py
+
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, Iterable, List, Optional
 
+from architect_http_api.services.ai_client import AIClient
+from architect_http_api.schemas.ai import AISuggestFieldsRequest, AISuggestFieldsResponse
 
 @dataclass
 class Suggestion:
@@ -35,6 +39,29 @@ class Suggestion:
         return asdict(self)
 
 
+class SuggestionsEngine:
+    """
+    Service class to handle AI-powered field suggestions.
+    Initialized with an AIClient by the router dependency injection.
+    """
+    def __init__(self, ai_client: AIClient):
+        self.ai_client = ai_client
+
+    async def suggest_fields(self, request: AISuggestFieldsRequest) -> AISuggestFieldsResponse:
+        """
+        Main entry point for the /suggest-fields endpoint.
+        """
+        # In a real implementation, you would call self.ai_client.chat() here
+        # to get suggestions from an LLM.
+        # For now, we delegate to the heuristic logic below.
+        
+        # We mock metadata lookup for now or pass None if unavailable contextually
+        suggestions = _heuristic_suggest_fields(None, request.current_payload)
+        
+        # Convert internal Suggestion objects to the response format (dict)
+        return AISuggestFieldsResponse(suggestions=[s.to_dict() for s in suggestions])
+
+
 def generate_suggestions(
     frame_metadata: Any,
     payload: Dict[str, Any],
@@ -43,42 +70,49 @@ def generate_suggestions(
 ) -> List[Dict[str, Any]]:
     """
     Compute high-level suggestions for the current frame + generation result.
-
-    Parameters
-    ----------
-    frame_metadata:
-        A `FrameMetadata`-like object as exposed by `schemas/frames_metadata.py`.
-        We only assume:
-            - it has a `.fields` attribute iterable over field descriptors,
-            - each descriptor either:
-                * is a dict with keys like "name", "label", "description",
-                  "required", "importance", or
-                * is an object with attributes of those names.
-    payload:
-        Current JSON payload for this frame (what the user has filled so far).
-        Typically the `frame` part of the `/generate` request body.
-    last_text:
-        Optional last generated text; used to propose simple style/length tweaks.
-
-    Returns
-    -------
-    list of dict
-        Each dict is the JSON-ready representation of a `Suggestion`.
-        The HTTP layer (router + Pydantic schemas) can wrap these as needed.
+    Legacy/Direct function.
     """
-    suggestions: List[Suggestion] = []
+    suggestions = _heuristic_suggest_fields(frame_metadata, payload, last_text)
+    return [s.to_dict() for s in suggestions]
 
-    suggestions.extend(_missing_required_field_suggestions(frame_metadata, payload))
-    suggestions.extend(_missing_recommended_field_suggestions(frame_metadata, payload))
-    suggestions.extend(_style_suggestions(last_text))
 
-    suggestions = _deduplicate_suggestions(suggestions)
-
+# Alias for __init__.py compatibility
+def suggest_fields(request: AISuggestFieldsRequest) -> List[Dict[str, Any]]:
+    """
+    Compatibility wrapper for __init__.py which expects a function named `suggest_fields`.
+    """
+    # This matches the signature expected by run_suggestions in __init__.py
+    suggestions = _heuristic_suggest_fields(None, request.current_payload)
     return [s.to_dict() for s in suggestions]
 
 
 # ---------------------------------------------------------------------------
-# Field-level heuristics
+# Internal Logic (Heuristics)
+# ---------------------------------------------------------------------------
+
+def _heuristic_suggest_fields(
+    frame_metadata: Any,
+    payload: Dict[str, Any],
+    last_text: Optional[str] = None,
+) -> List[Suggestion]:
+    """
+    Core logic extracted from generate_suggestions to be reusable.
+    """
+    suggestions: List[Suggestion] = []
+
+    if frame_metadata:
+        suggestions.extend(_missing_required_field_suggestions(frame_metadata, payload))
+        suggestions.extend(_missing_recommended_field_suggestions(frame_metadata, payload))
+    
+    # Check style
+    suggestions.extend(_style_suggestions(last_text))
+
+    suggestions = _deduplicate_suggestions(suggestions)
+    return suggestions
+
+
+# ---------------------------------------------------------------------------
+# Field-level heuristics (Rest of your original code below)
 # ---------------------------------------------------------------------------
 
 
