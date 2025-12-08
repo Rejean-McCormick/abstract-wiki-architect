@@ -4,7 +4,7 @@ FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    # Tell GF where to find the library files we are about to copy
+    # Tell GF where to find the library files
     GF_LIB_PATH=/usr/local/lib/gf
 
 WORKDIR /app
@@ -15,33 +15,48 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 # 2. Install GF 3.12 Compiler
-# We use the local .deb file you downloaded
-COPY gf-3.12-ubuntu-24.04.deb /tmp/gf.deb
-RUN apt-get update && apt-get install -y /tmp/gf.deb \
-    && rm /tmp/gf.deb
+# [cite_start]Download directly to ensure reproducibility without local files [cite: 826]
+RUN apt-get update && apt-get install -y wget \
+    && wget -q -O /tmp/gf.deb https://www.grammaticalframework.org/download/gf-3.12-ubuntu-24.04.deb \
+    && apt-get install -y /tmp/gf.deb \
+    && rm /tmp/gf.deb \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# 3. Install RGL Sources (Manual Copy)
-# We copy the local 'gf-rgl' folder you cloned
+# 3. TIER 1: Install Official RGL Sources
+# [cite_start]We copy the local 'gf-rgl' folder you cloned [cite: 826]
 COPY gf-rgl /tmp/gf-rgl
 
-# Instead of compiling, we simply move the source files to the library path.
-# The GF compiler will compile them automatically when needed.
+# [cite_start]Move source files to the library path (Standard RGL) [cite: 826]
 RUN mkdir -p /usr/local/lib/gf \
-    # Copy the main source tree (present/, api/, etc.)
     && cp -r /tmp/gf-rgl/src/* /usr/local/lib/gf/ \
-    # Cleanup
     && rm -rf /tmp/gf-rgl
 
-# 4. Install Python Dependencies
+# 4. TIER 3: Generate Factory Grammars (The Safety Net)
+# [cite_start]We run the factory script DURING build to ensure all 300 languages exist. [cite: 827]
+# This prevents "missing file" errors if you haven't run the script on host yet.
+COPY utils/grammar_factory.py /tmp/grammar_factory.py
+RUN python /tmp/grammar_factory.py \
+    && mkdir -p /usr/local/lib/gf/generated \
+    # The script outputs to relative path 'gf/generated/src', we move it
+    && cp -r gf/generated/src/* /usr/local/lib/gf/generated/ \
+    && rm -rf gf
+
+# 5. TIER 2: Install Manual Contrib (Overrides)
+# [cite_start]We copy the 'gf/contrib' folder for manual high-quality grammars [cite: 828]
+# (Ensure this folder exists on your host, even if empty)
+COPY gf/contrib /usr/local/lib/gf/contrib
+
+# 6. Install Python Dependencies
 COPY pyproject.toml requirements.txt* ./
 
 RUN if [ -f requirements.txt ]; then \
       pip install --no-cache-dir -r requirements.txt; \
     else \
       pip install --no-cache-dir .; \
-    fi
+    [cite_start]fi [cite: 830, 831]
 
-# 5. Copy Source Code
+# [cite_start]7. Copy Source Code [cite: 831]
 COPY architect_http_api ./architect_http_api
 COPY data ./data
 COPY discourse ./discourse

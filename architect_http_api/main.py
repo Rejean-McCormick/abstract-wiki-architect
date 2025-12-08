@@ -8,7 +8,7 @@ This module creates the FastAPI application, wires up middleware, and mounts
 all versioned routers under a common prefix.
 
 Intended usage:
-    uvicorn architect_http_api.main:app --host 0.0.0.0 --port 4000
+    uvicorn architect_http_api.main:app --host 0.0.0.0 --port 8000
 
 By default the API is exposed under:
 
@@ -23,13 +23,14 @@ the proxy should forward to this app without that prefix (see docs/hosting.md).
 
 import logging
 import os
-from typing import List
+from typing import List, Dict
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from architect_http_api.logging.config import configure_logging
 from architect_http_api.routers import ai, entities, frames, generate
+from architect_http_api.gf import language_map  # <--- NEW: Import Language Map logic
 
 
 # ---------------------------------------------------------------------------
@@ -50,9 +51,6 @@ API_VERSION: str = _env("ARCHITECT_API_VERSION", "")
 # Normalize and build final prefix, e.g. "/api/v1"
 RAW_API_ROOT = f"{API_PREFIX.rstrip('/')}/{API_VERSION.lstrip('/')}"
 API_ROOT: str = RAW_API_ROOT if RAW_API_ROOT.startswith("/") else f"/{RAW_API_ROOT}"
-# Special case: if both are empty, we want "" not "//" or "/" for the prefix argument,
-# unless it's strictly root.
-# Actually, FastAPI treats prefix="" as root.
 if API_ROOT == "//" or API_ROOT == "/":
     API_ROOT = ""
 
@@ -81,9 +79,6 @@ def _parse_cors_origins(raw: str) -> List[str]:
 def create_app() -> FastAPI:
     """
     Create and configure the FastAPI application instance.
-
-    This is separated into a factory so tests can import `create_app()` and
-    build an isolated app if needed.
     """
     configure_logging()
     logger = logging.getLogger("architect_http_api")
@@ -132,7 +127,7 @@ def create_app() -> FastAPI:
         """
         logger.info("Shutting down Abstract Wiki Architect HTTP API")
 
-    # Simple health check (no prefix, so it also works behind any proxy path)
+    # Simple health check
     @app.get("/health", tags=["system"])
     async def health() -> dict:
         return {
@@ -140,6 +135,29 @@ def create_app() -> FastAPI:
             "version": version,
             "api_root": API_ROOT,
         }
+
+    # --- NEW: Language List Endpoint ---
+    # Used by frontend to populate the 300+ language selector
+    @app.get("/languages", tags=["system"])
+    async def get_supported_languages() -> List[Dict[str, str]]:
+        """
+        Returns a list of all supported languages (RGL + Factory).
+        Format: [{"code": "eng", "name": "English", "z_id": "Z1002"}]
+        """
+        codes = language_map.get_all_supported_codes()
+        results = []
+        for code in codes:
+            z_id = language_map.get_z_language(code)
+            # Basic capitalization for name (e.g. 'zul' -> 'Zulu')
+            # In a real app, you'd fetch full localized names from a DB or file.
+            name = code.capitalize() 
+            results.append({
+                "code": code,
+                "name": name,
+                "z_id": z_id or ""
+            })
+        # Sort alphabetically by code
+        return sorted(results, key=lambda x: x["code"])
 
     # Mount versioned routers under /api/v1/...
     app.include_router(generate.router, prefix=API_ROOT)
@@ -150,7 +168,7 @@ def create_app() -> FastAPI:
     return app
 
 
-# Default application instance for `uvicorn architect_http_api.main:app`
+# Default application instance
 app = create_app()
 
 
@@ -160,10 +178,8 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    # Optional convenience runner for local development:
-    #   python -m architect_http_api.main
     host = _env("ARCHITECT_HTTP_API_HOST", "0.0.0.0")
-    port_str = _env("ARCHITECT_HTTP_API_PORT", "4000")
+    port_str = _env("ARCHITECT_HTTP_API_PORT", "8000")
 
     try:
         port = int(port_str)
@@ -172,7 +188,7 @@ if __name__ == "__main__":
             f"Invalid ARCHITECT_HTTP_API_PORT value {port_str!r}; must be an integer."
         ) from None
 
-    import uvicorn  # Imported lazily so tests don't require it
+    import uvicorn
 
     uvicorn.run(
         "architect_http_api.main:app",

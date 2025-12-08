@@ -14,8 +14,9 @@ from typing import Dict, List, Optional
 
 # --- 1. CORE DATA MAPPING ---
 # Structure: { ISO_639_3 : { 'iso1': ISO_639_1, 'z_id': Z-ID } }
-# This list matches the RGL_LANGUAGES list in gf/build_300.py
+# This list matches the TARGET_LANGUAGES list in gf/build_orchestrator.py
 LANGUAGE_MAP: Dict[str, Dict[str, str]] = {
+    # --- Tier 1: RGL Core ---
     "eng": {"iso1": "en", "z_id": "Z1002"},
     "fra": {"iso1": "fr", "z_id": "Z1003"},
     "deu": {"iso1": "de", "z_id": "Z1004"},
@@ -28,7 +29,7 @@ LANGUAGE_MAP: Dict[str, Dict[str, str]] = {
     "fin": {"iso1": "fi", "z_id": "Z1013"},
     "swe": {"iso1": "sv", "z_id": "Z1014"},
     "swa": {"iso1": "sw", "z_id": "Z1016"},
-    "ita": {"iso1": "it", "z_id": "Z1020"}, # Added/Fixed Z-IDs
+    "ita": {"iso1": "it", "z_id": "Z1020"},
     "por": {"iso1": "pt", "z_id": "Z1021"},
     "pol": {"iso1": "pl", "z_id": "Z1022"},
     "tur": {"iso1": "tr", "z_id": "Z1023"},
@@ -39,7 +40,31 @@ LANGUAGE_MAP: Dict[str, Dict[str, str]] = {
     "nob": {"iso1": "nb", "z_id": "Z1028"},
     "isl": {"iso1": "is", "z_id": "Z1029"},
     "ell": {"iso1": "el", "z_id": "Z1030"},
-    # Add more as needed...
+    "kor": {"iso1": "ko", "z_id": "Z1031"}, # Tier 3 Promoted
+    
+    # --- Tier 3: Factory / Generated Languages ---
+    # We assign Z-IDs sequentially for now (or match Wikidata if known)
+    "zul": {"iso1": "zu", "z_id": "Z1032"}, # Zulu
+    "yor": {"iso1": "yo", "z_id": "Z1033"}, # Yoruba
+    "ibo": {"iso1": "ig", "z_id": "Z1034"}, # Igbo
+    "hau": {"iso1": "ha", "z_id": "Z1035"}, # Hausa
+    "wol": {"iso1": "wo", "z_id": "Z1036"}, # Wolof
+    "kin": {"iso1": "rw", "z_id": "Z1037"}, # Kinyarwanda
+    "ind": {"iso1": "id", "z_id": "Z1038"}, # Indonesian
+    "msa": {"iso1": "ms", "z_id": "Z1039"}, # Malay
+    "tgl": {"iso1": "tl", "z_id": "Z1040"}, # Tagalog
+    "vie": {"iso1": "vi", "z_id": "Z1041"}, # Vietnamese
+    "que": {"iso1": "qu", "z_id": "Z1042"}, # Quechua
+    "aym": {"iso1": "ay", "z_id": "Z1043"}, # Aymara
+    "grn": {"iso1": "gn", "z_id": "Z1044"}, # Guarani
+    "fry": {"iso1": "fy", "z_id": "Z1045"}, # Frisian
+    "bre": {"iso1": "br", "z_id": "Z1046"}, # Breton
+    "oci": {"iso1": "oc", "z_id": "Z1047"}, # Occitan
+    "gla": {"iso1": "gd", "z_id": "Z1048"}, # Scottish Gaelic
+    "cym": {"iso1": "cy", "z_id": "Z1049"}, # Welsh
+    "tat": {"iso1": "tt", "z_id": "Z1050"}, # Tatar
+    "kur": {"iso1": "ku", "z_id": "Z1051"}, # Kurdish
+    # ... extensible list ...
 }
 
 # --- 2. LEGACY RGL NAMING RULES ---
@@ -52,7 +77,8 @@ RGL_LEGACY_MAP: Dict[str, str] = {
     "swe": "Swe", "dan": "Dan", "isl": "Ice", "fin": "Fin",
     "bul": "Bul", "pol": "Pol", "rus": "Rus", "spa": "Spa",
     "por": "Por", "ita": "Ita", "eng": "Eng", "hin": "Hin",
-    "ara": "Ara", "swa": "Swa", "tur": "Tur", "est": "Est"
+    "ara": "Ara", "swa": "Swa", "tur": "Tur", "est": "Est",
+    "msa": "Msa", "vie": "Vie", "tgl": "Tgl"
 }
 
 # --- 3. REVERSE LOOKUP TABLES ---
@@ -96,7 +122,7 @@ def get_iso3_code(identifier: str) -> Optional[str]:
 def get_concrete_name(identifier: str) -> Optional[str]:
     """
     Returns the exact Concrete Grammar name expected by the PGF binary.
-    Example: 'fr' -> 'WikiFre', 'zho' -> 'WikiChi', 'eng' -> 'WikiEng'
+    Example: 'fr' -> 'WikiFre', 'zul' -> 'WikiZul'
     """
     iso3 = get_iso3_code(identifier)
     if not iso3:

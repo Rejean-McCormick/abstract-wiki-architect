@@ -1,3 +1,5 @@
+# requirements.txt
+
 # CORE QA & TESTING
 # -----------------
 pytest>=7.0.0            # Framework for running the automated test suites
@@ -9,12 +11,10 @@ black>=23.0.0            # Auto-formatter for consistent, Wikimedia-friendly sty
 flake8>=6.0.0            # Linter to catch syntax / style issues early
 mypy>=1.8.0              # (Optional) Static type checker for engines and constructions
 
-# AI INTEGRATION (OPTIONAL)
+# AI INTEGRATION
 # -------------------------
-# If you plan to hook 'test_suite_generator.py' directly to an LLM API
-# instead of copy-pasting prompts, uncomment one or more of these:
-# openai>=1.0.0          # OpenAI API client
-# anthropic>=0.3.0       # Anthropic API client
+google-generativeai>=0.3.0  # Required for AI Refiner (Gemini API)
+python-dotenv>=1.0.0        # Required to load .env variables in utility scripts
 
 # BACKEND HTTP API
 # ----------------
@@ -23,4 +23,6 @@ uvicorn[standard]>=0.27.0  # ASGI server used to run the FastAPI app
 sqlalchemy>=2.0.0        # ORM / DB layer
 alembic>=1.12.0          # DB migrations
 
-pgf==1.1
+# GRAMMATICAL FRAMEWORK
+# ---------------------
+pgf==1.1                 # Python bindings for GF

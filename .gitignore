@@ -84,17 +84,19 @@ out/
 
 # Misc
 *.tsbuildinfo
-# Explicitly ignore common large build/dependency binaries (e.g., from Node)
+# Explicitly ignore common large build/dependency binaries
 *.node
 *.a
 *.so
 *.dylib
 *.dll
+*.deb
 
 # ---------------------------------
 # Backend-specific Generated Files
 # ---------------------------------
 # SQLAlchemy / Alembic migration artifacts
+# CAUTION: Usually you want to commit alembic.ini and versions/ so others can migrate their DBs.
 alembic.ini
 alembic/versions/
 alembic/script.py.mako
@@ -112,3 +114,10 @@ gf/tmp/
 gf/temp/
 !gf/*.gf # Keep source .gf files
 !gf/*.py # Keep python build scripts
+
+# --- Abstract Wiki Generated Grammars ---
+gf/generated/
+gf/incubator/
+gf/Wiki.pgf
+gf/*.gfo
+!gf/contrib/  # Keep manual contributions!
