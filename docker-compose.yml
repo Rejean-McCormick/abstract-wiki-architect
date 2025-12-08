@@ -9,10 +9,12 @@ services:
     env_file:
       - .env
     working_dir: /app
+    volumes:               # <--- NEW: Mounts local code to container
+      - .:/app
     expose:
       - "8000"
     ports:
-      - "8000:8000"     # <── add this
+      - "8000:8000"
     restart: unless-stopped
 
   frontend:

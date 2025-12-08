@@ -1,176 +1,323 @@
-# gf/build_300.py
-# =========================================================================
-# GF BUILD SCRIPT FOR MASSIVE MULTILINGUAL SUPPORT (~300 Languages)
-#
-# This script manages the compilation process:
-# 1. Defines the list of RGL languages (ISO 639-3 codes).
-# 2. Generates the language-specific instance files that bridge AbstractWiki.gf
-#    and the RGL Dictionary for each language.
-# 3. Executes the 'gf' command-line compiler to produce the final Wiki.pgf.
-# =========================================================================
-
 import os
 import subprocess
 import sys
 
-# --- CONFIGURATION ---
-
-# 1. The full list of RGL-supported languages (ISO 639-3 codes).
-# NOTE: This list must be exhaustive to cover all 300 languages. 
-# The list below is an abbreviated example; replace with the complete list.
+# --- CONFIGURATION: TARGET LANGUAGES ---
+# You can list all 300+ ISO 639-3 codes here. 
+# The script will filter this list and ONLY build the ones found in the RGL.
 RGL_LANGUAGES = [
+    # --- Core RGL (Mature) ---
     "eng", "fra", "deu", "spa", "ita", "swe", "por", "rus", "zho", "jpn",
-    "ara", "hin", "fin", "est", "swa", "tur", "bul", "pol", 
-    # ... add all other ISO 639-3 codes supported by RGL here ...
+    "ara", "hin", "fin", "est", "swa", "tur", "bul", "pol", "ron", "nld",
+    "dan", "nob", "isl", "ell", "heb", "lav", "lit", "mlt", "hun", "cat",
+    "eus", "tha", "urd", "fas", "mon", "nep", "pan", "snd", "afr", "amh",
+    "kor", "lat", "nno", "slv", "som", "tgl", "vie",
+    
+    # --- Future / 300 Goal (Placeholders) ---
+    # Add your 300+ codes here (e.g., "ibo", "yor", "zul", etc.)
+    # The script will skip them nicely if not found in RGL.
 ]
 
-# File paths
+# --- MAPPINGS: ISO 639-3 -> RGL CONVENTIONS ---
+
+# 1. Map to Legacy 3-Letter RGL Codes (e.g., SyntaxFre.gf)
+# If missing, defaults to Capitalized ISO (e.g., est -> Est)
+RGL_CODE_MAP = {
+    "fra": "Fre", "deu": "Ger", "zho": "Chi", "jpn": "Jap",
+    "nld": "Dut", "ell": "Gre", "ron": "Rom", "nob": "Nor",
+    "swe": "Swe", "dan": "Dan", "isl": "Ice", "fin": "Fin",
+    "bul": "Bul", "pol": "Pol", "rus": "Rus", "spa": "Spa",
+    "por": "Por", "ita": "Ita", "eng": "Eng", "hin": "Hin",
+    "urd": "Urd", "tha": "Tha", "kor": "Kor", "lav": "Lav",
+    "lit": "Lit", "est": "Est", "mlt": "Mlt", "cat": "Cat",
+    "eus": "Bas", "hun": "Hun", "ara": "Ara", "swa": "Swa",
+    "tur": "Tur", "heb": "Heb", "fas": "Pes", "mon": "Mon",
+    "nep": "Nep", "pan": "Pan", "snd": "Snd", "afr": "Afr",
+    "amh": "Amh", "lat": "Lat", "nno": "Nno", "slv": "Slv",
+    "som": "Som", "tgl": "Tgl", "vie": "Vie"
+}
+
+# 2. Map to Source Folder Names (for -path argument)
+ISO_TO_RGL_FOLDER = {
+    "eng": "english",    "fra": "french",     "deu": "german",
+    "spa": "spanish",    "ita": "italian",    "swe": "swedish",
+    "por": "portuguese", "rus": "russian",    "zho": "chinese",
+    "jpn": "japanese",   "ara": "arabic",     "hin": "hindi",
+    "fin": "finnish",    "est": "estonian",   "swa": "swahili",
+    "tur": "turkish",    "bul": "bulgarian",  "pol": "polish",
+    "ron": "romanian",   "nld": "dutch",      "dan": "danish",
+    "nob": "norwegian",  "isl": "icelandic",  "ell": "greek",
+    "heb": "hebrew",     "lav": "latvian",    "lit": "lithuanian",
+    "mlt": "maltese",    "hun": "hungarian",  "cat": "catalan",
+    "eus": "basque",     "tha": "thai",       "urd": "urdu",
+    "fas": "persian",    "mon": "mongolian",  "nep": "nepali",
+    "pan": "punjabi",    "snd": "sindhi",     "afr": "afrikaans",
+    "amh": "amharic",    "kor": "korean",     "lat": "latin",
+    "nno": "nynorsk",    "slv": "slovenian",  "som": "somali",
+    "tgl": "tagalog",    "vie": "vietnamese"
+}
+
+# 3. Map to Shared Libraries (Important for compiling families like Romance)
+ISO_TO_SHARED_LIB = {
+    "fra": "romance", "spa": "romance", "ita": "romance", 
+    "por": "romance", "ron": "romance", "cat": "romance",
+    "swe": "scandinavian", "dan": "scandinavian", "nob": "scandinavian", 
+    "nno": "scandinavian",
+    "fin": "uralic", "est": "uralic"
+}
+
 GF_DIR = os.path.dirname(os.path.abspath(__file__))
 PGF_OUTPUT_FILE = os.path.join(GF_DIR, "Wiki.pgf")
-ABSTRACT_WIKI = "AbstractWiki"
-VOCABULARY = "Vocabulary"
-MASTER_GF_FILE = os.path.join(GF_DIR, f"{ABSTRACT_WIKI}.gf")
+ABSTRACT_NAME = "AbstractWiki"
 
-# --- CORE LOGIC ---
+# --- LEXICON PLACEHOLDERS ---
+# (In a real system, you'd load this from a DB or CSV)
+LEXICON_DATA = {
+    "lex_animal_N": {"eng": "animal", "fra": "animal"},
+    # ... (Your full dictionary here) ...
+}
+FALLBACKS = {"_N": "dummy", "_A": "dummy", "_V": "dummy", "_Adv": "dummy"}
 
-def generate_language_files(lang_code: str) -> str:
+# --- HELPERS ---
+
+def get_rgl_name(iso_code: str) -> str:
+    return RGL_CODE_MAP.get(iso_code, iso_code.capitalize())
+
+def check_rgl_availability(iso_code: str, rgl_base_path: str) -> bool:
     """
-    Generates a temporary GF file that specifies the concrete realization
-    for a single language. This file uses the functor definitions in WikiI.gf
-    and VocabularyI.gf.
-
-    Returns the content of the generated GF file.
+    Checks if the RGL folder for this language actually exists.
+    This prevents the build from crashing on 'missing file' errors.
     """
-    # RGL Dictionary names are typically Dict<LangCode> (e.g., DictEng)
-    dict_name = f"Dict{lang_code.capitalize()}"
+    folder_name = ISO_TO_RGL_FOLDER.get(iso_code)
+    if not folder_name:
+        return False
     
-    # 1. Import all required RGL modules for the specific language.
-    # 2. Instantiate the WikiI functor using the RGL Concrete Syntax (Syntax<LangCode>).
-    # 3. Instantiate the VocabularyI functor using the RGL Dictionary (Dict<LangCode>).
-    #
-    # This single file combines the logic for structure (WikiI) and words (VocabularyI)
-    # for one language, preparing it for compilation.
+    full_path = os.path.join(rgl_base_path, folder_name)
+    return os.path.isdir(full_path)
 
-    content = f"""
--- Automatically generated by gf/build_300.py
--- Language: {lang_code}
+def get_word(ident: str, iso_code: str) -> str:
+    # 1. Exact match
+    if ident in LEXICON_DATA and iso_code in LEXICON_DATA[ident]:
+        return LEXICON_DATA[ident][iso_code]
+    
+    # 2. English fallback (if available)
+    if "eng" in LEXICON_DATA.get(ident, {}):
+        word = LEXICON_DATA[ident]["eng"]
+        # Basic heuristic to avoid morphology crashes on fallback words
+        if iso_code == "fra" and ident.endswith("_V"): return "marcher"
+        return word
 
--- 1. Import RGL Modules (Syntax and Dictionary for the specific language)
-import RGL.{dict_name} as D ;
-import RGL.Syntax{lang_code.capitalize()} ;
+    # 3. Dummy fallback
+    suffix = ident.split("_")[-1]
+    return FALLBACKS.get("_" + suffix, "dummy")
 
--- 2. Instantiate the WikiI Functor (Structural Rules)
-instance Wiki{lang_code.capitalize()} of AbstractWiki = open RGL.Syntax{lang_code.capitalize()} in 
-  WikiI ** open RGL.Syntax{lang_code.capitalize()} in {{}} ;
+# --- GENERATION LOGIC ---
 
--- 3. Instantiate the VocabularyI Functor (Lexical Rules)
-instance Vocabulary{lang_code.capitalize()} of Vocabulary = 
-  VocabularyI ** open D in {{}} ;
+def generate_abstract_wiki():
+    """Generates AbstractWiki.gf"""
+    filename = f"{ABSTRACT_NAME}.gf"
+    content = f"""abstract {ABSTRACT_NAME} = {{
+  cat
+    Entity ; Property ; Fact ; Predicate ; Modifier ; Value ;
 
+  fun
+    mkFact : Entity -> Predicate -> Fact ;
+    mkIsAProperty : Entity -> Property -> Fact ;
+    FactWithMod : Fact -> Modifier -> Fact ;
+    mkLiteral : Value -> Entity ;
+
+    Entity2NP : Entity -> Entity ;
+    Property2AP : Property -> Property ;
+    VP2Predicate : Predicate -> Predicate ;
+
+    -- Vocabulary
 """
-    return content
+    # Just generate some example vocabulary stubs for the Abstract
+    # (In production, iterate over ALL keys in your comprehensive DB)
+    for ident in LEXICON_DATA.keys():
+        if ident.endswith("_N"):
+            fun_name = ident.replace("lex_", "").replace("_N", "_Entity")
+            content += f"    {fun_name} : Entity ;\n"
+        elif ident.endswith("_A"):
+            fun_name = ident.replace("lex_", "").replace("_A", "_Property")
+            content += f"    {fun_name} : Property ;\n"
+        elif ident.endswith("_V"):
+            fun_name = ident.replace("lex_", "").replace("_V", "_VP")
+            content += f"    {fun_name} : Predicate ;\n"
+        elif ident.endswith("_Adv"):
+            fun_name = ident.replace("lex_", "").replace("_Adv", "_Mod")
+            content += f"    {fun_name} : Modifier ;\n"
 
-def create_master_gf_file(concrete_files: list[str]):
-    """
-    Creates a temporary master GF file (e.g., AbstractWiki_master.gf) 
-    that imports all individual language instances, ensuring they are all 
-    compiled into the final PGF file.
-    """
-    master_imports = "\n".join([f"import {f.replace('.gf', '')};" for f in concrete_files])
-
-    content = f"""
--- ====================================================================
--- MASTER COMPILATION FILE (Generated)
--- ====================================================================
--- Imports all necessary GF modules for compilation.
-
--- Core Abstract/Functors
-import AbstractWiki ;
-import Vocabulary ;
-import WikiI ;
-import VocabularyI ;
-
--- Import all generated Concrete Syntax files
-{master_imports}
-"""
-    master_path = os.path.join(GF_DIR, f"{ABSTRACT_WIKI}_master.gf")
-    with open(master_path, 'w') as f:
+    content += "}\n"
+    with open(os.path.join(GF_DIR, filename), 'w', encoding='utf-8') as f:
         f.write(content)
-    return master_path
+    return filename
 
-def compile_gf(master_file: str):
-    """
-    Executes the GF compiler command.
-    """
-    print(f"--- Compiling all {len(RGL_LANGUAGES)} languages into {PGF_OUTPUT_FILE} ---")
+def generate_wiki_interface():
+    """Generates WikiI.gf"""
+    filename = "WikiI.gf"
+    content = f"""incomplete concrete WikiI of {ABSTRACT_NAME} = open Syntax in {{
+  lincat
+    Entity = NP ; Property = AP ; Fact = S ; 
+    Predicate = VP ; Modifier = Adv ; Value = {{s : Str}} ;
+
+  lin
+    mkFact entity predicate = mkS (mkCl entity predicate) ;
+    mkIsAProperty entity property = mkS (mkCl entity (mkVP property)) ;
+    FactWithMod fact modifier = mkS modifier fact ;
+
+    Entity2NP e = e ;
+    Property2AP p = p ;
+    VP2Predicate p = p ;
+}}
+"""
+    with open(os.path.join(GF_DIR, filename), 'w', encoding='utf-8') as f:
+        f.write(content)
+    return filename
+
+def generate_dictionary_file(iso_code: str) -> str:
+    rgl_name = get_rgl_name(iso_code)
+    filename = f"Dict{rgl_name}.gf"
     
-    # Standard GF compilation command: 'gf -pgf <MasterFile.gf>'
-    command = ["gf", "-pgf", master_file]
+    oper_lines = []
+    for ident in LEXICON_DATA.keys():
+        word = get_word(ident, iso_code)
+        if ident.endswith("_N"):
+            oper_lines.append(f"    {ident} = mkN \"{word}\" ;")
+        elif ident.endswith("_A"):
+            oper_lines.append(f"    {ident} = mkA \"{word}\" ;")
+        elif ident.endswith("_V"):
+            oper_lines.append(f"    {ident} = mkV \"{word}\" ;")
+        elif ident.endswith("_Adv"):
+            oper_lines.append(f"    {ident} = mkAdv \"{word}\" ;")
+
+    content = f"""resource Dict{rgl_name} = open Paradigms{rgl_name} in {{
+  oper
+{chr(10).join(oper_lines)}
+}} ;
+"""
+    with open(os.path.join(GF_DIR, filename), 'w', encoding='utf-8') as f:
+        f.write(content)
+    return filename
+
+def generate_concrete_file(iso_code: str) -> str:
+    rgl_name = get_rgl_name(iso_code)
+    filename = f"Wiki{rgl_name}.gf"
+    
+    lin_rules = []
+    for ident in LEXICON_DATA.keys():
+        if ident.endswith("_N"):
+            abs_fun = ident.replace("lex_", "").replace("_N", "_Entity")
+            lin_rules.append(f"    {abs_fun} = mkNP {ident} ;")
+        elif ident.endswith("_A"):
+            abs_fun = ident.replace("lex_", "").replace("_A", "_Property")
+            lin_rules.append(f"    {abs_fun} = mkAP {ident} ;")
+        elif ident.endswith("_V"):
+            abs_fun = ident.replace("lex_", "").replace("_V", "_VP")
+            lin_rules.append(f"    {abs_fun} = mkVP {ident} ;")
+        elif ident.endswith("_Adv"):
+            abs_fun = ident.replace("lex_", "").replace("_Adv", "_Mod")
+            lin_rules.append(f"    {abs_fun} = {ident} ;")
+
+    lin_rules.append("    mkLiteral v = symb v.s ;")
+
+    content = f"""concrete Wiki{rgl_name} of {ABSTRACT_NAME} = WikiI ** open Syntax{rgl_name}, Paradigms{rgl_name}, Symbolic{rgl_name}, Dict{rgl_name} in {{
+  lin
+{chr(10).join(lin_rules)}
+}} ;
+"""
+    with open(os.path.join(GF_DIR, filename), 'w', encoding='utf-8') as f:
+        f.write(content)
+    return filename
+
+def compile_gf(concrete_files: list[str], active_iso_codes: list[str]):
+    print(f"--- Compiling {len(concrete_files)} files into {PGF_OUTPUT_FILE} ---")
+    
+    # 1. Determine base path
+    rgl_base = os.environ.get("GF_LIB_PATH", "/usr/local/lib/gf")
+    
+    # 2. Build the search path
+    # Standard folders
+    search_paths = [
+        rgl_base,
+        os.path.join(rgl_base, "api"),
+        os.path.join(rgl_base, "prelude"),
+        os.path.join(rgl_base, "abstract"),
+        os.path.join(rgl_base, "common"),
+    ]
+    
+    # Language-specific folders
+    for code in active_iso_codes:
+        folder = ISO_TO_RGL_FOLDER.get(code)
+        if folder:
+            search_paths.append(os.path.join(rgl_base, folder))
+            
+    # Shared libraries (Romance, Scandinavian, etc.)
+    # We add these automatically if any active language needs them
+    for code in active_iso_codes:
+        shared = ISO_TO_SHARED_LIB.get(code)
+        if shared:
+            shared_path = os.path.join(rgl_base, shared)
+            if shared_path not in search_paths:
+                search_paths.append(shared_path)
+
+    path_arg = ":".join(search_paths)
+    
+    # 3. Run Compiler
+    command = ["gf", "-make", "-path", path_arg] + concrete_files
     
     try:
-        # Run the compilation command, capturing output for debugging
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True, # Raise error if compilation fails
-            cwd=GF_DIR # Execute in the 'gf' directory
-        )
+        env = os.environ.copy()
+        subprocess.run(command, check=True, cwd=GF_DIR, env=env)
         print("GF Compilation successful.")
-        # The GF compiler outputs the PGF file next to the master file by default.
-        # Rename it to the final expected name: Wiki.pgf
-        os.rename(os.path.join(GF_DIR, master_file.replace(".gf", ".pgf")), PGF_OUTPUT_FILE)
-        print(f"Final PGF written to: {PGF_OUTPUT_FILE}")
-        # Cleanup temporary files
-        os.remove(master_file)
         
-    except subprocess.CalledProcessError as e:
-        print("ERROR: GF Compilation failed!")
-        print(f"Standard Output:\n{e.stdout}")
-        print(f"Standard Error:\n{e.stderr}")
+        generated_pgf = os.path.join(GF_DIR, f"{ABSTRACT_NAME}.pgf")
+        if os.path.exists(generated_pgf):
+            if os.path.exists(PGF_OUTPUT_FILE):
+                os.remove(PGF_OUTPUT_FILE)
+            os.rename(generated_pgf, PGF_OUTPUT_FILE)
+            print(f"✅ Final PGF written to: {PGF_OUTPUT_FILE}")
+        else:
+            print(f"Error: Expected output {generated_pgf} was not found.")
+            sys.exit(1)
+            
+    except subprocess.CalledProcessError:
+        print("❌ GF Compilation failed!")
         sys.exit(1)
     except FileNotFoundError:
-        print("ERROR: GF compiler not found. Ensure 'gf' is installed and in your PATH.")
+        print("❌ GF compiler not found. Ensure 'gf' is in your PATH.")
         sys.exit(1)
 
-
 def main():
-    """Main execution function."""
     print("GF Multilingual Build Script Starting...")
     
-    generated_gf_files = []
-    
-    # 1. Generate all language-specific files (e.g., WikiEng.gf, WikiFra.gf)
-    for lang_code in RGL_LANGUAGES:
-        file_name = f"Wiki{lang_code.capitalize()}.gf"
-        file_path = os.path.join(GF_DIR, file_name)
-        
-        try:
-            content = generate_language_files(lang_code)
-            with open(file_path, 'w') as f:
-                f.write(content)
-            generated_gf_files.append(file_name)
-            # print(f"  Generated {file_name}")
-        except Exception as e:
-            print(f"Warning: Could not generate file for {lang_code}. Skipping. Error: {e}")
-            
-    print(f"Successfully generated {len(generated_gf_files)} language bridge files.")
-    
-    # 2. Create the master compilation file
-    master_file = create_master_gf_file(generated_gf_files)
-    print(f"Created master file: {master_file}")
-    
-    # 3. Compile the grammar
-    compile_gf(master_file)
-    
-    # 4. Cleanup individual temporary language files
-    for file_name in generated_gf_files:
-        os.remove(os.path.join(GF_DIR, file_name))
-    
-    print("Build script finished. All temporary files cleaned up.")
+    rgl_base = os.environ.get("GF_LIB_PATH", "/usr/local/lib/gf")
+    print(f"Checking RGL in: {rgl_base}")
 
+    generate_abstract_wiki()
+    generate_wiki_interface()
+
+    concrete_files = []
+    active_iso_codes = []
+
+    # Filter languages: Only build if RGL folder exists
+    for iso_code in RGL_LANGUAGES:
+        if check_rgl_availability(iso_code, rgl_base):
+            try:
+                generate_dictionary_file(iso_code)
+                concrete_files.append(generate_concrete_file(iso_code))
+                active_iso_codes.append(iso_code)
+            except Exception as e:
+                print(f"Warning: Failed generating files for {iso_code}: {e}")
+        else:
+            print(f"Skipping {iso_code}: RGL folder not found.")
+            
+    print(f"Successfully prepared {len(active_iso_codes)} supported languages.")
+    
+    if concrete_files:
+        compile_gf(concrete_files, active_iso_codes)
+    else:
+        print("No valid languages found to compile.")
 
 if __name__ == "__main__":
-    # Ensure the script is run from the correct directory if needed, 
-    # but the use of os.path.join and GF_DIR should handle execution from anywhere.
     main()

@@ -3,16 +3,36 @@
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    # Tell GF where to find the library files we are about to copy
+    GF_LIB_PATH=/usr/local/lib/gf
 
 WORKDIR /app
 
-# System dependencies (keep minimal; add DB client libs here if needed)
+# 1. Install System Dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
   && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies first for better Docker layer caching
+# 2. Install GF 3.12 Compiler
+# We use the local .deb file you downloaded
+COPY gf-3.12-ubuntu-24.04.deb /tmp/gf.deb
+RUN apt-get update && apt-get install -y /tmp/gf.deb \
+    && rm /tmp/gf.deb
+
+# 3. Install RGL Sources (Manual Copy)
+# We copy the local 'gf-rgl' folder you cloned
+COPY gf-rgl /tmp/gf-rgl
+
+# Instead of compiling, we simply move the source files to the library path.
+# The GF compiler will compile them automatically when needed.
+RUN mkdir -p /usr/local/lib/gf \
+    # Copy the main source tree (present/, api/, etc.)
+    && cp -r /tmp/gf-rgl/src/* /usr/local/lib/gf/ \
+    # Cleanup
+    && rm -rf /tmp/gf-rgl
+
+# 4. Install Python Dependencies
 COPY pyproject.toml requirements.txt* ./
 
 RUN if [ -f requirements.txt ]; then \
@@ -21,11 +41,12 @@ RUN if [ -f requirements.txt ]; then \
       pip install --no-cache-dir .; \
     fi
 
-# Copy the rest of the backend-related source code
+# 5. Copy Source Code
 COPY architect_http_api ./architect_http_api
 COPY data ./data
 COPY discourse ./discourse
 COPY engines ./engines
+COPY gf ./gf
 COPY language_profiles ./language_profiles
 COPY lexicon ./lexicon
 COPY morphology ./morphology

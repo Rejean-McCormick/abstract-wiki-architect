@@ -22,3 +22,5 @@ fastapi>=0.110.0         # Web framework for the Architect HTTP API
 uvicorn[standard]>=0.27.0  # ASGI server used to run the FastAPI app
 sqlalchemy>=2.0.0        # ORM / DB layer
 alembic>=1.12.0          # DB migrations
+
+pgf==1.1

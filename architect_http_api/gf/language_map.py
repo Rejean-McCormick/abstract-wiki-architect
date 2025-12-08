@@ -5,103 +5,121 @@
 # This module converts between:
 # 1. Internal Z-Language IDs (used by your system/Wikifunctions)
 # 2. ISO 639-1 (2-letter) codes (common public standard)
-# 3. ISO 639-3 (3-letter) RGL codes (required by Grammatical Framework)
+# 3. ISO 639-3 (3-letter) codes (standard RGL identifiers)
+# 4. Legacy RGL Concrete Names (e.g., 'Fre' instead of 'Fra')
 #
-# Only the ISO 639-3 codes are guaranteed to be supported by the GF engine.
 # =========================================================================
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
-# --- LANGUAGE DATA MAPPING ---
-# NOTE: This is an abbreviated dictionary. The production version must 
-# include entries for all 300+ languages supported by your RGL build.
-
-# Structure: { RGL (ISO 639-3) : { 'iso1': ISO 639-1, 'z_id': Z-ID } }
+# --- 1. CORE DATA MAPPING ---
+# Structure: { ISO_639_3 : { 'iso1': ISO_639_1, 'z_id': Z-ID } }
+# This list matches the RGL_LANGUAGES list in gf/build_300.py
 LANGUAGE_MAP: Dict[str, Dict[str, str]] = {
-    "eng": {"iso1": "en", "z_id": "Z1002"},  # English
-    "fra": {"iso1": "fr", "z_id": "Z1003"},  # French
-    "deu": {"iso1": "de", "z_id": "Z1004"},  # German
-    "spa": {"iso1": "es", "z_id": "Z1005"},  # Spanish
-    "rus": {"iso1": "ru", "z_id": "Z1007"},  # Russian
-    "zho": {"iso1": "zh", "z_id": "Z1008"},  # Chinese (Mandarin)
-    "jpn": {"iso1": "ja", "z_id": "Z1009"},  # Japanese
-    "arb": {"iso1": "ar", "z_id": "Z1011"},  # Arabic (Standard)
-    "hin": {"iso1": "hi", "z_id": "Z1012"},  # Hindi
-    "fin": {"iso1": "fi", "z_id": "Z1013"},  # Finnish
-    "swe": {"iso1": "sv", "z_id": "Z1014"},  # Swedish
-    "swa": {"iso1": "sw", "z_id": "Z1016"},  # Swahili
-    # ... Add all 300+ RGL languages here ...
+    "eng": {"iso1": "en", "z_id": "Z1002"},
+    "fra": {"iso1": "fr", "z_id": "Z1003"},
+    "deu": {"iso1": "de", "z_id": "Z1004"},
+    "spa": {"iso1": "es", "z_id": "Z1005"},
+    "rus": {"iso1": "ru", "z_id": "Z1007"},
+    "zho": {"iso1": "zh", "z_id": "Z1008"},
+    "jpn": {"iso1": "ja", "z_id": "Z1009"},
+    "ara": {"iso1": "ar", "z_id": "Z1011"},
+    "hin": {"iso1": "hi", "z_id": "Z1012"},
+    "fin": {"iso1": "fi", "z_id": "Z1013"},
+    "swe": {"iso1": "sv", "z_id": "Z1014"},
+    "swa": {"iso1": "sw", "z_id": "Z1016"},
+    "ita": {"iso1": "it", "z_id": "Z1020"}, # Added/Fixed Z-IDs
+    "por": {"iso1": "pt", "z_id": "Z1021"},
+    "pol": {"iso1": "pl", "z_id": "Z1022"},
+    "tur": {"iso1": "tr", "z_id": "Z1023"},
+    "bul": {"iso1": "bg", "z_id": "Z1024"},
+    "nld": {"iso1": "nl", "z_id": "Z1025"},
+    "ron": {"iso1": "ro", "z_id": "Z1026"},
+    "dan": {"iso1": "da", "z_id": "Z1027"},
+    "nob": {"iso1": "nb", "z_id": "Z1028"},
+    "isl": {"iso1": "is", "z_id": "Z1029"},
+    "ell": {"iso1": "el", "z_id": "Z1030"},
+    # Add more as needed...
 }
 
-# --- REVERSE LOOKUP TABLES ---
-
-# { ISO 639-1 : RGL (ISO 639-3) }
-ISO1_TO_RGL_MAP: Dict[str, str] = {
-    data['iso1']: rgl_code for rgl_code, data in LANGUAGE_MAP.items()
+# --- 2. LEGACY RGL NAMING RULES ---
+# Maps standard ISO 639-3 codes to the specific 3-letter suffix used 
+# by the compiled RGL binary (Wiki.pgf).
+# Example: 'fra' -> 'Fre' results in concrete grammar 'WikiFre'.
+RGL_LEGACY_MAP: Dict[str, str] = {
+    "fra": "Fre", "deu": "Ger", "zho": "Chi", "jpn": "Jap",
+    "nld": "Dut", "ell": "Gre", "ron": "Rom", "nob": "Nor",
+    "swe": "Swe", "dan": "Dan", "isl": "Ice", "fin": "Fin",
+    "bul": "Bul", "pol": "Pol", "rus": "Rus", "spa": "Spa",
+    "por": "Por", "ita": "Ita", "eng": "Eng", "hin": "Hin",
+    "ara": "Ara", "swa": "Swa", "tur": "Tur", "est": "Est"
 }
 
-# { Z-ID : RGL (ISO 639-3) }
-ZID_TO_RGL_MAP: Dict[str, str] = {
-    data['z_id']: rgl_code for rgl_code, data in LANGUAGE_MAP.items()
+# --- 3. REVERSE LOOKUP TABLES ---
+ISO1_TO_ISO3_MAP: Dict[str, str] = {
+    data['iso1']: iso3 for iso3, data in LANGUAGE_MAP.items()
+}
+
+ZID_TO_ISO3_MAP: Dict[str, str] = {
+    data['z_id']: iso3 for iso3, data in LANGUAGE_MAP.items()
 }
 
 # --- PUBLIC FUNCTIONS ---
 
-def get_rgl_code(identifier: str) -> Optional[str]:
+def get_iso3_code(identifier: str) -> Optional[str]:
     """
-    Converts any known identifier (ISO-1, Z-ID, or RGL itself) to the 
-    required RGL (ISO 639-3) code for the GF Engine.
-    
-    Args:
-        identifier: A language identifier (e.g., 'en', 'Z1002', 'fra').
-        
-    Returns:
-        The 3-letter RGL code (e.g., 'eng') or None if not found.
+    Normalizes any identifier (ISO-1, Z-ID, or ISO-3) to the standard ISO 639-3 code.
+    Example: 'en', 'Z1002', 'Eng' -> 'eng'
     """
-    if len(identifier) == 3 and identifier.lower() in LANGUAGE_MAP:
-        # Already an RGL code
-        return identifier.lower()
+    ident = identifier.lower().strip()
     
-    if len(identifier) == 2 and identifier.lower() in ISO1_TO_RGL_MAP:
-        # ISO 639-1 to RGL lookup
-        return ISO1_TO_RGL_MAP[identifier.lower()]
-    
-    if identifier.upper().startswith('Z') and identifier.upper() in ZID_TO_RGL_MAP:
-        # Z-ID to RGL lookup
-        return ZID_TO_RGL_MAP[identifier.upper()]
+    # 1. Check if already valid ISO-3
+    if ident in LANGUAGE_MAP:
+        return ident
         
+    # 2. Check ISO-1 (2 letters)
+    if len(ident) == 2 and ident in ISO1_TO_ISO3_MAP:
+        return ISO1_TO_ISO3_MAP[ident]
+        
+    # 3. Check Z-ID
+    if ident.upper() in ZID_TO_ISO3_MAP:
+        return ZID_TO_ISO3_MAP[ident.upper()]
+        
+    # 4. Handle legacy RGL capitalization (e.g. 'Fre' -> 'fra')
+    # This is a bit expensive (O(N)), but safe for small N.
+    for iso3, legacy in RGL_LEGACY_MAP.items():
+        if legacy.lower() == ident:
+            return iso3
+            
     return None
 
-def get_z_language(identifier: str) -> Optional[str]:
+def get_concrete_name(identifier: str) -> Optional[str]:
     """
-    Converts any known identifier to the Z-ID.
-    
-    Args:
-        identifier: A language identifier (e.g., 'en', 'fra', 'Z1002').
+    Returns the exact Concrete Grammar name expected by the PGF binary.
+    Example: 'fr' -> 'WikiFre', 'zho' -> 'WikiChi', 'eng' -> 'WikiEng'
+    """
+    iso3 = get_iso3_code(identifier)
+    if not iso3:
+        return None
         
-    Returns:
-        The Z-ID (e.g., 'Z1002') or None if not found.
-    """
-    rgl_code = get_rgl_code(identifier)
-    if rgl_code and rgl_code in LANGUAGE_MAP:
-        return LANGUAGE_MAP[rgl_code]['z_id']
+    # Use legacy map if available, otherwise default to Capitalized ISO-3
+    suffix = RGL_LEGACY_MAP.get(iso3, iso3.capitalize())
+    return f"Wiki{suffix}"
+
+def get_z_language(identifier: str) -> Optional[str]:
+    """Returns the Z-ID for a given language code."""
+    iso3 = get_iso3_code(identifier)
+    if iso3:
+        return LANGUAGE_MAP[iso3]['z_id']
     return None
 
 def get_iso1_code(identifier: str) -> Optional[str]:
-    """
-    Converts any known identifier to the ISO 639-1 (2-letter) code.
-    
-    Args:
-        identifier: A language identifier (e.g., 'eng', 'Z1002', 'fr').
-        
-    Returns:
-        The ISO 639-1 code (e.g., 'en') or None if not found.
-    """
-    rgl_code = get_rgl_code(identifier)
-    if rgl_code and rgl_code in LANGUAGE_MAP:
-        return LANGUAGE_MAP[rgl_code]['iso1']
+    """Returns the ISO 639-1 code for a given language identifier."""
+    iso3 = get_iso3_code(identifier)
+    if iso3:
+        return LANGUAGE_MAP[iso3]['iso1']
     return None
 
-def get_all_rgl_codes() -> List[str]:
-    """Returns a list of all 3-letter RGL codes supported."""
+def get_all_supported_codes() -> List[str]:
+    """Returns a list of all supported ISO 639-3 codes."""
     return list(LANGUAGE_MAP.keys())
