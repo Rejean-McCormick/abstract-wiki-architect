@@ -43,8 +43,10 @@ htmlcov/
 # ---------------------------------
 # Project-specific generated data
 # ---------------------------------
+# Ignore all generated dataset directories
 qa_tools/generated_datasets/
 qa/generated_datasets/
+# Re-include the .gitignore file for the generated datasets directory (if one exists)
 !qa/generated_datasets/.gitignore
 
 # Logs
@@ -82,3 +84,31 @@ out/
 
 # Misc
 *.tsbuildinfo
+# Explicitly ignore common large build/dependency binaries (e.g., from Node)
+*.node
+*.a
+*.so
+*.dylib
+*.dll
+
+# ---------------------------------
+# Backend-specific Generated Files
+# ---------------------------------
+# SQLAlchemy / Alembic migration artifacts
+alembic.ini
+alembic/versions/
+alembic/script.py.mako
+!alembic/env.py # Keep env.py to configure runtime
+
+# Database file (SQLite default)
+*.db
+*.sqlite
+*.sqlite3
+
+# Grammatical Framework (GF) generated files
+gf/*.pgf
+gf/*.o
+gf/tmp/
+gf/temp/
+!gf/*.gf # Keep source .gf files
+!gf/*.py # Keep python build scripts
