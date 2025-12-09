@@ -1,50 +1,46 @@
-# docker/Dockerfile.backend
-
 FROM python:3.11-slim
 
+# Environment Variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    # Tell GF where to find the library files
-    GF_LIB_PATH=/usr/local/lib/gf
+    # GF Default Library Path (Where the .deb installs it)
+    GF_LIB_PATH=/usr/local/lib/gf \
+    # API Grammar Path
+    AW_PGF_PATH=/app/gf/Wiki.pgf
 
 WORKDIR /app
 
 # 1. Install System Dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    wget \
+    ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
-# 2. Install GF 3.12 Compiler
-# [cite_start]Download directly to ensure reproducibility without local files [cite: 826]
-RUN apt-get update && apt-get install -y wget \
-    && wget -q -O /tmp/gf.deb https://www.grammaticalframework.org/download/gf-3.12-ubuntu-24.04.deb \
-    && apt-get install -y /tmp/gf.deb \
+# 2. Install GF (Grammatical Framework)
+COPY gf-3.12-ubuntu-24.04.deb /tmp/gf.deb
+
+# This installs the compiler AND the Standard Library (RGL)
+RUN apt-get update && apt-get install -y /tmp/gf.deb \
     && rm /tmp/gf.deb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. TIER 1: Install Official RGL Sources
-# [cite_start]We copy the local 'gf-rgl' folder you cloned [cite: 826]
-COPY gf-rgl /tmp/gf-rgl
+# [REMOVED] Step 3 (Install Official RGL Sources)
+# We trust the .deb installed the library correctly. 
+# Overwriting it forces a massive re-compilation that crashes Docker.
 
-# [cite_start]Move source files to the library path (Standard RGL) [cite: 826]
-RUN mkdir -p /usr/local/lib/gf \
-    && cp -r /tmp/gf-rgl/src/* /usr/local/lib/gf/ \
-    && rm -rf /tmp/gf-rgl
+# 4. TIER 3: Generate Factory Grammars
+# Copy to /app/utils so the script's relative path logic works correctly
+COPY utils/grammar_factory.py /app/utils/grammar_factory.py
 
-# 4. TIER 3: Generate Factory Grammars (The Safety Net)
-# [cite_start]We run the factory script DURING build to ensure all 300 languages exist. [cite: 827]
-# This prevents "missing file" errors if you haven't run the script on host yet.
-COPY utils/grammar_factory.py /tmp/grammar_factory.py
-RUN python /tmp/grammar_factory.py \
+# Run factory: Generates files into /app/gf/generated/src
+RUN python utils/grammar_factory.py \
     && mkdir -p /usr/local/lib/gf/generated \
-    # The script outputs to relative path 'gf/generated/src', we move it
     && cp -r gf/generated/src/* /usr/local/lib/gf/generated/ \
     && rm -rf gf
 
-# 5. TIER 2: Install Manual Contrib (Overrides)
-# [cite_start]We copy the 'gf/contrib' folder for manual high-quality grammars [cite: 828]
-# (Ensure this folder exists on your host, even if empty)
+# 5. TIER 2: Install Manual Contrib
 COPY gf/contrib /usr/local/lib/gf/contrib
 
 # 6. Install Python Dependencies
@@ -54,9 +50,9 @@ RUN if [ -f requirements.txt ]; then \
       pip install --no-cache-dir -r requirements.txt; \
     else \
       pip install --no-cache-dir .; \
-    [cite_start]fi [cite: 830, 831]
+    fi
 
-# [cite_start]7. Copy Source Code [cite: 831]
+# 7. Copy Source Code
 COPY architect_http_api ./architect_http_api
 COPY data ./data
 COPY discourse ./discourse
@@ -71,6 +67,11 @@ COPY utils ./utils
 COPY router.py ./router.py
 COPY alembic.ini ./alembic.ini
 COPY alembic ./alembic
+
+# 8. COMPILE THE PGF (The Orchestrator)
+# We disable this during build to prevent crashes.
+# You will run it manually: docker run ... python gf/build_orchestrator.py
+# RUN python gf/build_orchestrator.py
 
 EXPOSE 8000
 

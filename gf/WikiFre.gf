@@ -1,5 +1,7 @@
-concrete WikiFre of AbstractWiki = WikiI ** open SyntaxFre, ParadigmsFre, SymbolicFre, DictFre in {
+concrete WikiFre of AbstractWiki = WikiI ** open SyntaxFre, ParadigmsFre, SymbolicFre in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    lex_animal_N = mkNP (mkN "animal");
+    lex_walk_V = mkVP (mkV "walk");
+    lex_blue_A = mkAP (mkA "blue"); 
+    mkLiteral v = symb v.s;
+};

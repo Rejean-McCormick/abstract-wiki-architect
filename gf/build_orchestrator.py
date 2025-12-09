@@ -1,13 +1,13 @@
 import os
 import subprocess
 import sys
+import shutil
 
 # ===========================================================================
 # CONFIGURATION
 # ===========================================================================
 
 # The Master List of ISO 639-3 codes to support.
-# This combines Official RGL languages + Factory languages.
 TARGET_LANGUAGES = [
     # --- Tier 1: Core RGL (Mature) ---
     "eng", "fra", "deu", "spa", "ita", "swe", "por", "rus", "zho", "jpn",
@@ -17,88 +17,75 @@ TARGET_LANGUAGES = [
     "kor", "lat", "nno", "slv", "som", "tgl", "vie",
 
     # --- Tier 3: Factory / Generated (Examples) ---
-    # Add your 260+ extra codes here. 
     "zul", "yor", "ibo", "hau", "wol", "kin", "ind", "msa", "que", "nav",
     "aym", "grn", "fry", "bre", "oci", "gla", "nah", "tat", "kur", "uzb",
     "kaz", "ben", "tam", "tel", "jav", "lug", "lin", "xho"
 ]
 
-# Mapping ISO 639-3 to GF Concrete Name Suffix (WikiXXX).
-# Most use Capitalized ISO (e.g. zul -> Zul), but RGL has legacy names (fra -> Fre).
 CODE_TO_NAME = {
-    "fra": "Fre", "deu": "Ger", "zho": "Chi", "jpn": "Jap",
-    "nld": "Dut", "ell": "Gre", "ron": "Rom", "nob": "Nor",
-    "swe": "Swe", "dan": "Dan", "isl": "Ice", "fin": "Fin",
-    "bul": "Bul", "pol": "Pol", "rus": "Rus", "spa": "Spa",
-    "por": "Por", "ita": "Ita", "eng": "Eng", "hin": "Hin",
-    "urd": "Urd", "tha": "Tha", "kor": "Kor", "lav": "Lav",
-    "lit": "Lit", "est": "Est", "mlt": "Mlt", "cat": "Cat",
-    "eus": "Bas", "hun": "Hun", "ara": "Ara", "swa": "Swa",
-    "tur": "Tur", "heb": "Heb", "fas": "Pes", "mon": "Mon",
-    "nep": "Nep", "pan": "Pan", "snd": "Snd", "afr": "Afr",
-    "amh": "Amh", "lat": "Lat", "nno": "Nno", "slv": "Slv",
-    "som": "Som", "tgl": "Tgl", "vie": "Vie",
-    "msa": "Msa" 
+    "fra": "Fre", "deu": "Ger", "zho": "Chi", "jpn": "Jap", "nld": "Dut", 
+    "ell": "Gre", "ron": "Rom", "nob": "Nor", "swe": "Swe", "dan": "Dan", 
+    "isl": "Ice", "fin": "Fin", "bul": "Bul", "pol": "Pol", "rus": "Rus", 
+    "spa": "Spa", "por": "Por", "ita": "Ita", "eng": "Eng", "hin": "Hin", 
+    "urd": "Urd", "tha": "Tha", "kor": "Kor", "lav": "Lav", "lit": "Lit", 
+    "est": "Est", "mlt": "Mlt", "cat": "Cat", "eus": "Bas", "hun": "Hun", 
+    "ara": "Ara", "swa": "Swa", "tur": "Tur", "heb": "Heb", "fas": "Pes", 
+    "mon": "Mon", "nep": "Nep", "pan": "Pan", "snd": "Snd", "afr": "Afr", 
+    "amh": "Amh", "lat": "Lat", "nno": "Nno", "slv": "Slv", "som": "Som", 
+    "tgl": "Tgl", "vie": "Vie", "msa": "Msa" 
 }
 
-# Mapping ISO 639-3 to Official RGL Source Folder Name
 ISO_TO_RGL_FOLDER = {
-    "eng": "english",    "fra": "french",     "deu": "german",
-    "spa": "spanish",    "ita": "italian",    "swe": "swedish",
-    "por": "portuguese", "rus": "russian",    "zho": "chinese",
-    "jpn": "japanese",   "ara": "arabic",     "hin": "hindi",
-    "fin": "finnish",    "est": "estonian",   "swa": "swahili",
-    "tur": "turkish",    "bul": "bulgarian",  "pol": "polish",
-    "ron": "romanian",   "nld": "dutch",      "dan": "danish",
-    "nob": "norwegian",  "isl": "icelandic",  "ell": "greek",
-    "heb": "hebrew",     "lav": "latvian",    "lit": "lithuanian",
-    "mlt": "maltese",    "hun": "hungarian",  "cat": "catalan",
-    "eus": "basque",     "tha": "thai",       "urd": "urdu",
-    "fas": "persian",    "mon": "mongolian",  "nep": "nepali",
-    "pan": "punjabi",    "snd": "sindhi",     "afr": "afrikaans",
-    "amh": "amharic",    "kor": "korean",     "lat": "latin",
-    "nno": "nynorsk",    "slv": "slovenian",  "som": "somali",
-    "tgl": "tagalog",    "vie": "vietnamese"
+    "eng": "english", "fra": "french", "deu": "german", "spa": "spanish", 
+    "ita": "italian", "swe": "swedish", "por": "portuguese", "rus": "russian", 
+    "zho": "chinese", "jpn": "japanese", "ara": "arabic", "hin": "hindi", 
+    "fin": "finnish", "est": "estonian", "swa": "swahili", "tur": "turkish", 
+    "bul": "bulgarian", "pol": "polish", "ron": "romanian", "nld": "dutch", 
+    "dan": "danish", "nob": "norwegian", "isl": "icelandic", "ell": "greek", 
+    "heb": "hebrew", "lav": "latvian", "lit": "lithuanian", "mlt": "maltese", 
+    "hun": "hungarian", "cat": "catalan", "eus": "basque", "tha": "thai", 
+    "urd": "urdu", "fas": "persian", "mon": "mongolian", "nep": "nepali", 
+    "pan": "punjabi", "snd": "sindhi", "afr": "afrikaans", "amh": "amharic", 
+    "kor": "korean", "lat": "latin", "nno": "nynorsk", "slv": "slovenian", 
+    "som": "somali", "tgl": "tagalog", "vie": "vietnamese"
 }
 
-# Shared Libraries required for certain RGL families
 ISO_TO_SHARED_LIB = {
-    "fra": "romance", "spa": "romance", "ita": "romance", 
-    "por": "romance", "ron": "romance", "cat": "romance",
-    "swe": "scandinavian", "dan": "scandinavian", "nob": "scandinavian", 
-    "nno": "scandinavian",
-    "fin": "uralic", "est": "uralic"
+    "fra": "romance", "spa": "romance", "ita": "romance", "por": "romance", 
+    "ron": "romance", "cat": "romance", "swe": "scandinavian", "dan": "scandinavian", 
+    "nob": "scandinavian", "nno": "scandinavian", "fin": "uralic", "est": "uralic"
 }
 
-# Mapping ISO 639-3 to Factory Folder Name.
-# Since our factory generates folders based on full language names (e.g. "zulu"),
-# we map codes to those names here.
 ISO_TO_FACTORY_FOLDER = {
-    "zul": "zulu", "yor": "yoruba", "ibo": "igbo", "hau": "hausa",
-    "wol": "wolof", "kin": "kinyarwanda", "kor": "korean",
-    "ind": "indonesian", "msa": "malay", "tgl": "tagalog", "vie": "vietnamese",
-    "que": "quechua", "nav": "navajo", "aym": "aymara", "grn": "guarani",
-    "fry": "frisian", "bre": "breton", "oci": "occitan", "gla": "gaelic",
-    "nah": "nahuatl", "tat": "tatar", "kur": "kurdish", "xho": "xhosa",
-    "lug": "ganda", "lin": "lingala", "som": "somali", "jav": "javanese",
-    "tam": "tamil", "tel": "telugu", "ben": "bengali", "uzb": "uzbek",
-    "kaz": "kazakh"
+    "zul": "zulu", "yor": "yoruba", "ibo": "igbo", "hau": "hausa", "wol": "wolof", 
+    "kin": "kinyarwanda", "kor": "korean", "ind": "indonesian", "msa": "malay", 
+    "tgl": "tagalog", "vie": "vietnamese", "que": "quechua", "nav": "navajo", 
+    "aym": "aymara", "grn": "guarani", "fry": "frisian", "bre": "breton", 
+    "oci": "occitan", "gla": "gaelic", "nah": "nahuatl", "tat": "tatar", 
+    "kur": "kurdish", "xho": "xhosa", "lug": "ganda", "lin": "lingala", 
+    "som": "somali", "jav": "javanese", "tam": "tamil", "tel": "telugu", 
+    "ben": "bengali", "uzb": "uzbek", "kaz": "kazakh"
+}
+
+VOCAB_STUBS = {
+    "rus": {"n": "животное", "v": ["идти", "иду"]}, 
+    "lat": {"n": "animal", "v": ["ambulare", "ambulo"]},
+    "default": {"n": "animal", "v": "walk"}
 }
 
 GF_DIR = os.path.dirname(os.path.abspath(__file__))
 PGF_OUTPUT_FILE = os.path.join(GF_DIR, "Wiki.pgf")
 ABSTRACT_NAME = "AbstractWiki"
+BUILD_LOGS_DIR = os.path.join(GF_DIR, "build_logs")
 
 # ===========================================================================
 # GENERATORS
 # ===========================================================================
 
 def get_gf_suffix(iso_code):
-    """Returns the suffix used for the concrete grammar (e.g. 'Fre' or 'Zul')."""
     return CODE_TO_NAME.get(iso_code, iso_code.capitalize())
 
 def generate_abstract():
-    """Generates the Abstract Syntax file."""
     filename = f"{ABSTRACT_NAME}.gf"
     content = f"""abstract {ABSTRACT_NAME} = {{
   cat Entity; Property; Fact; Predicate; Modifier; Value;
@@ -108,16 +95,13 @@ def generate_abstract():
     FactWithMod : Fact -> Modifier -> Fact;
     mkLiteral : Value -> Entity;
     Entity2NP : Entity -> Entity; Property2AP : Property -> Property; VP2Predicate : Predicate -> Predicate;
-    
-    -- Vocabulary Stubs (Shared across all languages)
-    lex_animal_N : Entity; lex_cat_N : Entity; lex_walk_V : Predicate; lex_blue_A : Property;
+    lex_animal_N : Entity; lex_walk_V : Predicate; lex_blue_A : Property;
 }}\n"""
     with open(os.path.join(GF_DIR, filename), 'w', encoding='utf-8') as f: 
         f.write(content)
     return filename
 
 def generate_interface():
-    """Generates the Interface file used by RGL languages."""
     filename = "WikiI.gf"
     content = f"""incomplete concrete WikiI of {ABSTRACT_NAME} = open Syntax in {{
   lincat Entity = NP; Property = AP; Fact = S; Predicate = VP; Modifier = Adv; Value = {{s : Str}};
@@ -132,16 +116,21 @@ def generate_interface():
     return filename
 
 def generate_rgl_connector(iso_code):
-    """Generates the connector file that bridges Official RGL to our AbstractWiki."""
     suffix = get_gf_suffix(iso_code)
     filename = f"Wiki{suffix}.gf"
-    # Note: We use mkNP/mkVP from RGL Paradigms here
+    words = VOCAB_STUBS.get(iso_code, VOCAB_STUBS["default"])
+    
+    v_raw = words['v']
+    if isinstance(v_raw, list):
+        verb_args = " ".join([f'"{arg}"' for arg in v_raw])
+    else:
+        verb_args = f'"{v_raw}"'
+        
     content = f"""concrete Wiki{suffix} of {ABSTRACT_NAME} = WikiI ** open Syntax{suffix}, Paradigms{suffix}, Symbolic{suffix} in {{
   lin
-    lex_animal_N = mkNP (mkN "animal");
-    lex_cat_N = mkNP (mkN "cat");
-    lex_walk_V = mkVP (mkV "walk");
-    lex_blue_A = mkAP (mkA "blue");
+    lex_animal_N = mkNP (mkN "{words['n']}");
+    lex_walk_V = mkVP (mkV {verb_args});
+    lex_blue_A = mkAP (mkA "blue"); 
     mkLiteral v = symb v.s;
 }};\n"""
     with open(os.path.join(GF_DIR, filename), 'w', encoding='utf-8') as f: 
@@ -149,132 +138,189 @@ def generate_rgl_connector(iso_code):
     return filename
 
 # ===========================================================================
-# MAIN BUILD LOGIC
+# BUILD LOGIC
 # ===========================================================================
 
-def main():
-    print("🚀 Abstract Wiki Architect: Orchestrating 300-Language Build...")
+def get_base_paths():
+    rgl_base = os.environ.get("GF_LIB_PATH")
+    if not rgl_base:
+        for p in ["/usr/local/lib/gf", r"C:\gf-rgl-20250812", r"C:\Program Files\GF\lib"]:
+            if os.path.exists(p): rgl_base = p; break
     
-    # 1. Define Base Paths
-    # These match the Docker container structure
-    rgl_base = os.environ.get("GF_LIB_PATH", "/usr/local/lib/gf")
-    contrib_base = "/usr/local/lib/gf/contrib" 
-    factory_base = "/usr/local/lib/gf/generated"
+    rgl_src_base = None
+    if rgl_base and os.path.exists(os.path.join(rgl_base, "src")):
+        rgl_src_base = os.path.join(rgl_base, "src")
+    elif rgl_base:
+        rgl_src_base = rgl_base
 
-    # 2. Generate Base Files
-    generate_abstract()
-    generate_interface()
+    return rgl_src_base
 
-    files_to_compile = []
-    # Base search paths for the compiler (Core RGL)
-    search_paths = [
-        rgl_base, 
-        os.path.join(rgl_base, "api"), 
-        os.path.join(rgl_base, "prelude"), 
-        os.path.join(rgl_base, "abstract"), 
-        os.path.join(rgl_base, "common")
-    ]
+def resolve_language_path(iso_code, rgl_src_base):
+    suffix = get_gf_suffix(iso_code)
+    target_file = f"Wiki{suffix}.gf"
+    
+    contrib_base = os.path.join(GF_DIR, "contrib")
+    factory_base = os.path.join(GF_DIR, "generated", "src")
+    
+    paths = [GF_DIR, "."] 
 
-    # 3. Waterfall Logic: Iterate Languages
-    for iso_code in TARGET_LANGUAGES:
-        suffix = get_gf_suffix(iso_code)
-        target_file = f"Wiki{suffix}.gf"
+    if rgl_src_base:
+        paths.extend([
+            rgl_src_base, 
+            os.path.join(rgl_src_base, "api"), 
+            os.path.join(rgl_src_base, "prelude"), 
+            os.path.join(rgl_src_base, "abstract"), 
+            os.path.join(rgl_src_base, "common")
+        ])
+
+    # 1. Contrib
+    contrib_path = os.path.join(contrib_base, iso_code, target_file)
+    if os.path.exists(contrib_path):
+        paths.append(os.path.dirname(contrib_path))
+        return contrib_path, paths
+
+    # 2. Factory
+    folder = iso_code.lower() 
+    factory_path = os.path.join(factory_base, folder, target_file)
+    if os.path.exists(factory_path):
+        paths.append(os.path.dirname(factory_path))
+        return factory_path, paths
         
-        # --- Priority 1: Contrib (Manual Overrides) ---
-        contrib_file_path = os.path.join(contrib_base, iso_code, target_file)
-        # Note: We check if the folder exists in the container path, or relative in local dev
-        # For simplicity, we assume we are running in Docker or structure matches.
-        
-        # Local dev fallback for paths
-        if not os.path.exists(contrib_base):
-             # Fallback to local project path if running outside docker
-             local_contrib = os.path.join(GF_DIR, "contrib")
-             contrib_file_path = os.path.join(local_contrib, iso_code, target_file)
-
-        if os.path.exists(contrib_file_path):
-            print(f"[{iso_code}] Using Tier 2: Manual Contrib")
-            files_to_compile.append(contrib_file_path)
-            # Add this specific language folder to path
-            search_paths.append(os.path.dirname(contrib_file_path))
-            continue
-
-        # --- Priority 2: Factory (Generated) ---
-        folder = ISO_TO_FACTORY_FOLDER.get(iso_code)
-        if folder:
-            factory_file_path = os.path.join(factory_base, folder, target_file)
-            
-            # Local dev fallback
-            if not os.path.exists(factory_base):
-                local_factory = os.path.join(GF_DIR, "generated", "src")
-                factory_file_path = os.path.join(local_factory, folder, target_file)
-
-            if os.path.exists(factory_file_path):
-                print(f"[{iso_code}] Using Tier 3: Factory Generated")
-                files_to_compile.append(factory_file_path)
-                # Add factory root to path so 'open ResZul' works
-                search_paths.append(os.path.dirname(factory_file_path))
-                continue
-            
-        # --- Priority 3: Official RGL ---
+    # 3. RGL
+    if rgl_src_base:
         rgl_folder = ISO_TO_RGL_FOLDER.get(iso_code)
         if rgl_folder:
-            full_rgl_path = os.path.join(rgl_base, rgl_folder)
-            
-            # Check for critical Syntax file to ensure it's a valid RGL lang
+            full_rgl_path = os.path.join(rgl_src_base, rgl_folder)
             syntax_file = f"Syntax{suffix}.gf"
+            syntax_exists = os.path.exists(os.path.join(full_rgl_path, syntax_file)) or \
+                            os.path.exists(os.path.join(rgl_src_base, "api", syntax_file))
             
-            if os.path.exists(os.path.join(full_rgl_path, syntax_file)) or \
-               os.path.exists(os.path.join(rgl_base, "api", syntax_file)):
-                
-                print(f"[{iso_code}] Using Tier 1: Official RGL")
-                # For RGL, we generate the connector file in the root GF_DIR
-                files_to_compile.append(generate_rgl_connector(iso_code))
-                search_paths.append(full_rgl_path)
-                
-                # Add shared libs (Romance, Scandinavian, etc.)
+            if syntax_exists:
+                generated_file = os.path.join(GF_DIR, target_file)
+                generate_rgl_connector(iso_code)
+                paths.append(full_rgl_path)
                 shared = ISO_TO_SHARED_LIB.get(iso_code)
-                if shared:
-                    search_paths.append(os.path.join(rgl_base, shared))
-            else:
-                print(f"⚠️  [{iso_code}] SKIPPING: RGL found, but {syntax_file} missing.")
-        else:
-            print(f"⚠️  [{iso_code}] SKIPPING: No source found (RGL, Contrib, or Factory).")
+                if shared: paths.append(os.path.join(rgl_src_base, shared))
+                return generated_file, paths
 
-    # 4. Compile
-    if not files_to_compile:
-        print("❌ Error: No files found to compile. Check your configuration.")
+    return None, None
+
+def main():
+    print("🚀 Abstract Wiki Architect: Assembly Line (Logging Mode)")
+    
+    # 0. Setup Logs Directory
+    if os.path.exists(BUILD_LOGS_DIR):
+        shutil.rmtree(BUILD_LOGS_DIR)
+    os.makedirs(BUILD_LOGS_DIR)
+    print(f"[*] Logs initialized at: {BUILD_LOGS_DIR}")
+
+    # 1. Generate & Compile Abstract Grammar FIRST
+    print("[-] Compiling AbstractWiki.gf...")
+    generate_abstract()
+    generate_interface()
+    
+    abs_path = os.path.join(GF_DIR, "AbstractWiki.gf")
+    
+    env = os.environ.copy()
+    try:
+        cmd = ["gf", "-make", "-v", abs_path]
+        subprocess.run(cmd, check=True, cwd=GF_DIR, env=env)
+        print("✅ AbstractWiki.gfo created.")
+    except subprocess.CalledProcessError:
+        print("❌ Fatal: Could not compile AbstractWiki.gf")
         sys.exit(1)
 
-    print(f"\n--- Starting Compilation of {len(files_to_compile)} languages ---")
+    rgl_src_base = get_base_paths()
+    valid_files = []
+    all_paths = []
+    failed_langs = []
+
+    print(f"[*] Inspecting {len(TARGET_LANGUAGES)} languages...")
     
-    # Deduplicate search paths to keep command clean
-    search_paths = list(set(search_paths))
-    path_arg = ":".join(search_paths)
+    for iso in TARGET_LANGUAGES:
+        file_path, paths = resolve_language_path(iso, rgl_src_base)
+        
+        if not file_path:
+            continue
+
+        if GF_DIR not in paths: paths.insert(0, GF_DIR)
+        
+        deduped_paths = []
+        for p in paths:
+            if p not in deduped_paths: deduped_paths.append(p)
+        
+        path_arg = os.pathsep.join(deduped_paths)
+        
+        # Compile individual language
+        cmd = ["gf", "-make", "-v", "-path", path_arg, file_path]
+        
+        try:
+            result = subprocess.run(
+                cmd, 
+                cwd=GF_DIR, 
+                stdout=subprocess.PIPE, 
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            
+            if result.returncode == 0:
+                print(f"✅ {iso}: Compiled")
+                valid_files.append(file_path)
+                for p in deduped_paths: 
+                    if p not in all_paths: all_paths.append(p)
+            else:
+                log_file = os.path.join(BUILD_LOGS_DIR, f"{iso}.log")
+                print(f"❌ {iso}: Failed (See {iso}.log)")
+                
+                # Write individual log file
+                with open(log_file, "w", encoding="utf-8") as f:
+                    f.write(f"--- COMPILE ERROR FOR {iso} ---\n")
+                    f.write(f"COMMAND: {' '.join(cmd)}\n")
+                    f.write("-" * 40 + "\n")
+                    f.write(result.stderr)
+                    f.write(result.stdout)
+                
+                failed_langs.append(iso)
+
+        except Exception as e:
+            print(f"❌ {iso}: Process Error {e}")
+            failed_langs.append(iso)
+
+    if failed_langs:
+        print(f"\n⚠️  {len(failed_langs)} languages failed. Check {BUILD_LOGS_DIR}/<lang>.log")
     
-    # GF Command
-    cmd = ["gf", "-make", "-path", path_arg] + files_to_compile
+    if not valid_files:
+        print("❌ Critical: No languages compiled successfully.")
+        sys.exit(1)
+
+    print(f"\n🔗 Linking {len(valid_files)} valid languages into Wiki.pgf...")
+    
+    final_paths = list(all_paths)
+    if GF_DIR not in final_paths: final_paths.insert(0, GF_DIR)
+    
+    path_arg = os.pathsep.join(final_paths)
+    
+    build_cmd = ["gf", "-make", "-path", path_arg, "AbstractWiki.gf"] + valid_files
     
     try:
-        # Run compilation
-        env = os.environ.copy()
-        subprocess.run(cmd, check=True, cwd=GF_DIR, env=env)
+        subprocess.run(build_cmd, check=True, cwd=GF_DIR, env=env)
         
-        # Rename output to standard name
         generated_pgf = os.path.join(GF_DIR, f"{ABSTRACT_NAME}.pgf")
         if os.path.exists(generated_pgf):
             if os.path.exists(PGF_OUTPUT_FILE):
                 os.remove(PGF_OUTPUT_FILE)
             os.rename(generated_pgf, PGF_OUTPUT_FILE)
-            print(f"✅ SUCCESS: Grammar compiled to {PGF_OUTPUT_FILE}")
+            print(f"📦 SUCCESS! Binary created at: {PGF_OUTPUT_FILE}")
+            print(f"📊 Stats: {len(valid_files)} included, {len(failed_langs)} skipped.")
+            
+            # FORCE SUCCESS EXIT for Docker so container starts even with partial languages
+            sys.exit(0)
         else:
-            print("❌ Compile failed: PGF binary was not created.")
+            print("❌ Linker failed: PGF not created.")
             sys.exit(1)
             
     except subprocess.CalledProcessError:
-        print("❌ Compile failed due to GF errors.")
-        sys.exit(1)
-    except FileNotFoundError:
-        print("❌ GF Compiler not found. Ensure 'gf' is in PATH.")
+        print("❌ Final linking failed.")
         sys.exit(1)
 
 if __name__ == "__main__":

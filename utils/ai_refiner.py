@@ -44,33 +44,36 @@ def setup_gemini():
 
 def read_factory_files(iso_code, lang_name):
     """Reads the generated Tier 3 files for context."""
-    folder = iso_code  # Factory folders are usually iso codes or names. Let's try name first based on factory logic.
+    # Factory folders are usually iso codes or names. 
+    # In grammar_factory.py, we use the lowercase ISO code (e.g. 'zul')
     
-    # In factory script we used: lang_dir = os.path.join(OUTPUT_ROOT, config["name"].lower())
-    # So we look for lowercase name.
-    # We need a reverse lookup or just try the iso_code if the folder structure matches.
-    # For robust V1, let's assume we pass the full folder path or name.
+    target_folder = os.path.join(GF_GENERATED_PATH, iso_code)
     
-    # Heuristic: search in generated folder
-    search_path = os.path.join(GF_GENERATED_PATH, "*")
-    candidates = glob.glob(search_path)
-    
-    target_folder = None
-    for c in candidates:
-        if os.path.basename(c).lower().startswith(iso_code) or \
-           os.path.basename(c).lower() == lang_name.lower():
-            target_folder = c
-            break
-            
-    if not target_folder:
-        return None
+    if not os.path.exists(target_folder):
+        # Fallback search if exact ISO folder doesn't exist
+        search_path = os.path.join(GF_GENERATED_PATH, "*")
+        candidates = glob.glob(search_path)
+        for c in candidates:
+            if os.path.basename(c).lower() == lang_name.lower():
+                target_folder = c
+                break
+        else:
+            return None
 
     files = {}
+    # Note: grammar_factory uses capitalized names for files: WikiZul.gf
+    # We construct the expected filename based on the provided LangName (e.g. Zulu -> WikiZulu.gf)
+    # OR based on the ISO code capitalization if that's the convention.
+    # Architecture V2 says: WikiZul (ISO based).
+    # Let's try to find the files flexibly.
+    
     for ext in ["Res", "Syntax", "Wiki"]:
-        fname = f"{ext}{lang_name}.gf"
-        fpath = os.path.join(target_folder, fname)
-        if os.path.exists(fpath):
-            with open(fpath, "r", encoding="utf-8") as f:
+        # Try finding the file by globbing to handle naming conventions
+        pattern = os.path.join(target_folder, f"{ext}*.gf")
+        matches = glob.glob(pattern)
+        if matches:
+            fname = os.path.basename(matches[0])
+            with open(matches[0], "r", encoding="utf-8") as f:
                 files[fname] = f.read()
     
     return files
@@ -94,7 +97,7 @@ def parse_ai_response(response_text):
     buffer = []
 
     for line in lines:
-        if line.startswith("### FILE:"):
+        if line.strip().startswith("### FILE:"):
             if current_file:
                 files[current_file] = "\n".join(buffer)
             current_file = line.replace("### FILE:", "").strip()
@@ -115,7 +118,7 @@ def refine_language(iso_code, lang_name, specific_instructions=""):
     # 1. Load context
     files = read_factory_files(iso_code, lang_name)
     if not files:
-        print(f"❌ Could not find generated files for {iso_code}")
+        print(f"❌ Could not find generated files for {iso_code} in {GF_GENERATED_PATH}")
         return
 
     # 2. Build Prompt
@@ -125,7 +128,7 @@ def refine_language(iso_code, lang_name, specific_instructions=""):
     
     user_prompt += "\n--- EXISTING CODE ---\n"
     for fname, content in files.items():
-        user_prompt += f"\nFile: {fname}\n{content}\n"
+        user_prompt += f"\n### FILE: {fname}\n{content}\n"
 
     # 3. Call AI
     print("   Sending to Gemini (this may take 30s)...")

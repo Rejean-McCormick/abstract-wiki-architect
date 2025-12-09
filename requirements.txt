@@ -1,9 +1,8 @@
-# requirements.txt
-
 # CORE QA & TESTING
 # -----------------
 pytest>=7.0.0            # Framework for running the automated test suites
 pandas>=1.5.0            # For efficient handling of large CSV test datasets
+httpx>=0.24.0            # HTTP client (needed for API testing/client services)
 
 # CODE QUALITY
 # ------------
@@ -20,9 +19,15 @@ python-dotenv>=1.0.0        # Required to load .env variables in utility scripts
 # ----------------
 fastapi>=0.110.0         # Web framework for the Architect HTTP API
 uvicorn[standard]>=0.27.0  # ASGI server used to run the FastAPI app
+pydantic>=2.0.0          # Data validation (Critical for API Schemas)
 sqlalchemy>=2.0.0        # ORM / DB layer
 alembic>=1.12.0          # DB migrations
 
 # GRAMMATICAL FRAMEWORK
 # ---------------------
+# Note: 'pgf' often requires a system-level install or a specific wheel 
+# depending on your OS (Linux/Mac/Windows).
 pgf==1.1                 # Python bindings for GF
+
+
+requests>=2.31.0

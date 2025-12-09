@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
 
-from nlg.api import GenerationOptions, NLGSession
+from nlg.api import GenerationOptions
 from semantics.aw_bridge import UnknownFrameTypeError, frame_from_aw
 from semantics.all_frames import frame_to_dict
 from utils.logging_setup import get_logger
+from architect_http_api.services.nlg_client import NLGClient, get_nlg_client
 
 log = get_logger(__name__)
 
@@ -108,15 +109,6 @@ class GenerateResponse(BaseModel):
 
 
 # ---------------------------------------------------------------------------
-# Session
-# ---------------------------------------------------------------------------
-
-# Single shared NLG session for this process. If you want to preload languages,
-# adjust the constructor call here.
-_SESSION = NLGSession()
-
-
-# ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
 
@@ -126,13 +118,16 @@ _SESSION = NLGSession()
     response_model=GenerateResponse,
     summary="Generate text from a semantic frame",
 )
-def generate(req: GenerateRequest) -> GenerateResponse:
+def generate(
+    req: GenerateRequest,
+    nlg_client: NLGClient = Depends(get_nlg_client),
+) -> GenerateResponse:
     """
     Main HTTP entry point: AbstractWiki-style frame → realized text.
 
     Steps:
     1. Normalize the incoming AW payload into a semantic Frame.
-    2. Call NLGSession.generate with the requested language and options.
+    2. Call NLGClient.generate with the requested language and options.
     3. Convert the internal Frame back to a canonical dict for the response.
     """
     frame_type = str(req.frame.get("frame_type", "")).strip() or None
@@ -168,14 +163,15 @@ def generate(req: GenerateRequest) -> GenerateResponse:
     options = req.options.to_generation_options() if req.options else None
 
     try:
-        result = _SESSION.generate(
+        # Delegate to the shared NLGClient instance (thread-safe, shared PGF)
+        result = nlg_client.generate(
             lang=req.lang,
             frame=frame,
             options=options,
             debug=req.debug,
         )
     except Exception as exc:
-        log.exception("Error during NLGSession.generate in /generate")
+        log.exception("Error during NLGClient.generate in /generate")
         raise HTTPException(
             status_code=500,
             detail="Internal error while generating text.",

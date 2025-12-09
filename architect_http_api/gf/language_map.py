@@ -7,14 +7,12 @@
 # 2. ISO 639-1 (2-letter) codes (common public standard)
 # 3. ISO 639-3 (3-letter) codes (standard RGL identifiers)
 # 4. Legacy RGL Concrete Names (e.g., 'Fre' instead of 'Fra')
-#
 # =========================================================================
 
 from typing import Dict, List, Optional
 
 # --- 1. CORE DATA MAPPING ---
 # Structure: { ISO_639_3 : { 'iso1': ISO_639_1, 'z_id': Z-ID } }
-# This list matches the TARGET_LANGUAGES list in gf/build_orchestrator.py
 LANGUAGE_MAP: Dict[str, Dict[str, str]] = {
     # --- Tier 1: RGL Core ---
     "eng": {"iso1": "en", "z_id": "Z1002"},
@@ -40,10 +38,9 @@ LANGUAGE_MAP: Dict[str, Dict[str, str]] = {
     "nob": {"iso1": "nb", "z_id": "Z1028"},
     "isl": {"iso1": "is", "z_id": "Z1029"},
     "ell": {"iso1": "el", "z_id": "Z1030"},
-    "kor": {"iso1": "ko", "z_id": "Z1031"}, # Tier 3 Promoted
+    "kor": {"iso1": "ko", "z_id": "Z1031"}, 
     
     # --- Tier 3: Factory / Generated Languages ---
-    # We assign Z-IDs sequentially for now (or match Wikidata if known)
     "zul": {"iso1": "zu", "z_id": "Z1032"}, # Zulu
     "yor": {"iso1": "yo", "z_id": "Z1033"}, # Yoruba
     "ibo": {"iso1": "ig", "z_id": "Z1034"}, # Igbo
@@ -64,7 +61,8 @@ LANGUAGE_MAP: Dict[str, Dict[str, str]] = {
     "cym": {"iso1": "cy", "z_id": "Z1049"}, # Welsh
     "tat": {"iso1": "tt", "z_id": "Z1050"}, # Tatar
     "kur": {"iso1": "ku", "z_id": "Z1051"}, # Kurdish
-    # ... extensible list ...
+    
+    # Extensible...
 }
 
 # --- 2. LEGACY RGL NAMING RULES ---
@@ -97,6 +95,9 @@ def get_iso3_code(identifier: str) -> Optional[str]:
     Normalizes any identifier (ISO-1, Z-ID, or ISO-3) to the standard ISO 639-3 code.
     Example: 'en', 'Z1002', 'Eng' -> 'eng'
     """
+    if not identifier:
+        return None
+        
     ident = identifier.lower().strip()
     
     # 1. Check if already valid ISO-3
@@ -112,7 +113,6 @@ def get_iso3_code(identifier: str) -> Optional[str]:
         return ZID_TO_ISO3_MAP[ident.upper()]
         
     # 4. Handle legacy RGL capitalization (e.g. 'Fre' -> 'fra')
-    # This is a bit expensive (O(N)), but safe for small N.
     for iso3, legacy in RGL_LEGACY_MAP.items():
         if legacy.lower() == ident:
             return iso3
@@ -131,6 +131,17 @@ def get_concrete_name(identifier: str) -> Optional[str]:
     # Use legacy map if available, otherwise default to Capitalized ISO-3
     suffix = RGL_LEGACY_MAP.get(iso3, iso3.capitalize())
     return f"Wiki{suffix}"
+
+def get_rgl_code(identifier: str) -> Optional[str]:
+    """
+    Returns the 3-letter RGL suffix (e.g. 'Fre', 'Eng', 'Zul') 
+    without the 'Wiki' prefix. Needed for some legacy internal lookups.
+    """
+    iso3 = get_iso3_code(identifier)
+    if not iso3:
+        return None
+        
+    return RGL_LEGACY_MAP.get(iso3, iso3.capitalize())
 
 def get_z_language(identifier: str) -> Optional[str]:
     """Returns the Z-ID for a given language code."""

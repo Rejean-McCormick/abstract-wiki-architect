@@ -1,14 +1,8 @@
 incomplete concrete WikiI of AbstractWiki = open Syntax in {
-  lincat
-    Entity = NP ; Property = AP ; Fact = S ; 
-    Predicate = VP ; Modifier = Adv ; Value = {s : Str} ;
-
+  lincat Entity = NP; Property = AP; Fact = S; Predicate = VP; Modifier = Adv; Value = {s : Str};
   lin
-    mkFact entity predicate = mkS (mkCl entity predicate) ;
-    mkIsAProperty entity property = mkS (mkCl entity (mkVP property)) ;
-    FactWithMod fact modifier = mkS modifier fact ;
-
-    Entity2NP e = e ;
-    Property2AP p = p ;
-    VP2Predicate p = p ;
+    mkFact s p = mkS (mkCl s p);
+    mkIsAProperty s p = mkS (mkCl s (mkVP p));
+    FactWithMod f m = mkS m f;
+    Entity2NP x = x; Property2AP x = x; VP2Predicate x = x;
 }

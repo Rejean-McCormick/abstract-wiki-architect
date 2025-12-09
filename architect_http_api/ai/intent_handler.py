@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import json
-from typing import List, Tuple, Any, Dict
+import re
+import logging
+from typing import List, Tuple, Any, Dict, Optional
 
 from architect_http_api.schemas.ai import (
     AICommandRequest,
@@ -13,6 +15,7 @@ from architect_http_api.schemas.ai import (
 from architect_http_api.services.ai_client import AIClient
 from architect_http_api.ai.frame_builder import build_frame_patches
 
+logger = logging.getLogger(__name__)
 
 class IntentHandler:
     """
@@ -34,6 +37,47 @@ class IntentHandler:
         """
         return self.handle_command_sync(request)
 
+    def _extract_json_block(self, text: str) -> Optional[Dict[str, Any]]:
+        """
+        Robustly extracts the first valid JSON object from a string.
+        Handles markdown fences (```json ... ```) and mixed text.
+        """
+        if not text:
+            return None
+
+        # 1. Try finding a markdown block
+        json_match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
+        if json_match:
+            try:
+                return json.loads(json_match.group(1))
+            except json.JSONDecodeError:
+                pass  # Fallback to brute force
+
+        # 2. Brute force: find the outer-most balanced braces
+        # This handles cases where the LLM says "Sure! { ... } works."
+        stack = 0
+        start_index = -1
+        
+        for i, char in enumerate(text):
+            if char == "{":
+                if stack == 0:
+                    start_index = i
+                stack += 1
+            elif char == "}":
+                stack -= 1
+                if stack == 0 and start_index != -1:
+                    # Found a complete block
+                    candidate = text[start_index : i + 1]
+                    try:
+                        return json.loads(candidate)
+                    except json.JSONDecodeError:
+                        # Continue searching if this block was invalid
+                        # (e.g. inside a comment or string, though unlikely for outer block)
+                        start_index = -1
+                        continue
+        
+        return None
+
     def handle_command_sync(self, request: AICommandRequest) -> AICommandResponse:
         """
         Main logic for interpreting a user command.
@@ -46,7 +90,8 @@ class IntentHandler:
         system_prompt = (
             "You are an AI architect helper. "
             "Analyze the user request and the current frame context. "
-            "Return a JSON object with keys: 'intent', 'actions' (list of field updates), 'explanation'."
+            "Return a JSON object with keys: 'intent', 'actions' (list of field updates), 'explanation'. "
+            "Ensure the output is valid JSON."
         )
         
         # Serialize context for the prompt
@@ -59,26 +104,19 @@ class IntentHandler:
         # Note: AIClient.chat is synchronous in your codebase
         ai_reply_text = self._ai_client.chat(messages, system_prompt=system_prompt)
         
-        # 3. Parse LLM output (Mocking parsing logic for robustness)
-        # In a real implementation, we would robustly parse JSON from ai_reply_text.
-        # Here we assume a simple structure or fallback.
+        # 3. Parse LLM output (Robust)
         intent_label = "unknown"
         actions: List[Dict[str, Any]] = []
         explanation = ai_reply_text
 
-        # Basic heuristic parsing if LLM returned JSON
-        try:
-            # Find first '{' and last '}'
-            start = ai_reply_text.find("{")
-            end = ai_reply_text.rfind("}")
-            if start != -1 and end != -1:
-                json_str = ai_reply_text[start : end + 1]
-                data = json.loads(json_str)
-                intent_label = data.get("intent", intent_label)
-                actions = data.get("actions", [])
-                explanation = data.get("explanation", ai_reply_text)
-        except Exception:
-            pass # Fallback to raw text as explanation
+        extracted_data = self._extract_json_block(ai_reply_text)
+        
+        if extracted_data:
+            intent_label = extracted_data.get("intent", intent_label)
+            actions = extracted_data.get("actions", [])
+            explanation = extracted_data.get("explanation", explanation)
+        else:
+            logger.warning("Failed to extract JSON from AI response. Fallback to raw text.")
 
         # 4. Build Patches
         patches: List[AIFramePatch] = build_frame_patches(

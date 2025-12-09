@@ -8,12 +8,13 @@
 # =========================================================================
 
 from .engine import GFEngine, GFEngineError
-# Optionally expose language mapping tools if external modules need them
-from .language_map import get_rgl_code, get_z_language
+# Expose language mapping tools required by routers/services
+from .language_map import get_iso3_code, get_rgl_code, get_z_language
 
 __all__ = [
     "GFEngine",
     "GFEngineError",
+    "get_iso3_code",
     "get_rgl_code",
     "get_z_language",
 ]

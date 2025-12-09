@@ -1,4 +1,3 @@
-# architect_http_api/main.py
 from __future__ import annotations
 
 """
@@ -9,16 +8,6 @@ all versioned routers under a common prefix.
 
 Intended usage:
     uvicorn architect_http_api.main:app --host 0.0.0.0 --port 8000
-
-By default the API is exposed under:
-
-    /api/v1/...
-
-When deployed behind Nginx with a path prefix like:
-
-    /abstract_wiki_architect/
-
-the proxy should forward to this app without that prefix (see docs/hosting.md).
 """
 
 import logging
@@ -29,8 +18,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from architect_http_api.logging.config import configure_logging
-from architect_http_api.routers import ai, entities, frames, generate
-from architect_http_api.gf import language_map  # <--- NEW: Import Language Map logic
+# UPDATE: Added 'grammar' to the router imports
+from architect_http_api.routers import ai, entities, frames, generate, grammar
+from architect_http_api.gf import language_map
 
 
 # ---------------------------------------------------------------------------
@@ -58,10 +48,6 @@ if API_ROOT == "//" or API_ROOT == "/":
 def _parse_cors_origins(raw: str) -> List[str]:
     """
     Parse a comma-separated list of origins into a list.
-
-    Special cases:
-        "*" → ["*"] (fully open CORS)
-        ""  → ["*"] (fallback)
     """
     raw = (raw or "").strip()
     if not raw or raw == "*":
@@ -136,7 +122,7 @@ def create_app() -> FastAPI:
             "api_root": API_ROOT,
         }
 
-    # --- NEW: Language List Endpoint ---
+    # --- Language List Endpoint ---
     # Used by frontend to populate the 300+ language selector
     @app.get("/languages", tags=["system"])
     async def get_supported_languages() -> List[Dict[str, str]]:
@@ -149,7 +135,7 @@ def create_app() -> FastAPI:
         for code in codes:
             z_id = language_map.get_z_language(code)
             # Basic capitalization for name (e.g. 'zul' -> 'Zulu')
-            # In a real app, you'd fetch full localized names from a DB or file.
+            # In a real app, you might map this to a localized display name
             name = code.capitalize() 
             results.append({
                 "code": code,
@@ -164,6 +150,10 @@ def create_app() -> FastAPI:
     app.include_router(entities.router, prefix=API_ROOT)
     app.include_router(frames.router, prefix=API_ROOT)
     app.include_router(ai.router, prefix=API_ROOT)
+    
+    # UPDATE: Mount the grammar refinement router
+    # This exposes endpoints like /grammar/refine
+    app.include_router(grammar.router, prefix=API_ROOT)
 
     return app
 
