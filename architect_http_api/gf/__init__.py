@@ -1,14 +1,18 @@
 # architect_http_api/gf/__init__.py
-# =========================================================================
-# GRAMMATICAL FRAMEWORK (GF) INTEGRATION PACKAGE
-#
-# This module exposes the runtime engine required to interact with the
-# compiled PGF grammar. It serves as the single entry point for
-# linearization and morphology tasks.
-# =========================================================================
 
-from .engine import GFEngine, GFEngineError
+# Try to import the engine, but don't crash if pgf is missing.
+# This allows the Python-native engines (Romance, Germanic, etc.) to run on Windows
+# without requiring the heavy C++ build tools for pgf.
+try:
+    from .engine import GFEngine, GFEngineError
+except ImportError:
+    import logging
+    logging.getLogger(__name__).warning("PGF (Grammatical Framework) not installed. GF-based features will be disabled.")
+    GFEngine = None
+    GFEngineError = None
+
 # Expose language mapping tools required by routers/services
+# (These are pure Python and safe to import)
 from .language_map import get_iso3_code, get_rgl_code, get_z_language
 
 __all__ = [

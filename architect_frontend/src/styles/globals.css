@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* architect_frontend/src/styles/globals.css */
 
 *,
