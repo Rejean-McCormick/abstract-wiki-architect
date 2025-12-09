@@ -94,8 +94,8 @@ export interface LocalizedLabel {
 }
 
 export interface FrameTypeMeta {
-  frame_type: string;    // e.g. "bio", "event.generic"
-  family: string;        // e.g. "entity", "event"
+  frame_type: string;     // e.g. "bio", "event.generic"
+  family: string;         // e.g. "entity", "event"
   // Title/Description can be a string (legacy) or LocalizedLabel (new)
   title?: string | LocalizedLabel;
   description?: string | LocalizedLabel;
@@ -112,6 +112,16 @@ export function getLabelText(val: string | LocalizedLabel | undefined | null): s
 }
 
 /* -------------------------------------------------------------------------- */
+/* Language Types (REQUIRED FOR LANGUAGE SELECTOR)                            */
+/* -------------------------------------------------------------------------- */
+
+export interface Language {
+  code: string; // e.g. "zul"
+  name: string; // e.g. "Zulu"
+  z_id: string; // e.g. "Z1032"
+}
+
+/* -------------------------------------------------------------------------- */
 /* Domain Types (Entities)                                                    */
 /* Matches architect_http_api.schemas.entities.EntityRead                     */
 /* -------------------------------------------------------------------------- */
@@ -123,7 +133,7 @@ export interface Entity {
   lang: string; // e.g. "en", "fr"
   
   // Aligned with backend schemas/entities.py
-  frame_type?: string;     // e.g. 'entity.person', 'bio'
+  frame_type?: string;      // e.g. 'entity.person', 'bio'
   frame_payload?: Record<string, unknown>; // The actual content
   
   short_description?: string;
@@ -171,7 +181,7 @@ export interface AIMessage {
 export interface AIFramePatch {
   path: string;  // e.g. "birth_date" or "relations.0.target"
   value: unknown;
-  op?: "replace" | "add" | "remove"; 
+  op?: "replace" | "add" | "remove";  
 }
 
 /**
@@ -179,9 +189,9 @@ export interface AIFramePatch {
  * (Maps to AICommandRequest in backend)
  */
 export interface IntentRequest {
-  message: string;             // User's natural language input
+  message: string;        // User's natural language input
   lang?: string;
-  workspace_slug?: string;     // Context context
+  workspace_slug?: string;    // Context context
   
   // Context: the current state of the frame being edited
   context_frame?: {
@@ -199,7 +209,7 @@ export interface IntentRequest {
 export interface IntentResponse {
   intent_label: string;
   assistant_messages: AIMessage[];
-  patches: AIFramePatch[];     // Proposed changes to the frame
+  patches: AIFramePatch[];      // Proposed changes to the frame
   debug?: Record<string, unknown>;
 }
 
@@ -209,7 +219,7 @@ export interface IntentResponse {
 export interface SuggestionRequest {
   frame_type: string;
   current_payload?: Record<string, unknown>;
-  field_name?: string;        // If asking for specific field suggestions
+  field_name?: string;      // If asking for specific field suggestions
   partial_input?: string;     // What the user typed so far
 }
 
@@ -218,7 +228,7 @@ export interface SuggestionResponse {
     id: string;
     title: string;
     description: string;
-    value?: unknown;          // Suggested value
+    value?: unknown;      // Suggested value
     score?: number;
   }>;
 }
@@ -241,7 +251,7 @@ export interface GenerationResult {
   frame?: Record<string, unknown>;
   debug_info?: Record<string, unknown>;
   // Fallback for older interface usage
-  surface_text?: string; 
+  surface_text?: string;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -261,6 +271,11 @@ export interface ArchitectApi {
 
   /** Get the JSON Schema for a specific frame type to build the form */
   getFrameSchema(frameType: string): Promise<Record<string, any>>;
+
+  // --- Language Management (NEW) ---
+  
+  /** Get list of all supported languages */
+  listLanguages(): Promise<Language[]>; // <-- NEW FUNCTION
 
   // --- Entity Management ---
 
@@ -315,6 +330,12 @@ export const architectApi: ArchitectApi = {
 
   getFrameSchema(frameType: string): Promise<Record<string, any>> {
     return request<Record<string, any>>(`/frames/schemas/${frameType}`);
+  },
+  
+  // --- Language Management (IMPLEMENTATION) ---
+
+  listLanguages(): Promise<Language[]> { // <-- NEW IMPLEMENTATION
+    return request<Language[]>("/languages");
   },
 
   // --- Entities ---
