@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "language": "nl",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "nederlands": {
+      "lemma": "Nederlands",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Nederlands"
+      },
+      "features": {
+        "country_qid": "Q55"
+      },
+      "qid": "Q169469"
+    },
+    "duits": {
+      "lemma": "Duits",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Duits"
+      },
+      "features": {
+        "country_qid": "Q183"
+      },
+      "qid": "Q188"
+    },
+    "frans": {
+      "lemma": "Frans",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Frans"
+      },
+      "features": {
+        "country_qid": "Q142"
+      },
+      "qid": "Q150"
+    },
+    "italiaans": {
+      "lemma": "Italiaans",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Italiaans"
+      },
+      "features": {
+        "country_qid": "Q38"
+      },
+      "qid": "Q652"
+    },
+    "spaans": {
+      "lemma": "Spaans",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Spaans"
+      },
+      "features": {
+        "country_qid": "Q29"
+      },
+      "qid": "Q1321"
+    },
+    "pools": {
+      "lemma": "Pools",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Pools"
+      },
+      "features": {
+        "country_qid": "Q36"
+      },
+      "qid": "Q809"
+    },
+    "oostenrijks": {
+      "lemma": "Oostenrijks",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Oostenrijks"
+      },
+      "features": {
+        "country_qid": "Q40"
+      },
+      "qid": "Q28"
+    },
+    "amerikaans": {
+      "lemma": "Amerikaans",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Amerikaans"
+      },
+      "features": {
+        "country_qid": "Q30"
+      },
+      "qid": "Q30"
+    }
+  }
+}

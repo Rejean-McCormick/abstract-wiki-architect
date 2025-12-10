@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "language": "ro",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "roman": {
+      "key": "roman",
+      "lemma": "român",
+      "pos": "ADJ",
+      "language": "ro",
+      "sense": "nationality",
+      "human": null,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": "Q7913",
+      "forms": {
+        "m.sg": "român",
+        "f.sg": "română",
+        "m.pl": "români",
+        "f.pl": "române"
+      },
+      "adjective": "român",
+      "demonym": "român",
+      "country_name": "România",
+      "extra": {
+        "gloss": "Romanian",
+        "country_qid": "Q218"
+      }
+    },
+    "polonez": {
+      "key": "polonez",
+      "lemma": "polonez",
+      "pos": "ADJ",
+      "language": "ro",
+      "sense": "nationality",
+      "human": null,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "m.sg": "polonez",
+        "f.sg": "poloneză",
+        "m.pl": "polonezi",
+        "f.pl": "poloneze"
+      },
+      "adjective": "polonez",
+      "demonym": "polonez",
+      "country_name": "Polonia",
+      "extra": {
+        "gloss": "Polish",
+        "country_qid": "Q36"
+      }
+    },
+    "francez": {
+      "key": "francez",
+      "lemma": "francez",
+      "pos": "ADJ",
+      "language": "ro",
+      "sense": "nationality",
+      "human": null,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "m.sg": "francez",
+        "f.sg": "franceză",
+        "m.pl": "francezi",
+        "f.pl": "franceze"
+      },
+      "adjective": "francez",
+      "demonym": "francez",
+      "country_name": "Franța",
+      "extra": {
+        "gloss": "French",
+        "country_qid": "Q142"
+      }
+    },
+    "italian": {
+      "key": "italian",
+      "lemma": "italian",
+      "pos": "ADJ",
+      "language": "ro",
+      "sense": "nationality",
+      "human": null,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "m.sg": "italian",
+        "f.sg": "italiană",
+        "m.pl": "italieni",
+        "f.pl": "italiene"
+      },
+      "adjective": "italian",
+      "demonym": "italian",
+      "country_name": "Italia",
+      "extra": {
+        "gloss": "Italian",
+        "country_qid": "Q38"
+      }
+    }
+  }
+}

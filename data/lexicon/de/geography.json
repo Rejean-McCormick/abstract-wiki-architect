@@ -1,0 +1,93 @@
+{
+  "_meta": {
+    "language": "de",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "deutsch": {
+      "lemma": "deutsch",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "deutsch"
+      },
+      "features": {
+        "country_qid": "Q183"
+      },
+      "qid": "Q188"
+    },
+    "franzoesisch": {
+      "lemma": "französisch",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "französisch"
+      },
+      "features": {
+        "country_qid": "Q142"
+      },
+      "qid": "Q150"
+    },
+    "italienisch": {
+      "lemma": "italienisch",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "italienisch"
+      },
+      "features": {
+        "country_qid": "Q38"
+      },
+      "qid": "Q652"
+    },
+    "spanisch": {
+      "lemma": "spanisch",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "spanisch"
+      },
+      "features": {
+        "country_qid": "Q29"
+      },
+      "qid": "Q1321"
+    },
+    "polnisch": {
+      "lemma": "polnisch",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "polnisch"
+      },
+      "features": {
+        "country_qid": "Q36"
+      },
+      "qid": "Q809"
+    },
+    "oesterreichisch": {
+      "lemma": "österreichisch",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "österreichisch"
+      },
+      "features": {
+        "country_qid": "Q40"
+      },
+      "qid": "Q28"
+    },
+    "amerikanisch": {
+      "lemma": "amerikanisch",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "amerikanisch"
+      },
+      "features": {
+        "country_qid": "Q30"
+      },
+      "qid": "Q30"
+    }
+  }
+}

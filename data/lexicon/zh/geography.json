@@ -1,0 +1,93 @@
+{
+  "_meta": {
+    "language": "zh",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "chinese": {
+      "lemma": "中国",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "中国"
+      },
+      "extra": {
+        "pinyin": "zhōngguó"
+      },
+      "qid": "Q148"
+    },
+    "american": {
+      "lemma": "美国",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "美国"
+      },
+      "extra": {
+        "pinyin": "měiguó"
+      },
+      "qid": "Q30"
+    },
+    "british": {
+      "lemma": "英国",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "英国"
+      },
+      "extra": {
+        "pinyin": "yīngguó"
+      },
+      "qid": "Q145"
+    },
+    "french": {
+      "lemma": "法国",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "法国"
+      },
+      "extra": {
+        "pinyin": "fǎguó"
+      },
+      "qid": "Q142"
+    },
+    "german": {
+      "lemma": "德国",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "德国"
+      },
+      "extra": {
+        "pinyin": "déguó"
+      },
+      "qid": "Q183"
+    },
+    "japanese": {
+      "lemma": "日本",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "日本"
+      },
+      "extra": {
+        "pinyin": "rìběn"
+      },
+      "qid": "Q17"
+    },
+    "polish": {
+      "lemma": "波兰",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "波兰"
+      },
+      "extra": {
+        "pinyin": "bōlán"
+      },
+      "qid": "Q36"
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "language": "pt",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "polonês": {
+      "pos": "ADJ",
+      "gloss": "Polish (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "polonesa",
+      "plural_lemma": "poloneses",
+      "derived_from": "Polônia"
+    },
+    "polonesa": {
+      "pos": "ADJ",
+      "gloss": "Polish (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "polonês",
+      "plural_lemma": "polonesas",
+      "derived_from": "Polônia"
+    },
+    "francês": {
+      "pos": "ADJ",
+      "gloss": "French (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "francesa",
+      "plural_lemma": "franceses",
+      "derived_from": "França"
+    },
+    "francesa": {
+      "pos": "ADJ",
+      "gloss": "French (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "francês",
+      "plural_lemma": "francesas",
+      "derived_from": "França"
+    },
+    "britânico": {
+      "pos": "ADJ",
+      "gloss": "British (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "britânica",
+      "plural_lemma": "britânicos",
+      "derived_from": "Reino Unido"
+    },
+    "britânica": {
+      "pos": "ADJ",
+      "gloss": "British (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "britânico",
+      "plural_lemma": "britânicas",
+      "derived_from": "Reino Unido"
+    }
+  }
+}

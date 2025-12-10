@@ -1,0 +1,89 @@
+{
+  "_meta": {
+    "language": "es",
+    "domain": "science",
+    "version": 1
+  },
+  "entries": {
+    "cientifico": {
+      "pos": "NOUN",
+      "gloss": "científico (persona que hace ciencia)",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "cientifica",
+      "semantic_field": "science"
+    },
+    "cientifica": {
+      "pos": "NOUN",
+      "gloss": "científica (persona que hace ciencia)",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "cientifico",
+      "semantic_field": "science"
+    },
+    "fisico": {
+      "pos": "NOUN",
+      "gloss": "físico (persona que estudia física)",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "fisica",
+      "semantic_field": "science"
+    },
+    "fisica": {
+      "pos": "NOUN",
+      "gloss": "física (persona que estudia física)",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "fisico",
+      "semantic_field": "science"
+    },
+    "quimico": {
+      "pos": "NOUN",
+      "gloss": "químico",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "quimica",
+      "semantic_field": "science"
+    },
+    "quimica": {
+      "pos": "NOUN",
+      "gloss": "química",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "quimico",
+      "semantic_field": "science"
+    },
+    "matematico": {
+      "pos": "NOUN",
+      "gloss": "matemático",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "matematica",
+      "semantic_field": "science"
+    },
+    "matematica": {
+      "pos": "NOUN",
+      "gloss": "matemática",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "matematico",
+      "semantic_field": "science"
+    },
+    "premio_nobel_de_fisica": {
+      "pos": "NOUN",
+      "gloss": "Premio Nobel de Física",
+      "human": false,
+      "proper": true,
+      "multiword": true,
+      "semantic_field": "science"
+    }
+  }
+}

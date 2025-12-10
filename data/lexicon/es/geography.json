@@ -1,0 +1,193 @@
+{
+  "_meta": {
+    "language": "es",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "polaco": {
+      "pos": "ADJ",
+      "gloss": "polaco (relativo a Polonia, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q36"
+    },
+    "polaca": {
+      "pos": "ADJ",
+      "gloss": "polaca (relativo a Polonia, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q36"
+    },
+    "frances": {
+      "pos": "ADJ",
+      "gloss": "francés (relativo a Francia, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q142"
+    },
+    "francesa": {
+      "pos": "ADJ",
+      "gloss": "francesa (relativo a Francia, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q142"
+    },
+    "italiano": {
+      "pos": "ADJ",
+      "gloss": "italiano (relativo a Italia, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q38"
+    },
+    "italiana": {
+      "pos": "ADJ",
+      "gloss": "italiana (relativo a Italia, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q38"
+    },
+    "espanol": {
+      "pos": "ADJ",
+      "gloss": "español (relativo a España, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q29"
+    },
+    "espanola": {
+      "pos": "ADJ",
+      "gloss": "española (relativo a España, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q29"
+    },
+    "portugues": {
+      "pos": "ADJ",
+      "gloss": "portugués (relativo a Portugal, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q45"
+    },
+    "portuguesa": {
+      "pos": "ADJ",
+      "gloss": "portuguesa (relativo a Portugal, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q45"
+    },
+    "rumano": {
+      "pos": "ADJ",
+      "gloss": "rumano (relativo a Rumanía, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q218"
+    },
+    "rumana": {
+      "pos": "ADJ",
+      "gloss": "rumana (relativo a Rumanía, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q218"
+    },
+    "aleman": {
+      "pos": "ADJ",
+      "gloss": "alemán (relativo a Alemania, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q183"
+    },
+    "alemana": {
+      "pos": "ADJ",
+      "gloss": "alemana (relativo a Alemania, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q183"
+    },
+    "turco": {
+      "pos": "ADJ",
+      "gloss": "turco (relativo a Turquía, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q43"
+    },
+    "turca": {
+      "pos": "ADJ",
+      "gloss": "turca (relativo a Turquía, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q43"
+    },
+    "japones": {
+      "pos": "ADJ",
+      "gloss": "japonés (relativo a Japón, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q17"
+    },
+    "japonesa": {
+      "pos": "ADJ",
+      "gloss": "japonesa (relativo a Japón, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q17"
+    },
+    "estadounidense": {
+      "pos": "ADJ",
+      "gloss": "estadounidense (relativo a Estados Unidos)",
+      "degree": "positive",
+      "gender": "common",
+      "nationality": true,
+      "country_qid": "Q30"
+    },
+    "britanico": {
+      "pos": "ADJ",
+      "gloss": "británico (relativo al Reino Unido, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q145"
+    },
+    "britanica": {
+      "pos": "ADJ",
+      "gloss": "británica (relativo al Reino Unido, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q145"
+    },
+    "sueco": {
+      "pos": "ADJ",
+      "gloss": "sueco (relativo a Suecia, masculino)",
+      "degree": "positive",
+      "gender": "masculine",
+      "nationality": true,
+      "country_qid": "Q34"
+    },
+    "sueca": {
+      "pos": "ADJ",
+      "gloss": "sueca (relativo a Suecia, femenino)",
+      "degree": "positive",
+      "gender": "feminine",
+      "nationality": true,
+      "country_qid": "Q34"
+    }
+  }
+}

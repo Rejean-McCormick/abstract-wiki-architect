@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "language": "es",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "politico": {
+      "pos": "NOUN",
+      "gloss": "político",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "politica",
+      "semantic_field": "politics"
+    },
+    "politica": {
+      "pos": "NOUN",
+      "gloss": "política",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "politico",
+      "semantic_field": "politics"
+    },
+    "primer_ministro": {
+      "pos": "NOUN",
+      "gloss": "primer ministro, jefe de gobierno",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "politics"
+    },
+    "primera_ministra": {
+      "pos": "NOUN",
+      "gloss": "primera ministra, jefa de gobierno",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "politics"
+    },
+    "presidente": {
+      "pos": "NOUN",
+      "gloss": "presidente",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "presidenta",
+      "semantic_field": "politics"
+    },
+    "presidenta": {
+      "pos": "NOUN",
+      "gloss": "presidenta",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "presidente",
+      "semantic_field": "politics"
+    }
+  }
+}

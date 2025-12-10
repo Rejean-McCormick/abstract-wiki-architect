@@ -1,0 +1,173 @@
+{
+  "_meta": {
+    "language": "tr",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "fizikci": {
+      "lemma": "fizikçi",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "fizikçi",
+        "plural": "fizikçiler"
+      },
+      "features": {
+        "scientific_field": [
+          "fizik"
+        ]
+      },
+      "qid": "Q169470"
+    },
+    "kimyager": {
+      "lemma": "kimyager",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "kimyager",
+        "plural": "kimyagerler"
+      },
+      "features": {
+        "scientific_field": [
+          "kimya"
+        ]
+      },
+      "qid": "Q593644"
+    },
+    "yazar": {
+      "lemma": "yazar",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "yazar",
+        "plural": "yazarlar"
+      },
+      "features": {
+        "domain": [
+          "edebiyat"
+        ]
+      },
+      "qid": "Q36180"
+    },
+    "siyasetci": {
+      "lemma": "siyasetçi",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "siyasetçi",
+        "plural": "siyasetçiler"
+      },
+      "features": {
+        "domain": [
+          "siyaset"
+        ]
+      },
+      "qid": "Q82955"
+    },
+    "doktor": {
+      "lemma": "doktor",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "doktor",
+        "plural": "doktorlar"
+      },
+      "features": {
+        "domain": [
+          "tip"
+        ]
+      },
+      "qid": "Q39631"
+    },
+    "muzisyen": {
+      "lemma": "müzisyen",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "müzisyen",
+        "plural": "müzisyenler"
+      },
+      "features": {
+        "domain": [
+          "muzik"
+        ]
+      },
+      "qid": "Q639669"
+    },
+    "kral": {
+      "lemma": "kral",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "kral",
+        "plural": "krallar"
+      },
+      "qid": "Q12097"
+    },
+    "kralice": {
+      "lemma": "kraliçe",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "kraliçe",
+        "plural": "kraliçeler"
+      },
+      "qid": "Q19643"
+    },
+    "cumhurbaskani": {
+      "lemma": "cumhurbaşkanı",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "cumhurbaşkanı",
+        "plural": "cumhurbaşkanları"
+      },
+      "qid": "Q30461"
+    },
+    "nobel_fizik_odulu": {
+      "lemma": "Nobel Fizik Ödülü",
+      "pos": "NOUN",
+      "category": "honour",
+      "human": false,
+      "forms": {
+        "default": "Nobel Fizik Ödülü"
+      },
+      "features": {
+        "field": "fizik"
+      },
+      "qid": "Q38104"
+    },
+    "nobel_kimya_odulu": {
+      "lemma": "Nobel Kimya Ödülü",
+      "pos": "NOUN",
+      "category": "honour",
+      "human": false,
+      "forms": {
+        "default": "Nobel Kimya Ödülü"
+      },
+      "features": {
+        "field": "kimya"
+      },
+      "qid": "Q44585"
+    }
+  }
+}

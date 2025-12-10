@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "language": "pl",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "polska": {
+      "pos": "ADJ",
+      "gloss": "Polish (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "polski",
+      "plural_lemma": "polskie",
+      "derived_from": "polska"
+    },
+    "polski": {
+      "pos": "ADJ",
+      "gloss": "Polish (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "polska",
+      "plural_lemma": "polscy",
+      "derived_from": "polska"
+    },
+    "francuski": {
+      "pos": "ADJ",
+      "gloss": "French (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "francuska",
+      "plural_lemma": "francuscy",
+      "derived_from": "francja"
+    },
+    "francuska": {
+      "pos": "ADJ",
+      "gloss": "French (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "francuski",
+      "plural_lemma": "francuskie",
+      "derived_from": "francja"
+    },
+    "niemiecki": {
+      "pos": "ADJ",
+      "gloss": "German (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "niemiecka",
+      "plural_lemma": "niemieccy",
+      "derived_from": "niemcy"
+    },
+    "niemiecka": {
+      "pos": "ADJ",
+      "gloss": "German (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "niemiecki",
+      "plural_lemma": "niemieckie",
+      "derived_from": "niemcy"
+    }
+  }
+}

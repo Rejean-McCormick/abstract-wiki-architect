@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "language": "cy",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "cymreig": {
+      "lemma": "Cymreig",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Cymreig"
+      },
+      "features": {
+        "country_qid": "Q25"
+      },
+      "qid": "Q186962"
+    },
+    "saesnig": {
+      "lemma": "Seisnig",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Seisnig"
+      },
+      "features": {
+        "country_qid": "Q21"
+      },
+      "qid": "Q45564"
+    },
+    "ffrangeg": {
+      "lemma": "Ffrengig",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Ffrengig"
+      },
+      "features": {
+        "country_qid": "Q142"
+      },
+      "qid": "Q121376"
+    },
+    "almaenig": {
+      "lemma": "Almaenig",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Almaenig"
+      },
+      "features": {
+        "country_qid": "Q183"
+      },
+      "qid": "Q7318"
+    },
+    "eidalaidd": {
+      "lemma": "Eidalaidd",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Eidalaidd"
+      },
+      "features": {
+        "country_qid": "Q38"
+      },
+      "qid": "Q652"
+    },
+    "sbaenaidd": {
+      "lemma": "Sbaenaidd",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Sbaenaidd"
+      },
+      "features": {
+        "country_qid": "Q29"
+      },
+      "qid": "Q1321"
+    },
+    "pwylaidd": {
+      "lemma": "Pwylaidd",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Pwylaidd"
+      },
+      "features": {
+        "country_qid": "Q36"
+      },
+      "qid": "Q809"
+    },
+    "americanaidd": {
+      "lemma": "Americanaidd",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "Americanaidd"
+      },
+      "features": {
+        "country_qid": "Q30"
+      },
+      "qid": "Q30"
+    }
+  }
+}

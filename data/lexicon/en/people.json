@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "language": "en",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "politician": {
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "number": "count",
+      "semantic_field": "politics"
+    },
+    "prime_minister": {
+      "pos": "NOUN",
+      "gloss": "prime minister, head of government",
+      "human": true,
+      "multiword": true,
+      "number": "count",
+      "semantic_field": "politics"
+    },
+    "president": {
+      "pos": "NOUN",
+      "gloss": "president, head of state or organization",
+      "human": true,
+      "number": "count",
+      "semantic_field": "politics"
+    }
+  }
+}

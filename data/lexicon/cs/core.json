@@ -1,0 +1,249 @@
+{
+  "_meta": {
+    "language": "cs",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "clovek": {
+      "pos": "NOUN",
+      "gloss": "human, person",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "lidé"
+    },
+    "muz": {
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "muži"
+    },
+    "zena": {
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "ženy"
+    },
+    "vedec": {
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "vědkyně",
+      "plural_lemma": "vědci"
+    },
+    "vedkyne": {
+      "pos": "NOUN",
+      "gloss": "scientist (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "vědec",
+      "plural_lemma": "vědkyně"
+    },
+    "fyzik": {
+      "pos": "NOUN",
+      "gloss": "physicist (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "fyzička",
+      "plural_lemma": "fyzici"
+    },
+    "fyzicka": {
+      "pos": "NOUN",
+      "gloss": "physicist (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "fyzik",
+      "plural_lemma": "fyzičky"
+    },
+    "spisovatel": {
+      "pos": "NOUN",
+      "gloss": "writer (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "spisovatelka",
+      "plural_lemma": "spisovatelé"
+    },
+    "spisovatelka": {
+      "pos": "NOUN",
+      "gloss": "writer (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "spisovatel",
+      "plural_lemma": "spisovatelky"
+    },
+    "politik": {
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "politici"
+    },
+    "ucitel": {
+      "pos": "NOUN",
+      "gloss": "teacher (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "učitelka",
+      "plural_lemma": "učitelé"
+    },
+    "ucitelka": {
+      "pos": "NOUN",
+      "gloss": "teacher (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "učitel",
+      "plural_lemma": "učitelky"
+    },
+    "zeme": {
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "země"
+    },
+    "mesto": {
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "města"
+    },
+    "cesko": {
+      "pos": "NOUN",
+      "gloss": "Czechia",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q213"
+    },
+    "polsko": {
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "francie": {
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "nemecko": {
+      "pos": "NOUN",
+      "gloss": "Germany",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q183"
+    },
+    "praha": {
+      "pos": "NOUN",
+      "gloss": "Prague",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q1085"
+    },
+    "varsava": {
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "pariz": {
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "znamy": {
+      "pos": "ADJ",
+      "gloss": "famous, known (masc.)",
+      "degree": "positive",
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "známá"
+    },
+    "znama": {
+      "pos": "ADJ",
+      "gloss": "famous, known (fem.)",
+      "degree": "positive",
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "známý"
+    },
+    "byt": {
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_m": "byl",
+        "past_f": "byla",
+        "past_n": "bylo",
+        "past_pl": "byli",
+        "present_3sg": "je"
+      }
+    },
+    "narodit_se": {
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_m": "narodil se",
+        "past_f": "narodila se"
+      }
+    },
+    "zemrit": {
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_m": "zemřel",
+        "past_f": "zemřela"
+      }
+    },
+    "rok": {
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "roky"
+    }
+  }
+}

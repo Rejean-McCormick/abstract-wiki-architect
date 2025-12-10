@@ -1,0 +1,121 @@
+{
+  "_meta": {
+    "language": "ta",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "manithar": {
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "manithargal"
+    },
+    "aan": {
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "aangal"
+    },
+    "pen": {
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "pengal"
+    },
+    "aṟiviyalar": {
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "aṟiviyalar"
+    },
+    "paudika_aṟiviyalar": {
+      "lemma": "paudika_aṟiviyalar",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "paudika_aṟiviyalar"
+    },
+    "eluthalar": {
+      "lemma": "eluthalar",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "eluthalargal"
+    },
+    "aasiriyar": {
+      "lemma": "aasiriyar",
+      "pos": "NOUN",
+      "gloss": "teacher (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "aasiriyai",
+      "plural_lemma": "aasiriyargal"
+    },
+    "arasialvaathi": {
+      "lemma": "arasialvaathi",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "arasialvaathigal"
+    },
+    "naadu": {
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "naadugal"
+    },
+    "chennai": {
+      "pos": "NOUN",
+      "gloss": "Chennai",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q1742"
+    },
+    "iru": {
+      "pos": "VERB",
+      "gloss": "to be / to exist",
+      "subcat": "copula",
+      "lemma_type": "base"
+    },
+    "piṟanthu": {
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base"
+    },
+    "kandupidithu": {
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base"
+    },
+    "varuṭam": {
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "varuṭankaḷ"
+    }
+  }
+}

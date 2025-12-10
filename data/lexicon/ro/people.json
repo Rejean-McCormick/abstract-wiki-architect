@@ -1,0 +1,140 @@
+{
+  "_meta": {
+    "language": "ro",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "fizician": {
+      "key": "fizician",
+      "lemma": "fizician",
+      "pos": "NOUN",
+      "language": "ro",
+      "sense": "profession",
+      "human": true,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": "Q169470",
+      "forms": {
+        "m.sg": "fizician",
+        "f.sg": "fiziciană",
+        "m.pl": "fizicieni",
+        "f.pl": "fiziciene"
+      },
+      "extra": {
+        "gloss": "physicist",
+        "semantic_class": "scientific_profession"
+      }
+    },
+    "om_de_stiinta": {
+      "key": "om_de_stiinta",
+      "lemma": "om de știință",
+      "pos": "NOUN",
+      "language": "ro",
+      "sense": "profession",
+      "human": true,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "m.sg": "om de știință",
+        "m.pl": "oameni de știință"
+      },
+      "extra": {
+        "gloss": "scientist"
+      }
+    },
+    "scriitor": {
+      "key": "scriitor",
+      "lemma": "scriitor",
+      "pos": "NOUN",
+      "language": "ro",
+      "sense": "profession",
+      "human": true,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "m.sg": "scriitor",
+        "f.sg": "scriitoare",
+        "m.pl": "scriitori",
+        "f.pl": "scriitoare"
+      },
+      "extra": {
+        "gloss": "writer"
+      }
+    },
+    "politician": {
+      "key": "politician",
+      "lemma": "politician",
+      "pos": "NOUN",
+      "language": "ro",
+      "sense": "profession",
+      "human": true,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "m.sg": "politician",
+        "f.sg": "politiciană",
+        "m.pl": "politicieni",
+        "f.pl": "politiciene"
+      },
+      "extra": {
+        "gloss": "politician"
+      }
+    },
+    "doctor": {
+      "key": "doctor",
+      "lemma": "doctor",
+      "pos": "TITLE",
+      "language": "ro",
+      "sense": "title",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "formal",
+      "wikidata_qid": null,
+      "forms": {
+        "plain": "doctor"
+      },
+      "position": "pre_name",
+      "extra": {
+        "abbreviation": "Dr."
+      }
+    },
+    "profesor": {
+      "key": "profesor",
+      "lemma": "profesor",
+      "pos": "TITLE",
+      "language": "ro",
+      "sense": "title",
+      "human": true,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "formal",
+      "wikidata_qid": null,
+      "forms": {
+        "m.sg": "profesor",
+        "f.sg": "profesoară"
+      },
+      "position": "pre_name",
+      "extra": {
+        "abbreviation": "Prof."
+      }
+    },
+    "nobel_prize_physics": {
+      "key": "nobel_prize_physics",
+      "label": "Premiul Nobel pentru Fizică",
+      "short_label": "Premiul Nobel în Fizică",
+      "wikidata_qid": "Q38104",
+      "extra": {
+        "gloss": "Nobel Prize in Physics"
+      }
+    }
+  }
+}

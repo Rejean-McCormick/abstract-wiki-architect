@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "language": "ja",
+    "domain": "science",
+    "version": 1
+  },
+  "entries": {
+    "physicist": {
+      "pos": "NOUN",
+      "sense": "profession",
+      "kanji": "物理学者",
+      "kana": "ぶつりがくしゃ",
+      "romaji": "butsuri-gakusha",
+      "human": true,
+      "default_formality": "neutral"
+    },
+    "chemist": {
+      "pos": "NOUN",
+      "sense": "profession",
+      "kanji": "化学者",
+      "kana": "かがくしゃ",
+      "romaji": "kagaku-sha",
+      "human": true,
+      "default_formality": "neutral"
+    },
+    "mathematician": {
+      "pos": "NOUN",
+      "sense": "profession",
+      "kanji": "数学者",
+      "kana": "すうがくしゃ",
+      "romaji": "sūgaku-sha",
+      "human": true,
+      "default_formality": "neutral"
+    }
+  }
+}

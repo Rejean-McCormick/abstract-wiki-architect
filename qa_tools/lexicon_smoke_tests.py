@@ -2,7 +2,7 @@
 qa_tools/lexicon_smoke_tests.py
 ===============================
 
-Lightweight structural checks for all lexicon JSON files.
+Lightweight structural checks for all lexicon data.
 
 This module is designed to work both:
 
@@ -13,19 +13,19 @@ This module is designed to work both:
 
 It validates:
 
-1. That there is at least one *_lexicon.json file in data/lexicon/.
-2. That each such file is valid JSON and passes the structural checks
-   in `lexicon.schema.validate_lexicon_structure` (no errors).
-3. That basic metadata (language, schema_version) is reasonable.
+1. That the data/lexicon directory exists.
+2. That at least one language is detected.
+3. That each language has a valid directory structure.
+4. That the merged lexicon data (core + people + etc.) passes
+   `lexicon.schema.validate_lexicon_structure`.
 """
 
 from __future__ import annotations
 
-import json
 import os
-from typing import Any, Dict, List, Tuple
+from typing import List, Tuple
 
-from lexicon.loader import available_languages
+from lexicon.loader import available_languages, load_lexicon
 from lexicon.schema import SchemaIssue, validate_lexicon_structure
 
 from utils.logging_setup import get_logger
@@ -41,45 +41,30 @@ LEXICON_DIR = os.path.join(PROJECT_ROOT, "data", "lexicon")
 # ---------------------------------------------------------------------------
 
 
-def _lexicon_path_for_lang(lang: str) -> str:
-    """
-    Compute the expected lexicon JSON path for a given language code.
-    """
-    filename = f"{lang}_lexicon.json"
-    return os.path.join(LEXICON_DIR, filename)
-
-
-def _load_json(path: str) -> Dict[str, Any]:
-    """
-    Load a JSON file and return the parsed object.
-    Raises ValueError on decode errors.
-    """
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
 def _collect_schema_issues() -> List[Tuple[str, List[SchemaIssue]]]:
     """
-    For all available lexica, run schema validation and return a list of
-    (lang_code, issues) pairs.
+    For all available languages, load the full merged lexicon and run schema 
+    validation. Returns a list of (lang_code, issues) pairs.
     """
     results: List[Tuple[str, List[SchemaIssue]]] = []
 
     langs = available_languages()
     for lang in langs:
-        path = _lexicon_path_for_lang(lang)
         try:
-            data = _load_json(path)
+            # We use the official loader to get the final merged structure
+            # exactly as the engine sees it.
+            data = load_lexicon(lang)
         except Exception as e:
-            # Treat a JSON load failure as a single fatal error issue
+            # Treat a load failure as a single fatal error issue
             issue = SchemaIssue(
-                path="",
-                message=f"Failed to parse JSON: {e}",
+                path="loader",
+                message=f"Failed to load/merge lexicon files for '{lang}': {e}",
                 level="error",
             )
             results.append((lang, [issue]))
             continue
 
+        # Validate the merged data structure
         issues = validate_lexicon_structure(lang, data)
         results.append((lang, issues))
 
@@ -98,33 +83,36 @@ def test_lexicon_directory_exists() -> None:
     assert os.path.isdir(LEXICON_DIR), f"Lexicon directory not found: {LEXICON_DIR}"
 
 
-def test_at_least_one_lexicon_file() -> None:
+def test_at_least_one_language_detected() -> None:
     """
-    Ensure there is at least one *_lexicon.json file.
+    Ensure the loader finds at least one language configuration.
     """
     langs = available_languages()
     assert (
         len(langs) > 0
-    ), f"No *_lexicon.json files found in {LEXICON_DIR}. Expected at least one."
+    ), f"No language directories found in {LEXICON_DIR}. Expected at least one folder (e.g. 'en', 'fr')."
 
 
-def test_all_lexicon_files_exist() -> None:
+def test_language_directories_integrity() -> None:
     """
-    For every language discovered by available_languages(), the
-    corresponding JSON file must exist on disk.
+    For every language discovered by available_languages(), ensure
+    a corresponding directory or legacy file exists.
     """
     missing = []
     for lang in available_languages():
-        path = _lexicon_path_for_lang(lang)
-        if not os.path.isfile(path):
-            missing.append((lang, path))
+        # It must be either a directory (new standard) or a file (legacy fallback)
+        dir_path = os.path.join(LEXICON_DIR, lang)
+        file_path = os.path.join(LEXICON_DIR, f"{lang}_lexicon.json")
+        
+        if not os.path.isdir(dir_path) and not os.path.isfile(file_path):
+            missing.append(lang)
 
-    assert not missing, f"Missing lexicon files: {missing}"
+    assert not missing, f"Missing lexicon source for languages: {missing}"
 
 
 def test_lexicon_schema_has_no_errors() -> None:
     """
-    Validate lexicon structure for each language and ensure there are
+    Validate merged lexicon structure for each language and ensure there are
     no *error*-level issues. Warnings are allowed.
     """
     problems: List[str] = []
@@ -161,10 +149,10 @@ def _print_human_report() -> int:
 
     langs = available_languages()
     if not langs:
-        print(f"❌ No *_lexicon.json files found in {LEXICON_DIR}")
+        print(f"❌ No language data found in {LEXICON_DIR}")
         return 1
 
-    print(f"📚 Found {len(langs)} lexicon(s): {', '.join(sorted(langs))}\n")
+    print(f"📚 Found {len(langs)} language(s): {', '.join(sorted(langs))}\n")
 
     all_ok = True
     for lang, issues in _collect_schema_issues():

@@ -1,0 +1,115 @@
+{
+  "_meta": {
+    "language": "fr",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "Marie Curie": {
+      "pos": "PROPN",
+      "gender": "f",
+      "number": "sg",
+      "proper_name": true
+    },
+    "européen": {
+      "pos": "ADJ",
+      "inflection_class": "éen",
+      "forms": {
+        "m.sg": "européen",
+        "f.sg": "européenne",
+        "m.pl": "européens",
+        "f.pl": "européennes"
+      }
+    },
+    "célèbre": {
+      "pos": "ADJ",
+      "inflection_class": "e_invariable",
+      "forms": {
+        "m.sg": "célèbre",
+        "f.sg": "célèbre",
+        "m.pl": "célèbres",
+        "f.pl": "célèbres"
+      }
+    },
+    "important": {
+      "pos": "ADJ",
+      "inflection_class": "ant",
+      "forms": {
+        "m.sg": "important",
+        "f.sg": "importante",
+        "m.pl": "importants",
+        "f.pl": "importantes"
+      }
+    },
+    "grand": {
+      "pos": "ADJ",
+      "inflection_class": "regular",
+      "forms": {
+        "m.sg": "grand",
+        "f.sg": "grande",
+        "m.pl": "grands",
+        "f.pl": "grandes"
+      }
+    },
+    "ancien": {
+      "pos": "ADJ",
+      "inflection_class": "ien",
+      "forms": {
+        "m.sg": "ancien",
+        "f.sg": "ancienne",
+        "m.pl": "anciens",
+        "f.pl": "anciennes"
+      }
+    },
+    "rivière": {
+      "pos": "NOUN",
+      "gender": "f",
+      "default_number": "sg",
+      "semantic_class": "natural_feature",
+      "forms": {
+        "f.sg": "rivière",
+        "f.pl": "rivières"
+      }
+    },
+    "fleuve": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "semantic_class": "natural_feature",
+      "forms": {
+        "m.sg": "fleuve",
+        "m.pl": "fleuves"
+      }
+    },
+    "statue": {
+      "pos": "NOUN",
+      "gender": "f",
+      "default_number": "sg",
+      "semantic_class": "artifact",
+      "forms": {
+        "f.sg": "statue",
+        "f.pl": "statues"
+      }
+    },
+    "langue de programmation": {
+      "pos": "NOUN",
+      "gender": "f",
+      "default_number": "sg",
+      "semantic_class": "class",
+      "forms": {
+        "f.sg": "langue de programmation",
+        "f.pl": "langues de programmation"
+      }
+    },
+    "physique": {
+      "pos": "NOUN",
+      "gender": "f",
+      "default_number": "sg",
+      "semantic_class": "field_of_study",
+      "forms": {
+        "f.sg": "physique",
+        "f.pl": "physiques"
+      }
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "_meta": {
+    "language": "zh",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "physicist": {
+      "lemma": "物理学家",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "forms": {
+        "default": "物理学家"
+      },
+      "features": {
+        "classifier_type": "honorific",
+        "scientific_field": [
+          "物理学"
+        ]
+      },
+      "extra": {
+        "pinyin": "wùlǐxuéjiā"
+      },
+      "qid": "Q169470"
+    },
+    "chemist": {
+      "lemma": "化学家",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "forms": {
+        "default": "化学家"
+      },
+      "features": {
+        "classifier_type": "honorific",
+        "scientific_field": [
+          "化学"
+        ]
+      },
+      "extra": {
+        "pinyin": "huàxuéjiā"
+      },
+      "qid": "Q593644"
+    },
+    "writer": {
+      "lemma": "作家",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "forms": {
+        "default": "作家"
+      },
+      "features": {
+        "classifier_type": "honorific",
+        "domain": [
+          "文学"
+        ]
+      },
+      "extra": {
+        "pinyin": "zuòjiā"
+      },
+      "qid": "Q36180"
+    },
+    "politician": {
+      "lemma": "政治家",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "forms": {
+        "default": "政治家"
+      },
+      "features": {
+        "classifier_type": "honorific",
+        "domain": [
+          "政治"
+        ]
+      },
+      "extra": {
+        "pinyin": "zhèngzhìjiā"
+      },
+      "qid": "Q82955"
+    },
+    "teacher": {
+      "lemma": "教师",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "forms": {
+        "default": "教师"
+      },
+      "features": {
+        "classifier_type": "honorific"
+      },
+      "extra": {
+        "pinyin": "jiàoshī"
+      },
+      "qid": "Q37226"
+    },
+    "actor": {
+      "lemma": "演员",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "forms": {
+        "default": "演员"
+      },
+      "features": {
+        "classifier_type": "person",
+        "domain": [
+          "演艺"
+        ]
+      },
+      "extra": {
+        "pinyin": "yǎnyuán"
+      },
+      "qid": "Q33999"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "language": "hi",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "bharatiya": {
+      "pos": "ADJ",
+      "gloss": "Indian",
+      "degree": "positive",
+      "nationality": true,
+      "derived_from": "bharat"
+    },
+    "ameriki": {
+      "pos": "ADJ",
+      "gloss": "American",
+      "degree": "positive",
+      "nationality": true,
+      "derived_from": "america"
+    },
+    "polish": {
+      "pos": "ADJ",
+      "gloss": "Polish",
+      "degree": "positive",
+      "nationality": true,
+      "derived_from": "poland"
+    },
+    "fransisi": {
+      "pos": "ADJ",
+      "gloss": "French",
+      "degree": "positive",
+      "nationality": true,
+      "derived_from": "france"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "_meta": {
+    "language": "tr",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "turk": {
+      "lemma": "Türk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "Türk",
+        "plural": "Türkler"
+      },
+      "features": {
+        "country_qid": "Q43"
+      },
+      "qid": "Q1266100"
+    },
+    "polonyali": {
+      "lemma": "Polonyalı",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "Polonyalı",
+        "plural": "Polonyalılar"
+      },
+      "features": {
+        "country_qid": "Q36"
+      },
+      "qid": "Q1026"
+    },
+    "fransiz": {
+      "lemma": "Fransız",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "Fransız",
+        "plural": "Fransızlar"
+      },
+      "features": {
+        "country_qid": "Q142"
+      },
+      "qid": "Q121842"
+    },
+    "alman": {
+      "lemma": "Alman",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "Alman",
+        "plural": "Almanlar"
+      },
+      "features": {
+        "country_qid": "Q183"
+      },
+      "qid": "Q42884"
+    },
+    "amerikali": {
+      "lemma": "Amerikalı",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "none",
+      "forms": {
+        "default": "Amerikalı",
+        "plural": "Amerikalılar"
+      },
+      "features": {
+        "country_qid": "Q30"
+      },
+      "qid": "Q846570"
+    }
+  }
+}

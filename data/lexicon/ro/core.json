@@ -1,0 +1,66 @@
+{
+  "_meta": {
+    "language": "ro",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "om": {
+      "key": "om",
+      "lemma": "om",
+      "pos": "NOUN",
+      "language": "ro",
+      "sense": "common_noun",
+      "human": true,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "om",
+        "pl": "oameni"
+      },
+      "extra": {
+        "gloss": "person, man"
+      }
+    },
+    "femeie": {
+      "key": "femeie",
+      "lemma": "femeie",
+      "pos": "NOUN",
+      "language": "ro",
+      "sense": "common_noun",
+      "human": true,
+      "gender": "f",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "femeie",
+        "pl": "femei"
+      },
+      "extra": {
+        "gloss": "woman"
+      }
+    },
+    "barbat": {
+      "key": "barbat",
+      "lemma": "bărbat",
+      "pos": "NOUN",
+      "language": "ro",
+      "sense": "common_noun",
+      "human": true,
+      "gender": "m",
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "bărbat",
+        "pl": "bărbați"
+      },
+      "extra": {
+        "gloss": "man"
+      }
+    }
+  }
+}

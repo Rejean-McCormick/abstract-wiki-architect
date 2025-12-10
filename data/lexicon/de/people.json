@@ -1,0 +1,187 @@
+{
+  "_meta": {
+    "language": "de",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "physiker": {
+      "lemma": "Physiker",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "Physiker",
+        "plural": "Physiker",
+        "feminine": "Physikerin"
+      },
+      "features": {
+        "scientific_field": [
+          "Physik"
+        ]
+      },
+      "qid": "Q169470"
+    },
+    "physikerin": {
+      "lemma": "Physikerin",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "f",
+      "forms": {
+        "default": "Physikerin",
+        "plural": "Physikerinnen"
+      },
+      "features": {
+        "scientific_field": [
+          "Physik"
+        ]
+      }
+    },
+    "chemiker": {
+      "lemma": "Chemiker",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "Chemiker",
+        "plural": "Chemiker",
+        "feminine": "Chemikerin"
+      },
+      "features": {
+        "scientific_field": [
+          "Chemie"
+        ]
+      },
+      "qid": "Q593644"
+    },
+    "schriftsteller": {
+      "lemma": "Schriftsteller",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "Schriftsteller",
+        "plural": "Schriftsteller",
+        "feminine": "Schriftstellerin"
+      },
+      "features": {
+        "domain": [
+          "Literatur"
+        ]
+      },
+      "qid": "Q36180"
+    },
+    "schauspieler": {
+      "lemma": "Schauspieler",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "Schauspieler",
+        "plural": "Schauspieler",
+        "feminine": "Schauspielerin"
+      },
+      "features": {
+        "domain": [
+          "Film",
+          "Theater"
+        ]
+      },
+      "qid": "Q33999"
+    },
+    "politiker": {
+      "lemma": "Politiker",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "Politiker",
+        "plural": "Politiker",
+        "feminine": "Politikerin"
+      },
+      "qid": "Q82955"
+    },
+    "lehrer": {
+      "lemma": "Lehrer",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "Lehrer",
+        "plural": "Lehrer",
+        "feminine": "Lehrerin"
+      },
+      "qid": "Q37226"
+    },
+    "arzt": {
+      "lemma": "Arzt",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "Arzt",
+        "plural": "Ärzte",
+        "feminine": "Ärztin"
+      },
+      "qid": "Q39631"
+    },
+    "aerztin": {
+      "lemma": "Ärztin",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "f",
+      "forms": {
+        "default": "Ärztin",
+        "plural": "Ärztinnen"
+      },
+      "qid": "Q39631"
+    },
+    "koenig": {
+      "lemma": "König",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "m",
+      "qid": "Q12097"
+    },
+    "koenigin": {
+      "lemma": "Königin",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "f",
+      "qid": "Q16511993"
+    },
+    "praesident": {
+      "lemma": "Präsident",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "m",
+      "qid": "Q30461"
+    },
+    "nobelpreis_physik": {
+      "lemma": "Nobelpreis für Physik",
+      "pos": "NOUN",
+      "category": "honour",
+      "human": false,
+      "gender": "m",
+      "forms": {
+        "default": "Nobelpreis für Physik"
+      },
+      "features": {
+        "field": "Physik"
+      },
+      "qid": "Q38104"
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "language": "sw",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "mkenya": {
+      "key": "mkenya",
+      "lemma": "Mkenya",
+      "pos": "ADJ",
+      "language": "sw",
+      "sense": "nationality",
+      "human": null,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "Mkenya",
+        "pl": "Wakenya"
+      },
+      "adjective": "wa Kenya",
+      "demonym": "Mkenya",
+      "country_name": "Kenya",
+      "extra": {
+        "gloss": "Kenyan",
+        "country_qid": "Q114"
+      }
+    },
+    "mtanzania": {
+      "key": "mtanzania",
+      "lemma": "Mtanzania",
+      "pos": "ADJ",
+      "language": "sw",
+      "sense": "nationality",
+      "human": null,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "Mtanzania",
+        "pl": "Watanzania"
+      },
+      "adjective": "wa Tanzania",
+      "demonym": "Mtanzania",
+      "country_name": "Tanzania",
+      "extra": {
+        "gloss": "Tanzanian",
+        "country_qid": "Q924"
+      }
+    },
+    "mzungu": {
+      "key": "mzungu",
+      "lemma": "Mzungu",
+      "pos": "ADJ",
+      "language": "sw",
+      "sense": "nationality",
+      "human": null,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "Mzungu",
+        "pl": "Wazungu"
+      },
+      "adjective": "wa Ulaya",
+      "demonym": "Mzungu",
+      "country_name": "Ulaya",
+      "extra": {
+        "gloss": "European/foreigner (colloquial)",
+        "country_qid": null
+      }
+    },
+    "mpole": {
+      "key": "mpole",
+      "lemma": "Mpole",
+      "pos": "ADJ",
+      "language": "sw",
+      "sense": "nationality",
+      "human": null,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "Mpole",
+        "pl": "Wapole"
+      },
+      "adjective": "wa Polandia",
+      "demonym": "Mpole",
+      "country_name": "Polandia",
+      "extra": {
+        "gloss": "Polish (person from Poland)",
+        "country_qid": "Q36"
+      }
+    }
+  }
+}

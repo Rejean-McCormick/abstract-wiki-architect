@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "language": "sv",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "svensk": {
+      "lemma": "svensk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "svensk"
+      },
+      "features": {
+        "country_qid": "Q34"
+      },
+      "qid": "Q165672"
+    },
+    "tysk": {
+      "lemma": "tysk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "tysk"
+      },
+      "features": {
+        "country_qid": "Q183"
+      },
+      "qid": "Q188"
+    },
+    "fransk": {
+      "lemma": "fransk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "fransk"
+      },
+      "features": {
+        "country_qid": "Q142"
+      },
+      "qid": "Q150"
+    },
+    "italiensk": {
+      "lemma": "italiensk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "italiensk"
+      },
+      "features": {
+        "country_qid": "Q38"
+      },
+      "qid": "Q652"
+    },
+    "spansk": {
+      "lemma": "spansk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "spansk"
+      },
+      "features": {
+        "country_qid": "Q29"
+      },
+      "qid": "Q1321"
+    },
+    "polsk": {
+      "lemma": "polsk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "polsk"
+      },
+      "features": {
+        "country_qid": "Q36"
+      },
+      "qid": "Q809"
+    },
+    "osterrikisk": {
+      "lemma": "österrikisk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "österrikisk"
+      },
+      "features": {
+        "country_qid": "Q40"
+      },
+      "qid": "Q28"
+    },
+    "amerikansk": {
+      "lemma": "amerikansk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "amerikansk"
+      },
+      "features": {
+        "country_qid": "Q30"
+      },
+      "qid": "Q30"
+    },
+    "brittisk": {
+      "lemma": "brittisk",
+      "pos": "ADJ",
+      "category": "nationality",
+      "forms": {
+        "default": "brittisk"
+      },
+      "features": {
+        "country_qid": "Q145"
+      },
+      "qid": "Q842438"
+    }
+  }
+}

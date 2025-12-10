@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "language": "fr",
+    "domain": "science",
+    "version": 1
+  },
+  "entries": {
+    "mathématiques": {
+      "pos": "NOUN",
+      "gender": "f",
+      "default_number": "pl",
+      "semantic_class": "field_of_study",
+      "forms": {
+        "f.pl": "mathématiques"
+      }
+    }
+  }
+}

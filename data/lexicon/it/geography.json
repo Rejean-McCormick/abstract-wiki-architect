@@ -1,0 +1,111 @@
+{
+  "_meta": {
+    "language": "it",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "italiano": {
+      "lemma": "italiano",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "italiano",
+        "fem_sg": "italiana",
+        "masc_pl": "italiani",
+        "fem_pl": "italiane"
+      },
+      "features": {
+        "country_qid": "Q38"
+      },
+      "qid": "Q50001"
+    },
+    "francese": {
+      "lemma": "francese",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "common",
+      "forms": {
+        "masc_sg": "francese",
+        "fem_sg": "francese",
+        "masc_pl": "francesi",
+        "fem_pl": "francesi"
+      },
+      "features": {
+        "country_qid": "Q142"
+      },
+      "qid": "Q15087"
+    },
+    "polacco": {
+      "lemma": "polacco",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "polacco",
+        "fem_sg": "polacca",
+        "masc_pl": "polacchi",
+        "fem_pl": "polacche"
+      },
+      "features": {
+        "country_qid": "Q36"
+      },
+      "qid": "Q171150"
+    },
+    "tedesco": {
+      "lemma": "tedesco",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "tedesco",
+        "fem_sg": "tedesca",
+        "masc_pl": "tedeschi",
+        "fem_pl": "tedesche"
+      },
+      "features": {
+        "country_qid": "Q183"
+      },
+      "qid": "Q42884"
+    },
+    "svizzero": {
+      "lemma": "svizzero",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "svizzero",
+        "fem_sg": "svizzera",
+        "masc_pl": "svizzeri",
+        "fem_pl": "svizzere"
+      },
+      "features": {
+        "country_qid": "Q39"
+      },
+      "qid": "Q23058"
+    },
+    "statunitense": {
+      "lemma": "statunitense",
+      "pos": "ADJ",
+      "category": "nationality",
+      "human": true,
+      "gender": "common",
+      "forms": {
+        "masc_sg": "statunitense",
+        "fem_sg": "statunitense",
+        "masc_pl": "statunitensi",
+        "fem_pl": "statunitensi"
+      },
+      "features": {
+        "country_qid": "Q30"
+      },
+      "qid": "Q1860"
+    }
+  }
+}

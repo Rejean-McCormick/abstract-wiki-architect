@@ -1,0 +1,179 @@
+{
+  "_meta": {
+    "language": "cy",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "ffisegydd": {
+      "lemma": "ffisegydd",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "ffisegydd",
+        "plural": "ffisegwyr"
+      },
+      "features": {
+        "scientific_field": [
+          "Ffiseg"
+        ]
+      },
+      "qid": "Q169470"
+    },
+    "cemegydd": {
+      "lemma": "cemegydd",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "cemegydd",
+        "plural": "cemegwyr"
+      },
+      "features": {
+        "scientific_field": [
+          "Cemeg"
+        ]
+      },
+      "qid": "Q593644"
+    },
+    "ysgrifennwr": {
+      "lemma": "ysgrifennwr",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "ysgrifennwr",
+        "plural": "ysgrifenwyr",
+        "feminine": "ysgrifennwraig"
+      },
+      "features": {
+        "domain": [
+          "Llenyddiaeth"
+        ]
+      },
+      "qid": "Q36180"
+    },
+    "ysgrifennwraig": {
+      "lemma": "ysgrifennwraig",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "f",
+      "forms": {
+        "default": "ysgrifennwraig",
+        "plural": "ysgrifennwragedd"
+      },
+      "qid": "Q36180"
+    },
+    "actor": {
+      "lemma": "actor",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "actor",
+        "plural": "actorion",
+        "feminine": "actores"
+      },
+      "features": {
+        "domain": [
+          "Ffilm",
+          "Theatr"
+        ]
+      },
+      "qid": "Q33999"
+    },
+    "actores": {
+      "lemma": "actores",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "f",
+      "forms": {
+        "default": "actores",
+        "plural": "actoresau"
+      },
+      "qid": "Q33999"
+    },
+    "gwleidydd": {
+      "lemma": "gwleidydd",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "gwleidydd",
+        "plural": "gwleidyddion"
+      },
+      "qid": "Q82955"
+    },
+    "athro": {
+      "lemma": "athro",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "m",
+      "forms": {
+        "default": "athro",
+        "plural": "athrawon",
+        "feminine": "athrawes"
+      },
+      "qid": "Q37226"
+    },
+    "athrawes": {
+      "lemma": "athrawes",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "f",
+      "forms": {
+        "default": "athrawes",
+        "plural": "athrawesau"
+      },
+      "qid": "Q37226"
+    },
+    "brenin": {
+      "lemma": "Brenin",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "m",
+      "qid": "Q12097"
+    },
+    "brenhines": {
+      "lemma": "Brenhines",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "f",
+      "qid": "Q16511993"
+    },
+    "arlywydd": {
+      "lemma": "Arlywydd",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "m",
+      "qid": "Q30461"
+    },
+    "gwobr_nobel_ffiseg": {
+      "lemma": "Gwobr Nobel mewn Ffiseg",
+      "pos": "NOUN",
+      "category": "honour",
+      "human": false,
+      "gender": "f",
+      "forms": {
+        "default": "Gwobr Nobel mewn Ffiseg"
+      },
+      "features": {
+        "field": "Ffiseg"
+      },
+      "qid": "Q38104"
+    }
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "_meta": {
+    "language": "id",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "orang": {
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "orang-orang"
+    },
+    "pria": {
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "pria"
+    },
+    "wanita": {
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "wanita"
+    },
+    "ilmuwan": {
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "ilmuwan"
+    },
+    "fisikawan": {
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "fisikawan"
+    },
+    "kimiawan": {
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "kimiawan"
+    },
+    "penulis": {
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "penulis"
+    },
+    "penyair": {
+      "pos": "NOUN",
+      "gloss": "poet",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "penyair"
+    },
+    "politikus": {
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "politikus"
+    },
+    "guru": {
+      "pos": "NOUN",
+      "gloss": "teacher",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "guru-guru"
+    },
+    "dosen": {
+      "pos": "NOUN",
+      "gloss": "lecturer",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "dosen-dosen"
+    },
+    "dokter": {
+      "pos": "NOUN",
+      "gloss": "doctor",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "dokter-dokter"
+    },
+    "aktor": {
+      "pos": "NOUN",
+      "gloss": "actor",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "aktor"
+    },
+    "aktris": {
+      "pos": "NOUN",
+      "gloss": "actress",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "aktris"
+    },
+    "negara": {
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "negara-negara"
+    },
+    "kota": {
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "kota-kota"
+    },
+    "indonesia": {
+      "pos": "NOUN",
+      "gloss": "Indonesia",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "qid": "Q252"
+    },
+    "amerika_serikat": {
+      "pos": "NOUN",
+      "gloss": "United States",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "qid": "Q30"
+    },
+    "jepang": {
+      "pos": "NOUN",
+      "gloss": "Japan",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "qid": "Q17"
+    },
+    "terkenal": {
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive"
+    },
+    "besar": {
+      "pos": "ADJ",
+      "gloss": "big/great",
+      "degree": "positive"
+    },
+    "adalah": {
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base"
+    },
+    "ialah": {
+      "pos": "VERB",
+      "gloss": "to be (formal)",
+      "subcat": "copula",
+      "lemma_type": "base"
+    },
+    "lahir": {
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base"
+    },
+    "meninggal": {
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base"
+    },
+    "menemukan": {
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base"
+    },
+    "memenangkan": {
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "lemma_type": "base"
+    },
+    "tahun": {
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "tahun-tahun"
+    }
+  }
+}

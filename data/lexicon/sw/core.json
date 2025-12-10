@@ -1,0 +1,93 @@
+{
+  "_meta": {
+    "language": "sw",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "mtu": {
+      "key": "mtu",
+      "lemma": "mtu",
+      "pos": "NOUN",
+      "language": "sw",
+      "sense": "common_noun",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "mtu",
+        "pl": "watu"
+      },
+      "extra": {
+        "gloss": "person",
+        "noun_class_sg": 1,
+        "noun_class_pl": 2
+      }
+    },
+    "mwanamke": {
+      "key": "mwanamke",
+      "lemma": "mwanamke",
+      "pos": "NOUN",
+      "language": "sw",
+      "sense": "common_noun",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "mwanamke",
+        "pl": "wanawake"
+      },
+      "extra": {
+        "gloss": "woman",
+        "noun_class_sg": 1,
+        "noun_class_pl": 2
+      }
+    },
+    "mwanaume": {
+      "key": "mwanaume",
+      "lemma": "mwanaume",
+      "pos": "NOUN",
+      "language": "sw",
+      "sense": "common_noun",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "mwanaume",
+        "pl": "wanaume"
+      },
+      "extra": {
+        "gloss": "man",
+        "noun_class_sg": 1,
+        "noun_class_pl": 2
+      }
+    },
+    "nchi": {
+      "key": "nchi",
+      "lemma": "nchi",
+      "pos": "NOUN",
+      "language": "sw",
+      "sense": "common_noun",
+      "human": false,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "nchi",
+        "pl": "nchi"
+      },
+      "extra": {
+        "gloss": "country",
+        "noun_class_sg": 9,
+        "noun_class_pl": 10
+      }
+    }
+  }
+}

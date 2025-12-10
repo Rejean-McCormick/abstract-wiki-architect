@@ -1,0 +1,212 @@
+{
+  "_meta": {
+    "language": "pl",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "czlowiek": {
+      "pos": "NOUN",
+      "gloss": "human, person",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "ludzie"
+    },
+    "mezczyzna": {
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "mężczyźni"
+    },
+    "kobieta": {
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "kobiety"
+    },
+    "naukowiec": {
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "naukowcy"
+    },
+    "fizyk": {
+      "pos": "NOUN",
+      "gloss": "physicist (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "fizyczka",
+      "plural_lemma": "fizycy"
+    },
+    "fizyczka": {
+      "pos": "NOUN",
+      "gloss": "physicist (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "fizyk",
+      "plural_lemma": "fizyczki"
+    },
+    "pisarz": {
+      "pos": "NOUN",
+      "gloss": "writer (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "pisarka",
+      "plural_lemma": "pisarze"
+    },
+    "pisarka": {
+      "pos": "NOUN",
+      "gloss": "writer (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "pisarz",
+      "plural_lemma": "pisarki"
+    },
+    "polityk": {
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "politycy"
+    },
+    "nauczyciel": {
+      "pos": "NOUN",
+      "gloss": "teacher (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "nauczycielka",
+      "plural_lemma": "nauczyciele"
+    },
+    "nauczycielka": {
+      "pos": "NOUN",
+      "gloss": "teacher (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "nauczyciel",
+      "plural_lemma": "nauczycielki"
+    },
+    "kraj": {
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "kraje"
+    },
+    "miasto": {
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "miasta"
+    },
+    "francja": {
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "niemcy": {
+      "pos": "NOUN",
+      "gloss": "Germany",
+      "human": false,
+      "proper": true,
+      "gender": "nonvirile",
+      "number": "pl",
+      "qid": "Q183"
+    },
+    "warszawa": {
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "paryz": {
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "znany": {
+      "pos": "ADJ",
+      "gloss": "famous, known (masc.)",
+      "degree": "positive",
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "znana"
+    },
+    "znana": {
+      "pos": "ADJ",
+      "gloss": "famous, known (fem.)",
+      "degree": "positive",
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "znany"
+    },
+    "byc": {
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_m": "był",
+        "past_f": "była",
+        "past_n": "było",
+        "past_pl": "byli",
+        "present_3sg": "jest"
+      }
+    },
+    "urodzic_sie": {
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_m": "urodził się",
+        "past_f": "urodziła się"
+      }
+    },
+    "zrzec_sie": {
+      "pos": "VERB",
+      "gloss": "to resign/die (euphemism) or generic end",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_m": "zmarł",
+        "past_f": "zmarła"
+      }
+    },
+    "rok": {
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "lata"
+    }
+  }
+}

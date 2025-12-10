@@ -1,0 +1,90 @@
+{
+  "_meta": {
+    "language": "ar",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "masri": {
+      "pos": "ADJ",
+      "gloss": "Egyptian",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "masriyya",
+      "country_qid": "Q79"
+    },
+    "masriyya": {
+      "pos": "ADJ",
+      "gloss": "Egyptian (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "masri",
+      "country_qid": "Q79"
+    },
+    "faransi": {
+      "pos": "ADJ",
+      "gloss": "French",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "faransiyya",
+      "country_qid": "Q142"
+    },
+    "faransiyya": {
+      "pos": "ADJ",
+      "gloss": "French (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "faransi",
+      "country_qid": "Q142"
+    },
+    "amriki": {
+      "pos": "ADJ",
+      "gloss": "American",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "amrikiyya",
+      "country_qid": "Q30"
+    },
+    "amrikiyya": {
+      "pos": "ADJ",
+      "gloss": "American (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "amriki",
+      "country_qid": "Q30"
+    },
+    "almani": {
+      "pos": "ADJ",
+      "gloss": "German",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "almaniyya",
+      "country_qid": "Q183"
+    },
+    "almaniyya": {
+      "pos": "ADJ",
+      "gloss": "German (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "almani",
+      "country_qid": "Q183"
+    },
+    "britani": {
+      "pos": "ADJ",
+      "gloss": "British",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "britaniyya",
+      "country_qid": "Q145"
+    }
+  }
+}

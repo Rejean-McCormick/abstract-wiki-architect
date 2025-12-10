@@ -1,0 +1,119 @@
+{
+  "_meta": {
+    "language": "sw",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "mwanasayansi": {
+      "key": "mwanasayansi",
+      "lemma": "mwanasayansi",
+      "pos": "NOUN",
+      "language": "sw",
+      "sense": "profession",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "mwanasayansi",
+        "pl": "wanasayansi"
+      },
+      "extra": {
+        "gloss": "scientist",
+        "noun_class_sg": 1,
+        "noun_class_pl": 2
+      }
+    },
+    "daktari": {
+      "key": "daktari",
+      "lemma": "daktari",
+      "pos": "NOUN",
+      "language": "sw",
+      "sense": "profession",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "daktari",
+        "pl": "madaktari"
+      },
+      "extra": {
+        "gloss": "doctor",
+        "noun_class_sg": 5,
+        "noun_class_pl": 6
+      }
+    },
+    "mwalimu": {
+      "key": "mwalimu",
+      "lemma": "mwalimu",
+      "pos": "NOUN",
+      "language": "sw",
+      "sense": "profession",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "neutral",
+      "wikidata_qid": null,
+      "forms": {
+        "sg": "mwalimu",
+        "pl": "walimu"
+      },
+      "extra": {
+        "gloss": "teacher",
+        "noun_class_sg": 1,
+        "noun_class_pl": 2
+      }
+    },
+    "dkt": {
+      "key": "dkt",
+      "lemma": "Dkt.",
+      "pos": "TITLE",
+      "language": "sw",
+      "sense": "title",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "formal",
+      "wikidata_qid": null,
+      "forms": {
+        "plain": "Dkt."
+      },
+      "position": "pre_name",
+      "extra": {
+        "full": "Daktari"
+      }
+    },
+    "prof": {
+      "key": "prof",
+      "lemma": "Prof.",
+      "pos": "TITLE",
+      "language": "sw",
+      "sense": "title",
+      "human": true,
+      "gender": null,
+      "default_number": "sg",
+      "default_formality": "formal",
+      "wikidata_qid": null,
+      "forms": {
+        "plain": "Prof."
+      },
+      "position": "pre_name",
+      "extra": {
+        "full": "Profesor"
+      }
+    },
+    "tuzo_ya_nobel_fizikia": {
+      "key": "tuzo_ya_nobel_fizikia",
+      "label": "Tuzo ya Nobel ya Fizikia",
+      "short_label": "Tuzo ya Nobel ya Fizikia",
+      "wikidata_qid": "Q38104",
+      "extra": {
+        "gloss": "Nobel Prize in Physics"
+      }
+    }
+  }
+}

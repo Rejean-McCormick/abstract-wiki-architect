@@ -1,0 +1,175 @@
+{
+  "_meta": {
+    "language": "he",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "adam": {
+      "pos": "NOUN",
+      "gloss": "person, human",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "anashim"
+    },
+    "ish": {
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "anashim"
+    },
+    "isha": {
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "nashim"
+    },
+    "madaan": {
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "madaaniy",
+      "plural_lemma": "madanim"
+    },
+    "fizikai": {
+      "pos": "NOUN",
+      "gloss": "physicist (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "fizikait",
+      "plural_lemma": "fizikaim"
+    },
+    "fizikait": {
+      "pos": "NOUN",
+      "gloss": "physicist (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "fizikai",
+      "plural_lemma": "fizikaiot"
+    },
+    "chimai": {
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "chimait",
+      "plural_lemma": "chimaim"
+    },
+    "sofer": {
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "soferet",
+      "plural_lemma": "sofrim"
+    },
+    "soferet": {
+      "pos": "NOUN",
+      "gloss": "writer (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "sofer",
+      "plural_lemma": "sofrot"
+    },
+    "politikai": {
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "politikait",
+      "plural_lemma": "politikaim"
+    },
+    "moreh": {
+      "pos": "NOUN",
+      "gloss": "teacher",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "morah",
+      "plural_lemma": "morim"
+    },
+    "rofe": {
+      "pos": "NOUN",
+      "gloss": "doctor",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "rof'a",
+      "plural_lemma": "rofim"
+    },
+    "medina": {
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "medinot"
+    },
+    "ir": {
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "arim"
+    },
+    "mefursam": {
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "mefursemet"
+    },
+    "haya": {
+      "pos": "VERB",
+      "gloss": "to be (past)",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg_m": "haya",
+        "past_3sg_f": "hayta"
+      }
+    },
+    "nolad": {
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg_m": "nolad",
+        "past_3sg_f": "nolda"
+      }
+    },
+    "met": {
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg_m": "met",
+        "past_3sg_f": "meta"
+      }
+    },
+    "shana": {
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "shanim"
+    }
+  }
+}

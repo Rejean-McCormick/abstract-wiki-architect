@@ -1,0 +1,435 @@
+{
+  "_meta": {
+    "language": "en",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "person": {
+      "pos": "NOUN",
+      "gloss": "person, human",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "people"
+    },
+    "man": {
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "men"
+    },
+    "woman": {
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "women"
+    },
+    "scientist": {
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "scientists"
+    },
+    "writer": {
+      "pos": "NOUN",
+      "gloss": "writer, author",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "writers"
+    },
+    "author": {
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "authors"
+    },
+    "professor": {
+      "pos": "NOUN",
+      "gloss": "professor",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "professors"
+    },
+    "nobel_prize": {
+      "pos": "NOUN",
+      "gloss": "a major international prize awarded in several fields",
+      "human": false,
+      "proper": true,
+      "number": "count",
+      "semantic_field": "awards"
+    },
+    "famous": {
+      "pos": "ADJ",
+      "gloss": "famous, well-known",
+      "degree": "positive"
+    },
+    "notable": {
+      "pos": "ADJ",
+      "gloss": "notable, worthy of note",
+      "degree": "positive"
+    },
+    "great": {
+      "pos": "ADJ",
+      "gloss": "great, important",
+      "degree": "positive"
+    },
+    "be": {
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_sg": "was",
+        "past_pl": "were",
+        "past_participle": "been",
+        "present_3sg": "is"
+      }
+    },
+    "be_born": {
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "multiword": true,
+      "components": [
+        "be",
+        "born"
+      ]
+    },
+    "die": {
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "regular": true
+    },
+    "discover": {
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "win": {
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "irregular_forms": {
+        "past": "won",
+        "past_participle": "won",
+        "present_3sg": "wins"
+      }
+    },
+    "receive": {
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "year": {
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "neut",
+      "number": "sg",
+      "plural_lemma": "years"
+    },
+    "city": {
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "neut",
+      "number": "sg",
+      "plural_lemma": "cities"
+    },
+    "country": {
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "neut",
+      "number": "sg",
+      "plural_lemma": "countries"
+    },
+    "politician": {
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "politicians"
+    },
+    "Poland": {
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "neut",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "neut",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "United Kingdom": {
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "neut",
+      "number": "sg",
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "neut",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "neut",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "important": {
+      "pos": "ADJ",
+      "gloss": "important, major",
+      "degree": "positive"
+    },
+    "to_be": {
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base"
+    },
+    "to_be_born": {
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "multiword",
+      "components": [
+        "be",
+        "born"
+      ]
+    },
+    "to_die": {
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base"
+    },
+    "to_discover": {
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base"
+    },
+    "to_lead": {
+      "pos": "VERB",
+      "gloss": "to lead",
+      "subcat": "transitive",
+      "lemma_type": "base"
+    },
+    "date": {
+      "pos": "NOUN",
+      "gloss": "date (calendar)",
+      "human": false,
+      "gender": "neut",
+      "number": "sg",
+      "plural_lemma": "dates"
+    },
+    "statistician": {
+      "pos": "NOUN",
+      "gloss": "a scientist who works in statistics",
+      "human": true,
+      "number": "count",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "pos": "NOUN",
+      "gloss": "a scientist who studies computer science",
+      "human": true,
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "pos": "NOUN",
+      "gloss": "a scientist who studies celestial objects",
+      "human": true,
+      "number": "count",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "pos": "NOUN",
+      "gloss": "a scientist who studies the Earth",
+      "human": true,
+      "number": "count",
+      "semantic_field": "geology"
+    },
+    "climate_scientist": {
+      "pos": "NOUN",
+      "gloss": "a scientist who studies climate",
+      "human": true,
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "climatology"
+    },
+    "neuroscientist": {
+      "pos": "NOUN",
+      "gloss": "a scientist who studies the nervous system",
+      "human": true,
+      "number": "count",
+      "semantic_field": "neuroscience"
+    },
+    "statistics": {
+      "pos": "NOUN",
+      "gloss": "the study of data and uncertainty",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "pos": "NOUN",
+      "gloss": "the study of celestial objects and space",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "pos": "NOUN",
+      "gloss": "the study of the Earth and its structure",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "pos": "NOUN",
+      "gloss": "the study of the nervous system",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize_in_physiology_or_medicine": {
+      "pos": "NOUN",
+      "gloss": "a Nobel Prize awarded for achievements in physiology or medicine",
+      "human": false,
+      "proper": true,
+      "multiword": true,
+      "number": "count",
+      "semantic_field": "awards"
+    },
+    "field_of_research": {
+      "pos": "NOUN",
+      "gloss": "a specific area within science or scholarship",
+      "human": false,
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "pos": "NOUN",
+      "gloss": "an explanatory framework in science",
+      "human": false,
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "pos": "NOUN",
+      "gloss": "a written report of research results",
+      "human": false,
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "research": {
+      "pos": "NOUN",
+      "gloss": "systematic investigation to establish facts",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "pos": "NOUN",
+      "gloss": "a test carried out under controlled conditions",
+      "human": false,
+      "number": "count",
+      "semantic_field": "science_meta"
+    },
+    "to_research": {
+      "pos": "VERB",
+      "gloss": "to carry out research",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "to_experiment": {
+      "pos": "VERB",
+      "gloss": "to perform experiments",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "to_publish": {
+      "pos": "VERB",
+      "gloss": "to make research publicly available",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "to_win": {
+      "pos": "VERB",
+      "gloss": "to receive a prize or award",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past": "won",
+        "past_participle": "won",
+        "present_3sg": "wins"
+      },
+      "semantic_field": "awards"
+    },
+    "scientific": {
+      "pos": "ADJ",
+      "gloss": "relating to science",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "pos": "ADJ",
+      "gloss": "based on experiments",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "pos": "ADJ",
+      "gloss": "based on theory",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    }
+  }
+}

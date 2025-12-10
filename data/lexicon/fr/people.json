@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "language": "fr",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "physicien": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "inflection_class": "ien",
+      "semantic_class": "profession",
+      "forms": {
+        "m.sg": "physicien",
+        "f.sg": "physicienne",
+        "m.pl": "physiciens",
+        "f.pl": "physiciennes"
+      }
+    },
+    "scientifique": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "semantic_class": "profession",
+      "forms": {
+        "m.sg": "scientifique",
+        "f.sg": "scientifique",
+        "m.pl": "scientifiques",
+        "f.pl": "scientifiques"
+      }
+    },
+    "chimiste": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "semantic_class": "profession",
+      "forms": {
+        "m.sg": "chimiste",
+        "f.sg": "chimiste",
+        "m.pl": "chimistes",
+        "f.pl": "chimistes"
+      }
+    },
+    "mathématicien": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "semantic_class": "profession",
+      "inflection_class": "ien",
+      "forms": {
+        "m.sg": "mathématicien",
+        "f.sg": "mathématicienne",
+        "m.pl": "mathématiciens",
+        "f.pl": "mathématiciennes"
+      }
+    },
+    "roi": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "semantic_class": "title",
+      "forms": {
+        "m.sg": "roi",
+        "f.sg": "reine",
+        "m.pl": "rois",
+        "f.pl": "reines"
+      }
+    },
+    "pape": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "semantic_class": "title",
+      "forms": {
+        "m.sg": "pape",
+        "m.pl": "papes"
+      }
+    },
+    "président": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "semantic_class": "title",
+      "forms": {
+        "m.sg": "président",
+        "f.sg": "présidente",
+        "m.pl": "présidents",
+        "f.pl": "présidentes"
+      }
+    },
+    "avocat": {
+      "pos": "NOUN",
+      "gender": "m",
+      "default_number": "sg",
+      "semantic_class": "profession",
+      "forms": {
+        "m.sg": "avocat",
+        "f.sg": "avocate",
+        "m.pl": "avocats",
+        "f.pl": "avocates"
+      }
+    }
+  }
+}

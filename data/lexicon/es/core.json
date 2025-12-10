@@ -1,0 +1,203 @@
+{
+  "_meta": {
+    "language": "es",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "persona": {
+      "pos": "NOUN",
+      "gloss": "persona, ser humano",
+      "human": true,
+      "gender": "feminine",
+      "number": "count"
+    },
+    "hombre": {
+      "pos": "NOUN",
+      "gloss": "hombre adulto",
+      "human": true,
+      "gender": "masculine",
+      "number": "count"
+    },
+    "mujer": {
+      "pos": "NOUN",
+      "gloss": "mujer adulta",
+      "human": true,
+      "gender": "feminine",
+      "number": "count"
+    },
+    "escritor": {
+      "pos": "NOUN",
+      "gloss": "escritor",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "escritora",
+      "semantic_field": "arts"
+    },
+    "escritora": {
+      "pos": "NOUN",
+      "gloss": "escritora",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "escritor",
+      "semantic_field": "arts"
+    },
+    "autor": {
+      "pos": "NOUN",
+      "gloss": "autor",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "autora",
+      "semantic_field": "arts"
+    },
+    "autora": {
+      "pos": "NOUN",
+      "gloss": "autora",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "autor",
+      "semantic_field": "arts"
+    },
+    "profesor": {
+      "pos": "NOUN",
+      "gloss": "profesor (cargo académico)",
+      "human": true,
+      "gender": "masculine",
+      "number": "count",
+      "feminine_form": "profesora",
+      "semantic_field": "academia"
+    },
+    "profesora": {
+      "pos": "NOUN",
+      "gloss": "profesora (cargo académico)",
+      "human": true,
+      "gender": "feminine",
+      "number": "count",
+      "masculine_form": "profesor",
+      "semantic_field": "academia"
+    },
+    "premio_nobel": {
+      "pos": "NOUN",
+      "gloss": "Premio Nobel",
+      "human": false,
+      "proper": true,
+      "number": "count",
+      "multiword": true
+    },
+    "famoso": {
+      "pos": "ADJ",
+      "gloss": "famoso",
+      "degree": "positive",
+      "gender": "masculine"
+    },
+    "famosa": {
+      "pos": "ADJ",
+      "gloss": "famosa",
+      "degree": "positive",
+      "gender": "feminine"
+    },
+    "notable": {
+      "pos": "ADJ",
+      "gloss": "notable",
+      "degree": "positive",
+      "gender": "common"
+    },
+    "gran": {
+      "pos": "ADJ",
+      "gloss": "gran, importante",
+      "degree": "positive",
+      "gender": "common",
+      "position": "before_noun"
+    },
+    "ser": {
+      "pos": "VERB",
+      "gloss": "ser",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "presente_1sg": "soy",
+        "presente_2sg": "eres",
+        "presente_3sg": "es",
+        "presente_1pl": "somos",
+        "presente_2pl": "sois",
+        "presente_3pl": "son",
+        "preterito_1sg": "fui",
+        "preterito_3sg": "fue",
+        "preterito_3pl": "fueron",
+        "participio_pasado": "sido"
+      }
+    },
+    "estar": {
+      "pos": "VERB",
+      "gloss": "estar",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "presente_1sg": "estoy",
+        "presente_3sg": "está",
+        "preterito_1sg": "estuve",
+        "participio_pasado": "estado"
+      }
+    },
+    "nacer": {
+      "pos": "VERB",
+      "gloss": "nacer",
+      "subcat": "intransitive",
+      "regular": true
+    },
+    "morir": {
+      "pos": "VERB",
+      "gloss": "morir",
+      "subcat": "intransitive",
+      "irregular_forms": {
+        "preterito_3sg": "murió",
+        "participio_pasado": "muerto"
+      }
+    },
+    "descubrir": {
+      "pos": "VERB",
+      "gloss": "descubrir",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "ganar": {
+      "pos": "VERB",
+      "gloss": "ganar",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "recibir": {
+      "pos": "VERB",
+      "gloss": "recibir",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "ano": {
+      "pos": "NOUN",
+      "gloss": "año",
+      "human": false,
+      "number": "count",
+      "plural": "anos"
+    },
+    "ciudad": {
+      "pos": "NOUN",
+      "gloss": "ciudad",
+      "human": false,
+      "gender": "feminine",
+      "number": "count",
+      "plural": "ciudades"
+    },
+    "pais": {
+      "pos": "NOUN",
+      "gloss": "país",
+      "human": false,
+      "gender": "masculine",
+      "number": "count",
+      "plural": "paises"
+    }
+  }
+}

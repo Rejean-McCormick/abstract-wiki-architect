@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "language": "he",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "israeli": {
+      "pos": "ADJ",
+      "gloss": "Israeli",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "israelit",
+      "country_qid": "Q801"
+    },
+    "israelit": {
+      "pos": "ADJ",
+      "gloss": "Israeli (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "israeli",
+      "country_qid": "Q801"
+    },
+    "tzarfati": {
+      "pos": "ADJ",
+      "gloss": "French",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "tzarfatit",
+      "country_qid": "Q142"
+    },
+    "tzarfatit": {
+      "pos": "ADJ",
+      "gloss": "French (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "tzarfati",
+      "country_qid": "Q142"
+    },
+    "polani": {
+      "pos": "ADJ",
+      "gloss": "Polish",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "polanit",
+      "country_qid": "Q36"
+    },
+    "polanit": {
+      "pos": "ADJ",
+      "gloss": "Polish (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "polani",
+      "country_qid": "Q36"
+    },
+    "amerikai": {
+      "pos": "ADJ",
+      "gloss": "American",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "amerikait",
+      "country_qid": "Q30"
+    },
+    "amerikait": {
+      "pos": "ADJ",
+      "gloss": "American (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "amerikai",
+      "country_qid": "Q30"
+    },
+    "germani": {
+      "pos": "ADJ",
+      "gloss": "German",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "feminine_lemma": "germanit",
+      "country_qid": "Q183"
+    },
+    "germanit": {
+      "pos": "ADJ",
+      "gloss": "German (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "masculine_lemma": "germani",
+      "country_qid": "Q183"
+    }
+  }
+}

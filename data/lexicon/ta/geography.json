@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "language": "ta",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "thamizhar": {
+      "lemma": "thamizhar",
+      "pos": "ADJ",
+      "gloss": "Tamil/person of Tamil origin",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "derived_from": "thamizhagam"
+    },
+    "pōland_person": {
+      "lemma": "pōland_nāṭṭavar",
+      "pos": "ADJ",
+      "gloss": "Polish person",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "derived_from": "pōland"
+    },
+    "pirāns_person": {
+      "lemma": "pirāns nāṭṭavar",
+      "pos": "ADJ",
+      "gloss": "French person",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "derived_from": "pirāns"
+    }
+  }
+}

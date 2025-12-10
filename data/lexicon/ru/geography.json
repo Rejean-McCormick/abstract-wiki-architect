@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "language": "ru",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "русский": {
+      "pos": "ADJ",
+      "gloss": "Russian (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "русская",
+      "plural_lemma": "русские",
+      "derived_from": "Россия"
+    },
+    "русская": {
+      "pos": "ADJ",
+      "gloss": "Russian (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "русский",
+      "plural_lemma": "русские",
+      "derived_from": "Россия"
+    },
+    "польский": {
+      "pos": "ADJ",
+      "gloss": "Polish (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "польская",
+      "plural_lemma": "польские",
+      "derived_from": "Польша"
+    },
+    "польская": {
+      "pos": "ADJ",
+      "gloss": "Polish (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "польский",
+      "plural_lemma": "польские",
+      "derived_from": "Польша"
+    },
+    "французский": {
+      "pos": "ADJ",
+      "gloss": "French (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "французская",
+      "plural_lemma": "французские",
+      "derived_from": "Франция"
+    },
+    "французская": {
+      "pos": "ADJ",
+      "gloss": "French (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "французский",
+      "plural_lemma": "французские",
+      "derived_from": "Франция"
+    },
+    "британский": {
+      "pos": "ADJ",
+      "gloss": "British (masc.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "британская",
+      "plural_lemma": "британские",
+      "derived_from": "Великобритания"
+    },
+    "британская": {
+      "pos": "ADJ",
+      "gloss": "British (fem.)",
+      "degree": "positive",
+      "nationality": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "британский",
+      "plural_lemma": "британские",
+      "derived_from": "Великобритания"
+    }
+  }
+}

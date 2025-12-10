@@ -1,0 +1,209 @@
+{
+  "_meta": {
+    "language": "bn",
+    "domain": "core",
+    "version": 1
+  },
+  "entries": {
+    "manush": {
+      "pos": "NOUN",
+      "gloss": "human, person",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "manush"
+    },
+    "purush": {
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "purush"
+    },
+    "mohila": {
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "mohila"
+    },
+    "bigyani": {
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "bigyani"
+    },
+    "podarthobid": {
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "podarthobid"
+    },
+    "rasayonbid": {
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "rasayonbid"
+    },
+    "lekhok": {
+      "pos": "NOUN",
+      "gloss": "writer (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "lekhika",
+      "plural_lemma": "lekhok"
+    },
+    "lekhika": {
+      "pos": "NOUN",
+      "gloss": "writer (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "lekhok",
+      "plural_lemma": "lekhika"
+    },
+    "neta": {
+      "pos": "NOUN",
+      "gloss": "leader/politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "netri",
+      "plural_lemma": "neta"
+    },
+    "shikkhok": {
+      "pos": "NOUN",
+      "gloss": "teacher (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "shikkhika",
+      "plural_lemma": "shikkhok"
+    },
+    "shikkhika": {
+      "pos": "NOUN",
+      "gloss": "teacher (fem.)",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "shikkhok",
+      "plural_lemma": "shikkhika"
+    },
+    "kobi": {
+      "pos": "NOUN",
+      "gloss": "poet",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "kobi"
+    },
+    "abhineta": {
+      "pos": "NOUN",
+      "gloss": "actor",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "abhinetri",
+      "plural_lemma": "abhineta"
+    },
+    "abhinetri": {
+      "pos": "NOUN",
+      "gloss": "actress",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "masculine_lemma": "abhineta",
+      "plural_lemma": "abhinetri"
+    },
+    "desh": {
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "desh"
+    },
+    "shohor": {
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "shohor"
+    },
+    "bharot": {
+      "pos": "NOUN",
+      "gloss": "India",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q668"
+    },
+    "poland": {
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "france": {
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "bikkhato": {
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive"
+    },
+    "howa": {
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "present_3sg": "",
+        "present_3pl": "",
+        "past_3sg": "chilo",
+        "past_3pl": "chilen",
+        "formal_past": "chilen"
+      }
+    },
+    "jonmano": {
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base"
+    },
+    "mara_jawa": {
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base"
+    },
+    "bochor": {
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "bochor"
+    }
+  }
+}

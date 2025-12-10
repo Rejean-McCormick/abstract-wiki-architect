@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "language": "cs",
+    "domain": "science",
+    "version": 1
+  },
+  "entries": {
+    "chemik": {
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "chemici"
+    }
+  }
+}

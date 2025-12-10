@@ -1,0 +1,206 @@
+{
+  "_meta": {
+    "language": "it",
+    "domain": "people",
+    "version": 1
+  },
+  "entries": {
+    "fisico": {
+      "lemma": "fisico",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "fisico",
+        "fem_sg": "fisica",
+        "masc_pl": "fisici",
+        "fem_pl": "fisiche"
+      },
+      "features": {
+        "scientific_field": [
+          "fisica"
+        ]
+      },
+      "qid": "Q169470"
+    },
+    "scienziato": {
+      "lemma": "scienziato",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "scienziato",
+        "fem_sg": "scienziata",
+        "masc_pl": "scienziati",
+        "fem_pl": "scienziate"
+      },
+      "features": {
+        "scientific_field": [
+          "scienza"
+        ]
+      },
+      "qid": "Q901"
+    },
+    "chimico": {
+      "lemma": "chimico",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "chimico",
+        "fem_sg": "chimica",
+        "masc_pl": "chimici",
+        "fem_pl": "chimiche"
+      },
+      "features": {
+        "scientific_field": [
+          "chimica"
+        ]
+      },
+      "qid": "Q593644"
+    },
+    "scrittore": {
+      "lemma": "scrittore",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "scrittore",
+        "fem_sg": "scrittrice",
+        "masc_pl": "scrittori",
+        "fem_pl": "scrittrici"
+      },
+      "features": {
+        "domain": [
+          "letteratura"
+        ]
+      },
+      "qid": "Q36180"
+    },
+    "politico": {
+      "lemma": "politico",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "politico",
+        "fem_sg": "politica",
+        "masc_pl": "politici",
+        "fem_pl": "politiche"
+      },
+      "features": {
+        "domain": [
+          "politica"
+        ]
+      },
+      "qid": "Q82955"
+    },
+    "medico": {
+      "lemma": "medico",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "medico",
+        "fem_sg": "medica",
+        "masc_pl": "medici",
+        "fem_pl": "mediche"
+      },
+      "features": {
+        "domain": [
+          "medicina"
+        ]
+      },
+      "qid": "Q39631"
+    },
+    "musicista": {
+      "lemma": "musicista",
+      "pos": "NOUN",
+      "category": "profession",
+      "human": true,
+      "gender": "common",
+      "forms": {
+        "masc_sg": "musicista",
+        "fem_sg": "musicista",
+        "masc_pl": "musicisti",
+        "fem_pl": "musiciste"
+      },
+      "features": {
+        "domain": [
+          "musica"
+        ]
+      },
+      "qid": "Q639669"
+    },
+    "re": {
+      "lemma": "re",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "masc",
+      "forms": {
+        "masc_sg": "re",
+        "masc_pl": "re"
+      },
+      "qid": "Q116"
+    },
+    "regina": {
+      "lemma": "regina",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "fem",
+      "forms": {
+        "fem_sg": "regina",
+        "fem_pl": "regine"
+      },
+      "qid": "Q180"
+    },
+    "presidente": {
+      "lemma": "presidente",
+      "pos": "NOUN",
+      "category": "title",
+      "human": true,
+      "gender": "common",
+      "forms": {
+        "masc_sg": "presidente",
+        "fem_sg": "presidente",
+        "masc_pl": "presidenti",
+        "fem_pl": "presidenti"
+      },
+      "qid": "Q30461"
+    },
+    "premio_nobel_per_la_fisica": {
+      "lemma": "Premio Nobel per la fisica",
+      "pos": "NOUN",
+      "category": "honour",
+      "human": false,
+      "forms": {
+        "default": "Premio Nobel per la fisica"
+      },
+      "features": {
+        "field": "fisica"
+      },
+      "qid": "Q38104"
+    },
+    "premio_nobel_per_la_chimica": {
+      "lemma": "Premio Nobel per la chimica",
+      "pos": "NOUN",
+      "category": "honour",
+      "human": false,
+      "forms": {
+        "default": "Premio Nobel per la chimica"
+      },
+      "features": {
+        "field": "chimica"
+      },
+      "qid": "Q44585"
+    }
+  }
+}

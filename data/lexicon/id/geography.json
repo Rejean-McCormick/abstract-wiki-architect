@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "language": "id",
+    "domain": "geography",
+    "version": 1
+  },
+  "entries": {
+    "indonesia_adj": {
+      "lemma": "Indonesia",
+      "pos": "ADJ",
+      "gloss": "Indonesian",
+      "degree": "positive",
+      "nationality": true,
+      "derived_from": "indonesia"
+    },
+    "amerika": {
+      "pos": "ADJ",
+      "gloss": "American",
+      "degree": "positive",
+      "nationality": true,
+      "derived_from": "amerika_serikat"
+    },
+    "jepang_adj": {
+      "lemma": "Jepang",
+      "pos": "ADJ",
+      "gloss": "Japanese",
+      "degree": "positive",
+      "nationality": true,
+      "derived_from": "jepang"
+    },
+    "prancis": {
+      "pos": "ADJ",
+      "gloss": "French",
+      "degree": "positive",
+      "nationality": true,
+      "qid": "Q142"
+    },
+    "jerman": {
+      "pos": "ADJ",
+      "gloss": "German",
+      "degree": "positive",
+      "nationality": true,
+      "qid": "Q183"
+    },
+    "inggris": {
+      "pos": "ADJ",
+      "gloss": "British/English",
+      "degree": "positive",
+      "nationality": true,
+      "qid": "Q145"
+    },
+    "polandia": {
+      "pos": "ADJ",
+      "gloss": "Polish",
+      "degree": "positive",
+      "nationality": true,
+      "qid": "Q36"
+    }
+  }
+}
