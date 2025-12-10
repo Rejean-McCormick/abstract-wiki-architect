@@ -1,4 +1,4 @@
-concrete WikiIta of AbstractWiki = WikiI ** open SyntaxIta, ParadigmsIta, SymbolicIta, DictIta in {
+concrete WikiIta of AbstractWiki = WikiI ** open SyntaxIta, SymbolicIta, DictIta, Prelude in {
   lin
     animal_Entity = mkNP lex_animal_N ;
     mkLiteral v = symb v.s ;

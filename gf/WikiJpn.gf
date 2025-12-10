@@ -1,4 +1,4 @@
-concrete WikiJpn of AbstractWiki = WikiI ** open SyntaxJpn, ParadigmsJpn, SymbolicJpn, DictJpn in {
+concrete WikiJpn of AbstractWiki = WikiI ** open SyntaxJpn, SymbolicJpn, DictJpn, Prelude in {
   lin
     animal_Entity = mkNP lex_animal_N ;
     cat_Entity = mkNP lex_cat_N ;

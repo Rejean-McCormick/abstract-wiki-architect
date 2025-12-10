@@ -1,4 +1,4 @@
-concrete WikiFre of AbstractWiki = WikiI ** open SyntaxFre, ParadigmsFre, SymbolicFre in {
+concrete WikiFre of AbstractWiki = WikiI ** open SyntaxFre, SymbolicFre, DictFre, Prelude in {
   lin
     lex_animal_N = mkNP (mkN "animal");
     lex_walk_V = mkVP (mkV "walk");

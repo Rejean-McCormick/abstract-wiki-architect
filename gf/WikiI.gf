@@ -1,4 +1,4 @@
-incomplete concrete WikiI of AbstractWiki = open Syntax in {
+incomplete concrete WikiI of AbstractWiki = open Syntax, Prelude in {
   lincat Entity = NP; Property = AP; Fact = S; Predicate = VP; Modifier = Adv; Value = {s : Str};
   lin
     mkFact s p = mkS (mkCl s p);

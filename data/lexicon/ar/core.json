@@ -1,9 +1,11 @@
 {
   "_meta": {
     "language": "ar",
-    "domain": "mixed",
-    "version": 2,
-    "note": "Hybrid Schema: Contains both Arabic Script (for Engine) and Latin Transliteration (for Devs)"
+    "domain": "core",
+    "version": 3,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:15:00Z",
+    "note": "Hybrid Schema: Full Tashkeel (Diacritics) + Transliteration. Includes Broken Plurals."
   },
   "entries": {
     "shakhs": {
@@ -56,7 +58,7 @@
       "lemma": "فِيزْيَائِيّ",
       "lemma_translit": "fizya'i",
       "pos": "NOUN",
-      "gloss": "physicist (masc.)",
+      "gloss": "physicist",
       "human": true,
       "gender": "m",
       "number": "sg",
@@ -64,19 +66,6 @@
       "feminine_translit": "fizya'iyya",
       "plural_lemma": "فِيزْيَائِيُّون",
       "plural_translit": "fizya'iyyun"
-    },
-    "fizya'iyya": {
-      "lemma": "فِيزْيَائِيَّة",
-      "lemma_translit": "fizya'iyya",
-      "pos": "NOUN",
-      "gloss": "physicist (fem.)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "فِيزْيَائِيّ",
-      "masculine_translit": "fizya'i",
-      "plural_lemma": "فِيزْيَائِيَّات",
-      "plural_translit": "fizya'iyyat"
     },
     "kimya'i": {
       "lemma": "كِيمْيَائِيّ",
@@ -104,18 +93,18 @@
       "plural_lemma": "كُتَّاب",
       "plural_translit": "kuttab"
     },
-    "katiba": {
-      "lemma": "كَاتِبَة",
-      "lemma_translit": "katiba",
+    "mu'allif": {
+      "lemma": "مُؤَلِّف",
+      "lemma_translit": "mu'allif",
       "pos": "NOUN",
-      "gloss": "writer (fem.)",
+      "gloss": "author",
       "human": true,
-      "gender": "f",
+      "gender": "m",
       "number": "sg",
-      "masculine_lemma": "كَاتِب",
-      "masculine_translit": "katib",
-      "plural_lemma": "كَاتِبَات",
-      "plural_translit": "katibat"
+      "feminine_lemma": "مُؤَلِّفَة",
+      "feminine_translit": "mu'allifa",
+      "plural_lemma": "مُؤَلِّفُون",
+      "plural_translit": "mu'allifun"
     },
     "siyasi": {
       "lemma": "سِيَاسِيّ",
@@ -130,31 +119,172 @@
       "plural_lemma": "سِيَاسِيُّون",
       "plural_translit": "siyasiyyun"
     },
-    "mu'allim": {
-      "lemma": "مُعَلِّم",
-      "lemma_translit": "mu'allim",
+    "ihsa'i": {
+      "lemma": "إِحْصَائِيّ",
+      "lemma_translit": "ihsa'i",
       "pos": "NOUN",
-      "gloss": "teacher",
+      "gloss": "statistician",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "مُعَلِّمَة",
-      "feminine_translit": "mu'allima",
-      "plural_lemma": "مُعَلِّمُون",
-      "plural_translit": "mu'allimun"
+      "feminine_lemma": "إِحْصَائِيَّة",
+      "feminine_translit": "ihsa'iyya",
+      "semantic_field": "statistics"
     },
-    "tabib": {
-      "lemma": "طَبِيب",
-      "lemma_translit": "tabib",
+    "alim_hasub": {
+      "lemma": "عَالِم حَاسُوب",
+      "lemma_translit": "alim hasub",
       "pos": "NOUN",
-      "gloss": "doctor/physician",
+      "gloss": "computer scientist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "طَبِيبَة",
-      "feminine_translit": "tabiba",
-      "plural_lemma": "أَطِبَّاء",
-      "plural_translit": "atibba'"
+      "multiword": true,
+      "semantic_field": "computer_science"
+    },
+    "falaki": {
+      "lemma": "فَلَكِيّ",
+      "lemma_translit": "falaki",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "فَلَكِيُّون",
+      "plural_translit": "falakiyyun",
+      "semantic_field": "astronomy"
+    },
+    "jiyuluji": {
+      "lemma": "جِيُولُوجِيّ",
+      "lemma_translit": "jiyuluji",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "جِيُولُوجِيُّون",
+      "plural_translit": "jiyulujiyyun",
+      "semantic_field": "geology"
+    },
+    "alim_a'sab": {
+      "lemma": "عَالِم أَعْصَاب",
+      "lemma_translit": "alim a'sab",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "neuroscience"
+    },
+    "ja'izat_nobel": {
+      "lemma": "جَائِزَة نُوبِل",
+      "lemma_translit": "ja'izat nobel",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "awards"
+    },
+    "ihsa'": {
+      "lemma": "إِحْصَاء",
+      "lemma_translit": "ihsa'",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "number": "mass",
+      "gender": "m",
+      "semantic_field": "statistics"
+    },
+    "ilm_al_falak": {
+      "lemma": "عِلْم اَلْفَلَك",
+      "lemma_translit": "ilm al-falak",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "number": "mass",
+      "gender": "m",
+      "semantic_field": "astronomy"
+    },
+    "jiyulujya": {
+      "lemma": "جِيُولُوجِيَا",
+      "lemma_translit": "jiyulujya",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "geology"
+    },
+    "ilm_al_a'sab": {
+      "lemma": "عِلْم اَلْأَعْصَاب",
+      "lemma_translit": "ilm al-a'sab",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "number": "mass",
+      "gender": "m",
+      "semantic_field": "neuroscience"
+    },
+    "bahth": {
+      "lemma": "بَحْث",
+      "lemma_translit": "bahth",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "أَبْحَاث",
+      "plural_translit": "abhath",
+      "semantic_field": "science_meta"
+    },
+    "tajriba": {
+      "lemma": "تَجْرِبَة",
+      "lemma_translit": "tajriba",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "تَجَارِب",
+      "plural_translit": "tajarib",
+      "semantic_field": "science_meta"
+    },
+    "waraqa_ilmiyya": {
+      "lemma": "وَرَقَة عِلْمِيَّة",
+      "lemma_translit": "waraqa ilmiyya",
+      "pos": "NOUN",
+      "gloss": "scientific paper",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "ilmi": {
+      "lemma": "عِلْمِيّ",
+      "lemma_translit": "ilmi",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "عِلْمِيَّة",
+      "feminine_translit": "ilmiyya",
+      "semantic_field": "science_meta"
+    },
+    "nazari": {
+      "lemma": "نَظَرِيّ",
+      "lemma_translit": "nazari",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "نَظَرِيَّة",
+      "feminine_translit": "nazariyya",
+      "semantic_field": "science_meta"
     },
     "dawla": {
       "lemma": "دَوْلَة",
@@ -178,6 +308,62 @@
       "plural_lemma": "مُدُن",
       "plural_translit": "mudun"
     },
+    "bulanda": {
+      "lemma": "بُولَنْدَا",
+      "lemma_translit": "bulanda",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "faransa": {
+      "lemma": "فَرَنْسَا",
+      "lemma_translit": "faransa",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "al_mamlaka_al_muttahida": {
+      "lemma": "اَلْمَمْلَكَة اَلْمُتَّحِدَة",
+      "lemma_translit": "al-mamlaka al-muttahida",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "qid": "Q145"
+    },
+    "warso": {
+      "lemma": "وَارْسُو",
+      "lemma_translit": "warso",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "baris": {
+      "lemma": "بَارِيس",
+      "lemma_translit": "baris",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q90"
+    },
     "mashhur": {
       "lemma": "مَشْهُور",
       "lemma_translit": "mashhur",
@@ -186,7 +372,29 @@
       "degree": "positive",
       "gender": "m",
       "feminine_lemma": "مَشْهُورَة",
-      "feminine_translit": "mashhura"
+      "feminine_translit": "mashhura",
+      "plural_lemma": "مَشَاهِير",
+      "plural_translit": "mashahir"
+    },
+    "muhimm": {
+      "lemma": "مُهِمّ",
+      "lemma_translit": "muhimm",
+      "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "مُهِمَّة",
+      "feminine_translit": "muhimma"
+    },
+    "bariz": {
+      "lemma": "بَارِز",
+      "lemma_translit": "bariz",
+      "pos": "ADJ",
+      "gloss": "notable",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "بَارِزَة",
+      "feminine_translit": "bariza"
     },
     "kana": {
       "lemma": "كَانَ",
@@ -197,9 +405,7 @@
       "lemma_type": "base",
       "irregular_forms": {
         "past_3sg_m": "كَانَ",
-        "past_3sg_m_translit": "kana",
-        "past_3sg_f": "كَانَتْ",
-        "past_3sg_f_translit": "kanat"
+        "past_3sg_f": "كَانَتْ"
       }
     },
     "wulida": {
@@ -211,9 +417,7 @@
       "lemma_type": "base",
       "irregular_forms": {
         "past_3sg_m": "وُلِدَ",
-        "past_3sg_m_translit": "wulida",
-        "past_3sg_f": "وُلِدَتْ",
-        "past_3sg_f_translit": "wulidat"
+        "past_3sg_f": "وُلِدَتْ"
       }
     },
     "tuwuffiya": {
@@ -225,10 +429,47 @@
       "lemma_type": "base",
       "irregular_forms": {
         "past_3sg_m": "تُوُفِّيَ",
-        "past_3sg_m_translit": "tuwuffiya",
-        "past_3sg_f": "تُوُفِّيَتْ",
-        "past_3sg_f_translit": "tuwuffiyat"
+        "past_3sg_f": "تُوُفِّيَتْ"
       }
+    },
+    "iktashafa": {
+      "lemma": "اِكْتَشَفَ",
+      "lemma_translit": "iktashafa",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "faza": {
+      "lemma": "فَازَ",
+      "lemma_translit": "faza",
+      "pos": "VERB",
+      "gloss": "to win/succeed",
+      "subcat": "intransitive",
+      "note": "Takes preposition 'bi' (faza bi ja'iza)",
+      "irregular_forms": {
+        "past_3sg_m": "فَازَ",
+        "past_3sg_f": "فَازَتْ"
+      }
+    },
+    "nashara": {
+      "lemma": "نَشَرَ",
+      "lemma_translit": "nashara",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "bahatha": {
+      "lemma": "بَحَثَ",
+      "lemma_translit": "bahatha",
+      "pos": "VERB",
+      "gloss": "to research/search",
+      "subcat": "intransitive",
+      "note": "Takes preposition 'fi' or 'an'",
+      "regular": true,
+      "semantic_field": "science_meta"
     },
     "sanah": {
       "lemma": "سَنَة",
@@ -240,6 +481,73 @@
       "number": "sg",
       "plural_lemma": "سَنَوَات",
       "plural_translit": "sanawat"
+    },
+    "pronoun_he": {
+      "lemma": "هُوَ",
+      "lemma_translit": "huwa",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m"
+    },
+    "pronoun_she": {
+      "lemma": "هِيَ",
+      "lemma_translit": "hiya",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f"
+    },
+    "pronoun_they": {
+      "lemma": "هُمْ",
+      "lemma_translit": "hum",
+      "pos": "PRON",
+      "gloss": "they (masc)",
+      "person": "3",
+      "number": "pl",
+      "gender": "m"
+    },
+    "conj_and": {
+      "lemma": "وَ",
+      "lemma_translit": "wa",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "لَكِن",
+      "lemma_translit": "lakin",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "فِي",
+      "lemma_translit": "fi",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative"
+    },
+    "prep_from": {
+      "lemma": "مِنْ",
+      "lemma_translit": "min",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "prep_with": {
+      "lemma": "مَعَ",
+      "lemma_translit": "ma'a",
+      "pos": "PREP",
+      "gloss": "with (accompaniment)",
+      "subcat": "comitative"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
     }
   }
 }

@@ -2,12 +2,469 @@
   "_meta": {
     "language": "el",
     "domain": "core",
-    "version": 2,
-    "source": "Manual Entry (Standard V2)",
-    "generated_at": "2025-12-09T20:38:31Z",
-    "note": "Maximal Schema: Includes full declension tables for articles (case/gender/number) and pronouns."
+    "version": 3,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:45:00Z",
+    "note": "Maximal Schema: Includes full declension tables, transliteration, and scientific domain extensions."
   },
   "entries": {
+    "person": {
+      "lemma": "άτομο",
+      "lemma_translit": "atomo",
+      "pos": "NOUN",
+      "gloss": "person/individual",
+      "human": true,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "άτομα",
+      "plural_translit": "atoma"
+    },
+    "man": {
+      "lemma": "άνδρας",
+      "lemma_translit": "andras",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "άνδρες",
+      "plural_translit": "andres"
+    },
+    "woman": {
+      "lemma": "γυναίκα",
+      "lemma_translit": "gynaika",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "γυναίκες",
+      "plural_translit": "gynaikes"
+    },
+    "scientist": {
+      "lemma": "επιστήμονας",
+      "lemma_translit": "epistimonas",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "επιστήμονες",
+      "plural_translit": "epistimones"
+    },
+    "physicist": {
+      "lemma": "φυσικός",
+      "lemma_translit": "fysikos",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "φυσικοί",
+      "plural_translit": "fysikoi"
+    },
+    "chemist": {
+      "lemma": "χημικός",
+      "lemma_translit": "chimikos",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "χημικοί",
+      "plural_translit": "chimikoi"
+    },
+    "writer": {
+      "lemma": "συγγραφέας",
+      "lemma_translit": "syngrafeas",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "συγγραφείς",
+      "plural_translit": "syngrafeis"
+    },
+    "author": {
+      "lemma": "δημιουργός",
+      "lemma_translit": "dimiourgos",
+      "pos": "NOUN",
+      "gloss": "author/creator",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "δημιουργοί",
+      "plural_translit": "dimiourgoi"
+    },
+    "politician": {
+      "lemma": "πολιτικός",
+      "lemma_translit": "politikos",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "πολιτικοί",
+      "plural_translit": "politikoi"
+    },
+    "teacher": {
+      "lemma": "δάσκαλος",
+      "lemma_translit": "daskalos",
+      "pos": "NOUN",
+      "gloss": "teacher",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "δασκάλα",
+      "feminine_translit": "daskala",
+      "plural_lemma": "δάσκαλοι",
+      "plural_translit": "daskaloi"
+    },
+    "statistician": {
+      "lemma": "στατιστικολόγος",
+      "lemma_translit": "statistikologos",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "στατιστικολόγοι",
+      "plural_translit": "statistikologoi",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "επιστήμονας υπολογιστών",
+      "lemma_translit": "epistimonas ypologiston",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "multiword": true,
+      "plural_lemma": "επιστήμονες υπολογιστών",
+      "plural_translit": "epistimones ypologiston",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "αστρονόμος",
+      "lemma_translit": "astronomos",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "αστρονόμοι",
+      "plural_translit": "astronomoi",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "γεωλόγος",
+      "lemma_translit": "geologos",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "γεωλόγοι",
+      "plural_translit": "geologoi",
+      "semantic_field": "geology"
+    },
+    "neuroscientist": {
+      "lemma": "νευροεπιστήμονας",
+      "lemma_translit": "nevroepistimonas",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "νευροεπιστήμονες",
+      "plural_translit": "nevroepistimones",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize": {
+      "lemma": "Βραβείο Νόμπελ",
+      "lemma_translit": "Vraveio Nobel",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "awards"
+    },
+    "statistics": {
+      "lemma": "στατιστική",
+      "lemma_translit": "statistiki",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "αστρονομία",
+      "lemma_translit": "astronomia",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "γεωλογία",
+      "lemma_translit": "geologia",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "νευροεπιστήμη",
+      "lemma_translit": "nevroepistimi",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "neuroscience"
+    },
+    "research": {
+      "lemma": "έρευνα",
+      "lemma_translit": "erevna",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "έρευνες",
+      "plural_translit": "erevnes",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "πείραμα",
+      "lemma_translit": "peirama",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "πειράματα",
+      "plural_translit": "peiramata",
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "lemma": "επιστημονικό άρθρο",
+      "lemma_translit": "epistimoniko arthro",
+      "pos": "NOUN",
+      "gloss": "scientific paper",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "lemma": "επιστημονική θεωρία",
+      "lemma_translit": "epistimoniki theoria",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "field_of_research": {
+      "lemma": "ερευνητικό πεδίο",
+      "lemma_translit": "erevnitiko pedio",
+      "pos": "NOUN",
+      "gloss": "field of research",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "ερευνητικά πεδία",
+      "plural_translit": "erevnitika pedia",
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "έτος",
+      "lemma_translit": "etos",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "έτη",
+      "plural_translit": "eti"
+    },
+    "country": {
+      "lemma": "χώρα",
+      "lemma_translit": "chora",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "χώρες",
+      "plural_translit": "chores"
+    },
+    "city": {
+      "lemma": "πόλη",
+      "lemma_translit": "poli",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "πόλεις",
+      "plural_translit": "poleis"
+    },
+    "date": {
+      "lemma": "ημερομηνία",
+      "lemma_translit": "imerominia",
+      "pos": "NOUN",
+      "gloss": "date",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "ημερομηνίες",
+      "plural_translit": "imerominies"
+    },
+    "Poland": {
+      "lemma": "Πολωνία",
+      "lemma_translit": "Polonia",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "lemma": "Γαλλία",
+      "lemma_translit": "Gallia",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "Germany": {
+      "lemma": "Γερμανία",
+      "lemma_translit": "Germania",
+      "pos": "NOUN",
+      "gloss": "Germany",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q183"
+    },
+    "United Kingdom": {
+      "lemma": "Ηνωμένο Βασίλειο",
+      "lemma_translit": "Inomeno Vasileio",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "multiword": true,
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "lemma": "Βαρσοβία",
+      "lemma_translit": "Varsovia",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "lemma": "Παρίσι",
+      "lemma_translit": "Parisi",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "famous": {
+      "lemma": "διάσημος",
+      "lemma_translit": "diasimos",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "διάσημος",
+        "f_sg": "διάσημη",
+        "n_sg": "διάσημο"
+      }
+    },
+    "important": {
+      "lemma": "σημαντικός",
+      "lemma_translit": "simantikos",
+      "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "σημαντικός",
+        "f_sg": "σημαντική",
+        "n_sg": "σημαντικό"
+      }
+    },
+    "scientific": {
+      "lemma": "επιστημονικός",
+      "lemma_translit": "epistimonikos",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "επιστημονικός",
+        "f_sg": "επιστημονική",
+        "n_sg": "επιστημονικό"
+      },
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "θεωρητικός",
+      "lemma_translit": "theoritikos",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "θεωρητικός",
+        "f_sg": "θεωρητική",
+        "n_sg": "θεωρητικό"
+      },
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "πειραματικός",
+      "lemma_translit": "peiramatikos",
+      "pos": "ADJ",
+      "gloss": "experimental",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "πειραματικός",
+        "f_sg": "πειραματική",
+        "n_sg": "πειραματικό"
+      },
+      "semantic_field": "science_meta"
+    },
     "copula": {
       "lemma": "είμαι",
       "lemma_translit": "eimai",
@@ -27,6 +484,85 @@
         "past_3pl": "ήταν",
         "future_base": "θα είμαι"
       }
+    },
+    "be_born": {
+      "lemma": "γεννιέμαι",
+      "lemma_translit": "genniemai",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_1sg": "γεννήθηκα",
+        "past_1sg_translit": "gennithika",
+        "past_3sg": "γεννήθηκε",
+        "past_3sg_translit": "gennithike"
+      }
+    },
+    "die": {
+      "lemma": "πεθαίνω",
+      "lemma_translit": "pethaino",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg": "πέθανε",
+        "past_3sg_translit": "pethane"
+      }
+    },
+    "discover": {
+      "lemma": "ανακαλύπτω",
+      "lemma_translit": "anakalypto",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_3sg": "ανακάλυψε",
+        "past_3sg_translit": "anakalypse"
+      }
+    },
+    "win": {
+      "lemma": "κερδίζω",
+      "lemma_translit": "kerdizo",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_3sg": "κέρδισε",
+        "past_3sg_translit": "kerdise"
+      }
+    },
+    "receive": {
+      "lemma": "λαμβάνω",
+      "lemma_translit": "lamvano",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "irregular_forms": {
+        "past_3sg": "έλαβε",
+        "past_3sg_translit": "elave"
+      }
+    },
+    "publish": {
+      "lemma": "δημοσιεύω",
+      "lemma_translit": "dimosievo",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "research_verb": {
+      "lemma": "ερευνώ",
+      "lemma_translit": "erevno",
+      "pos": "VERB",
+      "gloss": "to research",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
     },
     "det_definite": {
       "lemma": "ο",

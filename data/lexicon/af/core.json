@@ -2,12 +2,370 @@
   "_meta": {
     "language": "af",
     "domain": "core",
-    "version": 2,
-    "source": "Manual Entry (Standard V2)",
-    "generated_at": "2025-12-09T20:40:00Z",
-    "note": "Maximal Schema: Includes glosses and explicit subcategories."
+    "version": 3,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:10:00Z",
+    "note": "Maximal Schema: Includes scientific extensions and standard functional grammar."
   },
   "entries": {
+    "person": {
+      "lemma": "persoon",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "persone"
+    },
+    "man": {
+      "lemma": "man",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "mans"
+    },
+    "woman": {
+      "lemma": "vrou",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "vroue"
+    },
+    "scientist": {
+      "lemma": "wetenskaplike",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "wetenskaplikes"
+    },
+    "writer": {
+      "lemma": "skrywer",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "skrywers"
+    },
+    "author": {
+      "lemma": "outeur",
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "outeurs"
+    },
+    "professor": {
+      "lemma": "professor",
+      "pos": "NOUN",
+      "gloss": "professor",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "professore"
+    },
+    "politician": {
+      "lemma": "politikus",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "politici"
+    },
+    "statistician": {
+      "lemma": "statistikus",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "statistici",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "rekenaarwetenskaplike",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "rekenaarwetenskaplikes",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "sterrekundige",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "sterrekundiges",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "geoloog",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "geoloë",
+      "semantic_field": "geology"
+    },
+    "climate_scientist": {
+      "lemma": "klimaatwetenskaplike",
+      "pos": "NOUN",
+      "gloss": "climate scientist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "klimaatwetenskaplikes",
+      "semantic_field": "climatology"
+    },
+    "neuroscientist": {
+      "lemma": "neurowetenskaplike",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "neurowetenskaplikes",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize": {
+      "lemma": "Nobelprys",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "plural_lemma": "Nobelpryse",
+      "semantic_field": "awards"
+    },
+    "nobel_prize_in_physiology_or_medicine": {
+      "lemma": "Nobelprys vir Fisiologie of Geneeskunde",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize in Physiology or Medicine",
+      "human": false,
+      "proper": true,
+      "multiword": true,
+      "number": "sg",
+      "semantic_field": "awards"
+    },
+    "statistics": {
+      "lemma": "statistiek",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "sterrekunde",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "geologie",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "neurowetenskap",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "neuroscience"
+    },
+    "research": {
+      "lemma": "navorsing",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "eksperiment",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "eksperimente",
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "lemma": "wetenskaplike teorie",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "wetenskaplike teorieë",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "field_of_research": {
+      "lemma": "navorsingsveld",
+      "pos": "NOUN",
+      "gloss": "field of research",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "navorsingsvelde",
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "lemma": "wetenskaplike artikel",
+      "pos": "NOUN",
+      "gloss": "scientific paper/article",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "wetenskaplike artikels",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "jaar",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "jare"
+    },
+    "city": {
+      "lemma": "stad",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "stede"
+    },
+    "country": {
+      "lemma": "land",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "lande"
+    },
+    "date": {
+      "lemma": "datum",
+      "pos": "NOUN",
+      "gloss": "date",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "datums"
+    },
+    "Poland": {
+      "lemma": "Pole",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "lemma": "Frankryk",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "United Kingdom": {
+      "lemma": "Verenigde Koninkryk",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "lemma": "Warskou",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "lemma": "Parys",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "famous": {
+      "lemma": "beroemd",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "attributive": "beroemde"
+      }
+    },
+    "notable": {
+      "lemma": "noemenswaardig",
+      "pos": "ADJ",
+      "gloss": "notable",
+      "degree": "positive",
+      "forms": {
+        "attributive": "noemenswaardige"
+      }
+    },
+    "great": {
+      "lemma": "groot",
+      "pos": "ADJ",
+      "gloss": "great",
+      "degree": "positive"
+    },
+    "important": {
+      "lemma": "belangrik",
+      "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive",
+      "forms": {
+        "attributive": "belangrike"
+      }
+    },
+    "scientific": {
+      "lemma": "wetenskaplik",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "forms": {
+        "attributive": "wetenskaplike"
+      },
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "teoreties",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "forms": {
+        "attributive": "teoretiese"
+      },
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "eksperimenteel",
+      "pos": "ADJ",
+      "gloss": "experimental",
+      "degree": "positive",
+      "forms": {
+        "attributive": "eksperimentele"
+      },
+      "semantic_field": "science_meta"
+    },
     "copula": {
       "lemma": "is",
       "pos": "VERB",
@@ -20,6 +378,83 @@
         "future": "sal wees"
       },
       "note": "Invariant for all persons in present/past."
+    },
+    "be_born": {
+      "lemma": "gebore word",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "multiword",
+      "irregular_forms": {
+        "past": "is gebore"
+      }
+    },
+    "die": {
+      "lemma": "sterf",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_participle": "gesterf"
+      }
+    },
+    "discover": {
+      "lemma": "ontdek",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_participle": "ontdek"
+      }
+    },
+    "win": {
+      "lemma": "wen",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_participle": "gewen"
+      }
+    },
+    "receive": {
+      "lemma": "ontvang",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_participle": "ontvang"
+      }
+    },
+    "to_research": {
+      "lemma": "navors",
+      "pos": "VERB",
+      "gloss": "to research",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_participle": "nagevors"
+      },
+      "semantic_field": "science_meta"
+    },
+    "to_experiment": {
+      "lemma": "eksperimenteer",
+      "pos": "VERB",
+      "gloss": "to experiment",
+      "subcat": "intransitive",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "to_publish": {
+      "lemma": "publiseer",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
     },
     "det_definite": {
       "lemma": "die",

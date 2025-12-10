@@ -2,145 +2,316 @@
   "_meta": {
     "language": "bn",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:25:00Z",
+    "note": "Hybrid Schema: Bengali Script lemmas with Latin Transliteration. Includes zero-copula handling."
   },
   "entries": {
     "manush": {
+      "lemma": "মানুষ",
+      "lemma_translit": "manush",
       "pos": "NOUN",
       "gloss": "human, person",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "manush"
+      "plural_lemma": "মানুষেরা",
+      "plural_translit": "manushera"
     },
     "purush": {
+      "lemma": "পুরুষ",
+      "lemma_translit": "purush",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "purush"
+      "plural_lemma": "পুরুষেরা",
+      "plural_translit": "purushera"
     },
     "mohila": {
+      "lemma": "মহিলা",
+      "lemma_translit": "mohila",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "mohila"
+      "plural_lemma": "মহিলারা",
+      "plural_translit": "mohilara"
     },
     "bigyani": {
+      "lemma": "বিজ্ঞানী",
+      "lemma_translit": "bigyani",
       "pos": "NOUN",
       "gloss": "scientist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "bigyani"
+      "plural_lemma": "বিজ্ঞানীরা",
+      "plural_translit": "bigyanira"
     },
     "podarthobid": {
+      "lemma": "পদার্থবিদ",
+      "lemma_translit": "podarthobid",
       "pos": "NOUN",
       "gloss": "physicist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "podarthobid"
+      "plural_lemma": "পদার্থবিদরা",
+      "plural_translit": "podarthobidra"
     },
     "rasayonbid": {
+      "lemma": "রসায়নবিদ",
+      "lemma_translit": "rasayonbid",
       "pos": "NOUN",
       "gloss": "chemist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "rasayonbid"
+      "plural_lemma": "রসায়নবিদরা",
+      "plural_translit": "rasayonbidra"
     },
     "lekhok": {
+      "lemma": "লেখক",
+      "lemma_translit": "lekhok",
       "pos": "NOUN",
       "gloss": "writer (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "lekhika",
-      "plural_lemma": "lekhok"
+      "feminine_lemma": "লেখিকা",
+      "feminine_translit": "lekhika",
+      "plural_lemma": "লেখকরা",
+      "plural_translit": "lekhokra"
     },
     "lekhika": {
+      "lemma": "লেখিকা",
+      "lemma_translit": "lekhika",
       "pos": "NOUN",
       "gloss": "writer (fem.)",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "lekhok",
-      "plural_lemma": "lekhika"
+      "masculine_lemma": "লেখক",
+      "masculine_translit": "lekhok",
+      "plural_lemma": "লেখিকারা",
+      "plural_translit": "lekhikara"
     },
     "neta": {
+      "lemma": "নেতা",
+      "lemma_translit": "neta",
       "pos": "NOUN",
-      "gloss": "leader/politician",
+      "gloss": "leader/politician (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "netri",
-      "plural_lemma": "neta"
+      "feminine_lemma": "নেত্রী",
+      "feminine_translit": "netri",
+      "plural_lemma": "নেতারা",
+      "plural_translit": "netara"
     },
     "shikkhok": {
+      "lemma": "শিক্ষক",
+      "lemma_translit": "shikkhok",
       "pos": "NOUN",
       "gloss": "teacher (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "shikkhika",
-      "plural_lemma": "shikkhok"
-    },
-    "shikkhika": {
-      "pos": "NOUN",
-      "gloss": "teacher (fem.)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "shikkhok",
-      "plural_lemma": "shikkhika"
+      "feminine_lemma": "শিক্ষিকা",
+      "feminine_translit": "shikkhika",
+      "plural_lemma": "শিক্ষকরা",
+      "plural_translit": "shikkhokra"
     },
     "kobi": {
+      "lemma": "কবি",
+      "lemma_translit": "kobi",
       "pos": "NOUN",
       "gloss": "poet",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "kobi"
+      "plural_lemma": "কবিরা",
+      "plural_translit": "kobira"
     },
-    "abhineta": {
+    "porishonkhanbid": {
+      "lemma": "পরিসংখ্যানবিদ",
+      "lemma_translit": "porishonkhanbid",
       "pos": "NOUN",
-      "gloss": "actor",
+      "gloss": "statistician",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "abhinetri",
-      "plural_lemma": "abhineta"
+      "semantic_field": "statistics"
     },
-    "abhinetri": {
+    "computer_bigyani": {
+      "lemma": "কম্পিউটার বিজ্ঞানী",
+      "lemma_translit": "computer bigyani",
       "pos": "NOUN",
-      "gloss": "actress",
+      "gloss": "computer scientist",
       "human": true,
+      "gender": "m",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "computer_science"
+    },
+    "jyotirbigyani": {
+      "lemma": "জ্যোতির্বিজ্ঞানী",
+      "lemma_translit": "jyotirbigyani",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "semantic_field": "astronomy"
+    },
+    "bhutattvik": {
+      "lemma": "ভূতাত্ত্বিক",
+      "lemma_translit": "bhutattvik",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "semantic_field": "geology"
+    },
+    "snayubigyani": {
+      "lemma": "স্নায়ুবিজ্ঞানী",
+      "lemma_translit": "snayubigyani",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_puroshkar": {
+      "lemma": "নোবেল পুরস্কার",
+      "lemma_translit": "nobel puroshkar",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "awards"
+    },
+    "porishonkhan": {
+      "lemma": "পরিসংখ্যান",
+      "lemma_translit": "porishonkhan",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "number": "mass",
+      "gender": "m",
+      "semantic_field": "statistics"
+    },
+    "jyotirbidya": {
+      "lemma": "জ্যোতির্বিদ্যা",
+      "lemma_translit": "jyotirbidya",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "astronomy"
+    },
+    "bhutattwa": {
+      "lemma": "ভূতত্ত্ব",
+      "lemma_translit": "bhutattwa",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "number": "mass",
+      "gender": "m",
+      "semantic_field": "geology"
+    },
+    "snayubiggan": {
+      "lemma": "স্নায়ুবিজ্ঞান",
+      "lemma_translit": "snayubiggan",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "number": "mass",
+      "gender": "m",
+      "semantic_field": "neuroscience"
+    },
+    "gobeshona": {
+      "lemma": "গবেষণা",
+      "lemma_translit": "gobeshona",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "abhineta",
-      "plural_lemma": "abhinetri"
+      "semantic_field": "science_meta"
+    },
+    "porikkha": {
+      "lemma": "পরীক্ষা",
+      "lemma_translit": "porikkha",
+      "pos": "NOUN",
+      "gloss": "experiment/test",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "semantic_field": "science_meta"
+    },
+    "boigyanik_nibondho": {
+      "lemma": "বৈজ্ঞানিক নিবন্ধ",
+      "lemma_translit": "boigyanik nibondho",
+      "pos": "NOUN",
+      "gloss": "scientific paper",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "boigyanik": {
+      "lemma": "বৈজ্ঞানিক",
+      "lemma_translit": "boigyanik",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
+    "tattvik": {
+      "lemma": "তাত্ত্বিক",
+      "lemma_translit": "tattvik",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "semantic_field": "science_meta"
     },
     "desh": {
+      "lemma": "দেশ",
+      "lemma_translit": "desh",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "desh"
+      "plural_lemma": "দেশগুলো",
+      "plural_translit": "deshgulo"
     },
     "shohor": {
+      "lemma": "শহর",
+      "lemma_translit": "shohor",
       "pos": "NOUN",
       "gloss": "city",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "shohor"
+      "plural_lemma": "শহরগুলো",
+      "plural_translit": "shohorgulo"
     },
     "bharot": {
+      "lemma": "ভারত",
+      "lemma_translit": "bharot",
       "pos": "NOUN",
       "gloss": "India",
       "human": false,
@@ -150,6 +321,8 @@
       "qid": "Q668"
     },
     "poland": {
+      "lemma": "পোল্যান্ড",
+      "lemma_translit": "poland",
       "pos": "NOUN",
       "gloss": "Poland",
       "human": false,
@@ -159,6 +332,8 @@
       "qid": "Q36"
     },
     "france": {
+      "lemma": "ফ্রান্স",
+      "lemma_translit": "france",
       "pos": "NOUN",
       "gloss": "France",
       "human": false,
@@ -167,43 +342,168 @@
       "number": "sg",
       "qid": "Q142"
     },
+    "juktorajyo": {
+      "lemma": "যুক্তরাজ্য",
+      "lemma_translit": "juktorajyo",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q145"
+    },
+    "warshaw": {
+      "lemma": "ওয়ারশ",
+      "lemma_translit": "warshaw",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "paris": {
+      "lemma": "প্যারিস",
+      "lemma_translit": "paris",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q90"
+    },
     "bikkhato": {
+      "lemma": "বিখ্যাত",
+      "lemma_translit": "bikkhato",
       "pos": "ADJ",
       "gloss": "famous",
       "degree": "positive"
     },
     "howa": {
+      "lemma": "হওয়া",
+      "lemma_translit": "howa",
       "pos": "VERB",
       "gloss": "to be",
       "subcat": "copula",
       "lemma_type": "base",
       "irregular_forms": {
         "present_3sg": "",
-        "present_3pl": "",
-        "past_3sg": "chilo",
-        "past_3pl": "chilen",
-        "formal_past": "chilen"
+        "present_3sg_note": "Zero copula in present tense",
+        "past_3sg": "ছিল",
+        "past_3sg_translit": "chilo",
+        "future_3sg": "হবে",
+        "future_3sg_translit": "hobe"
       }
     },
     "jonmano": {
+      "lemma": "জন্মানো",
+      "lemma_translit": "jonmano",
       "pos": "VERB",
       "gloss": "to be born",
       "subcat": "intransitive",
-      "lemma_type": "base"
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg": "জন্মগ্রহণ করেছিলেন",
+        "past_3sg_translit": "jonmogrohon korechilen"
+      }
     },
     "mara_jawa": {
+      "lemma": "মারা যাওয়া",
+      "lemma_translit": "mara jawa",
       "pos": "VERB",
       "gloss": "to die",
       "subcat": "intransitive",
-      "lemma_type": "base"
+      "lemma_type": "base",
+      "multiword": true
+    },
+    "gobeshona_kora": {
+      "lemma": "গবেষণা করা",
+      "lemma_translit": "gobeshona kora",
+      "pos": "VERB",
+      "gloss": "to research",
+      "subcat": "transitive",
+      "lemma_type": "multiword",
+      "semantic_field": "science_meta"
+    },
+    "prokash_kora": {
+      "lemma": "প্রকাশ করা",
+      "lemma_translit": "prokash kora",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "lemma_type": "multiword",
+      "semantic_field": "science_meta"
+    },
+    "joy_kora": {
+      "lemma": "জয় করা",
+      "lemma_translit": "joy kora",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "lemma_type": "multiword",
+      "semantic_field": "awards"
+    },
+    "pronoun_he_she_informal": {
+      "lemma": "সে",
+      "lemma_translit": "se",
+      "pos": "PRON",
+      "gloss": "he/she (informal)",
+      "person": "3",
+      "number": "sg"
+    },
+    "pronoun_he_she_formal": {
+      "lemma": "তিনি",
+      "lemma_translit": "tini",
+      "pos": "PRON",
+      "gloss": "he/she (formal)",
+      "person": "3",
+      "number": "sg"
+    },
+    "pronoun_they": {
+      "lemma": "তারা",
+      "lemma_translit": "tara",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl"
+    },
+    "conj_and": {
+      "lemma": "এবং",
+      "lemma_translit": "ebong",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "কিন্তু",
+      "lemma_translit": "kintu",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
     },
     "bochor": {
+      "lemma": "বছর",
+      "lemma_translit": "bochor",
       "pos": "NOUN",
       "gloss": "year",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "bochor"
+      "plural_lemma": "বছরগুলো",
+      "plural_translit": "bochorgulo"
+    },
+    "punctuation_period": {
+      "lemma": "।",
+      "pos": "PUNCT",
+      "gloss": "dari (period)"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
     }
   }
 }

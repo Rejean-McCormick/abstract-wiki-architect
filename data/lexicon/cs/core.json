@@ -2,10 +2,14 @@
   "_meta": {
     "language": "cs",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:05:00Z",
+    "note": "Maximal Schema: Includes scientific extensions, gender pairs, and functional grammar."
   },
   "entries": {
-    "clovek": {
+    "person": {
+      "lemma": "člověk",
       "pos": "NOUN",
       "gloss": "human, person",
       "human": true,
@@ -13,7 +17,8 @@
       "number": "sg",
       "plural_lemma": "lidé"
     },
-    "muz": {
+    "man": {
+      "lemma": "muž",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
@@ -21,7 +26,8 @@
       "number": "sg",
       "plural_lemma": "muži"
     },
-    "zena": {
+    "woman": {
+      "lemma": "žena",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
@@ -29,16 +35,18 @@
       "number": "sg",
       "plural_lemma": "ženy"
     },
-    "vedec": {
+    "scientist": {
+      "lemma": "vědec",
       "pos": "NOUN",
-      "gloss": "scientist",
+      "gloss": "scientist (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
       "feminine_lemma": "vědkyně",
       "plural_lemma": "vědci"
     },
-    "vedkyne": {
+    "scientist_fem": {
+      "lemma": "vědkyně",
       "pos": "NOUN",
       "gloss": "scientist (fem.)",
       "human": true,
@@ -47,7 +55,8 @@
       "masculine_lemma": "vědec",
       "plural_lemma": "vědkyně"
     },
-    "fyzik": {
+    "physicist": {
+      "lemma": "fyzik",
       "pos": "NOUN",
       "gloss": "physicist (masc.)",
       "human": true,
@@ -56,16 +65,8 @@
       "feminine_lemma": "fyzička",
       "plural_lemma": "fyzici"
     },
-    "fyzicka": {
-      "pos": "NOUN",
-      "gloss": "physicist (fem.)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "fyzik",
-      "plural_lemma": "fyzičky"
-    },
-    "spisovatel": {
+    "writer": {
+      "lemma": "spisovatel",
       "pos": "NOUN",
       "gloss": "writer (masc.)",
       "human": true,
@@ -74,24 +75,28 @@
       "feminine_lemma": "spisovatelka",
       "plural_lemma": "spisovatelé"
     },
-    "spisovatelka": {
+    "author": {
+      "lemma": "autor",
       "pos": "NOUN",
-      "gloss": "writer (fem.)",
+      "gloss": "author (masc.)",
       "human": true,
-      "gender": "f",
+      "gender": "m",
       "number": "sg",
-      "masculine_lemma": "spisovatel",
-      "plural_lemma": "spisovatelky"
+      "feminine_lemma": "autorka",
+      "plural_lemma": "autoři"
     },
-    "politik": {
+    "politician": {
+      "lemma": "politik",
       "pos": "NOUN",
       "gloss": "politician",
       "human": true,
       "gender": "m",
       "number": "sg",
+      "feminine_lemma": "politička",
       "plural_lemma": "politici"
     },
-    "ucitel": {
+    "teacher": {
+      "lemma": "učitel",
       "pos": "NOUN",
       "gloss": "teacher (masc.)",
       "human": true,
@@ -100,16 +105,160 @@
       "feminine_lemma": "učitelka",
       "plural_lemma": "učitelé"
     },
-    "ucitelka": {
+    "statistician": {
+      "lemma": "statistik",
       "pos": "NOUN",
-      "gloss": "teacher (fem.)",
+      "gloss": "statistician",
       "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "statistička",
+      "plural_lemma": "statistici",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "informatik",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "informatička",
+      "plural_lemma": "informatici",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "astronom",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "astronomka",
+      "plural_lemma": "astronomové",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "geolog",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "geoložka",
+      "plural_lemma": "geologové",
+      "semantic_field": "geology"
+    },
+    "climate_scientist": {
+      "lemma": "klimatolog",
+      "pos": "NOUN",
+      "gloss": "climate scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "klimatoložka",
+      "plural_lemma": "klimatologové",
+      "semantic_field": "climatology"
+    },
+    "neuroscientist": {
+      "lemma": "neurovědec",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "neurovědkyně",
+      "plural_lemma": "neurovědci",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize": {
+      "lemma": "Nobelova cena",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "učitel",
-      "plural_lemma": "učitelky"
+      "multiword": true,
+      "semantic_field": "awards"
     },
-    "zeme": {
+    "statistics": {
+      "lemma": "statistika",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "astronomie",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "geologie",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "neurověda",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "semantic_field": "neuroscience"
+    },
+    "research": {
+      "lemma": "výzkum",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "experiment",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "experimenty",
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "lemma": "vědecká teorie",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "field_of_research": {
+      "lemma": "vědní obor",
+      "pos": "NOUN",
+      "gloss": "field of research",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "country": {
+      "lemma": "země",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
@@ -117,7 +266,8 @@
       "number": "sg",
       "plural_lemma": "země"
     },
-    "mesto": {
+    "city": {
+      "lemma": "město",
       "pos": "NOUN",
       "gloss": "city",
       "human": false,
@@ -125,7 +275,17 @@
       "number": "sg",
       "plural_lemma": "města"
     },
-    "cesko": {
+    "year": {
+      "lemma": "rok",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "roky"
+    },
+    "Czechia": {
+      "lemma": "Česko",
       "pos": "NOUN",
       "gloss": "Czechia",
       "human": false,
@@ -134,7 +294,8 @@
       "number": "sg",
       "qid": "Q213"
     },
-    "polsko": {
+    "Poland": {
+      "lemma": "Polsko",
       "pos": "NOUN",
       "gloss": "Poland",
       "human": false,
@@ -143,7 +304,8 @@
       "number": "sg",
       "qid": "Q36"
     },
-    "francie": {
+    "France": {
+      "lemma": "Francie",
       "pos": "NOUN",
       "gloss": "France",
       "human": false,
@@ -152,7 +314,8 @@
       "number": "sg",
       "qid": "Q142"
     },
-    "nemecko": {
+    "Germany": {
+      "lemma": "Německo",
       "pos": "NOUN",
       "gloss": "Germany",
       "human": false,
@@ -161,7 +324,18 @@
       "number": "sg",
       "qid": "Q183"
     },
-    "praha": {
+    "United Kingdom": {
+      "lemma": "Spojené království",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q145"
+    },
+    "Prague": {
+      "lemma": "Praha",
       "pos": "NOUN",
       "gloss": "Prague",
       "human": false,
@@ -170,7 +344,8 @@
       "number": "sg",
       "qid": "Q1085"
     },
-    "varsava": {
+    "Warsaw": {
+      "lemma": "Varšava",
       "pos": "NOUN",
       "gloss": "Warsaw",
       "human": false,
@@ -179,7 +354,8 @@
       "number": "sg",
       "qid": "Q270"
     },
-    "pariz": {
+    "Paris": {
+      "lemma": "Paříž",
       "pos": "NOUN",
       "gloss": "Paris",
       "human": false,
@@ -188,23 +364,67 @@
       "number": "sg",
       "qid": "Q90"
     },
-    "znamy": {
+    "famous": {
+      "lemma": "známý",
       "pos": "ADJ",
-      "gloss": "famous, known (masc.)",
+      "gloss": "famous, known",
       "degree": "positive",
-      "gender": "m",
-      "number": "sg",
-      "feminine_lemma": "známá"
+      "forms": {
+        "m_sg": "známý",
+        "f_sg": "známá",
+        "n_sg": "známé",
+        "m_pl": "známí",
+        "f_pl": "známé",
+        "n_pl": "známá"
+      }
     },
-    "znama": {
+    "notable": {
+      "lemma": "významný",
       "pos": "ADJ",
-      "gloss": "famous, known (fem.)",
+      "gloss": "notable, significant",
       "degree": "positive",
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "známý"
+      "forms": {
+        "m_sg": "významný",
+        "f_sg": "významná",
+        "n_sg": "významné"
+      }
     },
-    "byt": {
+    "scientific": {
+      "lemma": "vědecký",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "vědecký",
+        "f_sg": "vědecká",
+        "n_sg": "vědecké"
+      },
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "teoretický",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "teoretický",
+        "f_sg": "teoretická"
+      },
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "experimentální",
+      "pos": "ADJ",
+      "gloss": "experimental",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "experimentální",
+        "f_sg": "experimentální"
+      },
+      "semantic_field": "science_meta"
+    },
+    "be": {
+      "lemma": "být",
       "pos": "VERB",
       "gloss": "to be",
       "subcat": "copula",
@@ -214,10 +434,16 @@
         "past_f": "byla",
         "past_n": "bylo",
         "past_pl": "byli",
-        "present_3sg": "je"
+        "present_1sg": "jsem",
+        "present_2sg": "jsi",
+        "present_3sg": "je",
+        "present_1pl": "jsme",
+        "present_2pl": "jste",
+        "present_3pl": "jsou"
       }
     },
-    "narodit_se": {
+    "be_born": {
+      "lemma": "narodit se",
       "pos": "VERB",
       "gloss": "to be born",
       "subcat": "intransitive",
@@ -227,7 +453,8 @@
         "past_f": "narodila se"
       }
     },
-    "zemrit": {
+    "die": {
+      "lemma": "zemřít",
       "pos": "VERB",
       "gloss": "to die",
       "subcat": "intransitive",
@@ -237,13 +464,112 @@
         "past_f": "zemřela"
       }
     },
-    "rok": {
-      "pos": "NOUN",
-      "gloss": "year",
-      "human": false,
-      "gender": "m",
+    "discover": {
+      "lemma": "objevit",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "win": {
+      "lemma": "vyhrát",
+      "pos": "VERB",
+      "gloss": "to win/gain (a prize)",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_m": "vyhrál",
+        "past_f": "vyhrála"
+      },
+      "semantic_field": "awards"
+    },
+    "publish": {
+      "lemma": "publikovat",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "research_verb": {
+      "lemma": "zkoumat",
+      "pos": "VERB",
+      "gloss": "to research/investigate",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "pronoun_he": {
+      "lemma": "on",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
       "number": "sg",
-      "plural_lemma": "roky"
+      "gender": "m",
+      "case": "nom"
+    },
+    "pronoun_she": {
+      "lemma": "ona",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom"
+    },
+    "pronoun_they": {
+      "lemma": "oni",
+      "pos": "PRON",
+      "gloss": "they (masc. animate)",
+      "person": "3",
+      "number": "pl",
+      "gender": "m",
+      "case": "nom"
+    },
+    "conj_and": {
+      "lemma": "a",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "ale",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "nebo",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "v",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Takes locative case (v Praze)."
+    },
+    "prep_with": {
+      "lemma": "s",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental",
+      "note": "Takes instrumental case (s bratrem)."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
     }
   }
 }

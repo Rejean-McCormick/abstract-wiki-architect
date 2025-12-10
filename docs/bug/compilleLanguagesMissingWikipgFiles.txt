@@ -1,0 +1,70 @@
+Here is the extensive documentation of the current situation, the environment, the scripts created, and the intended architecture.
+
+### 1. The Environment
+* **Host OS:** Windows 10/11 (accessing files via PowerShell/Explorer).
+* **Build Environment:** WSL 2 (Ubuntu) running inside the Windows host.
+* **Project Root:** `/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect` (Linux path) which maps to `C:\MyCode\AbstractWiki\abstract-wiki-architect` (Windows path).
+* **Python Environment:** A virtual environment located at `linux_env/` inside the project root.
+
+### 2. The Core Problem
+The project attempts to compile a multilingual grammar (`Wiki.pgf`) for ~50 languages using the Grammatical Framework (GF). The build fails due to a combination of factors:
+1.  **Missing RGL Modules:** Many languages (Chinese, Afrikaans, Arabic, etc.) are "partial" implementations in the standard Resource Grammar Library (RGL). They lack the full `Dictionary` or `Symbolic` modules required by the `Wiki*.gf` templates.
+2.  **Cross-OS Permissions:** WSL often loses "Write" permissions to the Windows drive, causing scripts (like `forge_library.py`) to crash when trying to generate missing files.
+3.  **Zombie Files:** Automation scripts have been restoring disabled (`.SKIP`) files without fixing their underlying code errors (broken imports), causing the compiler to hit the same "constant not found" errors repeatedly.
+4.  **Incomplete Dictionaries:** The `Wiki` grammar expects specific words (e.g., `lex_animal_N`), but the RGL dictionaries for many languages do not contain these words.
+
+### 3. The Architecture & Directory Structure
+
+| Directory/File | Description |
+| :--- | :--- |
+| **`gf/`** | **The Source Code.** Contains `Wiki.gf` (Abstract) and `WikiEng.gf`, `WikiFra.gf`, etc. (Concrete Grammars). This is where the compilation happens. |
+| **`gf-rgl/`** | **The Library.** A local copy of the GF Resource Grammar Library. Contains the linguistic rules for all languages. |
+| **`gf-rgl/src/api/`** | Contains key RGL files like `Syntax.gf`, `SyntaxEng.gf`, etc. |
+| **`gf-rgl/src/[lang]/`** | Contains language-specific implementations (e.g., `src/french/`). |
+| **`linux_env/`** | The Python virtual environment containing the `pgf` library. |
+| **`data/[family]/`** | **The Output.** Where the JSON configuration files (e.g., `data/romance/fra.json`) are stored after a successful sync. |
+
+### 4. The Scripts Inventory
+
+We have created several utility scripts to automate the fix. Here is what each one does:
+
+#### A. `forge_library_fixed.py` (The Creator)
+* **Purpose:** To ensure every language has a `DictXYZ.gf` and `SymbolicXYZ.gf` file, even if the RGL didn't provide one.
+* **Mechanism:** It scans for missing files and creates them. Crucially, it hardcodes a list of required English words (`lex_animal_N`, etc.) and fills the new dictionaries with English stubs (`mkN "animal"`) so the compiler doesn't crash on "unknown constant".
+* **Current Status:** It works, but often fails in Linux due to permission errors. It runs successfully in Windows PowerShell.
+
+#### B. `unlock_languages.py` (The Cleaner)
+* **Purpose:** To fix the `Wiki*.gf` source code imports.
+* **Mechanism:** It reads `Wiki*.gf` files (like `WikiAfr.gf`), checks the `open ... in` line, and removes modules that don't actually exist on disk (e.g., removing `ParadigmsAfr` if only `SyntaxAfr` exists).
+* **Current Status:** Essential for cleaning up "Zombie" files restored by the forge script. Must be run to prevent import errors.
+
+#### C. `compile_loop.py` (The Builder)
+* **Purpose:** To compile `Wiki.pgf` iteratively.
+* **Mechanism:** It runs `gf -make ...`, captures the error output, identifies which language caused the crash, renames that file to `.SKIP`, and tries again. It repeats this until the build passes.
+* **Current Status:** Currently failing because it sometimes restores broken files or fails to identify the specific file causing a "shared dependency" error (like `CatRomance`).
+
+#### D. `check_and_compile.py` (The Old Builder)
+* **Purpose:** An earlier version of the builder logic.
+* **Status:** Largely superseded by `compile_loop.py`, but contains logic for resolving API vs. Language folder paths.
+
+#### E. `sync_config_from_gf.py` (The Deployer)
+* **Purpose:** To take the compiled `Wiki.pgf` and generate the JSON configuration files needed for the frontend/backend application.
+* **Mechanism:** It uses the Python `pgf` library to read the compiled grammar and export linguistic data to `data/`.
+* **Status:** Works perfectly, *provided* `Wiki.pgf` exists.
+
+### 5. The Intended Workflow
+
+To achieve a working system, the operations must occur in this specific order to respect OS boundaries and logical dependencies:
+
+1.  **Windows Side (PowerShell):**
+    * **Unlock:** Run `unlock_languages.py` to strip bad imports from the source code.
+    * **Forge:** Run `forge_library_fixed.py` to create the missing dictionary files (filling them with English placeholders).
+    * **Permissions:** Run `attrib -r ...` to ensure Linux can read/write these files.
+
+2.  **Linux Side (WSL):**
+    * **Compile:** Run `gf -make ...` (or the loop script) to compile the source code + forged dictionaries into `Wiki.pgf`.
+    * **Sync:** Run `sync_config_from_gf.py` to extract the data for the app.
+
+3.  **Future Step (AI Refinement):**
+    * Run `populate_dictionaries.py` (to be created) to replace the English placeholders in `Dict*.gf` with real translations via Gemini API.
+    * Recompile.

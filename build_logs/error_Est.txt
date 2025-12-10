@@ -1,0 +1,14 @@
+Command: gf -make -path ... WikiEst.gf
+
+[34m
+WikiEst.gf:
+   WikiEst.gf:5:
+     Happened in linearization of SimpNP
+      Warning: ignoring lock fields in resolving mkNP cn
+               for
+                 {s : NForm => Str; postmod : Str}
+               using
+                 CN[39;49m
+gf: unknown identifier AdNum
+CallStack (from HasCallStack):
+  error, called at src/compiler/GF/Compile/GrammarToPGF.hs:220:32 in gf-3.12.0-TSf8Z0619pItfvHUq0gSQ:GF.Compile.GrammarToPGF

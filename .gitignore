@@ -1,4 +1,4 @@
-# ---------------------------------
+﻿# ---------------------------------
 # Python build / runtime artefacts
 # ---------------------------------
 __pycache__/
@@ -10,6 +10,7 @@ __pycache__/
 venv/
 env/
 .env/
+linux_env/     # Added this to fix the "Function not implemented" error
 
 # Packaging
 build/
@@ -51,6 +52,7 @@ qa/generated_datasets/
 
 # Logs
 *.log
+build_logs/    # Added based on your warnings
 
 # OS-specific
 .DS_Store
@@ -64,6 +66,7 @@ node_modules/
 
 # Next.js / React build output
 .next/
+**/architect_frontend/.next/  # Explicitly targeting your frontend folder just in case
 out/
 .next/cache/
 

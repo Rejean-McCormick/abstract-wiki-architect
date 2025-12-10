@@ -2,13 +2,131 @@
   "_meta": {
     "language": "ca",
     "domain": "core",
-    "version": 2,
-    "source": "Manual Entry (Standard V2)",
-    "generated_at": "2025-12-09T20:45:00Z",
-    "note": "Maximal Schema: Includes glosses, explicit subcategories, and secondary copula."
+    "version": 3,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:00:00Z",
+    "note": "Includes scientific domain extensions, irregular verbs, and full functional grammar."
   },
   "entries": {
-    "copula": {
+    "person": {
+      "lemma": "persona",
+      "pos": "NOUN",
+      "gloss": "person, human",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "persones"
+    },
+    "man": {
+      "lemma": "home",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "homes"
+    },
+    "woman": {
+      "lemma": "dona",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "dones"
+    },
+    "scientist": {
+      "lemma": "científic",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "científics",
+      "forms": {
+        "f_sg": "científica",
+        "f_pl": "científiques"
+      }
+    },
+    "writer": {
+      "lemma": "escriptor",
+      "pos": "NOUN",
+      "gloss": "writer, author",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "escriptors",
+      "forms": {
+        "f_sg": "escriptora",
+        "f_pl": "escriptores"
+      }
+    },
+    "author": {
+      "lemma": "autor",
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "autors",
+      "forms": {
+        "f_sg": "autora",
+        "f_pl": "autores"
+      }
+    },
+    "professor": {
+      "lemma": "professor",
+      "pos": "NOUN",
+      "gloss": "professor",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "professors",
+      "forms": {
+        "f_sg": "professora",
+        "f_pl": "professores"
+      }
+    },
+    "nobel_prize": {
+      "lemma": "Premi Nobel",
+      "pos": "NOUN",
+      "gloss": "a major international prize awarded in several fields",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "count",
+      "semantic_field": "awards"
+    },
+    "famous": {
+      "lemma": "famós",
+      "pos": "ADJ",
+      "gloss": "famous, well-known",
+      "degree": "positive",
+      "forms": {
+        "f_sg": "famosa",
+        "m_pl": "famosos",
+        "f_pl": "famoses"
+      }
+    },
+    "notable": {
+      "lemma": "notable",
+      "pos": "ADJ",
+      "gloss": "notable, worthy of note",
+      "degree": "positive",
+      "forms": {
+        "pl": "notables"
+      }
+    },
+    "great": {
+      "lemma": "gran",
+      "pos": "ADJ",
+      "gloss": "great, important",
+      "degree": "positive",
+      "forms": {
+        "pl": "grans"
+      }
+    },
+    "be": {
       "lemma": "ser",
       "pos": "VERB",
       "gloss": "to be (permanent)",
@@ -22,11 +140,12 @@
         "present_2pl": "sou",
         "present_3pl": "són",
         "past_imperfect_3sg": "era",
-        "past_imperfect_3pl": "eren"
+        "past_imperfect_3pl": "eren",
+        "past_participle": "sigut"
       },
       "note": "Used for identity, definition, and origin."
     },
-    "copula_locative": {
+    "be_locative": {
       "lemma": "estar",
       "pos": "VERB",
       "gloss": "to be (temporary/locative)",
@@ -42,6 +161,369 @@
         "past_imperfect_3sg": "estava"
       },
       "note": "Used for location and temporary states."
+    },
+    "be_born": {
+      "lemma": "néixer",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_participle": "nascut",
+        "present_3sg": "neix"
+      }
+    },
+    "die": {
+      "lemma": "morir",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "regular": true,
+      "irregular_forms": {
+          "past_participle": "mort"
+      }
+    },
+    "discover": {
+      "lemma": "descobrir",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+          "past_participle": "descobert"
+      }
+    },
+    "win": {
+      "lemma": "guanyar",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "receive": {
+      "lemma": "rebre",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "year": {
+      "lemma": "any",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "anys"
+    },
+    "city": {
+      "lemma": "ciutat",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "ciutats"
+    },
+    "country": {
+      "lemma": "país",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "països"
+    },
+    "politician": {
+      "lemma": "polític",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "polítics",
+       "forms": {
+        "f_sg": "política",
+        "f_pl": "polítiques"
+      }
+    },
+    "Poland": {
+      "lemma": "Polònia",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "lemma": "França",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "United Kingdom": {
+      "lemma": "Regne Unit",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "lemma": "Varsòvia",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "lemma": "París",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "important": {
+      "lemma": "important",
+      "pos": "ADJ",
+      "gloss": "important, major",
+      "degree": "positive",
+      "forms": {
+          "pl": "importants"
+      }
+    },
+    "date": {
+      "lemma": "data",
+      "pos": "NOUN",
+      "gloss": "date (calendar)",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "dates"
+    },
+    "statistician": {
+      "lemma": "estadístic",
+      "pos": "NOUN",
+      "gloss": "a scientist who works in statistics",
+      "human": true,
+      "number": "count",
+      "gender": "m",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "informàtic",
+      "pos": "NOUN",
+      "gloss": "a scientist who studies computer science",
+      "human": true,
+      "number": "count",
+      "gender": "m",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "astrònom",
+      "pos": "NOUN",
+      "gloss": "a scientist who studies celestial objects",
+      "human": true,
+      "number": "count",
+      "gender": "m",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "geòleg",
+      "pos": "NOUN",
+      "gloss": "a scientist who studies the Earth",
+      "human": true,
+      "number": "count",
+      "gender": "m",
+      "semantic_field": "geology"
+    },
+    "climate_scientist": {
+      "lemma": "climatòleg",
+      "pos": "NOUN",
+      "gloss": "a scientist who studies climate",
+      "human": true,
+      "number": "count",
+      "gender": "m",
+      "semantic_field": "climatology"
+    },
+    "neuroscientist": {
+      "lemma": "neurocientífic",
+      "pos": "NOUN",
+      "gloss": "a scientist who studies the nervous system",
+      "human": true,
+      "number": "count",
+      "gender": "m",
+      "semantic_field": "neuroscience"
+    },
+    "statistics": {
+      "lemma": "estadística",
+      "pos": "NOUN",
+      "gloss": "the study of data and uncertainty",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "astronomia",
+      "pos": "NOUN",
+      "gloss": "the study of celestial objects and space",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "geologia",
+      "pos": "NOUN",
+      "gloss": "the study of the Earth and its structure",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "neurociència",
+      "pos": "NOUN",
+      "gloss": "the study of the nervous system",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize_in_physiology_or_medicine": {
+      "lemma": "Premi Nobel de Fisiologia o Medicina",
+      "pos": "NOUN",
+      "gloss": "a Nobel Prize awarded for achievements in physiology or medicine",
+      "human": false,
+      "proper": true,
+      "multiword": true,
+      "number": "count",
+      "gender": "m",
+      "semantic_field": "awards"
+    },
+    "field_of_research": {
+      "lemma": "camp de recerca",
+      "pos": "NOUN",
+      "gloss": "a specific area within science or scholarship",
+      "human": false,
+      "number": "count",
+      "multiword": true,
+      "gender": "m",
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "lemma": "teoria científica",
+      "pos": "NOUN",
+      "gloss": "an explanatory framework in science",
+      "human": false,
+      "number": "count",
+      "multiword": true,
+      "gender": "f",
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "lemma": "article científic",
+      "pos": "NOUN",
+      "gloss": "a written report of research results",
+      "human": false,
+      "number": "count",
+      "multiword": true,
+      "gender": "m",
+      "semantic_field": "science_meta"
+    },
+    "research": {
+      "lemma": "recerca",
+      "pos": "NOUN",
+      "gloss": "systematic investigation to establish facts",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "experiment",
+      "pos": "NOUN",
+      "gloss": "a test carried out under controlled conditions",
+      "human": false,
+      "number": "count",
+      "gender": "m",
+      "semantic_field": "science_meta"
+    },
+    "to_research": {
+      "lemma": "investigar",
+      "pos": "VERB",
+      "gloss": "to carry out research",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "to_experiment": {
+      "lemma": "experimentar",
+      "pos": "VERB",
+      "gloss": "to perform experiments",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "to_publish": {
+      "lemma": "publicar",
+      "pos": "VERB",
+      "gloss": "to make research publicly available",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "scientific": {
+      "lemma": "científic",
+      "pos": "ADJ",
+      "gloss": "relating to science",
+      "degree": "positive",
+      "forms": {
+          "f_sg": "científica",
+          "m_pl": "científics",
+          "f_pl": "científiques"
+      },
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "experimental",
+      "pos": "ADJ",
+      "gloss": "based on experiments",
+      "degree": "positive",
+      "forms": {
+          "pl": "experimentals"
+      },
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "teòric",
+      "pos": "ADJ",
+      "gloss": "based on theory",
+      "degree": "positive",
+      "forms": {
+          "f_sg": "teòrica",
+          "m_pl": "teòrics",
+          "f_pl": "teòriques"
+      },
+      "semantic_field": "science_meta"
     },
     "det_definite": {
       "lemma": "el",

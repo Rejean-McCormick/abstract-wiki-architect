@@ -1,4 +1,4 @@
-concrete WikiSpa of AbstractWiki = WikiI ** open SyntaxSpa, ParadigmsSpa, SymbolicSpa in {
+concrete WikiSpa of AbstractWiki = WikiI ** open SyntaxSpa, SymbolicSpa, DictSpa, Prelude in {
   lin
     lex_animal_N = mkNP (mkN "animal");
     lex_walk_V = mkVP (mkV "walk");

@@ -2,12 +2,401 @@
   "_meta": {
     "language": "de",
     "domain": "core",
-    "version": 2,
-    "source": "Manual Entry (Standard V2)",
-    "generated_at": "2025-12-09T21:00:00Z",
-    "note": "Maximal Schema: Includes full case system (Nom, Acc, Dat, Gen) for determiners and pronouns."
+    "version": 3,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:35:00Z",
+    "note": "Maximal Schema: Includes full case system, gendered professions, and strong verb markers."
   },
   "entries": {
+    "person": {
+      "lemma": "Person",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "Personen"
+    },
+    "man": {
+      "lemma": "Mann",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "Männer"
+    },
+    "woman": {
+      "lemma": "Frau",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "Frauen"
+    },
+    "scientist": {
+      "lemma": "Wissenschaftler",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Wissenschaftlerin",
+      "plural_lemma": "Wissenschaftler"
+    },
+    "physicist": {
+      "lemma": "Physiker",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Physikerin",
+      "plural_lemma": "Physiker"
+    },
+    "chemist": {
+      "lemma": "Chemiker",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Chemikerin",
+      "plural_lemma": "Chemiker"
+    },
+    "writer": {
+      "lemma": "Schriftsteller",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Schriftstellerin",
+      "plural_lemma": "Schriftsteller"
+    },
+    "author": {
+      "lemma": "Autor",
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Autorin",
+      "plural_lemma": "Autoren"
+    },
+    "politician": {
+      "lemma": "Politiker",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Politikerin",
+      "plural_lemma": "Politiker"
+    },
+    "teacher": {
+      "lemma": "Lehrer",
+      "pos": "NOUN",
+      "gloss": "teacher",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Lehrerin",
+      "plural_lemma": "Lehrer"
+    },
+    "statistician": {
+      "lemma": "Statistiker",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Statistikerin",
+      "plural_lemma": "Statistiker",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "Informatiker",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Informatikerin",
+      "plural_lemma": "Informatiker",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "Astronom",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Astronomin",
+      "plural_lemma": "Astronomen",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "Geologe",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Geologin",
+      "plural_lemma": "Geologen",
+      "semantic_field": "geology"
+    },
+    "climate_scientist": {
+      "lemma": "Klimaforscher",
+      "pos": "NOUN",
+      "gloss": "climate scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Klimaforscherin",
+      "plural_lemma": "Klimaforscher",
+      "semantic_field": "climatology"
+    },
+    "neuroscientist": {
+      "lemma": "Neurowissenschaftler",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "Neurowissenschaftlerin",
+      "plural_lemma": "Neurowissenschaftler",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize": {
+      "lemma": "Nobelpreis",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "Nobelpreise",
+      "semantic_field": "awards"
+    },
+    "statistics": {
+      "lemma": "Statistik",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "Astronomie",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "Geologie",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "Neurowissenschaft",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "neuroscience"
+    },
+    "research": {
+      "lemma": "Forschung",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "Experiment",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "Experimente",
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "lemma": "wissenschaftlicher Artikel",
+      "pos": "NOUN",
+      "gloss": "scientific paper",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "lemma": "wissenschaftliche Theorie",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "field_of_research": {
+      "lemma": "Forschungsgebiet",
+      "pos": "NOUN",
+      "gloss": "field of research",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "Forschungsgebiete",
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "Jahr",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "Jahre"
+    },
+    "country": {
+      "lemma": "Land",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "Länder"
+    },
+    "city": {
+      "lemma": "Stadt",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "Städte"
+    },
+    "date": {
+      "lemma": "Datum",
+      "pos": "NOUN",
+      "gloss": "date",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "Daten"
+    },
+    "Poland": {
+      "lemma": "Polen",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "lemma": "Frankreich",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "Germany": {
+      "lemma": "Deutschland",
+      "pos": "NOUN",
+      "gloss": "Germany",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q183"
+    },
+    "United Kingdom": {
+      "lemma": "Vereinigtes Königreich",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "multiword": true,
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "lemma": "Warschau",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "lemma": "Paris",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "famous": {
+      "lemma": "berühmt",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive"
+    },
+    "important": {
+      "lemma": "wichtig",
+      "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive"
+    },
+    "scientific": {
+      "lemma": "wissenschaftlich",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "theoretisch",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "experimentell",
+      "pos": "ADJ",
+      "gloss": "experimental",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
     "copula": {
       "lemma": "sein",
       "pos": "VERB",
@@ -27,6 +416,86 @@
         "perfect_participle": "gewesen"
       },
       "note": "Highly irregular. Auxiliary 'sein' is used for perfect tense of movement/state change."
+    },
+    "be_born": {
+      "lemma": "geboren werden",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "multiword",
+      "irregular_forms": {
+        "past_3sg": "wurde geboren",
+        "perfect_3sg": "ist geboren"
+      }
+    },
+    "die": {
+      "lemma": "sterben",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg": "starb",
+        "perfect_participle": "gestorben"
+      },
+      "auxiliary": "sein"
+    },
+    "discover": {
+      "lemma": "entdecken",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true,
+      "auxiliary": "haben"
+    },
+    "win": {
+      "lemma": "gewinnen",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "irregular_forms": {
+        "past_3sg": "gewann",
+        "perfect_participle": "gewonnen"
+      },
+      "auxiliary": "haben"
+    },
+    "receive": {
+      "lemma": "erhalten",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "irregular_forms": {
+        "past_3sg": "erhielt",
+        "perfect_participle": "erhalten"
+      },
+      "auxiliary": "haben"
+    },
+    "publish": {
+      "lemma": "veröffentlichen",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "regular": true,
+      "auxiliary": "haben",
+      "semantic_field": "science_meta"
+    },
+    "research_verb": {
+      "lemma": "forschen",
+      "pos": "VERB",
+      "gloss": "to research",
+      "subcat": "intransitive",
+      "regular": true,
+      "auxiliary": "haben",
+      "semantic_field": "science_meta"
+    },
+    "experiment_verb": {
+      "lemma": "experimentieren",
+      "pos": "VERB",
+      "gloss": "to experiment",
+      "subcat": "intransitive",
+      "regular": true,
+      "auxiliary": "haben",
+      "semantic_field": "science_meta"
     },
     "det_definite": {
       "lemma": "der",
@@ -104,21 +573,6 @@
         "genitive": "ihrer"
       }
     },
-    "pronoun_it": {
-      "lemma": "es",
-      "pos": "PRON",
-      "gloss": "it",
-      "person": "3",
-      "number": "sg",
-      "gender": "n",
-      "case": "nom",
-      "forms": {
-        "nominative": "es",
-        "accusative": "es",
-        "dative": "ihm",
-        "genitive": "seiner"
-      }
-    },
     "pronoun_they": {
       "lemma": "sie",
       "pos": "PRON",
@@ -132,8 +586,7 @@
         "accusative": "sie",
         "dative": "ihnen",
         "genitive": "ihrer"
-      },
-      "note": "Capitalized 'Sie' is formal 'You', lower case 'sie' is 'they' or 'she'."
+      }
     },
     "conj_and": {
       "lemma": "und",
@@ -158,7 +611,7 @@
       "pos": "PREP",
       "gloss": "in",
       "subcat": "locative",
-      "note": "Takes Dative for location (im Haus), Accusative for motion (ins Haus). Contractions: in+dem=im."
+      "note": "Takes Dative for location (im Haus), Accusative for motion (ins Haus)."
     },
     "prep_from": {
       "lemma": "aus",
@@ -172,7 +625,7 @@
       "pos": "PREP",
       "gloss": "of/from/by",
       "subcat": "genitive_substitute",
-      "note": "Always takes Dative. Often replaces Genitive. Contractions: von+dem=vom."
+      "note": "Always takes Dative."
     },
     "prep_with": {
       "lemma": "mit",

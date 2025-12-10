@@ -2,7 +2,498 @@
   "_meta": {
     "language": "cy",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:30:00Z",
+    "note": "Maximal Schema: Includes mutations notes, variable definite articles, and auxiliary verb constructions."
   },
-  "entries": {}
+  "entries": {
+    "person": {
+      "lemma": "person",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "personau"
+    },
+    "man": {
+      "lemma": "dyn",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "dynion"
+    },
+    "woman": {
+      "lemma": "menyw",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "menywod",
+      "note": "Northern dialect: 'gwraig'."
+    },
+    "scientist": {
+      "lemma": "gwyddonydd",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "gwyddonwyr"
+    },
+    "physicist": {
+      "lemma": "ffisegydd",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "ffisegwyr"
+    },
+    "chemist": {
+      "lemma": "cemegydd",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "cemegwyr"
+    },
+    "writer": {
+      "lemma": "ysgrifennwr",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "ysgrifenwyr"
+    },
+    "author": {
+      "lemma": "awdur",
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "awduron"
+    },
+    "politician": {
+      "lemma": "gwleidydd",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "gwleidyddion"
+    },
+    "teacher": {
+      "lemma": "athro",
+      "pos": "NOUN",
+      "gloss": "teacher (masc)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "athrawes",
+      "plural_lemma": "athrawon"
+    },
+    "statistician": {
+      "lemma": "ystadegoiydd",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "ystadegwyr",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "gwyddonydd cyfrifiadurol",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "multiword": true,
+      "plural_lemma": "gwyddonwyr cyfrifiadurol",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "seryddwr",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "seryddwyr",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "daearegwr",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "daearegwyr",
+      "semantic_field": "geology"
+    },
+    "neuroscientist": {
+      "lemma": "niwrowyddonydd",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "niwrowyddonwyr",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize": {
+      "lemma": "Gwobr Nobel",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "plural_lemma": "Gwobrau Nobel",
+      "semantic_field": "awards"
+    },
+    "statistics": {
+      "lemma": "ystadegaeth",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "seryddiaeth",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "daeareg",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "niwrowyddoniaeth",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "neuroscience"
+    },
+    "research": {
+      "lemma": "ymchwil",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "m",
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "arbrawf",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "arbrofion",
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "lemma": "papur gwyddonol",
+      "pos": "NOUN",
+      "gloss": "scientific paper",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "papurau gwyddonol",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "blwyddyn",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "blynyddoedd"
+    },
+    "country": {
+      "lemma": "gwlad",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "gwledydd"
+    },
+    "city": {
+      "lemma": "dinas",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "dinasoedd"
+    },
+    "Poland": {
+      "lemma": "Gwlad Pwyl",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "lemma": "Ffrainc",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "note": "Requires mutation after 'i' (to) -> i Ffrainc.",
+      "qid": "Q142"
+    },
+    "United Kingdom": {
+      "lemma": "Y Deyrnas Unedig",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "lemma": "Warsaw",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "lemma": "Paris",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "famous": {
+      "lemma": "enwog",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive"
+    },
+    "important": {
+      "lemma": "pwysig",
+      "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive"
+    },
+    "scientific": {
+      "lemma": "gwyddonol",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "damcaniaethol",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "arbrofol",
+      "pos": "ADJ",
+      "gloss": "experimental",
+      "degree": "positive",
+      "semantic_field": "science_meta"
+    },
+    "copula": {
+      "lemma": "bod",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "dw i",
+        "present_3sg": "mae",
+        "imperfect_3sg": "roedd"
+      },
+      "note": "Highly irregular. Verb-initial word order (VSO)."
+    },
+    "be_born": {
+      "lemma": "geni",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "note": "Usually passive construction: 'cafodd ei eni' (he was born)."
+    },
+    "die": {
+      "lemma": "marw",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base"
+    },
+    "discover": {
+      "lemma": "darganfod",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "win": {
+      "lemma": "ennill",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "publish": {
+      "lemma": "cyhoeddi",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "research_verb": {
+      "lemma": "ymchwilio",
+      "pos": "VERB",
+      "gloss": "to research",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "det_definite": {
+      "lemma": "y",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "forms": {
+        "before_consonant": "y",
+        "before_vowel": "yr",
+        "after_vowel": "'r"
+      }
+    },
+    "det_indefinite": {
+      "lemma": null,
+      "pos": "DET",
+      "gloss": "none",
+      "subcat": "indefinite",
+      "note": "Welsh has no indefinite article."
+    },
+    "pronoun_he": {
+      "lemma": "fe",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "note": "Also 'e' or 'ef' depending on dialect/register."
+    },
+    "pronoun_she": {
+      "lemma": "hi",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f"
+    },
+    "pronoun_they": {
+      "lemma": "nhw",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "note": "Formal/Literary: 'hwy'."
+    },
+    "conj_and": {
+      "lemma": "a",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating",
+      "forms": {
+        "before_consonant": "a",
+        "before_vowel": "ac"
+      }
+    },
+    "conj_but": {
+      "lemma": "ond",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "neu",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "yn",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Can trigger nasal mutation for specific places."
+    },
+    "prep_from": {
+      "lemma": "o",
+      "pos": "PREP",
+      "gloss": "from/of",
+      "subcat": "source",
+      "note": "Triggers soft mutation."
+    },
+    "prep_with": {
+      "lemma": "gyda",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "comitative",
+      "note": "South Wales. North Wales often uses 'efo'."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
 }

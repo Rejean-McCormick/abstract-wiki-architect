@@ -1,0 +1,12 @@
+Command: gf -make -path ... WikiChi.gf
+
+[34m
+WikiChi.gf:
+   WikiChi.gf:5:
+     Happened in linearization of SimpNP
+      Warning: ambiguous overloading of mkNP resolved by selecting the first of the alternatives
+                 NounChi.MassNP
+                 \n -> NounChi.MassNP (NounChi.UseN n)[39;49m
+gf: unknown identifier AdNum
+CallStack (from HasCallStack):
+  error, called at src/compiler/GF/Compile/GrammarToPGF.hs:220:32 in gf-3.12.0-TSf8Z0619pItfvHUq0gSQ:GF.Compile.GrammarToPGF

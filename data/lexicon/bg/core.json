@@ -2,12 +2,415 @@
   "_meta": {
     "language": "bg",
     "domain": "core",
-    "version": 2,
-    "source": "Manual Entry (Standard V2)",
-    "generated_at": "2025-12-09T20:50:00Z",
+    "version": 3,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:20:00Z",
     "note": "Maximal Schema: Includes Cyrillic script, Latin transliteration, and phonetic preposition variants."
   },
   "entries": {
+    "person": {
+      "lemma": "човек",
+      "lemma_translit": "chovek",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "хора",
+      "plural_translit": "hora"
+    },
+    "man": {
+      "lemma": "мъж",
+      "lemma_translit": "muzh",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "мъже",
+      "plural_translit": "muzhe"
+    },
+    "woman": {
+      "lemma": "жена",
+      "lemma_translit": "zhena",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "жени",
+      "plural_translit": "zheni"
+    },
+    "scientist": {
+      "lemma": "учен",
+      "lemma_translit": "uchen",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "учени",
+      "plural_translit": "ucheni"
+    },
+    "physicist": {
+      "lemma": "физик",
+      "lemma_translit": "fizik",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "физици",
+      "plural_translit": "fizitsi"
+    },
+    "chemist": {
+      "lemma": "химик",
+      "lemma_translit": "himik",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "химици",
+      "plural_translit": "himitsi"
+    },
+    "writer": {
+      "lemma": "писател",
+      "lemma_translit": "pisatel",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "писатели",
+      "plural_translit": "pisateli"
+    },
+    "author": {
+      "lemma": "автор",
+      "lemma_translit": "avtor",
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "автори",
+      "plural_translit": "avtori"
+    },
+    "politician": {
+      "lemma": "политик",
+      "lemma_translit": "politik",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "политици",
+      "plural_translit": "polititsi"
+    },
+    "statistician": {
+      "lemma": "статистик",
+      "lemma_translit": "statistik",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "статистици",
+      "plural_translit": "statistitsi",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "информатик",
+      "lemma_translit": "informatik",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "информатици",
+      "plural_translit": "informatitsi",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "астроном",
+      "lemma_translit": "astronom",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "астрономи",
+      "plural_translit": "astronomi",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "геолог",
+      "lemma_translit": "geolog",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "геолози",
+      "plural_translit": "geolozi",
+      "semantic_field": "geology"
+    },
+    "neuroscientist": {
+      "lemma": "невроучен",
+      "lemma_translit": "nevrouchen",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "невроучени",
+      "plural_translit": "nevroucheni",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize": {
+      "lemma": "Нобелова награда",
+      "lemma_translit": "Nobelova nagrada",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "awards"
+    },
+    "statistics": {
+      "lemma": "статистика",
+      "lemma_translit": "statistika",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "астрономия",
+      "lemma_translit": "astronomiya",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "геология",
+      "lemma_translit": "geologiya",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "невронаука",
+      "lemma_translit": "nevronauka",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "number": "mass",
+      "gender": "f",
+      "semantic_field": "neuroscience"
+    },
+    "research": {
+      "lemma": "изследване",
+      "lemma_translit": "izsledvane",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "изследвания",
+      "plural_translit": "izsledvaniya",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "експеримент",
+      "lemma_translit": "eksperiment",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "експерименти",
+      "plural_translit": "eksperimenti",
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "lemma": "научна статия",
+      "lemma_translit": "nauchna statiya",
+      "pos": "NOUN",
+      "gloss": "scientific paper",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "година",
+      "lemma_translit": "godina",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "години",
+      "plural_translit": "godini"
+    },
+    "country": {
+      "lemma": "държава",
+      "lemma_translit": "durzhava",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "държави",
+      "plural_translit": "durzhavi"
+    },
+    "city": {
+      "lemma": "град",
+      "lemma_translit": "grad",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "градове",
+      "plural_translit": "gradove"
+    },
+    "Poland": {
+      "lemma": "Полша",
+      "lemma_translit": "Polsha",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "lemma": "Франция",
+      "lemma_translit": "Frantsiya",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "United Kingdom": {
+      "lemma": "Обединеното кралство",
+      "lemma_translit": "Obedinenoto kralstvo",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "sg",
+      "multiword": true,
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "lemma": "Варшава",
+      "lemma_translit": "Varshava",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "lemma": "Париж",
+      "lemma_translit": "Parizh",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "famous": {
+      "lemma": "известен",
+      "lemma_translit": "izvesten",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "известен",
+        "f_sg": "известна",
+        "n_sg": "известно",
+        "pl": "известни"
+      }
+    },
+    "important": {
+      "lemma": "важен",
+      "lemma_translit": "vazhen",
+      "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "важен",
+        "f_sg": "важна",
+        "n_sg": "важно",
+        "pl": "важни"
+      }
+    },
+    "scientific": {
+      "lemma": "научен",
+      "lemma_translit": "nauchen",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "научен",
+        "f_sg": "научна",
+        "n_sg": "научно",
+        "pl": "научни"
+      },
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "теоретичен",
+      "lemma_translit": "teoretichen",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "теоретичен",
+        "f_sg": "теоретична",
+        "n_sg": "теоретично",
+        "pl": "теоретични"
+      },
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "експериментален",
+      "lemma_translit": "eksperimentalen",
+      "pos": "ADJ",
+      "gloss": "experimental",
+      "degree": "positive",
+      "forms": {
+        "m_sg": "експериментален",
+        "f_sg": "експериментална",
+        "n_sg": "експериментално",
+        "pl": "експериментални"
+      },
+      "semantic_field": "science_meta"
+    },
     "copula": {
       "lemma": "съм",
       "lemma_translit": "sum",
@@ -17,25 +420,74 @@
       "lemma_type": "base",
       "forms": {
         "present_1sg": "съм",
-        "present_1sg_translit": "sum",
-        "present_2sg": "си",
-        "present_2sg_translit": "si",
         "present_3sg": "е",
-        "present_3sg_translit": "e",
-        "present_1pl": "сме",
-        "present_1pl_translit": "sme",
-        "present_2pl": "сте",
-        "present_2pl_translit": "ste",
         "present_3pl": "са",
-        "present_3pl_translit": "sa",
-        "past_3sg": "беше",
-        "past_3sg_translit": "beshe",
-        "past_3pl": "бяха",
-        "past_3pl_translit": "byaha",
-        "future_base": "ще бъде",
-        "future_base_translit": "shte bude"
+        "past_3sg": "беше"
       },
       "note": "Highly irregular. 'е' (is) is the most common form."
+    },
+    "be_born": {
+      "lemma": "родя се",
+      "lemma_translit": "rodya se",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_participle_m": "роден",
+        "past_participle_f": "родена"
+      }
+    },
+    "die": {
+      "lemma": "почина",
+      "lemma_translit": "pochina",
+      "pos": "VERB",
+      "gloss": "to die (polite/formal)",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg": "почина"
+      }
+    },
+    "discover": {
+      "lemma": "открия",
+      "lemma_translit": "otkriya",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_3sg": "откри"
+      }
+    },
+    "win": {
+      "lemma": "спечеля",
+      "lemma_translit": "spechelya",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past_3sg": "спечели"
+      }
+    },
+    "publish": {
+      "lemma": "публикувам",
+      "lemma_translit": "publikuvam",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "research_verb": {
+      "lemma": "изследвам",
+      "lemma_translit": "izsledvam",
+      "pos": "VERB",
+      "gloss": "to research",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
     },
     "det_definite": {
       "lemma": "–",
@@ -52,13 +504,9 @@
       "subcat": "indefinite",
       "forms": {
         "m_sg": "един",
-        "m_sg_translit": "edin",
         "f_sg": "една",
-        "f_sg_translit": "edna",
         "n_sg": "едно",
-        "n_sg_translit": "edno",
-        "pl": "едни",
-        "pl_translit": "edni"
+        "pl": "едни"
       }
     },
     "pronoun_he": {
@@ -69,15 +517,7 @@
       "person": "3",
       "number": "sg",
       "gender": "m",
-      "case": "nom",
-      "forms": {
-        "nominative": "той",
-        "nominative_translit": "toy",
-        "accusative_short": "го",
-        "accusative_full": "него",
-        "dative_short": "му",
-        "dative_full": "на него"
-      }
+      "case": "nom"
     },
     "pronoun_she": {
       "lemma": "тя",
@@ -87,15 +527,7 @@
       "person": "3",
       "number": "sg",
       "gender": "f",
-      "case": "nom",
-      "forms": {
-        "nominative": "тя",
-        "nominative_translit": "tya",
-        "accusative_short": "я",
-        "accusative_full": "нея",
-        "dative_short": "ѝ",
-        "dative_full": "на нея"
-      }
+      "case": "nom"
     },
     "pronoun_they": {
       "lemma": "те",
@@ -105,15 +537,7 @@
       "person": "3",
       "number": "pl",
       "gender": "n",
-      "case": "nom",
-      "forms": {
-        "nominative": "те",
-        "nominative_translit": "te",
-        "accusative_short": "ги",
-        "accusative_full": "тях",
-        "dative_short": "им",
-        "dative_full": "на тях"
-      }
+      "case": "nom"
     },
     "conj_and": {
       "lemma": "и",

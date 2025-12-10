@@ -1,4 +1,4 @@
-concrete WikiFra of AbstractWiki = WikiI ** open SyntaxFra, ParadigmsFra, SymbolicFra, DictFra in {
+concrete WikiFra of AbstractWiki = WikiI ** open SyntaxFre, SymbolicFre, DictFra, SymbolicFra, Prelude in {
   lin
     animal_Entity = mkNP lex_animal_N ;
     cat_Entity = mkNP lex_cat_N ;

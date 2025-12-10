@@ -1,4 +1,4 @@
-concrete WikiZho of AbstractWiki = WikiI ** open SyntaxZho, ParadigmsZho, SymbolicZho, DictZho in {
+concrete WikiZho of AbstractWiki = WikiI ** open SyntaxChi, SymbolicChi, DictZho, SymbolicZho, Prelude in {
   lin
     animal_Entity = mkNP lex_animal_N ;
     cat_Entity = mkNP lex_cat_N ;

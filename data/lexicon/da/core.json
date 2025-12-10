@@ -2,12 +2,408 @@
   "_meta": {
     "language": "da",
     "domain": "core",
-    "version": 2,
-    "source": "Manual Entry (Standard V2)",
-    "generated_at": "2025-12-09T20:55:00Z",
-    "note": "Maximal Schema: Includes gender forms (common/neuter) and pronoun cases."
+    "version": 3,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-10T11:40:00Z",
+    "note": "Maximal Schema: Includes common/neuter gender, compound nouns, and passive constructions."
   },
   "entries": {
+    "person": {
+      "lemma": "person",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "personer"
+    },
+    "man": {
+      "lemma": "mand",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "mænd"
+    },
+    "woman": {
+      "lemma": "kvinde",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "kvinder"
+    },
+    "scientist": {
+      "lemma": "forsker",
+      "pos": "NOUN",
+      "gloss": "scientist/researcher",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "forskere",
+      "note": "Gender neutral. 'Videnskabsmand' is traditional but male-coded."
+    },
+    "physicist": {
+      "lemma": "fysiker",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "fysikere"
+    },
+    "chemist": {
+      "lemma": "kemiker",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "kemikere"
+    },
+    "writer": {
+      "lemma": "forfatter",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "forfattere"
+    },
+    "author": {
+      "lemma": "forfatter",
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "forfattere"
+    },
+    "politician": {
+      "lemma": "politiker",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "politikere"
+    },
+    "teacher": {
+      "lemma": "lærer",
+      "pos": "NOUN",
+      "gloss": "teacher",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "lærere"
+    },
+    "statistician": {
+      "lemma": "statistiker",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "statistikere",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "datalog",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "dataloger",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "astronom",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "astronomer",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "geolog",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "geologer",
+      "semantic_field": "geology"
+    },
+    "climate_scientist": {
+      "lemma": "klimaforsker",
+      "pos": "NOUN",
+      "gloss": "climate scientist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "klimaforskere",
+      "semantic_field": "climatology"
+    },
+    "neuroscientist": {
+      "lemma": "hjerneforsker",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "hjerneforskere",
+      "note": "Literally 'brain researcher'.",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize": {
+      "lemma": "Nobelprisen",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "common",
+      "number": "sg",
+      "semantic_field": "awards"
+    },
+    "statistics": {
+      "lemma": "statistik",
+      "pos": "NOUN",
+      "gloss": "statistics",
+      "human": false,
+      "number": "mass",
+      "gender": "common",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "astronomi",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "number": "mass",
+      "gender": "common",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "geologi",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "number": "mass",
+      "gender": "common",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "neurovidenskab",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "number": "mass",
+      "gender": "common",
+      "semantic_field": "neuroscience"
+    },
+    "research": {
+      "lemma": "forskning",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "common",
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "eksperiment",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "gender": "neuter",
+      "number": "sg",
+      "plural_lemma": "eksperimenter",
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "lemma": "videnskabelig artikel",
+      "pos": "NOUN",
+      "gloss": "scientific paper",
+      "human": false,
+      "gender": "common",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "lemma": "videnskabelig teori",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "gender": "common",
+      "number": "sg",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "field_of_research": {
+      "lemma": "forskningsområde",
+      "pos": "NOUN",
+      "gloss": "field of research",
+      "human": false,
+      "gender": "neuter",
+      "number": "sg",
+      "plural_lemma": "forskningsområder",
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "år",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "neuter",
+      "number": "sg",
+      "plural_lemma": "år"
+    },
+    "country": {
+      "lemma": "land",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "neuter",
+      "number": "sg",
+      "plural_lemma": "lande"
+    },
+    "city": {
+      "lemma": "by",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "byer"
+    },
+    "date": {
+      "lemma": "dato",
+      "pos": "NOUN",
+      "gloss": "date",
+      "human": false,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "datoer"
+    },
+    "Poland": {
+      "lemma": "Polen",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "neuter",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "lemma": "Frankrig",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "neuter",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "Germany": {
+      "lemma": "Tyskland",
+      "pos": "NOUN",
+      "gloss": "Germany",
+      "human": false,
+      "proper": true,
+      "gender": "neuter",
+      "number": "sg",
+      "qid": "Q183"
+    },
+    "United Kingdom": {
+      "lemma": "Storbritannien",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "neuter",
+      "number": "sg",
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "lemma": "Warszawa",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "neuter",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "lemma": "Paris",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "neuter",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "famous": {
+      "lemma": "berømt",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "plural": "berømte",
+        "definite": "berømte"
+      }
+    },
+    "important": {
+      "lemma": "vigtig",
+      "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive",
+      "forms": {
+        "plural": "vigtige",
+        "definite": "vigtige"
+      }
+    },
+    "scientific": {
+      "lemma": "videnskabelig",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "forms": {
+        "plural": "videnskabelige",
+        "definite": "videnskabelige"
+      },
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "teoretisk",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "forms": {
+        "plural": "teoretiske",
+        "definite": "teoretiske"
+      },
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "eksperimentel",
+      "pos": "ADJ",
+      "gloss": "experimental",
+      "degree": "positive",
+      "forms": {
+        "plural": "eksperimentelle",
+        "definite": "eksperimentelle"
+      },
+      "semantic_field": "science_meta"
+    },
     "copula": {
       "lemma": "være",
       "pos": "VERB",
@@ -21,6 +417,81 @@
         "perfect": "været"
       },
       "note": "Invariant in present tense for all persons."
+    },
+    "be_born": {
+      "lemma": "blive født",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "multiword",
+      "irregular_forms": {
+        "past": "blev født",
+        "perfect": "er blevet født"
+      }
+    },
+    "die": {
+      "lemma": "dø",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past": "døde",
+        "perfect": "er død"
+      }
+    },
+    "discover": {
+      "lemma": "opdage",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true,
+      "irregular_forms": {
+        "past": "opdagede",
+        "perfect": "opdaget"
+      }
+    },
+    "win": {
+      "lemma": "vinde",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "irregular_forms": {
+        "present": "vinder",
+        "past": "vandt",
+        "perfect": "vundet"
+      }
+    },
+    "receive": {
+      "lemma": "modtage",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "publish": {
+      "lemma": "udgive",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "research_verb": {
+      "lemma": "forske",
+      "pos": "VERB",
+      "gloss": "to research",
+      "subcat": "intransitive",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "experiment_verb": {
+      "lemma": "eksperimentere",
+      "pos": "VERB",
+      "gloss": "to experiment",
+      "subcat": "intransitive",
+      "regular": true,
+      "semantic_field": "science_meta"
     },
     "det_definite": {
       "lemma": "den",

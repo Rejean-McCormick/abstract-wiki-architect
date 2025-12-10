@@ -1,4 +1,4 @@
-concrete WikiDeu of AbstractWiki = WikiI ** open SyntaxDeu, ParadigmsDeu, SymbolicDeu, DictDeu in {
+concrete WikiDeu of AbstractWiki = WikiI ** open SyntaxGer, SymbolicGer, DictDeu, SymbolicDeu, Prelude in {
   lin
     animal_Entity = mkNP lex_animal_N ;
     cat_Entity = mkNP lex_cat_N ;

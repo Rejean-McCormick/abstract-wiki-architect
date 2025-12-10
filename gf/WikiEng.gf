@@ -1,4 +1,4 @@
-concrete WikiEng of AbstractWiki = WikiI ** open SyntaxEng, ParadigmsEng, SymbolicEng in {
+concrete WikiEng of AbstractWiki = WikiI ** open SyntaxEng, SymbolicEng, DictEng, Prelude in {
   lin
     lex_animal_N = mkNP (mkN "animal");
     lex_walk_V = mkVP (mkV "walk");
