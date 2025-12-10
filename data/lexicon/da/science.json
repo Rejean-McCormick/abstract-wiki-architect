@@ -2,7 +2,73 @@
   "_meta": {
     "language": "da",
     "domain": "science",
-    "version": 1
+    "generated_at": "2025-12-10T01:04:10.581120",
+    "schema_version": "2.0"
   },
-  "entries": {}
+  "entries": {
+    "Physics": {
+      "lemma": "fysik",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q413",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Chemistry": {
+      "lemma": "kemi",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q2329",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Biology": {
+      "lemma": "biologi",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q420",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Mathematics": {
+      "lemma": "matematik",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q395",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Astronomy": {
+      "lemma": "astronomi",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q333",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Planet": {
+      "lemma": "planet",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q634",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Star": {
+      "lemma": "stjerne",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q523",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Atom": {
+      "lemma": "atom",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q9121",
+        "source": "wikidata_automated_import"
+      }
+    }
+  }
 }

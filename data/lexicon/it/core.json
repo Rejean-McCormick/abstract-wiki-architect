@@ -2,7 +2,499 @@
   "_meta": {
     "language": "it",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "note": "Includes full article morphology, articulated preposition logic, and scientific domain."
   },
-  "entries": {}
+  "entries": {
+    "person": {
+      "lemma": "persona",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "persone"
+    },
+    "man": {
+      "lemma": "uomo",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "uomini"
+    },
+    "woman": {
+      "lemma": "donna",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "donne"
+    },
+    "scientist": {
+      "lemma": "scienziato",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "scienziata",
+      "plural_lemma": "scienziati"
+    },
+    "physicist": {
+      "lemma": "fisico",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "fisica",
+      "plural_lemma": "fisici",
+      "semantic_field": "physics"
+    },
+    "chemist": {
+      "lemma": "chimico",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "chimica",
+      "plural_lemma": "chimici",
+      "semantic_field": "chemistry"
+    },
+    "writer": {
+      "lemma": "scrittore",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "scrittrice",
+      "plural_lemma": "scrittori"
+    },
+    "author": {
+      "lemma": "autore",
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "autrice",
+      "plural_lemma": "autori"
+    },
+    "poet": {
+      "lemma": "poeta",
+      "pos": "NOUN",
+      "gloss": "poet",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "poetessa",
+      "plural_lemma": "poeti"
+    },
+    "painter": {
+      "lemma": "pittore",
+      "pos": "NOUN",
+      "gloss": "painter",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "pittrice",
+      "plural_lemma": "pittori"
+    },
+    "actor": {
+      "lemma": "attore",
+      "pos": "NOUN",
+      "gloss": "actor",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "attrice",
+      "plural_lemma": "attori"
+    },
+    "professor": {
+      "lemma": "professore",
+      "pos": "NOUN",
+      "gloss": "professor",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "professoressa",
+      "plural_lemma": "professori"
+    },
+    "politician": {
+      "lemma": "politico",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "politica",
+      "plural_lemma": "politici"
+    },
+    "nobel_prize": {
+      "lemma": "Premio Nobel",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "count",
+      "semantic_field": "awards"
+    },
+    "famous": {
+      "lemma": "famoso",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "famosa",
+      "plural_lemma_m": "famosi",
+      "plural_lemma_f": "famose"
+    },
+    "notable": {
+      "lemma": "notevole",
+      "pos": "ADJ",
+      "gloss": "notable",
+      "degree": "positive",
+      "gender": "common",
+      "plural_lemma": "notevoli",
+      "note": "Invariant in gender singular."
+    },
+    "great": {
+      "lemma": "grande",
+      "pos": "ADJ",
+      "gloss": "great/big",
+      "degree": "positive",
+      "gender": "common",
+      "plural_lemma": "grandi"
+    },
+    "italian": {
+      "lemma": "italiano",
+      "pos": "ADJ",
+      "gloss": "Italian",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "italiana",
+      "plural_lemma_m": "italiani",
+      "plural_lemma_f": "italiane"
+    },
+    "french": {
+      "lemma": "francese",
+      "pos": "ADJ",
+      "gloss": "French",
+      "degree": "positive",
+      "gender": "common",
+      "plural_lemma": "francesi"
+    },
+    "be": {
+      "lemma": "essere",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "present_1sg": "sono",
+        "present_2sg": "sei",
+        "present_3sg": "è",
+        "present_3pl": "sono",
+        "past_remote_3sg": "fu",
+        "imperfect_3sg": "era",
+        "past_participle": "stato"
+      },
+      "note": "Uses itself as auxiliary."
+    },
+    "be_born": {
+      "lemma": "nascere",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_remote_3sg": "nacque",
+        "past_participle": "nato"
+      },
+      "note": "Takes 'essere' auxiliary (è nato / è nata)."
+    },
+    "die": {
+      "lemma": "morire",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_remote_3sg": "morì",
+        "past_participle": "morto"
+      },
+      "note": "Takes 'essere' auxiliary (è morto / è morta)."
+    },
+    "discover": {
+      "lemma": "scoprire",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_remote_3sg": "scoprì",
+        "past_participle": "scoperto"
+      }
+    },
+    "win": {
+      "lemma": "vincere",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_remote_3sg": "vinse",
+        "past_participle": "vinto"
+      },
+      "semantic_field": "awards"
+    },
+    "receive": {
+      "lemma": "ricevere",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "publish": {
+      "lemma": "pubblicare",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "anno",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "anni"
+    },
+    "city": {
+      "lemma": "città",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "città",
+      "note": "Invariant in plural."
+    },
+    "country": {
+      "lemma": "paese",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "paesi"
+    },
+    "Italy": {
+      "lemma": "Italia",
+      "pos": "NOUN",
+      "gloss": "Italy",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "qid": "Q38"
+    },
+    "France": {
+      "lemma": "Francia",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "qid": "Q142"
+    },
+    "Poland": {
+      "lemma": "Polonia",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "qid": "Q36"
+    },
+    "statistician": {
+      "lemma": "statistico",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "gender": "m",
+      "feminine_lemma": "statistica",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "informatico",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "m",
+      "feminine_lemma": "informatica",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "astronomo",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "feminine_lemma": "astronoma",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "geologo",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "feminine_lemma": "geologa",
+      "plural_lemma_m": "geologi",
+      "semantic_field": "geology"
+    },
+    "neuroscientist": {
+      "lemma": "neuroscienziato",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "feminine_lemma": "neuroscienziata",
+      "semantic_field": "neuroscience"
+    },
+    "physics": {
+      "lemma": "fisica",
+      "pos": "NOUN",
+      "gloss": "physics",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "physics"
+    },
+    "chemistry": {
+      "lemma": "chimica",
+      "pos": "NOUN",
+      "gloss": "chemistry",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "chemistry"
+    },
+    "scientific_theory": {
+      "lemma": "teoria scientifica",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "gender": "f",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "research": {
+      "lemma": "ricerca",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "plural_lemma": "ricerche",
+      "semantic_field": "science_meta"
+    },
+    "det_definite": {
+      "lemma": "il",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "forms": {
+        "m_sg": "il",
+        "m_sg_vowel": "l'",
+        "m_sg_impure": "lo",
+        "f_sg": "la",
+        "f_sg_vowel": "l'",
+        "m_pl": "i",
+        "m_pl_vowel": "gli",
+        "m_pl_impure": "gli",
+        "f_pl": "le"
+      },
+      "note": "'lo' and 'gli' used before z, gn, ps, s+consonant."
+    },
+    "det_indefinite": {
+      "lemma": "un",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "m": "un",
+        "m_impure": "uno",
+        "f": "una",
+        "f_vowel": "un'"
+      }
+    },
+    "conj_and": {
+      "lemma": "e",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating",
+      "note": "Becomes 'ed' before 'e' (euphonic)."
+    },
+    "conj_but": {
+      "lemma": "ma",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "o",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "in",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Contracts: nel, nella, nei, negli, nelle."
+    },
+    "prep_at": {
+      "lemma": "a",
+      "pos": "PREP",
+      "gloss": "at/to",
+      "subcat": "locative",
+      "note": "Contracts: al, alla, ai, agli, alle."
+    },
+    "prep_of": {
+      "lemma": "di",
+      "pos": "PREP",
+      "gloss": "of/from",
+      "subcat": "genitive",
+      "note": "Contracts: del, della, dei, degli, delle."
+    },
+    "prep_with": {
+      "lemma": "con",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
 }

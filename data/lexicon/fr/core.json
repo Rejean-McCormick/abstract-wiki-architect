@@ -2,37 +2,249 @@
   "_meta": {
     "language": "fr",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T21:30:00Z",
+    "note": "Includes scientific domain extensions, irregular verb forms (naître/mourir), and full gender inflection."
   },
   "entries": {
-    "Marie Curie": {
-      "pos": "PROPN",
-      "gender": "f",
-      "number": "sg",
-      "proper_name": true
-    },
-    "européen": {
-      "pos": "ADJ",
-      "inflection_class": "éen",
+    "copula": {
+      "lemma": "être",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
       "forms": {
-        "m.sg": "européen",
-        "f.sg": "européenne",
-        "m.pl": "européens",
-        "f.pl": "européennes"
+        "present_1sg": "suis",
+        "present_2sg": "es",
+        "present_3sg": "est",
+        "present_1pl": "sommes",
+        "present_2pl": "êtes",
+        "present_3pl": "sont",
+        "past_3sg": "était",
+        "past_3pl": "étaient",
+        "perfect_participle": "été"
+      },
+      "note": "Auxiliary 'avoir' used for its own compound tenses."
+    },
+    "det_definite": {
+      "lemma": "le",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "forms": {
+        "m_sg": "le",
+        "f_sg": "la",
+        "vowel_sg": "l'",
+        "pl": "les"
       }
     },
-    "célèbre": {
+    "det_indefinite": {
+      "lemma": "un",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "m_sg": "un",
+        "f_sg": "une",
+        "pl": "des"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "il",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative": "il",
+        "accusative": "le",
+        "dative": "lui",
+        "disjunctive": "lui"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "elle",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom",
+      "forms": {
+        "nominative": "elle",
+        "accusative": "la",
+        "dative": "lui",
+        "disjunctive": "elle"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "ils",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative_m": "ils",
+        "nominative_f": "elles",
+        "accusative": "les",
+        "dative": "leur",
+        "disjunctive_m": "eux",
+        "disjunctive_f": "elles"
+      }
+    },
+    "Marie Curie": {
+      "lemma": "Marie Curie",
+      "pos": "PROPN",
+      "gloss": "Marie Curie",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "proper": true,
+      "qid": "Q7186"
+    },
+    "person": {
+      "lemma": "personne",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "personnes"
+    },
+    "man": {
+      "lemma": "homme",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "hommes"
+    },
+    "woman": {
+      "lemma": "femme",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "femmes"
+    },
+    "scientist": {
+      "lemma": "scientifique",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "scientifiques",
+      "note": "Identical form for masculine and feminine."
+    },
+    "physicist": {
+      "lemma": "physicien",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "physicienne",
+      "plural_lemma": "physiciens",
+      "semantic_field": "physics"
+    },
+    "chemist": {
+      "lemma": "chimiste",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "chimistes",
+      "semantic_field": "chemistry"
+    },
+    "writer": {
+      "lemma": "écrivain",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "écrivaine",
+      "plural_lemma": "écrivains"
+    },
+    "author": {
+      "lemma": "auteur",
+      "pos": "NOUN",
+      "gloss": "author",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "autrice",
+      "plural_lemma": "auteurs"
+    },
+    "professor": {
+      "lemma": "professeur",
+      "pos": "NOUN",
+      "gloss": "professor",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "professeure",
+      "plural_lemma": "professeurs"
+    },
+    "politician": {
+      "lemma": "politique",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "common",
+      "number": "sg",
+      "plural_lemma": "politiques",
+      "note": "Often 'homme politique' / 'femme politique'."
+    },
+    "nobel_prize": {
+      "lemma": "Prix Nobel",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "count",
+      "semantic_field": "awards"
+    },
+    "famous": {
+      "lemma": "célèbre",
       "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "gender": "common",
       "inflection_class": "e_invariable",
       "forms": {
         "m.sg": "célèbre",
         "f.sg": "célèbre",
-        "m.pl": "célèbres",
-        "f.pl": "célèbres"
+        "pl": "célèbres"
+      }
+    },
+    "notable": {
+      "lemma": "notable",
+      "pos": "ADJ",
+      "gloss": "notable",
+      "degree": "positive",
+      "gender": "common",
+      "forms": {
+        "m.sg": "notable",
+        "f.sg": "notable",
+        "pl": "notables"
       }
     },
     "important": {
+      "lemma": "important",
       "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive",
       "inflection_class": "ant",
       "forms": {
         "m.sg": "important",
@@ -41,8 +253,11 @@
         "f.pl": "importantes"
       }
     },
-    "grand": {
+    "great": {
+      "lemma": "grand",
       "pos": "ADJ",
+      "gloss": "great/tall",
+      "degree": "positive",
       "inflection_class": "regular",
       "forms": {
         "m.sg": "grand",
@@ -51,8 +266,11 @@
         "f.pl": "grandes"
       }
     },
-    "ancien": {
+    "ancient": {
+      "lemma": "ancien",
       "pos": "ADJ",
+      "gloss": "ancient/former",
+      "degree": "positive",
       "inflection_class": "ien",
       "forms": {
         "m.sg": "ancien",
@@ -61,55 +279,285 @@
         "f.pl": "anciennes"
       }
     },
-    "rivière": {
-      "pos": "NOUN",
-      "gender": "f",
-      "default_number": "sg",
-      "semantic_class": "natural_feature",
+    "european": {
+      "lemma": "européen",
+      "pos": "ADJ",
+      "gloss": "European",
+      "degree": "positive",
+      "inflection_class": "éen",
       "forms": {
-        "f.sg": "rivière",
-        "f.pl": "rivières"
+        "m.sg": "européen",
+        "f.sg": "européenne",
+        "m.pl": "européens",
+        "f.pl": "européennes"
       }
     },
-    "fleuve": {
-      "pos": "NOUN",
-      "gender": "m",
-      "default_number": "sg",
-      "semantic_class": "natural_feature",
-      "forms": {
-        "m.sg": "fleuve",
-        "m.pl": "fleuves"
+    "be_born": {
+      "lemma": "naître",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg": "est né",
+        "past_3sg_f": "est née",
+        "past_3pl": "sont nés",
+        "past_3pl_f": "sont nées"
+      },
+      "note": "Uses auxiliary 'être'."
+    },
+    "die": {
+      "lemma": "mourir",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_3sg": "est mort",
+        "past_3sg_f": "est morte",
+        "past_3pl": "sont morts"
+      },
+      "note": "Uses auxiliary 'être'."
+    },
+    "discover": {
+      "lemma": "découvrir",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_participle": "découvert",
+        "past_3sg": "a découvert"
       }
+    },
+    "win": {
+      "lemma": "gagner",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "receive": {
+      "lemma": "recevoir",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_participle": "reçu",
+        "past_3sg": "a reçu"
+      }
+    },
+    "year": {
+      "lemma": "année",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "années"
+    },
+    "city": {
+      "lemma": "ville",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "villes"
+    },
+    "country": {
+      "lemma": "pays",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "pays",
+      "note": "Invariant in singular/plural."
+    },
+    "river_small": {
+      "lemma": "rivière",
+      "pos": "NOUN",
+      "gloss": "river (tributary)",
+      "human": false,
+      "gender": "f",
+      "semantic_class": "natural_feature",
+      "plural_lemma": "rivières"
+    },
+    "river_large": {
+      "lemma": "fleuve",
+      "pos": "NOUN",
+      "gloss": "river (flows to sea)",
+      "human": false,
+      "gender": "m",
+      "semantic_class": "natural_feature",
+      "plural_lemma": "fleuves"
     },
     "statue": {
+      "lemma": "statue",
       "pos": "NOUN",
+      "gloss": "statue",
+      "human": false,
       "gender": "f",
-      "default_number": "sg",
       "semantic_class": "artifact",
-      "forms": {
-        "f.sg": "statue",
-        "f.pl": "statues"
-      }
+      "plural_lemma": "statues"
     },
-    "langue de programmation": {
+    "programming_language": {
+      "lemma": "langage de programmation",
       "pos": "NOUN",
-      "gender": "f",
-      "default_number": "sg",
+      "gloss": "programming language",
+      "human": false,
+      "gender": "m",
+      "multiword": true,
       "semantic_class": "class",
-      "forms": {
-        "f.sg": "langue de programmation",
-        "f.pl": "langues de programmation"
-      }
+      "plural_lemma": "langages de programmation"
     },
-    "physique": {
+    "physics": {
+      "lemma": "physique",
       "pos": "NOUN",
+      "gloss": "physics",
+      "human": false,
       "gender": "f",
-      "default_number": "sg",
-      "semantic_class": "field_of_study",
-      "forms": {
-        "f.sg": "physique",
-        "f.pl": "physiques"
-      }
+      "number": "mass",
+      "semantic_class": "field_of_study"
+    },
+    "France": {
+      "lemma": "France",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "qid": "Q142"
+    },
+    "Poland": {
+      "lemma": "Pologne",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "qid": "Q36"
+    },
+    "Paris": {
+      "lemma": "Paris",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "qid": "Q90"
+    },
+    "statistician": {
+      "lemma": "statisticien",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "gender": "m",
+      "feminine_lemma": "statisticienne",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "informaticien",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "m",
+      "feminine_lemma": "informaticienne",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "astronome",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "common",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "géologue",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "common",
+      "semantic_field": "geology"
+    },
+    "scientific_theory": {
+      "lemma": "théorie scientifique",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "gender": "f",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "research": {
+      "lemma": "recherche",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "to_publish": {
+      "lemma": "publier",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "conj_and": {
+      "lemma": "et",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "mais",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "ou",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "dans",
+      "pos": "PREP",
+      "gloss": "in (interior)",
+      "subcat": "locative"
+    },
+    "prep_at": {
+      "lemma": "à",
+      "pos": "PREP",
+      "gloss": "at/to",
+      "subcat": "locative",
+      "note": "Contracts with articles: à+le=au, à+les=aux."
+    },
+    "prep_of": {
+      "lemma": "de",
+      "pos": "PREP",
+      "gloss": "of/from",
+      "subcat": "genitive",
+      "note": "Contracts with articles: de+le=du, de+les=des. Elides to d' before vowel."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
     }
   }
 }

@@ -2,7 +2,113 @@
   "_meta": {
     "language": "ko",
     "domain": "people",
-    "version": 1
+    "generated_at": "2025-12-10T01:04:07.756840",
+    "schema_version": "2.0"
   },
-  "entries": {}
+  "entries": {
+    "Scientist": {
+      "lemma": "과학자",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q901",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Physicist": {
+      "lemma": "물리학자",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q169470",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Chemist": {
+      "lemma": "화학자",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q593644",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Biologist": {
+      "lemma": "생물학자",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q864503",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Mathematician": {
+      "lemma": "수학자",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q170790",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Actor": {
+      "lemma": "배우",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q33999",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Writer": {
+      "lemma": "작가",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q36180",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Painter": {
+      "lemma": "화가",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q1028181",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Poet": {
+      "lemma": "시인",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q49757",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Politician": {
+      "lemma": "정치인",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q82955",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Musician": {
+      "lemma": "음악가",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q639669",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Teacher": {
+      "lemma": "교사",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q37226",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Engineer": {
+      "lemma": "기술자",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q81096",
+        "source": "wikidata_automated_import"
+      }
+    }
+  }
 }

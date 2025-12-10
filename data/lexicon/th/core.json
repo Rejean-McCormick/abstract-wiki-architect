@@ -1,0 +1,245 @@
+{
+  "_meta": {
+    "language": "th",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:50:00Z",
+    "note": "Maximal Schema: Includes Thai script, Romanization, and zero-inflection entries."
+  },
+  "entries": {
+    "copula_identity": {
+      "lemma": "เป็น",
+      "lemma_translit": "pen",
+      "pos": "COPULA",
+      "gloss": "to be (identity/profession)",
+      "subcat": "identity"
+    },
+    "copula_equality": {
+      "lemma": "คือ",
+      "lemma_translit": "khue",
+      "pos": "COPULA",
+      "gloss": "to be (equality/definition)",
+      "subcat": "definition"
+    },
+    "copula_locative": {
+      "lemma": "อยู่",
+      "lemma_translit": "yùu",
+      "pos": "COPULA",
+      "gloss": "to be (location)",
+      "subcat": "locative"
+    },
+    "marker_definite": {
+      "lemma": "–",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "zero_article",
+      "note": "Thai has no articles."
+    },
+    "marker_plural": {
+      "lemma": "หลาย",
+      "lemma_translit": "lǎai",
+      "pos": "ADV",
+      "gloss": "many/plural marker",
+      "note": "Optional plural marker, used before the noun."
+    },
+    "classifier_person": {
+      "lemma": "คน",
+      "lemma_translit": "khon",
+      "pos": "CLF",
+      "gloss": "Classifier for people"
+    },
+    "pronoun_he": {
+      "lemma": "เขา",
+      "lemma_translit": "khăo",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "note": "Gender neutral."
+    },
+    "pronoun_she": {
+      "lemma": "เขา",
+      "lemma_translit": "khăo",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common"
+    },
+    "pronoun_they": {
+      "lemma": "พวกเขา",
+      "lemma_translit": "phûak-khăo",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common"
+    },
+    "person": {
+      "lemma": "คน",
+      "lemma_translit": "khon",
+      "pos": "NOUN",
+      "gloss": "person/human",
+      "human": true,
+      "classifier_lemma": "คน"
+    },
+    "man": {
+      "lemma": "ผู้ชาย",
+      "lemma_translit": "phûu-chaai",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "classifier_lemma": "คน"
+    },
+    "woman": {
+      "lemma": "ผู้หญิง",
+      "lemma_translit": "phûu-yĭng",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "classifier_lemma": "คน"
+    },
+    "scientist": {
+      "lemma": "นักวิทยาศาสตร์",
+      "lemma_translit": "nák-wít-thá-yaa-sàat",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "classifier_lemma": "คน",
+      "semantic_field": "science"
+    },
+    "writer": {
+      "lemma": "นักเขียน",
+      "lemma_translit": "nák-khǐan",
+      "pos": "NOUN",
+      "gloss": "writer/author",
+      "human": true,
+      "classifier_lemma": "คน"
+    },
+    "politician": {
+      "lemma": "นักการเมือง",
+      "lemma_translit": "nák-gaan-mueang",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "classifier_lemma": "คน"
+    },
+    "famous": {
+      "lemma": "มีชื่อเสียง",
+      "lemma_translit": "mee chêu-sĭang",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "note": "Compound adjective."
+    },
+    "great": {
+      "lemma": "ยิ่งใหญ่",
+      "lemma_translit": "yîng-yài",
+      "pos": "ADJ",
+      "gloss": "great",
+      "degree": "positive"
+    },
+    "be_born": {
+      "lemma": "เกิด",
+      "lemma_translit": "gèrt",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "note": "Tense/aspect handled by auxiliary markers (e.g., dâai gèrt for was born)."
+    },
+    "die": {
+      "lemma": "เสียชีวิต",
+      "lemma_translit": "sĭa chii-wít",
+      "pos": "VERB",
+      "gloss": "to die (polite)",
+      "subcat": "intransitive"
+    },
+    "discover": {
+      "lemma": "ค้นพบ",
+      "lemma_translit": "khón-phóp",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive"
+    },
+    "receive": {
+      "lemma": "ได้รับ",
+      "lemma_translit": "dâi-ráp",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive"
+    },
+    "year": {
+      "lemma": "ปี",
+      "lemma_translit": "bpee",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "classifier_lemma": "ปี"
+    },
+    "city": {
+      "lemma": "เมือง",
+      "lemma_translit": "mueang",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "classifier_lemma": "เมือง"
+    },
+    "country": {
+      "lemma": "ประเทศ",
+      "lemma_translit": "bprà-têet",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "classifier_lemma": "ประเทศ"
+    },
+    "conj_and": {
+      "lemma": "และ",
+      "lemma_translit": "láe",
+      "pos": "CONJ",
+      "gloss": "and (between clauses/nouns)",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "แต่",
+      "lemma_translit": "tàe",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "ใน",
+      "lemma_translit": "nai",
+      "pos": "PREP",
+      "gloss": "in/inside",
+      "subcat": "locative"
+    },
+    "prep_from": {
+      "lemma": "จาก",
+      "lemma_translit": "jàak",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "prep_of": {
+      "lemma": "ของ",
+      "lemma_translit": "khɔ̌ng",
+      "pos": "PREP",
+      "gloss": "of/possessive",
+      "subcat": "genitive"
+    },
+    "punctuation_period": {
+      "lemma": "–",
+      "pos": "PUNCT",
+      "gloss": "period",
+      "note": "No punctuation mark used at the end of sentences."
+    },
+    "punctuation_comma": {
+      "lemma": "ฯ",
+      "pos": "PUNCT",
+      "gloss": "comma",
+      "note": "Western comma (,) is used for enumeration."
+    }
+  }
+}

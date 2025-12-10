@@ -1,0 +1,307 @@
+{
+  "_meta": {
+    "language": "ur",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T23:00:00Z",
+    "note": "Maximal Schema: Includes Urdu script, transliteration, gender inflection, and complex predicates."
+  },
+  "entries": {
+    "copula": {
+      "lemma": "ہونا",
+      "lemma_translit": "honā",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "ہوں",
+        "present_1sg_translit": "hūñ",
+        "present_3sg": "ہے",
+        "present_3sg_translit": "hai",
+        "present_3pl": "ہیں",
+        "present_3pl_translit": "haiñ",
+        "past_m_sg": "تھا",
+        "past_m_sg_translit": "thā",
+        "past_f_sg": "تھی",
+        "past_f_sg_translit": "thī",
+        "past_m_pl": "تھے",
+        "past_m_pl_translit": "the"
+      }
+    },
+    "det_definite": {
+      "lemma": "وہ",
+      "lemma_translit": "voh",
+      "pos": "DET",
+      "gloss": "that/the (demonstrative)",
+      "subcat": "definite"
+    },
+    "det_indefinite": {
+      "lemma": "ایک",
+      "lemma_translit": "ek",
+      "pos": "DET",
+      "gloss": "one/a/an",
+      "subcat": "indefinite"
+    },
+    "pronoun_he": {
+      "lemma": "وہ",
+      "lemma_translit": "voh",
+      "pos": "PRON",
+      "gloss": "he/she/it",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "forms": {
+        "nominative": "وہ",
+        "oblique": "اس",
+        "ergative": "اس نے"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_she": {
+      "lemma": "وہ",
+      "lemma_translit": "voh",
+      "pos": "PRON",
+      "gloss": "he/she/it",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "forms": {
+        "nominative": "وہ",
+        "oblique": "اس",
+        "ergative": "اس نے"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "وہ",
+      "lemma_translit": "voh",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "forms": {
+        "nominative": "وہ",
+        "oblique": "ان",
+        "ergative": "انہوں نے"
+      }
+    },
+    "person": {
+      "lemma": "شخص",
+      "lemma_translit": "shakhs",
+      "pos": "NOUN",
+      "gloss": "person/human",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "اشخاص",
+      "plural_translit": "ashkhās"
+    },
+    "man": {
+      "lemma": "مرد",
+      "lemma_translit": "mard",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "مرد",
+      "plural_translit": "mard"
+    },
+    "woman": {
+      "lemma": "عورت",
+      "lemma_translit": "aurat",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "عورتیں",
+      "plural_translit": "aurteñ"
+    },
+    "scientist": {
+      "lemma": "سائنسدان",
+      "lemma_translit": "sāinsdān",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "سائنسدان",
+      "plural_translit": "sāinsdān",
+      "semantic_field": "science"
+    },
+    "writer": {
+      "lemma": "لکھاری",
+      "lemma_translit": "likhārī",
+      "pos": "NOUN",
+      "gloss": "writer (masc.)",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "لکھاری",
+      "feminine_translit": "likhārī",
+      "plural_lemma": "لکھاری",
+      "plural_translit": "likhārī"
+    },
+    "politician": {
+      "lemma": "سیاستدان",
+      "lemma_translit": "siyāsatdān",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "سیاستدان",
+      "plural_translit": "siyāsatdān"
+    },
+    "famous": {
+      "lemma": "مشہور",
+      "lemma_translit": "mash'hūr",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "gender": "common",
+      "note": "Invariant adjective."
+    },
+    "great": {
+      "lemma": "عظیم",
+      "lemma_translit": "azīm",
+      "pos": "ADJ",
+      "gloss": "great",
+      "degree": "positive",
+      "gender": "common",
+      "note": "Invariant adjective."
+    },
+    "be_born": {
+      "lemma": "پیدا ہونا",
+      "lemma_translit": "paidā honā",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "complex_predicate",
+      "components": [
+        "paidā",
+        "honā"
+      ],
+      "forms": {
+        "past_m_sg": "پیدا ہوا",
+        "past_m_sg_translit": "paidā huā",
+        "past_f_sg": "پیدا ہوئی",
+        "past_f_sg_translit": "paidā huī"
+      }
+    },
+    "die": {
+      "lemma": "وفات پانا",
+      "lemma_translit": "vafāt pānā",
+      "pos": "VERB",
+      "gloss": "to die (euphemism)",
+      "subcat": "intransitive",
+      "lemma_type": "complex_predicate",
+      "components": [
+        "vafāt",
+        "pānā"
+      ]
+    },
+    "receive": {
+      "lemma": "حاصل کرنا",
+      "lemma_translit": "hāsil karnā",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "lemma_type": "complex_predicate",
+      "components": [
+        "hāsil",
+        "karnā"
+      ]
+    },
+    "year": {
+      "lemma": "سال",
+      "lemma_translit": "sāl",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "سال",
+      "plural_translit": "sāl"
+    },
+    "city": {
+      "lemma": "شہر",
+      "lemma_translit": "shahr",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "شہر",
+      "plural_translit": "shahr"
+    },
+    "country": {
+      "lemma": "ملک",
+      "lemma_translit": "mulk",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "ممالک",
+      "plural_translit": "mumālik"
+    },
+    "conj_and": {
+      "lemma": "اور",
+      "lemma_translit": "aur",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "لیکن",
+      "lemma_translit": "lekin",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "میں",
+      "lemma_translit": "meñ",
+      "pos": "POST",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Postposition following the noun."
+    },
+    "prep_from": {
+      "lemma": "سے",
+      "lemma_translit": "se",
+      "pos": "POST",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "prep_of": {
+      "lemma": "کا",
+      "lemma_translit": "kā",
+      "pos": "POST",
+      "gloss": "of/possessive",
+      "subcat": "genitive",
+      "forms": {
+        "m_sg": "کا",
+        "f_sg": "کی",
+        "m_pl": "کے",
+        "f_pl": "کی"
+      },
+      "note": "Possessive marker that agrees with the *possessed* item."
+    },
+    "punctuation_period": {
+      "lemma": "۔",
+      "pos": "PUNCT",
+      "gloss": "full stop",
+      "note": "Urdu full stop."
+    },
+    "punctuation_comma": {
+      "lemma": "،",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
+}

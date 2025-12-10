@@ -1,0 +1,227 @@
+{
+  "_meta": {
+    "language": "mt",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:10:00Z",
+    "note": "Maximal Schema: Semitic language (Zero Copula/Prefix Article) using Latin script."
+  },
+  "entries": {
+    "copula": {
+      "lemma": "kien",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_3sg": "NULL",
+        "present_3pl": "NULL",
+        "past_3sg_m": "kien",
+        "past_3sg_f": "kienet",
+        "future_3sg": "se jkun"
+      },
+      "note": "Present tense is usually omitted/null (Zero Copula)."
+    },
+    "det_definite": {
+      "lemma": "il-",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite_prefix",
+      "forms": {
+        "default": "il-",
+        "sun_letter": "id-",
+        "moon_letter": "il-"
+      },
+      "note": "Prefixes the noun. Changes to 'id-', 'ir-', 'is-', etc. before certain 'sun letters'."
+    },
+    "det_indefinite": {
+      "lemma": "wieħed",
+      "pos": "DET",
+      "gloss": "one/a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "m": "wieħed",
+        "f": "waħda"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "hu",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom"
+    },
+    "pronoun_she": {
+      "lemma": "hi",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom"
+    },
+    "pronoun_they": {
+      "lemma": "huma",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "case": "nom"
+    },
+    "person": {
+      "lemma": "persuna",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "persuni"
+    },
+    "man": {
+      "lemma": "raġel",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "irġiel"
+    },
+    "woman": {
+      "lemma": "mara",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "nisa"
+    },
+    "scientist": {
+      "lemma": "xjenzat",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "xjenzata",
+      "plural_lemma": "xjenzati",
+      "semantic_field": "science"
+    },
+    "writer": {
+      "lemma": "kittieb",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "kittieba",
+      "plural_lemma": "kittieba"
+    },
+    "famous": {
+      "lemma": "famuż",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "famuża"
+    },
+    "be_born": {
+      "lemma": "twieled",
+      "pos": "VERB",
+      "gloss": "to be born (passive)",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg_m": "twieled",
+        "past_3sg_f": "twieldet"
+      }
+    },
+    "die": {
+      "lemma": "miet",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg_m": "miet",
+        "past_3sg_f": "mietet"
+      }
+    },
+    "receive": {
+      "lemma": "irċieva",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "year": {
+      "lemma": "sena",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "snin"
+    },
+    "city": {
+      "lemma": "belt",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "ibliet"
+    },
+    "country": {
+      "lemma": "pajjiż",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "pajjiżi"
+    },
+    "conj_and": {
+      "lemma": "u",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "iżda",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "f'",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Prefixes the noun, often followed by the definite article (e.g., fil-Belt, fis-sena)."
+    },
+    "prep_from": {
+      "lemma": "minn",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "prep_with": {
+      "lemma": "ma'",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
+}

@@ -72,42 +72,6 @@ def _normalize_entry(base_key: str, entry: Mapping[str, Any]) -> Dict[str, Dict[
 
     return normalized_map
 
-def _process_file_content(raw_data: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
-    """
-    Extracts valid lemma mappings from a raw file content dict.
-    Supports Schema V2 ("entries") and Legacy V1 ("lemmas", "professions", etc).
-    """
-    extracted_lemmas: Dict[str, Dict[str, Any]] = {}
-
-    # Identify where the entries are stored
-    sources = []
-    
-    # Priority 1: New Standard "entries"
-    if "entries" in raw_data and isinstance(raw_data["entries"], Mapping):
-        sources.append(raw_data["entries"])
-    
-    # Priority 2: Legacy "lemmas"
-    if "lemmas" in raw_data and isinstance(raw_data["lemmas"], Mapping):
-        sources.append(raw_data["lemmas"])
-
-    # Priority 3: Legacy Category Keys (fallback for imperfect migrations)
-    for cat in ["professions", "titles", "nationalities", "honours"]:
-        if cat in raw_data and isinstance(raw_data[cat], Mapping):
-            sources.append(raw_data[cat])
-
-    # Process all found source dictionaries
-    for source_dict in sources:
-        for key, entry in source_dict.items():
-            if isinstance(entry, Mapping):
-                forms_map = _normalize_entry(key, entry)
-                extracted_lemmas.update(forms_map)
-
-    return extracted_lemmas
-
-# ---------------------------------------------------------------------------
-# Public API
-# ---------------------------------------------------------------------------
-
 def available_languages() -> List[str]:
     """
     Return a sorted list of language codes for which a lexicon directory exists.
@@ -123,7 +87,7 @@ def available_languages() -> List[str]:
             if any(item.glob("*.json")):
                 langs.append(item.name)
     
-    # Fallback: check for legacy root .json files if folders are missing
+    # Fallback: check for legacy root .json files
     for item in BASE_DIR.glob("*_lexicon.json"):
         code = item.name.replace("_lexicon.json", "")
         if code not in langs:
@@ -134,12 +98,28 @@ def available_languages() -> List[str]:
 def load_lexicon(lang_code: str) -> Dict[str, Any]:
     """
     Load and merge all lexicon files for a given language code.
-    Scans data/lexicon/{lang_code}/*.json.
+    
+    Returns:
+        Dict: A flattened dictionary of {surface_form: features}.
+              (NOT wrapped in "entries" key).
     """
     lang_dir = BASE_DIR / lang_code
     
     merged_entries: Dict[str, Dict[str, Any]] = {}
-    source_type = "folder"
+    
+    # Helper to extract data from raw JSON
+    def process_data(raw_data):
+        sources = []
+        if "entries" in raw_data: sources.append(raw_data["entries"])
+        if "lemmas" in raw_data: sources.append(raw_data["lemmas"])
+        for cat in ["professions", "titles", "nationalities", "honours"]:
+            if cat in raw_data: sources.append(raw_data[cat])
+            
+        for source_dict in sources:
+            if isinstance(source_dict, Mapping):
+                for key, entry in source_dict.items():
+                    if isinstance(entry, Mapping):
+                        merged_entries.update(_normalize_entry(key, entry))
 
     # 1. Try loading from the new folder structure
     if lang_dir.is_dir():
@@ -149,32 +129,23 @@ def load_lexicon(lang_code: str) -> Dict[str, Any]:
         
         for file_path in files:
             raw_data = _load_json_file(file_path)
-            if not raw_data: continue
-            
-            file_lemmas = _process_file_content(raw_data)
-            merged_entries.update(file_lemmas)
+            if raw_data: process_data(raw_data)
 
     # 2. Fallback: Try the old single-file location
     else:
         legacy_file = BASE_DIR / f"{lang_code}_lexicon.json"
         if legacy_file.exists():
             logger.info(f"Loading legacy file: {legacy_file.name}")
-            source_type = "legacy_file"
             raw_data = _load_json_file(legacy_file)
-            merged_entries = _process_file_content(raw_data)
+            if raw_data: process_data(raw_data)
         else:
             logger.error(f"No lexicon found for language: {lang_code}")
 
-    logger.info(f"Loaded {len(merged_entries)} surface forms for '{lang_code}' via {source_type}.")
+    logger.info(f"Loaded {len(merged_entries)} surface forms for '{lang_code}'.")
     
-    return {
-        "entries": merged_entries,
-        "_meta": {
-            "language": lang_code,
-            "source": source_type,
-            "count": len(merged_entries)
-        }
-    }
+    # CRITICAL FIX: Return the dictionary directly.
+    # The engine expects {"physicien": {...}}, not {"entries": {"physicien": ...}}
+    return merged_entries
 
 __all__ = [
     "load_lexicon",
@@ -187,4 +158,5 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         test_lang = sys.argv[1]
         lex = load_lexicon(test_lang)
-        print(f"Loaded {len(lex['entries'])} entries for {test_lang}")
+        # Note: 'lex' is now the direct dictionary, so we check len(lex), not len(lex['entries'])
+        print(f"Loaded {len(lex)} entries for {test_lang}")

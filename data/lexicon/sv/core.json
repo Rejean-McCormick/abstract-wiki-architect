@@ -2,7 +2,287 @@
   "_meta": {
     "language": "sv",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:38:00Z",
+    "note": "Maximal Schema: Includes Common/Neuter gender distinction and handles suffixed definite articles."
   },
-  "entries": {}
+  "entries": {
+    "copula": {
+      "lemma": "vara",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present": "är",
+        "past": "var",
+        "perfect_participle": "varit"
+      },
+      "note": "Invariant in present and past tense."
+    },
+    "det_definite": {
+      "lemma": "–et",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite_suffix",
+      "forms": {
+        "common_suffix": "-en",
+        "neuter_suffix": "-et",
+        "plural_suffix": "-na"
+      },
+      "note": "Definite article is a suffix (e.g., bordet, stolen)."
+    },
+    "det_indefinite": {
+      "lemma": "en",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "common": "en",
+        "neuter": "ett"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "han",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative": "han",
+        "accusative": "honom"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "hon",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom",
+      "forms": {
+        "nominative": "hon",
+        "accusative": "henne"
+      }
+    },
+    "pronoun_it": {
+      "lemma": "det",
+      "pos": "PRON",
+      "gloss": "it",
+      "person": "3",
+      "number": "sg",
+      "gender": "n",
+      "case": "nom",
+      "forms": {
+        "nominative": "det",
+        "accusative": "det"
+      },
+      "note": "Used for neuter nouns."
+    },
+    "pronoun_they": {
+      "lemma": "de",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "de",
+        "accusative": "dem"
+      }
+    },
+    "person": {
+      "lemma": "person",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "personer"
+    },
+    "man": {
+      "lemma": "man",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "män"
+    },
+    "woman": {
+      "lemma": "kvinna",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "kvinnor"
+    },
+    "scientist": {
+      "lemma": "forskare",
+      "pos": "NOUN",
+      "gloss": "researcher/scientist",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "forskare",
+      "note": "Invariant in plural."
+    },
+    "writer": {
+      "lemma": "författare",
+      "pos": "NOUN",
+      "gloss": "writer/author",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "författare"
+    },
+    "professor": {
+      "lemma": "professor",
+      "pos": "NOUN",
+      "gloss": "professor",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "professorer"
+    },
+    "nobel_prize": {
+      "lemma": "Nobelpriset",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "n",
+      "number": "count",
+      "semantic_field": "awards"
+    },
+    "famous": {
+      "lemma": "berömd",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "neuter": "berömt",
+        "plural_definite": "berömda"
+      }
+    },
+    "great": {
+      "lemma": "stor",
+      "pos": "ADJ",
+      "gloss": "great/big",
+      "degree": "positive",
+      "forms": {
+        "neuter": "stort",
+        "plural_definite": "stora"
+      }
+    },
+    "be_born": {
+      "lemma": "födas",
+      "pos": "VERB",
+      "gloss": "to be born (passive/deponent)",
+      "subcat": "intransitive",
+      "lemma_type": "deponent",
+      "forms": {
+        "past_3sg": "föddes",
+        "perfect_participle": "född"
+      }
+    },
+    "die": {
+      "lemma": "dö",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "discover": {
+      "lemma": "upptäcka",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "receive": {
+      "lemma": "motta",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "year": {
+      "lemma": "år",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "år",
+      "note": "Invariant in plural."
+    },
+    "city": {
+      "lemma": "stad",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "städer"
+    },
+    "country": {
+      "lemma": "land",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "länder"
+    },
+    "conj_and": {
+      "lemma": "och",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "men",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "i",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative"
+    },
+    "prep_from": {
+      "lemma": "från",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "prep_of": {
+      "lemma": "av",
+      "pos": "PREP",
+      "gloss": "of/by",
+      "subcat": "genitive"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
 }

@@ -1,0 +1,208 @@
+{
+  "_meta": {
+    "language": "el",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Standard V2)",
+    "generated_at": "2025-12-09T20:38:31Z",
+    "note": "Maximal Schema: Includes full declension tables for articles (case/gender/number) and pronouns."
+  },
+  "entries": {
+    "copula": {
+      "lemma": "είμαι",
+      "lemma_translit": "eimai",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "είμαι",
+        "present_2sg": "είσαι",
+        "present_3sg": "είναι",
+        "present_1pl": "είμαστε",
+        "present_2pl": "είστε",
+        "present_3pl": "είναι",
+        "past_1sg": "ήμουν",
+        "past_3sg": "ήταν",
+        "past_3pl": "ήταν",
+        "future_base": "θα είμαι"
+      }
+    },
+    "det_definite": {
+      "lemma": "ο",
+      "lemma_translit": "o",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "lemma_type": "base",
+      "forms": {
+        "m_nom_sg": "ο",
+        "f_nom_sg": "η",
+        "n_nom_sg": "το",
+        "m_acc_sg": "τον",
+        "f_acc_sg": "την",
+        "n_acc_sg": "το",
+        "m_gen_sg": "του",
+        "f_gen_sg": "της",
+        "n_gen_sg": "του",
+        "m_nom_pl": "οι",
+        "f_nom_pl": "οι",
+        "n_nom_pl": "τα",
+        "m_acc_pl": "τους",
+        "f_acc_pl": "τις",
+        "n_acc_pl": "τα",
+        "m_gen_pl": "των",
+        "f_gen_pl": "των",
+        "n_gen_pl": "των"
+      }
+    },
+    "det_indefinite": {
+      "lemma": "ένας",
+      "lemma_translit": "enas",
+      "pos": "DET",
+      "gloss": "a/an/one",
+      "subcat": "indefinite",
+      "lemma_type": "base",
+      "forms": {
+        "m_nom": "ένας",
+        "f_nom": "μια",
+        "n_nom": "ένα",
+        "m_acc": "έναν",
+        "f_acc": "μια",
+        "n_acc": "ένα",
+        "m_gen": "ενός",
+        "f_gen": "μιας",
+        "n_gen": "ενός"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "αυτός",
+      "lemma_translit": "autos",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative": "αυτός",
+        "accusative_strong": "αυτόν",
+        "accusative_weak": "τον",
+        "genitive_strong": "αυτού",
+        "genitive_weak": "του"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "αυτή",
+      "lemma_translit": "auti",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom",
+      "forms": {
+        "nominative": "αυτή",
+        "accusative_strong": "αυτήν",
+        "accusative_weak": "την",
+        "genitive_strong": "αυτής",
+        "genitive_weak": "της"
+      }
+    },
+    "pronoun_it": {
+      "lemma": "αυτό",
+      "lemma_translit": "auto",
+      "pos": "PRON",
+      "gloss": "it",
+      "person": "3",
+      "number": "sg",
+      "gender": "n",
+      "case": "nom",
+      "forms": {
+        "nominative": "αυτό",
+        "accusative_strong": "αυτό",
+        "accusative_weak": "το",
+        "genitive_strong": "αυτού",
+        "genitive_weak": "του"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "αυτοί",
+      "lemma_translit": "autoi",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative_m": "αυτοί",
+        "nominative_f": "αυτές",
+        "nominative_n": "αυτά",
+        "accusative_m_strong": "αυτούς",
+        "accusative_m_weak": "τους",
+        "genitive_pl_weak": "τους"
+      }
+    },
+    "conj_and": {
+      "lemma": "και",
+      "lemma_translit": "kai",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "αλλά",
+      "lemma_translit": "alla",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "ή",
+      "lemma_translit": "i",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "σε",
+      "lemma_translit": "se",
+      "pos": "PREP",
+      "gloss": "in/at/to",
+      "subcat": "locative",
+      "note": "Combines with definite articles: σε+τον=στον, σε+την=στην, σε+το=στο, σε+τους=στους, σε+τις=στις, σε+τα=στα."
+    },
+    "prep_from": {
+      "lemma": "από",
+      "lemma_translit": "apo",
+      "pos": "PREP",
+      "gloss": "from/by",
+      "subcat": "source"
+    },
+    "prep_with": {
+      "lemma": "με",
+      "lemma_translit": "me",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental"
+    },
+    "prep_for": {
+      "lemma": "για",
+      "lemma_translit": "gia",
+      "pos": "PREP",
+      "gloss": "for/about",
+      "subcat": "benefactive"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
+}

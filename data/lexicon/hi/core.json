@@ -2,155 +2,287 @@
   "_meta": {
     "language": "hi",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T21:40:00Z",
+    "note": "Maximal Schema: Includes Devanagari script, gender inflection, and complex predicates."
   },
   "entries": {
+    "copula": {
+      "lemma": "होना",
+      "lemma_translit": "hona",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "हूँ",
+        "present_1sg_translit": "hoon",
+        "present_2sg": "है",
+        "present_2sg_translit": "hai",
+        "present_3sg": "है",
+        "present_3sg_translit": "hai",
+        "present_2pl": "हो",
+        "present_2pl_translit": "ho",
+        "present_3pl": "हैं",
+        "present_3pl_translit": "hain",
+        "past_m_sg": "था",
+        "past_m_sg_translit": "tha",
+        "past_f_sg": "थी",
+        "past_f_sg_translit": "thi",
+        "past_m_pl": "थे",
+        "past_m_pl_translit": "the",
+        "past_f_pl": "थीं",
+        "past_f_pl_translit": "thin"
+      }
+    },
+    "det_definite": {
+      "lemma": "वह",
+      "lemma_translit": "vah",
+      "pos": "DET",
+      "gloss": "that/the",
+      "subcat": "definite",
+      "note": "Hindi uses demonstratives for definiteness."
+    },
+    "det_indefinite": {
+      "lemma": "एक",
+      "lemma_translit": "ek",
+      "pos": "DET",
+      "gloss": "one/a/an",
+      "subcat": "indefinite"
+    },
+    "pronoun_he": {
+      "lemma": "वह",
+      "lemma_translit": "vah",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "वह",
+        "oblique": "उस",
+        "ergative": "उसने"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_she": {
+      "lemma": "वह",
+      "lemma_translit": "vah",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "वह",
+        "oblique": "उस",
+        "ergative": "उसने"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_they": {
+      "lemma": "वे",
+      "lemma_translit": "ve",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "वे",
+        "oblique": "उन",
+        "ergative": "उन्होंने"
+      }
+    },
     "vyakti": {
+      "lemma": "व्यक्ति",
+      "lemma_translit": "vyakti",
       "pos": "NOUN",
       "gloss": "person",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "vyakti"
+      "plural_lemma": "व्यक्ति",
+      "plural_translit": "vyakti",
+      "note": "Invariant in direct plural."
     },
     "admi": {
+      "lemma": "आदमी",
+      "lemma_translit": "admi",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "admi"
+      "plural_lemma": "आदमी",
+      "plural_translit": "admi"
     },
     "aurat": {
+      "lemma": "औरत",
+      "lemma_translit": "aurat",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "auratein"
+      "plural_lemma": "औरतें",
+      "plural_translit": "auratein"
     },
     "vaigyanik": {
+      "lemma": "वैज्ञानिक",
+      "lemma_translit": "vaigyanik",
       "pos": "NOUN",
       "gloss": "scientist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "vaigyanik"
+      "plural_lemma": "वैज्ञानिक",
+      "plural_translit": "vaigyanik"
     },
     "bhautik_vigyani": {
+      "lemma": "भौतिक विज्ञानी",
+      "lemma_translit": "bhautik_vigyani",
       "pos": "NOUN",
       "gloss": "physicist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "bhautik_vigyani"
+      "plural_lemma": "भौतिक विज्ञानी",
+      "plural_translit": "bhautik_vigyani",
+      "semantic_field": "physics"
     },
     "rasayan_shastri": {
+      "lemma": "रसायन शास्त्री",
+      "lemma_translit": "rasayan_shastri",
       "pos": "NOUN",
       "gloss": "chemist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "rasayan_shastri"
+      "plural_lemma": "रसायन शास्त्री",
+      "plural_translit": "rasayan_shastri",
+      "semantic_field": "chemistry"
     },
     "lekhak": {
+      "lemma": "लेखक",
+      "lemma_translit": "lekhak",
       "pos": "NOUN",
       "gloss": "writer (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "lekhika",
-      "plural_lemma": "lekhak"
+      "feminine_lemma": "लेखिका",
+      "feminine_translit": "lekhika",
+      "plural_lemma": "लेखक",
+      "plural_translit": "lekhak"
     },
     "lekhika": {
+      "lemma": "लेखिका",
+      "lemma_translit": "lekhika",
       "pos": "NOUN",
       "gloss": "writer (fem.)",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "lekhak",
-      "plural_lemma": "lekhikayein"
+      "masculine_lemma": "लेखक",
+      "masculine_translit": "lekhak",
+      "plural_lemma": "लेखिकाएं",
+      "plural_translit": "lekhikayein"
     },
     "neta": {
+      "lemma": "नेता",
+      "lemma_translit": "neta",
       "pos": "NOUN",
       "gloss": "politician/leader",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "netri",
-      "plural_lemma": "neta"
+      "feminine_lemma": "नेत्री",
+      "feminine_translit": "netri",
+      "plural_lemma": "नेता",
+      "plural_translit": "neta"
     },
     "adhyapak": {
+      "lemma": "अध्यापक",
+      "lemma_translit": "adhyapak",
       "pos": "NOUN",
       "gloss": "teacher (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "adhyapika",
-      "plural_lemma": "adhyapak"
-    },
-    "adhyapika": {
-      "pos": "NOUN",
-      "gloss": "teacher (fem.)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "adhyapak",
-      "plural_lemma": "adhyapikayein"
+      "feminine_lemma": "अध्यापिका",
+      "feminine_translit": "adhyapika",
+      "plural_lemma": "अध्यापक",
+      "plural_translit": "adhyapak"
     },
     "kavi": {
+      "lemma": "कवि",
+      "lemma_translit": "kavi",
       "pos": "NOUN",
       "gloss": "poet",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "kaviyitri",
-      "plural_lemma": "kavi"
-    },
-    "kaviyitri": {
-      "pos": "NOUN",
-      "gloss": "poetess",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "kavi",
-      "plural_lemma": "kaviyitriyan"
+      "feminine_lemma": "कवियित्री",
+      "feminine_translit": "kaviyitri",
+      "plural_lemma": "कवि",
+      "plural_translit": "kavi"
     },
     "abhineta": {
+      "lemma": "अभिनेता",
+      "lemma_translit": "abhineta",
       "pos": "NOUN",
       "gloss": "actor",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "abhinetri",
-      "plural_lemma": "abhineta"
+      "feminine_lemma": "अभिनेत्री",
+      "feminine_translit": "abhinetri",
+      "plural_lemma": "अभिनेता",
+      "plural_translit": "abhineta"
     },
     "abhinetri": {
+      "lemma": "अभिनेत्री",
+      "lemma_translit": "abhinetri",
       "pos": "NOUN",
       "gloss": "actress",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "abhineta",
-      "plural_lemma": "abhinetriyan"
+      "masculine_lemma": "अभिनेता",
+      "masculine_translit": "abhineta",
+      "plural_lemma": "अभिनेत्रियां",
+      "plural_translit": "abhinetriyan"
     },
     "desh": {
+      "lemma": "देश",
+      "lemma_translit": "desh",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "desh"
+      "plural_lemma": "देश",
+      "plural_translit": "desh"
     },
     "shahar": {
+      "lemma": "शहर",
+      "lemma_translit": "shahar",
       "pos": "NOUN",
       "gloss": "city",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "shahar"
+      "plural_lemma": "शहर",
+      "plural_translit": "shahar"
     },
     "bharat": {
+      "lemma": "भारत",
+      "lemma_translit": "Bharat",
       "pos": "NOUN",
       "gloss": "India",
       "human": false,
@@ -160,6 +292,8 @@
       "qid": "Q668"
     },
     "poland": {
+      "lemma": "पोलैंड",
+      "lemma_translit": "Poland",
       "pos": "NOUN",
       "gloss": "Poland",
       "human": false,
@@ -169,6 +303,8 @@
       "qid": "Q36"
     },
     "france": {
+      "lemma": "फ़्रांस",
+      "lemma_translit": "France",
       "pos": "NOUN",
       "gloss": "France",
       "human": false,
@@ -178,57 +314,123 @@
       "qid": "Q142"
     },
     "mashhoor": {
+      "lemma": "मशहूर",
+      "lemma_translit": "mashhoor",
       "pos": "ADJ",
       "gloss": "famous",
-      "degree": "positive"
+      "degree": "positive",
+      "gender": "common",
+      "note": "Invariant adjective."
     },
     "bada": {
+      "lemma": "बड़ा",
+      "lemma_translit": "bada",
       "pos": "ADJ",
-      "gloss": "big/great (masc.)",
+      "gloss": "big/great",
       "degree": "positive",
       "gender": "m",
-      "feminine_lemma": "badi"
-    },
-    "badi": {
-      "pos": "ADJ",
-      "gloss": "big/great (fem.)",
-      "degree": "positive",
-      "gender": "f",
-      "masculine_lemma": "bada"
-    },
-    "hona": {
-      "pos": "VERB",
-      "gloss": "to be",
-      "subcat": "copula",
-      "lemma_type": "base",
-      "irregular_forms": {
-        "present_3sg": "hai",
-        "present_3pl": "hain",
-        "past_m_sg": "tha",
-        "past_f_sg": "thi",
-        "past_m_pl": "the",
-        "past_f_pl": "thin"
-      }
+      "feminine_lemma": "बड़ी",
+      "feminine_translit": "badi",
+      "plural_lemma": "बड़े",
+      "plural_translit": "bade"
     },
     "paida_hona": {
+      "lemma": "पैदा होना",
+      "lemma_translit": "paida hona",
       "pos": "VERB",
       "gloss": "to be born",
       "subcat": "intransitive",
-      "lemma_type": "base"
+      "lemma_type": "complex_predicate",
+      "components": [
+        "paida",
+        "hona"
+      ],
+      "irregular_forms": {
+        "past_m_sg": "पैदा हुआ",
+        "past_m_sg_translit": "paida hua",
+        "past_f_sg": "पैदा हुई",
+        "past_f_sg_translit": "paida hui"
+      }
     },
     "marna": {
+      "lemma": "मरना",
+      "lemma_translit": "marna",
       "pos": "VERB",
       "gloss": "to die",
       "subcat": "intransitive",
-      "lemma_type": "base"
+      "lemma_type": "base",
+      "irregular_forms": {
+        "past_m_sg": "मरा",
+        "past_m_sg_translit": "mara",
+        "past_f_sg": "मरी",
+        "past_f_sg_translit": "mari"
+      }
+    },
+    "prapt_karna": {
+      "lemma": "प्राप्त करना",
+      "lemma_translit": "prapt karna",
+      "pos": "VERB",
+      "gloss": "to receive/obtain",
+      "subcat": "transitive",
+      "lemma_type": "complex_predicate",
+      "components": [
+        "prapt",
+        "karna"
+      ],
+      "irregular_forms": {
+        "past_m_sg": "प्राप्त किया",
+        "past_m_sg_translit": "prapt kiya"
+      }
     },
     "saal": {
+      "lemma": "साल",
+      "lemma_translit": "saal",
       "pos": "NOUN",
       "gloss": "year",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "saal"
+      "plural_lemma": "साल",
+      "plural_translit": "saal"
+    },
+    "conj_and": {
+      "lemma": "और",
+      "lemma_translit": "aur",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "लेकिन",
+      "lemma_translit": "lekin",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "में",
+      "lemma_translit": "mein",
+      "pos": "POST",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Postposition following the noun (e.g., Bharat mein)."
+    },
+    "prep_from": {
+      "lemma": "से",
+      "lemma_translit": "se",
+      "pos": "POST",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "punctuation_period": {
+      "lemma": "।",
+      "pos": "PUNCT",
+      "gloss": "danda (period)"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
     }
   }
 }

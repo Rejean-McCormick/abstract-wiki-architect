@@ -1,0 +1,239 @@
+{
+  "_meta": {
+    "language": "mn",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:05:00Z",
+    "note": "Maximal Schema: Includes Cyrillic, transliteration, and agglutinative/postpositional structure."
+  },
+  "entries": {
+    "copula": {
+      "lemma": "байх",
+      "lemma_translit": "baykh",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_3sg": "байна",
+        "present_3sg_translit": "baina",
+        "present_3pl": "байна",
+        "past_3sg": "байсан",
+        "past_3sg_translit": "baysan",
+        "enclitic_m": "–",
+        "enclitic_f": "–",
+        "enclitic_translit": "–",
+        "note": "The actual copula is often omitted or attached as an enclitic (-d, -d’iin)."
+      }
+    },
+    "det_definite": {
+      "lemma": "",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "note": "Mongolian has no articles."
+    },
+    "det_indefinite": {
+      "lemma": "нэг",
+      "lemma_translit": "neg",
+      "pos": "DET",
+      "gloss": "one/a/an",
+      "subcat": "indefinite"
+    },
+    "pronoun_he": {
+      "lemma": "тэр",
+      "lemma_translit": "ter",
+      "pos": "PRON",
+      "gloss": "he/she/it",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "forms": {
+        "nom": "тэр",
+        "gen": "түүний",
+        "dat": "түүнд",
+        "acc": "түүнийг"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_she": {
+      "lemma": "тэр",
+      "lemma_translit": "ter",
+      "pos": "PRON",
+      "gloss": "he/she/it",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "forms": {
+        "nom": "тэр",
+        "gen": "түүний",
+        "dat": "түүнд",
+        "acc": "түүнийг"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_they": {
+      "lemma": "тэд",
+      "lemma_translit": "ted",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "forms": {
+        "nom": "тэд",
+        "gen": "тэдний",
+        "acc": "тэднийг"
+      }
+    },
+    "person": {
+      "lemma": "хүн",
+      "lemma_translit": "khün",
+      "pos": "NOUN",
+      "gloss": "person/human",
+      "human": true,
+      "forms": {
+        "plural": "хүмүүс",
+        "plural_translit": "khümüüs"
+      }
+    },
+    "scientist": {
+      "lemma": "эpдэмтэн",
+      "lemma_translit": "erdemten",
+      "pos": "NOUN",
+      "gloss": "scientist/scholar",
+      "human": true,
+      "forms": {
+        "plural": "эрдэмтэд",
+        "plural_translit": "erdemted"
+      },
+      "semantic_field": "science"
+    },
+    "writer": {
+      "lemma": "зохиолч",
+      "lemma_translit": "zokhiolch",
+      "pos": "NOUN",
+      "gloss": "writer/author",
+      "human": true
+    },
+    "famous": {
+      "lemma": "алдартай",
+      "lemma_translit": "aldartai",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive"
+    },
+    "great": {
+      "lemma": "агуу",
+      "lemma_translit": "aguu",
+      "pos": "ADJ",
+      "gloss": "great/big",
+      "degree": "positive"
+    },
+    "be_born": {
+      "lemma": "төрөх",
+      "lemma_translit": "törökh",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "төрсөн",
+        "past_3sg_translit": "törsön"
+      }
+    },
+    "die": {
+      "lemma": "нас барах",
+      "lemma_translit": "nas barakh",
+      "pos": "VERB",
+      "gloss": "to die (polite)",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "нас барсан",
+        "past_3sg_translit": "nas barsan"
+      }
+    },
+    "discover": {
+      "lemma": "нээх",
+      "lemma_translit": "neekh",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "forms": {
+        "past_3sg": "нээсэн",
+        "past_3sg_translit": "neesen"
+      }
+    },
+    "receive": {
+      "lemma": "хүлээн авах",
+      "lemma_translit": "khüleen avakh",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "forms": {
+        "past_3sg": "хүлээн авсан",
+        "past_3sg_translit": "khüleen avsan"
+      }
+    },
+    "year": {
+      "lemma": "жил",
+      "lemma_translit": "jil",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false
+    },
+    "city": {
+      "lemma": "хот",
+      "lemma_translit": "khot",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false
+    },
+    "country": {
+      "lemma": "улс",
+      "lemma_translit": "uls",
+      "pos": "NOUN",
+      "gloss": "country/state",
+      "human": false
+    },
+    "conj_and": {
+      "lemma": "болон",
+      "lemma_translit": "bolon",
+      "pos": "CONJ",
+      "gloss": "and (between nouns)",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "харин",
+      "lemma_translit": "kharin",
+      "pos": "CONJ",
+      "gloss": "but/however",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "дотор",
+      "lemma_translit": "dotor",
+      "pos": "POST",
+      "gloss": "in/inside",
+      "subcat": "locative",
+      "note": "Postposition taking Genitive (e.g., Ulsyn dotor)."
+    },
+    "prep_from": {
+      "lemma": "–",
+      "pos": "POST",
+      "gloss": "from",
+      "subcat": "source",
+      "note": "Expressed via Ablative case suffix (-aas/-ees) attached to the noun."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
+}

@@ -1,0 +1,261 @@
+{
+  "_meta": {
+    "language": "lv",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:01:00Z",
+    "note": "Maximal Schema: Includes 4-case declension, masculine/feminine forms, and handles the Zero Copula in the present tense."
+  },
+  "entries": {
+    "copula": {
+      "lemma": "būt",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_3sg": "NULL",
+        "present_3pl": "NULL",
+        "past_3sg_m": "bija",
+        "past_3sg_f": "bija",
+        "future_3sg": "būs",
+        "past_participle": "bijis"
+      },
+      "note": "Present tense is usually omitted/null (Zero Copula)."
+    },
+    "det_definite": {
+      "lemma": "šis",
+      "pos": "DET",
+      "gloss": "this/that (demonstrative)",
+      "subcat": "definite",
+      "note": "Latvian lacks a true definite article; definiteness is shown by definite adjectives or demonstratives."
+    },
+    "det_indefinite": {
+      "lemma": "kāds",
+      "pos": "DET",
+      "gloss": "a certain/a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "m_nom_sg": "kāds",
+        "f_nom_sg": "kāda"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "viņš",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nom": "viņš",
+        "gen": "viņa",
+        "dat": "viņam",
+        "acc": "viņu"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "viņa",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom",
+      "forms": {
+        "nom": "viņa",
+        "gen": "viņas",
+        "dat": "viņai",
+        "acc": "viņu"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "viņi",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "m_nom": "viņi",
+        "f_nom": "viņas",
+        "gen_pl": "viņu"
+      }
+    },
+    "person": {
+      "lemma": "persona",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "f",
+      "number": "sg",
+      "forms": {
+        "nom_sg": "persona",
+        "gen_sg": "personas",
+        "dat_sg": "personai",
+        "acc_sg": "personu",
+        "pl": "personas"
+      }
+    },
+    "scientist": {
+      "lemma": "zinātnieks",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "zinātniece",
+      "forms": {
+        "nom_sg": "zinātnieks",
+        "gen_sg": "zinātnieka",
+        "acc_sg": "zinātnieku"
+      }
+    },
+    "writer": {
+      "lemma": "rakstnieks",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "rakstniece"
+    },
+    "famous": {
+      "lemma": "slavens",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "m_nom_sg": "slavens",
+        "f_nom_sg": "slavena",
+        "m_gen_sg": "slavena",
+        "f_gen_sg": "slavenas",
+        "m_def_nom_sg": "slavenais"
+      }
+    },
+    "great": {
+      "lemma": "liels",
+      "pos": "ADJ",
+      "gloss": "great/big",
+      "degree": "positive",
+      "forms": {
+        "m_nom_sg": "liels",
+        "f_nom_sg": "liela",
+        "m_def_nom_sg": "lielais"
+      }
+    },
+    "be_born": {
+      "lemma": "dzimt",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "dzima",
+        "past_participle_m": "dzimis",
+        "past_participle_f": "dzimusi"
+      }
+    },
+    "die": {
+      "lemma": "nomirt",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "nomira",
+        "past_participle_m": "nomiris"
+      }
+    },
+    "receive": {
+      "lemma": "saņemt",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "year": {
+      "lemma": "gads",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "forms": {
+        "nom_sg": "gads",
+        "gen_sg": "gada",
+        "pl": "gadi"
+      }
+    },
+    "city": {
+      "lemma": "pilsēta",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "forms": {
+        "nom_sg": "pilsēta",
+        "gen_sg": "pilsētas",
+        "pl": "pilsētas"
+      }
+    },
+    "country": {
+      "lemma": "valsts",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "forms": {
+        "nom_sg": "valsts",
+        "gen_sg": "valsts",
+        "pl": "valstis"
+      }
+    },
+    "conj_and": {
+      "lemma": "un",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "bet",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "iekš",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Usually takes Genitive. Locative case on the noun is often preferred."
+    },
+    "prep_from": {
+      "lemma": "no",
+      "pos": "PREP",
+      "gloss": "from/of",
+      "subcat": "source",
+      "note": "Takes Genitive."
+    },
+    "prep_with": {
+      "lemma": "ar",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental",
+      "note": "Takes Accusative/Instrumental equivalent."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
+}

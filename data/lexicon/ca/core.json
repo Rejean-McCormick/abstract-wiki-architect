@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "language": "ca",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Standard V2)",
+    "generated_at": "2025-12-09T20:45:00Z",
+    "note": "Maximal Schema: Includes glosses, explicit subcategories, and secondary copula."
+  },
+  "entries": {
+    "copula": {
+      "lemma": "ser",
+      "pos": "VERB",
+      "gloss": "to be (permanent)",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "sóc",
+        "present_2sg": "ets",
+        "present_3sg": "és",
+        "present_1pl": "som",
+        "present_2pl": "sou",
+        "present_3pl": "són",
+        "past_imperfect_3sg": "era",
+        "past_imperfect_3pl": "eren"
+      },
+      "note": "Used for identity, definition, and origin."
+    },
+    "copula_locative": {
+      "lemma": "estar",
+      "pos": "VERB",
+      "gloss": "to be (temporary/locative)",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "estic",
+        "present_2sg": "estàs",
+        "present_3sg": "està",
+        "present_1pl": "estem",
+        "present_2pl": "esteu",
+        "present_3pl": "estan",
+        "past_imperfect_3sg": "estava"
+      },
+      "note": "Used for location and temporary states."
+    },
+    "det_definite": {
+      "lemma": "el",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "lemma_type": "base",
+      "forms": {
+        "m_sg": "el",
+        "f_sg": "la",
+        "m_pl": "els",
+        "f_pl": "les",
+        "vowel_sg": "l'"
+      }
+    },
+    "det_indefinite": {
+      "lemma": "un",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "lemma_type": "base",
+      "forms": {
+        "m_sg": "un",
+        "f_sg": "una",
+        "m_pl": "uns",
+        "f_pl": "unes"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "ell",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative": "ell",
+        "accusative": "el",
+        "dative": "li",
+        "prepositional": "ell"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "ella",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom",
+      "forms": {
+        "nominative": "ella",
+        "accusative": "la",
+        "dative": "li",
+        "prepositional": "ella"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "ells",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative_m": "ells",
+        "nominative_f": "elles",
+        "accusative_m": "els",
+        "accusative_f": "les",
+        "dative": "els"
+      }
+    },
+    "conj_and": {
+      "lemma": "i",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "però",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "o",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "a",
+      "pos": "PREP",
+      "gloss": "in/at/to",
+      "subcat": "locative",
+      "note": "Can be 'a' (location/direction) or 'en' (interiority/time)."
+    },
+    "prep_of": {
+      "lemma": "de",
+      "pos": "PREP",
+      "gloss": "of/from",
+      "subcat": "genitive",
+      "forms": {
+        "default": "de",
+        "before_vowel": "d'"
+      }
+    },
+    "prep_with": {
+      "lemma": "amb",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
+}

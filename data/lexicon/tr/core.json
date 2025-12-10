@@ -2,7 +2,240 @@
   "_meta": {
     "language": "tr",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:55:00Z",
+    "note": "Maximal Schema: Includes agglutinative structure, gender-neutral pronouns, and postpositions."
   },
-  "entries": {}
+  "entries": {
+    "copula": {
+      "lemma": "olmak",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_3sg": "–dır",
+        "present_3pl": "–dırlar",
+        "past_3sg": "idi",
+        "past_3pl": "idiler"
+      },
+      "note": "Present tense copula is generally an enclitic suffix (-dır, -dir, -dur, -dür) that harmonizes with the preceding word."
+    },
+    "det_definite": {
+      "lemma": "–",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "zero_article",
+      "note": "Turkish has no articles. Definiteness is implied or shown by the Accusative case suffix."
+    },
+    "det_indefinite": {
+      "lemma": "bir",
+      "pos": "DET",
+      "gloss": "a/an/one",
+      "subcat": "indefinite"
+    },
+    "pronoun_he": {
+      "lemma": "o",
+      "pos": "PRON",
+      "gloss": "he/she/it",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "forms": {
+        "nominative": "o",
+        "genitive": "onun",
+        "dative": "ona",
+        "accusative": "onu",
+        "locative": "onda"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_she": {
+      "lemma": "o",
+      "pos": "PRON",
+      "gloss": "he/she/it",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "forms": {
+        "nominative": "o",
+        "genitive": "onun",
+        "dative": "ona",
+        "accusative": "onu",
+        "locative": "onda"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "onlar",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "forms": {
+        "nominative": "onlar",
+        "genitive": "onların",
+        "accusative": "onları"
+      }
+    },
+    "person": {
+      "lemma": "kişi",
+      "pos": "NOUN",
+      "gloss": "person/human",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "kişiler"
+    },
+    "man": {
+      "lemma": "erkek",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "erkekler"
+    },
+    "woman": {
+      "lemma": "kadın",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "kadınlar"
+    },
+    "scientist": {
+      "lemma": "bilim insanı",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "bilim insanları",
+      "multiword": true,
+      "semantic_field": "science"
+    },
+    "yazar": {
+      "lemma": "yazar",
+      "pos": "NOUN",
+      "gloss": "writer/author",
+      "human": true,
+      "number": "sg",
+      "plural_lemma": "yazarlar"
+    },
+    "ünlü": {
+      "lemma": "ünlü",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "note": "Invariant adjective."
+    },
+    "büyük": {
+      "lemma": "büyük",
+      "pos": "ADJ",
+      "gloss": "great/big",
+      "degree": "positive",
+      "note": "Invariant adjective."
+    },
+    "doğmak": {
+      "lemma": "doğmak",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "doğdu",
+        "past_3pl": "doğdular"
+      }
+    },
+    "ölmek": {
+      "lemma": "ölmek",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "öldü",
+        "past_3pl": "öldüler"
+      }
+    },
+    "keşfetmek": {
+      "lemma": "keşfetmek",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "regular": true
+    },
+    "almak": {
+      "lemma": "almak",
+      "pos": "VERB",
+      "gloss": "to receive/get",
+      "subcat": "transitive",
+      "forms": {
+        "past_3sg": "aldı"
+      }
+    },
+    "yıl": {
+      "lemma": "yıl",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "yıllar"
+    },
+    "şehir": {
+      "lemma": "şehir",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "şehirler"
+    },
+    "ülke": {
+      "lemma": "ülke",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "number": "sg",
+      "plural_lemma": "ülkeler"
+    },
+    "conj_ve": {
+      "lemma": "ve",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_ama": {
+      "lemma": "ama",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "–de",
+      "pos": "POST",
+      "gloss": "in/at/on",
+      "subcat": "locative",
+      "note": "Expressed via Locative case suffix (-de, -da, -te, -ta) attached to the noun."
+    },
+    "prep_from": {
+      "lemma": "–dan",
+      "pos": "POST",
+      "gloss": "from",
+      "subcat": "source",
+      "note": "Expressed via Ablative case suffix (-den, -dan, -ten, -tan) attached to the noun."
+    },
+    "prep_with": {
+      "lemma": "ile",
+      "pos": "POST",
+      "gloss": "with",
+      "subcat": "instrumental"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
 }

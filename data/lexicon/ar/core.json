@@ -1,175 +1,245 @@
 {
   "_meta": {
     "language": "ar",
-    "domain": "core",
-    "version": 1
+    "domain": "mixed",
+    "version": 2,
+    "note": "Hybrid Schema: Contains both Arabic Script (for Engine) and Latin Transliteration (for Devs)"
   },
   "entries": {
     "shakhs": {
+      "lemma": "شَخْص",
+      "lemma_translit": "shakhs",
       "pos": "NOUN",
       "gloss": "person",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "ashkhas"
+      "plural_lemma": "أَشْخَاص",
+      "plural_translit": "ashkhas"
     },
     "rajul": {
+      "lemma": "رَجُل",
+      "lemma_translit": "rajul",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "rijal"
+      "plural_lemma": "رِجَال",
+      "plural_translit": "rijal"
     },
     "imra'a": {
+      "lemma": "اِمْرَأَة",
+      "lemma_translit": "imra'a",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "nisa'"
+      "plural_lemma": "نِسَاء",
+      "plural_translit": "nisa'"
     },
     "alim": {
+      "lemma": "عَالِم",
+      "lemma_translit": "alim",
       "pos": "NOUN",
       "gloss": "scientist/scholar",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "alima",
-      "plural_lemma": "ulama"
+      "feminine_lemma": "عَالِمَة",
+      "feminine_translit": "alima",
+      "plural_lemma": "عُلَمَاء",
+      "plural_translit": "ulama"
     },
     "fizya'i": {
+      "lemma": "فِيزْيَائِيّ",
+      "lemma_translit": "fizya'i",
       "pos": "NOUN",
       "gloss": "physicist (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "fizya'iyya",
-      "plural_lemma": "fizya'iyyun"
+      "feminine_lemma": "فِيزْيَائِيَّة",
+      "feminine_translit": "fizya'iyya",
+      "plural_lemma": "فِيزْيَائِيُّون",
+      "plural_translit": "fizya'iyyun"
     },
     "fizya'iyya": {
+      "lemma": "فِيزْيَائِيَّة",
+      "lemma_translit": "fizya'iyya",
       "pos": "NOUN",
       "gloss": "physicist (fem.)",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "fizya'i",
-      "plural_lemma": "fizya'iyyat"
+      "masculine_lemma": "فِيزْيَائِيّ",
+      "masculine_translit": "fizya'i",
+      "plural_lemma": "فِيزْيَائِيَّات",
+      "plural_translit": "fizya'iyyat"
     },
     "kimya'i": {
+      "lemma": "كِيمْيَائِيّ",
+      "lemma_translit": "kimya'i",
       "pos": "NOUN",
       "gloss": "chemist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "kimya'iyya",
-      "plural_lemma": "kimya'iyyun"
+      "feminine_lemma": "كِيمْيَائِيَّة",
+      "feminine_translit": "kimya'iyya",
+      "plural_lemma": "كِيمْيَائِيُّون",
+      "plural_translit": "kimya'iyyun"
     },
     "katib": {
+      "lemma": "كَاتِب",
+      "lemma_translit": "katib",
       "pos": "NOUN",
       "gloss": "writer",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "katiba",
-      "plural_lemma": "kuttab"
+      "feminine_lemma": "كَاتِبَة",
+      "feminine_translit": "katiba",
+      "plural_lemma": "كُتَّاب",
+      "plural_translit": "kuttab"
     },
     "katiba": {
+      "lemma": "كَاتِبَة",
+      "lemma_translit": "katiba",
       "pos": "NOUN",
       "gloss": "writer (fem.)",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "katib",
-      "plural_lemma": "katibat"
+      "masculine_lemma": "كَاتِب",
+      "masculine_translit": "katib",
+      "plural_lemma": "كَاتِبَات",
+      "plural_translit": "katibat"
     },
     "siyasi": {
+      "lemma": "سِيَاسِيّ",
+      "lemma_translit": "siyasi",
       "pos": "NOUN",
       "gloss": "politician",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "siyasiyya",
-      "plural_lemma": "siyasiyyun"
+      "feminine_lemma": "سِيَاسِيَّة",
+      "feminine_translit": "siyasiyya",
+      "plural_lemma": "سِيَاسِيُّون",
+      "plural_translit": "siyasiyyun"
     },
     "mu'allim": {
+      "lemma": "مُعَلِّم",
+      "lemma_translit": "mu'allim",
       "pos": "NOUN",
       "gloss": "teacher",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "mu'allima",
-      "plural_lemma": "mu'allimun"
+      "feminine_lemma": "مُعَلِّمَة",
+      "feminine_translit": "mu'allima",
+      "plural_lemma": "مُعَلِّمُون",
+      "plural_translit": "mu'allimun"
     },
     "tabib": {
+      "lemma": "طَبِيب",
+      "lemma_translit": "tabib",
       "pos": "NOUN",
       "gloss": "doctor/physician",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "tabiba",
-      "plural_lemma": "atibba'"
+      "feminine_lemma": "طَبِيبَة",
+      "feminine_translit": "tabiba",
+      "plural_lemma": "أَطِبَّاء",
+      "plural_translit": "atibba'"
     },
     "dawla": {
+      "lemma": "دَوْلَة",
+      "lemma_translit": "dawla",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "duwal"
+      "plural_lemma": "دُوَل",
+      "plural_translit": "duwal"
     },
     "madina": {
+      "lemma": "مَدِينَة",
+      "lemma_translit": "madina",
       "pos": "NOUN",
       "gloss": "city",
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "mudun"
+      "plural_lemma": "مُدُن",
+      "plural_translit": "mudun"
     },
     "mashhur": {
+      "lemma": "مَشْهُور",
+      "lemma_translit": "mashhur",
       "pos": "ADJ",
       "gloss": "famous",
       "degree": "positive",
       "gender": "m",
-      "feminine_lemma": "mashhura"
+      "feminine_lemma": "مَشْهُورَة",
+      "feminine_translit": "mashhura"
     },
     "kana": {
+      "lemma": "كَانَ",
+      "lemma_translit": "kana",
       "pos": "VERB",
       "gloss": "to be (past)",
       "subcat": "copula",
       "lemma_type": "base",
       "irregular_forms": {
-        "past_3sg_m": "kana",
-        "past_3sg_f": "kanat"
+        "past_3sg_m": "كَانَ",
+        "past_3sg_m_translit": "kana",
+        "past_3sg_f": "كَانَتْ",
+        "past_3sg_f_translit": "kanat"
       }
     },
     "wulida": {
+      "lemma": "وُلِدَ",
+      "lemma_translit": "wulida",
       "pos": "VERB",
       "gloss": "to be born (passive)",
       "subcat": "intransitive",
       "lemma_type": "base",
       "irregular_forms": {
-        "past_3sg_m": "wulida",
-        "past_3sg_f": "wulidat"
+        "past_3sg_m": "وُلِدَ",
+        "past_3sg_m_translit": "wulida",
+        "past_3sg_f": "وُلِدَتْ",
+        "past_3sg_f_translit": "wulidat"
       }
     },
     "tuwuffiya": {
+      "lemma": "تُوُفِّيَ",
+      "lemma_translit": "tuwuffiya",
       "pos": "VERB",
       "gloss": "to die (passive/polite)",
       "subcat": "intransitive",
       "lemma_type": "base",
       "irregular_forms": {
-        "past_3sg_m": "tuwuffiya",
-        "past_3sg_f": "tuwuffiyat"
+        "past_3sg_m": "تُوُفِّيَ",
+        "past_3sg_m_translit": "tuwuffiya",
+        "past_3sg_f": "تُوُفِّيَتْ",
+        "past_3sg_f_translit": "tuwuffiyat"
       }
     },
     "sanah": {
+      "lemma": "سَنَة",
+      "lemma_translit": "sanah",
       "pos": "NOUN",
       "gloss": "year",
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "sanawat"
+      "plural_lemma": "سَنَوَات",
+      "plural_translit": "sanawat"
     }
   }
 }

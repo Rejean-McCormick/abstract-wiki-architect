@@ -2,350 +2,565 @@
   "_meta": {
     "language": "ja",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T21:45:00Z",
+    "note": "Includes full scientific domain, particles, and copula forms."
   },
   "entries": {
+    "copula": {
+      "lemma": "だ",
+      "pos": "COPULA",
+      "gloss": "to be (identity)",
+      "romaji": "da",
+      "forms": {
+        "plain_present": "だ",
+        "polite_present": "です",
+        "plain_past": "だった",
+        "polite_past": "でした"
+      },
+      "note": "Base copula. Requires explicit selection of formality."
+    },
+    "particle_topic": {
+      "lemma": "は",
+      "pos": "PART",
+      "gloss": "topic marker",
+      "kana": "は",
+      "romaji": "wa"
+    },
+    "particle_subject": {
+      "lemma": "が",
+      "pos": "PART",
+      "gloss": "subject marker",
+      "kana": "が",
+      "romaji": "ga"
+    },
+    "particle_object": {
+      "lemma": "を",
+      "pos": "PART",
+      "gloss": "object marker",
+      "kana": "を",
+      "romaji": "o"
+    },
+    "particle_possessive": {
+      "lemma": "の",
+      "pos": "PART",
+      "gloss": "possessive/genitive marker",
+      "kana": "の",
+      "romaji": "no"
+    },
+    "particle_in": {
+      "lemma": "に",
+      "pos": "PART",
+      "gloss": "location/time marker",
+      "kana": "に",
+      "romaji": "ni"
+    },
+    "conj_and": {
+      "lemma": "と",
+      "pos": "PART",
+      "gloss": "and (exhaustive list)",
+      "kana": "と",
+      "romaji": "to"
+    },
+    "conj_but": {
+      "lemma": "しかし",
+      "pos": "CONJ",
+      "gloss": "but/however",
+      "kanji": "しかし",
+      "romaji": "shikashi"
+    },
+    "pronoun_he": {
+      "lemma": "彼",
+      "pos": "PRON",
+      "gloss": "he",
+      "kanji": "彼",
+      "romaji": "kare"
+    },
+    "pronoun_she": {
+      "lemma": "彼女",
+      "pos": "PRON",
+      "gloss": "she",
+      "kanji": "彼女",
+      "romaji": "kanojo"
+    },
+    "pronoun_they": {
+      "lemma": "彼ら",
+      "pos": "PRON",
+      "gloss": "they",
+      "kanji": "彼ら",
+      "romaji": "karera"
+    },
+    "person": {
+      "lemma": "人",
+      "pos": "NOUN",
+      "gloss": "person",
+      "kanji": "人",
+      "kana": "ひと",
+      "romaji": "hito",
+      "human": true
+    },
+    "man": {
+      "lemma": "男",
+      "pos": "NOUN",
+      "gloss": "man",
+      "kanji": "男",
+      "kana": "おとこ",
+      "romaji": "otoko",
+      "human": true
+    },
+    "woman": {
+      "lemma": "女",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "kanji": "女",
+      "kana": "おんな",
+      "romaji": "onna",
+      "human": true
+    },
     "philosopher": {
+      "lemma": "哲学者",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "哲学者",
       "kana": "てつがくしゃ",
       "romaji": "tetsugaku-sha",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "writer": {
+      "lemma": "作家",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "作家",
       "kana": "さっか",
       "romaji": "sakka",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "poet": {
+      "lemma": "詩人",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "詩人",
       "kana": "しじん",
       "romaji": "shijin",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "singer": {
+      "lemma": "歌手",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "歌手",
       "kana": "かしゅ",
       "romaji": "kashu",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "actor": {
+      "lemma": "俳優",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "俳優",
       "kana": "はいゆう",
       "romaji": "haiyū",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "actress": {
+      "lemma": "女優",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "女優",
       "kana": "じょゆう",
       "romaji": "joyū",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "film_director": {
+      "lemma": "映画監督",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "映画監督",
       "kana": "えいがかんとく",
       "romaji": "eiga-kantoku",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "politician": {
+      "lemma": "政治家",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "政治家",
       "kana": "せいじか",
       "romaji": "seiji-ka",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "emperor": {
+      "lemma": "天皇",
       "pos": "NOUN",
       "sense": "title",
       "kanji": "天皇",
       "kana": "てんのう",
       "romaji": "tennō",
-      "human": true,
-      "default_formality": "formal"
+      "human": true
     },
     "prime_minister": {
+      "lemma": "首相",
       "pos": "NOUN",
       "sense": "title",
       "kanji": "首相",
       "kana": "しゅしょう",
       "romaji": "shushō",
-      "human": true,
-      "default_formality": "formal"
+      "human": true
     },
     "footballer": {
+      "lemma": "サッカー選手",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "サッカー選手",
       "kana": "さっかーせんしゅ",
       "romaji": "sakkā-senshu",
       "human": true,
-      "default_formality": "neutral"
+      "multiword": true
     },
     "basketball_player": {
+      "lemma": "バスケットボール選手",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "バスケットボール選手",
       "kana": "ばすけっとぼーるせんしゅ",
       "romaji": "basukettobōru-senshu",
       "human": true,
-      "default_formality": "neutral"
+      "multiword": true
     },
     "scientist": {
+      "lemma": "科学者",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "科学者",
       "kana": "かがくしゃ",
       "romaji": "kagaku-sha",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "historian": {
+      "lemma": "歴史家",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "歴史家",
       "kana": "れきしか",
       "romaji": "rekishi-ka",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "composer": {
+      "lemma": "作曲家",
       "pos": "NOUN",
       "sense": "profession",
       "kanji": "作曲家",
       "kana": "さっきょくか",
       "romaji": "sakkyoku-ka",
+      "human": true
+    },
+    "scientific_researcher": {
+      "lemma": "研究者",
+      "pos": "NOUN",
+      "sense": "profession",
+      "kanji": "研究者",
+      "kana": "けんきゅうしゃ",
+      "romaji": "kenkyū-sha",
+      "human": true
+    },
+    "physicist": {
+      "lemma": "物理学者",
+      "pos": "NOUN",
+      "sense": "profession",
+      "kanji": "物理学者",
+      "kana": "ぶつりがくしゃ",
+      "romaji": "butsuri-gaku-sha",
       "human": true,
-      "default_formality": "neutral"
+      "semantic_field": "physics"
+    },
+    "chemist": {
+      "lemma": "化学者",
+      "pos": "NOUN",
+      "sense": "profession",
+      "kanji": "化学者",
+      "kana": "かがくしゃ (biyori)",
+      "romaji": "kagaku-sha (biyori)",
+      "human": true,
+      "semantic_field": "chemistry"
+    },
+    "statistician": {
+      "lemma": "統計学者",
+      "pos": "NOUN",
+      "sense": "profession",
+      "kanji": "統計学者",
+      "kana": "とうけいがくしゃ",
+      "romaji": "tōkei-gaku-sha",
+      "human": true,
+      "semantic_field": "statistics"
+    },
+    "neuroscientist": {
+      "lemma": "神経科学者",
+      "pos": "NOUN",
+      "sense": "profession",
+      "kanji": "神経科学者",
+      "kana": "しんけいかがくしゃ",
+      "romaji": "shinkei-kagaku-sha",
+      "human": true,
+      "semantic_field": "neuroscience"
+    },
+    "be_born": {
+      "lemma": "生まれる",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "kanji": "生まれる",
+      "kana": "うまれる",
+      "romaji": "umareru",
+      "forms": {
+        "past": "生まれた",
+        "polite_past": "生まれました"
+      }
+    },
+    "die": {
+      "lemma": "亡くなる",
+      "pos": "VERB",
+      "gloss": "to die (polite)",
+      "kanji": "亡くなる",
+      "kana": "なくなる",
+      "romaji": "nakunaru",
+      "forms": {
+        "past": "亡くなった",
+        "polite_past": "亡くなりました"
+      }
+    },
+    "discover": {
+      "lemma": "発見する",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "kanji": "発見する",
+      "kana": "はっけんする",
+      "romaji": "hakken-suru",
+      "forms": {
+        "past": "発見した",
+        "polite_past": "発見しました"
+      }
+    },
+    "win": {
+      "lemma": "受賞する",
+      "pos": "VERB",
+      "gloss": "to win/receive (award)",
+      "kanji": "受賞する",
+      "kana": "じゅしょうする",
+      "romaji": "jushō-suru",
+      "forms": {
+        "past": "受賞した",
+        "polite_past": "受賞しました"
+      },
+      "semantic_field": "awards"
+    },
+    "receive": {
+      "lemma": "受ける",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "kanji": "受ける",
+      "kana": "うける",
+      "romaji": "ukeru",
+      "forms": {
+        "past": "受けた",
+        "polite_past": "受けました"
+      }
+    },
+    "publish": {
+      "lemma": "発表する",
+      "pos": "VERB",
+      "gloss": "to publish (research)",
+      "kanji": "発表する",
+      "kana": "はっぴょうする",
+      "romaji": "happyō-suru",
+      "forms": {
+        "past": "発表した"
+      },
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "年",
+      "pos": "NOUN",
+      "gloss": "year",
+      "kanji": "年",
+      "kana": "とし",
+      "romaji": "toshi",
+      "number": "sg"
+    },
+    "city": {
+      "lemma": "都市",
+      "pos": "NOUN",
+      "sense": "common_noun",
+      "kanji": "都市",
+      "kana": "とし",
+      "romaji": "toshi",
+      "human": false
+    },
+    "country": {
+      "lemma": "国",
+      "pos": "NOUN",
+      "gloss": "country",
+      "kanji": "国",
+      "kana": "くに",
+      "romaji": "kuni",
+      "human": false
+    },
+    "nobel_prize": {
+      "lemma": "ノーベル賞",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "kanji": "ノーベル賞",
+      "kana": "のーべるしょう",
+      "romaji": "nōberu-shō",
+      "human": false,
+      "proper": true,
+      "semantic_field": "awards"
+    },
+    "scientific_theory": {
+      "lemma": "科学理論",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "kanji": "科学理論",
+      "kana": "かがくりろん",
+      "romaji": "kagaku-riron",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "research": {
+      "lemma": "研究",
+      "pos": "NOUN",
+      "gloss": "research",
+      "kanji": "研究",
+      "kana": "けんきゅう",
+      "romaji": "kenkyū",
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "famous": {
+      "lemma": "有名",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "kanji": "有名",
+      "kana": "ゆうめい",
+      "romaji": "yūmei",
+      "forms": {
+        "adjectival": "有名な"
+      }
+    },
+    "important": {
+      "lemma": "重要",
+      "pos": "ADJ",
+      "gloss": "important",
+      "kanji": "重要",
+      "kana": "じゅうよう",
+      "romaji": "jūyō",
+      "forms": {
+        "adjectival": "重要な"
+      }
     },
     "japanese": {
+      "lemma": "日本人",
       "pos": "NOUN",
       "sense": "nationality",
       "kanji": "日本人",
       "kana": "にほんじん",
       "romaji": "nihon-jin",
-      "human": true,
-      "default_formality": "neutral"
+      "human": true
     },
     "polish": {
+      "lemma": "ポーランド人",
       "pos": "NOUN",
       "sense": "nationality",
       "kanji": "ポーランド人",
       "kana": "ぽーらんどじん",
       "romaji": "pōrando-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "french": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "フランス人",
-      "kana": "ふらんすじん",
-      "romaji": "furansu-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "italian": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "イタリア人",
-      "kana": "いたりあじん",
-      "romaji": "itaria-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "spanish": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "スペイン人",
-      "kana": "すぺいんじん",
-      "romaji": "supein-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "german": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "ドイツ人",
-      "kana": "どいつじん",
-      "romaji": "doitsu-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "british": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "イギリス人",
-      "kana": "いぎりすじん",
-      "romaji": "igirisu-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "american": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "アメリカ人",
-      "kana": "あめりかじん",
-      "romaji": "amerika-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "russian": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "ロシア人",
-      "kana": "ろしあじん",
-      "romaji": "roshia-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "chinese": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "中国人",
-      "kana": "ちゅうごくじん",
-      "romaji": "chūgoku-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "korean": {
-      "pos": "NOUN",
-      "sense": "nationality",
-      "kanji": "韓国人",
-      "kana": "かんこくじん",
-      "romaji": "kankoku-jin",
-      "human": true,
-      "default_formality": "neutral"
-    },
-    "japan": {
-      "pos": "NOUN",
-      "sense": "country",
-      "kanji": "日本",
-      "kana": "にほん",
-      "romaji": "nihon",
-      "human": false,
-      "default_formality": "neutral"
-    },
-    "poland": {
-      "pos": "NOUN",
-      "sense": "country",
-      "kanji": "ポーランド",
-      "kana": "ぽーらんど",
-      "romaji": "pōrando",
-      "human": false,
-      "default_formality": "neutral"
+      "human": true
     },
     "france": {
+      "lemma": "フランス",
       "pos": "NOUN",
       "sense": "country",
       "kanji": "フランス",
       "kana": "ふらんす",
       "romaji": "furansu",
-      "human": false,
-      "default_formality": "neutral"
+      "human": false
     },
     "italy": {
+      "lemma": "イタリア",
       "pos": "NOUN",
       "sense": "country",
       "kanji": "イタリア",
       "kana": "いたりあ",
       "romaji": "itaria",
-      "human": false,
-      "default_formality": "neutral"
+      "human": false
     },
     "spain": {
+      "lemma": "スペイン",
       "pos": "NOUN",
       "sense": "country",
       "kanji": "スペイン",
       "kana": "すぺいん",
       "romaji": "supein",
-      "human": false,
-      "default_formality": "neutral"
+      "human": false
     },
     "germany": {
+      "lemma": "ドイツ",
       "pos": "NOUN",
       "sense": "country",
       "kanji": "ドイツ",
       "kana": "どいつ",
       "romaji": "doitsu",
-      "human": false,
-      "default_formality": "neutral"
+      "human": false
     },
     "united_kingdom": {
+      "lemma": "イギリス",
       "pos": "NOUN",
       "sense": "country",
       "kanji": "イギリス",
       "kana": "いぎりす",
       "romaji": "igirisu",
-      "human": false,
-      "default_formality": "neutral"
+      "human": false
     },
     "united_states": {
+      "lemma": "アメリカ合衆国",
       "pos": "NOUN",
       "sense": "country",
       "kanji": "アメリカ合衆国",
       "kana": "あめりかがっしゅうこく",
       "romaji": "amerika-gasshūkoku",
       "human": false,
-      "default_formality": "neutral"
+      "multiword": true
     },
     "china": {
+      "lemma": "中国",
       "pos": "NOUN",
       "sense": "country",
       "kanji": "中国",
       "kana": "ちゅうごく",
       "romaji": "chūgoku",
-      "human": false,
-      "default_formality": "neutral"
+      "human": false
     },
     "korea": {
+      "lemma": "韓国",
       "pos": "NOUN",
       "sense": "country",
       "kanji": "韓国",
       "kana": "かんこく",
       "romaji": "kankoku",
-      "human": false,
-      "default_formality": "neutral"
+      "human": false
     },
-    "city": {
-      "pos": "NOUN",
-      "sense": "common_noun",
-      "kanji": "都市",
-      "kana": "とし",
-      "romaji": "toshi",
-      "human": false,
-      "default_formality": "neutral"
+    "punctuation_period": {
+      "lemma": "。",
+      "pos": "PUNCT",
+      "gloss": "full stop",
+      "kanji": "。",
+      "romaji": "."
     },
-    "scientific_researcher": {
-      "pos": "NOUN",
-      "sense": "profession",
-      "kanji": "研究者",
-      "kana": "けんきゅうしゃ",
-      "romaji": "kenkyū-sha",
-      "human": true,
-      "default_formality": "neutral"
+    "punctuation_comma": {
+      "lemma": "、",
+      "pos": "PUNCT",
+      "gloss": "comma",
+      "kanji": "、",
+      "romaji": ","
     }
   }
 }

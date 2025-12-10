@@ -2,65 +2,291 @@
   "_meta": {
     "language": "ro",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:30:00Z",
+    "note": "Maximal Schema: Includes scientific domain, irregular copula, and distinct indefinite articles."
   },
   "entries": {
+    "copula": {
+      "lemma": "a fi",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "sunt",
+        "present_3sg": "este",
+        "present_3pl": "sunt",
+        "past_simple_3sg": "fu",
+        "imperfect_3sg": "era",
+        "past_participle": "fost"
+      }
+    },
+    "det_definite": {
+      "lemma": "–ul",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite_suffix",
+      "note": "Definite articles are suffixes attached to the noun: -ul/-a/-ii/-le."
+    },
+    "det_indefinite": {
+      "lemma": "un",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "m_sg": "un",
+        "f_sg": "o"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "el",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom"
+    },
+    "pronoun_she": {
+      "lemma": "ea",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom"
+    },
+    "pronoun_they": {
+      "lemma": "ei",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "m_nom": "ei",
+        "f_nom": "ele"
+      }
+    },
     "om": {
-      "key": "om",
       "lemma": "om",
       "pos": "NOUN",
-      "language": "ro",
-      "sense": "common_noun",
+      "gloss": "person, man",
       "human": true,
       "gender": "m",
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
-      "forms": {
-        "sg": "om",
-        "pl": "oameni"
-      },
-      "extra": {
-        "gloss": "person, man"
-      }
+      "number": "sg",
+      "plural_lemma": "oameni"
     },
     "femeie": {
-      "key": "femeie",
       "lemma": "femeie",
       "pos": "NOUN",
-      "language": "ro",
-      "sense": "common_noun",
+      "gloss": "woman",
       "human": true,
       "gender": "f",
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
-      "forms": {
-        "sg": "femeie",
-        "pl": "femei"
-      },
-      "extra": {
-        "gloss": "woman"
-      }
+      "number": "sg",
+      "plural_lemma": "femei"
     },
     "barbat": {
-      "key": "barbat",
       "lemma": "bărbat",
       "pos": "NOUN",
-      "language": "ro",
-      "sense": "common_noun",
+      "gloss": "man",
       "human": true,
       "gender": "m",
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
+      "number": "sg",
+      "plural_lemma": "bărbați"
+    },
+    "om_de_stiinta": {
+      "lemma": "om de știință",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "oameni de știință",
+      "multiword": true,
+      "semantic_field": "science"
+    },
+    "fizician": {
+      "lemma": "fizician",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "fiziciană",
+      "plural_lemma": "fizicieni",
+      "semantic_field": "physics"
+    },
+    "chimist": {
+      "lemma": "chimist",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "chimistă",
+      "plural_lemma": "chimiști",
+      "semantic_field": "chemistry"
+    },
+    "scriitor": {
+      "lemma": "scriitor",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "scriitoare",
+      "plural_lemma": "scriitori"
+    },
+    "profesor": {
+      "lemma": "profesor",
+      "pos": "NOUN",
+      "gloss": "professor",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "profesoară",
+      "plural_lemma": "profesori"
+    },
+    "politician": {
+      "lemma": "politician",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "politiciană",
+      "plural_lemma": "politicieni"
+    },
+    "celebru": {
+      "lemma": "celebru",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
       "forms": {
-        "sg": "bărbat",
-        "pl": "bărbați"
-      },
-      "extra": {
-        "gloss": "man"
+        "m_sg": "celebru",
+        "f_sg": "celebră",
+        "m_pl": "celebri",
+        "f_pl": "celebre"
       }
+    },
+    "mare": {
+      "lemma": "mare",
+      "pos": "ADJ",
+      "gloss": "great/big",
+      "degree": "positive",
+      "gender": "common",
+      "plural_lemma": "mari"
+    },
+    "a_se_naște": {
+      "lemma": "a se naște",
+      "pos": "VERB",
+      "gloss": "to be born (reflexive)",
+      "subcat": "intransitive",
+      "lemma_type": "reflexive",
+      "forms": {
+        "past_3sg": "s-a născut",
+        "past_3pl": "s-au născut"
+      }
+    },
+    "a_muri": {
+      "lemma": "a muri",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "forms": {
+        "past_3sg": "a murit"
+      }
+    },
+    "a_descoperi": {
+      "lemma": "a descoperi",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "forms": {
+        "past_3sg": "a descoperit"
+      }
+    },
+    "an": {
+      "lemma": "an",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "ani"
+    },
+    "oraș": {
+      "lemma": "oraș",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "orașe"
+    },
+    "țară": {
+      "lemma": "țară",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "țări"
+    },
+    "conj_and": {
+      "lemma": "și",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating",
+      "note": "Becomes 'și' or 'iar' in various contexts."
+    },
+    "conj_but": {
+      "lemma": "dar",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "în",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Governs Accusative. Often used for location: în oraș."
+    },
+    "prep_of": {
+      "lemma": "a",
+      "pos": "DET",
+      "gloss": "of (genitive connector)",
+      "subcat": "genitive",
+      "forms": {
+        "m_sg": "al",
+        "f_sg": "a",
+        "m_pl": "ai",
+        "f_pl": "ale"
+      },
+      "note": "Genitive/Dative articulation. This word agrees in gender/number with the item owned, not the owner."
+    },
+    "prep_from": {
+      "lemma": "din",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
     }
   }
 }

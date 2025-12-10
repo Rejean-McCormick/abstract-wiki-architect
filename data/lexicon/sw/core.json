@@ -2,92 +2,267 @@
   "_meta": {
     "language": "sw",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:45:00Z",
+    "note": "Maximal Schema: Includes Bantu Noun Classes and full verb/adjective prefix agreement."
   },
   "entries": {
+    "copula": {
+      "lemma": "kuwa",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_identity": "ni",
+        "past_default": "alikuwa",
+        "future_default": "atakuwa"
+      },
+      "note": "Present copula 'ni' is invariant. Past/Future requires subject prefix (e.g., a-li-kuwa)."
+    },
+    "det_definite": {
+      "lemma": "–",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "zero_article",
+      "note": "Swahili has no articles. Definiteness is often implied or shown by demonstratives."
+    },
+    "det_indefinite": {
+      "lemma": "moja",
+      "pos": "DET",
+      "gloss": "one/a/an",
+      "subcat": "indefinite",
+      "note": "Literal 'one' (moja) is used for emphasis."
+    },
+    "pronoun_he": {
+      "lemma": "yeye",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "forms": {
+        "subject_prefix": "a-",
+        "object_prefix": "m-",
+        "possessive_stem": "-ake"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "yeye",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "forms": {
+        "subject_prefix": "a-",
+        "object_prefix": "m-",
+        "possessive_stem": "-ake"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "wao",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "forms": {
+        "subject_prefix": "wa-",
+        "object_prefix": "wa-",
+        "possessive_stem": "-ao"
+      }
+    },
     "mtu": {
-      "key": "mtu",
       "lemma": "mtu",
       "pos": "NOUN",
-      "language": "sw",
-      "sense": "common_noun",
+      "gloss": "person",
       "human": true,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
       "forms": {
         "sg": "mtu",
         "pl": "watu"
       },
-      "extra": {
-        "gloss": "person",
-        "noun_class_sg": 1,
-        "noun_class_pl": 2
-      }
+      "noun_class_sg": 1,
+      "noun_class_pl": 2
     },
     "mwanamke": {
-      "key": "mwanamke",
       "lemma": "mwanamke",
       "pos": "NOUN",
-      "language": "sw",
-      "sense": "common_noun",
+      "gloss": "woman",
       "human": true,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
       "forms": {
         "sg": "mwanamke",
         "pl": "wanawake"
       },
-      "extra": {
-        "gloss": "woman",
-        "noun_class_sg": 1,
-        "noun_class_pl": 2
-      }
+      "noun_class_sg": 1,
+      "noun_class_pl": 2
     },
     "mwanaume": {
-      "key": "mwanaume",
       "lemma": "mwanaume",
       "pos": "NOUN",
-      "language": "sw",
-      "sense": "common_noun",
+      "gloss": "man",
       "human": true,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
       "forms": {
         "sg": "mwanaume",
         "pl": "wanaume"
       },
-      "extra": {
-        "gloss": "man",
-        "noun_class_sg": 1,
-        "noun_class_pl": 2
-      }
+      "noun_class_sg": 1,
+      "noun_class_pl": 2
     },
     "nchi": {
-      "key": "nchi",
       "lemma": "nchi",
       "pos": "NOUN",
-      "language": "sw",
-      "sense": "common_noun",
+      "gloss": "country",
       "human": false,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
       "forms": {
         "sg": "nchi",
         "pl": "nchi"
       },
-      "extra": {
-        "gloss": "country",
-        "noun_class_sg": 9,
-        "noun_class_pl": 10
+      "noun_class_sg": 9,
+      "noun_class_pl": 10
+    },
+    "mwanasayansi": {
+      "lemma": "mwanasayansi",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "forms": {
+        "sg": "mwanasayansi",
+        "pl": "wanasayansi"
+      },
+      "noun_class_sg": 1,
+      "noun_class_pl": 2,
+      "semantic_field": "science"
+    },
+    "mwandishi": {
+      "lemma": "mwandishi",
+      "pos": "NOUN",
+      "gloss": "writer/author",
+      "human": true,
+      "forms": {
+        "sg": "mwandishi",
+        "pl": "waandishi"
+      },
+      "noun_class_sg": 1,
+      "noun_class_pl": 2
+    },
+    "mji": {
+      "lemma": "mji",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "forms": {
+        "sg": "mji",
+        "pl": "miji"
+      },
+      "noun_class_sg": 3,
+      "noun_class_pl": 4
+    },
+    "mwaka": {
+      "lemma": "mwaka",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "forms": {
+        "sg": "mwaka",
+        "pl": "miaka"
+      },
+      "noun_class_sg": 3,
+      "noun_class_pl": 4
+    },
+    "maarufu": {
+      "lemma": "maarufu",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "base": "maarufu"
+      },
+      "note": "Invariant adjective."
+    },
+    "kubwa": {
+      "lemma": "kubwa",
+      "pos": "ADJ",
+      "gloss": "great/big",
+      "degree": "positive",
+      "forms": {
+        "Class1_2": "mkuu"
+      },
+      "note": "Requires concord prefix depending on noun class (e.g., m-kuu, ki-kuu)."
+    },
+    "kuzaliwa": {
+      "lemma": "kuzaliwa",
+      "pos": "VERB",
+      "gloss": "to be born (passive)",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "alizaliwa",
+        "past_3pl": "walizaliwa"
       }
+    },
+    "kufa": {
+      "lemma": "kufa",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "alikufa",
+        "past_3pl": "walikufa"
+      }
+    },
+    "kugundua": {
+      "lemma": "kugundua",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "forms": {
+        "past_3sg": "aligundua"
+      }
+    },
+    "kupokea": {
+      "lemma": "kupokea",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "forms": {
+        "past_3sg": "alipokea"
+      }
+    },
+    "conj_na": {
+      "lemma": "na",
+      "pos": "CONJ",
+      "gloss": "and/with",
+      "subcat": "coordinating"
+    },
+    "conj_lakini": {
+      "lemma": "lakini",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_katika": {
+      "lemma": "katika",
+      "pos": "PREP",
+      "gloss": "in/at/from",
+      "subcat": "locative",
+      "note": "Used for location and time (replaces locative class prefix)."
+    },
+    "prep_kutoka": {
+      "lemma": "kutoka",
+      "pos": "PREP",
+      "gloss": "from (place)",
+      "subcat": "source"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
     }
   }
 }

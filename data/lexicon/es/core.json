@@ -2,202 +2,579 @@
   "_meta": {
     "language": "es",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "note": "Includes scientific domain extensions, full conjugation forms, and gender."
   },
   "entries": {
-    "persona": {
+    "person": {
+      "lemma": "persona",
       "pos": "NOUN",
-      "gloss": "persona, ser humano",
+      "gloss": "person, human",
       "human": true,
-      "gender": "feminine",
-      "number": "count"
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "personas"
     },
-    "hombre": {
+    "man": {
+      "lemma": "hombre",
       "pos": "NOUN",
-      "gloss": "hombre adulto",
+      "gloss": "man",
       "human": true,
-      "gender": "masculine",
-      "number": "count"
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "hombres"
     },
-    "mujer": {
+    "woman": {
+      "lemma": "mujer",
       "pos": "NOUN",
-      "gloss": "mujer adulta",
+      "gloss": "woman",
       "human": true,
-      "gender": "feminine",
-      "number": "count"
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "mujeres"
     },
-    "escritor": {
+    "scientist": {
+      "lemma": "científico",
       "pos": "NOUN",
-      "gloss": "escritor",
+      "gloss": "scientist",
       "human": true,
-      "gender": "masculine",
-      "number": "count",
-      "feminine_form": "escritora",
-      "semantic_field": "arts"
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "científica",
+      "plural_lemma": "científicos"
     },
-    "escritora": {
+    "writer": {
+      "lemma": "escritor",
       "pos": "NOUN",
-      "gloss": "escritora",
+      "gloss": "writer, author",
       "human": true,
-      "gender": "feminine",
-      "number": "count",
-      "masculine_form": "escritor",
-      "semantic_field": "arts"
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "escritora",
+      "plural_lemma": "escritores"
     },
-    "autor": {
+    "author": {
+      "lemma": "autor",
       "pos": "NOUN",
-      "gloss": "autor",
+      "gloss": "author",
       "human": true,
-      "gender": "masculine",
-      "number": "count",
-      "feminine_form": "autora",
-      "semantic_field": "arts"
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "autora",
+      "plural_lemma": "autores"
     },
-    "autora": {
+    "professor": {
+      "lemma": "profesor",
       "pos": "NOUN",
-      "gloss": "autora",
+      "gloss": "professor",
       "human": true,
-      "gender": "feminine",
-      "number": "count",
-      "masculine_form": "autor",
-      "semantic_field": "arts"
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "profesora",
+      "plural_lemma": "profesores"
     },
-    "profesor": {
+    "nobel_prize": {
+      "lemma": "Premio Nobel",
       "pos": "NOUN",
-      "gloss": "profesor (cargo académico)",
-      "human": true,
-      "gender": "masculine",
-      "number": "count",
-      "feminine_form": "profesora",
-      "semantic_field": "academia"
-    },
-    "profesora": {
-      "pos": "NOUN",
-      "gloss": "profesora (cargo académico)",
-      "human": true,
-      "gender": "feminine",
-      "number": "count",
-      "masculine_form": "profesor",
-      "semantic_field": "academia"
-    },
-    "premio_nobel": {
-      "pos": "NOUN",
-      "gloss": "Premio Nobel",
+      "gloss": "a major international prize awarded in several fields",
       "human": false,
       "proper": true,
+      "gender": "m",
       "number": "count",
-      "multiword": true
+      "semantic_field": "awards"
     },
-    "famoso": {
+    "famous": {
+      "lemma": "famoso",
       "pos": "ADJ",
-      "gloss": "famoso",
+      "gloss": "famous",
       "degree": "positive",
-      "gender": "masculine"
-    },
-    "famosa": {
-      "pos": "ADJ",
-      "gloss": "famosa",
-      "degree": "positive",
-      "gender": "feminine"
+      "gender": "m",
+      "feminine_lemma": "famosa"
     },
     "notable": {
+      "lemma": "notable",
       "pos": "ADJ",
       "gloss": "notable",
       "degree": "positive",
-      "gender": "common"
+      "gender": "common",
+      "note": "Invariant in gender (el notable / la notable)"
     },
-    "gran": {
+    "great": {
+      "lemma": "gran",
       "pos": "ADJ",
-      "gloss": "gran, importante",
+      "gloss": "great (before noun)",
       "degree": "positive",
       "gender": "common",
-      "position": "before_noun"
+      "note": "Apocope of 'grande' when used before singular nouns."
     },
-    "ser": {
+    "be": {
+      "lemma": "ser",
       "pos": "VERB",
-      "gloss": "ser",
+      "gloss": "to be (permanent)",
       "subcat": "copula",
       "lemma_type": "base",
       "irregular_forms": {
-        "presente_1sg": "soy",
-        "presente_2sg": "eres",
-        "presente_3sg": "es",
-        "presente_1pl": "somos",
-        "presente_2pl": "sois",
-        "presente_3pl": "son",
-        "preterito_1sg": "fui",
-        "preterito_3sg": "fue",
-        "preterito_3pl": "fueron",
-        "participio_pasado": "sido"
+        "present_1sg": "soy",
+        "present_3sg": "es",
+        "present_3pl": "son",
+        "past_3sg": "fue",
+        "past_3pl": "fueron",
+        "imperfect_3sg": "era",
+        "past_participle": "sido"
       }
     },
-    "estar": {
+    "be_born": {
+      "lemma": "nacer",
       "pos": "VERB",
-      "gloss": "estar",
-      "subcat": "copula",
+      "gloss": "to be born",
+      "subcat": "intransitive",
       "lemma_type": "base",
       "irregular_forms": {
-        "presente_1sg": "estoy",
-        "presente_3sg": "está",
-        "preterito_1sg": "estuve",
-        "participio_pasado": "estado"
+        "past_3sg": "nació",
+        "past_3pl": "nacieron",
+        "past_participle": "nacido"
       }
     },
-    "nacer": {
+    "die": {
+      "lemma": "morir",
       "pos": "VERB",
-      "gloss": "nacer",
+      "gloss": "to die",
       "subcat": "intransitive",
-      "regular": true
-    },
-    "morir": {
-      "pos": "VERB",
-      "gloss": "morir",
-      "subcat": "intransitive",
+      "lemma_type": "base",
       "irregular_forms": {
-        "preterito_3sg": "murió",
-        "participio_pasado": "muerto"
+        "past_3sg": "murió",
+        "past_3pl": "murieron",
+        "past_participle": "muerto"
       }
     },
-    "descubrir": {
+    "discover": {
+      "lemma": "descubrir",
       "pos": "VERB",
-      "gloss": "descubrir",
+      "gloss": "to discover",
       "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "irregular_forms": {
+        "past_participle": "descubierto"
+      }
+    },
+    "win": {
+      "lemma": "ganar",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "lemma_type": "base",
       "regular": true
     },
-    "ganar": {
+    "receive": {
+      "lemma": "recibir",
       "pos": "VERB",
-      "gloss": "ganar",
+      "gloss": "to receive",
       "subcat": "transitive",
+      "lemma_type": "base",
       "regular": true
     },
-    "recibir": {
+    "year": {
+      "lemma": "año",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "años"
+    },
+    "city": {
+      "lemma": "ciudad",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "ciudades"
+    },
+    "country": {
+      "lemma": "país",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "m",
+      "number": "sg",
+      "plural_lemma": "países"
+    },
+    "politician": {
+      "lemma": "político",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "gender": "m",
+      "number": "sg",
+      "feminine_lemma": "política",
+      "plural_lemma": "políticos"
+    },
+    "Poland": {
+      "lemma": "Polonia",
+      "pos": "NOUN",
+      "gloss": "Poland",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q36"
+    },
+    "France": {
+      "lemma": "Francia",
+      "pos": "NOUN",
+      "gloss": "France",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q142"
+    },
+    "United Kingdom": {
+      "lemma": "Reino Unido",
+      "pos": "NOUN",
+      "gloss": "United Kingdom",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q145"
+    },
+    "Warsaw": {
+      "lemma": "Varsovia",
+      "pos": "NOUN",
+      "gloss": "Warsaw",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "sg",
+      "qid": "Q270"
+    },
+    "Paris": {
+      "lemma": "París",
+      "pos": "NOUN",
+      "gloss": "Paris",
+      "human": false,
+      "proper": true,
+      "gender": "m",
+      "number": "sg",
+      "qid": "Q90"
+    },
+    "important": {
+      "lemma": "importante",
+      "pos": "ADJ",
+      "gloss": "important",
+      "degree": "positive",
+      "gender": "common",
+      "note": "Invariant (el importante / la importante)"
+    },
+    "date": {
+      "lemma": "fecha",
+      "pos": "NOUN",
+      "gloss": "date (calendar)",
+      "human": false,
+      "gender": "f",
+      "number": "sg",
+      "plural_lemma": "fechas"
+    },
+    "statistician": {
+      "lemma": "estadístico",
+      "pos": "NOUN",
+      "gloss": "statistician",
+      "human": true,
+      "gender": "m",
+      "number": "count",
+      "feminine_lemma": "estadística",
+      "semantic_field": "statistics"
+    },
+    "computer_scientist": {
+      "lemma": "informático",
+      "pos": "NOUN",
+      "gloss": "computer scientist",
+      "human": true,
+      "gender": "m",
+      "number": "count",
+      "feminine_lemma": "informática",
+      "semantic_field": "computer_science"
+    },
+    "astronomer": {
+      "lemma": "astrónomo",
+      "pos": "NOUN",
+      "gloss": "astronomer",
+      "human": true,
+      "gender": "m",
+      "number": "count",
+      "feminine_lemma": "astrónoma",
+      "semantic_field": "astronomy"
+    },
+    "geologist": {
+      "lemma": "geólogo",
+      "pos": "NOUN",
+      "gloss": "geologist",
+      "human": true,
+      "gender": "m",
+      "number": "count",
+      "feminine_lemma": "geóloga",
+      "semantic_field": "geology"
+    },
+    "climate_scientist": {
+      "lemma": "climatólogo",
+      "pos": "NOUN",
+      "gloss": "climate scientist",
+      "human": true,
+      "gender": "m",
+      "number": "count",
+      "feminine_lemma": "climatóloga",
+      "semantic_field": "climatology"
+    },
+    "neuroscientist": {
+      "lemma": "neurocientífico",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "m",
+      "number": "count",
+      "feminine_lemma": "neurocientífica",
+      "semantic_field": "neuroscience"
+    },
+    "statistics": {
+      "lemma": "estadística",
+      "pos": "NOUN",
+      "gloss": "statistics (field)",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "statistics"
+    },
+    "astronomy": {
+      "lemma": "astronomía",
+      "pos": "NOUN",
+      "gloss": "astronomy",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "astronomy"
+    },
+    "geology": {
+      "lemma": "geología",
+      "pos": "NOUN",
+      "gloss": "geology",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "geology"
+    },
+    "neuroscience": {
+      "lemma": "neurociencia",
+      "pos": "NOUN",
+      "gloss": "neuroscience",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "neuroscience"
+    },
+    "nobel_prize_in_physiology_or_medicine": {
+      "lemma": "Premio Nobel de Fisiología o Medicina",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize in Medicine",
+      "human": false,
+      "proper": true,
+      "multiword": true,
+      "gender": "m",
+      "number": "count",
+      "semantic_field": "awards"
+    },
+    "field_of_research": {
+      "lemma": "campo de investigación",
+      "pos": "NOUN",
+      "gloss": "field of research",
+      "human": false,
+      "gender": "m",
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "lemma": "teoría científica",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "gender": "f",
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "scientific_paper": {
+      "lemma": "artículo científico",
+      "pos": "NOUN",
+      "gloss": "scientific paper/article",
+      "human": false,
+      "gender": "m",
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "science_meta"
+    },
+    "research": {
+      "lemma": "investigación",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "f",
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "experiment": {
+      "lemma": "experimento",
+      "pos": "NOUN",
+      "gloss": "experiment",
+      "human": false,
+      "gender": "m",
+      "number": "count",
+      "semantic_field": "science_meta"
+    },
+    "to_research": {
+      "lemma": "investigar",
       "pos": "VERB",
-      "gloss": "recibir",
+      "gloss": "to research",
       "subcat": "transitive",
-      "regular": true
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
     },
-    "ano": {
-      "pos": "NOUN",
-      "gloss": "año",
-      "human": false,
-      "number": "count",
-      "plural": "anos"
+    "to_experiment": {
+      "lemma": "experimentar",
+      "pos": "VERB",
+      "gloss": "to experiment",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
     },
-    "ciudad": {
-      "pos": "NOUN",
-      "gloss": "ciudad",
-      "human": false,
-      "gender": "feminine",
-      "number": "count",
-      "plural": "ciudades"
+    "to_publish": {
+      "lemma": "publicar",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
     },
-    "pais": {
-      "pos": "NOUN",
-      "gloss": "país",
-      "human": false,
-      "gender": "masculine",
-      "number": "count",
-      "plural": "paises"
+    "to_win": {
+      "lemma": "ganar",
+      "pos": "VERB",
+      "gloss": "to win/receive (prize)",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "awards"
+    },
+    "scientific": {
+      "lemma": "científico",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "científica",
+      "semantic_field": "science_meta"
+    },
+    "experimental": {
+      "lemma": "experimental",
+      "pos": "ADJ",
+      "gloss": "experimental",
+      "degree": "positive",
+      "gender": "common",
+      "semantic_field": "science_meta"
+    },
+    "theoretical": {
+      "lemma": "teórico",
+      "pos": "ADJ",
+      "gloss": "theoretical",
+      "degree": "positive",
+      "gender": "m",
+      "feminine_lemma": "teórica",
+      "semantic_field": "science_meta"
+    },
+    "det_definite": {
+      "lemma": "el",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "forms": {
+        "m_sg": "el",
+        "f_sg": "la",
+        "m_pl": "los",
+        "f_pl": "las"
+      }
+    },
+    "det_indefinite": {
+      "lemma": "un",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "m_sg": "un",
+        "f_sg": "una",
+        "m_pl": "unos",
+        "f_pl": "unas"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "él",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom"
+    },
+    "pronoun_she": {
+      "lemma": "ella",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom"
+    },
+    "pronoun_they": {
+      "lemma": "ellos",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "masc": "ellos",
+        "fem": "ellas"
+      }
+    },
+    "conj_and": {
+      "lemma": "y",
+      "pos": "CONJ",
+      "gloss": "and",
+      "forms": {
+        "default": "y",
+        "before_i": "e"
+      }
+    },
+    "conj_but": {
+      "lemma": "pero",
+      "pos": "CONJ",
+      "gloss": "but"
+    },
+    "prep_in": {
+      "lemma": "en",
+      "pos": "PREP",
+      "gloss": "in"
+    },
+    "prep_of": {
+      "lemma": "de",
+      "pos": "PREP",
+      "gloss": "of/from",
+      "note": "Combines with 'el' -> 'del'"
     }
   }
 }

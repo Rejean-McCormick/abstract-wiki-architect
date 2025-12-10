@@ -1,0 +1,273 @@
+{
+  "_meta": {
+    "language": "et",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "note": "Includes Genitive/Partitive stems for nouns and gender-neutral pronouns."
+  },
+  "entries": {
+    "copula": {
+      "lemma": "olema",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "olen",
+        "present_2sg": "oled",
+        "present_3sg": "on",
+        "present_1pl": "oleme",
+        "present_2pl": "olete",
+        "present_3pl": "on",
+        "past_3sg": "oli",
+        "past_3pl": "olid",
+        "neg_present": "ei ole"
+      }
+    },
+    "det_definite": {
+      "lemma": "",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "note": "Estonian has no definite article."
+    },
+    "det_indefinite": {
+      "lemma": "",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "note": "Estonian has no indefinite article."
+    },
+    "pronoun_he": {
+      "lemma": "tema",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "short": "ta",
+        "genitive": "tema",
+        "partitive": "teda"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_she": {
+      "lemma": "tema",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "short": "ta",
+        "genitive": "tema",
+        "partitive": "teda"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_they": {
+      "lemma": "nemad",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "short": "nad",
+        "genitive": "nende",
+        "partitive": "neid"
+      }
+    },
+    "person": {
+      "lemma": "inimene",
+      "pos": "NOUN",
+      "gloss": "person/human",
+      "human": true,
+      "forms": {
+        "genitive": "inimese",
+        "partitive": "inimest",
+        "plural": "inimesed"
+      }
+    },
+    "scientist": {
+      "lemma": "teadlane",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "forms": {
+        "genitive": "teadlase",
+        "partitive": "teadlast",
+        "plural": "teadlased"
+      }
+    },
+    "writer": {
+      "lemma": "kirjanik",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "forms": {
+        "genitive": "kirjaniku",
+        "partitive": "kirjanikku",
+        "plural": "kirjanikud"
+      }
+    },
+    "physicist": {
+      "lemma": "füüsik",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "semantic_field": "physics",
+      "forms": {
+        "genitive": "füüsiku",
+        "partitive": "füüsikut"
+      }
+    },
+    "chemist": {
+      "lemma": "keemik",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "semantic_field": "chemistry",
+      "forms": {
+        "genitive": "keemiku",
+        "partitive": "keemikut"
+      }
+    },
+    "nobel_prize": {
+      "lemma": "Nobeli preemia",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "semantic_field": "awards",
+      "forms": {
+        "genitive": "Nobeli preemia",
+        "partitive": "Nobeli preemiat"
+      }
+    },
+    "city": {
+      "lemma": "linn",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "forms": {
+        "genitive": "linna",
+        "partitive": "linna"
+      }
+    },
+    "country": {
+      "lemma": "riik",
+      "pos": "NOUN",
+      "gloss": "country/state",
+      "human": false,
+      "forms": {
+        "genitive": "riigi",
+        "partitive": "riiki"
+      }
+    },
+    "be_born": {
+      "lemma": "sündima",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "sündis",
+        "past_3pl": "sündisid"
+      }
+    },
+    "die": {
+      "lemma": "surema",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "forms": {
+        "past_3sg": "suri",
+        "past_3pl": "surid"
+      }
+    },
+    "discover": {
+      "lemma": "avastama",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "forms": {
+        "past_3sg": "avastas",
+        "past_3pl": "avastasid"
+      }
+    },
+    "receive": {
+      "lemma": "saama",
+      "pos": "VERB",
+      "gloss": "to receive/get",
+      "subcat": "transitive",
+      "forms": {
+        "past_3sg": "sai",
+        "past_3pl": "said"
+      }
+    },
+    "publish": {
+      "lemma": "avaldama",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "forms": {
+        "past_3sg": "aldas",
+        "past_3pl": "aldasid"
+      }
+    },
+    "scientific": {
+      "lemma": "teaduslik",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "forms": {
+        "genitive": "teadusliku",
+        "partitive": "teaduslikku"
+      }
+    },
+    "famous": {
+      "lemma": "kuulus",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "genitive": "kuulsa",
+        "partitive": "kuulsat"
+      }
+    },
+    "conj_and": {
+      "lemma": "ja",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "aga",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "sees",
+      "pos": "POST",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Usually expressed via Inessive case suffix (-s) attached to the noun."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
+}

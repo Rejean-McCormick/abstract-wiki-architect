@@ -1,53 +1,44 @@
 {
   "_meta": {
-    "language": "da",
+    "language": "af",
     "domain": "core",
     "version": 2,
     "source": "Manual Entry (Standard V2)",
-    "generated_at": "2025-12-09T20:55:00Z",
-    "note": "Maximal Schema: Includes gender forms (common/neuter) and pronoun cases."
+    "generated_at": "2025-12-09T20:40:00Z",
+    "note": "Maximal Schema: Includes glosses and explicit subcategories."
   },
   "entries": {
     "copula": {
-      "lemma": "være",
+      "lemma": "is",
       "pos": "VERB",
       "gloss": "to be",
       "subcat": "copula",
       "lemma_type": "base",
       "forms": {
-        "present": "er",
-        "past": "var",
-        "future": "vil være",
-        "perfect": "været"
+        "present": "is",
+        "past": "was",
+        "future": "sal wees"
       },
-      "note": "Invariant in present tense for all persons."
+      "note": "Invariant for all persons in present/past."
     },
     "det_definite": {
-      "lemma": "den",
+      "lemma": "die",
       "pos": "DET",
       "gloss": "the",
-      "subcat": "definite_free",
+      "subcat": "definite",
       "lemma_type": "base",
-      "forms": {
-        "common": "den",
-        "neuter": "det",
-        "plural": "de"
-      },
-      "note": "Used before adjectives (e.g., 'den store mand'). Otherwise, use suffixes (-en/-et)."
+      "note": "Used for both singular and plural."
     },
     "det_indefinite": {
-      "lemma": "en",
+      "lemma": "'n",
       "pos": "DET",
       "gloss": "a/an",
       "subcat": "indefinite",
       "lemma_type": "base",
-      "forms": {
-        "common": "en",
-        "neuter": "et"
-      }
+      "note": "Pronounced as a schwa. Always written with apostrophe."
     },
     "pronoun_he": {
-      "lemma": "han",
+      "lemma": "hy",
       "pos": "PRON",
       "gloss": "he",
       "person": "3",
@@ -55,13 +46,13 @@
       "gender": "m",
       "case": "nom",
       "forms": {
-        "nominative": "han",
-        "accusative": "ham",
-        "genitive": "hans"
+        "nominative": "hy",
+        "accusative": "hom",
+        "genitive": "sy"
       }
     },
     "pronoun_she": {
-      "lemma": "hun",
+      "lemma": "sy",
       "pos": "PRON",
       "gloss": "she",
       "person": "3",
@@ -69,13 +60,13 @@
       "gender": "f",
       "case": "nom",
       "forms": {
-        "nominative": "hun",
-        "accusative": "hende",
-        "genitive": "hendes"
+        "nominative": "sy",
+        "accusative": "haar",
+        "genitive": "haar"
       }
     },
     "pronoun_they": {
-      "lemma": "de",
+      "lemma": "hulle",
       "pos": "PRON",
       "gloss": "they",
       "person": "3",
@@ -83,53 +74,46 @@
       "gender": "n",
       "case": "nom",
       "forms": {
-        "nominative": "de",
-        "accusative": "dem",
-        "genitive": "deres"
+        "nominative": "hulle",
+        "accusative": "hulle",
+        "genitive": "hulle"
       }
     },
     "conj_and": {
-      "lemma": "og",
+      "lemma": "en",
       "pos": "CONJ",
       "gloss": "and",
       "subcat": "coordinating"
     },
     "conj_but": {
-      "lemma": "men",
+      "lemma": "maar",
       "pos": "CONJ",
       "gloss": "but",
       "subcat": "coordinating"
     },
     "conj_or": {
-      "lemma": "eller",
+      "lemma": "of",
       "pos": "CONJ",
       "gloss": "or",
       "subcat": "coordinating"
     },
     "prep_in": {
-      "lemma": "i",
+      "lemma": "in",
       "pos": "PREP",
       "gloss": "in",
       "subcat": "locative"
     },
     "prep_from": {
-      "lemma": "fra",
+      "lemma": "van",
       "pos": "PREP",
-      "gloss": "from",
+      "gloss": "from/of",
       "subcat": "source"
     },
     "prep_with": {
-      "lemma": "med",
+      "lemma": "met",
       "pos": "PREP",
       "gloss": "with",
       "subcat": "instrumental"
-    },
-    "prep_of": {
-      "lemma": "af",
-      "pos": "PREP",
-      "gloss": "of/by",
-      "subcat": "genitive_agent",
-      "note": "Used for 'made of' or agent in passive 'by'."
     },
     "punctuation_period": {
       "lemma": ".",

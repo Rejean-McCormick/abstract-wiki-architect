@@ -2,7 +2,354 @@
   "_meta": {
     "language": "nl",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T21:03:09Z",
+    "note": "Maximal Schema: Includes Common/Neuter gender distinction and adjective inflection."
   },
-  "entries": {}
+  "entries": {
+    "copula": {
+      "lemma": "zijn",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "ben",
+        "present_2sg": "bent",
+        "present_3sg": "is",
+        "present_1pl": "zijn",
+        "present_3pl": "zijn",
+        "past_1sg": "was",
+        "past_3sg": "was",
+        "past_1pl": "waren",
+        "perfect_participle": "geweest"
+      },
+      "note": "Auxiliary 'hebben' (to have) is typically used for perfect tenses, except with movement/state change verbs (which use 'zijn')."
+    },
+    "det_definite": {
+      "lemma": "de",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "forms": {
+        "common_sg": "de",
+        "neuter_sg": "het",
+        "plural": "de"
+      }
+    },
+    "det_indefinite": {
+      "lemma": "een",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "default": "een"
+      },
+      "note": "Invariant form for common and neuter."
+    },
+    "pronoun_he": {
+      "lemma": "hij",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative": "hij",
+        "accusative": "hem",
+        "dative": "hem"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "zij",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom",
+      "forms": {
+        "nominative": "zij",
+        "accusative": "haar",
+        "dative": "haar"
+      }
+    },
+    "pronoun_it": {
+      "lemma": "het",
+      "pos": "PRON",
+      "gloss": "it",
+      "person": "3",
+      "number": "sg",
+      "gender": "n",
+      "case": "nom",
+      "forms": {
+        "nominative": "het",
+        "accusative": "het"
+      },
+      "note": "Only used for neuter nouns (het huis)."
+    },
+    "pronoun_they": {
+      "lemma": "zij",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "zij",
+        "accusative": "hen/ze"
+      }
+    },
+    "person": {
+      "lemma": "persoon",
+      "pos": "NOUN",
+      "gloss": "person",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "personen"
+    },
+    "man": {
+      "lemma": "man",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "mannen"
+    },
+    "woman": {
+      "lemma": "vrouw",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "vrouwen"
+    },
+    "scientist": {
+      "lemma": "wetenschapper",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "wetenschappers"
+    },
+    "physicist": {
+      "lemma": "natuurkundige",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "natuurkundigen",
+      "semantic_field": "physics"
+    },
+    "writer": {
+      "lemma": "schrijver",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "feminine_lemma": "schrijfster",
+      "plural_lemma": "schrijvers"
+    },
+    "professor": {
+      "lemma": "professor",
+      "pos": "NOUN",
+      "gloss": "professor",
+      "human": true,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "professoren"
+    },
+    "nobel_prize": {
+      "lemma": "Nobelprijs",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "c",
+      "number": "count",
+      "semantic_field": "awards"
+    },
+    "famous": {
+      "lemma": "beroemd",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "attributive": "beroemde"
+      },
+      "note": "Attributive form ends in -e."
+    },
+    "great": {
+      "lemma": "groot",
+      "pos": "ADJ",
+      "gloss": "great/big",
+      "degree": "positive",
+      "forms": {
+        "attributive": "grote"
+      }
+    },
+    "be_born": {
+      "lemma": "geboren worden",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "multiword",
+      "components": [
+        "geboren",
+        "worden"
+      ],
+      "forms": {
+        "past_3sg": "werd geboren",
+        "perfect_3sg": "is geboren"
+      }
+    },
+    "die": {
+      "lemma": "sterven",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "irregular_forms": {
+        "perfect_participle": "gestorven",
+        "past_3sg": "stierf"
+      },
+      "note": "Takes 'zijn' auxiliary in perfect tense (is gestorven)."
+    },
+    "discover": {
+      "lemma": "ontdekken",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "receive": {
+      "lemma": "ontvangen",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "publish": {
+      "lemma": "publiceren",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true,
+      "semantic_field": "science_meta"
+    },
+    "year": {
+      "lemma": "jaar",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "jaren"
+    },
+    "city": {
+      "lemma": "stad",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "gender": "c",
+      "number": "sg",
+      "plural_lemma": "steden"
+    },
+    "country": {
+      "lemma": "land",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "gender": "n",
+      "number": "sg",
+      "plural_lemma": "landen"
+    },
+    "neuroscientist": {
+      "lemma": "neurowetenschapper",
+      "pos": "NOUN",
+      "gloss": "neuroscientist",
+      "human": true,
+      "gender": "c",
+      "plural_lemma": "neurowetenschappers",
+      "semantic_field": "neuroscience"
+    },
+    "research": {
+      "lemma": "onderzoek",
+      "pos": "NOUN",
+      "gloss": "research",
+      "human": false,
+      "gender": "n",
+      "number": "mass",
+      "semantic_field": "science_meta"
+    },
+    "scientific_theory": {
+      "lemma": "wetenschappelijke theorie",
+      "pos": "NOUN",
+      "gloss": "scientific theory",
+      "human": false,
+      "gender": "c",
+      "multiword": true,
+      "plural_lemma": "wetenschappelijke theorieën",
+      "semantic_field": "science_meta"
+    },
+    "conj_and": {
+      "lemma": "en",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "maar",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "of",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "in",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Can contract with 'het' to 'in het' or 'in de'."
+    },
+    "prep_from": {
+      "lemma": "uit",
+      "pos": "PREP",
+      "gloss": "from/out of",
+      "subcat": "source"
+    },
+    "prep_of": {
+      "lemma": "van",
+      "pos": "PREP",
+      "gloss": "of/from",
+      "subcat": "genitive"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
 }

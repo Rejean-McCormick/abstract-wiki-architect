@@ -2,7 +2,113 @@
   "_meta": {
     "language": "da",
     "domain": "people",
-    "version": 1
+    "generated_at": "2025-12-10T01:04:09.959447",
+    "schema_version": "2.0"
   },
-  "entries": {}
+  "entries": {
+    "Scientist": {
+      "lemma": "videnskabsmand",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q901",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Physicist": {
+      "lemma": "fysiker",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q169470",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Chemist": {
+      "lemma": "kemiker",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q593644",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Biologist": {
+      "lemma": "biolog",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q864503",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Mathematician": {
+      "lemma": "matematiker",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q170790",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Actor": {
+      "lemma": "skuespiller",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q33999",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Writer": {
+      "lemma": "forfatter",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q36180",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Painter": {
+      "lemma": "kunstmaler",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q1028181",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Poet": {
+      "lemma": "digter",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q49757",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Politician": {
+      "lemma": "politiker",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q82955",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Musician": {
+      "lemma": "musiker",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q639669",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Teacher": {
+      "lemma": "lærer",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q37226",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Engineer": {
+      "lemma": "ingeniør",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q81096",
+        "source": "wikidata_automated_import"
+      }
+    }
+  }
 }

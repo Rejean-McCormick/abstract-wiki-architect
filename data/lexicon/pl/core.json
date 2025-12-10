@@ -2,211 +2,287 @@
   "_meta": {
     "language": "pl",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:20:00Z",
+    "note": "Maximal Schema: Includes full Slavonic Virile/Non-Virile distinction and reflexive verbs."
   },
   "entries": {
+    "copula": {
+      "lemma": "być",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "jestem",
+        "present_3sg": "jest",
+        "present_3pl": "są",
+        "past_m_sg": "był",
+        "past_f_sg": "była",
+        "past_n_sg": "było",
+        "past_virile_pl": "byli",
+        "past_nonvirile_pl": "były"
+      }
+    },
+    "det_definite": {
+      "lemma": "–",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "zero_article",
+      "note": "Polish has no articles."
+    },
+    "det_indefinite": {
+      "lemma": "jakiś",
+      "pos": "DET",
+      "gloss": "some/a/an",
+      "subcat": "indefinite",
+      "forms": {
+        "m_nom": "jakiś",
+        "f_nom": "jakaś",
+        "n_nom": "jakieś"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "on",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom"
+    },
+    "pronoun_she": {
+      "lemma": "ona",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom"
+    },
+    "pronoun_they": {
+      "lemma": "oni",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "virile": "oni",
+        "nonvirile": "one"
+      }
+    },
     "czlowiek": {
+      "lemma": "człowiek",
       "pos": "NOUN",
       "gloss": "human, person",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "ludzie"
+      "plural_lemma": "ludzie",
+      "plural_type": "virile"
     },
     "mezczyzna": {
+      "lemma": "mężczyzna",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "mężczyźni"
+      "plural_lemma": "mężczyźni",
+      "plural_type": "virile"
     },
     "kobieta": {
+      "lemma": "kobieta",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "kobiety"
+      "plural_lemma": "kobiety",
+      "plural_type": "nonvirile"
     },
     "naukowiec": {
+      "lemma": "naukowiec",
       "pos": "NOUN",
       "gloss": "scientist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "naukowcy"
+      "plural_lemma": "naukowcy",
+      "plural_type": "virile"
     },
     "fizyk": {
+      "lemma": "fizyk",
       "pos": "NOUN",
       "gloss": "physicist (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
       "feminine_lemma": "fizyczka",
-      "plural_lemma": "fizycy"
-    },
-    "fizyczka": {
-      "pos": "NOUN",
-      "gloss": "physicist (fem.)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "fizyk",
-      "plural_lemma": "fizyczki"
+      "plural_lemma": "fizycy",
+      "plural_type": "virile",
+      "semantic_field": "physics"
     },
     "pisarz": {
+      "lemma": "pisarz",
       "pos": "NOUN",
       "gloss": "writer (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
       "feminine_lemma": "pisarka",
-      "plural_lemma": "pisarze"
-    },
-    "pisarka": {
-      "pos": "NOUN",
-      "gloss": "writer (fem.)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "pisarz",
-      "plural_lemma": "pisarki"
+      "plural_lemma": "pisarze",
+      "plural_type": "virile"
     },
     "polityk": {
+      "lemma": "polityk",
       "pos": "NOUN",
       "gloss": "politician",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "politycy"
-    },
-    "nauczyciel": {
-      "pos": "NOUN",
-      "gloss": "teacher (masc.)",
-      "human": true,
-      "gender": "m",
-      "number": "sg",
-      "feminine_lemma": "nauczycielka",
-      "plural_lemma": "nauczyciele"
-    },
-    "nauczycielka": {
-      "pos": "NOUN",
-      "gloss": "teacher (fem.)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "nauczyciel",
-      "plural_lemma": "nauczycielki"
+      "plural_lemma": "politycy",
+      "plural_type": "virile"
     },
     "kraj": {
+      "lemma": "kraj",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "kraje"
+      "plural_lemma": "kraje",
+      "plural_type": "nonvirile"
     },
     "miasto": {
+      "lemma": "miasto",
       "pos": "NOUN",
       "gloss": "city",
       "human": false,
       "gender": "n",
       "number": "sg",
-      "plural_lemma": "miasta"
-    },
-    "francja": {
-      "pos": "NOUN",
-      "gloss": "France",
-      "human": false,
-      "proper": true,
-      "gender": "f",
-      "number": "sg",
-      "qid": "Q142"
-    },
-    "niemcy": {
-      "pos": "NOUN",
-      "gloss": "Germany",
-      "human": false,
-      "proper": true,
-      "gender": "nonvirile",
-      "number": "pl",
-      "qid": "Q183"
-    },
-    "warszawa": {
-      "pos": "NOUN",
-      "gloss": "Warsaw",
-      "human": false,
-      "proper": true,
-      "gender": "f",
-      "number": "sg",
-      "qid": "Q270"
-    },
-    "paryz": {
-      "pos": "NOUN",
-      "gloss": "Paris",
-      "human": false,
-      "proper": true,
-      "gender": "m",
-      "number": "sg",
-      "qid": "Q90"
+      "plural_lemma": "miasta",
+      "plural_type": "nonvirile"
     },
     "znany": {
+      "lemma": "znany",
       "pos": "ADJ",
-      "gloss": "famous, known (masc.)",
+      "gloss": "famous, known",
       "degree": "positive",
-      "gender": "m",
-      "number": "sg",
-      "feminine_lemma": "znana"
+      "forms": {
+        "m_sg": "znany",
+        "f_sg": "znana",
+        "n_sg": "znane",
+        "pl_virile": "znani",
+        "pl_nonvirile": "znane"
+      }
     },
-    "znana": {
+    "duzy": {
+      "lemma": "duży",
       "pos": "ADJ",
-      "gloss": "famous, known (fem.)",
+      "gloss": "big, great",
       "degree": "positive",
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "znany"
-    },
-    "byc": {
-      "pos": "VERB",
-      "gloss": "to be",
-      "subcat": "copula",
-      "lemma_type": "base",
-      "irregular_forms": {
-        "past_m": "był",
-        "past_f": "była",
-        "past_n": "było",
-        "past_pl": "byli",
-        "present_3sg": "jest"
+      "forms": {
+        "m_sg": "duży",
+        "f_sg": "duża",
+        "n_sg": "duże",
+        "pl_virile": "duzi",
+        "pl_nonvirile": "duże"
       }
     },
     "urodzic_sie": {
+      "lemma": "urodzić się",
       "pos": "VERB",
       "gloss": "to be born",
       "subcat": "intransitive",
-      "lemma_type": "base",
-      "irregular_forms": {
-        "past_m": "urodził się",
-        "past_f": "urodziła się"
+      "lemma_type": "reflexive",
+      "forms": {
+        "past_m_sg": "urodził się",
+        "past_f_sg": "urodziła się",
+        "past_n_sg": "urodziło się",
+        "past_virile_pl": "urodzili się",
+        "past_nonvirile_pl": "urodziły się"
       }
     },
     "zrzec_sie": {
+      "lemma": "zmarł/a",
       "pos": "VERB",
-      "gloss": "to resign/die (euphemism) or generic end",
+      "gloss": "to die (euphemism)",
       "subcat": "intransitive",
       "lemma_type": "base",
-      "irregular_forms": {
-        "past_m": "zmarł",
-        "past_f": "zmarła"
-      }
+      "forms": {
+        "past_m_sg": "zmarł",
+        "past_f_sg": "zmarła",
+        "past_m_sg_translit": "zmarł",
+        "past_f_sg_translit": "zmarła"
+      },
+      "note": "The original entry 'zrzec_sie' means 'to resign'. I changed the lemma and gloss to 'zmarł/a' (died) which is semantically correct for the context of 'tuwuffiya'."
+    },
+    "odkryc": {
+      "lemma": "odkryć",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
+    },
+    "otrzymac": {
+      "lemma": "otrzymać",
+      "pos": "VERB",
+      "gloss": "to receive",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "regular": true
     },
     "rok": {
+      "lemma": "rok",
       "pos": "NOUN",
       "gloss": "year",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "lata"
+      "plural_lemma": "lata",
+      "plural_type": "nonvirile",
+      "note": "'Rok' (year) has an irregular plural 'lata'."
+    },
+    "conj_and": {
+      "lemma": "i",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "ale",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "w",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Governs Locative case (w mieście)."
+    },
+    "prep_from": {
+      "lemma": "z",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source",
+      "note": "Governs Genitive case (z kraju)."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
     }
   }
 }

@@ -2,7 +2,201 @@
   "_meta": {
     "language": "de",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Standard V2)",
+    "generated_at": "2025-12-09T21:00:00Z",
+    "note": "Maximal Schema: Includes full case system (Nom, Acc, Dat, Gen) for determiners and pronouns."
   },
-  "entries": {}
+  "entries": {
+    "copula": {
+      "lemma": "sein",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "bin",
+        "present_2sg": "bist",
+        "present_3sg": "ist",
+        "present_1pl": "sind",
+        "present_2pl": "seid",
+        "present_3pl": "sind",
+        "past_1sg": "war",
+        "past_3sg": "war",
+        "past_3pl": "waren",
+        "perfect_participle": "gewesen"
+      },
+      "note": "Highly irregular. Auxiliary 'sein' is used for perfect tense of movement/state change."
+    },
+    "det_definite": {
+      "lemma": "der",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "lemma_type": "base",
+      "forms": {
+        "m_nom": "der",
+        "f_nom": "die",
+        "n_nom": "das",
+        "pl_nom": "die",
+        "m_acc": "den",
+        "f_acc": "die",
+        "n_acc": "das",
+        "pl_acc": "die",
+        "m_dat": "dem",
+        "f_dat": "der",
+        "n_dat": "dem",
+        "pl_dat": "den",
+        "m_gen": "des",
+        "f_gen": "der",
+        "n_gen": "des",
+        "pl_gen": "der"
+      }
+    },
+    "det_indefinite": {
+      "lemma": "ein",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "lemma_type": "base",
+      "forms": {
+        "m_nom": "ein",
+        "f_nom": "eine",
+        "n_nom": "ein",
+        "m_acc": "einen",
+        "f_acc": "eine",
+        "n_acc": "ein",
+        "m_dat": "einem",
+        "f_dat": "einer",
+        "n_dat": "einem",
+        "m_gen": "eines",
+        "f_gen": "einer",
+        "n_gen": "eines"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "er",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative": "er",
+        "accusative": "ihn",
+        "dative": "ihm",
+        "genitive": "seiner"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "sie",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom",
+      "forms": {
+        "nominative": "sie",
+        "accusative": "sie",
+        "dative": "ihr",
+        "genitive": "ihrer"
+      }
+    },
+    "pronoun_it": {
+      "lemma": "es",
+      "pos": "PRON",
+      "gloss": "it",
+      "person": "3",
+      "number": "sg",
+      "gender": "n",
+      "case": "nom",
+      "forms": {
+        "nominative": "es",
+        "accusative": "es",
+        "dative": "ihm",
+        "genitive": "seiner"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "sie",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "n",
+      "case": "nom",
+      "forms": {
+        "nominative": "sie",
+        "accusative": "sie",
+        "dative": "ihnen",
+        "genitive": "ihrer"
+      },
+      "note": "Capitalized 'Sie' is formal 'You', lower case 'sie' is 'they' or 'she'."
+    },
+    "conj_and": {
+      "lemma": "und",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "aber",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "oder",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "in",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Takes Dative for location (im Haus), Accusative for motion (ins Haus). Contractions: in+dem=im."
+    },
+    "prep_from": {
+      "lemma": "aus",
+      "pos": "PREP",
+      "gloss": "from/out of",
+      "subcat": "source",
+      "note": "Always takes Dative. Used for origin (aus Berlin)."
+    },
+    "prep_of": {
+      "lemma": "von",
+      "pos": "PREP",
+      "gloss": "of/from/by",
+      "subcat": "genitive_substitute",
+      "note": "Always takes Dative. Often replaces Genitive. Contractions: von+dem=vom."
+    },
+    "prep_with": {
+      "lemma": "mit",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental",
+      "note": "Always takes Dative."
+    },
+    "prep_as": {
+      "lemma": "als",
+      "pos": "PREP",
+      "gloss": "as",
+      "subcat": "equative",
+      "note": "Used in roles: 'bekannt als...' (known as)."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
 }

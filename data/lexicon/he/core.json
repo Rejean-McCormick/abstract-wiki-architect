@@ -2,174 +2,263 @@
   "_meta": {
     "language": "he",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "note": "Includes Hebrew script, transliteration, and root-based verb forms."
   },
   "entries": {
     "adam": {
+      "lemma": "אדם",
+      "lemma_translit": "adam",
       "pos": "NOUN",
       "gloss": "person, human",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "anashim"
+      "plural_lemma": "אנשים",
+      "plural_translit": "anashim"
     },
     "ish": {
+      "lemma": "איש",
+      "lemma_translit": "ish",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "anashim"
+      "plural_lemma": "אנשים",
+      "plural_translit": "anashim"
     },
     "isha": {
+      "lemma": "אישה",
+      "lemma_translit": "isha",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "nashim"
+      "plural_lemma": "נשים",
+      "plural_translit": "nashim"
     },
     "madaan": {
+      "lemma": "מדען",
+      "lemma_translit": "madaan",
       "pos": "NOUN",
       "gloss": "scientist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "madaaniy",
-      "plural_lemma": "madanim"
+      "feminine_lemma": "מדענית",
+      "feminine_translit": "mada'anit",
+      "plural_lemma": "מדענים",
+      "plural_translit": "madanim"
     },
     "fizikai": {
+      "lemma": "פיזיקאי",
+      "lemma_translit": "fizikai",
       "pos": "NOUN",
       "gloss": "physicist (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "fizikait",
-      "plural_lemma": "fizikaim"
+      "feminine_lemma": "פיזיקאית",
+      "feminine_translit": "fizikait",
+      "plural_lemma": "פיזיקאים",
+      "plural_translit": "fizikaim"
     },
     "fizikait": {
+      "lemma": "פיזיקאית",
+      "lemma_translit": "fizikait",
       "pos": "NOUN",
       "gloss": "physicist (fem.)",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "fizikai",
-      "plural_lemma": "fizikaiot"
+      "masculine_lemma": "פיזיקאי",
+      "masculine_translit": "fizikai",
+      "plural_lemma": "פיזיקאיות",
+      "plural_translit": "fizikaiot"
     },
     "chimai": {
+      "lemma": "כימאי",
+      "lemma_translit": "chimai",
       "pos": "NOUN",
       "gloss": "chemist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "chimait",
-      "plural_lemma": "chimaim"
+      "feminine_lemma": "כימאית",
+      "feminine_translit": "chimait",
+      "plural_lemma": "כימאים",
+      "plural_translit": "chimaim"
     },
     "sofer": {
+      "lemma": "סופר",
+      "lemma_translit": "sofer",
       "pos": "NOUN",
       "gloss": "writer",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "soferet",
-      "plural_lemma": "sofrim"
+      "feminine_lemma": "סופרת",
+      "feminine_translit": "soferet",
+      "plural_lemma": "סופרים",
+      "plural_translit": "sofrim"
     },
     "soferet": {
+      "lemma": "סופרת",
+      "lemma_translit": "soferet",
       "pos": "NOUN",
       "gloss": "writer (fem.)",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "masculine_lemma": "sofer",
-      "plural_lemma": "sofrot"
+      "masculine_lemma": "סופר",
+      "masculine_translit": "sofer",
+      "plural_lemma": "סופרות",
+      "plural_translit": "sofrot"
     },
     "politikai": {
+      "lemma": "פוליטיקאי",
+      "lemma_translit": "politikai",
       "pos": "NOUN",
       "gloss": "politician",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "politikait",
-      "plural_lemma": "politikaim"
+      "feminine_lemma": "פוליטיקאית",
+      "feminine_translit": "politikait",
+      "plural_lemma": "פוליטיקאים",
+      "plural_translit": "politikaim"
     },
     "moreh": {
+      "lemma": "מורה",
+      "lemma_translit": "moreh",
       "pos": "NOUN",
       "gloss": "teacher",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "morah",
-      "plural_lemma": "morim"
+      "feminine_lemma": "מורה",
+      "feminine_translit": "morah",
+      "plural_lemma": "מורים",
+      "plural_translit": "morim"
     },
     "rofe": {
+      "lemma": "רופא",
+      "lemma_translit": "rofe",
       "pos": "NOUN",
       "gloss": "doctor",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "feminine_lemma": "rof'a",
-      "plural_lemma": "rofim"
+      "feminine_lemma": "רופאה",
+      "feminine_translit": "rof'a",
+      "plural_lemma": "רופאים",
+      "plural_translit": "rofim"
     },
     "medina": {
+      "lemma": "מדינה",
+      "lemma_translit": "medina",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "medinot"
+      "plural_lemma": "מדינות",
+      "plural_translit": "medinot"
     },
     "ir": {
+      "lemma": "עיר",
+      "lemma_translit": "ir",
       "pos": "NOUN",
       "gloss": "city",
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "arim"
+      "plural_lemma": "ערים",
+      "plural_translit": "arim"
     },
     "mefursam": {
+      "lemma": "מפורסם",
+      "lemma_translit": "mefursam",
       "pos": "ADJ",
       "gloss": "famous",
       "degree": "positive",
       "gender": "m",
-      "feminine_lemma": "mefursemet"
+      "feminine_lemma": "מפורסמת",
+      "feminine_translit": "mefursemet"
     },
     "haya": {
+      "lemma": "היה",
+      "lemma_translit": "haya",
       "pos": "VERB",
       "gloss": "to be (past)",
       "subcat": "copula",
       "lemma_type": "base",
       "irregular_forms": {
-        "past_3sg_m": "haya",
-        "past_3sg_f": "hayta"
+        "past_3sg_m": "היה",
+        "past_3sg_m_translit": "haya",
+        "past_3sg_f": "הייתה",
+        "past_3sg_f_translit": "hayta",
+        "present": "null",
+        "note": "Zero copula in present tense."
       }
     },
     "nolad": {
+      "lemma": "נולד",
+      "lemma_translit": "nolad",
       "pos": "VERB",
       "gloss": "to be born",
       "subcat": "intransitive",
       "lemma_type": "base",
       "irregular_forms": {
-        "past_3sg_m": "nolad",
-        "past_3sg_f": "nolda"
+        "past_3sg_m": "נולד",
+        "past_3sg_m_translit": "nolad",
+        "past_3sg_f": "נולדה",
+        "past_3sg_f_translit": "nolda"
       }
     },
     "met": {
+      "lemma": "מת",
+      "lemma_translit": "met",
       "pos": "VERB",
       "gloss": "to die",
       "subcat": "intransitive",
       "lemma_type": "base",
       "irregular_forms": {
-        "past_3sg_m": "met",
-        "past_3sg_f": "meta"
+        "past_3sg_m": "מת",
+        "past_3sg_m_translit": "met",
+        "past_3sg_f": "מתה",
+        "past_3sg_f_translit": "meta"
       }
     },
     "shana": {
+      "lemma": "שנה",
+      "lemma_translit": "shana",
       "pos": "NOUN",
       "gloss": "year",
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "shanim"
+      "plural_lemma": "שנים",
+      "plural_translit": "shanim"
+    },
+    "conj_and": {
+      "lemma": "ו",
+      "lemma_translit": "ve",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating",
+      "note": "Prefix attached to the following word."
+    },
+    "prep_in": {
+      "lemma": "ב",
+      "lemma_translit": "be",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Prefix attached to the following word."
     }
   }
 }

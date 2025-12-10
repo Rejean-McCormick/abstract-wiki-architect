@@ -2,115 +2,269 @@
   "_meta": {
     "language": "fa",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T21:15:00Z",
+    "note": "Maximal Schema: Includes Perso-Arabic script, Ezafe markers, and compound verb structures."
   },
   "entries": {
+    "copula": {
+      "lemma": "بودن",
+      "lemma_translit": "budan",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "هستم",
+        "present_1sg_translit": "hastam",
+        "present_2sg": "هستی",
+        "present_2sg_translit": "hasti",
+        "present_3sg": "است",
+        "present_3sg_translit": "ast",
+        "present_1pl": "هستیم",
+        "present_1pl_translit": "hastim",
+        "present_2pl": "هستید",
+        "present_2pl_translit": "hastid",
+        "present_3pl": "هستند",
+        "present_3pl_translit": "hastand",
+        "past_3sg": "بود",
+        "past_3sg_translit": "bud",
+        "neg_present_3sg": "نیست",
+        "neg_present_3sg_translit": "nist"
+      },
+      "note": "In colloquial Persian, 'ast' often shortens to suffix '-e'."
+    },
+    "det_definite": {
+      "lemma": "",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "note": "Persian has no definite article. Definiteness is often marked by object marker 'ra' or context."
+    },
+    "det_indefinite": {
+      "lemma": "یک",
+      "lemma_translit": "yek",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "note": "Can also use suffix '-i' attached to the noun."
+    },
+    "pronoun_he": {
+      "lemma": "او",
+      "lemma_translit": "u",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "او",
+        "nominative_translit": "u",
+        "accusative": "او را",
+        "accusative_translit": "u ra"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_she": {
+      "lemma": "او",
+      "lemma_translit": "u",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "او",
+        "nominative_translit": "u",
+        "accusative": "او را",
+        "accusative_translit": "u ra"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_they": {
+      "lemma": "آنها",
+      "lemma_translit": "anha",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "آنها",
+        "nominative_translit": "anha",
+        "accusative": "آنها را",
+        "accusative_translit": "anha ra"
+      }
+    },
     "shakhs": {
+      "lemma": "شخص",
+      "lemma_translit": "shakhs",
       "pos": "NOUN",
       "gloss": "person",
       "human": true,
       "number": "sg",
-      "plural_lemma": "ashkhas"
+      "plural_lemma": "اشخاص",
+      "plural_translit": "ashkhas",
+      "ezafe_suffix": "ِ",
+      "ezafe_translit": "-e"
     },
     "mard": {
+      "lemma": "مرد",
+      "lemma_translit": "mard",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
       "number": "sg",
-      "plural_lemma": "mardan"
+      "plural_lemma": "مردان",
+      "plural_translit": "mardan",
+      "ezafe_suffix": "ِ",
+      "ezafe_translit": "-e"
     },
     "zan": {
+      "lemma": "زن",
+      "lemma_translit": "zan",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
       "number": "sg",
-      "plural_lemma": "zanan"
+      "plural_lemma": "زنان",
+      "plural_translit": "zanan",
+      "ezafe_suffix": "ِ",
+      "ezafe_translit": "-e"
     },
     "daneshmand": {
+      "lemma": "دانشمند",
+      "lemma_translit": "daneshmand",
       "pos": "NOUN",
       "gloss": "scientist",
       "human": true,
       "number": "sg",
-      "plural_lemma": "daneshmandan"
+      "plural_lemma": "دانشمندان",
+      "plural_translit": "daneshmandan",
+      "ezafe_suffix": "ِ",
+      "ezafe_translit": "-e"
     },
     "fizikdan": {
+      "lemma": "فیزیکدان",
+      "lemma_translit": "fizikdan",
       "pos": "NOUN",
       "gloss": "physicist",
       "human": true,
       "number": "sg",
-      "plural_lemma": "fizikdanan"
+      "plural_lemma": "فیزیکدانان",
+      "plural_translit": "fizikdanan",
+      "semantic_field": "physics"
     },
     "shimidan": {
+      "lemma": "شیمیدان",
+      "lemma_translit": "shimidan",
       "pos": "NOUN",
       "gloss": "chemist",
       "human": true,
       "number": "sg",
-      "plural_lemma": "shimidanan"
+      "plural_lemma": "شیمیدانان",
+      "plural_translit": "shimidanan",
+      "semantic_field": "chemistry"
     },
     "nevisandeh": {
+      "lemma": "نویسنده",
+      "lemma_translit": "nevisandeh",
       "pos": "NOUN",
       "gloss": "writer",
       "human": true,
       "number": "sg",
-      "plural_lemma": "nevisandegan"
+      "plural_lemma": "نویسندگان",
+      "plural_translit": "nevisandegan",
+      "ezafe_suffix": "ِ",
+      "ezafe_translit": "-ye"
     },
     "shaer": {
+      "lemma": "شاعر",
+      "lemma_translit": "shaer",
       "pos": "NOUN",
       "gloss": "poet",
       "human": true,
       "number": "sg",
-      "plural_lemma": "shaeran"
+      "plural_lemma": "شاعران",
+      "plural_translit": "shaeran"
     },
     "siasatmadar": {
+      "lemma": "سیاستمدار",
+      "lemma_translit": "siasatmadar",
       "pos": "NOUN",
       "gloss": "politician",
       "human": true,
       "number": "sg",
-      "plural_lemma": "siasatmadaran"
+      "plural_lemma": "سیاستمداران",
+      "plural_translit": "siasatmadaran"
     },
     "moallem": {
+      "lemma": "معلم",
+      "lemma_translit": "moallem",
       "pos": "NOUN",
       "gloss": "teacher",
       "human": true,
       "number": "sg",
-      "plural_lemma": "moalleman"
+      "plural_lemma": "معلمان",
+      "plural_translit": "moalleman"
     },
     "ostad": {
+      "lemma": "استاد",
+      "lemma_translit": "ostad",
       "pos": "NOUN",
       "gloss": "professor/master",
       "human": true,
       "number": "sg",
-      "plural_lemma": "ostadan"
+      "plural_lemma": "استادان",
+      "plural_translit": "ostadan"
     },
     "pezeshk": {
+      "lemma": "پزشک",
+      "lemma_translit": "pezeshk",
       "pos": "NOUN",
       "gloss": "doctor",
       "human": true,
       "number": "sg",
-      "plural_lemma": "pezeshkan"
+      "plural_lemma": "پزشکان",
+      "plural_translit": "pezeshkan"
     },
     "bazigar": {
+      "lemma": "بازیگر",
+      "lemma_translit": "bazigar",
       "pos": "NOUN",
       "gloss": "actor/actress",
       "human": true,
       "number": "sg",
-      "plural_lemma": "bazigaran"
+      "plural_lemma": "بازیگران",
+      "plural_translit": "bazigaran"
     },
     "keshvar": {
+      "lemma": "کشور",
+      "lemma_translit": "keshvar",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
       "number": "sg",
-      "plural_lemma": "keshvarha"
+      "plural_lemma": "کشورها",
+      "plural_translit": "keshvarha"
     },
     "shahr": {
+      "lemma": "شهر",
+      "lemma_translit": "shahr",
       "pos": "NOUN",
       "gloss": "city",
       "human": false,
       "number": "sg",
-      "plural_lemma": "shahrha"
+      "plural_lemma": "شهرها",
+      "plural_translit": "shahrha"
     },
     "iran": {
+      "lemma": "ایران",
+      "lemma_translit": "Iran",
       "pos": "NOUN",
       "gloss": "Iran",
       "human": false,
@@ -119,6 +273,8 @@
       "qid": "Q794"
     },
     "farans": {
+      "lemma": "فرانسه",
+      "lemma_translit": "Faranse",
       "pos": "NOUN",
       "gloss": "France",
       "human": false,
@@ -127,6 +283,8 @@
       "qid": "Q142"
     },
     "alman": {
+      "lemma": "آلمان",
+      "lemma_translit": "Alman",
       "pos": "NOUN",
       "gloss": "Germany",
       "human": false,
@@ -135,6 +293,8 @@
       "qid": "Q183"
     },
     "lahestan": {
+      "lemma": "لهستان",
+      "lemma_translit": "Lahestan",
       "pos": "NOUN",
       "gloss": "Poland",
       "human": false,
@@ -143,58 +303,105 @@
       "qid": "Q36"
     },
     "mashhur": {
+      "lemma": "مشهور",
+      "lemma_translit": "mashhur",
       "pos": "ADJ",
       "gloss": "famous",
       "degree": "positive"
     },
     "bozorg": {
+      "lemma": "بزرگ",
+      "lemma_translit": "bozorg",
       "pos": "ADJ",
       "gloss": "big/great",
       "degree": "positive"
     },
-    "budan": {
-      "pos": "VERB",
-      "gloss": "to be",
-      "subcat": "copula",
-      "lemma_type": "base",
-      "irregular_forms": {
-        "present_3sg": "ast",
-        "past_3sg": "bud"
-      }
-    },
     "be_donya_amadan": {
+      "lemma": "به دنیا آمدن",
+      "lemma_translit": "be donya amadan",
       "pos": "VERB",
       "gloss": "to be born",
       "subcat": "intransitive",
       "lemma_type": "multiword",
+      "components": [
+        "be",
+        "donya",
+        "amadan"
+      ],
       "irregular_forms": {
-        "past_3sg": "be donya amad"
+        "past_3sg": "به دنیا آمد",
+        "past_3sg_translit": "be donya amad"
       }
     },
     "mordan": {
+      "lemma": "مردن",
+      "lemma_translit": "mordan",
       "pos": "VERB",
       "gloss": "to die",
       "subcat": "intransitive",
       "lemma_type": "base",
       "irregular_forms": {
-        "past_3sg": "mord"
+        "past_3sg": "مرد",
+        "past_3sg_translit": "mord"
       }
     },
     "daryaft_kardan": {
+      "lemma": "دریافت کردن",
+      "lemma_translit": "daryaft kardan",
       "pos": "VERB",
       "gloss": "to receive",
       "subcat": "transitive",
       "lemma_type": "multiword",
+      "components": [
+        "daryaft",
+        "kardan"
+      ],
       "irregular_forms": {
-        "past_3sg": "daryaft kard"
+        "past_3sg": "دریافت کرد",
+        "past_3sg_translit": "daryaft kard"
       }
     },
     "sal": {
+      "lemma": "سال",
+      "lemma_translit": "sal",
       "pos": "NOUN",
       "gloss": "year",
       "human": false,
       "number": "sg",
-      "plural_lemma": "salha"
+      "plural_lemma": "سال‌ها",
+      "plural_translit": "salha"
+    },
+    "conj_and": {
+      "lemma": "و",
+      "lemma_translit": "va",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "در",
+      "lemma_translit": "dar",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative"
+    },
+    "prep_from": {
+      "lemma": "از",
+      "lemma_translit": "az",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": "،",
+      "pos": "PUNCT",
+      "gloss": "comma",
+      "note": "Inverted comma"
     }
   }
 }

@@ -2,10 +2,13 @@
   "_meta": {
     "language": "en",
     "domain": "core",
-    "version": 1
+    "version": 1,
+    "source": "Manual Entry (Maximal V2)",
+    "note": "Includes scientific domain extensions and irregular verbs."
   },
   "entries": {
     "person": {
+      "lemma": "person",
       "pos": "NOUN",
       "gloss": "person, human",
       "human": true,
@@ -14,6 +17,7 @@
       "plural_lemma": "people"
     },
     "man": {
+      "lemma": "man",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
@@ -22,6 +26,7 @@
       "plural_lemma": "men"
     },
     "woman": {
+      "lemma": "woman",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
@@ -30,6 +35,7 @@
       "plural_lemma": "women"
     },
     "scientist": {
+      "lemma": "scientist",
       "pos": "NOUN",
       "gloss": "scientist",
       "human": true,
@@ -38,6 +44,7 @@
       "plural_lemma": "scientists"
     },
     "writer": {
+      "lemma": "writer",
       "pos": "NOUN",
       "gloss": "writer, author",
       "human": true,
@@ -46,6 +53,7 @@
       "plural_lemma": "writers"
     },
     "author": {
+      "lemma": "author",
       "pos": "NOUN",
       "gloss": "author",
       "human": true,
@@ -54,6 +62,7 @@
       "plural_lemma": "authors"
     },
     "professor": {
+      "lemma": "professor",
       "pos": "NOUN",
       "gloss": "professor",
       "human": true,
@@ -62,6 +71,7 @@
       "plural_lemma": "professors"
     },
     "nobel_prize": {
+      "lemma": "Nobel Prize",
       "pos": "NOUN",
       "gloss": "a major international prize awarded in several fields",
       "human": false,
@@ -70,21 +80,25 @@
       "semantic_field": "awards"
     },
     "famous": {
+      "lemma": "famous",
       "pos": "ADJ",
       "gloss": "famous, well-known",
       "degree": "positive"
     },
     "notable": {
+      "lemma": "notable",
       "pos": "ADJ",
       "gloss": "notable, worthy of note",
       "degree": "positive"
     },
     "great": {
+      "lemma": "great",
       "pos": "ADJ",
       "gloss": "great, important",
       "degree": "positive"
     },
     "be": {
+      "lemma": "be",
       "pos": "VERB",
       "gloss": "to be",
       "subcat": "copula",
@@ -97,6 +111,7 @@
       }
     },
     "be_born": {
+      "lemma": "be born",
       "pos": "VERB",
       "gloss": "to be born",
       "subcat": "intransitive",
@@ -107,18 +122,21 @@
       ]
     },
     "die": {
+      "lemma": "die",
       "pos": "VERB",
       "gloss": "to die",
       "subcat": "intransitive",
       "regular": true
     },
     "discover": {
+      "lemma": "discover",
       "pos": "VERB",
       "gloss": "to discover",
       "subcat": "transitive",
       "regular": true
     },
     "win": {
+      "lemma": "win",
       "pos": "VERB",
       "gloss": "to win",
       "subcat": "transitive",
@@ -129,12 +147,14 @@
       }
     },
     "receive": {
+      "lemma": "receive",
       "pos": "VERB",
       "gloss": "to receive",
       "subcat": "transitive",
       "regular": true
     },
     "year": {
+      "lemma": "year",
       "pos": "NOUN",
       "gloss": "year",
       "human": false,
@@ -143,6 +163,7 @@
       "plural_lemma": "years"
     },
     "city": {
+      "lemma": "city",
       "pos": "NOUN",
       "gloss": "city",
       "human": false,
@@ -151,6 +172,7 @@
       "plural_lemma": "cities"
     },
     "country": {
+      "lemma": "country",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
@@ -159,6 +181,7 @@
       "plural_lemma": "countries"
     },
     "politician": {
+      "lemma": "politician",
       "pos": "NOUN",
       "gloss": "politician",
       "human": true,
@@ -167,6 +190,7 @@
       "plural_lemma": "politicians"
     },
     "Poland": {
+      "lemma": "Poland",
       "pos": "NOUN",
       "gloss": "Poland",
       "human": false,
@@ -176,6 +200,7 @@
       "qid": "Q36"
     },
     "France": {
+      "lemma": "France",
       "pos": "NOUN",
       "gloss": "France",
       "human": false,
@@ -185,6 +210,7 @@
       "qid": "Q142"
     },
     "United Kingdom": {
+      "lemma": "United Kingdom",
       "pos": "NOUN",
       "gloss": "United Kingdom",
       "human": false,
@@ -194,6 +220,7 @@
       "qid": "Q145"
     },
     "Warsaw": {
+      "lemma": "Warsaw",
       "pos": "NOUN",
       "gloss": "Warsaw",
       "human": false,
@@ -203,6 +230,7 @@
       "qid": "Q270"
     },
     "Paris": {
+      "lemma": "Paris",
       "pos": "NOUN",
       "gloss": "Paris",
       "human": false,
@@ -212,17 +240,20 @@
       "qid": "Q90"
     },
     "important": {
+      "lemma": "important",
       "pos": "ADJ",
       "gloss": "important, major",
       "degree": "positive"
     },
     "to_be": {
+      "lemma": "be",
       "pos": "VERB",
       "gloss": "to be",
       "subcat": "copula",
       "lemma_type": "base"
     },
     "to_be_born": {
+      "lemma": "be born",
       "pos": "VERB",
       "gloss": "to be born",
       "subcat": "intransitive",
@@ -233,24 +264,28 @@
       ]
     },
     "to_die": {
+      "lemma": "die",
       "pos": "VERB",
       "gloss": "to die",
       "subcat": "intransitive",
       "lemma_type": "base"
     },
     "to_discover": {
+      "lemma": "discover",
       "pos": "VERB",
       "gloss": "to discover",
       "subcat": "transitive",
       "lemma_type": "base"
     },
     "to_lead": {
+      "lemma": "lead",
       "pos": "VERB",
       "gloss": "to lead",
       "subcat": "transitive",
       "lemma_type": "base"
     },
     "date": {
+      "lemma": "date",
       "pos": "NOUN",
       "gloss": "date (calendar)",
       "human": false,
@@ -259,6 +294,7 @@
       "plural_lemma": "dates"
     },
     "statistician": {
+      "lemma": "statistician",
       "pos": "NOUN",
       "gloss": "a scientist who works in statistics",
       "human": true,
@@ -266,6 +302,7 @@
       "semantic_field": "statistics"
     },
     "computer_scientist": {
+      "lemma": "computer scientist",
       "pos": "NOUN",
       "gloss": "a scientist who studies computer science",
       "human": true,
@@ -274,6 +311,7 @@
       "semantic_field": "computer_science"
     },
     "astronomer": {
+      "lemma": "astronomer",
       "pos": "NOUN",
       "gloss": "a scientist who studies celestial objects",
       "human": true,
@@ -281,6 +319,7 @@
       "semantic_field": "astronomy"
     },
     "geologist": {
+      "lemma": "geologist",
       "pos": "NOUN",
       "gloss": "a scientist who studies the Earth",
       "human": true,
@@ -288,6 +327,7 @@
       "semantic_field": "geology"
     },
     "climate_scientist": {
+      "lemma": "climate scientist",
       "pos": "NOUN",
       "gloss": "a scientist who studies climate",
       "human": true,
@@ -296,6 +336,7 @@
       "semantic_field": "climatology"
     },
     "neuroscientist": {
+      "lemma": "neuroscientist",
       "pos": "NOUN",
       "gloss": "a scientist who studies the nervous system",
       "human": true,
@@ -303,6 +344,7 @@
       "semantic_field": "neuroscience"
     },
     "statistics": {
+      "lemma": "statistics",
       "pos": "NOUN",
       "gloss": "the study of data and uncertainty",
       "human": false,
@@ -310,6 +352,7 @@
       "semantic_field": "statistics"
     },
     "astronomy": {
+      "lemma": "astronomy",
       "pos": "NOUN",
       "gloss": "the study of celestial objects and space",
       "human": false,
@@ -317,6 +360,7 @@
       "semantic_field": "astronomy"
     },
     "geology": {
+      "lemma": "geology",
       "pos": "NOUN",
       "gloss": "the study of the Earth and its structure",
       "human": false,
@@ -324,6 +368,7 @@
       "semantic_field": "geology"
     },
     "neuroscience": {
+      "lemma": "neuroscience",
       "pos": "NOUN",
       "gloss": "the study of the nervous system",
       "human": false,
@@ -331,6 +376,7 @@
       "semantic_field": "neuroscience"
     },
     "nobel_prize_in_physiology_or_medicine": {
+      "lemma": "Nobel Prize in Physiology or Medicine",
       "pos": "NOUN",
       "gloss": "a Nobel Prize awarded for achievements in physiology or medicine",
       "human": false,
@@ -340,6 +386,7 @@
       "semantic_field": "awards"
     },
     "field_of_research": {
+      "lemma": "field of research",
       "pos": "NOUN",
       "gloss": "a specific area within science or scholarship",
       "human": false,
@@ -348,6 +395,7 @@
       "semantic_field": "science_meta"
     },
     "scientific_theory": {
+      "lemma": "scientific theory",
       "pos": "NOUN",
       "gloss": "an explanatory framework in science",
       "human": false,
@@ -356,6 +404,7 @@
       "semantic_field": "science_meta"
     },
     "scientific_paper": {
+      "lemma": "scientific paper",
       "pos": "NOUN",
       "gloss": "a written report of research results",
       "human": false,
@@ -364,6 +413,7 @@
       "semantic_field": "science_meta"
     },
     "research": {
+      "lemma": "research",
       "pos": "NOUN",
       "gloss": "systematic investigation to establish facts",
       "human": false,
@@ -371,6 +421,7 @@
       "semantic_field": "science_meta"
     },
     "experiment": {
+      "lemma": "experiment",
       "pos": "NOUN",
       "gloss": "a test carried out under controlled conditions",
       "human": false,
@@ -378,6 +429,7 @@
       "semantic_field": "science_meta"
     },
     "to_research": {
+      "lemma": "research",
       "pos": "VERB",
       "gloss": "to carry out research",
       "subcat": "transitive",
@@ -386,6 +438,7 @@
       "semantic_field": "science_meta"
     },
     "to_experiment": {
+      "lemma": "experiment",
       "pos": "VERB",
       "gloss": "to perform experiments",
       "subcat": "intransitive",
@@ -394,6 +447,7 @@
       "semantic_field": "science_meta"
     },
     "to_publish": {
+      "lemma": "publish",
       "pos": "VERB",
       "gloss": "to make research publicly available",
       "subcat": "transitive",
@@ -402,6 +456,7 @@
       "semantic_field": "science_meta"
     },
     "to_win": {
+      "lemma": "win",
       "pos": "VERB",
       "gloss": "to receive a prize or award",
       "subcat": "transitive",
@@ -414,18 +469,21 @@
       "semantic_field": "awards"
     },
     "scientific": {
+      "lemma": "scientific",
       "pos": "ADJ",
       "gloss": "relating to science",
       "degree": "positive",
       "semantic_field": "science_meta"
     },
     "experimental": {
+      "lemma": "experimental",
       "pos": "ADJ",
       "gloss": "based on experiments",
       "degree": "positive",
       "semantic_field": "science_meta"
     },
     "theoretical": {
+      "lemma": "theoretical",
       "pos": "ADJ",
       "gloss": "based on theory",
       "degree": "positive",

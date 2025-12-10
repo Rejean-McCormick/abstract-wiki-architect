@@ -2,7 +2,390 @@
   "_meta": {
     "language": "fi",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T21:20:00Z",
+    "note": "Includes Genitive/Partitive forms for case generation and gender-neutral pronouns."
   },
-  "entries": {}
+  "entries": {
+    "copula": {
+      "lemma": "olla",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "olen",
+        "present_2sg": "olet",
+        "present_3sg": "on",
+        "present_1pl": "olemme",
+        "present_2pl": "olette",
+        "present_3pl": "ovat",
+        "past_3sg": "oli",
+        "past_3pl": "olivat",
+        "neg_present": "ei ole"
+      },
+      "note": "Used as auxiliary for perfect tenses."
+    },
+    "det_definite": {
+      "lemma": "",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite",
+      "note": "Finnish has no definite article. Definiteness is implied by context or word order."
+    },
+    "det_indefinite": {
+      "lemma": "",
+      "pos": "DET",
+      "gloss": "a/an",
+      "subcat": "indefinite",
+      "note": "Finnish has no indefinite article."
+    },
+    "pronoun_he": {
+      "lemma": "hän",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "hän",
+        "genitive": "hänen",
+        "partitive": "häntä",
+        "accusative": "hänet"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_she": {
+      "lemma": "hän",
+      "pos": "PRON",
+      "gloss": "he/she",
+      "person": "3",
+      "number": "sg",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "hän",
+        "genitive": "hänen",
+        "partitive": "häntä",
+        "accusative": "hänet"
+      },
+      "note": "Gender neutral."
+    },
+    "pronoun_they": {
+      "lemma": "he",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "case": "nom",
+      "forms": {
+        "nominative": "he",
+        "genitive": "heidän",
+        "partitive": "heitä",
+        "accusative": "heidät"
+      }
+    },
+    "person": {
+      "lemma": "ihminen",
+      "pos": "NOUN",
+      "gloss": "person/human",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "ihmisen",
+        "partitive": "ihmistä",
+        "plural": "ihmiset"
+      }
+    },
+    "man": {
+      "lemma": "mies",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "miehen",
+        "partitive": "miestä",
+        "plural": "miehet"
+      }
+    },
+    "woman": {
+      "lemma": "nainen",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "naisen",
+        "partitive": "naista",
+        "plural": "naiset"
+      }
+    },
+    "scientist": {
+      "lemma": "tieteilijä",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "tieteilijän",
+        "partitive": "tieteilijää",
+        "plural": "tieteilijät"
+      }
+    },
+    "physicist": {
+      "lemma": "fyysikko",
+      "pos": "NOUN",
+      "gloss": "physicist",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "fyysikon",
+        "partitive": "fyysikkoa",
+        "plural": "fyysikot"
+      },
+      "semantic_field": "physics"
+    },
+    "chemist": {
+      "lemma": "kemisti",
+      "pos": "NOUN",
+      "gloss": "chemist",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "kemistin",
+        "partitive": "kemistiä",
+        "plural": "kemistit"
+      },
+      "semantic_field": "chemistry"
+    },
+    "writer": {
+      "lemma": "kirjailija",
+      "pos": "NOUN",
+      "gloss": "writer",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "kirjailijan",
+        "partitive": "kirjailijaa",
+        "plural": "kirjailijat"
+      }
+    },
+    "politician": {
+      "lemma": "poliitikko",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "poliitikon",
+        "partitive": "poliitikkoa",
+        "plural": "poliitikot"
+      }
+    },
+    "teacher": {
+      "lemma": "opettaja",
+      "pos": "NOUN",
+      "gloss": "teacher",
+      "human": true,
+      "number": "sg",
+      "forms": {
+        "genitive": "opettajan",
+        "partitive": "opettajaa",
+        "plural": "opettajat"
+      }
+    },
+    "nobel_prize": {
+      "lemma": "Nobel-palkinto",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "semantic_field": "awards",
+      "forms": {
+        "genitive": "Nobel-palkinnon",
+        "partitive": "Nobel-palkintoa"
+      }
+    },
+    "city": {
+      "lemma": "kaupunki",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "forms": {
+        "genitive": "kaupungin",
+        "partitive": "kaupunkia",
+        "plural": "kaupungit"
+      }
+    },
+    "country": {
+      "lemma": "maa",
+      "pos": "NOUN",
+      "gloss": "country/land",
+      "human": false,
+      "forms": {
+        "genitive": "maan",
+        "partitive": "maata",
+        "plural": "maat"
+      }
+    },
+    "year": {
+      "lemma": "vuosi",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "forms": {
+        "genitive": "vuoden",
+        "partitive": "vuotta",
+        "plural": "vuodet"
+      }
+    },
+    "be_born": {
+      "lemma": "syntyä",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "forms": {
+        "past_3sg": "syntyi",
+        "past_3pl": "syntyivät",
+        "perfect_participle": "syntynyt"
+      }
+    },
+    "die": {
+      "lemma": "kuolla",
+      "pos": "VERB",
+      "gloss": "to die",
+      "subcat": "intransitive",
+      "lemma_type": "base",
+      "forms": {
+        "past_3sg": "kuoli",
+        "past_3pl": "kuolivat",
+        "perfect_participle": "kuollut"
+      }
+    },
+    "discover": {
+      "lemma": "löytää",
+      "pos": "VERB",
+      "gloss": "to find/discover",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "forms": {
+        "past_3sg": "löysi",
+        "past_3pl": "löysivät",
+        "perfect_participle": "löytänyt"
+      }
+    },
+    "win": {
+      "lemma": "voittaa",
+      "pos": "VERB",
+      "gloss": "to win",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "forms": {
+        "past_3sg": "voitti",
+        "past_3pl": "voittivat",
+        "perfect_participle": "voittanut"
+      },
+      "semantic_field": "awards"
+    },
+    "receive": {
+      "lemma": "saada",
+      "pos": "VERB",
+      "gloss": "to receive/get",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "forms": {
+        "past_3sg": "sai",
+        "past_3pl": "saivat",
+        "perfect_participle": "saanut"
+      }
+    },
+    "publish": {
+      "lemma": "julkaista",
+      "pos": "VERB",
+      "gloss": "to publish",
+      "subcat": "transitive",
+      "lemma_type": "base",
+      "forms": {
+        "past_3sg": "julkaisi",
+        "past_3pl": "julkaisivat",
+        "perfect_participle": "julkaissut"
+      },
+      "semantic_field": "science_meta"
+    },
+    "scientific": {
+      "lemma": "tieteellinen",
+      "pos": "ADJ",
+      "gloss": "scientific",
+      "degree": "positive",
+      "forms": {
+        "genitive": "tieteellisen",
+        "partitive": "tieteellistä"
+      },
+      "semantic_field": "science_meta"
+    },
+    "famous": {
+      "lemma": "kuuluisa",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "forms": {
+        "genitive": "kuuluisan",
+        "partitive": "kuuluisaa"
+      }
+    },
+    "conj_and": {
+      "lemma": "ja",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "mutta",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "tai",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "–",
+      "pos": "POST",
+      "gloss": "in",
+      "subcat": "locative",
+      "note": "Expressed via Inessive case suffix (-ssa/-ssä) attached to the noun."
+    },
+    "prep_from": {
+      "lemma": "–",
+      "pos": "POST",
+      "gloss": "from",
+      "subcat": "source",
+      "note": "Expressed via Elative case suffix (-sta/-stä) attached to the noun."
+    },
+    "prep_with": {
+      "lemma": "kanssa",
+      "pos": "POST",
+      "gloss": "with",
+      "subcat": "instrumental",
+      "note": "Postposition requiring Genitive (e.g., 'ystävän kanssa')."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
 }

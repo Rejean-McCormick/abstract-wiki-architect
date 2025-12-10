@@ -2,7 +2,113 @@
   "_meta": {
     "language": "fi",
     "domain": "people",
-    "version": 1
+    "generated_at": "2025-12-10T01:04:12.167788",
+    "schema_version": "2.0"
   },
-  "entries": {}
+  "entries": {
+    "Scientist": {
+      "lemma": "tieteentekijä",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q901",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Physicist": {
+      "lemma": "fyysikko",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q169470",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Chemist": {
+      "lemma": "kemisti",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q593644",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Biologist": {
+      "lemma": "biologi",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q864503",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Mathematician": {
+      "lemma": "matemaatikko",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q170790",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Actor": {
+      "lemma": "näyttelijä",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q33999",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Writer": {
+      "lemma": "kirjailija",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q36180",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Painter": {
+      "lemma": "taidemaalari",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q1028181",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Poet": {
+      "lemma": "runoilija",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q49757",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Politician": {
+      "lemma": "poliitikko",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q82955",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Musician": {
+      "lemma": "muusikko",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q639669",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Teacher": {
+      "lemma": "opettaja",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q37226",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Engineer": {
+      "lemma": "insinööri",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q81096",
+        "source": "wikidata_automated_import"
+      }
+    }
+  }
 }

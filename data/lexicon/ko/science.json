@@ -2,7 +2,73 @@
   "_meta": {
     "language": "ko",
     "domain": "science",
-    "version": 1
+    "generated_at": "2025-12-10T01:04:08.360353",
+    "schema_version": "2.0"
   },
-  "entries": {}
+  "entries": {
+    "Physics": {
+      "lemma": "물리학",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q413",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Chemistry": {
+      "lemma": "화학",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q2329",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Biology": {
+      "lemma": "생물학",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q420",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Mathematics": {
+      "lemma": "수학",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q395",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Astronomy": {
+      "lemma": "천문학",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q333",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Planet": {
+      "lemma": "행성",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q634",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Star": {
+      "lemma": "항성",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q523",
+        "source": "wikidata_automated_import"
+      }
+    },
+    "Atom": {
+      "lemma": "원자",
+      "pos": "N",
+      "metadata": {
+        "wikidata_id": "Q9121",
+        "source": "wikidata_automated_import"
+      }
+    }
+  }
 }

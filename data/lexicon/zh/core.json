@@ -2,7 +2,236 @@
   "_meta": {
     "language": "zh",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T23:05:00Z",
+    "note": "Maximal Schema: Includes Simplified Chinese, Pinyin, and functional markers for an isolating language."
   },
-  "entries": {}
+  "entries": {
+    "copula_identity": {
+      "lemma": "是",
+      "pinyin": "shì",
+      "pos": "COPULA",
+      "gloss": "to be (identity/definition)",
+      "subcat": "identity"
+    },
+    "copula_locative": {
+      "lemma": "在",
+      "pinyin": "zài",
+      "pos": "COPULA",
+      "gloss": "to be (location/existence)",
+      "subcat": "locative"
+    },
+    "marker_plural": {
+      "lemma": "们",
+      "pinyin": "men",
+      "pos": "PART",
+      "gloss": "plural marker (for human pronouns/nouns)",
+      "note": "Used mainly for pronouns and familiar human nouns (e.g., wǒmen, laoshīmen)."
+    },
+    "marker_definite": {
+      "lemma": "这",
+      "pinyin": "zhè",
+      "pos": "DET",
+      "gloss": "this/the (demonstrative)",
+      "subcat": "definite",
+      "note": "Definiteness is often implied or marked with demonstratives."
+    },
+    "classifier_person": {
+      "lemma": "个",
+      "pinyin": "gè",
+      "pos": "CLF",
+      "gloss": "General/human classifier"
+    },
+    "pronoun_he": {
+      "lemma": "他",
+      "pinyin": "tā",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m"
+    },
+    "pronoun_she": {
+      "lemma": "她",
+      "pinyin": "tā",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f"
+    },
+    "pronoun_they": {
+      "lemma": "他们",
+      "pinyin": "tāmen",
+      "pos": "PRON",
+      "gloss": "they (masc/mixed)",
+      "person": "3",
+      "number": "pl",
+      "gender": "m"
+    },
+    "person": {
+      "lemma": "人",
+      "pinyin": "rén",
+      "pos": "NOUN",
+      "gloss": "person/human",
+      "human": true,
+      "classifier_lemma": "个"
+    },
+    "man": {
+      "lemma": "男人",
+      "pinyin": "nánrén",
+      "pos": "NOUN",
+      "gloss": "man",
+      "human": true,
+      "classifier_lemma": "个"
+    },
+    "woman": {
+      "lemma": "女人",
+      "pinyin": "nǚrén",
+      "pos": "NOUN",
+      "gloss": "woman",
+      "human": true,
+      "classifier_lemma": "个"
+    },
+    "scientist": {
+      "lemma": "科学家",
+      "pinyin": "kēxuéjiā",
+      "pos": "NOUN",
+      "gloss": "scientist",
+      "human": true,
+      "classifier_lemma": "位",
+      "semantic_field": "science"
+    },
+    "writer": {
+      "lemma": "作家",
+      "pinyin": "zuòjiā",
+      "pos": "NOUN",
+      "gloss": "writer/author",
+      "human": true,
+      "classifier_lemma": "位"
+    },
+    "politician": {
+      "lemma": "政治家",
+      "pinyin": "zhèngzhìjiā",
+      "pos": "NOUN",
+      "gloss": "politician",
+      "human": true,
+      "classifier_lemma": "位"
+    },
+    "famous": {
+      "lemma": "著名",
+      "pinyin": "zhùmíng",
+      "pos": "ADJ",
+      "gloss": "famous",
+      "degree": "positive",
+      "note": "Invariant adjective."
+    },
+    "great": {
+      "lemma": "伟大",
+      "pinyin": "wěidà",
+      "pos": "ADJ",
+      "gloss": "great",
+      "degree": "positive"
+    },
+    "be_born": {
+      "lemma": "出生",
+      "pinyin": "chūshēng",
+      "pos": "VERB",
+      "gloss": "to be born",
+      "subcat": "intransitive"
+    },
+    "die": {
+      "lemma": "去世",
+      "pinyin": "qùshì",
+      "pos": "VERB",
+      "gloss": "to die (euphemism)",
+      "subcat": "intransitive"
+    },
+    "discover": {
+      "lemma": "发现",
+      "pinyin": "fāxiàn",
+      "pos": "VERB",
+      "gloss": "to discover",
+      "subcat": "transitive"
+    },
+    "receive": {
+      "lemma": "获得",
+      "pinyin": "huòdé",
+      "pos": "VERB",
+      "gloss": "to receive/obtain",
+      "subcat": "transitive"
+    },
+    "year": {
+      "lemma": "年",
+      "pinyin": "nián",
+      "pos": "NOUN",
+      "gloss": "year",
+      "human": false,
+      "classifier_lemma": "个"
+    },
+    "city": {
+      "lemma": "城市",
+      "pinyin": "chéngshì",
+      "pos": "NOUN",
+      "gloss": "city",
+      "human": false,
+      "classifier_lemma": "座"
+    },
+    "country": {
+      "lemma": "国家",
+      "pinyin": "guójiā",
+      "pos": "NOUN",
+      "gloss": "country",
+      "human": false,
+      "classifier_lemma": "个"
+    },
+    "conj_and": {
+      "lemma": "和",
+      "pinyin": "hé",
+      "pos": "CONJ",
+      "gloss": "and (connecting nouns)",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "但是",
+      "pinyin": "dànshì",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "在",
+      "pinyin": "zài",
+      "pos": "PREP",
+      "gloss": "in/at",
+      "subcat": "locative"
+    },
+    "prep_from": {
+      "lemma": "从",
+      "pinyin": "cóng",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source"
+    },
+    "prep_of": {
+      "lemma": "的",
+      "pinyin": "de",
+      "pos": "PART",
+      "gloss": "possessive/genitive marker",
+      "subcat": "genitive"
+    },
+    "punctuation_period": {
+      "lemma": "。",
+      "pinyin": ".",
+      "pos": "PUNCT",
+      "gloss": "full stop"
+    },
+    "punctuation_comma": {
+      "lemma": "，",
+      "pinyin": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
 }

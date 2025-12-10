@@ -1,0 +1,181 @@
+{
+  "_meta": {
+    "language": "bg",
+    "domain": "core",
+    "version": 2,
+    "source": "Manual Entry (Standard V2)",
+    "generated_at": "2025-12-09T20:50:00Z",
+    "note": "Maximal Schema: Includes Cyrillic script, Latin transliteration, and phonetic preposition variants."
+  },
+  "entries": {
+    "copula": {
+      "lemma": "съм",
+      "lemma_translit": "sum",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_1sg": "съм",
+        "present_1sg_translit": "sum",
+        "present_2sg": "си",
+        "present_2sg_translit": "si",
+        "present_3sg": "е",
+        "present_3sg_translit": "e",
+        "present_1pl": "сме",
+        "present_1pl_translit": "sme",
+        "present_2pl": "сте",
+        "present_2pl_translit": "ste",
+        "present_3pl": "са",
+        "present_3pl_translit": "sa",
+        "past_3sg": "беше",
+        "past_3sg_translit": "beshe",
+        "past_3pl": "бяха",
+        "past_3pl_translit": "byaha",
+        "future_base": "ще бъде",
+        "future_base_translit": "shte bude"
+      },
+      "note": "Highly irregular. 'е' (is) is the most common form."
+    },
+    "det_definite": {
+      "lemma": "–",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "definite_suffix",
+      "note": "Bulgarian uses suffixes (-ът, -та, -то, -те) attached to the noun/adjective, not a standalone word."
+    },
+    "det_indefinite": {
+      "lemma": "един",
+      "lemma_translit": "edin",
+      "pos": "DET",
+      "gloss": "a/an/one",
+      "subcat": "indefinite",
+      "forms": {
+        "m_sg": "един",
+        "m_sg_translit": "edin",
+        "f_sg": "една",
+        "f_sg_translit": "edna",
+        "n_sg": "едно",
+        "n_sg_translit": "edno",
+        "pl": "едни",
+        "pl_translit": "edni"
+      }
+    },
+    "pronoun_he": {
+      "lemma": "той",
+      "lemma_translit": "toy",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom",
+      "forms": {
+        "nominative": "той",
+        "nominative_translit": "toy",
+        "accusative_short": "го",
+        "accusative_full": "него",
+        "dative_short": "му",
+        "dative_full": "на него"
+      }
+    },
+    "pronoun_she": {
+      "lemma": "тя",
+      "lemma_translit": "tya",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom",
+      "forms": {
+        "nominative": "тя",
+        "nominative_translit": "tya",
+        "accusative_short": "я",
+        "accusative_full": "нея",
+        "dative_short": "ѝ",
+        "dative_full": "на нея"
+      }
+    },
+    "pronoun_they": {
+      "lemma": "те",
+      "lemma_translit": "te",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "n",
+      "case": "nom",
+      "forms": {
+        "nominative": "те",
+        "nominative_translit": "te",
+        "accusative_short": "ги",
+        "accusative_full": "тях",
+        "dative_short": "им",
+        "dative_full": "на тях"
+      }
+    },
+    "conj_and": {
+      "lemma": "и",
+      "lemma_translit": "i",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "но",
+      "lemma_translit": "no",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "conj_or": {
+      "lemma": "или",
+      "lemma_translit": "ili",
+      "pos": "CONJ",
+      "gloss": "or",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "в",
+      "lemma_translit": "v",
+      "pos": "PREP",
+      "gloss": "in",
+      "subcat": "locative",
+      "forms": {
+        "default": "в",
+        "before_v_f": "във"
+      },
+      "note": "Use 'във' before words starting with 'в' or 'ф'."
+    },
+    "prep_from": {
+      "lemma": "от",
+      "lemma_translit": "ot",
+      "pos": "PREP",
+      "gloss": "from/of",
+      "subcat": "source"
+    },
+    "prep_with": {
+      "lemma": "с",
+      "lemma_translit": "s",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental",
+      "forms": {
+        "default": "с",
+        "before_s_z": "със"
+      },
+      "note": "Use 'със' before words starting with 'с' or 'з'."
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
+    }
+  }
+}

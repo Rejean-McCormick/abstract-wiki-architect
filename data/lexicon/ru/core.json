@@ -2,258 +2,399 @@
   "_meta": {
     "language": "ru",
     "domain": "core",
-    "version": 1
+    "version": 2,
+    "source": "Manual Entry (Maximal V2)",
+    "generated_at": "2025-12-09T22:35:00Z",
+    "note": "Maximal Schema: Includes Cyrillic script, transliteration, and verb aspect (Perfective/Imperfective)."
   },
   "entries": {
+    "copula": {
+      "lemma": "быть",
+      "lemma_translit": "byt'",
+      "pos": "VERB",
+      "gloss": "to be",
+      "subcat": "copula",
+      "lemma_type": "base",
+      "forms": {
+        "present_3sg": "есть",
+        "present_3sg_translit": "yest'",
+        "past_m_sg": "был",
+        "past_m_sg_translit": "byl",
+        "past_f_sg": "была",
+        "past_f_sg_translit": "byla",
+        "past_n_sg": "было",
+        "past_n_sg_translit": "bylo",
+        "future_3sg": "будет",
+        "future_3sg_translit": "budet"
+      },
+      "note": "Present tense ('есть') is typically omitted in copular sentences."
+    },
+    "det_definite": {
+      "lemma": "–",
+      "pos": "DET",
+      "gloss": "the",
+      "subcat": "zero_article",
+      "note": "Russian has no articles."
+    },
+    "det_indefinite": {
+      "lemma": "какой-то",
+      "lemma_translit": "kakoy-to",
+      "pos": "DET",
+      "gloss": "some/a/an",
+      "subcat": "indefinite"
+    },
+    "pronoun_he": {
+      "lemma": "он",
+      "lemma_translit": "on",
+      "pos": "PRON",
+      "gloss": "he",
+      "person": "3",
+      "number": "sg",
+      "gender": "m",
+      "case": "nom"
+    },
+    "pronoun_she": {
+      "lemma": "она",
+      "lemma_translit": "ona",
+      "pos": "PRON",
+      "gloss": "she",
+      "person": "3",
+      "number": "sg",
+      "gender": "f",
+      "case": "nom"
+    },
+    "pronoun_they": {
+      "lemma": "они",
+      "lemma_translit": "oni",
+      "pos": "PRON",
+      "gloss": "they",
+      "person": "3",
+      "number": "pl",
+      "gender": "common",
+      "case": "nom"
+    },
     "человек": {
+      "lemma": "человек",
+      "lemma_translit": "chelovek",
       "pos": "NOUN",
       "gloss": "person, human",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "люди"
+      "plural_lemma": "люди",
+      "plural_translit": "lyudi"
     },
     "мужчина": {
+      "lemma": "мужчина",
+      "lemma_translit": "muzhchina",
       "pos": "NOUN",
       "gloss": "man",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "мужчины"
+      "plural_lemma": "мужчины",
+      "plural_translit": "muzhchiny"
     },
     "женщина": {
+      "lemma": "женщина",
+      "lemma_translit": "zhenshchina",
       "pos": "NOUN",
       "gloss": "woman",
       "human": true,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "женщины"
+      "plural_lemma": "женщины",
+      "plural_translit": "zhenshchiny"
     },
     "учёный": {
+      "lemma": "учёный",
+      "lemma_translit": "uchyonyy",
       "pos": "NOUN",
       "gloss": "scientist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "учёные"
+      "plural_lemma": "учёные",
+      "plural_translit": "uchyonyye",
+      "semantic_field": "science"
     },
     "физик": {
+      "lemma": "физик",
+      "lemma_translit": "fizik",
       "pos": "NOUN",
       "gloss": "physicist (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
       "feminine_lemma": "физичка",
-      "plural_lemma": "физики"
-    },
-    "физичка": {
-      "pos": "NOUN",
-      "gloss": "physicist (fem., colloquial)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "физик",
-      "plural_lemma": "физички"
+      "feminine_translit": "fizichka",
+      "plural_lemma": "физики",
+      "plural_translit": "fiziki",
+      "semantic_field": "physics"
     },
     "химик": {
+      "lemma": "химик",
+      "lemma_translit": "khimik",
       "pos": "NOUN",
       "gloss": "chemist",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "химики"
+      "plural_lemma": "химики",
+      "plural_translit": "khimiki",
+      "semantic_field": "chemistry"
     },
     "писатель": {
+      "lemma": "писатель",
+      "lemma_translit": "pisatel'",
       "pos": "NOUN",
       "gloss": "writer, author (masc.)",
       "human": true,
       "gender": "m",
       "number": "sg",
       "feminine_lemma": "писательница",
-      "plural_lemma": "писатели"
-    },
-    "писательница": {
-      "pos": "NOUN",
-      "gloss": "writer, author (fem.)",
-      "human": true,
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "писатель",
-      "plural_lemma": "писательницы"
+      "feminine_translit": "pisatel'nitsa",
+      "plural_lemma": "писатели",
+      "plural_translit": "pisateli"
     },
     "профессор": {
+      "lemma": "профессор",
+      "lemma_translit": "professor",
       "pos": "NOUN",
       "gloss": "professor",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "профессора"
+      "plural_lemma": "профессора",
+      "plural_translit": "professora"
     },
     "политик": {
+      "lemma": "политик",
+      "lemma_translit": "politik",
       "pos": "NOUN",
       "gloss": "politician",
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "политики"
+      "plural_lemma": "политики",
+      "plural_translit": "politiki"
     },
     "страна": {
+      "lemma": "страна",
+      "lemma_translit": "strana",
       "pos": "NOUN",
       "gloss": "country",
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "страны"
+      "plural_lemma": "страны",
+      "plural_translit": "strany"
     },
     "город": {
+      "lemma": "город",
+      "lemma_translit": "gorod",
       "pos": "NOUN",
       "gloss": "city, town",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "города"
-    },
-    "Россия": {
-      "pos": "NOUN",
-      "gloss": "Russia",
-      "human": false,
-      "proper": true,
-      "gender": "f",
-      "number": "sg",
-      "qid": "Q159"
-    },
-    "Польша": {
-      "pos": "NOUN",
-      "gloss": "Poland",
-      "human": false,
-      "proper": true,
-      "gender": "f",
-      "number": "sg",
-      "qid": "Q36"
-    },
-    "Франция": {
-      "pos": "NOUN",
-      "gloss": "France",
-      "human": false,
-      "proper": true,
-      "gender": "f",
-      "number": "sg",
-      "qid": "Q142"
-    },
-    "Великобритания": {
-      "pos": "NOUN",
-      "gloss": "United Kingdom",
-      "human": false,
-      "proper": true,
-      "gender": "f",
-      "number": "sg",
-      "qid": "Q145"
-    },
-    "Варшава": {
-      "pos": "NOUN",
-      "gloss": "Warsaw",
-      "human": false,
-      "proper": true,
-      "gender": "f",
-      "number": "sg",
-      "qid": "Q270"
-    },
-    "Париж": {
-      "pos": "NOUN",
-      "gloss": "Paris",
-      "human": false,
-      "proper": true,
-      "gender": "m",
-      "number": "sg",
-      "qid": "Q90"
+      "plural_lemma": "города",
+      "plural_translit": "goroda"
     },
     "известный": {
+      "lemma": "известный",
+      "lemma_translit": "izvestnyy",
       "pos": "ADJ",
       "gloss": "famous, well-known (masc.)",
       "degree": "positive",
-      "gender": "m",
-      "number": "sg",
-      "feminine_lemma": "известная",
-      "plural_lemma": "известные"
-    },
-    "известная": {
-      "pos": "ADJ",
-      "gloss": "famous, well-known (fem.)",
-      "degree": "positive",
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "известный",
-      "plural_lemma": "известные"
+      "forms": {
+        "m_sg": "известный",
+        "f_sg": "известная",
+        "n_sg": "известное",
+        "pl": "известные"
+      }
     },
     "важный": {
+      "lemma": "важный",
+      "lemma_translit": "vazhnyy",
       "pos": "ADJ",
       "gloss": "important, major (masc.)",
       "degree": "positive",
-      "gender": "m",
-      "number": "sg",
-      "feminine_lemma": "важная",
-      "plural_lemma": "важные"
-    },
-    "важная": {
-      "pos": "ADJ",
-      "gloss": "important, major (fem.)",
-      "degree": "positive",
-      "gender": "f",
-      "number": "sg",
-      "masculine_lemma": "важный",
-      "plural_lemma": "важные"
-    },
-    "быть": {
-      "pos": "VERB",
-      "gloss": "to be",
-      "subcat": "copula",
-      "lemma_type": "base"
+      "forms": {
+        "m_sg": "важный",
+        "f_sg": "важная",
+        "n_sg": "важное",
+        "pl": "важные"
+      }
     },
     "родиться": {
+      "lemma": "родиться",
+      "lemma_translit": "rodit'sya",
       "pos": "VERB",
-      "gloss": "to be born",
+      "gloss": "to be born (perfective)",
       "subcat": "intransitive",
-      "lemma_type": "base"
+      "lemma_type": "reflexive",
+      "forms": {
+        "past_m_sg": "родился",
+        "past_m_sg_translit": "rodilsya",
+        "past_f_sg": "родилась",
+        "past_f_sg_translit": "rodilas'"
+      }
     },
     "умереть": {
+      "lemma": "умереть",
+      "lemma_translit": "umeret'",
       "pos": "VERB",
-      "gloss": "to die",
+      "gloss": "to die (perfective)",
       "subcat": "intransitive",
-      "lemma_type": "base"
+      "forms": {
+        "past_m_sg": "умер",
+        "past_m_sg_translit": "umer",
+        "past_f_sg": "умерла",
+        "past_f_sg_translit": "umerla"
+      }
     },
     "открыть": {
+      "lemma": "открыть",
+      "lemma_translit": "otkryt'",
       "pos": "VERB",
       "gloss": "to discover (perfective)",
       "subcat": "transitive",
-      "lemma_type": "base"
+      "aspect_pair": "открывать"
     },
     "открывать": {
+      "lemma": "открывать",
+      "lemma_translit": "otkryvat'",
       "pos": "VERB",
-      "gloss": "to discover (imperfective), to be discovering",
+      "gloss": "to discover (imperfective)",
       "subcat": "transitive",
-      "lemma_type": "base"
+      "aspect_pair": "открыть"
     },
     "руководить": {
+      "lemma": "руководить",
+      "lemma_translit": "rukovodit'",
       "pos": "VERB",
-      "gloss": "to lead, to head",
+      "gloss": "to lead, to head (imperfective)",
       "subcat": "transitive",
-      "lemma_type": "base"
+      "note": "Governs Instrumental case."
+    },
+    "получить": {
+      "lemma": "получить",
+      "lemma_translit": "poluchit'",
+      "pos": "VERB",
+      "gloss": "to receive (perfective)",
+      "subcat": "transitive",
+      "aspect_pair": "получать"
+    },
+    "получать": {
+      "lemma": "получать",
+      "lemma_translit": "poluchat'",
+      "pos": "VERB",
+      "gloss": "to receive (imperfective)",
+      "subcat": "transitive",
+      "aspect_pair": "получить"
     },
     "год": {
+      "lemma": "год",
+      "lemma_translit": "god",
       "pos": "NOUN",
       "gloss": "year",
       "human": false,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "годы"
+      "plural_lemma": "годы",
+      "plural_translit": "gody",
+      "forms": {
+        "genitive_pl": "лет",
+        "genitive_pl_translit": "let"
+      },
+      "note": "Irregular plural genitive form used for numbers 5-20."
     },
     "дата": {
+      "lemma": "дата",
+      "lemma_translit": "data",
       "pos": "NOUN",
       "gloss": "date (calendar)",
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "даты"
+      "plural_lemma": "даты",
+      "plural_translit": "daty"
+    },
+    "nobel_prize": {
+      "lemma": "Нобелевская премия",
+      "lemma_translit": "Nobelevskaya premiya",
+      "pos": "NOUN",
+      "gloss": "Nobel Prize",
+      "human": false,
+      "proper": true,
+      "gender": "f",
+      "number": "count",
+      "multiword": true,
+      "semantic_field": "awards"
+    },
+    "conj_and": {
+      "lemma": "и",
+      "lemma_translit": "i",
+      "pos": "CONJ",
+      "gloss": "and",
+      "subcat": "coordinating"
+    },
+    "conj_but": {
+      "lemma": "но",
+      "lemma_translit": "no",
+      "pos": "CONJ",
+      "gloss": "but",
+      "subcat": "coordinating"
+    },
+    "prep_in": {
+      "lemma": "в",
+      "lemma_translit": "v",
+      "pos": "PREP",
+      "gloss": "in/at",
+      "subcat": "locative",
+      "forms": {
+        "governs_loc": "Предложный (Prepositional)",
+        "governs_acc": "Винительный (Accusative)"
+      },
+      "note": "Takes Prepositional for location (в городе) and Accusative for motion (в город)."
+    },
+    "prep_from": {
+      "lemma": "из",
+      "lemma_translit": "iz",
+      "pos": "PREP",
+      "gloss": "from",
+      "subcat": "source",
+      "forms": {
+        "governs_gen": "Родительный (Genitive)"
+      }
+    },
+    "prep_of": {
+      "lemma": "–",
+      "pos": "PREP",
+      "gloss": "of (genitive)",
+      "subcat": "genitive",
+      "note": "Possession is usually expressed by Genitive case alone."
+    },
+    "prep_with": {
+      "lemma": "с",
+      "lemma_translit": "s",
+      "pos": "PREP",
+      "gloss": "with",
+      "subcat": "instrumental",
+      "forms": {
+        "governs_inst": "Творительный (Instrumental)"
+      }
+    },
+    "punctuation_period": {
+      "lemma": ".",
+      "pos": "PUNCT",
+      "gloss": "period"
+    },
+    "punctuation_comma": {
+      "lemma": ",",
+      "pos": "PUNCT",
+      "gloss": "comma"
     }
   }
 }
