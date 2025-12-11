@@ -1,0 +1,154 @@
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\CatCgg.gf:
+   Warning: no linearization type for ACard, inserting default {s : Str}
+   Warning: no linearization type for GN, inserting default {s : Str}
+   Warning: no linearization type for LN, inserting default {s : Str}
+   Warning: no linearization type for SN, inserting default {s : Str}
+   Warning: no linearization type for SSlash, inserting default {s : Str}
+   Warning: no linearization type for Subj, inserting default {s : Str}
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\NounCgg.gf:
+   Warning: no linearization of QuantityNP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\VerbCgg.gf:
+   Warning: no linearization of ExtAdvVP
+   Warning: no linearization of PassV2
+   Warning: no linearization of ReflVP
+   Warning: no linearization of SlashV2A
+   Warning: no linearization of SlashV2Q
+   Warning: no linearization of SlashV2S
+   Warning: no linearization of SlashV2V
+   Warning: no linearization of SlashV2VNP
+   Warning: no linearization of VPSlashPrep
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\AdjectiveCgg.gf:
+   Warning: no linearization of AdvAP
+   Warning: no linearization of CAdvAP
+   Warning: no linearization of ComparA
+   Warning: no linearization of ComplA2
+   Warning: no linearization of ReflA2
+   Warning: no linearization of SentAP
+   Warning: no linearization of UseA2
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\AdverbCgg.gf:
+   Warning: no linearization of AdAdv
+   Warning: no linearization of AdnCAdv
+   Warning: no linearization of ComparAdvAdj
+   Warning: no linearization of ComparAdvAdjS
+   Warning: no linearization of PositAdAAdj
+   Warning: no linearization of PositAdvAdj
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\NumeralCgg.gf:
+   Warning: no linearization type for Sub1000000000, inserting default {s : Str}
+   Warning: no linearization type for Sub1000000000000, inserting default {s : Str}
+   Warning: no linearization of pot21
+   Warning: no linearization of pot31
+   Warning: no linearization of pot3as4
+   Warning: no linearization of pot3decimal
+   Warning: no linearization of pot4
+   Warning: no linearization of pot41
+   Warning: no linearization of pot4as5
+   Warning: no linearization of pot4decimal
+   Warning: no linearization of pot4plus
+   Warning: no linearization of pot5
+   Warning: no linearization of pot51
+   Warning: no linearization of pot5decimal
+   Warning: no linearization of pot5plus
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\SentenceCgg.gf:
+   Warning: no linearization of AdvImp
+   Warning: no linearization of AdvS
+   Warning: no linearization of AdvSlash
+   Warning: no linearization of EmbedQS
+   Warning: no linearization of EmbedS
+   Warning: no linearization of PredSCVP
+   Warning: no linearization of RelS
+   Warning: no linearization of SSubjS
+   Warning: no linearization of SlashPrep
+   Warning: no linearization of SlashVS
+   Warning: no linearization of UseSlash
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\SentenceCgg.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\SentenceCgg.gf:451-454:
+     Happened in linearization of EmbedVP
+      Warning: patterns never reached:
+                 _
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\QuestionCgg.gf:
+   Warning: no linearization of AddAdvQVP
+   Warning: no linearization of AdvIAdv
+   Warning: no linearization of AdvIP
+   Warning: no linearization of AdvQVP
+   Warning: no linearization of ComplSlashIP
+   Warning: no linearization of IdetQuant
+   Warning: no linearization of PrepIP
+   Warning: no linearization type for QVP, inserting default {s : Str}
+   Warning: no linearization of QuestQVP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\RelativeCgg.gf:
+   Warning: no linearization of FunRP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\ConjunctionCgg.gf:
+   Warning: no linearization of BaseAP
+   Warning: no linearization of BaseAdV
+   Warning: no linearization of BaseAdv
+   Warning: no linearization of BaseCN
+   Warning: no linearization of BaseDAP
+   Warning: no linearization of BaseIAdv
+   Warning: no linearization of BaseNP
+   Warning: no linearization of BaseRS
+   Warning: no linearization of BaseS
+   Warning: no linearization of ConjAP
+   Warning: no linearization of ConjAdV
+   Warning: no linearization of ConjAdv
+   Warning: no linearization of ConjCN
+   Warning: no linearization of ConjDet
+   Warning: no linearization of ConjIAdv
+   Warning: no linearization of ConjNP
+   Warning: no linearization of ConjRS
+   Warning: no linearization of ConjS
+   Warning: no linearization of ConsAP
+   Warning: no linearization of ConsAdV
+   Warning: no linearization of ConsAdv
+   Warning: no linearization of ConsCN
+   Warning: no linearization of ConsDAP
+   Warning: no linearization of ConsIAdv
+   Warning: no linearization of ConsNP
+   Warning: no linearization of ConsRS
+   Warning: no linearization of ConsS
+   Warning: no linearization type for ListAdV, inserting default {s : Str}
+   Warning: no linearization type for ListAdv, inserting default {s : Str}
+   Warning: no linearization type for ListDAP, inserting default {s : Str}
+   Warning: no linearization type for ListIAdv, inserting default {s : Str}
+   Warning: no linearization type for ListS, inserting default {s : Str}
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\rukiga\IdiomCgg.gf:
+   Warning: no linearization of CleftAdv
+   Warning: no linearization of CleftNP
+   Warning: no linearization of ExistIP
+   Warning: no linearization of ExistIPAdv
+   Warning: no linearization of ExistNP
+   Warning: no linearization of ExistNPAdv
+   Warning: no linearization of GenericCl
+   Warning: no linearization of ImpP3
+   Warning: no linearization of ImpersCl
+   Warning: no linearization of ProgrVP
+   Warning: no linearization of SelfAdVVP
+   Warning: no linearization of SelfAdvVP
+   Warning: no linearization of SelfNP
+
+WikiCgg.gf:17:
+  Happened in the renaming of apple_N
+   constant not found: mkCN
+   given P, ParadigmsCgg, GrammarCgg, WikiCgg
+WikiCgg.gf:13:
+  Happened in the renaming of SimpNP
+   constant not found: mkNP
+   given P, ParadigmsCgg, GrammarCgg, WikiCgg
+   constant not found: a_Det
+   given P, ParadigmsCgg, GrammarCgg, WikiCgg
+WikiCgg.gf:15:
+  Happened in the renaming of John
+   constant not found: mkNP
+   given P, ParadigmsCgg, GrammarCgg, WikiCgg
+WikiCgg.gf:15:
+  Happened in the renaming of John
+   unknown qualified constant P.mkPN

@@ -1,0 +1,1294 @@
+{
+  "Afr": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxAfr",
+      "(P = ParadigmsAfr)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxAfr.Phr",
+      "NP": "SyntaxAfr.NP",
+      "CN": "SyntaxAfr.CN",
+      "Adv": "SyntaxAfr.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Sqi": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarSqi",
+      "(P = ParadigmsSqi)"
+    ],
+    "lincats": {
+      "Phr": "GrammarSqi.Phr",
+      "NP": "GrammarSqi.NP",
+      "CN": "GrammarSqi.CN",
+      "Adv": "GrammarSqi.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Amh": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarAmh",
+      "(P = ParadigmsAmh)"
+    ],
+    "lincats": {
+      "Phr": "GrammarAmh.Phr",
+      "NP": "GrammarAmh.NP",
+      "CN": "GrammarAmh.CN",
+      "Adv": "GrammarAmh.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Grc": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxGrc",
+      "(P = ParadigmsGrc)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxGrc.Phr",
+      "NP": "SyntaxGrc.NP",
+      "CN": "SyntaxGrc.CN",
+      "Adv": "SyntaxGrc.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Ara": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxAra",
+      "(P = ParadigmsAra)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxAra.Phr",
+      "NP": "SyntaxAra.NP",
+      "CN": "SyntaxAra.CN",
+      "Adv": "SyntaxAra.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Bul": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxBul",
+      "(P = ParadigmsBul)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxBul.Phr",
+      "NP": "SyntaxBul.NP",
+      "CN": "SyntaxBul.CN",
+      "Adv": "SyntaxBul.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Cat": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxCat",
+      "(P = ParadigmsCat)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxCat.Phr",
+      "NP": "SyntaxCat.NP",
+      "CN": "SyntaxCat.CN",
+      "Adv": "SyntaxCat.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Chi": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxChi",
+      "(P = ParadigmsChi)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxChi.Phr",
+      "NP": "SyntaxChi.NP",
+      "CN": "SyntaxChi.CN",
+      "Adv": "SyntaxChi.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Cze": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxCze",
+      "(P = ParadigmsCze)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxCze.Phr",
+      "NP": "SyntaxCze.NP",
+      "CN": "SyntaxCze.CN",
+      "Adv": "SyntaxCze.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Dan": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxDan",
+      "(P = ParadigmsDan)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxDan.Phr",
+      "NP": "SyntaxDan.NP",
+      "CN": "SyntaxDan.CN",
+      "Adv": "SyntaxDan.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Dut": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxDut",
+      "(P = ParadigmsDut)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxDut.Phr",
+      "NP": "SyntaxDut.NP",
+      "CN": "SyntaxDut.CN",
+      "Adv": "SyntaxDut.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Eng": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxEng",
+      "(P = ParadigmsEng)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxEng.Phr",
+      "NP": "SyntaxEng.NP",
+      "CN": "SyntaxEng.CN",
+      "Adv": "SyntaxEng.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Est": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxEst",
+      "(P = ParadigmsEst)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxEst.Phr",
+      "NP": "SyntaxEst.NP",
+      "CN": "SyntaxEst.CN",
+      "Adv": "SyntaxEst.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Eus": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxEus",
+      "(P = ParadigmsEus)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxEus.Phr",
+      "NP": "SyntaxEus.NP",
+      "CN": "SyntaxEus.CN",
+      "Adv": "SyntaxEus.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Fin": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxFin",
+      "(P = ParadigmsFin)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxFin.Phr",
+      "NP": "SyntaxFin.NP",
+      "CN": "SyntaxFin.CN",
+      "Adv": "SyntaxFin.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Fre": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxFre",
+      "(P = ParadigmsFre)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxFre.Phr",
+      "NP": "SyntaxFre.NP",
+      "CN": "SyntaxFre.CN",
+      "Adv": "SyntaxFre.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Ger": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxGer",
+      "(P = ParadigmsGer)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxGer.Phr",
+      "NP": "SyntaxGer.NP",
+      "CN": "SyntaxGer.CN",
+      "Adv": "SyntaxGer.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Gre": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxGre",
+      "(P = ParadigmsGre)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxGre.Phr",
+      "NP": "SyntaxGre.NP",
+      "CN": "SyntaxGre.CN",
+      "Adv": "SyntaxGre.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Hin": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxHin",
+      "(P = ParadigmsHin)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxHin.Phr",
+      "NP": "SyntaxHin.NP",
+      "CN": "SyntaxHin.CN",
+      "Adv": "SyntaxHin.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Hrv": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxHrv",
+      "(P = ParadigmsHrv)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxHrv.Phr",
+      "NP": "SyntaxHrv.NP",
+      "CN": "SyntaxHrv.CN",
+      "Adv": "SyntaxHrv.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Hun": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxHun",
+      "(P = ParadigmsHun)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxHun.Phr",
+      "NP": "SyntaxHun.NP",
+      "CN": "SyntaxHun.CN",
+      "Adv": "SyntaxHun.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Ice": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxIce",
+      "(P = ParadigmsIce)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxIce.Phr",
+      "NP": "SyntaxIce.NP",
+      "CN": "SyntaxIce.CN",
+      "Adv": "SyntaxIce.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Ina": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxIna",
+      "(P = ParadigmsIna)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxIna.Phr",
+      "NP": "SyntaxIna.NP",
+      "CN": "SyntaxIna.CN",
+      "Adv": "SyntaxIna.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Ita": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxIta",
+      "(P = ParadigmsIta)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxIta.Phr",
+      "NP": "SyntaxIta.NP",
+      "CN": "SyntaxIta.CN",
+      "Adv": "SyntaxIta.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Jpn": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxJpn",
+      "(P = ParadigmsJpn)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxJpn.Phr",
+      "NP": "SyntaxJpn.NP",
+      "CN": "SyntaxJpn.CN",
+      "Adv": "SyntaxJpn.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Kor": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxKor",
+      "(P = ParadigmsKor)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxKor.Phr",
+      "NP": "SyntaxKor.NP",
+      "CN": "SyntaxKor.CN",
+      "Adv": "SyntaxKor.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Lat": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxLat",
+      "(P = ParadigmsLat)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxLat.Phr",
+      "NP": "SyntaxLat.NP",
+      "CN": "SyntaxLat.CN",
+      "Adv": "SyntaxLat.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Lav": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxLav",
+      "(P = ParadigmsLav)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxLav.Phr",
+      "NP": "SyntaxLav.NP",
+      "CN": "SyntaxLav.CN",
+      "Adv": "SyntaxLav.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "May": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxMay",
+      "(P = ParadigmsMay)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxMay.Phr",
+      "NP": "SyntaxMay.NP",
+      "CN": "SyntaxMay.CN",
+      "Adv": "SyntaxMay.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Mlt": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxMlt",
+      "(P = ParadigmsMlt)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxMlt.Phr",
+      "NP": "SyntaxMlt.NP",
+      "CN": "SyntaxMlt.CN",
+      "Adv": "SyntaxMlt.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Mon": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxMon",
+      "(P = ParadigmsMon)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxMon.Phr",
+      "NP": "SyntaxMon.NP",
+      "CN": "SyntaxMon.CN",
+      "Adv": "SyntaxMon.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Nep": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxNep",
+      "(P = ParadigmsNep)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxNep.Phr",
+      "NP": "SyntaxNep.NP",
+      "CN": "SyntaxNep.CN",
+      "Adv": "SyntaxNep.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Nno": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxNno",
+      "(P = ParadigmsNno)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxNno.Phr",
+      "NP": "SyntaxNno.NP",
+      "CN": "SyntaxNno.CN",
+      "Adv": "SyntaxNno.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Nor": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxNor",
+      "(P = ParadigmsNor)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxNor.Phr",
+      "NP": "SyntaxNor.NP",
+      "CN": "SyntaxNor.CN",
+      "Adv": "SyntaxNor.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Pes": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxPes",
+      "(P = ParadigmsPes)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxPes.Phr",
+      "NP": "SyntaxPes.NP",
+      "CN": "SyntaxPes.CN",
+      "Adv": "SyntaxPes.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Pnb": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxPnb",
+      "(P = ParadigmsPnb)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxPnb.Phr",
+      "NP": "SyntaxPnb.NP",
+      "CN": "SyntaxPnb.CN",
+      "Adv": "SyntaxPnb.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Pol": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxPol",
+      "(P = ParadigmsPol)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxPol.Phr",
+      "NP": "SyntaxPol.NP",
+      "CN": "SyntaxPol.CN",
+      "Adv": "SyntaxPol.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Por": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxPor",
+      "(P = ParadigmsPor)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxPor.Phr",
+      "NP": "SyntaxPor.NP",
+      "CN": "SyntaxPor.CN",
+      "Adv": "SyntaxPor.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Ron": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxRon",
+      "(P = ParadigmsRon)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxRon.Phr",
+      "NP": "SyntaxRon.NP",
+      "CN": "SyntaxRon.CN",
+      "Adv": "SyntaxRon.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Rus": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxRus",
+      "(P = ParadigmsRus)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxRus.Phr",
+      "NP": "SyntaxRus.NP",
+      "CN": "SyntaxRus.CN",
+      "Adv": "SyntaxRus.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Sco": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxSco",
+      "(P = ParadigmsSco)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxSco.Phr",
+      "NP": "SyntaxSco.NP",
+      "CN": "SyntaxSco.CN",
+      "Adv": "SyntaxSco.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Slo": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxSlo",
+      "(P = ParadigmsSlo)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxSlo.Phr",
+      "NP": "SyntaxSlo.NP",
+      "CN": "SyntaxSlo.CN",
+      "Adv": "SyntaxSlo.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Snd": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxSnd",
+      "(P = ParadigmsSnd)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxSnd.Phr",
+      "NP": "SyntaxSnd.NP",
+      "CN": "SyntaxSnd.CN",
+      "Adv": "SyntaxSnd.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Som": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxSom",
+      "(P = ParadigmsSom)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxSom.Phr",
+      "NP": "SyntaxSom.NP",
+      "CN": "SyntaxSom.CN",
+      "Adv": "SyntaxSom.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Spa": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxSpa",
+      "(P = ParadigmsSpa)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxSpa.Phr",
+      "NP": "SyntaxSpa.NP",
+      "CN": "SyntaxSpa.CN",
+      "Adv": "SyntaxSpa.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Swe": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxSwe",
+      "(P = ParadigmsSwe)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxSwe.Phr",
+      "NP": "SyntaxSwe.NP",
+      "CN": "SyntaxSwe.CN",
+      "Adv": "SyntaxSwe.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Tam": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxTam",
+      "(P = ParadigmsTam)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxTam.Phr",
+      "NP": "SyntaxTam.NP",
+      "CN": "SyntaxTam.CN",
+      "Adv": "SyntaxTam.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Tha": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxTha",
+      "(P = ParadigmsTha)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxTha.Phr",
+      "NP": "SyntaxTha.NP",
+      "CN": "SyntaxTha.CN",
+      "Adv": "SyntaxTha.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Tur": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxTur",
+      "(P = ParadigmsTur)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxTur.Phr",
+      "NP": "SyntaxTur.NP",
+      "CN": "SyntaxTur.CN",
+      "Adv": "SyntaxTur.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Urd": {
+    "status": "GOLD",
+    "imports": [
+      "SyntaxUrd",
+      "(P = ParadigmsUrd)"
+    ],
+    "lincats": {
+      "Phr": "SyntaxUrd.Phr",
+      "NP": "SyntaxUrd.NP",
+      "CN": "SyntaxUrd.CN",
+      "Adv": "SyntaxUrd.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Hye": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarHye",
+      "(P = ParadigmsHye)"
+    ],
+    "lincats": {
+      "Phr": "GrammarHye.Phr",
+      "NP": "GrammarHye.NP",
+      "CN": "GrammarHye.CN",
+      "Adv": "GrammarHye.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Bel": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarBel",
+      "(P = ParadigmsBel)"
+    ],
+    "lincats": {
+      "Phr": "GrammarBel.Phr",
+      "NP": "GrammarBel.NP",
+      "CN": "GrammarBel.CN",
+      "Adv": "GrammarBel.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Gus": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarGus",
+      "(P = ParadigmsGus)"
+    ],
+    "lincats": {
+      "Phr": "GrammarGus.Phr",
+      "NP": "GrammarGus.NP",
+      "CN": "GrammarGus.CN",
+      "Adv": "GrammarGus.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Fao": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarFao",
+      "(P = ParadigmsFao)"
+    ],
+    "lincats": {
+      "Phr": "GrammarFao.Phr",
+      "NP": "GrammarFao.NP",
+      "CN": "GrammarFao.CN",
+      "Adv": "GrammarFao.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Gla": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarGla",
+      "(P = ParadigmsGla)"
+    ],
+    "lincats": {
+      "Phr": "GrammarGla.Phr",
+      "NP": "GrammarGla.NP",
+      "CN": "GrammarGla.CN",
+      "Adv": "GrammarGla.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Heb": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarHeb",
+      "(P = ParadigmsHeb)"
+    ],
+    "lincats": {
+      "Phr": "GrammarHeb.Phr",
+      "NP": "GrammarHeb.NP",
+      "CN": "GrammarHeb.CN",
+      "Adv": "GrammarHeb.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Kaz": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarKaz",
+      "(P = ParadigmsKaz)"
+    ],
+    "lincats": {
+      "Phr": "GrammarKaz.Phr",
+      "NP": "GrammarKaz.NP",
+      "CN": "GrammarKaz.CN",
+      "Adv": "GrammarKaz.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Kam": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarKam",
+      "(P = ParadigmsKam)"
+    ],
+    "lincats": {
+      "Phr": "GrammarKam.Phr",
+      "NP": "GrammarKam.NP",
+      "CN": "GrammarKam.CN",
+      "Adv": "GrammarKam.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Lit": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarLit",
+      "(P = ParadigmsLit)"
+    ],
+    "lincats": {
+      "Phr": "GrammarLit.Phr",
+      "NP": "GrammarLit.NP",
+      "CN": "GrammarLit.CN",
+      "Adv": "GrammarLit.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Mkd": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarMkd",
+      "(P = ParadigmsMkd)"
+    ],
+    "lincats": {
+      "Phr": "GrammarMkd.Phr",
+      "NP": "GrammarMkd.NP",
+      "CN": "GrammarMkd.CN",
+      "Adv": "GrammarMkd.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Cgg": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarCgg",
+      "(P = ParadigmsCgg)"
+    ],
+    "lincats": {
+      "Phr": "GrammarCgg.Phr",
+      "NP": "GrammarCgg.NP",
+      "CN": "GrammarCgg.CN",
+      "Adv": "GrammarCgg.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Slv": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarSlv",
+      "(P = ParadigmsSlv)"
+    ],
+    "lincats": {
+      "Phr": "GrammarSlv.Phr",
+      "NP": "GrammarSlv.NP",
+      "CN": "GrammarSlv.CN",
+      "Adv": "GrammarSlv.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Swa": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarSwa",
+      "(P = ParadigmsSwa)"
+    ],
+    "lincats": {
+      "Phr": "GrammarSwa.Phr",
+      "NP": "GrammarSwa.NP",
+      "CN": "GrammarSwa.CN",
+      "Adv": "GrammarSwa.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Tel": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarTel",
+      "(P = ParadigmsTel)"
+    ],
+    "lincats": {
+      "Phr": "GrammarTel.Phr",
+      "NP": "GrammarTel.NP",
+      "CN": "GrammarTel.CN",
+      "Adv": "GrammarTel.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "TMP": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarTMP",
+      "(P = ParadigmsTMP)"
+    ],
+    "lincats": {
+      "Phr": "GrammarTMP.Phr",
+      "NP": "GrammarTMP.NP",
+      "CN": "GrammarTMP.CN",
+      "Adv": "GrammarTMP.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Ukr": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarUkr",
+      "(P = ParadigmsUkr)"
+    ],
+    "lincats": {
+      "Phr": "GrammarUkr.Phr",
+      "NP": "GrammarUkr.NP",
+      "CN": "GrammarUkr.CN",
+      "Adv": "GrammarUkr.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Zul": {
+    "status": "SILVER",
+    "imports": [
+      "GrammarZul",
+      "(P = ParadigmsZul)"
+    ],
+    "lincats": {
+      "Phr": "GrammarZul.Phr",
+      "NP": "GrammarZul.NP",
+      "CN": "GrammarZul.CN",
+      "Adv": "GrammarZul.Adv"
+    },
+    "rules": {
+      "SimpNP": "mkNP a_Det cn",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  "Ext": {
+    "status": "IRON",
+    "imports": [
+      "CatExt",
+      "NounExt"
+    ],
+    "lincats": {
+      "Phr": "CatExt.Phr",
+      "NP": "CatExt.NP",
+      "CN": "CatExt.CN",
+      "Adv": "CatExt.Adv"
+    },
+    "rules": {
+      "SimpNP": "MassNP cn",
+      "John": "MassNP (UseN apple_N)",
+      "Here": "cn",
+      "apple_N": "UseN apple_N"
+    }
+  }
+}

@@ -1,0 +1,154 @@
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\hebrew\VerbHeb.gf:
+   Warning: no linearization of AdVVP
+   Warning: no linearization of AdVVPSlash
+   Warning: no linearization of AdvVP
+   Warning: no linearization of AdvVPSlash
+   Warning: no linearization of CompAP
+   Warning: no linearization of CompAdv
+   Warning: no linearization of CompCN
+   Warning: no linearization of CompNP
+   Warning: no linearization of ComplVA
+   Warning: no linearization of ComplVQ
+   Warning: no linearization of ComplVS
+   Warning: no linearization of ComplVV
+   Warning: no linearization of ExtAdvVP
+   Warning: no linearization of PassV2
+   Warning: no linearization of ReflVP
+   Warning: no linearization of Slash2V3
+   Warning: no linearization of Slash3V3
+   Warning: no linearization of SlashV2A
+   Warning: no linearization of SlashV2Q
+   Warning: no linearization of SlashV2S
+   Warning: no linearization of SlashV2V
+   Warning: no linearization of SlashV2VNP
+   Warning: no linearization of SlashVV
+   Warning: no linearization of UseComp
+   Warning: no linearization of UseCopula
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\hebrew\AdjectiveHeb.gf:
+   Warning: function UseA is not in abstract
+   Warning: no linearization of AdAP
+   Warning: no linearization of AdjOrd
+   Warning: no linearization of AdvAP
+   Warning: no linearization of CAdvAP
+   Warning: no linearization of ComparA
+   Warning: no linearization of ComplA2
+   Warning: no linearization of PositA
+   Warning: no linearization of ReflA2
+   Warning: no linearization of SentAP
+   Warning: no linearization of UseA2
+   Warning: no linearization of UseComparA
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\hebrew\AdverbHeb.gf:
+   Warning: no linearization of AdAdv
+   Warning: no linearization of AdnCAdv
+   Warning: no linearization of ComparAdvAdj
+   Warning: no linearization of ComparAdvAdjS
+   Warning: no linearization of PositAdAAdj
+   Warning: no linearization of PositAdvAdj
+   Warning: no linearization of SubjS
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\hebrew\SentenceHeb.gf:
+   Warning: no linearization of AdvImp
+   Warning: no linearization of AdvS
+   Warning: no linearization of AdvSlash
+   Warning: no linearization of EmbedQS
+   Warning: no linearization of EmbedS
+   Warning: no linearization of EmbedVP
+   Warning: no linearization of ExtAdvS
+   Warning: no linearization of ImpVP
+   Warning: no linearization of PredSCVP
+   Warning: no linearization of RelS
+   Warning: no linearization of SSubjS
+   Warning: no linearization of SlashPrep
+   Warning: no linearization of SlashVP
+   Warning: no linearization of SlashVS
+   Warning: no linearization of UseQCl
+   Warning: no linearization of UseRCl
+   Warning: no linearization of UseSlash
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\hebrew\PhraseHeb.gf:
+   Warning: no linearization of PConjConj
+   Warning: no linearization of UttAP
+   Warning: no linearization of UttCN
+   Warning: no linearization of UttCard
+   Warning: no linearization of UttIAdv
+   Warning: no linearization of UttIP
+   Warning: no linearization of UttImpPl
+   Warning: no linearization of UttImpPol
+   Warning: no linearization of UttImpSg
+   Warning: no linearization of UttInterj
+   Warning: no linearization of UttQS
+   Warning: no linearization of UttS
+   Warning: no linearization of UttVP
+   Warning: no linearization of VocNP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\hebrew\StructuralHeb.gf:
+   Warning: function what_IP is not in abstract
+   Warning: no linearization of all_Predet
+   Warning: no linearization of almost_AdA
+   Warning: no linearization of almost_AdN
+   Warning: no linearization of always_AdV
+   Warning: no linearization of and_Conj
+   Warning: no linearization of as_CAdv
+   Warning: no linearization of at_least_AdN
+   Warning: no linearization of at_most_AdN
+   Warning: no linearization of both7and_DConj
+   Warning: no linearization of can8know_VV
+   Warning: no linearization of can_VV
+   Warning: no linearization of either7or_DConj
+   Warning: no linearization of every_Det
+   Warning: no linearization of everybody_NP
+   Warning: no linearization of few_Det
+   Warning: no linearization of have_V2
+   Warning: no linearization of here7to_Adv
+   Warning: no linearization of here_Adv
+   Warning: no linearization of if_then_Conj
+   Warning: no linearization of in8front_Prep
+   Warning: no linearization of in_Prep
+   Warning: no linearization of language_title_Utt
+   Warning: no linearization of less_CAdv
+   Warning: no linearization of many_Det
+   Warning: no linearization of more_CAdv
+   Warning: no linearization of most_Predet
+   Warning: no linearization of much_Det
+   Warning: no linearization of must_VV
+   Warning: no linearization of no_Quant
+   Warning: no linearization of nobody_NP
+   Warning: no linearization of not_Predet
+   Warning: no linearization of nothing_NP
+   Warning: no linearization of on_Prep
+   Warning: no linearization of only_Predet
+   Warning: no linearization of or_Conj
+   Warning: no linearization of otherwise_PConj
+   Warning: no linearization of part_Prep
+   Warning: no linearization of please_Voc
+   Warning: no linearization of possess_Prep
+   Warning: no linearization of quite_Adv
+   Warning: no linearization of so_AdA
+   Warning: no linearization of somePl_Det
+   Warning: no linearization of someSg_Det
+   Warning: no linearization of somebody_NP
+   Warning: no linearization of something_NP
+   Warning: no linearization of therefore_PConj
+   Warning: no linearization of to_Prep
+   Warning: no linearization of too_AdA
+   Warning: no linearization of very_AdA
+   Warning: no linearization of want_VV
+   Warning: no linearization of which_IQuant
+   Warning: no linearization of youPol_Pron
+
+WikiHeb.gf:17:
+  Happened in the renaming of apple_N
+   constant not found: mkCN
+   given P, ParadigmsHeb, GrammarHeb, WikiHeb
+WikiHeb.gf:13:
+  Happened in the renaming of SimpNP
+   constant not found: mkNP
+   given P, ParadigmsHeb, GrammarHeb, WikiHeb
+   constant not found: a_Det
+   given P, ParadigmsHeb, GrammarHeb, WikiHeb
+WikiHeb.gf:15:
+  Happened in the renaming of John
+   constant not found: mkNP
+   given P, ParadigmsHeb, GrammarHeb, WikiHeb

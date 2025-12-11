@@ -1,0 +1,3 @@
+WikiCze.gf:15:
+  Happened in the renaming of John
+   unknown qualified constant P.mkPN

@@ -1,0 +1,374 @@
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1354-1355:
+  Happened in the renaming of whichSg_IDet
+   constant not found: IdetQuant
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1356-1357:
+  Happened in the renaming of whichPl_IDet
+   constant not found: IdetQuant
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:715-716:
+  Happened in the renaming of those_NP
+   constant not found: DetNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:709-710:
+  Happened in the renaming of this_NP
+   constant not found: DetNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:713-714:
+  Happened in the renaming of these_NP
+   constant not found: DetNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:711-712:
+  Happened in the renaming of that_NP
+   constant not found: DetNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:551-552:
+  Happened in the renaming of progressiveVP
+   constant not found: ProgrVP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1522-1542:
+  Happened in the renaming of mkVPSlash
+   constant not found: SlashV2A
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1522-1542:
+  Happened in the renaming of mkVPSlash
+   constant not found: SlashVV
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:320-325:
+  Happened in the renaming of mkUttImp
+   constant not found: UttImpSg
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+   constant not found: UttImpPl
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+   constant not found: UttImpPol
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttQS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttQS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttImpSg
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttImpSg
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttIP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttIAdv
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttVP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttCN
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttAP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:211-248:
+  Happened in the renaming of mkUtt
+   constant not found: UttCard
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:76-132:
+  Happened in the renaming of mkText
+   constant not found: UttQS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:76-132:
+  Happened in the renaming of mkText
+   constant not found: UttImpSg
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:76-132:
+  Happened in the renaming of mkText
+   constant not found: UttImpSg
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:567-574:
+  Happened in the renaming of mkSC
+   constant not found: EmbedQS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:567-574:
+  Happened in the renaming of mkSC
+   constant not found: EmbedVP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1371-1395:
+  Happened in the renaming of mkRS
+   constant not found: ConjRS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+   constant not found: BaseRS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1371-1395:
+  Happened in the renaming of mkRS
+   constant not found: ConjRS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1473-1474:
+  Happened in the renaming of mkRP
+   constant not found: FunRP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1399-1462:
+  Happened in the renaming of mkRCl
+   constant not found: RelCl
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1198-1282:
+  Happened in the renaming of mkQCl
+   constant not found: QuestSlash
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1198-1282:
+  Happened in the renaming of mkQCl
+   constant not found: QuestSlash
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1198-1282:
+  Happened in the renaming of mkQCl
+   constant not found: QuestIAdv
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1198-1282:
+  Happened in the renaming of mkQCl
+   constant not found: QuestIAdv
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1198-1282:
+  Happened in the renaming of mkQCl
+   constant not found: QuestIComp
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1198-1282:
+  Happened in the renaming of mkQCl
+   constant not found: QuestIComp
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1198-1282:
+  Happened in the renaming of mkQCl
+   constant not found: ExistIP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:161-182:
+  Happened in the renaming of mkPhr
+   constant not found: UttQS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:161-182:
+  Happened in the renaming of mkPhr
+   constant not found: UttImpSg
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:601-686:
+  Happened in the renaming of mkNP
+   constant not found: DetNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:601-686:
+  Happened in the renaming of mkNP
+   constant not found: DetNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:601-686:
+  Happened in the renaming of mkNP
+   constant not found: DetNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:601-686:
+  Happened in the renaming of mkNP
+   constant not found: PredetNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:601-686:
+  Happened in the renaming of mkNP
+   constant not found: PPartNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1592-1597:
+  Happened in the renaming of mkListRS
+   constant not found: BaseRS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1592-1597:
+  Happened in the renaming of mkListRS
+   constant not found: ConsRS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1296-1319:
+  Happened in the renaming of mkIP
+   constant not found: IdetQuant
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1296-1319:
+  Happened in the renaming of mkIP
+   constant not found: IdetQuant
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1296-1319:
+  Happened in the renaming of mkIP
+   constant not found: IdetQuant
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1345-1350:
+  Happened in the renaming of mkIDet
+   constant not found: IdetQuant
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1345-1350:
+  Happened in the renaming of mkIDet
+   constant not found: IdetQuant
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1335-1340:
+  Happened in the renaming of mkIAdv
+   constant not found: AdvIAdv
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1486-1517:
+  Happened in the renaming of mkClSlash
+   constant not found: SlashVV
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1486-1517:
+  Happened in the renaming of mkClSlash
+   constant not found: AdvSlash
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:374-453:
+  Happened in the renaming of mkCl
+   constant not found: ExistNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:374-453:
+  Happened in the renaming of mkCl
+   constant not found: ExistNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:374-453:
+  Happened in the renaming of mkCl
+   constant not found: ExistNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:374-453:
+  Happened in the renaming of mkCl
+   constant not found: CleftNP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:374-453:
+  Happened in the renaming of mkCl
+   constant not found: CleftAdv
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:374-453:
+  Happened in the renaming of mkCl
+   constant not found: ImpersCl
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:374-453:
+  Happened in the renaming of mkCl
+   constant not found: ImpersCl
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:983-1051:
+  Happened in the renaming of mkCN
+   constant not found: EmbedQS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:983-1051:
+  Happened in the renaming of mkCN
+   constant not found: EmbedVP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:983-1051:
+  Happened in the renaming of mkCN
+   constant not found: ApposCN
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:983-1051:
+  Happened in the renaming of mkCN
+   constant not found: ApposCN
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1117-1152:
+  Happened in the renaming of mkAdv
+   constant not found: ComparAdvAdjS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1117-1152:
+  Happened in the renaming of mkAdv
+   constant not found: AdAdv
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:861-862:
+  Happened in the renaming of mkAdN
+   constant not found: AdnCAdv
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1058-1108:
+  Happened in the renaming of mkAP
+   constant not found: EmbedQS
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1058-1108:
+  Happened in the renaming of mkAP
+   constant not found: EmbedVP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1058-1108:
+  Happened in the renaming of mkAP
+   constant not found: CAdvAP
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:252-253:
+  Happened in the renaming of lets_Utt
+   constant not found: ImpPl1
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:457-458:
+  Happened in the renaming of genericCl
+   constant not found: GenericCl
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc
+/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/api/Constructors.gf:1633:
+  Happened in the renaming of ComplV2A
+   constant not found: SlashV2A
+   given GrammarGrc, Grammar, GrammarGrc, GrammarGrc, GrammarGrc,
+         ConstructorsGrc

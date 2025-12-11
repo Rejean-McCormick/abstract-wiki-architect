@@ -1,4 +1,3 @@
-
 abstract Wiki = {
   flags startcat = Phr ;
   cat

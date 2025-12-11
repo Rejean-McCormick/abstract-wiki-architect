@@ -1,0 +1,40 @@
+WikiIce.gf:
+   WikiIce.gf:15:
+     Happened in linearization of John
+      no overload instance of ConstructorsIce.mkNP
+      with value type NP
+      for argument list
+        Gender -> PN
+      among alternatives
+        Quant N
+        Quant CN
+        Quant Num CN
+        Quant Num Ord CN
+        Quant Num N
+        Det CN
+        Det N
+        Numeral CN
+        Numeral N
+        Digits CN
+        Digits N
+        Digit CN
+        Digit N
+        Card CN
+        Card N
+        Pron CN
+        Pron N
+        PN
+        Pron
+        Quant
+        Quant Num
+        Det
+        CN
+        N
+        Predet NP
+        NP V2
+        NP Adv
+        NP RS
+        Conj NP NP
+        Conj ListNP
+        Quant CN
+        Quant CN

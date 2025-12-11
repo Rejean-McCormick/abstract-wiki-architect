@@ -1,0 +1,7 @@
+WikiLat.gf:
+   WikiLat.gf:15:
+     Happened in linearization of John
+       type of "John"
+      expected: {s : ParamX.Number => ResLat.Case => Str;
+                 g : ResLat.Gender; lock_N : {}}
+      inferred: Str

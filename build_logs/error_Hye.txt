@@ -1,0 +1,58 @@
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\armenian\CatHye.gf:
+   Warning: no linearization type for ACard, inserting default {s : Str}
+   Warning: no linearization type for Card, inserting default {s : Str}
+   Warning: no linearization type for Cl, inserting default {s : Str}
+   Warning: no linearization type for ClSlash, inserting default {s : Str}
+   Warning: no linearization type for Comp, inserting default {s : Str}
+   Warning: no linearization type for Conj, inserting default {s : Str}
+   Warning: no linearization type for DAP, inserting default {s : Str}
+   Warning: no linearization type for Decimal, inserting default {s : Str}
+   Warning: no linearization type for Det, inserting default {s : Str}
+   Warning: no linearization type for Digits, inserting default {s : Str}
+   Warning: no linearization type for GN, inserting default {s : Str}
+   Warning: no linearization type for IComp, inserting default {s : Str}
+   Warning: no linearization type for IDet, inserting default {s : Str}
+   Warning: no linearization type for IP, inserting default {s : Str}
+   Warning: no linearization type for IQuant, inserting default {s : Str}
+   Warning: no linearization type for Imp, inserting default {s : Str}
+   Warning: no linearization type for LN, inserting default {s : Str}
+   Warning: no linearization type for NP, inserting default {s : Str}
+   Warning: no linearization type for Num, inserting default {s : Str}
+   Warning: no linearization type for Numeral, inserting default {s : Str}
+   Warning: no linearization type for Ord, inserting default {s : Str}
+   Warning: no linearization type for PN, inserting default {s : Str}
+   Warning: no linearization type for Predet, inserting default {s : Str}
+   Warning: no linearization type for Pron, inserting default {s : Str}
+   Warning: no linearization type for QCl, inserting default {s : Str}
+   Warning: no linearization type for QS, inserting default {s : Str}
+   Warning: no linearization type for Quant, inserting default {s : Str}
+   Warning: no linearization type for RCl, inserting default {s : Str}
+   Warning: no linearization type for RP, inserting default {s : Str}
+   Warning: no linearization type for RS, inserting default {s : Str}
+   Warning: no linearization type for S, inserting default {s : Str}
+   Warning: no linearization type for SN, inserting default {s : Str}
+   Warning: no linearization type for SSlash, inserting default {s : Str}
+   Warning: no linearization type for Subj, inserting default {s : Str}
+   Warning: no linearization type for VP, inserting default {s : Str}
+   Warning: no linearization type for VPSlash, inserting default {s : Str}
+
+WikiHye.gf:17:
+  Happened in the renaming of apple_N
+   constant not found: mkCN
+   given P, ParadigmsHye, GrammarHye, WikiHye
+WikiHye.gf:13:
+  Happened in the renaming of SimpNP
+   constant not found: mkNP
+   given P, ParadigmsHye, GrammarHye, WikiHye
+   constant not found: a_Det
+   given P, ParadigmsHye, GrammarHye, WikiHye
+WikiHye.gf:15:
+  Happened in the renaming of John
+   constant not found: mkNP
+   given P, ParadigmsHye, GrammarHye, WikiHye
+WikiHye.gf:8:
+  Happened in the renaming of NP
+   unknown qualified constant GrammarHye.NP
+WikiHye.gf:9:
+  Happened in the renaming of CN
+   unknown qualified constant GrammarHye.CN

@@ -1,0 +1,1297 @@
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:7:
+  Happened in the renaming of VV
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:7:
+  Happened in the renaming of VS
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:7:
+  Happened in the renaming of VQ
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:7:
+  Happened in the renaming of VA
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:9:
+  Happened in the renaming of V3
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:9:
+  Happened in the renaming of V2V
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:9:
+  Happened in the renaming of V2S
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:9:
+  Happened in the renaming of V2Q
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:9:
+  Happened in the renaming of V2A
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:8:
+  Happened in the renaming of V2
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:6:
+  Happened in the renaming of V
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:11:
+  Happened in the renaming of A2
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given ResBel, CommonX, CatBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:10:
+  Happened in the renaming of A
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given ResBel, CommonX, CatBel
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\CatBel.gf:
+   Warning: no linearization type for ACard, inserting default {s : Str}
+   Warning: no linearization type for Card, inserting default {s : Str}
+   Warning: no linearization type for Cl, inserting default {s : Str}
+   Warning: no linearization type for ClSlash, inserting default {s : Str}
+   Warning: no linearization type for Comp, inserting default {s : Str}
+   Warning: no linearization type for Conj, inserting default {s : Str}
+   Warning: no linearization type for DAP, inserting default {s : Str}
+   Warning: no linearization type for Decimal, inserting default {s : Str}
+   Warning: no linearization type for Det, inserting default {s : Str}
+   Warning: no linearization type for Digits, inserting default {s : Str}
+   Warning: no linearization type for IComp, inserting default {s : Str}
+   Warning: no linearization type for IDet, inserting default {s : Str}
+   Warning: no linearization type for IP, inserting default {s : Str}
+   Warning: no linearization type for IQuant, inserting default {s : Str}
+   Warning: no linearization type for Imp, inserting default {s : Str}
+   Warning: no linearization type for NP, inserting default {s : Str}
+   Warning: no linearization type for Num, inserting default {s : Str}
+   Warning: no linearization type for Numeral, inserting default {s : Str}
+   Warning: no linearization type for Ord, inserting default {s : Str}
+   Warning: no linearization type for Predet, inserting default {s : Str}
+   Warning: no linearization type for Pron, inserting default {s : Str}
+   Warning: no linearization type for QCl, inserting default {s : Str}
+   Warning: no linearization type for QS, inserting default {s : Str}
+   Warning: no linearization type for Quant, inserting default {s : Str}
+   Warning: no linearization type for RCl, inserting default {s : Str}
+   Warning: no linearization type for RP, inserting default {s : Str}
+   Warning: no linearization type for RS, inserting default {s : Str}
+   Warning: no linearization type for SSlash, inserting default {s : Str}
+   Warning: no linearization type for Subj, inserting default {s : Str}
+   Warning: no linearization type for VP, inserting default {s : Str}
+   Warning: no linearization type for VPSlash, inserting default {s : Str}
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\PhraseBel.gf:
+   Warning: no linearization of PConjConj
+   Warning: no linearization of UttAP
+   Warning: no linearization of UttAdv
+   Warning: no linearization of UttCN
+   Warning: no linearization of UttCard
+   Warning: no linearization of UttIAdv
+   Warning: no linearization of UttIP
+   Warning: no linearization of UttImpPl
+   Warning: no linearization of UttImpPol
+   Warning: no linearization of UttImpSg
+   Warning: no linearization of UttNP
+   Warning: no linearization of UttQS
+   Warning: no linearization of UttVP
+   Warning: no linearization of VocNP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\NounBel.gf:
+   Warning: no linearization of AdNum
+   Warning: no linearization of AdjCN
+   Warning: no linearization of AdjDAP
+   Warning: no linearization of AdvCN
+   Warning: no linearization of AdvNP
+   Warning: no linearization of ApposCN
+   Warning: no linearization of ComplN2
+   Warning: no linearization of ComplN3
+   Warning: no linearization of CountNP
+   Warning: no linearization of DefArt
+   Warning: no linearization of DetCN
+   Warning: no linearization of DetDAP
+   Warning: no linearization of DetNP
+   Warning: no linearization of DetQuant
+   Warning: no linearization of DetQuantOrd
+   Warning: no linearization of ExtAdvNP
+   Warning: no linearization of IndefArt
+   Warning: no linearization of MassNP
+   Warning: no linearization of NumCard
+   Warning: no linearization of NumDecimal
+   Warning: no linearization of NumDigits
+   Warning: no linearization of NumNumeral
+   Warning: no linearization of NumPl
+   Warning: no linearization of NumSg
+   Warning: no linearization of OrdDigits
+   Warning: no linearization of OrdNumeral
+   Warning: no linearization of OrdNumeralSuperl
+   Warning: no linearization of OrdSuperl
+   Warning: no linearization of PPartNP
+   Warning: no linearization of PartNP
+   Warning: no linearization of PossNP
+   Warning: no linearization of PossPron
+   Warning: no linearization of PredetNP
+   Warning: no linearization of QuantityNP
+   Warning: no linearization of RelCN
+   Warning: no linearization of RelNP
+   Warning: no linearization of SentCN
+   Warning: no linearization of Use2N3
+   Warning: no linearization of Use3N3
+   Warning: no linearization of UseN2
+   Warning: no linearization of UsePN
+   Warning: no linearization of UsePron
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\AdjectiveBel.gf:
+   Warning: no linearization of AdAP
+   Warning: no linearization of AdjOrd
+   Warning: no linearization of AdvAP
+   Warning: no linearization of CAdvAP
+   Warning: no linearization of ComparA
+   Warning: no linearization of ComplA2
+   Warning: no linearization of ReflA2
+   Warning: no linearization of SentAP
+   Warning: no linearization of UseA2
+   Warning: no linearization of UseComparA
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29124:
+  Happened in the renaming of mkV186
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29053:
+  Happened in the renaming of mkV185
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28982:
+  Happened in the renaming of mkV184
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28911:
+  Happened in the renaming of mkV183
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28840:
+  Happened in the renaming of mkV182
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28769:
+  Happened in the renaming of mkV181
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28698:
+  Happened in the renaming of mkV180
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28627:
+  Happened in the renaming of mkV179
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28556:
+  Happened in the renaming of mkV178
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28485:
+  Happened in the renaming of mkV177
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28414:
+  Happened in the renaming of mkV176
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28343:
+  Happened in the renaming of mkV175
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28272:
+  Happened in the renaming of mkV174
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28201:
+  Happened in the renaming of mkV173
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28130:
+  Happened in the renaming of mkV172
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:28059:
+  Happened in the renaming of mkV171
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27988:
+  Happened in the renaming of mkV170
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27917:
+  Happened in the renaming of mkV169
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27846:
+  Happened in the renaming of mkV168
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27775:
+  Happened in the renaming of mkV167
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27704:
+  Happened in the renaming of mkV166
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27633:
+  Happened in the renaming of mkV165
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27562:
+  Happened in the renaming of mkV164
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27491:
+  Happened in the renaming of mkV163
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27420:
+  Happened in the renaming of mkV162
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27349:
+  Happened in the renaming of mkV161
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27278:
+  Happened in the renaming of mkV160
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27207:
+  Happened in the renaming of mkV159
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27136:
+  Happened in the renaming of mkV158
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:27065:
+  Happened in the renaming of mkV157
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26994:
+  Happened in the renaming of mkV156
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26923:
+  Happened in the renaming of mkV155
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26852:
+  Happened in the renaming of mkV154
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26781:
+  Happened in the renaming of mkV153
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26710:
+  Happened in the renaming of mkV152
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26639:
+  Happened in the renaming of mkV151
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26568:
+  Happened in the renaming of mkV150
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26497:
+  Happened in the renaming of mkV149
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26426:
+  Happened in the renaming of mkV148
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26355:
+  Happened in the renaming of mkV147
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26284:
+  Happened in the renaming of mkV146
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26213:
+  Happened in the renaming of mkV145
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26142:
+  Happened in the renaming of mkV144
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26071:
+  Happened in the renaming of mkV143
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:26000:
+  Happened in the renaming of mkV142
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25929:
+  Happened in the renaming of mkV141
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25858:
+  Happened in the renaming of mkV140
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25787:
+  Happened in the renaming of mkV139
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25716:
+  Happened in the renaming of mkV138
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25645:
+  Happened in the renaming of mkV137
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25574:
+  Happened in the renaming of mkV136
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25503:
+  Happened in the renaming of mkV135
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25432:
+  Happened in the renaming of mkV134
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25361:
+  Happened in the renaming of mkV133
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25290:
+  Happened in the renaming of mkV132
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25219:
+  Happened in the renaming of mkV131
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25148:
+  Happened in the renaming of mkV130
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25077:
+  Happened in the renaming of mkV129
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:25006:
+  Happened in the renaming of mkV128
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24935:
+  Happened in the renaming of mkV127
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24864:
+  Happened in the renaming of mkV126
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24793:
+  Happened in the renaming of mkV125
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24722:
+  Happened in the renaming of mkV124
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24651:
+  Happened in the renaming of mkV123
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24580:
+  Happened in the renaming of mkV122
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24509:
+  Happened in the renaming of mkV121
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24438:
+  Happened in the renaming of mkV120
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24367:
+  Happened in the renaming of mkV119
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24296:
+  Happened in the renaming of mkV118
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24225:
+  Happened in the renaming of mkV117
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24154:
+  Happened in the renaming of mkV116
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24083:
+  Happened in the renaming of mkV115
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:24012:
+  Happened in the renaming of mkV114
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23941:
+  Happened in the renaming of mkV113
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23870:
+  Happened in the renaming of mkV112
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23799:
+  Happened in the renaming of mkV111
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23728:
+  Happened in the renaming of mkV110
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23657:
+  Happened in the renaming of mkV109
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23586:
+  Happened in the renaming of mkV108
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23515:
+  Happened in the renaming of mkV107
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23444:
+  Happened in the renaming of mkV106
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23373:
+  Happened in the renaming of mkV105
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23302:
+  Happened in the renaming of mkV104
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23231:
+  Happened in the renaming of mkV103
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23160:
+  Happened in the renaming of mkV102
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23089:
+  Happened in the renaming of mkV101
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:23018:
+  Happened in the renaming of mkV100
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22947:
+  Happened in the renaming of mkV099
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22876:
+  Happened in the renaming of mkV098
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22805:
+  Happened in the renaming of mkV097
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22734:
+  Happened in the renaming of mkV096
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22663:
+  Happened in the renaming of mkV095
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22592:
+  Happened in the renaming of mkV094
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22521:
+  Happened in the renaming of mkV093
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22450:
+  Happened in the renaming of mkV092
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22379:
+  Happened in the renaming of mkV091
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22308:
+  Happened in the renaming of mkV090
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22237:
+  Happened in the renaming of mkV089
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22166:
+  Happened in the renaming of mkV088
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22095:
+  Happened in the renaming of mkV087
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:22024:
+  Happened in the renaming of mkV086
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21953:
+  Happened in the renaming of mkV085
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21882:
+  Happened in the renaming of mkV084
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21811:
+  Happened in the renaming of mkV083
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21740:
+  Happened in the renaming of mkV082
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21669:
+  Happened in the renaming of mkV081
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21598:
+  Happened in the renaming of mkV080
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21527:
+  Happened in the renaming of mkV079
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21456:
+  Happened in the renaming of mkV078
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21385:
+  Happened in the renaming of mkV077
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21314:
+  Happened in the renaming of mkV076
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21243:
+  Happened in the renaming of mkV075
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21172:
+  Happened in the renaming of mkV074
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21101:
+  Happened in the renaming of mkV073
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:21030:
+  Happened in the renaming of mkV072
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20959:
+  Happened in the renaming of mkV071
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20888:
+  Happened in the renaming of mkV070
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20817:
+  Happened in the renaming of mkV069
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20746:
+  Happened in the renaming of mkV068
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20675:
+  Happened in the renaming of mkV067
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20604:
+  Happened in the renaming of mkV066
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20533:
+  Happened in the renaming of mkV065
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20462:
+  Happened in the renaming of mkV064
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20391:
+  Happened in the renaming of mkV063
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20320:
+  Happened in the renaming of mkV062
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20249:
+  Happened in the renaming of mkV061
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20178:
+  Happened in the renaming of mkV060
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20107:
+  Happened in the renaming of mkV059
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:20036:
+  Happened in the renaming of mkV058
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19965:
+  Happened in the renaming of mkV057
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19894:
+  Happened in the renaming of mkV056
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19823:
+  Happened in the renaming of mkV055
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19752:
+  Happened in the renaming of mkV054
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19681:
+  Happened in the renaming of mkV053
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19610:
+  Happened in the renaming of mkV052
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19539:
+  Happened in the renaming of mkV051
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19468:
+  Happened in the renaming of mkV050
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19397:
+  Happened in the renaming of mkV049
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19326:
+  Happened in the renaming of mkV048
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19255:
+  Happened in the renaming of mkV047
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19184:
+  Happened in the renaming of mkV046
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19113:
+  Happened in the renaming of mkV045
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:19042:
+  Happened in the renaming of mkV044
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18971:
+  Happened in the renaming of mkV043
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18900:
+  Happened in the renaming of mkV042
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18829:
+  Happened in the renaming of mkV041
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18758:
+  Happened in the renaming of mkV040
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18687:
+  Happened in the renaming of mkV039
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18616:
+  Happened in the renaming of mkV038
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18545:
+  Happened in the renaming of mkV037
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18474:
+  Happened in the renaming of mkV036
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18403:
+  Happened in the renaming of mkV035
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18332:
+  Happened in the renaming of mkV034
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18261:
+  Happened in the renaming of mkV033
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18190:
+  Happened in the renaming of mkV032
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18119:
+  Happened in the renaming of mkV031
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:18048:
+  Happened in the renaming of mkV030
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17977:
+  Happened in the renaming of mkV029
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17906:
+  Happened in the renaming of mkV028
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17835:
+  Happened in the renaming of mkV027
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17764:
+  Happened in the renaming of mkV026
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17693:
+  Happened in the renaming of mkV025
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17622:
+  Happened in the renaming of mkV024
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17551:
+  Happened in the renaming of mkV023
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17480:
+  Happened in the renaming of mkV022
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17409:
+  Happened in the renaming of mkV021
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17338:
+  Happened in the renaming of mkV020
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17267:
+  Happened in the renaming of mkV019
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17196:
+  Happened in the renaming of mkV018
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17125:
+  Happened in the renaming of mkV017
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:17054:
+  Happened in the renaming of mkV016
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16983:
+  Happened in the renaming of mkV015
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16912:
+  Happened in the renaming of mkV014
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16841:
+  Happened in the renaming of mkV013
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16770:
+  Happened in the renaming of mkV012
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16699:
+  Happened in the renaming of mkV011
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16628:
+  Happened in the renaming of mkV010
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16557:
+  Happened in the renaming of mkV009
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16486:
+  Happened in the renaming of mkV008
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16415:
+  Happened in the renaming of mkV007
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16344:
+  Happened in the renaming of mkV006
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16273:
+  Happened in the renaming of mkV005
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16202:
+  Happened in the renaming of mkV004
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16131:
+  Happened in the renaming of mkV003
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:16060:
+  Happened in the renaming of mkV002
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:15989:
+  Happened in the renaming of mkV001
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29573:
+  Happened in the renaming of mkA010
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29531:
+  Happened in the renaming of mkA009
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29489:
+  Happened in the renaming of mkA008
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29447:
+  Happened in the renaming of mkA007
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29405:
+  Happened in the renaming of mkA006
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29363:
+  Happened in the renaming of mkA005
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29321:
+  Happened in the renaming of mkA004
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29279:
+  Happened in the renaming of mkA003
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29237:
+  Happened in the renaming of mkA002
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\MorphoBel.gf:29195:
+  Happened in the renaming of mkA001
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given Predef, ResBel, CatBel, MorphoBel
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:639-656:
+  Happened in the renaming of regV
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:720-737:
+  Happened in the renaming of regA
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:658-718:
+  Happened in the renaming of reg2V
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:739-747:
+  Happened in the renaming of reg2A
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:769:
+  Happened in the renaming of mkVV
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:770:
+  Happened in the renaming of mkVS
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:771:
+  Happened in the renaming of mkVQ
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:772:
+  Happened in the renaming of mkVA
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:779-782:
+  Happened in the renaming of mkV3
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:779-782:
+  Happened in the renaming of mkV3
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:799-802:
+  Happened in the renaming of mkV2V
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:799-802:
+  Happened in the renaming of mkV2V
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:789-792:
+  Happened in the renaming of mkV2S
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:789-792:
+  Happened in the renaming of mkV2S
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:794-797:
+  Happened in the renaming of mkV2Q
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:794-797:
+  Happened in the renaming of mkV2Q
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:784-787:
+  Happened in the renaming of mkV2A
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:784-787:
+  Happened in the renaming of mkV2A
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:774-777:
+  Happened in the renaming of mkV2
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:774-777:
+  Happened in the renaming of mkV2
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:764-767:
+  Happened in the renaming of mkV
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:764-767:
+  Happened in the renaming of mkV
+   Warning: atomic term V
+            conflict ResBel.V, CatBel.V
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:809-812:
+  Happened in the renaming of mkA2
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:809-812:
+  Happened in the renaming of mkA2
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:804-807:
+  Happened in the renaming of mkA
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\belarusian\ParadigmsBel.gf:804-807:
+  Happened in the renaming of mkA
+   Warning: atomic term A
+            conflict ResBel.A, CatBel.A
+            given ResBel, CatBel, Prelude, Predef, MorphoBel, ParadigmsBel
+
+WikiBel.gf:17:
+  Happened in the renaming of apple_N
+   constant not found: mkCN
+   given P, ParadigmsBel, GrammarBel, WikiBel
+WikiBel.gf:13:
+  Happened in the renaming of SimpNP
+   constant not found: mkNP
+   given P, ParadigmsBel, GrammarBel, WikiBel
+   constant not found: a_Det
+   given P, ParadigmsBel, GrammarBel, WikiBel
+WikiBel.gf:15:
+  Happened in the renaming of John
+   constant not found: mkNP
+   given P, ParadigmsBel, GrammarBel, WikiBel

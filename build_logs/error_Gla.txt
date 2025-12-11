@@ -1,0 +1,561 @@
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:325-357:
+     Happened in operation mkLinPrep
+      Warning: patterns never reached:
+                 Definite
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:198-203:
+     Happened in operation agr2pagr
+      Warning: patterns never reached:
+                 NotPron _
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:394-398:
+     Happened in operation àsPrep
+      Warning: ignoring lock fields in resolving mkPrep {base = "às";
+                                                         sg1 = "asam"; sg2 = "asad"; sg3M = "às";
+                                                         sg3F = "aiste"; pl1 = "asainn";
+                                                         pl2 = "asaibh";
+                                                         pl3 = "asda"} (invarPrepForms "às") NoMutation
+               for
+                 {base : Str; sg1 : Str; sg2 : Str; sg3M : Str; sg3F : Str;
+                  pl1 : Str; pl2 : Str; pl3 : Str} {base : Str; pl1 : Str; pl2 : Str;
+                                                    pl3 : Str; sg1 : Str; sg2 : Str; sg3F : Str;
+                                                    sg3M : Str} Mutation
+               using
+                 {base : Str; pl1 : Str; pl2 : Str; pl3 : Str; sg1 : Str; sg2 : Str;
+                  sg3F : Str; sg3M : Str} {base : Str; pl1 : Str; pl2 : Str;
+                                           pl3 : Str; sg1 : Str; sg2 : Str; sg3F : Str;
+                                           sg3M : Str} Mutation
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:415-422:
+     Happened in operation guPrep
+      Warning: ignoring lock fields in resolving mkPrep True (Dat NoMutation) Gen {base = "gu";
+                                                                                   sg1 = "ugam";
+                                                                                   sg2 = "ugad";
+                                                                                   sg3M = "uige";
+                                                                                   sg3F = "uice";
+                                                                                   pl1 = "ugainn";
+                                                                                   pl2 = "ugaibh";
+                                                                                   pl3 = "uca"} {base = "gu";
+                                                                                                 sg1 = "gum" + LENITION_DEBUG;
+                                                                                                 sg2 = "gud" + LENITION_DEBUG;
+                                                                                                 sg3M = "gu a" + LENITION_DEBUG;
+                                                                                                 sg3F = "gu a"
+                                                                                                          ++ h;
+                                                                                                 pl1 = "gar"
+                                                                                                         ++ n;
+                                                                                                 pl2 = "gur"
+                                                                                                         ++ n;
+                                                                                                 pl3 = "gun"}
+               for
+                 Bool Case Case {base : Str; sg1 : Str; sg2 : Str; sg3M : Str;
+                                 sg3F : Str; pl1 : Str; pl2 : Str; pl3 : Str} {base : Str;
+                                                                               sg1 : Str; sg2 : Str;
+                                                                               sg3M : Str;
+                                                                               sg3F : Str;
+                                                                               pl1 : Str; pl2 : Str;
+                                                                               pl3 : Str}
+               using
+                 Bool Case Case {base : Str; pl1 : Str; pl2 : Str; pl3 : Str;
+                                 sg1 : Str; sg2 : Str; sg3F : Str; sg3M : Str} {base : Str;
+                                                                                pl1 : Str;
+                                                                                pl2 : Str;
+                                                                                pl3 : Str;
+                                                                                sg1 : Str;
+                                                                                sg2 : Str;
+                                                                                sg3F : Str;
+                                                                                sg3M : Str}
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:407-411:
+     Happened in operation doPrep
+      Warning: ignoring lock fields in resolving mkPrep {base = "do";
+                                                         sg1 = "dhomh"; sg2 = "dhut"; sg3M = "dha";
+                                                         sg3F = "dhi"; pl1 = "dhuinn";
+                                                         pl2 = "dhuibh";
+                                                         pl3 = "dhiubh"} {base = "bho";
+                                                                          sg1 = "dom" + LENITION_DEBUG;
+                                                                          sg2 = "dod" + LENITION_DEBUG;
+                                                                          sg3M = "dha" + LENITION_DEBUG;
+                                                                          sg3F = "dha" ++ h;
+                                                                          pl1 = "dor" ++ n;
+                                                                          pl2 = "dhur" ++ n;
+                                                                          pl3 = "don"} Lenited
+               for
+                 {base : Str; sg1 : Str; sg2 : Str; sg3M : Str; sg3F : Str;
+                  pl1 : Str; pl2 : Str; pl3 : Str} {base : Str; sg1 : Str; sg2 : Str;
+                                                    sg3M : Str; sg3F : Str; pl1 : Str; pl2 : Str;
+                                                    pl3 : Str} Mutation
+               using
+                 {base : Str; pl1 : Str; pl2 : Str; pl3 : Str; sg1 : Str; sg2 : Str;
+                  sg3F : Str; sg3M : Str} {base : Str; pl1 : Str; pl2 : Str;
+                                           pl3 : Str; sg1 : Str; sg2 : Str; sg3F : Str;
+                                           sg3M : Str} Mutation
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:400-404:
+     Happened in operation bhoPrep
+      Warning: ignoring lock fields in resolving mkPrep {base = "bho";
+                                                         sg1 = "bhuam"; sg2 = "bhuat";
+                                                         sg3M = "bhuaithe"; sg3F = "bhuaipe";
+                                                         pl1 = "bhuainn"; pl2 = "buaibh";
+                                                         pl3 = "bhuapa"} {base = "bho";
+                                                                          sg1 = "bhom" + LENITION_DEBUG;
+                                                                          sg2 = "bhod" + LENITION_DEBUG;
+                                                                          sg3M = "bho a" + LENITION_DEBUG;
+                                                                          sg3F = "bho a" ++ h;
+                                                                          pl1 = "bhor" ++ n;
+                                                                          pl2 = "bhu" ++ n;
+                                                                          pl3 = "bhon"} Lenited
+               for
+                 {base : Str; sg1 : Str; sg2 : Str; sg3M : Str; sg3F : Str;
+                  pl1 : Str; pl2 : Str; pl3 : Str} {base : Str; sg1 : Str; sg2 : Str;
+                                                    sg3M : Str; sg3F : Str; pl1 : Str; pl2 : Str;
+                                                    pl3 : Str} Mutation
+               using
+                 {base : Str; pl1 : Str; pl2 : Str; pl3 : Str; sg1 : Str; sg2 : Str;
+                  sg3F : Str; sg3M : Str} {base : Str; pl1 : Str; pl2 : Str;
+                                           pl3 : Str; sg1 : Str; sg2 : Str; sg3F : Str;
+                                           sg3M : Str} Mutation
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:388-392:
+     Happened in operation annPrep
+      Warning: ignoring lock fields in resolving mkPrep {base = "ann";
+                                                         sg1 = "annam"; sg2 = "annad"; sg3M = "ann";
+                                                         sg3F = "innte"; pl1 = "annainn";
+                                                         pl2 = "annaibh";
+                                                         pl3 = "annta"} {base = "ann";
+                                                                         sg1 = "'nam" + LENITION_DEBUG;
+                                                                         sg2 = "'nad" + LENITION_DEBUG;
+                                                                         sg3M = "'na" + LENITION_DEBUG;
+                                                                         sg3F = "'na" ++ h;
+                                                                         pl1 = "'nar" ++ n;
+                                                                         pl2 = "'nur" ++ n;
+                                                                         pl3 = "'nan"} NoMutation
+               for
+                 {base : Str; sg1 : Str; sg2 : Str; sg3M : Str; sg3F : Str;
+                  pl1 : Str; pl2 : Str; pl3 : Str} {base : Str; sg1 : Str; sg2 : Str;
+                                                    sg3M : Str; sg3F : Str; pl1 : Str; pl2 : Str;
+                                                    pl3 : Str} Mutation
+               using
+                 {base : Str; pl1 : Str; pl2 : Str; pl3 : Str; sg1 : Str; sg2 : Str;
+                  sg3F : Str; sg3M : Str} {base : Str; pl1 : Str; pl2 : Str;
+                                           pl3 : Str; sg1 : Str; sg2 : Str; sg3F : Str;
+                                           sg3M : Str} Mutation
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:382-386:
+     Happened in operation airPrep
+      Warning: ignoring lock fields in resolving mkPrep {base = "air";
+                                                         sg1 = "orm"; sg2 = "ort"; sg3M = "air";
+                                                         sg3F = "oirre"; pl1 = "oirrn";
+                                                         pl2 = "oirbh";
+                                                         pl3 = "orra"} (invarPrepForms "air") NoMutation
+               for
+                 {base : Str; sg1 : Str; sg2 : Str; sg3M : Str; sg3F : Str;
+                  pl1 : Str; pl2 : Str; pl3 : Str} {base : Str; pl1 : Str; pl2 : Str;
+                                                    pl3 : Str; sg1 : Str; sg2 : Str; sg3F : Str;
+                                                    sg3M : Str} Mutation
+               using
+                 {base : Str; pl1 : Str; pl2 : Str; pl3 : Str; sg1 : Str; sg2 : Str;
+                  sg3F : Str; sg3M : Str} {base : Str; pl1 : Str; pl2 : Str;
+                                           pl3 : Str; sg1 : Str; sg2 : Str; sg3F : Str;
+                                           sg3M : Str} Mutation
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:
+   C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ResGla.gf:376-380:
+     Happened in operation aigPrep
+      Warning: ignoring lock fields in resolving mkPrep {base = "aig";
+                                                         sg1 = "agam"; sg2 = "agad"; sg3M = "aige";
+                                                         sg3F = "aice"; pl1 = "againn";
+                                                         pl2 = "agaibh"; pl3 = "aca"} {base = "aig";
+                                                                                       sg1 = "'gam" + LENITION_DEBUG;
+                                                                                       sg2 = "'gad" + LENITION_DEBUG;
+                                                                                       sg3M = "'ga" + LENITION_DEBUG;
+                                                                                       sg3F = "'ga"
+                                                                                                ++ h;
+                                                                                       pl1 = "'gar"
+                                                                                               ++ n;
+                                                                                       pl2 = "'gur"
+                                                                                               ++ n;
+                                                                                       pl3 = "'gan"} NoMutation
+               for
+                 {base : Str; sg1 : Str; sg2 : Str; sg3M : Str; sg3F : Str;
+                  pl1 : Str; pl2 : Str; pl3 : Str} {base : Str; sg1 : Str; sg2 : Str;
+                                                    sg3M : Str; sg3F : Str; pl1 : Str; pl2 : Str;
+                                                    pl3 : Str} Mutation
+               using
+                 {base : Str; pl1 : Str; pl2 : Str; pl3 : Str; sg1 : Str; sg2 : Str;
+                  sg3F : Str; sg3M : Str} {base : Str; pl1 : Str; pl2 : Str;
+                                           pl3 : Str; sg1 : Str; sg2 : Str; sg3F : Str;
+                                           sg3M : Str} Mutation
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\CatGla.gf:
+   Warning: no linearization type for Decimal, inserting default {s : Str}
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\NounGla.gf:
+   Warning: no linearization of AdNum
+   Warning: no linearization of AdjDAP
+   Warning: no linearization of AdvCN
+   Warning: no linearization of AdvNP
+   Warning: no linearization of ApposCN
+   Warning: no linearization of ComplN2
+   Warning: no linearization of ComplN3
+   Warning: no linearization of CountNP
+   Warning: no linearization of DetDAP
+   Warning: no linearization of DetNP
+   Warning: no linearization of DetQuantOrd
+   Warning: no linearization of ExtAdvNP
+   Warning: no linearization of NumCard
+   Warning: no linearization of NumDecimal
+   Warning: no linearization of NumDigits
+   Warning: no linearization of NumNumeral
+   Warning: no linearization of OrdDigits
+   Warning: no linearization of OrdNumeral
+   Warning: no linearization of OrdNumeralSuperl
+   Warning: no linearization of OrdSuperl
+   Warning: no linearization of PPartNP
+   Warning: no linearization of PartNP
+   Warning: no linearization of PossNP
+   Warning: no linearization of PredetNP
+   Warning: no linearization of QuantityNP
+   Warning: no linearization of RelCN
+   Warning: no linearization of RelNP
+   Warning: no linearization of SentCN
+   Warning: no linearization of Use2N3
+   Warning: no linearization of Use3N3
+   Warning: no linearization of UseN2
+   Warning: no linearization of UsePN
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\AdverbGla.gf:
+   Warning: no linearization of AdAdv
+   Warning: no linearization of AdnCAdv
+   Warning: no linearization of ComparAdvAdj
+   Warning: no linearization of ComparAdvAdjS
+   Warning: no linearization of PositAdAAdj
+   Warning: no linearization of PositAdvAdj
+   Warning: no linearization of SubjS
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\VerbGla.gf:
+   Warning: no linearization of AdVVP
+   Warning: no linearization of AdVVPSlash
+   Warning: no linearization of AdvVP
+   Warning: no linearization of AdvVPSlash
+   Warning: no linearization of CompAP
+   Warning: no linearization of CompAdv
+   Warning: no linearization of CompCN
+   Warning: no linearization of CompNP
+   Warning: no linearization of ComplSlash
+   Warning: no linearization of ComplVA
+   Warning: no linearization of ComplVQ
+   Warning: no linearization of ComplVS
+   Warning: no linearization of ComplVV
+   Warning: no linearization of ExtAdvVP
+   Warning: no linearization of PassV2
+   Warning: no linearization of ReflVP
+   Warning: no linearization of Slash2V3
+   Warning: no linearization of Slash3V3
+   Warning: no linearization of SlashV2A
+   Warning: no linearization of SlashV2Q
+   Warning: no linearization of SlashV2S
+   Warning: no linearization of SlashV2V
+   Warning: no linearization of SlashV2VNP
+   Warning: no linearization of SlashV2a
+   Warning: no linearization of SlashVV
+   Warning: no linearization of UseComp
+   Warning: no linearization of UseCopula
+   Warning: no linearization of VPSlashPrep
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\AdjectiveGla.gf:
+   Warning: no linearization of AdAP
+   Warning: no linearization of AdjOrd
+   Warning: no linearization of CAdvAP
+   Warning: no linearization of ComparA
+   Warning: no linearization of ComplA2
+   Warning: no linearization of ReflA2
+   Warning: no linearization of SentAP
+   Warning: no linearization of UseA2
+   Warning: no linearization of UseComparA
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\NumeralGla.gf:
+   Warning: no linearization of D_0
+   Warning: no linearization of D_1
+   Warning: no linearization of D_2
+   Warning: no linearization of D_3
+   Warning: no linearization of D_4
+   Warning: no linearization of D_5
+   Warning: no linearization of D_6
+   Warning: no linearization of D_7
+   Warning: no linearization of D_8
+   Warning: no linearization of D_9
+   Warning: no linearization type for Dig, inserting default {s : Str}
+   Warning: no linearization type for Digit, inserting default {s : Str}
+   Warning: no linearization of IDig
+   Warning: no linearization of IFrac
+   Warning: no linearization of IIDig
+   Warning: no linearization of NegDecimal
+   Warning: no linearization of PosDecimal
+   Warning: no linearization type for Sub10, inserting default {s : Str}
+   Warning: no linearization type for Sub100, inserting default {s : Str}
+   Warning: no linearization type for Sub1000, inserting default {s : Str}
+   Warning: no linearization type for Sub1000000, inserting default {s : Str}
+   Warning: no linearization type for Sub1000000000, inserting default {s : Str}
+   Warning: no linearization type for Sub1000000000000, inserting default {s : Str}
+   Warning: no linearization of n2
+   Warning: no linearization of n3
+   Warning: no linearization of n4
+   Warning: no linearization of n5
+   Warning: no linearization of n6
+   Warning: no linearization of n7
+   Warning: no linearization of n8
+   Warning: no linearization of n9
+   Warning: no linearization of num
+   Warning: no linearization of pot0
+   Warning: no linearization of pot01
+   Warning: no linearization of pot0as1
+   Warning: no linearization of pot1
+   Warning: no linearization of pot110
+   Warning: no linearization of pot111
+   Warning: no linearization of pot1as2
+   Warning: no linearization of pot1plus
+   Warning: no linearization of pot1to19
+   Warning: no linearization of pot2
+   Warning: no linearization of pot21
+   Warning: no linearization of pot2as3
+   Warning: no linearization of pot2plus
+   Warning: no linearization of pot3
+   Warning: no linearization of pot31
+   Warning: no linearization of pot3as4
+   Warning: no linearization of pot3decimal
+   Warning: no linearization of pot3plus
+   Warning: no linearization of pot4
+   Warning: no linearization of pot41
+   Warning: no linearization of pot4as5
+   Warning: no linearization of pot4decimal
+   Warning: no linearization of pot4plus
+   Warning: no linearization of pot5
+   Warning: no linearization of pot51
+   Warning: no linearization of pot5decimal
+   Warning: no linearization of pot5plus
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\SentenceGla.gf:
+   Warning: no linearization of AdvImp
+   Warning: no linearization of AdvS
+   Warning: no linearization of AdvSlash
+   Warning: no linearization of EmbedQS
+   Warning: no linearization of EmbedS
+   Warning: no linearization of EmbedVP
+   Warning: no linearization of ExtAdvS
+   Warning: no linearization of ImpVP
+   Warning: no linearization of PredSCVP
+   Warning: no linearization of RelS
+   Warning: no linearization of SSubjS
+   Warning: no linearization of SlashPrep
+   Warning: no linearization of SlashVP
+   Warning: no linearization of SlashVS
+   Warning: no linearization of UseQCl
+   Warning: no linearization of UseRCl
+   Warning: no linearization of UseSlash
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\StructuralGla.gf:
+   Warning: no linearization of above_Prep
+   Warning: no linearization of after_Prep
+   Warning: no linearization of all_Predet
+   Warning: no linearization of almost_AdA
+   Warning: no linearization of almost_AdN
+   Warning: no linearization of although_Subj
+   Warning: no linearization of always_AdV
+   Warning: no linearization of as_CAdv
+   Warning: no linearization of at_least_AdN
+   Warning: no linearization of at_most_AdN
+   Warning: no linearization of because_Subj
+   Warning: no linearization of before_Prep
+   Warning: no linearization of behind_Prep
+   Warning: no linearization of between_Prep
+   Warning: no linearization of but_PConj
+   Warning: no linearization of by8agent_Prep
+   Warning: no linearization of by8means_Prep
+   Warning: no linearization of can8know_VV
+   Warning: no linearization of can_VV
+   Warning: no linearization of during_Prep
+   Warning: no linearization of either7or_DConj
+   Warning: no linearization of every_Det
+   Warning: no linearization of everybody_NP
+   Warning: no linearization of everything_NP
+   Warning: no linearization of everywhere_Adv
+   Warning: no linearization of except_Prep
+   Warning: no linearization of few_Det
+   Warning: no linearization of have_V2
+   Warning: no linearization of here7from_Adv
+   Warning: no linearization of here7to_Adv
+   Warning: no linearization of here_Adv
+   Warning: no linearization of how8many_IDet
+   Warning: no linearization of how8much_IAdv
+   Warning: no linearization of how_IAdv
+   Warning: no linearization of if_Subj
+   Warning: no linearization of if_then_Conj
+   Warning: no linearization of in8front_Prep
+   Warning: no linearization of it_Pron
+   Warning: no linearization of language_title_Utt
+   Warning: no linearization of less_CAdv
+   Warning: no linearization of many_Det
+   Warning: no linearization of more_CAdv
+   Warning: no linearization of most_Predet
+   Warning: no linearization of much_Det
+   Warning: no linearization of must_VV
+   Warning: no linearization of no_Quant
+   Warning: no linearization of no_Utt
+   Warning: no linearization of nobody_NP
+   Warning: no linearization of not_Predet
+   Warning: no linearization of nothing_NP
+   Warning: no linearization of only_Predet
+   Warning: no linearization of or_Conj
+   Warning: no linearization of otherwise_PConj
+   Warning: no linearization of part_Prep
+   Warning: no linearization of please_Voc
+   Warning: no linearization of possess_Prep
+   Warning: no linearization of quite_Adv
+   Warning: no linearization of so_AdA
+   Warning: no linearization of somePl_Det
+   Warning: no linearization of someSg_Det
+   Warning: no linearization of somebody_NP
+   Warning: no linearization of something_NP
+   Warning: no linearization of somewhere_Adv
+   Warning: no linearization of that_Quant
+   Warning: no linearization of that_Subj
+   Warning: no linearization of there7from_Adv
+   Warning: no linearization of there7to_Adv
+   Warning: no linearization of there_Adv
+   Warning: no linearization of therefore_PConj
+   Warning: no linearization of this_Quant
+   Warning: no linearization of through_Prep
+   Warning: no linearization of too_AdA
+   Warning: no linearization of under_Prep
+   Warning: no linearization of very_AdA
+   Warning: no linearization of want_VV
+   Warning: no linearization of whatPl_IP
+   Warning: no linearization of whatSg_IP
+   Warning: no linearization of when_IAdv
+   Warning: no linearization of when_Subj
+   Warning: no linearization of where_IAdv
+   Warning: no linearization of which_IQuant
+   Warning: no linearization of whoPl_IP
+   Warning: no linearization of whoSg_IP
+   Warning: no linearization of why_IAdv
+   Warning: no linearization of with_Prep
+   Warning: no linearization of without_Prep
+   Warning: no linearization of yes_Utt
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\QuestionGla.gf:
+   Warning: no linearization of AddAdvQVP
+   Warning: no linearization of AdvIAdv
+   Warning: no linearization of AdvIP
+   Warning: no linearization of AdvQVP
+   Warning: no linearization of CompIAdv
+   Warning: no linearization of CompIP
+   Warning: no linearization of ComplSlashIP
+   Warning: no linearization of IdetCN
+   Warning: no linearization of IdetIP
+   Warning: no linearization of IdetQuant
+   Warning: no linearization of PrepIP
+   Warning: no linearization type for QVP, inserting default {s : Str}
+   Warning: no linearization of QuestCl
+   Warning: no linearization of QuestIAdv
+   Warning: no linearization of QuestIComp
+   Warning: no linearization of QuestQVP
+   Warning: no linearization of QuestSlash
+   Warning: no linearization of QuestVP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\RelativeGla.gf:
+   Warning: no linearization of FunRP
+   Warning: no linearization of IdRP
+   Warning: no linearization of RelCl
+   Warning: no linearization of RelSlash
+   Warning: no linearization of RelVP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\ConjunctionGla.gf:
+   Warning: no linearization of BaseAP
+   Warning: no linearization of BaseAdV
+   Warning: no linearization of BaseAdv
+   Warning: no linearization of BaseCN
+   Warning: no linearization of BaseDAP
+   Warning: no linearization of BaseIAdv
+   Warning: no linearization of BaseNP
+   Warning: no linearization of BaseRS
+   Warning: no linearization of BaseS
+   Warning: no linearization of ConjAP
+   Warning: no linearization of ConjAdV
+   Warning: no linearization of ConjAdv
+   Warning: no linearization of ConjCN
+   Warning: no linearization of ConjDet
+   Warning: no linearization of ConjIAdv
+   Warning: no linearization of ConjNP
+   Warning: no linearization of ConjRS
+   Warning: no linearization of ConjS
+   Warning: no linearization of ConsAP
+   Warning: no linearization of ConsAdV
+   Warning: no linearization of ConsAdv
+   Warning: no linearization of ConsCN
+   Warning: no linearization of ConsDAP
+   Warning: no linearization of ConsIAdv
+   Warning: no linearization of ConsNP
+   Warning: no linearization of ConsRS
+   Warning: no linearization of ConsS
+   Warning: no linearization type for ListAP, inserting default {s : Str}
+   Warning: no linearization type for ListAdV, inserting default {s : Str}
+   Warning: no linearization type for ListAdv, inserting default {s : Str}
+   Warning: no linearization type for ListCN, inserting default {s : Str}
+   Warning: no linearization type for ListDAP, inserting default {s : Str}
+   Warning: no linearization type for ListIAdv, inserting default {s : Str}
+   Warning: no linearization type for ListNP, inserting default {s : Str}
+   Warning: no linearization type for ListRS, inserting default {s : Str}
+   Warning: no linearization type for ListS, inserting default {s : Str}
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\PhraseGla.gf:
+   Warning: no linearization of PConjConj
+   Warning: no linearization of UttCard
+   Warning: no linearization of UttIAdv
+   Warning: no linearization of UttIP
+   Warning: no linearization of UttImpPl
+   Warning: no linearization of UttImpPol
+   Warning: no linearization of UttImpSg
+   Warning: no linearization of UttQS
+   Warning: no linearization of UttVP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\IdiomGla.gf:
+   Warning: no linearization of CleftAdv
+   Warning: no linearization of CleftNP
+   Warning: no linearization of ExistIP
+   Warning: no linearization of ExistIPAdv
+   Warning: no linearization of ExistNP
+   Warning: no linearization of ExistNPAdv
+   Warning: no linearization of GenericCl
+   Warning: no linearization of ImpP3
+   Warning: no linearization of ImpPl1
+   Warning: no linearization of ImpersCl
+   Warning: no linearization of ProgrVP
+   Warning: no linearization of SelfAdVVP
+   Warning: no linearization of SelfAdvVP
+   Warning: no linearization of SelfNP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\gaelic\NamesGla.gf:
+   Warning: no linearization of AdjLN
+   Warning: no linearization of FemaleSurname
+   Warning: no linearization of FullName
+   Warning: no linearization of GivenName
+   Warning: no linearization of InLN
+   Warning: no linearization of MaleSurname
+   Warning: no linearization of PlSurname
+   Warning: no linearization of PlainLN
+   Warning: no linearization of UseLN
+
+WikiGla.gf:17:
+  Happened in the renaming of apple_N
+   constant not found: mkCN
+   given P, ParadigmsGla, GrammarGla, WikiGla
+WikiGla.gf:13:
+  Happened in the renaming of SimpNP
+   constant not found: mkNP
+   given P, ParadigmsGla, GrammarGla, WikiGla
+   constant not found: a_Det
+   given P, ParadigmsGla, GrammarGla, WikiGla
+WikiGla.gf:15:
+  Happened in the renaming of John
+   constant not found: mkNP
+   given P, ParadigmsGla, GrammarGla, WikiGla

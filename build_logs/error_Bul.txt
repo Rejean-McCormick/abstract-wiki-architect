@@ -1,6 +1,3 @@
-Command: gf -make -path ... WikiBul.gf
-
-
-WikiBul.gf:6:
-  Happened in the renaming of apple_N
+WikiBul.gf:17:
+  Happened in the renaming of apple_N
    unknown qualified constant P.mkN

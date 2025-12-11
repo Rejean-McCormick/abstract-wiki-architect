@@ -1,7 +1,7 @@
 {
   "languages": {
     "Afr": {
-      "path": "gf-rgl/src/afrikaans",
+      "path": "gf-rgl/src\\afrikaans",
       "modules": {
         "Cat": "gf-rgl/src/afrikaans/CatAfr.gf",
         "Grammar": "gf-rgl/src/afrikaans/GrammarAfr.gf",
@@ -11,7 +11,7 @@
       }
     },
     "Sqi": {
-      "path": "gf-rgl/src/albanian",
+      "path": "gf-rgl/src\\albanian",
       "modules": {
         "Cat": "gf-rgl/src/albanian/CatSqi.gf",
         "Grammar": "gf-rgl/src/albanian/GrammarSqi.gf",
@@ -20,7 +20,7 @@
       }
     },
     "Amh": {
-      "path": "gf-rgl/src/amharic",
+      "path": "gf-rgl/src\\amharic",
       "modules": {
         "Cat": "gf-rgl/src/amharic/CatAmh.gf",
         "Grammar": "gf-rgl/src/amharic/GrammarAmh.gf",
@@ -29,7 +29,7 @@
       }
     },
     "Grc": {
-      "path": "gf-rgl/src/ancient_greek",
+      "path": "gf-rgl/src\\ancient_greek",
       "modules": {
         "Cat": "gf-rgl/src/ancient_greek/CatGrc.gf",
         "Grammar": "gf-rgl/src/ancient_greek/GrammarGrc.gf",
@@ -39,7 +39,7 @@
       }
     },
     "Ara": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxAra.gf",
         "Cat": "gf-rgl/src/arabic/CatAra.gf",
@@ -49,7 +49,7 @@
       }
     },
     "Bul": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxBul.gf",
         "Cat": "gf-rgl/src/bulgarian/CatBul.gf",
@@ -59,7 +59,7 @@
       }
     },
     "Cat": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxCat.gf",
         "Grammar": "gf-rgl/src/catalan/GrammarCat.gf",
@@ -68,7 +68,7 @@
       }
     },
     "Chi": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxChi.gf",
         "Cat": "gf-rgl/src/chinese/CatChi.gf",
@@ -78,7 +78,7 @@
       }
     },
     "Cze": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxCze.gf",
         "Cat": "gf-rgl/src/czech/CatCze.gf",
@@ -88,7 +88,7 @@
       }
     },
     "Dan": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxDan.gf",
         "Cat": "gf-rgl/src/danish/CatDan.gf",
@@ -98,7 +98,7 @@
       }
     },
     "Dut": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxDut.gf",
         "Cat": "gf-rgl/src/dutch/CatDut.gf",
@@ -108,7 +108,7 @@
       }
     },
     "Eng": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxEng.gf",
         "Cat": "gf-rgl/src/english/CatEng.gf",
@@ -118,7 +118,7 @@
       }
     },
     "Est": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxEst.gf",
         "Cat": "gf-rgl/src/estonian/CatEst.gf",
@@ -128,7 +128,7 @@
       }
     },
     "Eus": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxEus.gf",
         "Cat": "gf-rgl/src/basque/CatEus.gf",
@@ -138,7 +138,7 @@
       }
     },
     "Fin": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxFin.gf",
         "Cat": "gf-rgl/src/finnish/CatFin.gf",
@@ -148,7 +148,7 @@
       }
     },
     "Fre": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxFre.gf",
         "Cat": "gf-rgl/src/french/CatFre.gf",
@@ -158,7 +158,7 @@
       }
     },
     "Ger": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxGer.gf",
         "Cat": "gf-rgl/src/german/CatGer.gf",
@@ -168,7 +168,7 @@
       }
     },
     "Gre": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxGre.gf",
         "Cat": "gf-rgl/src/greek/CatGre.gf",
@@ -178,7 +178,7 @@
       }
     },
     "Hin": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxHin.gf",
         "Cat": "gf-rgl/src/hindi/CatHin.gf",
@@ -188,7 +188,7 @@
       }
     },
     "Hrv": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxHrv.gf",
         "Cat": "gf-rgl/src/croatian/CatHrv.gf",
@@ -198,7 +198,7 @@
       }
     },
     "Hun": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxHun.gf",
         "Cat": "gf-rgl/src/hungarian/CatHun.gf",
@@ -208,7 +208,7 @@
       }
     },
     "Ice": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxIce.gf",
         "Cat": "gf-rgl/src/icelandic/CatIce.gf",
@@ -218,7 +218,7 @@
       }
     },
     "Ina": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxIna.gf",
         "Cat": "gf-rgl/src/interlingua/CatIna.gf",
@@ -228,7 +228,7 @@
       }
     },
     "Ita": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxIta.gf",
         "Cat": "gf-rgl/src/italian/CatIta.gf",
@@ -238,7 +238,7 @@
       }
     },
     "Jpn": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxJpn.gf",
         "Cat": "gf-rgl/src/japanese/CatJpn.gf",
@@ -248,7 +248,7 @@
       }
     },
     "Kor": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxKor.gf",
         "Cat": "gf-rgl/src/korean/CatKor.gf",
@@ -258,7 +258,7 @@
       }
     },
     "Lat": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxLat.gf",
         "Cat": "gf-rgl/src/latin/CatLat.gf",
@@ -268,7 +268,7 @@
       }
     },
     "Lav": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxLav.gf",
         "Cat": "gf-rgl/src/latvian/CatLav.gf",
@@ -278,7 +278,7 @@
       }
     },
     "May": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxMay.gf",
         "Cat": "gf-rgl/src/malay/CatMay.gf",
@@ -288,7 +288,7 @@
       }
     },
     "Mlt": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxMlt.gf",
         "Cat": "gf-rgl/src/maltese/CatMlt.gf",
@@ -298,7 +298,7 @@
       }
     },
     "Mon": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxMon.gf",
         "Cat": "gf-rgl/src/mongolian/CatMon.gf",
@@ -308,7 +308,7 @@
       }
     },
     "Nep": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxNep.gf",
         "Cat": "gf-rgl/src/nepali/CatNep.gf",
@@ -318,7 +318,7 @@
       }
     },
     "Nno": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxNno.gf",
         "Cat": "gf-rgl/src/nynorsk/CatNno.gf",
@@ -328,7 +328,7 @@
       }
     },
     "Nor": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxNor.gf",
         "Cat": "gf-rgl/src/norwegian/CatNor.gf",
@@ -338,7 +338,7 @@
       }
     },
     "Pes": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxPes.gf",
         "Cat": "gf-rgl/src/persian/CatPes.gf",
@@ -348,7 +348,7 @@
       }
     },
     "Pnb": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxPnb.gf",
         "Cat": "gf-rgl/src/punjabi/CatPnb.gf",
@@ -358,7 +358,7 @@
       }
     },
     "Pol": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxPol.gf",
         "Cat": "gf-rgl/src/polish/CatPol.gf",
@@ -368,7 +368,7 @@
       }
     },
     "Por": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxPor.gf",
         "Cat": "gf-rgl/src/portuguese/CatPor.gf",
@@ -378,7 +378,7 @@
       }
     },
     "Ron": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxRon.gf",
         "Cat": "gf-rgl/src/romanian/CatRon.gf",
@@ -388,7 +388,7 @@
       }
     },
     "Rus": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxRus.gf",
         "Cat": "gf-rgl/src/russian/v1/CatRus.gf",
@@ -398,7 +398,7 @@
       }
     },
     "Sco": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxSco.gf",
         "Cat": "gf-rgl/src/scots/CatSco.gf",
@@ -408,7 +408,7 @@
       }
     },
     "Slo": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxSlo.gf",
         "Cat": "gf-rgl/src/slovak/CatSlo.gf",
@@ -418,7 +418,7 @@
       }
     },
     "Snd": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxSnd.gf",
         "Cat": "gf-rgl/src/sindhi/CatSnd.gf",
@@ -428,7 +428,7 @@
       }
     },
     "Som": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxSom.gf",
         "Cat": "gf-rgl/src/somali/CatSom.gf",
@@ -438,7 +438,7 @@
       }
     },
     "Spa": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxSpa.gf",
         "Cat": "gf-rgl/src/spanish/CatSpa.gf",
@@ -448,7 +448,7 @@
       }
     },
     "Swe": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxSwe.gf",
         "Cat": "gf-rgl/src/swedish/CatSwe.gf",
@@ -458,7 +458,7 @@
       }
     },
     "Tam": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxTam.gf",
         "Cat": "gf-rgl/src/tamil/CatTam.gf",
@@ -468,7 +468,7 @@
       }
     },
     "Tha": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxTha.gf",
         "Cat": "gf-rgl/src/thai/CatTha.gf",
@@ -478,7 +478,7 @@
       }
     },
     "Tur": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxTur.gf",
         "Cat": "gf-rgl/src/turkish/CatTur.gf",
@@ -488,7 +488,7 @@
       }
     },
     "Urd": {
-      "path": "gf-rgl/src/api",
+      "path": "gf-rgl/src\\api",
       "modules": {
         "Syntax": "gf-rgl/src/api/SyntaxUrd.gf",
         "Cat": "gf-rgl/src/urdu/CatUrd.gf",
@@ -498,7 +498,7 @@
       }
     },
     "Hye": {
-      "path": "gf-rgl/src/armenian",
+      "path": "gf-rgl/src\\armenian",
       "modules": {
         "Cat": "gf-rgl/src/armenian/CatHye.gf",
         "Grammar": "gf-rgl/src/armenian/GrammarHye.gf",
@@ -507,7 +507,7 @@
       }
     },
     "Bel": {
-      "path": "gf-rgl/src/belarusian",
+      "path": "gf-rgl/src\\belarusian",
       "modules": {
         "Cat": "gf-rgl/src/belarusian/CatBel.gf",
         "Grammar": "gf-rgl/src/belarusian/GrammarBel.gf",
@@ -516,7 +516,7 @@
       }
     },
     "Gus": {
-      "path": "gf-rgl/src/egekusii",
+      "path": "gf-rgl/src\\egekusii",
       "modules": {
         "Cat": "gf-rgl/src/egekusii/CatGus.gf",
         "Grammar": "gf-rgl/src/egekusii/GrammarGus.gf",
@@ -525,7 +525,7 @@
       }
     },
     "Fao": {
-      "path": "gf-rgl/src/faroese",
+      "path": "gf-rgl/src\\faroese",
       "modules": {
         "Cat": "gf-rgl/src/faroese/CatFao.gf",
         "Grammar": "gf-rgl/src/faroese/GrammarFao.gf",
@@ -534,7 +534,7 @@
       }
     },
     "Gla": {
-      "path": "gf-rgl/src/gaelic",
+      "path": "gf-rgl/src\\gaelic",
       "modules": {
         "Cat": "gf-rgl/src/gaelic/CatGla.gf",
         "Grammar": "gf-rgl/src/gaelic/GrammarGla.gf",
@@ -543,7 +543,7 @@
       }
     },
     "Heb": {
-      "path": "gf-rgl/src/hebrew",
+      "path": "gf-rgl/src\\hebrew",
       "modules": {
         "Cat": "gf-rgl/src/hebrew/CatHeb.gf",
         "Grammar": "gf-rgl/src/hebrew/GrammarHeb.gf",
@@ -552,7 +552,7 @@
       }
     },
     "Kaz": {
-      "path": "gf-rgl/src/kazakh",
+      "path": "gf-rgl/src\\kazakh",
       "modules": {
         "Cat": "gf-rgl/src/kazakh/CatKaz.gf",
         "Grammar": "gf-rgl/src/kazakh/GrammarKaz.gf",
@@ -560,7 +560,7 @@
       }
     },
     "Kam": {
-      "path": "gf-rgl/src/kikamba",
+      "path": "gf-rgl/src\\kikamba",
       "modules": {
         "Cat": "gf-rgl/src/kikamba/CatKam.gf",
         "Grammar": "gf-rgl/src/kikamba/GrammarKam.gf",
@@ -569,7 +569,7 @@
       }
     },
     "Lit": {
-      "path": "gf-rgl/src/lithuanian",
+      "path": "gf-rgl/src\\lithuanian",
       "modules": {
         "Cat": "gf-rgl/src/lithuanian/CatLit.gf",
         "Grammar": "gf-rgl/src/lithuanian/GrammarLit.gf",
@@ -578,7 +578,7 @@
       }
     },
     "Mkd": {
-      "path": "gf-rgl/src/macedonian",
+      "path": "gf-rgl/src\\macedonian",
       "modules": {
         "Cat": "gf-rgl/src/macedonian/CatMkd.gf",
         "Grammar": "gf-rgl/src/macedonian/GrammarMkd.gf",
@@ -586,7 +586,7 @@
       }
     },
     "Cgg": {
-      "path": "gf-rgl/src/rukiga",
+      "path": "gf-rgl/src\\rukiga",
       "modules": {
         "Cat": "gf-rgl/src/rukiga/CatCgg.gf",
         "Grammar": "gf-rgl/src/rukiga/GrammarCgg.gf",
@@ -595,7 +595,7 @@
       }
     },
     "Slv": {
-      "path": "gf-rgl/src/slovenian",
+      "path": "gf-rgl/src\\slovenian",
       "modules": {
         "Cat": "gf-rgl/src/slovenian/CatSlv.gf",
         "Grammar": "gf-rgl/src/slovenian/GrammarSlv.gf",
@@ -604,7 +604,7 @@
       }
     },
     "Swa": {
-      "path": "gf-rgl/src/swahili",
+      "path": "gf-rgl/src\\swahili",
       "modules": {
         "Cat": "gf-rgl/src/swahili/old/CatSwa.gf",
         "Grammar": "gf-rgl/src/swahili/old/GrammarSwa.gf",
@@ -613,7 +613,7 @@
       }
     },
     "Tel": {
-      "path": "gf-rgl/src/telugu",
+      "path": "gf-rgl/src\\telugu",
       "modules": {
         "Cat": "gf-rgl/src/telugu/CatTel.gf",
         "Grammar": "gf-rgl/src/telugu/GrammarTel.gf",
@@ -622,7 +622,7 @@
       }
     },
     "TMP": {
-      "path": "gf-rgl/src/TEMPLATE",
+      "path": "gf-rgl/src\\TEMPLATE",
       "modules": {
         "Cat": "gf-rgl/src/TEMPLATE/CatTMP.gf",
         "Grammar": "gf-rgl/src/TEMPLATE/GrammarTMP.gf",
@@ -631,7 +631,7 @@
       }
     },
     "Ukr": {
-      "path": "gf-rgl/src/ukrainian",
+      "path": "gf-rgl/src\\ukrainian",
       "modules": {
         "Cat": "gf-rgl/src/ukrainian/CatUkr.gf",
         "Grammar": "gf-rgl/src/ukrainian/GrammarUkr.gf",
@@ -640,7 +640,7 @@
       }
     },
     "Zul": {
-      "path": "gf-rgl/src/zulu",
+      "path": "gf-rgl/src\\zulu",
       "modules": {
         "Cat": "gf-rgl/src/zulu/CatZul.gf",
         "Grammar": "gf-rgl/src/zulu/GrammarZul.gf",
@@ -649,7 +649,7 @@
       }
     },
     "Ext": {
-      "path": "gf-rgl/src/zulu/abstract_ext",
+      "path": "gf-rgl/src\\zulu\\abstract_ext",
       "modules": {
         "Cat": "gf-rgl/src/zulu/abstract_ext/CatExt.gf",
         "Noun": "gf-rgl/src/zulu/abstract_ext/NounExt.gf"

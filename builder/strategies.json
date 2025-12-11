@@ -1,0 +1,54 @@
+[
+  {
+    "name": "GOLD",
+    "description": "Standard High-Level API (Syntax + Paradigms)",
+    "requirements": ["Syntax", "Paradigms"],
+    "imports": ["Syntax{code}", "(P = Paradigms{code})"],
+    "lincat_base": "Syntax{code}",
+    "rules": {
+      "SimpNP": "{simp_np}",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  {
+    "name": "SILVER",
+    "description": "Direct Grammar Access (Grammar + Paradigms)",
+    "requirements": ["Grammar", "Paradigms"],
+    "imports": ["Grammar{code}", "(P = Paradigms{code})"],
+    "lincat_base": "Grammar{code}",
+    "rules": {
+      "SimpNP": "{simp_np}",
+      "John": "mkNP (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "mkCN (P.mkN \"apple\")"
+    }
+  },
+  {
+    "name": "BRONZE",
+    "description": "Manual Construction (Cat + Noun + Paradigms)",
+    "requirements": ["Cat", "Noun", "Paradigms"],
+    "imports": ["Cat{code}", "Noun{code}", "(P = Paradigms{code})"],
+    "lincat_base": "Cat{code}",
+    "rules": {
+      "SimpNP": "MassNP cn",
+      "John": "UsePN (P.mkPN \"John\")",
+      "Here": "P.mkAdv \"here\"",
+      "apple_N": "UseN (P.mkN \"apple\")"
+    }
+  },
+  {
+    "name": "IRON",
+    "description": "Survival Mode (Cat + Noun Only, Read-Only)",
+    "requirements": ["Cat", "Noun"],
+    "imports": ["Cat{code}", "Noun{code}"],
+    "lincat_base": "Cat{code}",
+    "rules": {
+      "SimpNP": "MassNP cn",
+      "John": "MassNP (UseN apple_N)", 
+      "Here": "cn",
+      "apple_N": "UseN apple_N"
+    }
+  }
+]

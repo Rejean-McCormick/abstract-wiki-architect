@@ -1,0 +1,30 @@
+WikiExt.gf:17:
+  Happened in the renaming of apple_N
+   constant not found: UseN
+   given NounExt, CatExt, WikiExt
+WikiExt.gf:13:
+  Happened in the renaming of SimpNP
+   constant not found: MassNP
+   given NounExt, CatExt, WikiExt
+WikiExt.gf:15:
+  Happened in the renaming of John
+   constant not found: MassNP
+   given NounExt, CatExt, WikiExt
+   constant not found: UseN
+   given NounExt, CatExt, WikiExt
+WikiExt.gf:16:
+  Happened in the renaming of Here
+   constant not found: cn
+   given NounExt, CatExt, WikiExt
+WikiExt.gf:7:
+  Happened in the renaming of Phr
+   unknown qualified constant CatExt.Phr
+WikiExt.gf:8:
+  Happened in the renaming of NP
+   unknown qualified constant CatExt.NP
+WikiExt.gf:9:
+  Happened in the renaming of CN
+   unknown qualified constant CatExt.CN
+WikiExt.gf:10:
+  Happened in the renaming of Adv
+   unknown qualified constant CatExt.Adv

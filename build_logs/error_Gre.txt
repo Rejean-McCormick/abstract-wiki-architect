@@ -1,0 +1,3 @@
+gf: Internal error in GeneratePMCFG: evalTerm ("apple")
+CallStack (from HasCallStack):
+  error, called at src/compiler\GF\Compile\GeneratePMCFG.hs:621:13 in gf-3.12.0-inplace:GF.Compile.GeneratePMCFG

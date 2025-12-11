@@ -1,0 +1,119 @@
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\faroese\CatFao.gf:
+   Warning: no linearization type for ACard, inserting default {s : Str}
+   Warning: no linearization type for Card, inserting default {s : Str}
+   Warning: no linearization type for Cl, inserting default {s : Str}
+   Warning: no linearization type for ClSlash, inserting default {s : Str}
+   Warning: no linearization type for Comp, inserting default {s : Str}
+   Warning: no linearization type for Conj, inserting default {s : Str}
+   Warning: no linearization type for DAP, inserting default {s : Str}
+   Warning: no linearization type for Decimal, inserting default {s : Str}
+   Warning: no linearization type for Det, inserting default {s : Str}
+   Warning: no linearization type for Digits, inserting default {s : Str}
+   Warning: no linearization type for IComp, inserting default {s : Str}
+   Warning: no linearization type for IDet, inserting default {s : Str}
+   Warning: no linearization type for IP, inserting default {s : Str}
+   Warning: no linearization type for IQuant, inserting default {s : Str}
+   Warning: no linearization type for Imp, inserting default {s : Str}
+   Warning: no linearization type for NP, inserting default {s : Str}
+   Warning: no linearization type for Num, inserting default {s : Str}
+   Warning: no linearization type for Numeral, inserting default {s : Str}
+   Warning: no linearization type for Ord, inserting default {s : Str}
+   Warning: no linearization type for Predet, inserting default {s : Str}
+   Warning: no linearization type for Pron, inserting default {s : Str}
+   Warning: no linearization type for QCl, inserting default {s : Str}
+   Warning: no linearization type for QS, inserting default {s : Str}
+   Warning: no linearization type for Quant, inserting default {s : Str}
+   Warning: no linearization type for RCl, inserting default {s : Str}
+   Warning: no linearization type for RP, inserting default {s : Str}
+   Warning: no linearization type for RS, inserting default {s : Str}
+   Warning: no linearization type for SSlash, inserting default {s : Str}
+   Warning: no linearization type for Subj, inserting default {s : Str}
+   Warning: no linearization type for VP, inserting default {s : Str}
+   Warning: no linearization type for VPSlash, inserting default {s : Str}
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\faroese\PhraseFao.gf:
+   Warning: no linearization of PConjConj
+   Warning: no linearization of UttAP
+   Warning: no linearization of UttAdv
+   Warning: no linearization of UttCN
+   Warning: no linearization of UttCard
+   Warning: no linearization of UttIAdv
+   Warning: no linearization of UttIP
+   Warning: no linearization of UttImpPl
+   Warning: no linearization of UttImpPol
+   Warning: no linearization of UttImpSg
+   Warning: no linearization of UttNP
+   Warning: no linearization of UttQS
+   Warning: no linearization of UttVP
+   Warning: no linearization of VocNP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\faroese\NounFao.gf:
+   Warning: no linearization of AdNum
+   Warning: no linearization of AdjCN
+   Warning: no linearization of AdjDAP
+   Warning: no linearization of AdvCN
+   Warning: no linearization of AdvNP
+   Warning: no linearization of ApposCN
+   Warning: no linearization of ComplN2
+   Warning: no linearization of ComplN3
+   Warning: no linearization of CountNP
+   Warning: no linearization of DefArt
+   Warning: no linearization of DetCN
+   Warning: no linearization of DetDAP
+   Warning: no linearization of DetNP
+   Warning: no linearization of DetQuant
+   Warning: no linearization of DetQuantOrd
+   Warning: no linearization of ExtAdvNP
+   Warning: no linearization of IndefArt
+   Warning: no linearization of MassNP
+   Warning: no linearization of NumCard
+   Warning: no linearization of NumDecimal
+   Warning: no linearization of NumDigits
+   Warning: no linearization of NumNumeral
+   Warning: no linearization of NumPl
+   Warning: no linearization of NumSg
+   Warning: no linearization of OrdDigits
+   Warning: no linearization of OrdNumeral
+   Warning: no linearization of OrdNumeralSuperl
+   Warning: no linearization of OrdSuperl
+   Warning: no linearization of PPartNP
+   Warning: no linearization of PartNP
+   Warning: no linearization of PossNP
+   Warning: no linearization of PossPron
+   Warning: no linearization of PredetNP
+   Warning: no linearization of QuantityNP
+   Warning: no linearization of RelCN
+   Warning: no linearization of RelNP
+   Warning: no linearization of SentCN
+   Warning: no linearization of Use2N3
+   Warning: no linearization of Use3N3
+   Warning: no linearization of UseN2
+   Warning: no linearization of UsePN
+   Warning: no linearization of UsePron
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\faroese\AdjectiveFao.gf:
+   Warning: no linearization of AdAP
+   Warning: no linearization of AdjOrd
+   Warning: no linearization of AdvAP
+   Warning: no linearization of CAdvAP
+   Warning: no linearization of ComparA
+   Warning: no linearization of ComplA2
+   Warning: no linearization of ReflA2
+   Warning: no linearization of SentAP
+   Warning: no linearization of UseA2
+   Warning: no linearization of UseComparA
+
+WikiFao.gf:17:
+  Happened in the renaming of apple_N
+   constant not found: mkCN
+   given P, ParadigmsFao, GrammarFao, WikiFao
+WikiFao.gf:13:
+  Happened in the renaming of SimpNP
+   constant not found: mkNP
+   given P, ParadigmsFao, GrammarFao, WikiFao
+   constant not found: a_Det
+   given P, ParadigmsFao, GrammarFao, WikiFao
+WikiFao.gf:15:
+  Happened in the renaming of John
+   constant not found: mkNP
+   given P, ParadigmsFao, GrammarFao, WikiFao

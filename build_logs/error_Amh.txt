@@ -1,0 +1,172 @@
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\VerbAmh.gf:
+   Warning: no linearization of AdVVP
+   Warning: no linearization of AdVVPSlash
+   Warning: no linearization of AdvVPSlash
+   Warning: no linearization of CompCN
+   Warning: no linearization of ComplVQ
+   Warning: no linearization of ComplVS
+   Warning: no linearization of ExtAdvVP
+   Warning: no linearization of ReflVP
+   Warning: no linearization of Slash2V3
+   Warning: no linearization of SlashV2A
+   Warning: no linearization of SlashV2Q
+   Warning: no linearization of SlashV2S
+   Warning: no linearization of SlashV2V
+   Warning: no linearization of SlashV2VNP
+   Warning: no linearization of SlashVV
+   Warning: no linearization of UseCopula
+   Warning: no linearization of VPSlashPrep
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\AdjectiveAmh.gf:
+   Warning: no linearization of AdvAP
+   Warning: no linearization of ComplA2
+   Warning: no linearization of ReflA2
+   Warning: no linearization of SentAP
+   Warning: no linearization of UseA2
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\AdverbAmh.gf:
+   Warning: no linearization of AdnCAdv
+   Warning: no linearization of ComparAdvAdjS
+   Warning: no linearization of PositAdAAdj
+   Warning: no linearization of SubjS
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\NumeralAmh.gf:
+   Warning: no linearization type for Sub1000000000, inserting default {s : Str}
+   Warning: no linearization type for Sub1000000000000, inserting default {s : Str}
+   Warning: no linearization of pot21
+   Warning: no linearization of pot31
+   Warning: no linearization of pot3as4
+   Warning: no linearization of pot3decimal
+   Warning: no linearization of pot4
+   Warning: no linearization of pot41
+   Warning: no linearization of pot4as5
+   Warning: no linearization of pot4decimal
+   Warning: no linearization of pot4plus
+   Warning: no linearization of pot5
+   Warning: no linearization of pot51
+   Warning: no linearization of pot5decimal
+   Warning: no linearization of pot5plus
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\SentenceAmh.gf:
+   Warning: no linearization of AdvImp
+   Warning: no linearization of AdvSlash
+   Warning: no linearization of EmbedQS
+   Warning: no linearization of EmbedS
+   Warning: no linearization of ExtAdvS
+   Warning: no linearization of PredSCVP
+   Warning: no linearization of RelS
+   Warning: no linearization of SlashPrep
+   Warning: no linearization of SlashVS
+   Warning: no linearization of UseRCl
+   Warning: no linearization of UseSlash
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\QuestionAmh.gf:
+   Warning: no linearization of AddAdvQVP
+   Warning: no linearization of AdvIAdv
+   Warning: no linearization of AdvQVP
+   Warning: no linearization of ComplSlashIP
+   Warning: no linearization of PrepIP
+   Warning: no linearization type for QVP, inserting default {s : Str}
+   Warning: no linearization of QuestIComp
+   Warning: no linearization of QuestQVP
+   Warning: no linearization of QuestSlash
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\RelativeAmh.gf:
+   Warning: no linearization of FunRP
+   Warning: no linearization of IdRP
+   Warning: no linearization of RelCl
+   Warning: no linearization of RelSlash
+   Warning: no linearization of RelVP
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\ConjunctionAmh.gf:
+   Warning: no linearization of BaseAdV
+   Warning: no linearization of BaseCN
+   Warning: no linearization of BaseDAP
+   Warning: no linearization of BaseIAdv
+   Warning: no linearization of BaseRS
+   Warning: no linearization of ConjAdV
+   Warning: no linearization of ConjCN
+   Warning: no linearization of ConjDet
+   Warning: no linearization of ConjIAdv
+   Warning: no linearization of ConjRS
+   Warning: no linearization of ConsAdV
+   Warning: no linearization of ConsCN
+   Warning: no linearization of ConsDAP
+   Warning: no linearization of ConsIAdv
+   Warning: no linearization of ConsRS
+   Warning: no linearization type for ListAdV, inserting default {s : Str}
+   Warning: no linearization type for ListCN, inserting default {s : Str}
+   Warning: no linearization type for ListDAP, inserting default {s : Str}
+   Warning: no linearization type for ListIAdv, inserting default {s : Str}
+   Warning: no linearization type for ListRS, inserting default {s : Str}
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\PhraseAmh.gf:
+   Warning: no linearization of PConjConj
+   Warning: no linearization of UttInterj
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\StructuralAmh.gf:
+   Warning: function first_Ord is not in abstract
+   Warning: function whichPl_IDet is not in abstract
+   Warning: function whichSg_IDet is not in abstract
+   Warning: no linearization of almost_AdA
+   Warning: no linearization of almost_AdN
+   Warning: no linearization of at_least_AdN
+   Warning: no linearization of at_most_AdN
+   Warning: no linearization of can8know_VV
+   Warning: no linearization of can_VV
+   Warning: no linearization of during_Prep
+   Warning: no linearization of except_Prep
+   Warning: no linearization of how8much_IAdv
+   Warning: no linearization of if_Subj
+   Warning: no linearization of if_then_Conj
+   Warning: no linearization of must_VV
+   Warning: no linearization of no_Quant
+   Warning: no linearization of no_Utt
+   Warning: no linearization of nobody_NP
+   Warning: no linearization of not_Predet
+   Warning: no linearization of nothing_NP
+   Warning: no linearization of part_Prep
+   Warning: no linearization of possess_Prep
+   Warning: no linearization of quite_Adv
+   Warning: no linearization of that_Subj
+   Warning: no linearization of whatPl_IP
+   Warning: no linearization of whatSg_IP
+   Warning: no linearization of when_Subj
+   Warning: no linearization of yes_Utt
+
+C:\MyCode\AbstractWiki\abstract-wiki-architect\gf-rgl\src\amharic\IdiomAmh.gf:
+   Warning: no linearization of CleftAdv
+   Warning: no linearization of CleftNP
+   Warning: no linearization of ExistIP
+   Warning: no linearization of ExistIPAdv
+   Warning: no linearization of ExistNP
+   Warning: no linearization of ExistNPAdv
+   Warning: no linearization of GenericCl
+   Warning: no linearization of ImpP3
+   Warning: no linearization of ImpPl1
+   Warning: no linearization of ImpersCl
+   Warning: no linearization of ProgrVP
+   Warning: no linearization of SelfAdVVP
+   Warning: no linearization of SelfAdvVP
+   Warning: no linearization of SelfNP
+
+WikiAmh.gf:17:
+  Happened in the renaming of apple_N
+   constant not found: mkCN
+   given P, ParadigmsAmh, GrammarAmh, WikiAmh
+WikiAmh.gf:13:
+  Happened in the renaming of SimpNP
+   constant not found: mkNP
+   given P, ParadigmsAmh, GrammarAmh, WikiAmh
+   constant not found: a_Det
+   given P, ParadigmsAmh, GrammarAmh, WikiAmh
+WikiAmh.gf:15:
+  Happened in the renaming of John
+   constant not found: mkNP
+   given P, ParadigmsAmh, GrammarAmh, WikiAmh
+WikiAmh.gf:15:
+  Happened in the renaming of John
+   unknown qualified constant P.mkPN
+WikiAmh.gf:16:
+  Happened in the renaming of Here
+   unknown qualified constant P.mkAdv
