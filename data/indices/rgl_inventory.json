@@ -1,0 +1,689 @@
+{
+  "languages": {
+    "Afr": {
+      "path": "gf-rgl/src/afrikaans",
+      "modules": {
+        "Cat": "gf-rgl/src/afrikaans/CatAfr.gf",
+        "Grammar": "gf-rgl/src/afrikaans/GrammarAfr.gf",
+        "Noun": "gf-rgl/src/afrikaans/NounAfr.gf",
+        "Paradigms": "gf-rgl/src/afrikaans/ParadigmsAfr.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxAfr.gf"
+      }
+    },
+    "Sqi": {
+      "path": "gf-rgl/src/albanian",
+      "modules": {
+        "Cat": "gf-rgl/src/albanian/CatSqi.gf",
+        "Grammar": "gf-rgl/src/albanian/GrammarSqi.gf",
+        "Noun": "gf-rgl/src/albanian/NounSqi.gf",
+        "Paradigms": "gf-rgl/src/albanian/ParadigmsSqi.gf"
+      }
+    },
+    "Amh": {
+      "path": "gf-rgl/src/amharic",
+      "modules": {
+        "Cat": "gf-rgl/src/amharic/CatAmh.gf",
+        "Grammar": "gf-rgl/src/amharic/GrammarAmh.gf",
+        "Noun": "gf-rgl/src/amharic/NounAmh.gf",
+        "Paradigms": "gf-rgl/src/amharic/ParadigmsAmh.gf"
+      }
+    },
+    "Grc": {
+      "path": "gf-rgl/src/ancient_greek",
+      "modules": {
+        "Cat": "gf-rgl/src/ancient_greek/CatGrc.gf",
+        "Grammar": "gf-rgl/src/ancient_greek/GrammarGrc.gf",
+        "Noun": "gf-rgl/src/ancient_greek/NounGrc.gf",
+        "Paradigms": "gf-rgl/src/ancient_greek/ParadigmsGrc.gf",
+        "Syntax": "gf-rgl/src/ancient_greek/SyntaxGrc.gf"
+      }
+    },
+    "Ara": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxAra.gf",
+        "Cat": "gf-rgl/src/arabic/CatAra.gf",
+        "Grammar": "gf-rgl/src/arabic/GrammarAra.gf",
+        "Noun": "gf-rgl/src/arabic/NounAra.gf",
+        "Paradigms": "gf-rgl/src/arabic/ParadigmsAra.gf"
+      }
+    },
+    "Bul": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxBul.gf",
+        "Cat": "gf-rgl/src/bulgarian/CatBul.gf",
+        "Grammar": "gf-rgl/src/bulgarian/GrammarBul.gf",
+        "Noun": "gf-rgl/src/bulgarian/NounBul.gf",
+        "Paradigms": "gf-rgl/src/bulgarian/ParadigmsBul.gf"
+      }
+    },
+    "Cat": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxCat.gf",
+        "Grammar": "gf-rgl/src/catalan/GrammarCat.gf",
+        "Noun": "gf-rgl/src/catalan/NounCat.gf",
+        "Paradigms": "gf-rgl/src/catalan/ParadigmsCat.gf"
+      }
+    },
+    "Chi": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxChi.gf",
+        "Cat": "gf-rgl/src/chinese/CatChi.gf",
+        "Grammar": "gf-rgl/src/chinese/GrammarChi.gf",
+        "Noun": "gf-rgl/src/chinese/NounChi.gf",
+        "Paradigms": "gf-rgl/src/chinese/pinyin/ParadigmsChi.gf"
+      }
+    },
+    "Cze": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxCze.gf",
+        "Cat": "gf-rgl/src/czech/CatCze.gf",
+        "Grammar": "gf-rgl/src/czech/GrammarCze.gf",
+        "Noun": "gf-rgl/src/czech/NounCze.gf",
+        "Paradigms": "gf-rgl/src/czech/ParadigmsCze.gf"
+      }
+    },
+    "Dan": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxDan.gf",
+        "Cat": "gf-rgl/src/danish/CatDan.gf",
+        "Grammar": "gf-rgl/src/danish/GrammarDan.gf",
+        "Noun": "gf-rgl/src/danish/NounDan.gf",
+        "Paradigms": "gf-rgl/src/danish/ParadigmsDan.gf"
+      }
+    },
+    "Dut": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxDut.gf",
+        "Cat": "gf-rgl/src/dutch/CatDut.gf",
+        "Grammar": "gf-rgl/src/dutch/GrammarDut.gf",
+        "Noun": "gf-rgl/src/dutch/NounDut.gf",
+        "Paradigms": "gf-rgl/src/dutch/ParadigmsDut.gf"
+      }
+    },
+    "Eng": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxEng.gf",
+        "Cat": "gf-rgl/src/english/CatEng.gf",
+        "Grammar": "gf-rgl/src/english/GrammarEng.gf",
+        "Noun": "gf-rgl/src/english/NounEng.gf",
+        "Paradigms": "gf-rgl/src/english/ParadigmsEng.gf"
+      }
+    },
+    "Est": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxEst.gf",
+        "Cat": "gf-rgl/src/estonian/CatEst.gf",
+        "Grammar": "gf-rgl/src/estonian/GrammarEst.gf",
+        "Noun": "gf-rgl/src/estonian/NounEst.gf",
+        "Paradigms": "gf-rgl/src/estonian/ParadigmsEst.gf"
+      }
+    },
+    "Eus": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxEus.gf",
+        "Cat": "gf-rgl/src/basque/CatEus.gf",
+        "Grammar": "gf-rgl/src/basque/GrammarEus.gf",
+        "Noun": "gf-rgl/src/basque/NounEus.gf",
+        "Paradigms": "gf-rgl/src/basque/ParadigmsEus.gf"
+      }
+    },
+    "Fin": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxFin.gf",
+        "Cat": "gf-rgl/src/finnish/CatFin.gf",
+        "Grammar": "gf-rgl/src/finnish/GrammarFin.gf",
+        "Noun": "gf-rgl/src/finnish/NounFin.gf",
+        "Paradigms": "gf-rgl/src/finnish/ParadigmsFin.gf"
+      }
+    },
+    "Fre": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxFre.gf",
+        "Cat": "gf-rgl/src/french/CatFre.gf",
+        "Grammar": "gf-rgl/src/french/GrammarFre.gf",
+        "Noun": "gf-rgl/src/french/NounFre.gf",
+        "Paradigms": "gf-rgl/src/french/ParadigmsFre.gf"
+      }
+    },
+    "Ger": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxGer.gf",
+        "Cat": "gf-rgl/src/german/CatGer.gf",
+        "Grammar": "gf-rgl/src/german/GrammarGer.gf",
+        "Noun": "gf-rgl/src/german/NounGer.gf",
+        "Paradigms": "gf-rgl/src/german/ParadigmsGer.gf"
+      }
+    },
+    "Gre": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxGre.gf",
+        "Cat": "gf-rgl/src/greek/CatGre.gf",
+        "Grammar": "gf-rgl/src/greek/GrammarGre.gf",
+        "Noun": "gf-rgl/src/greek/NounGre.gf",
+        "Paradigms": "gf-rgl/src/greek/ParadigmsGre.gf"
+      }
+    },
+    "Hin": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxHin.gf",
+        "Cat": "gf-rgl/src/hindi/CatHin.gf",
+        "Grammar": "gf-rgl/src/hindi/GrammarHin.gf",
+        "Noun": "gf-rgl/src/hindi/NounHin.gf",
+        "Paradigms": "gf-rgl/src/hindi/ParadigmsHin.gf"
+      }
+    },
+    "Hrv": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxHrv.gf",
+        "Cat": "gf-rgl/src/croatian/CatHrv.gf",
+        "Grammar": "gf-rgl/src/croatian/GrammarHrv.gf",
+        "Noun": "gf-rgl/src/croatian/NounHrv.gf",
+        "Paradigms": "gf-rgl/src/croatian/ParadigmsHrv.gf"
+      }
+    },
+    "Hun": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxHun.gf",
+        "Cat": "gf-rgl/src/hungarian/CatHun.gf",
+        "Grammar": "gf-rgl/src/hungarian/GrammarHun.gf",
+        "Noun": "gf-rgl/src/hungarian/NounHun.gf",
+        "Paradigms": "gf-rgl/src/hungarian/ParadigmsHun.gf"
+      }
+    },
+    "Ice": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxIce.gf",
+        "Cat": "gf-rgl/src/icelandic/CatIce.gf",
+        "Grammar": "gf-rgl/src/icelandic/GrammarIce.gf",
+        "Noun": "gf-rgl/src/icelandic/NounIce.gf",
+        "Paradigms": "gf-rgl/src/icelandic/ParadigmsIce.gf"
+      }
+    },
+    "Ina": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxIna.gf",
+        "Cat": "gf-rgl/src/interlingua/CatIna.gf",
+        "Grammar": "gf-rgl/src/interlingua/GrammarIna.gf",
+        "Noun": "gf-rgl/src/interlingua/NounIna.gf",
+        "Paradigms": "gf-rgl/src/interlingua/ParadigmsIna.gf"
+      }
+    },
+    "Ita": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxIta.gf",
+        "Cat": "gf-rgl/src/italian/CatIta.gf",
+        "Grammar": "gf-rgl/src/italian/GrammarIta.gf",
+        "Noun": "gf-rgl/src/italian/NounIta.gf",
+        "Paradigms": "gf-rgl/src/italian/ParadigmsIta.gf"
+      }
+    },
+    "Jpn": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxJpn.gf",
+        "Cat": "gf-rgl/src/japanese/CatJpn.gf",
+        "Grammar": "gf-rgl/src/japanese/GrammarJpn.gf",
+        "Noun": "gf-rgl/src/japanese/NounJpn.gf",
+        "Paradigms": "gf-rgl/src/japanese/ParadigmsJpn.gf"
+      }
+    },
+    "Kor": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxKor.gf",
+        "Cat": "gf-rgl/src/korean/CatKor.gf",
+        "Grammar": "gf-rgl/src/korean/GrammarKor.gf",
+        "Noun": "gf-rgl/src/korean/NounKor.gf",
+        "Paradigms": "gf-rgl/src/korean/ParadigmsKor.gf"
+      }
+    },
+    "Lat": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxLat.gf",
+        "Cat": "gf-rgl/src/latin/CatLat.gf",
+        "Grammar": "gf-rgl/src/latin/GrammarLat.gf",
+        "Noun": "gf-rgl/src/latin/NounLat.gf",
+        "Paradigms": "gf-rgl/src/latin/ParadigmsLat.gf"
+      }
+    },
+    "Lav": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxLav.gf",
+        "Cat": "gf-rgl/src/latvian/CatLav.gf",
+        "Grammar": "gf-rgl/src/latvian/GrammarLav.gf",
+        "Noun": "gf-rgl/src/latvian/NounLav.gf",
+        "Paradigms": "gf-rgl/src/latvian/ParadigmsLav.gf"
+      }
+    },
+    "May": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxMay.gf",
+        "Cat": "gf-rgl/src/malay/CatMay.gf",
+        "Grammar": "gf-rgl/src/malay/GrammarMay.gf",
+        "Noun": "gf-rgl/src/malay/NounMay.gf",
+        "Paradigms": "gf-rgl/src/malay/ParadigmsMay.gf"
+      }
+    },
+    "Mlt": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxMlt.gf",
+        "Cat": "gf-rgl/src/maltese/CatMlt.gf",
+        "Grammar": "gf-rgl/src/maltese/GrammarMlt.gf",
+        "Noun": "gf-rgl/src/maltese/NounMlt.gf",
+        "Paradigms": "gf-rgl/src/maltese/ParadigmsMlt.gf"
+      }
+    },
+    "Mon": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxMon.gf",
+        "Cat": "gf-rgl/src/mongolian/CatMon.gf",
+        "Grammar": "gf-rgl/src/mongolian/GrammarMon.gf",
+        "Noun": "gf-rgl/src/mongolian/NounMon.gf",
+        "Paradigms": "gf-rgl/src/mongolian/ParadigmsMon.gf"
+      }
+    },
+    "Nep": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxNep.gf",
+        "Cat": "gf-rgl/src/nepali/CatNep.gf",
+        "Grammar": "gf-rgl/src/nepali/GrammarNep.gf",
+        "Noun": "gf-rgl/src/nepali/NounNep.gf",
+        "Paradigms": "gf-rgl/src/nepali/ParadigmsNep.gf"
+      }
+    },
+    "Nno": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxNno.gf",
+        "Cat": "gf-rgl/src/nynorsk/CatNno.gf",
+        "Grammar": "gf-rgl/src/nynorsk/GrammarNno.gf",
+        "Noun": "gf-rgl/src/nynorsk/NounNno.gf",
+        "Paradigms": "gf-rgl/src/nynorsk/ParadigmsNno.gf"
+      }
+    },
+    "Nor": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxNor.gf",
+        "Cat": "gf-rgl/src/norwegian/CatNor.gf",
+        "Grammar": "gf-rgl/src/norwegian/GrammarNor.gf",
+        "Noun": "gf-rgl/src/norwegian/NounNor.gf",
+        "Paradigms": "gf-rgl/src/norwegian/ParadigmsNor.gf"
+      }
+    },
+    "Pes": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxPes.gf",
+        "Cat": "gf-rgl/src/persian/CatPes.gf",
+        "Grammar": "gf-rgl/src/persian/GrammarPes.gf",
+        "Noun": "gf-rgl/src/persian/NounPes.gf",
+        "Paradigms": "gf-rgl/src/persian/ParadigmsPes.gf"
+      }
+    },
+    "Pnb": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxPnb.gf",
+        "Cat": "gf-rgl/src/punjabi/CatPnb.gf",
+        "Grammar": "gf-rgl/src/punjabi/GrammarPnb.gf",
+        "Noun": "gf-rgl/src/punjabi/NounPnb.gf",
+        "Paradigms": "gf-rgl/src/punjabi/ParadigmsPnb.gf"
+      }
+    },
+    "Pol": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxPol.gf",
+        "Cat": "gf-rgl/src/polish/CatPol.gf",
+        "Grammar": "gf-rgl/src/polish/GrammarPol.gf",
+        "Noun": "gf-rgl/src/polish/NounPol.gf",
+        "Paradigms": "gf-rgl/src/polish/ParadigmsPol.gf"
+      }
+    },
+    "Por": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxPor.gf",
+        "Cat": "gf-rgl/src/portuguese/CatPor.gf",
+        "Grammar": "gf-rgl/src/portuguese/GrammarPor.gf",
+        "Noun": "gf-rgl/src/portuguese/NounPor.gf",
+        "Paradigms": "gf-rgl/src/portuguese/ParadigmsPor.gf"
+      }
+    },
+    "Ron": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxRon.gf",
+        "Cat": "gf-rgl/src/romanian/CatRon.gf",
+        "Grammar": "gf-rgl/src/romanian/GrammarRon.gf",
+        "Noun": "gf-rgl/src/romanian/NounRon.gf",
+        "Paradigms": "gf-rgl/src/romanian/ParadigmsRon.gf"
+      }
+    },
+    "Rus": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxRus.gf",
+        "Cat": "gf-rgl/src/russian/v1/CatRus.gf",
+        "Grammar": "gf-rgl/src/russian/v1/GrammarRus.gf",
+        "Noun": "gf-rgl/src/russian/v1/NounRus.gf",
+        "Paradigms": "gf-rgl/src/russian/v1/ParadigmsRus.gf"
+      }
+    },
+    "Sco": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxSco.gf",
+        "Cat": "gf-rgl/src/scots/CatSco.gf",
+        "Grammar": "gf-rgl/src/scots/GrammarSco.gf",
+        "Noun": "gf-rgl/src/scots/NounSco.gf",
+        "Paradigms": "gf-rgl/src/scots/ParadigmsSco.gf"
+      }
+    },
+    "Slo": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxSlo.gf",
+        "Cat": "gf-rgl/src/slovak/CatSlo.gf",
+        "Grammar": "gf-rgl/src/slovak/GrammarSlo.gf",
+        "Noun": "gf-rgl/src/slovak/NounSlo.gf",
+        "Paradigms": "gf-rgl/src/slovak/ParadigmsSlo.gf"
+      }
+    },
+    "Snd": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxSnd.gf",
+        "Cat": "gf-rgl/src/sindhi/CatSnd.gf",
+        "Grammar": "gf-rgl/src/sindhi/GrammarSnd.gf",
+        "Noun": "gf-rgl/src/sindhi/NounSnd.gf",
+        "Paradigms": "gf-rgl/src/sindhi/ParadigmsSnd.gf"
+      }
+    },
+    "Som": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxSom.gf",
+        "Cat": "gf-rgl/src/somali/CatSom.gf",
+        "Grammar": "gf-rgl/src/somali/GrammarSom.gf",
+        "Noun": "gf-rgl/src/somali/NounSom.gf",
+        "Paradigms": "gf-rgl/src/somali/ParadigmsSom.gf"
+      }
+    },
+    "Spa": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxSpa.gf",
+        "Cat": "gf-rgl/src/spanish/CatSpa.gf",
+        "Grammar": "gf-rgl/src/spanish/GrammarSpa.gf",
+        "Noun": "gf-rgl/src/spanish/NounSpa.gf",
+        "Paradigms": "gf-rgl/src/spanish/ParadigmsSpa.gf"
+      }
+    },
+    "Swe": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxSwe.gf",
+        "Cat": "gf-rgl/src/swedish/CatSwe.gf",
+        "Grammar": "gf-rgl/src/swedish/GrammarSwe.gf",
+        "Noun": "gf-rgl/src/swedish/NounSwe.gf",
+        "Paradigms": "gf-rgl/src/swedish/ParadigmsSwe.gf"
+      }
+    },
+    "Tam": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxTam.gf",
+        "Cat": "gf-rgl/src/tamil/CatTam.gf",
+        "Grammar": "gf-rgl/src/tamil/GrammarTam.gf",
+        "Noun": "gf-rgl/src/tamil/NounTam.gf",
+        "Paradigms": "gf-rgl/src/tamil/ParadigmsTam.gf"
+      }
+    },
+    "Tha": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxTha.gf",
+        "Cat": "gf-rgl/src/thai/CatTha.gf",
+        "Grammar": "gf-rgl/src/thai/GrammarTha.gf",
+        "Noun": "gf-rgl/src/thai/NounTha.gf",
+        "Paradigms": "gf-rgl/src/thai/ParadigmsTha.gf"
+      }
+    },
+    "Tur": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxTur.gf",
+        "Cat": "gf-rgl/src/turkish/CatTur.gf",
+        "Grammar": "gf-rgl/src/turkish/GrammarTur.gf",
+        "Noun": "gf-rgl/src/turkish/NounTur.gf",
+        "Paradigms": "gf-rgl/src/turkish/ParadigmsTur.gf"
+      }
+    },
+    "Urd": {
+      "path": "gf-rgl/src/api",
+      "modules": {
+        "Syntax": "gf-rgl/src/api/SyntaxUrd.gf",
+        "Cat": "gf-rgl/src/urdu/CatUrd.gf",
+        "Grammar": "gf-rgl/src/urdu/GrammarUrd.gf",
+        "Noun": "gf-rgl/src/urdu/NounUrd.gf",
+        "Paradigms": "gf-rgl/src/urdu/ParadigmsUrd.gf"
+      }
+    },
+    "Hye": {
+      "path": "gf-rgl/src/armenian",
+      "modules": {
+        "Cat": "gf-rgl/src/armenian/CatHye.gf",
+        "Grammar": "gf-rgl/src/armenian/GrammarHye.gf",
+        "Noun": "gf-rgl/src/armenian/NounHye.gf",
+        "Paradigms": "gf-rgl/src/armenian/ParadigmsHye.gf"
+      }
+    },
+    "Bel": {
+      "path": "gf-rgl/src/belarusian",
+      "modules": {
+        "Cat": "gf-rgl/src/belarusian/CatBel.gf",
+        "Grammar": "gf-rgl/src/belarusian/GrammarBel.gf",
+        "Noun": "gf-rgl/src/belarusian/NounBel.gf",
+        "Paradigms": "gf-rgl/src/belarusian/ParadigmsBel.gf"
+      }
+    },
+    "Gus": {
+      "path": "gf-rgl/src/egekusii",
+      "modules": {
+        "Cat": "gf-rgl/src/egekusii/CatGus.gf",
+        "Grammar": "gf-rgl/src/egekusii/GrammarGus.gf",
+        "Noun": "gf-rgl/src/egekusii/NounGus.gf",
+        "Paradigms": "gf-rgl/src/egekusii/ParadigmsGus.gf"
+      }
+    },
+    "Fao": {
+      "path": "gf-rgl/src/faroese",
+      "modules": {
+        "Cat": "gf-rgl/src/faroese/CatFao.gf",
+        "Grammar": "gf-rgl/src/faroese/GrammarFao.gf",
+        "Noun": "gf-rgl/src/faroese/NounFao.gf",
+        "Paradigms": "gf-rgl/src/faroese/ParadigmsFao.gf"
+      }
+    },
+    "Gla": {
+      "path": "gf-rgl/src/gaelic",
+      "modules": {
+        "Cat": "gf-rgl/src/gaelic/CatGla.gf",
+        "Grammar": "gf-rgl/src/gaelic/GrammarGla.gf",
+        "Noun": "gf-rgl/src/gaelic/NounGla.gf",
+        "Paradigms": "gf-rgl/src/gaelic/ParadigmsGla.gf"
+      }
+    },
+    "Heb": {
+      "path": "gf-rgl/src/hebrew",
+      "modules": {
+        "Cat": "gf-rgl/src/hebrew/CatHeb.gf",
+        "Grammar": "gf-rgl/src/hebrew/GrammarHeb.gf",
+        "Noun": "gf-rgl/src/hebrew/NounHeb.gf",
+        "Paradigms": "gf-rgl/src/hebrew/ParadigmsHeb.gf"
+      }
+    },
+    "Kaz": {
+      "path": "gf-rgl/src/kazakh",
+      "modules": {
+        "Cat": "gf-rgl/src/kazakh/CatKaz.gf",
+        "Grammar": "gf-rgl/src/kazakh/GrammarKaz.gf",
+        "Paradigms": "gf-rgl/src/kazakh/ParadigmsKaz.gf"
+      }
+    },
+    "Kam": {
+      "path": "gf-rgl/src/kikamba",
+      "modules": {
+        "Cat": "gf-rgl/src/kikamba/CatKam.gf",
+        "Grammar": "gf-rgl/src/kikamba/GrammarKam.gf",
+        "Noun": "gf-rgl/src/kikamba/NounKam.gf",
+        "Paradigms": "gf-rgl/src/kikamba/ParadigmsKam.gf"
+      }
+    },
+    "Lit": {
+      "path": "gf-rgl/src/lithuanian",
+      "modules": {
+        "Cat": "gf-rgl/src/lithuanian/CatLit.gf",
+        "Grammar": "gf-rgl/src/lithuanian/GrammarLit.gf",
+        "Noun": "gf-rgl/src/lithuanian/NounLit.gf",
+        "Paradigms": "gf-rgl/src/lithuanian/ParadigmsLit.gf"
+      }
+    },
+    "Mkd": {
+      "path": "gf-rgl/src/macedonian",
+      "modules": {
+        "Cat": "gf-rgl/src/macedonian/CatMkd.gf",
+        "Grammar": "gf-rgl/src/macedonian/GrammarMkd.gf",
+        "Paradigms": "gf-rgl/src/macedonian/ParadigmsMkd.gf"
+      }
+    },
+    "Cgg": {
+      "path": "gf-rgl/src/rukiga",
+      "modules": {
+        "Cat": "gf-rgl/src/rukiga/CatCgg.gf",
+        "Grammar": "gf-rgl/src/rukiga/GrammarCgg.gf",
+        "Noun": "gf-rgl/src/rukiga/NounCgg.gf",
+        "Paradigms": "gf-rgl/src/rukiga/ParadigmsCgg.gf"
+      }
+    },
+    "Slv": {
+      "path": "gf-rgl/src/slovenian",
+      "modules": {
+        "Cat": "gf-rgl/src/slovenian/CatSlv.gf",
+        "Grammar": "gf-rgl/src/slovenian/GrammarSlv.gf",
+        "Noun": "gf-rgl/src/slovenian/NounSlv.gf",
+        "Paradigms": "gf-rgl/src/slovenian/ParadigmsSlv.gf"
+      }
+    },
+    "Swa": {
+      "path": "gf-rgl/src/swahili",
+      "modules": {
+        "Cat": "gf-rgl/src/swahili/old/CatSwa.gf",
+        "Grammar": "gf-rgl/src/swahili/old/GrammarSwa.gf",
+        "Noun": "gf-rgl/src/swahili/old/NounSwa.gf",
+        "Paradigms": "gf-rgl/src/swahili/old/ParadigmsSwa.gf"
+      }
+    },
+    "Tel": {
+      "path": "gf-rgl/src/telugu",
+      "modules": {
+        "Cat": "gf-rgl/src/telugu/CatTel.gf",
+        "Grammar": "gf-rgl/src/telugu/GrammarTel.gf",
+        "Noun": "gf-rgl/src/telugu/NounTel.gf",
+        "Paradigms": "gf-rgl/src/telugu/ParadigmsTel.gf"
+      }
+    },
+    "TMP": {
+      "path": "gf-rgl/src/TEMPLATE",
+      "modules": {
+        "Cat": "gf-rgl/src/TEMPLATE/CatTMP.gf",
+        "Grammar": "gf-rgl/src/TEMPLATE/GrammarTMP.gf",
+        "Noun": "gf-rgl/src/TEMPLATE/NounTMP.gf",
+        "Paradigms": "gf-rgl/src/TEMPLATE/ParadigmsTMP.gf"
+      }
+    },
+    "Ukr": {
+      "path": "gf-rgl/src/ukrainian",
+      "modules": {
+        "Cat": "gf-rgl/src/ukrainian/CatUkr.gf",
+        "Grammar": "gf-rgl/src/ukrainian/GrammarUkr.gf",
+        "Noun": "gf-rgl/src/ukrainian/NounUkr.gf",
+        "Paradigms": "gf-rgl/src/ukrainian/ParadigmsUkr.gf"
+      }
+    },
+    "Zul": {
+      "path": "gf-rgl/src/zulu",
+      "modules": {
+        "Cat": "gf-rgl/src/zulu/CatZul.gf",
+        "Grammar": "gf-rgl/src/zulu/GrammarZul.gf",
+        "Noun": "gf-rgl/src/zulu/NounZul.gf",
+        "Paradigms": "gf-rgl/src/zulu/ParadigmsZul.gf"
+      }
+    },
+    "Ext": {
+      "path": "gf-rgl/src/zulu/abstract_ext",
+      "modules": {
+        "Cat": "gf-rgl/src/zulu/abstract_ext/CatExt.gf",
+        "Noun": "gf-rgl/src/zulu/abstract_ext/NounExt.gf"
+      }
+    }
+  },
+  "families": [
+    "abstract",
+    "abstract_to_api",
+    "bantu",
+    "common",
+    "demo",
+    "exper",
+    "frequency",
+    "grammar_ext",
+    "greenlandic",
+    "hindustani",
+    "hungarian",
+    "infinitives",
+    "latvian",
+    "lexica",
+    "libraryBrowser",
+    "lithuanian",
+    "mongolian",
+    "morphodict",
+    "polish",
+    "prelude",
+    "romance",
+    "scandinavian",
+    "src",
+    "stemmed",
+    "sysu",
+    "tagged",
+    "wiktionary",
+    "zulu"
+  ]
+}

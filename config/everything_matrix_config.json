@@ -1,0 +1,22 @@
+{
+  "rgl_base_path": "gf-rgl/src",
+  "map_file": "rgl_map.json",
+  "iso_map_file": "config/iso_to_wiki.json",
+  "exceptions_file": "config/language_exceptions.json",
+  "inventory_file": "data/indices/rgl_inventory.json",
+  "audit_csv": "data/reports/rgl_matrix_audit.csv",
+  "strategy_json": "data/reports/rgl_matrix_strategy.json",
+  "everything_index": "data/indices/everything_matrix.json",
+  "output_dir": "data/indices",
+  "report_dir": "data/reports",
+  "ignored_folders": ["doc", "examples", "dist", "bin", "boot"],
+  "frontend": {
+    "profiles_path": "architect_frontend/src/config/language_profiles.json",
+    "assets_path": "architect_frontend/public/flags"
+  },
+  "lexicon": {
+    "seeds_path": "data/seeds",
+    "imports_path": "data/imports",
+    "mappings_path": "semantics/mappings"
+  }
+}

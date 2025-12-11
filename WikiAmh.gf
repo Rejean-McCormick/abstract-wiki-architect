@@ -1,4 +1,4 @@
-concrete WikiSlv of Wiki = CatSlv, NounSlv ** open NounSlv, (P = ParadigmsSlv) in {
+concrete WikiAmh of Wiki = CatAmh, NounAmh ** open NounAmh, (P = ParadigmsAmh) in {
   lin
     -- Fallback: Use MassNP or DetCN if mkNP is unavailable
     SimpNP cn = MassNP cn ;

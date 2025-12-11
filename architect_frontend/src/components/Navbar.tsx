@@ -10,6 +10,8 @@ export default function Navbar() {
     { name: '📊 Status', path: '/' },
     { name: '📝 Editor', path: '/editor' },
     { name: '🤖 Refiner', path: '/refiner' },
+    // --- ADDED THE EVERYTHING MATRIX ---
+    { name: '⚙️ Matrix', path: '/matrix' },
   ];
 
   return (
@@ -22,14 +24,15 @@ export default function Navbar() {
         
         <div className="flex gap-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.path;
+            // Note: If you renamed your folder to /matrix, update the path here too!
+            const isActive = pathname === item.path; 
             return (
               <Link
                 key={item.path}
                 href={item.path}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive 
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' 
+                  isActive  
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'  
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
                 }`}
               >

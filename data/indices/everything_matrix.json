@@ -1,0 +1,2375 @@
+{
+  "timestamp": "2025-12-11T01:56:07.759188+00:00",
+  "languages": {
+    "Afr": {
+      "meta": {
+        "wiki_code": "Afr",
+        "rgl_code": "Afr",
+        "iso_code": "???",
+        "name": "Afr"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Amh": {
+      "meta": {
+        "wiki_code": "Amh",
+        "rgl_code": "Amh",
+        "iso_code": "???",
+        "name": "Amh"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 3.3,
+        "is_active": false
+      }
+    },
+    "Ara": {
+      "meta": {
+        "wiki_code": "Ara",
+        "rgl_code": "Ara",
+        "iso_code": "???",
+        "name": "Ara"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Bas": {
+      "meta": {
+        "wiki_code": "Bas",
+        "rgl_code": "Eus",
+        "iso_code": "???",
+        "name": "Bas"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Bel": {
+      "meta": {
+        "wiki_code": "Bel",
+        "rgl_code": "Bel",
+        "iso_code": "???",
+        "name": "Bel"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Ben": {
+      "meta": {
+        "wiki_code": "Ben",
+        "rgl_code": "Ben",
+        "iso_code": "???",
+        "name": "Ben"
+      },
+      "blocks": {
+        "rgl_cat": 0,
+        "rgl_noun": 0,
+        "rgl_paradigms": 0,
+        "rgl_grammar": 0,
+        "rgl_syntax": 0,
+        "lex_seed": 10,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 0.7,
+        "is_active": false
+      }
+    },
+    "Bul": {
+      "meta": {
+        "wiki_code": "Bul",
+        "rgl_code": "Bul",
+        "iso_code": "???",
+        "name": "Bul"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Cat": {
+      "meta": {
+        "wiki_code": "Cat",
+        "rgl_code": "Cat",
+        "iso_code": "???",
+        "name": "Cat"
+      },
+      "blocks": {
+        "rgl_cat": 0,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 4.0,
+        "is_active": false
+      }
+    },
+    "Cgg": {
+      "meta": {
+        "wiki_code": "Cgg",
+        "rgl_code": "Cgg",
+        "iso_code": "???",
+        "name": "Cgg"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Chi": {
+      "meta": {
+        "wiki_code": "Chi",
+        "rgl_code": "Chi",
+        "iso_code": "???",
+        "name": "Chi"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Cym": {
+      "meta": {
+        "wiki_code": "Cym",
+        "rgl_code": "Cym",
+        "iso_code": "???",
+        "name": "Cym"
+      },
+      "blocks": {
+        "rgl_cat": 0,
+        "rgl_noun": 0,
+        "rgl_paradigms": 0,
+        "rgl_grammar": 0,
+        "rgl_syntax": 0,
+        "lex_seed": 10,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 0.7,
+        "is_active": false
+      }
+    },
+    "Cze": {
+      "meta": {
+        "wiki_code": "Cze",
+        "rgl_code": "Cze",
+        "iso_code": "???",
+        "name": "Cze"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 4.0,
+        "is_active": false
+      }
+    },
+    "Dan": {
+      "meta": {
+        "wiki_code": "Dan",
+        "rgl_code": "Dan",
+        "iso_code": "???",
+        "name": "Dan"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Deu": {
+      "meta": {
+        "wiki_code": "Deu",
+        "rgl_code": "Ger",
+        "iso_code": "???",
+        "name": "Deu"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.0,
+        "is_active": false
+      }
+    },
+    "Dut": {
+      "meta": {
+        "wiki_code": "Dut",
+        "rgl_code": "Dut",
+        "iso_code": "???",
+        "name": "Dut"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Eng": {
+      "meta": {
+        "wiki_code": "Eng",
+        "rgl_code": "Eng",
+        "iso_code": "???",
+        "name": "Eng"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Est": {
+      "meta": {
+        "wiki_code": "Est",
+        "rgl_code": "Est",
+        "iso_code": "???",
+        "name": "Est"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Eus": {
+      "meta": {
+        "wiki_code": "Eus",
+        "rgl_code": "Eus",
+        "iso_code": "???",
+        "name": "Eus"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 3.3,
+        "is_active": false
+      }
+    },
+    "Ext": {
+      "meta": {
+        "wiki_code": "Ext",
+        "rgl_code": "Ext",
+        "iso_code": "???",
+        "name": "Ext"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 0,
+        "rgl_grammar": 0,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 1.3,
+        "is_active": false
+      }
+    },
+    "Fao": {
+      "meta": {
+        "wiki_code": "Fao",
+        "rgl_code": "Fao",
+        "iso_code": "???",
+        "name": "Fao"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Fin": {
+      "meta": {
+        "wiki_code": "Fin",
+        "rgl_code": "Fin",
+        "iso_code": "???",
+        "name": "Fin"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Fre": {
+      "meta": {
+        "wiki_code": "Fre",
+        "rgl_code": "Fre",
+        "iso_code": "???",
+        "name": "Fre"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Ger": {
+      "meta": {
+        "wiki_code": "Ger",
+        "rgl_code": "Ger",
+        "iso_code": "???",
+        "name": "Ger"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Gla": {
+      "meta": {
+        "wiki_code": "Gla",
+        "rgl_code": "Gla",
+        "iso_code": "???",
+        "name": "Gla"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Grc": {
+      "meta": {
+        "wiki_code": "Grc",
+        "rgl_code": "Grc",
+        "iso_code": "???",
+        "name": "Grc"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 3.3,
+        "is_active": false
+      }
+    },
+    "Gre": {
+      "meta": {
+        "wiki_code": "Gre",
+        "rgl_code": "Gre",
+        "iso_code": "???",
+        "name": "Gre"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Gus": {
+      "meta": {
+        "wiki_code": "Gus",
+        "rgl_code": "Gus",
+        "iso_code": "???",
+        "name": "Gus"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Heb": {
+      "meta": {
+        "wiki_code": "Heb",
+        "rgl_code": "Heb",
+        "iso_code": "???",
+        "name": "Heb"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 5,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "overall_maturity": 4.3,
+        "is_active": false
+      }
+    },
+    "Hin": {
+      "meta": {
+        "wiki_code": "Hin",
+        "rgl_code": "Hin",
+        "iso_code": "???",
+        "name": "Hin"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Hrv": {
+      "meta": {
+        "wiki_code": "Hrv",
+        "rgl_code": "Hrv",
+        "iso_code": "???",
+        "name": "Hrv"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 3.3,
+        "is_active": false
+      }
+    },
+    "Hun": {
+      "meta": {
+        "wiki_code": "Hun",
+        "rgl_code": "Hun",
+        "iso_code": "???",
+        "name": "Hun"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Hye": {
+      "meta": {
+        "wiki_code": "Hye",
+        "rgl_code": "Hye",
+        "iso_code": "???",
+        "name": "Hye"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Ice": {
+      "meta": {
+        "wiki_code": "Ice",
+        "rgl_code": "Ice",
+        "iso_code": "???",
+        "name": "Ice"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Ina": {
+      "meta": {
+        "wiki_code": "Ina",
+        "rgl_code": "Ina",
+        "iso_code": "???",
+        "name": "Ina"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 3.3,
+        "is_active": false
+      }
+    },
+    "Ind": {
+      "meta": {
+        "wiki_code": "Ind",
+        "rgl_code": "Ind",
+        "iso_code": "???",
+        "name": "Ind"
+      },
+      "blocks": {
+        "rgl_cat": 0,
+        "rgl_noun": 0,
+        "rgl_paradigms": 0,
+        "rgl_grammar": 0,
+        "rgl_syntax": 0,
+        "lex_seed": 10,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 0.7,
+        "is_active": false
+      }
+    },
+    "Inu": {
+      "meta": {
+        "wiki_code": "Inu",
+        "rgl_code": "Inu",
+        "iso_code": "???",
+        "name": "Inu"
+      },
+      "blocks": {
+        "rgl_cat": 0,
+        "rgl_noun": 0,
+        "rgl_paradigms": 0,
+        "rgl_grammar": 0,
+        "rgl_syntax": 0,
+        "lex_seed": 10,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 0.7,
+        "is_active": false
+      }
+    },
+    "Ita": {
+      "meta": {
+        "wiki_code": "Ita",
+        "rgl_code": "Ita",
+        "iso_code": "???",
+        "name": "Ita"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Jap": {
+      "meta": {
+        "wiki_code": "Jap",
+        "rgl_code": "Jpn",
+        "iso_code": "???",
+        "name": "Jap"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Jpn": {
+      "meta": {
+        "wiki_code": "Jpn",
+        "rgl_code": "Jpn",
+        "iso_code": "???",
+        "name": "Jpn"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Kam": {
+      "meta": {
+        "wiki_code": "Kam",
+        "rgl_code": "Kam",
+        "iso_code": "???",
+        "name": "Kam"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Kaz": {
+      "meta": {
+        "wiki_code": "Kaz",
+        "rgl_code": "Kaz",
+        "iso_code": "???",
+        "name": "Kaz"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 0,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.0,
+        "is_active": false
+      }
+    },
+    "Kor": {
+      "meta": {
+        "wiki_code": "Kor",
+        "rgl_code": "Kor",
+        "iso_code": "???",
+        "name": "Kor"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Lat": {
+      "meta": {
+        "wiki_code": "Lat",
+        "rgl_code": "Lat",
+        "iso_code": "???",
+        "name": "Lat"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Lav": {
+      "meta": {
+        "wiki_code": "Lav",
+        "rgl_code": "Lav",
+        "iso_code": "???",
+        "name": "Lav"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Lit": {
+      "meta": {
+        "wiki_code": "Lit",
+        "rgl_code": "Lit",
+        "iso_code": "???",
+        "name": "Lit"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 5,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "overall_maturity": 3.7,
+        "is_active": false
+      }
+    },
+    "Mal": {
+      "meta": {
+        "wiki_code": "Mal",
+        "rgl_code": "Mal",
+        "iso_code": "???",
+        "name": "Mal"
+      },
+      "blocks": {
+        "rgl_cat": 0,
+        "rgl_noun": 0,
+        "rgl_paradigms": 0,
+        "rgl_grammar": 0,
+        "rgl_syntax": 0,
+        "lex_seed": 10,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 0.7,
+        "is_active": false
+      }
+    },
+    "May": {
+      "meta": {
+        "wiki_code": "May",
+        "rgl_code": "May",
+        "iso_code": "???",
+        "name": "May"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 3.3,
+        "is_active": false
+      }
+    },
+    "Mkd": {
+      "meta": {
+        "wiki_code": "Mkd",
+        "rgl_code": "Mkd",
+        "iso_code": "???",
+        "name": "Mkd"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 0,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.0,
+        "is_active": false
+      }
+    },
+    "Mlt": {
+      "meta": {
+        "wiki_code": "Mlt",
+        "rgl_code": "Mlt",
+        "iso_code": "???",
+        "name": "Mlt"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Mon": {
+      "meta": {
+        "wiki_code": "Mon",
+        "rgl_code": "Mon",
+        "iso_code": "???",
+        "name": "Mon"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Nep": {
+      "meta": {
+        "wiki_code": "Nep",
+        "rgl_code": "Nep",
+        "iso_code": "???",
+        "name": "Nep"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Nno": {
+      "meta": {
+        "wiki_code": "Nno",
+        "rgl_code": "Nno",
+        "iso_code": "???",
+        "name": "Nno"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Nor": {
+      "meta": {
+        "wiki_code": "Nor",
+        "rgl_code": "Nor",
+        "iso_code": "???",
+        "name": "Nor"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Pan": {
+      "meta": {
+        "wiki_code": "Pan",
+        "rgl_code": "Pnb",
+        "iso_code": "???",
+        "name": "Pan"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.0,
+        "is_active": false
+      }
+    },
+    "Pes": {
+      "meta": {
+        "wiki_code": "Pes",
+        "rgl_code": "Pes",
+        "iso_code": "???",
+        "name": "Pes"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Pnb": {
+      "meta": {
+        "wiki_code": "Pnb",
+        "rgl_code": "Pnb",
+        "iso_code": "???",
+        "name": "Pnb"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 4.0,
+        "is_active": false
+      }
+    },
+    "Pol": {
+      "meta": {
+        "wiki_code": "Pol",
+        "rgl_code": "Pol",
+        "iso_code": "???",
+        "name": "Pol"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Por": {
+      "meta": {
+        "wiki_code": "Por",
+        "rgl_code": "Por",
+        "iso_code": "???",
+        "name": "Por"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Rom": {
+      "meta": {
+        "wiki_code": "Rom",
+        "rgl_code": "Ron",
+        "iso_code": "???",
+        "name": "Rom"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Ron": {
+      "meta": {
+        "wiki_code": "Ron",
+        "rgl_code": "Ron",
+        "iso_code": "???",
+        "name": "Ron"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 4.0,
+        "is_active": false
+      }
+    },
+    "Rus": {
+      "meta": {
+        "wiki_code": "Rus",
+        "rgl_code": "Rus",
+        "iso_code": "???",
+        "name": "Rus"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Sco": {
+      "meta": {
+        "wiki_code": "Sco",
+        "rgl_code": "Sco",
+        "iso_code": "???",
+        "name": "Sco"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 3.3,
+        "is_active": false
+      }
+    },
+    "Slo": {
+      "meta": {
+        "wiki_code": "Slo",
+        "rgl_code": "Slo",
+        "iso_code": "???",
+        "name": "Slo"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 3.3,
+        "is_active": false
+      }
+    },
+    "Slv": {
+      "meta": {
+        "wiki_code": "Slv",
+        "rgl_code": "Slv",
+        "iso_code": "???",
+        "name": "Slv"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 5,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "overall_maturity": 3.7,
+        "is_active": false
+      }
+    },
+    "Snd": {
+      "meta": {
+        "wiki_code": "Snd",
+        "rgl_code": "Snd",
+        "iso_code": "???",
+        "name": "Snd"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Som": {
+      "meta": {
+        "wiki_code": "Som",
+        "rgl_code": "Som",
+        "iso_code": "???",
+        "name": "Som"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.7,
+        "is_active": false
+      }
+    },
+    "Spa": {
+      "meta": {
+        "wiki_code": "Spa",
+        "rgl_code": "Spa",
+        "iso_code": "???",
+        "name": "Spa"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Sqi": {
+      "meta": {
+        "wiki_code": "Sqi",
+        "rgl_code": "Sqi",
+        "iso_code": "???",
+        "name": "Sqi"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Swa": {
+      "meta": {
+        "wiki_code": "Swa",
+        "rgl_code": "Swa",
+        "iso_code": "???",
+        "name": "Swa"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 5,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "overall_maturity": 4.3,
+        "is_active": false
+      }
+    },
+    "Swe": {
+      "meta": {
+        "wiki_code": "Swe",
+        "rgl_code": "Swe",
+        "iso_code": "???",
+        "name": "Swe"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Tmp": {
+      "meta": {
+        "wiki_code": "Tmp",
+        "rgl_code": "Tmp",
+        "iso_code": "???",
+        "name": "Tmp"
+      },
+      "blocks": {
+        "rgl_cat": 0,
+        "rgl_noun": 0,
+        "rgl_paradigms": 0,
+        "rgl_grammar": 0,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 0.0,
+        "is_active": false
+      }
+    },
+    "Tam": {
+      "meta": {
+        "wiki_code": "Tam",
+        "rgl_code": "Tam",
+        "iso_code": "???",
+        "name": "Tam"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 4.0,
+        "is_active": false
+      }
+    },
+    "Tel": {
+      "meta": {
+        "wiki_code": "Tel",
+        "rgl_code": "Tel",
+        "iso_code": "???",
+        "name": "Tel"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Tha": {
+      "meta": {
+        "wiki_code": "Tha",
+        "rgl_code": "Tha",
+        "iso_code": "???",
+        "name": "Tha"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Tur": {
+      "meta": {
+        "wiki_code": "Tur",
+        "rgl_code": "Tur",
+        "iso_code": "???",
+        "name": "Tur"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Ukr": {
+      "meta": {
+        "wiki_code": "Ukr",
+        "rgl_code": "Ukr",
+        "iso_code": "???",
+        "name": "Ukr"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    },
+    "Urd": {
+      "meta": {
+        "wiki_code": "Urd",
+        "rgl_code": "Urd",
+        "iso_code": "???",
+        "name": "Urd"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 10,
+        "lex_concrete": 10,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 5.3,
+        "is_active": false
+      }
+    },
+    "Zho": {
+      "meta": {
+        "wiki_code": "Zho",
+        "rgl_code": "Chi",
+        "iso_code": "???",
+        "name": "Zho"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 10,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 10,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "HIGH_ROAD",
+        "overall_maturity": 4.0,
+        "is_active": false
+      }
+    },
+    "Zul": {
+      "meta": {
+        "wiki_code": "Zul",
+        "rgl_code": "Zul",
+        "iso_code": "???",
+        "name": "Zul"
+      },
+      "blocks": {
+        "rgl_cat": 10,
+        "rgl_noun": 10,
+        "rgl_paradigms": 10,
+        "rgl_grammar": 10,
+        "rgl_syntax": 0,
+        "lex_seed": 0,
+        "lex_concrete": 0,
+        "lex_wide": 0,
+        "sem_mappings": 0,
+        "app_profile": 0,
+        "app_assets": 0,
+        "app_routes": 0,
+        "build_config": 0,
+        "meta_compile": 0,
+        "meta_test": 0
+      },
+      "status": {
+        "build_strategy": "NONE",
+        "overall_maturity": 2.7,
+        "is_active": false
+      }
+    }
+  }
+}
