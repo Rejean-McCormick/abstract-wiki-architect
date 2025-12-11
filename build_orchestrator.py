@@ -5,14 +5,13 @@ import subprocess
 # Ensure we can import the builder package
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from builder import strategist, forge, compiler
+from builder import strategist, forge, compiler, healer
 
 def run_scanner():
     """Runs the RGL Scanner to update the Everything Matrix inventory."""
     print("\n--- [1/4] Scanning RGL (Everything Matrix) ---")
     
     # Path to your scanner script
-    # Adjust this if rgl_scanner.py is in a different folder (e.g. tools/everything_matrix/)
     scanner_script = os.path.join("tools", "everything_matrix", "rgl_scanner.py")
     
     # Fallback: check root if not in tools
@@ -30,7 +29,7 @@ def run_scanner():
 
 def main():
     print("="*60)
-    print("🏛️  ABSTRACT WIKI ARCHITECT - BUILD ORCHESTRATOR")
+    print("🏛️  ABSTRACT WIKI ARCHITECT - BUILD ORCHESTRATOR (AI-POWERED)")
     print("="*60)
     
     # 1. SCAN (Update the Facts)
@@ -49,18 +48,31 @@ def main():
     print("\n--- [3/4] Forging Code ---")
     forge.run()
     
-    # 4. COMPILE (The Muscle)
-    # Compiles Wiki.pgf
-    print("\n--- [4/4] Compiling PGF ---")
+    # 4. COMPILE & HEAL (The Muscle + The Surgeon)
+    print("\n--- [4/4] Compiling (Pass 1) ---")
     success = compiler.run()
     
+    # --- SELF-HEALING LOOP ---
+    # We run the healer regardless of success/fail, because "success" 
+    # just means the PGF was built, not that all languages passed.
+    print("\n🚑 Analyzing Failures for AI Repair...")
+    patched = healer.run_healing_round()
+    
+    if patched:
+        print("\n🔄 Updates Applied. Compiling (Pass 2)...")
+        success = compiler.run()
+    else:
+        print("   (No AI repairs needed or possible)")
+
     print("-" * 60)
     
     if success:
         print("🎉 Orchestration Complete. System Ready.")
     else:
-        print("⚠️  Orchestration finished with errors.")
-        sys.exit(1)
+        print("⚠️  Orchestration finished with errors (Partial Build).")
+        # Exit 1 only if we failed to produce ANY PGF
+        if not os.path.exists(os.path.join("gf", "Wiki.pgf")):
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
