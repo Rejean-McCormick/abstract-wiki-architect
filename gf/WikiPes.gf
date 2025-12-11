@@ -1,5 +1,7 @@
-concrete WikiPes of AbstractWiki = WikiI ** open SyntaxPes, SymbolicPes, DictPes, Prelude in {
+concrete WikiPes of Wiki = GrammarPes, ParadigmsPes ** open SyntaxPes, (P = ParadigmsPes) in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

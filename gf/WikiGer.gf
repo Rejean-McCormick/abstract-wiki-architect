@@ -1,7 +1,7 @@
-concrete WikiGer of AbstractWiki = WikiI ** open SyntaxGer, SymbolicGer, DictGer, Prelude in {
+concrete WikiGer of Wiki = GrammarGer, ParadigmsGer ** open SyntaxGer, (P = ParadigmsGer) in {
   lin
-    lex_animal_N = mkNP (mkN "animal");
-    lex_walk_V = mkVP (mkV "walk");
-    lex_blue_A = mkAP (mkA "blue"); 
-    mkLiteral v = symb v.s;
-};
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

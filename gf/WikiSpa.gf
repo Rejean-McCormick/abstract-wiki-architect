@@ -1,7 +1,7 @@
-concrete WikiSpa of AbstractWiki = WikiI ** open SyntaxSpa, SymbolicSpa, DictSpa, Prelude in {
+concrete WikiSpa of Wiki = GrammarSpa, ParadigmsSpa ** open SyntaxSpa, (P = ParadigmsSpa) in {
   lin
-    lex_animal_N = mkNP (mkN "animal");
-    lex_walk_V = mkVP (mkV "walk");
-    lex_blue_A = mkAP (mkA "blue"); 
-    mkLiteral v = symb v.s;
-};
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

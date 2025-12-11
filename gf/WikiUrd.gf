@@ -1,5 +1,7 @@
-concrete WikiUrd of AbstractWiki = WikiI ** open SyntaxUrd, SymbolicUrd, DictUrd, Prelude in {
+concrete WikiUrd of Wiki = GrammarUrd, ParadigmsUrd ** open SyntaxUrd, (P = ParadigmsUrd) in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

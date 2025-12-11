@@ -1,5 +1,7 @@
-concrete WikiJap of AbstractWiki = WikiI ** open SyntaxJpn, SymbolicJpn, DictJap, SymbolicJap, Prelude in {
+concrete WikiJap of Wiki = GrammarJpn, ParadigmsJpn ** open SyntaxJpn, (P = ParadigmsJpn) in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

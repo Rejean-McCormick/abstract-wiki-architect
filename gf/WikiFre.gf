@@ -1,7 +1,7 @@
-concrete WikiFre of AbstractWiki = WikiI ** open SyntaxFre, SymbolicFre, DictFre, Prelude in {
+concrete WikiFre of Wiki = GrammarFre, ParadigmsFre ** open SyntaxFre, (P = ParadigmsFre) in {
   lin
-    lex_animal_N = mkNP (mkN "animal");
-    lex_walk_V = mkVP (mkV "walk");
-    lex_blue_A = mkAP (mkA "blue"); 
-    mkLiteral v = symb v.s;
-};
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

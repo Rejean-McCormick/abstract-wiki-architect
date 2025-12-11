@@ -1,5 +1,7 @@
-concrete WikiDut of AbstractWiki = WikiI ** open SyntaxDut, SymbolicDut, DictDut, Prelude in {
+concrete WikiDut of Wiki = GrammarDut, ParadigmsDut ** open SyntaxDut, (P = ParadigmsDut) in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

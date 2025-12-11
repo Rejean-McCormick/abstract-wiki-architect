@@ -1,5 +1,7 @@
-concrete WikiNno of AbstractWiki = WikiI ** open SyntaxNno, SymbolicNno, DictNno, Prelude in {
+concrete WikiNno of Wiki = GrammarNno, ParadigmsNno ** open SyntaxNno, (P = ParadigmsNno) in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

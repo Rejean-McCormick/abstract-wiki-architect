@@ -1,5 +1,7 @@
-concrete WikiGre of AbstractWiki = WikiI ** open SyntaxGre, SymbolicGre, DictGre, Prelude in {
+concrete WikiGre of Wiki = GrammarGre, ParadigmsGre ** open SyntaxGre, (P = ParadigmsGre) in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

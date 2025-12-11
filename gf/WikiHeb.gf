@@ -1,5 +1,13 @@
-concrete WikiHeb of AbstractWiki = WikiI ** open   -- NO VALID IMPORTS --, DictHeb, SymbolicHeb, Prelude   in {
+concrete WikiHeb of Wiki = CatHeb, NounHeb ** open NounHeb, (P = ParadigmsHeb) in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    -- Fallback: Use MassNP or DetCN if mkNP is unavailable
+    SimpNP cn = MassNP cn ;
+    
+    -- Fallback: UsePN promotes a Proper Name to an NP
+    John = UsePN (P.mkPN "John") ; 
+    
+    Here = P.mkAdv "here" ;
+    
+    -- Fallback: UseN promotes a Noun to a Common Noun
+    apple_N = UseN (P.mkN "apple") ;
+}

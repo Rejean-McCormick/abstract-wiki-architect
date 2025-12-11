@@ -1,7 +1,7 @@
-concrete WikiEng of AbstractWiki = WikiI ** open SyntaxEng, SymbolicEng, DictEng, Prelude in {
+concrete WikiEng of Wiki = GrammarEng, ParadigmsEng ** open SyntaxEng, (P = ParadigmsEng) in {
   lin
-    lex_animal_N = mkNP (mkN "animal");
-    lex_walk_V = mkVP (mkV "walk");
-    lex_blue_A = mkAP (mkA "blue"); 
-    mkLiteral v = symb v.s;
-};
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}

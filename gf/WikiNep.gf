@@ -1,5 +1,7 @@
-concrete WikiNep of AbstractWiki = WikiI ** open SyntaxNep, DictNep, SymbolicNep, Prelude in {
+concrete WikiNep of Wiki = GrammarNep, ParadigmsNep ** open SyntaxNep, (P = ParadigmsNep) in {
   lin
-    animal_Entity = mkNP lex_animal_N ;
-    mkLiteral v = symb v.s ;
-} ;
+    SimpNP cn = mkNP cn ;
+    John = mkNP (P.mkPN "John") ; 
+    Here = P.mkAdv "here" ;
+    apple_N = mkCN (P.mkN "apple") ;
+}
