@@ -23,11 +23,12 @@ class BuildLanguage:
     """
 
     def __init__(self, broker: IMessageBroker):
+        # Inject the IMessageBroker Port
         self.broker = broker
 
     async def execute(self, lang_code: str, strategy: str = "fast") -> str:
         """
-        Triggers a language build.
+        Triggers a language build. 
 
         Args:
             lang_code: ISO 639-3 code.
@@ -47,7 +48,7 @@ class BuildLanguage:
                 if strategy not in ["fast", "full"]:
                     raise DomainError(f"Invalid build strategy '{strategy}'. Use 'fast' or 'full'.")
 
-                # 2. Create Payload
+                # 2. Create Payload (Pydantic models ensure correct serialization)
                 payload = BuildRequestedPayload(
                     lang_code=lang_code,
                     strategy=strategy

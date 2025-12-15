@@ -1,8 +1,9 @@
 # app\adapters\api\main.py
+import uvicorn
+import structlog
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-import structlog
 
 from app.shared.container import container
 from app.shared.config import settings
@@ -76,13 +77,18 @@ def create_app() -> FastAPI:
 
     return app
 
-# Entry point for local debugging (e.g. `python app/adapters/api/main.py`)
-if __name__ == "__main__":
-    import uvicorn
+def start():
+    """
+    Entry point for the 'architect-api' CLI script defined in pyproject.toml.
+    """
     uvicorn.run(
         "app.adapters.api.main:create_app", 
         host="0.0.0.0", 
         port=8000, 
-        reload=True, 
+        reload=settings.DEBUG, 
         factory=True
     )
+
+# Entry point for local debugging (e.g. `python app/adapters/api/main.py`)
+if __name__ == "__main__":
+    start()

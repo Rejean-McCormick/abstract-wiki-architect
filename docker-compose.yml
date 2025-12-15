@@ -34,8 +34,8 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    # Using the new entry point defined in pyproject.toml / technical plan
-    command: uvicorn app.adapters.api.main:app --host 0.0.0.0 --port 8000 --reload
+    # [FIX] Use factory flag because 'create_app' is a function, not a global object
+    command: uvicorn app.adapters.api.main:create_app --host 0.0.0.0 --port 8000 --reload --factory
     restart: unless-stopped
 
   # 3. ASYNC WORKER (Hexagonal Adapter)
@@ -53,8 +53,8 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    # Starts the arq worker listening on the specific Redis Settings
-    command: arq app.worker.main.WorkerSettings
+    # [FIX] Run the python module directly, as main.py handles the loop and DI container
+    command: python -m app.worker.main
     restart: unless-stopped
 
   # 4. FRONTEND (UI Layer)

@@ -5,44 +5,57 @@ import time
 
 API_URL = "http://localhost:8000"
 
-# The test payload (Universal Frame)
+# [UPDATE] Aligned with app.core.domain.models.Frame structure (V2)
 TEST_FRAME = {
-    "frame_type": "entity.person",
-    "name": "TestUser",
-    "profession": "Scientist",
-    "nationality": "Human"
+    "frame_type": "bio",
+    "subject": {
+        "name": "Marie Curie",
+        "qid": "Q7186"
+    },
+    "properties": {
+        "profession": "physicist",
+        "nationality": "polish"
+    }
 }
 
 def check_all():
     print(f"🚀 Connecting to Architect API at {API_URL}...")
     
+    languages = []
+    
     # 1. Get list of loaded languages
     try:
+        # Try to fetch dynamically from API
         info_resp = requests.get(f"{API_URL}/info")
-        info_resp.raise_for_status()
-        data = info_resp.json()
-        languages = data.get("supported_languages", [])
-        
-        print(f"📋 Found {len(languages)} active languages.")
-        print("-" * 60)
-        
-    except Exception as e:
-        print(f"❌ Failed to fetch language list: {e}")
-        return
+        if info_resp.status_code == 200:
+            data = info_resp.json()
+            languages = data.get("supported_languages", [])
+            print(f"📋 Retrieved {len(languages)} languages from API.")
+    except Exception:
+        pass
+
+    # Fallback if API discovery fails (or isn't implemented yet)
+    if not languages:
+        print("⚠️  Could not auto-discover languages. Using V2 defaults.")
+        languages = ["eng", "fra", "deu", "ita", "spa"]
+
+    print("-" * 60)
 
     # 2. Test each language
     passed = []
     failed = []
 
-    for i, lang_code in enumerate(languages):
-        payload = {
-            "lang": lang_code,
-            "frame": TEST_FRAME
-        }
-        
+    for lang_code in languages:
         try:
             start = time.time()
-            resp = requests.post(f"{API_URL}/generate", json=payload)
+            
+            # [UPDATE] API V2 uses RESTful path: /generate/{lang_code}
+            # Payload is now just the frame, not wrapped in a logic envelope
+            resp = requests.post(
+                f"{API_URL}/generate/{lang_code}", 
+                json=TEST_FRAME
+            )
+            
             duration = (time.time() - start) * 1000
             
             if resp.status_code == 200:
@@ -51,6 +64,7 @@ def check_all():
                 print(f"✅ [{lang_code}] {duration:.0f}ms : {text}")
                 passed.append(lang_code)
             else:
+                # Print error details (useful for 422 Validation Errors)
                 print(f"❌ [{lang_code}] {resp.status_code} : {resp.text}")
                 failed.append(lang_code)
                 

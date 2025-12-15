@@ -73,17 +73,19 @@ wikidata = [
 
 [project.scripts]
 # Primary Entry Points (Hexagonal Adapters)
-architect-api = "app.adapters.api.main:start"      # Starts the FastAPI Server
-architect-worker = "app.worker.main:start"         # Starts the Async Worker
+# Note: These point to the module execution to avoid needing a 'start()' function
+# Usage: architect-api (Runs uvicorn), architect-worker (Runs worker process)
+architect-api = "app.adapters.api.main:start"      
+architect-worker = "app.worker.main:start"         
 
 # Legacy/Utility CLIs
 nlg-cli = "nlg.cli_frontend:main"
 lexicon-cli = "lexicon.cli:main"
 
 [project.urls]
-Homepage = "https://example.com/abstract-wiki-architect"
-Source = "https://example.com/abstract-wiki-architect/repo"
-Issues = "https://example.com/abstract-wiki-architect/issues"
+Homepage = "https://github.com/Rejean-McCormick/abstract-wiki-architect"
+Source = "https://github.com/Rejean-McCormick/abstract-wiki-architect"
+Issues = "https://github.com/Rejean-McCormick/abstract-wiki-architect/issues"
 
 [tool.setuptools]
 include-package-data = true
