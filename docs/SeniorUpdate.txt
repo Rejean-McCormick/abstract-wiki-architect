@@ -72,3 +72,257 @@ Layer in Circuit Breakers and Distributed Tracing from Day 1.
 Wait on Microservices, Event Sourcing, and Chaos Engineering until scale demands it.
 
 This approach gives you the structure of a giant tech company without the crippling complexity of managing it before you are ready.
+
+
+
+
+This step defines the **System Constants and Configuration Contract**. By establishing these files first, we ensure that every subsequent file (Adapters, Use Cases, Tests) imports the exact same variable names, types, and defaults.
+
+Here is the code that aligns the **Infrastructure** (Docker/Env), **Application** (Config), and **Domain** (Models/Events).
+
+### 1\. Project Dependencies (`pyproject.toml`)
+
+*Defines the library versions (variables) used across the system.*
+
+```toml
+[tool.poetry]
+name = "abstract-wiki-architect"
+version = "2.0.0"
+description = "Industrial-grade NLG system for Abstract Wikipedia"
+authors = ["Architecture Team"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.109.0"
+uvicorn = {extras = ["standard"], version = "^0.27.0"}
+pydantic = "^2.6.0"
+pydantic-settings = "^2.1.0"
+structlog = "^24.1.0"
+opentelemetry-api = "^1.22.0"
+opentelemetry-sdk = "^1.22.0"
+opentelemetry-instrumentation-fastapi = "^0.43b0"
+redis = "^5.0.1"
+arq = "^0.25.0"  # Async Task Queue
+tenacity = "^8.2.3" # Circuit Breakers & Retries
+httpx = "^0.26.0"
+jinja2 = "^3.1.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.0"
+black = "^24.1.0"
+mypy = "^1.8.0"
+httpx = "^0.26.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+```
+
+### 2\. Environment Variables (`.env.example`)
+
+*The contract between the OS and the App. These variable names MUST match `app/shared/config.py`.*
+
+```bash
+# --- Application ---
+APP_NAME=abstract-wiki-architect
+APP_ENV=development # development, staging, production
+DEBUG=true
+LOG_LEVEL=INFO
+LOG_FORMAT=json # console, json
+
+# --- Persistence ---
+# Path to the local lexicon storage (for dev)
+FILESYSTEM_REPO_PATH=/app/data
+
+# --- Messaging (Redis) ---
+# Hostname matches the service name in docker-compose.yml
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_QUEUE_NAME=architect_tasks
+
+# --- External Services ---
+WIKIDATA_SPARQL_URL=https://query.wikidata.org/sparql
+# Timeout in seconds before Circuit Breaker trips
+WIKIDATA_TIMEOUT=30
+
+# --- Worker ---
+# Max concurrent builds
+WORKER_CONCURRENCY=2
+```
+
+### 3\. Infrastructure Orchestration (`docker-compose.yml`)
+
+*Aligns hostnames (`redis`, `backend`) with the Environment Variables.*
+
+```yaml
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: aw_backend
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+    command: uvicorn app.adapters.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: aw_worker
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+    # Starts the arq worker listening on the specific Redis Settings
+    command: arq app.worker.main.WorkerSettings
+
+  redis:
+    image: redis:alpine
+    container_name: aw_redis
+    ports:
+      - "6379:6379"
+```
+
+### 4\. Application Configuration (`app/shared/config.py`)
+
+*The Single Source of Truth. All Python code imports settings from here, never from `os.environ` directly.*
+
+```python
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from enum import Enum
+
+class AppEnv(str, Enum):
+    DEVELOPMENT = "development"
+    PRODUCTION = "production"
+    TESTING = "testing"
+
+class Settings(BaseSettings):
+    # --- Meta ---
+    APP_NAME: str = "Abstract Wiki Architect"
+    APP_ENV: AppEnv = AppEnv.DEVELOPMENT
+    DEBUG: bool = False
+    
+    # --- Logging ---
+    LOG_LEVEL: str = "INFO"
+    LOG_FORMAT: str = "json"
+
+    # --- Redis ---
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+    REDIS_DB: int = 0
+    REDIS_QUEUE_NAME: str = "architect_tasks"
+
+    @property
+    def redis_url(self) -> str:
+        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+
+    # --- External ---
+    WIKIDATA_SPARQL_URL: str = "https://query.wikidata.org/sparql"
+    WIKIDATA_TIMEOUT: int = 30
+    
+    # --- Paths ---
+    FILESYSTEM_REPO_PATH: str = "/app/data"
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+# Singleton instance
+settings = Settings()
+```
+
+### 5\. Domain Data Structures (`app/core/domain/models.py`)
+
+*Defines the variable names for data passing through the system.*
+
+```python
+from pydantic import BaseModel, Field
+from typing import Dict, Any, Optional, List
+from enum import Enum
+from datetime import datetime
+
+class LanguageStatus(str, Enum):
+    PLANNED = "planned"
+    BUILDING = "building"
+    READY = "ready"
+    ERROR = "error"
+
+class Language(BaseModel):
+    """Core entity representing a supported language."""
+    code: str  # ISO 639-3 (e.g., 'fra', 'zul')
+    name: str
+    status: LanguageStatus = LanguageStatus.PLANNED
+    grammar_engine: str = "gf"  # 'gf', 'python', 'neural'
+    meta: Dict[str, Any] = Field(default_factory=dict)
+
+class Frame(BaseModel):
+    """The input semantic frame."""
+    frame_type: str # e.g. 'bio', 'event'
+    subject: Dict[str, Any]
+    properties: Dict[str, Any] = Field(default_factory=dict)
+
+class Sentence(BaseModel):
+    """The output generation."""
+    text: str
+    lang_code: str
+    meta: Dict[str, Any] = Field(default_factory=dict)
+```
+
+### 6\. Event Vocabulary (`app/core/domain/events.py`)
+
+*Aligns the variable names for Async Messaging. Use these constants, never raw strings.*
+
+```python
+from enum import Enum
+from pydantic import BaseModel
+from typing import Dict, Any
+
+class EventType(str, Enum):
+    BUILD_REQUESTED = "language.build.requested"
+    BUILD_COMPLETED = "language.build.completed"
+    BUILD_FAILED = "language.build.failed"
+    LEXICON_UPDATED = "lexicon.updated"
+
+class SystemEvent(BaseModel):
+    """Standard envelope for all async messages."""
+    type: EventType
+    payload: Dict[str, Any]
+    trace_id: str
+    timestamp: float
+```
+
+
+Yes, this file list covers **100% of the architectural requirements** defined in the Master Plan.
+
+Here is the verification of how these files map to the strategic goals:
+
+### \u2705 1. Hexagonal Structure (The Core)
+* **Domain Isolation:** You have `app/core/domain` for pure logic (no frameworks).
+* **Interface Enforcement:** `app/core/ports` ensures the Core never talks directly to Redis or GF; it talks to `IGrammarEngine` or `IMessageBroker`.
+* **Dependency Injection:** `app/shared/container.py` wires the `adapters` to the `ports`, enabling the modularity we promised.
+
+### \u2705 2. Resilience (The Shield)
+* **Circuit Breakers:** Implemented in `app/shared/resilience.py` and applied in `app/adapters/persistence/wikidata_adapter.py`.
+* **Bulkheading:** Achieved via `docker/Dockerfile.worker` (isolating compilation resources) and `app/worker/` (separate process).
+
+### \u2705 3. Data & Consistency (The Nervous System)
+* **Async Messaging:** Defined in `app/core/domain/events.py` (the contract) and implemented in `app/adapters/messaging/redis_broker.py` (the plumbing).
+* **Sagas:** The complex orchestration is captured in `app/core/use_cases/onboard_language_saga.py`, handling the multi-step build process.
+
+### \u2705 4. Observability (The Eyes)
+* **Tracing & Logging:** `app/shared/observability.py` and `app/shared/logging_config.py` ensure that every request through `app/adapters/api` and every task in `app/worker` carries a Trace ID and emits JSON logs.
+
+### \u26a0\ufe0f One Minor Recommendation
+While strictly not "missing" (as `arq` handles job state in Redis and `filesystem_repo` handles data), a truly "Senior" system often includes a **Database Migration Tool** (like `alembic`) if you plan to store user accounts or complex metadata in a SQL database later.
+
+However, for this specific **Language Architecture** upgrade (which relies heavily on file-based grammars and Redis job queues), **the list is complete and ready for execution.**
+
