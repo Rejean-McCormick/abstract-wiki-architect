@@ -1,3 +1,4 @@
+# app\core\use_cases\generate_text.py
 import structlog
 from opentelemetry import trace
 from app.core.domain.models import Frame, Sentence

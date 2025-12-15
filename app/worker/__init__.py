@@ -1,3 +1,4 @@
+# app\worker\__init__.py
 """
 Background Worker Application.
 

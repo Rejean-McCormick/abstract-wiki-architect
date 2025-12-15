@@ -1,3 +1,4 @@
+# app\adapters\persistence\wikidata_adapter.py
 import httpx
 import structlog
 from typing import List, Optional, Dict, Any

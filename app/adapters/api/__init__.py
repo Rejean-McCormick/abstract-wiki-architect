@@ -1,3 +1,4 @@
+# app\adapters\api\__init__.py
 """
 REST API Adapter.
 

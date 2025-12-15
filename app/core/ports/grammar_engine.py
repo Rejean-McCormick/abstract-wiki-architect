@@ -1,3 +1,4 @@
+# app\core\ports\grammar_engine.py
 from typing import Protocol, List, Optional
 from app.core.domain.models import Frame, Sentence
 

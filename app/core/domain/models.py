@@ -1,3 +1,4 @@
+# app\core\domain\models.py
 from enum import Enum
 from typing import Dict, Any, Optional, List
 from pydantic import BaseModel, Field

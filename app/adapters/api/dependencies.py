@@ -1,3 +1,4 @@
+# app\adapters\api\dependencies.py
 from typing import Annotated
 from fastapi import Depends, Header, HTTPException, status
 from dependency_injector.wiring import inject, Provide

@@ -1,3 +1,4 @@
+# app\worker\tasks.py
 import asyncio
 import structlog
 from dependency_injector.wiring import inject, Provide

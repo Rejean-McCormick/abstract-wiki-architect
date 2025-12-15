@@ -1,3 +1,4 @@
+# tests\core\test_domain_models.py
 import pytest
 from pydantic import ValidationError
 from app.core.domain.models import Frame, Sentence, LexiconEntry, Language, LanguageStatus

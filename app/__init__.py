@@ -1,3 +1,4 @@
+# app\__init__.py
 """
 Abstract Wiki Architect - Industrial-Grade NLG System (V2).
 

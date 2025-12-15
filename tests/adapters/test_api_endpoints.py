@@ -1,3 +1,4 @@
+# tests\adapters\test_api_endpoints.py
 import pytest
 from fastapi import status
 from fastapi.testclient import TestClient

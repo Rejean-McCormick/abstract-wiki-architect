@@ -1,3 +1,4 @@
+# tests\adapters\test_wikidata_adapter.py
 import pytest
 from unittest.mock import patch, MagicMock
 from app.adapters.persistence.wikidata_adapter import WikidataAdapter

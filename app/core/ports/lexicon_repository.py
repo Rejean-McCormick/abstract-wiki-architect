@@ -1,3 +1,4 @@
+# app\core\ports\lexicon_repository.py
 from typing import Protocol, Optional, Dict, List
 from app.core.domain.models import LexiconEntry
 

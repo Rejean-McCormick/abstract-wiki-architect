@@ -1,3 +1,4 @@
+# app\adapters\api\routers\generation.py
 from fastapi import APIRouter, Depends, HTTPException, status, Body
 import structlog
 

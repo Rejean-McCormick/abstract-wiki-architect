@@ -1,3 +1,4 @@
+# app\adapters\engines\python_engine_wrapper.py
 import structlog
 from typing import List, Dict, Any
 from app.core.ports.grammar_engine import IGrammarEngine

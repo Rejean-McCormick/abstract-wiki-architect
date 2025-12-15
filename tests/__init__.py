@@ -1,3 +1,4 @@
+# tests\__init__.py
 """
 Test Suite for Abstract Wiki.
 

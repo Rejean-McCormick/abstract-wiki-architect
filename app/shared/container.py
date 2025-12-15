@@ -1,3 +1,4 @@
+# app\shared\container.py
 from dependency_injector import containers, providers
 
 from app.shared.config import settings

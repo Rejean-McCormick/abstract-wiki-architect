@@ -1,3 +1,4 @@
+# app\core\ports\message_broker.py
 from typing import Protocol, Any, Callable, Coroutine
 from app.core.domain.events import SystemEvent
 

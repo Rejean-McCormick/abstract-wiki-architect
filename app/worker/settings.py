@@ -1,3 +1,4 @@
+# app\worker\settings.py
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from app.shared.config import settings as global_settings
 

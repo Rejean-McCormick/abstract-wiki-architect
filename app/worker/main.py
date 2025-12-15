@@ -1,3 +1,4 @@
+# app\worker\main.py
 import asyncio
 import signal
 import structlog
