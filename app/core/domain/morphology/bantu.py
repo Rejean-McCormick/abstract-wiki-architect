@@ -1,3 +1,4 @@
+# app\core\domain\morphology\bantu.py
 # morphology\bantu.py
 """
 BANTU MORPHOLOGY MODULE

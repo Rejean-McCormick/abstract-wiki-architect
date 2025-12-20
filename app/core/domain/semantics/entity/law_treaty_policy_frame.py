@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\law_treaty_policy_frame.py
 # semantics\entity\law_treaty_policy_frame.py
 # semantics/entity/law_treaty_policy_frame.py
 

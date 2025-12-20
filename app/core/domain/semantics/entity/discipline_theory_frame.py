@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\discipline_theory_frame.py
 # semantics\entity\discipline_theory_frame.py
 from __future__ import annotations
 

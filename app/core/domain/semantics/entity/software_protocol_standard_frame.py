@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\software_protocol_standard_frame.py
 # semantics\entity\software_protocol_standard_frame.py
 from __future__ import annotations
 

@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\index.py
 # lexicon\index.py
 """
 lexicon/index.py

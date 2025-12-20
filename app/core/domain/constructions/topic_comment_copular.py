@@ -1,3 +1,4 @@
+# app\core\domain\constructions\topic_comment_copular.py
 # constructions\topic_comment_copular.py
 """
 constructions/topic_comment_copular.py

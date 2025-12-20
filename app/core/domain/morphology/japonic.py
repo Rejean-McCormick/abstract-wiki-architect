@@ -1,3 +1,4 @@
+# app\core\domain\morphology\japonic.py
 # morphology\japonic.py
 """
 JAPONIC MORPHOLOGY MODULE

@@ -1,3 +1,4 @@
+# app\core\domain\semantics\event\legal_case_event_frame.py
 # semantics\event\legal_case_event_frame.py
 from __future__ import annotations
 

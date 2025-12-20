@@ -1,3 +1,4 @@
+# app\core\domain\semantics\event\cultural_event_frame.py
 # semantics\event\cultural_event_frame.py
 from __future__ import annotations
 

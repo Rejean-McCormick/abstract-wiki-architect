@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\person_frame.py
 # semantics\entity\person_frame.py
 # semantics/entity/person_frame.py
 #

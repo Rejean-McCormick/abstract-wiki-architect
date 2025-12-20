@@ -1,3 +1,4 @@
+# app\core\domain\semantics\relational\membership_affiliation_frame.py
 # semantics\relational\membership_affiliation_frame.py
 """
 semantics/relational/membership_affiliation_frame.py

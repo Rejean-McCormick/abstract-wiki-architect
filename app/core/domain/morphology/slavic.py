@@ -1,3 +1,4 @@
+# app\core\domain\morphology\slavic.py
 # morphology\slavic.py
 """
 Slavic morphology helpers.

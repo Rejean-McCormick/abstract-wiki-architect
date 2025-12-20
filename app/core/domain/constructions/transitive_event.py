@@ -1,3 +1,4 @@
+# app\core\domain\constructions\transitive_event.py
 # constructions\transitive_event.py
 """
 TRANSITIVE_EVENT CONSTRUCTION

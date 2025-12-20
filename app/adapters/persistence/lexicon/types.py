@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\types.py
 # lexicon\types.py
 """
 lexicon/types.py

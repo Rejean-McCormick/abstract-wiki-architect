@@ -1,3 +1,4 @@
+# app\core\domain\morphology\koreanic.py
 # morphology\koreanic.py
 """
 KOREANIC MORPHOLOGY MODULE

@@ -1,3 +1,4 @@
+# app\core\domain\constructions\coordination_clauses.py
 # constructions\coordination_clauses.py
 """
 COORDINATION_CLAUSES CONSTRUCTION

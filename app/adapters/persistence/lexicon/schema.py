@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\schema.py
 # lexicon\schema.py
 """
 lexicon/schema.py

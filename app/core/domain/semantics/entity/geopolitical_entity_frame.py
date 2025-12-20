@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\geopolitical_entity_frame.py
 # semantics\entity\geopolitical_entity_frame.py
 from __future__ import annotations
 

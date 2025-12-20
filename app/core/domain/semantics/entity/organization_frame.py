@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\organization_frame.py
 # semantics\entity\organization_frame.py
 """
 semantics/entity/organization_frame.py

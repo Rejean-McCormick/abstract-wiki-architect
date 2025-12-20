@@ -1,3 +1,4 @@
+# app\core\domain\morphology\iranic.py
 # morphology\iranic.py
 """
 IRANIC MORPHOLOGY MODULE

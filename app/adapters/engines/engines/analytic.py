@@ -1,3 +1,4 @@
+# app\adapters\engines\engines\analytic.py
 # engines\analytic.py
 # File: engines/analytic.py
 def render_bio(name, gender, profession, nationality, config):

@@ -1,3 +1,4 @@
+# app\core\domain\morphology\agglutinative.py
 # morphology\agglutinative.py
 """
 Agglutinative morphology module.

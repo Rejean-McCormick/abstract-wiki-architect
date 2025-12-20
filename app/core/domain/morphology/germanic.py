@@ -1,3 +1,4 @@
+# app\core\domain\morphology\germanic.py
 # morphology\germanic.py
 """
 morphology/germanic.py

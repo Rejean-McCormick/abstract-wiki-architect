@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\artifact_frame.py
 # semantics\entity\artifact_frame.py
 """
 semantics/entity/artifact_frame.py

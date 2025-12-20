@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\config.py
 # lexicon\config.py
 """
 lexicon/config.py

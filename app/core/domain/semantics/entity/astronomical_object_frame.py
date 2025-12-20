@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\astronomical_object_frame.py
 # semantics\entity\astronomical_object_frame.py
 """
 semantics/entity/astronomical_object_frame.py

@@ -1,3 +1,4 @@
+# app\core\domain\morphology\austronesian.py
 # morphology\austronesian.py
 """
 Austronesian morphology module.

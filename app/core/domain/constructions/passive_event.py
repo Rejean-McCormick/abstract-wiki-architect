@@ -1,3 +1,4 @@
+# app\core\domain\constructions\passive_event.py
 # constructions\passive_event.py
 """
 Passive event construction.

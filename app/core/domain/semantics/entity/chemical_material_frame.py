@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\chemical_material_frame.py
 # semantics\entity\chemical_material_frame.py
 from __future__ import annotations
 

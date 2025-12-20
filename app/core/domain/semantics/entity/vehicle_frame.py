@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\vehicle_frame.py
 # semantics\entity\vehicle_frame.py
 from __future__ import annotations
 

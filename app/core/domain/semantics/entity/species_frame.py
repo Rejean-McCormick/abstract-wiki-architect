@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\species_frame.py
 # semantics\entity\species_frame.py
 from __future__ import annotations
 

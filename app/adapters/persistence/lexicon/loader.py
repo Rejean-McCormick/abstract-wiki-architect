@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\loader.py
 # lexicon\loader.py
 """
 lexicon/loader.py

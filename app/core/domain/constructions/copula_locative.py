@@ -1,3 +1,4 @@
+# app\core\domain\constructions\copula_locative.py
 # constructions\copula_locative.py
 """
 constructions/copula_locative.py

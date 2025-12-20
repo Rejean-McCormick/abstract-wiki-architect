@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\errors.py
 # lexicon\errors.py
 """
 lexicon/errors.py

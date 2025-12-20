@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\product_brand_frame.py
 # semantics\entity\product_brand_frame.py
 from __future__ import annotations
 

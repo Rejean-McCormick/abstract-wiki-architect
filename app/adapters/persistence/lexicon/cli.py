@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\cli.py
 # lexicon\cli.py
 # lexicon/cli.py
 

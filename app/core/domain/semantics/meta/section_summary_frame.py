@@ -1,3 +1,4 @@
+# app\core\domain\semantics\meta\section_summary_frame.py
 # semantics\meta\section_summary_frame.py
 # semantics/meta/section_summary_frame.py
 

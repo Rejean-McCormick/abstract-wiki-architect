@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\competition_league_frame.py
 # semantics\entity\competition_league_frame.py
 """
 semantics/entity/competition_league_frame.py

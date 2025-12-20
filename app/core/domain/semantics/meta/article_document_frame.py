@@ -1,3 +1,4 @@
+# app\core\domain\semantics\meta\article_document_frame.py
 # semantics\meta\article_document_frame.py
 """
 semantics/meta/article_document_frame.py

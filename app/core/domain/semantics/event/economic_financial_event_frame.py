@@ -1,3 +1,4 @@
+# app\core\domain\semantics\event\economic_financial_event_frame.py
 # semantics\event\economic_financial_event_frame.py
 """
 semantics/event/economic_financial_event_frame.py

@@ -1,3 +1,4 @@
+# app\core\domain\morphology\semitic.py
 # morphology\semitic.py
 """
 morphology/semitic.py

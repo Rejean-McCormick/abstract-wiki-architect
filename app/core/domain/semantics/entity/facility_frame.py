@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\facility_frame.py
 # semantics\entity\facility_frame.py
 # semantics/entity/facility_frame.py
 

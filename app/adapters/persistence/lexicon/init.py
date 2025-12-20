@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\init.py
 # lexicon\init.py
 """
 lexicon/__init__.py

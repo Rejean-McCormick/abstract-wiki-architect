@@ -1,4 +1,5 @@
-# app\adapters\api\dependencies.py
+# app/adapters/api/dependencies.py
+import secrets
 from typing import Annotated
 from fastapi import Depends, Header, HTTPException, status
 from dependency_injector.wiring import inject, Provide
@@ -7,6 +8,7 @@ from app.shared.container import Container
 from app.shared.config import settings
 
 # Import Use Cases for type hinting
+# Ensure these paths match your actual core structure
 from app.core.use_cases.generate_text import GenerateText
 from app.core.use_cases.build_language import BuildLanguage
 from app.core.use_cases.onboard_language_saga import OnboardLanguageSaga
@@ -18,14 +20,26 @@ async def verify_api_key(
 ) -> str:
     """
     Validates the API Key provided in the request headers.
-    Returns the key if valid, raises 403 otherwise.
+    
+    Hardening (Phase 1):
+    - Uses constant-time comparison to prevent timing attacks.
+    - Rejects requests immediately if the key is invalid.
     """
-    # Note: In production, use constant-time comparison (secrets.compare_digest)
-    if x_api_key != settings.API_KEY:
+    # Verify the secret exists in config
+    if not settings.API_SECRET:
+        # Fail safe if server is misconfigured
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Server configuration error: API_SECRET not set"
+        )
+
+    # Constant-time comparison
+    if not secrets.compare_digest(x_api_key, settings.API_SECRET):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Invalid or missing API Key"
+            detail="Invalid X-API-Key credentials"
         )
+    
     return x_api_key
 
 # --- Use Case Injection Helpers ---

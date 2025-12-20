@@ -1,3 +1,4 @@
+# app\core\domain\constructions\copula_attributive_np.py
 # constructions\copula_attributive_np.py
 """
 constructions/copula_attributive_np.py

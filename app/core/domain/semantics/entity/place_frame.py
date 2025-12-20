@@ -1,3 +1,4 @@
+# app\core\domain\semantics\entity\place_frame.py
 # semantics\entity\place_frame.py
 # semantics/entity/place_frame.py
 

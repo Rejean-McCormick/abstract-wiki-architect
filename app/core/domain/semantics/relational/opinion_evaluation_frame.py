@@ -1,3 +1,4 @@
+# app\core\domain\semantics\relational\opinion_evaluation_frame.py
 # semantics\relational\opinion_evaluation_frame.py
 """
 semantics/relational/opinion_evaluation_frame.py

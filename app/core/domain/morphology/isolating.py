@@ -1,3 +1,4 @@
+# app\core\domain\morphology\isolating.py
 # morphology\isolating.py
 """
 ISOLATING MORPHOLOGY MODULE

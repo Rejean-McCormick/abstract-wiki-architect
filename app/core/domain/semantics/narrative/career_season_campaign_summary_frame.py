@@ -1,3 +1,4 @@
+# app\core\domain\semantics\narrative\career_season_campaign_summary_frame.py
 # semantics\narrative\career_season_campaign_summary_frame.py
 # semantics/narrative/career_season_campaign_summary_frame.py
 

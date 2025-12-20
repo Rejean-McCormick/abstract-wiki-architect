@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\wikidata_bridge.py
 # lexicon\wikidata_bridge.py
 """
 lexicon/wikidata_bridge.py

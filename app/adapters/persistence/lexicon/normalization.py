@@ -1,3 +1,4 @@
+# app\adapters\persistence\lexicon\normalization.py
 # lexicon\normalization.py
 """
 lexicon.normalization

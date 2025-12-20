@@ -1,3 +1,4 @@
+# app\core\domain\constructions\intransitive_event.py
 # constructions\intransitive_event.py
 """
 Intransitive event construction.
