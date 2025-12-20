@@ -1,4 +1,4 @@
-# app\core\domain\exceptions.py
+# app/core/domain/exceptions.py
 class DomainError(Exception):
     """Base class for all domain-level exceptions."""
     def __init__(self, message: str):

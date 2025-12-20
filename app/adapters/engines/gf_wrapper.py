@@ -1,11 +1,9 @@
-# app\adapters\engines\gf_wrapper.py
+# app/adapters/engines/gf_wrapper.py
 import sys
 import structlog
-from typing import List, Optional
+from typing import List, Optional, Any
 from pathlib import Path
 
-# Try importing the GF runtime (pgf). 
-# This is installed in the Docker container but might be missing locally.
 try:
     import pgf
 except ImportError:
@@ -15,8 +13,7 @@ from app.core.ports.grammar_engine import IGrammarEngine
 from app.core.domain.models import Frame, Sentence
 from app.core.domain.exceptions import (
     LanguageNotFoundError, 
-    DomainError, 
-    GrammarCompilationError
+    DomainError
 )
 from app.shared.config import settings
 
@@ -25,15 +22,14 @@ logger = structlog.get_logger()
 class GFGrammarEngine(IGrammarEngine):
     """
     Primary Grammar Engine using the compiled PGF binary.
-    
-    It maps the generic 'Frame' entity into a GF 'Expr' (Abstract Syntax Tree)
-    and then linearizes it using the underlying C-runtime for maximum speed
-    and linguistic correctness.
     """
 
-    def __init__(self):
+    def __init__(self, lib_path: str = None):
         self.pgf_path = settings.AW_PGF_PATH
         self.grammar: Optional[pgf.PGF] = None
+        
+        # DEBUG: Confirm initialization of the new logic
+        print(f"[DEBUG] GFGrammarEngine (Flexible Mode) initializing from: {self.pgf_path}")
         self._load_grammar()
 
     def _load_grammar(self):
@@ -46,12 +42,11 @@ class GFGrammarEngine(IGrammarEngine):
         if path.exists():
             try:
                 self.grammar = pgf.readPGF(str(path))
-                logger.info("gf_grammar_loaded", path=str(path), languages=list(self.grammar.languages.keys()))
+                logger.info("gf_grammar_loaded", path=str(path))
             except Exception as e:
                 logger.error("gf_load_failed", error=str(e))
-                # We don't crash start-up; we just won't be able to generate until fixed.
         else:
-            logger.warning("gf_pgf_not_found", path=str(path))
+            logger.error("gf_file_not_found", path=str(path))
 
     async def generate(self, lang_code: str, frame: Frame) -> Sentence:
         """
@@ -60,19 +55,18 @@ class GFGrammarEngine(IGrammarEngine):
         3. Linearize Expression -> Text.
         """
         if not self.grammar:
-            raise DomainError("GF Runtime is not loaded.")
+            raise DomainError("GF Runtime is not loaded or PGF file is missing.")
 
         # 1. Resolve Concrete Language
-        # The PGF usually names languages like 'WikiEng', 'WikiFra'.
-        # We need a mapping strategy. For now, we try 'Wiki' + TitleCase(lang_code) or ISO match.
         conc_name = self._resolve_concrete_name(lang_code)
         if not conc_name:
-            raise LanguageNotFoundError(lang_code)
+            # Helpful error message listing available languages
+            avail = list(self.grammar.languages.keys())
+            raise LanguageNotFoundError(f"Language '{lang_code}' not found. Available: {avail}")
         
         concrete = self.grammar.languages[conc_name]
 
         # 2. Construct AST (Abstract Syntax Tree)
-        # This transforms the generic JSON Frame into a strictly typed GF Tree.
         try:
             expr = self._build_expr(frame)
         except Exception as e:
@@ -81,7 +75,6 @@ class GFGrammarEngine(IGrammarEngine):
 
         # 3. Linearize
         try:
-            # linearize returns a string. handling exceptions from C-level.
             text = concrete.linearize(expr)
         except Exception as e:
             logger.error("gf_linearization_failed", lang=conc_name, error=str(e))
@@ -101,70 +94,56 @@ class GFGrammarEngine(IGrammarEngine):
         """
         Maps ISO code (fra) to PGF concrete name (WikiFra).
         """
-        # Heuristic: The PGF usually contains names like 'WikiEng', 'WikiChi'.
-        # We search for the suffix.
-        target_suffix = lang_code.capitalize() # 'fra' -> 'Fra' (Note: ISO 3 letter codes match RGL conventions usually)
+        target_suffix = lang_code.capitalize() 
         
-        # 1. Direct Lookup if naming convention is strict
+        # 1. Direct Lookup (e.g. WikiEng)
         candidate = f"Wiki{target_suffix}"
         if candidate in self.grammar.languages:
             return candidate
 
-        # 2. Search (Slower)
+        # 2. Suffix Search (fallback)
         for name in self.grammar.languages.keys():
             if name.endswith(target_suffix):
                 return name
-        
         return None
 
-    def _build_expr(self, frame: Frame) -> pgf.Expr:
+    def _build_expr(self, frame: Frame) -> Any:
         """
         Converts the generic Frame into a PGF Expression.
-        
-        Example:
-        Frame(type="Bio", subject={"qid": "Q42"}) 
-        -> mkBio (mkPerson "Q42")
+        Handles both Constants (John) and Functions (mkBio).
         """
-        # This is a simplifed mapper. In a real system, this would be recursive
-        # and use the type signature of the grammar to know which functions to call.
+        fname = frame.frame_type
         
-        # We assume the Frame 'type' corresponds to a function in the Abstract Syntax.
-        function_name = f"mk{frame.frame_type.capitalize()}" 
-        
-        # We check if the function exists in the grammar
-        if function_name not in self.grammar.functions:
-            # Fallback or error
-            raise DomainError(f"Grammar function '{function_name}' not found.")
+        # 1. Try exact name match (e.g. "John")
+        if fname not in self.grammar.functions:
+            # 2. Try RGL convention (e.g. "mkJohn")
+            fname_rgl = f"mk{frame.frame_type.capitalize()}" 
+            if fname_rgl in self.grammar.functions:
+                fname = fname_rgl
+            else:
+                # Failure
+                raise DomainError(f"Function '{fname}' (or '{fname_rgl}') not found in grammar.")
 
-        # Construct Arguments
-        # This requires knowledge of the function signature.
-        # For this example, we assume we pass the subject QID as a string literal.
-        qid = frame.subject.get("qid", "Q0")
+        # 3. Handle Constants (0 arguments)
+        # If no subject is provided, we assume it's a constant like "John" or "Apple"
+        if not frame.subject:
+             return pgf.Expr(fname, [])
+
+        # 4. Handle Functions with Arguments (Simplified)
+        # We assume 1 string argument for now.
+        arg_value = frame.subject.get("qid", "")
+        if arg_value:
+             return pgf.Expr(fname, [pgf.readExpr(f'"{arg_value}"')])
         
-        # In PGF python: pgf.readExpr('mkBio (mkPerson "Q42")') is easiest for simple stuff.
-        # Or constructing via pgf.Expr(fun, [args...])
-        
-        # Simplified logic:
-        # We assume the grammar has a wrapper function that takes a string string.
-        # Real impl requires sophisticated argument mapping.
-        
-        # Helper: Create a string literal expression
-        arg_str = pgf.readExpr(f'"{qid}"') 
-        
-        # Create the function call: mkBio "Q42"
-        # (Assuming mkBio takes a String in this simplified grammar)
-        expr = pgf.Expr(function_name, [arg_str])
-        
-        return expr
+        # Fallback to 0-arg if subject was empty dict
+        return pgf.Expr(fname, [])
 
     async def get_supported_languages(self) -> List[str]:
         if not self.grammar:
             return []
-        # Return ISO codes derived from concrete names
         return [name[-3:].lower() for name in self.grammar.languages.keys()]
 
     async def reload(self) -> None:
-        """Hot-reloads the PGF file."""
         logger.info("gf_reloading_started")
         self._load_grammar()
 

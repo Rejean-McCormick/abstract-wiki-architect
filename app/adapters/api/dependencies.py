@@ -6,12 +6,26 @@ from dependency_injector.wiring import inject, Provide
 
 from app.shared.container import Container
 from app.shared.config import settings
-from app.adapters.llm_adapter import GeminiAdapter
 
-# Import Use Cases
+# Ports & Domain
+from app.core.ports.grammar_engine import IGrammarEngine
+from app.core.ports.llm_port import ILanguageModel
+
+# Adapters
+from app.adapters.llm_adapter import GeminiAdapter
+from app.adapters.engines.gf_wrapper import GFGrammarEngine
+
+# Use Cases
 from app.core.use_cases.generate_text import GenerateText
 from app.core.use_cases.build_language import BuildLanguage
 from app.core.use_cases.onboard_language_saga import OnboardLanguageSaga
+
+# --- Singletons ---
+# We instantiate the heavy GF engine once and reuse it across requests.
+_grammar_engine_instance = GFGrammarEngine()
+
+def get_grammar_engine() -> IGrammarEngine:
+    return _grammar_engine_instance
 
 # --- Security Dependencies ---
 
@@ -42,7 +56,6 @@ async def get_user_llm_key(
 ) -> Optional[str]:
     """
     Extracts the user's personal LLM Key from headers.
-    If provided, this allows them to bypass server quotas/costs.
     """
     return x_user_llm_key
 
@@ -51,7 +64,7 @@ def get_llm_adapter(
 ) -> GeminiAdapter:
     """
     Creates a request-scoped Adapter instance.
-    This injects the User Key (if present) or falls back to Server Key.
+    Injects User Key if present, otherwise falls back to Server Key.
     """
     return GeminiAdapter(user_api_key=user_key)
 
@@ -59,17 +72,14 @@ def get_llm_adapter(
 
 @inject
 def get_generate_text_use_case(
-    # We inject the dynamic, request-scoped adapter here
     llm_adapter: GeminiAdapter = Depends(get_llm_adapter),
-    # If the use case needs other static dependencies (like Repos), we pull them from container
-    # language_repo = Depends(Provide[Container.language_repo]) 
+    engine: IGrammarEngine = Depends(get_grammar_engine)
 ) -> GenerateText:
     """
-    Constructs the GenerateText Interactor with the correct LLM Adapter.
+    Constructs the GenerateText Interactor.
+    CRITICAL FIX: We pass 'engine' and 'llm' to match the Use Case __init__.
     """
-    # We manually instantiate here to ensure the Use Case uses the *User's* key,
-    # not the Singleton adapter cached in the Container.
-    return GenerateText(llm_port=llm_adapter)
+    return GenerateText(engine=engine, llm=llm_adapter)
 
 @inject
 def get_build_language_use_case(
@@ -80,13 +90,10 @@ def get_build_language_use_case(
 
 @inject
 def get_onboard_saga(
-    # Sagas might also need the LLM adapter if they generate initial content
     llm_adapter: GeminiAdapter = Depends(get_llm_adapter),
-    # Inject other fixed dependencies manually if bypassing container for Sagas
-    # Or, if the Saga doesn't use the LLM directly, just use Provide[]
     saga: OnboardLanguageSaga = Depends(Provide[Container.onboard_language_saga])
 ) -> OnboardLanguageSaga:
     """Dependency to inject the OnboardLanguageSaga."""
-    # If the Saga uses the LLM, you might need to set the adapter manually:
-    # saga.llm_port = llm_adapter 
+    # If saga needs the request-scoped LLM, set it here (optional pattern)
+    # saga.llm = llm_adapter
     return saga

@@ -1,4 +1,5 @@
 # app/shared/config.py
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from enum import Enum
 from typing import Optional
@@ -15,7 +16,6 @@ class StorageBackend(str, Enum):
 class Settings(BaseSettings):
     """
     Central Configuration Registry.
-    Reads from environment variables or .env file.
     """
     
     # --- Application Meta ---
@@ -23,12 +23,12 @@ class Settings(BaseSettings):
     APP_ENV: AppEnv = AppEnv.DEVELOPMENT
     DEBUG: bool = False
     
-    # --- Security (Phase 1) ---
+    # --- Security ---
     API_SECRET: str = "change-me-for-production" 
     
-    # --- Logging & Observability (Phase 4) ---
+    # --- Logging & Observability ---
     LOG_LEVEL: str = "INFO"
-    LOG_FORMAT: str = "json"  # Options: 'console', 'json'
+    LOG_FORMAT: str = "json"
     OTEL_SERVICE_NAME: str = "architect-backend"
     OTEL_EXPORTER_OTLP_ENDPOINT: Optional[str] = None 
 
@@ -39,22 +39,22 @@ class Settings(BaseSettings):
     REDIS_QUEUE_NAME: str = "architect_tasks"
 
     @property
-    def redis_url(self) -> str:
-        """Constructs the Redis Connection URL for ARQ and Redis Client."""
+    def REDIS_URL(self) -> str:
+        # Matches 'redis_broker.py' expectation
         return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
 
-    # --- External Services (Resilience) ---
+    # --- External Services ---
     WIKIDATA_SPARQL_URL: str = "https://query.wikidata.org/sparql"
     WIKIDATA_TIMEOUT: int = 30
     
-    # --- Persistence (Phase 2) ---
+    # --- Persistence ---
     STORAGE_BACKEND: StorageBackend = StorageBackend.FILESYSTEM
     
-    # Filesystem Config
-    # Updated default to your WSL path so it works out of the box
-    FILESYSTEM_REPO_PATH: str = "/mnt/c/MyCode/AbstractWiki/grammars"
+    # FILESYSTEM CONFIG
+    # Pointing to the project root
+    FILESYSTEM_REPO_PATH: str = "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect"
     
-    # S3 Config (Optional - Active if STORAGE_BACKEND=s3)
+    # S3 Config
     AWS_ACCESS_KEY_ID: Optional[str] = None
     AWS_SECRET_ACCESS_KEY: Optional[str] = None
     AWS_REGION: str = "us-east-1"
@@ -63,20 +63,21 @@ class Settings(BaseSettings):
     # --- Worker Configuration ---
     WORKER_CONCURRENCY: int = 2
 
-    # --- FEATURE FLAGS & PATHS (CRITICAL FIX) ---
-    # These were missing in your snippet but required by container.py
-    
-    # Toggle between Real GF (False) or Python Mock (True)
+    # --- Feature Flags ---
     USE_MOCK_GRAMMAR: bool = False 
-
-    # Path to the GF Runtime Library (RGL)
     GF_LIB_PATH: str = "/mnt/c/MyCode/AbstractWiki/gf-rgl"
-
-    # Google Gemini API Key (Server Default)
     GOOGLE_API_KEY: Optional[str] = None
 
-    # Pydantic Config: Case-insensitive env var matching, ignores extras
+    @property
+    def AW_PGF_PATH(self) -> str:
+        """Dynamically builds the path to the PGF binary."""
+        # CRITICAL FIX: Smart detection of 'gf' folder to prevent 'gf/gf/Wiki.pgf'
+        base = self.FILESYSTEM_REPO_PATH.rstrip("/")
+        
+        if base.endswith("gf"):
+             return os.path.join(base, "Wiki.pgf")
+        return os.path.join(base, "gf", "Wiki.pgf")
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-# Singleton instance to be imported across the app
 settings = Settings()

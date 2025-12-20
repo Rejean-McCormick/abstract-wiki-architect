@@ -1,9 +1,12 @@
-# app\core\use_cases\generate_text.py
+# app/core/use_cases/generate_text.py
 import structlog
+from typing import Optional
 from opentelemetry import trace
+
 from app.core.domain.models import Frame, Sentence
 from app.core.domain.exceptions import InvalidFrameError, DomainError
 from app.core.ports.grammar_engine import IGrammarEngine
+from app.core.ports.llm_port import ILanguageModel
 from app.shared.observability import get_tracer
 
 logger = structlog.get_logger()
@@ -20,9 +23,10 @@ class GenerateText:
     4. Handles domain-level errors.
     """
 
-    def __init__(self, grammar_engine: IGrammarEngine):
-        # We inject the interface, not the concrete implementation (GF/Python)
-        self.grammar_engine = grammar_engine
+    def __init__(self, engine: IGrammarEngine, llm: Optional[ILanguageModel] = None):
+        # We inject the interfaces (Ports), not the concrete implementations
+        self.engine = engine
+        self.llm = llm
 
     async def execute(self, lang_code: str, frame: Frame) -> Sentence:
         """
@@ -45,11 +49,16 @@ class GenerateText:
                 # 1. Validation (Business Rules)
                 self._validate_frame(frame)
 
-                # 2. Execution (via Port)
-                # The core doesn't know if this runs GF binary, Python code, or an LLM.
-                sentence = await self.grammar_engine.generate(lang_code, frame)
+                # 2. Execution (via Grammar Engine Port)
+                # The core doesn't know if this runs GF binary or Python code.
+                sentence = await self.engine.generate(lang_code, frame)
                 
-                # 3. Post-processing / Metrics
+                # 3. Refinement (Optional LLM Step)
+                # If an LLM is present, we could refine the grammar output here.
+                # if self.llm:
+                #     sentence.text = await self.llm.refine(sentence.text)
+                
+                # 4. Post-processing / Metrics
                 span.set_attribute("app.generated_length", len(sentence.text))
                 logger.info("generation_success", lang=lang_code, text_preview=sentence.text[:50])
                 
