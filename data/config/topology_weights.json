@@ -1,0 +1,50 @@
+{
+  "SVO": {
+    "nsubj": -10,
+    "root": 0,
+    "obj": 10,
+    "iobj": 5,
+    "obl": 15,
+    "advmod": 20
+  },
+  "SOV": {
+    "nsubj": -10,
+    "iobj": -8,
+    "obj": -5,
+    "obl": -2,
+    "root": 0,
+    "advmod": 20
+  },
+  "VSO": {
+    "root": -10,
+    "nsubj": 0,
+    "obj": 10,
+    "iobj": 15,
+    "obl": 20,
+    "advmod": 25
+  },
+  "VOS": {
+    "root": -10,
+    "obj": 5,
+    "nsubj": 10,
+    "iobj": 15,
+    "obl": 20,
+    "advmod": 25
+  },
+  "OVS": {
+    "obj": -10,
+    "root": 0,
+    "nsubj": 10,
+    "iobj": 15,
+    "obl": 20,
+    "advmod": 25
+  },
+  "OSV": {
+    "obj": -10,
+    "nsubj": -5,
+    "root": 0,
+    "iobj": 5,
+    "obl": 10,
+    "advmod": 20
+  }
+}

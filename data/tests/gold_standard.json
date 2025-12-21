@@ -1,0 +1,67 @@
+[
+  {
+    "id": "eng_bio_001",
+    "lang": "eng",
+    "tier": 1,
+    "description": "Standard Biographical Sentence (Subject + Copula + Indef + Adj + Noun)",
+    "intent": {
+      "frame_type": "bio",
+      "name": "Alan Turing",
+      "profession": "computer_scientist",
+      "nationality": "british"
+    },
+    "expected": "Alan Turing is a British computer scientist."
+  },
+  {
+    "id": "fra_bio_001",
+    "lang": "fra",
+    "tier": 1,
+    "description": "Feminine Gender Agreement (Physicienne vs Physicien)",
+    "intent": {
+      "frame_type": "bio",
+      "name": "Marie Curie",
+      "profession": "physicist",
+      "nationality": "polish",
+      "gender": "f"
+    },
+    "expected": "Marie Curie est une physicienne polonaise."
+  },
+  {
+    "id": "fra_bio_002",
+    "lang": "fra",
+    "tier": 1,
+    "description": "Masculine Gender Agreement (Guerrier vs Guerrière)",
+    "intent": {
+      "frame_type": "bio",
+      "name": "Shaka",
+      "profession": "warrior",
+      "nationality": "zulu",
+      "gender": "m"
+    },
+    "expected": "Shaka est un guerrier zoulou."
+  },
+  {
+    "id": "hau_bio_001",
+    "lang": "hau",
+    "tier": 3,
+    "description": "Factory SVO Topology (Simple Copula)",
+    "intent": {
+      "frame_type": "bio",
+      "name": "Shaka",
+      "profession": "warrior"
+    },
+    "expected": "Shaka jarumi ne."
+  },
+  {
+    "id": "zul_bio_001",
+    "lang": "zul",
+    "tier": 3,
+    "description": "Factory SVO Topology (Subject Concord Prefix)",
+    "intent": {
+      "frame_type": "bio",
+      "name": "Shaka",
+      "profession": "warrior"
+    },
+    "expected": "uShaka uyisosha."
+  }
+]

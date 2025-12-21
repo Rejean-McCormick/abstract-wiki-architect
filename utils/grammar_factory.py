@@ -1,15 +1,25 @@
-# utils\grammar_factory.py
+# utils/grammar_factory.py
 import os
+import json
 import shutil
 from pathlib import Path
+from typing import Dict, List, Tuple
+
+# ===========================================================================
+# CONFIGURATION & PATHS
+# ===========================================================================
+
+# Base Paths (Hybrid WSL/Windows Compatible)
+BASE_DIR = Path(__file__).resolve().parent.parent
+OUTPUT_ROOT = BASE_DIR / "gf" / "generated" / "src"
+TOPOLOGY_CONFIG_PATH = BASE_DIR / "data" / "config" / "topology_weights.json"
 
 # ===========================================================================
 # LANGUAGE FACTORY CONFIGURATION (TIER 3)
 # ===========================================================================
-# This dictionary defines the "DNA" for languages that do not exist in the
-# official Resource Grammar Library.
-#
-# Schema: "iso_code": { "name": "EnglishName", "order": "SVO"|"SOV"|"VSO" }
+# This dictionary defines the "Wishlist" for languages that do not exist in the
+# official Resource Grammar Library. The 'order' key maps to weights in 
+# topology_weights.json.
 # ===========================================================================
 
 FACTORY_CONFIGS = {
@@ -19,7 +29,7 @@ FACTORY_CONFIGS = {
     "yor": {"name": "Yoruba",      "order": "SVO"},
     "ibo": {"name": "Igbo",        "order": "SVO"},
     "hau": {"name": "Hausa",       "order": "SVO"},
-    "swa": {"name": "Swahili",     "order": "SVO"}, # Fallback
+    "swa": {"name": "Swahili",     "order": "SVO"}, 
     "wol": {"name": "Wolof",       "order": "SVO"},
     "kin": {"name": "Kinyarwanda", "order": "SVO"},
     "lug": {"name": "Ganda",       "order": "SVO"},
@@ -57,17 +67,21 @@ FACTORY_CONFIGS = {
     "kur": {"name": "Kurdish",     "order": "SOV"},
 }
 
-# Determine the absolute path to 'gf/generated/src' based on this script's location
-# This ensures it works whether run from root or inside utils/
-BASE_DIR = Path(__file__).resolve().parent.parent
-OUTPUT_ROOT = BASE_DIR / "gf" / "generated" / "src"
-
 def clean_directory():
     """Wipes the generated directory to ensure a clean build slate."""
     if OUTPUT_ROOT.exists():
         print(f"[*] Cleaning factory output: {OUTPUT_ROOT}")
         shutil.rmtree(OUTPUT_ROOT)
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+
+def load_topology_weights() -> Dict[str, Dict[str, int]]:
+    """Loads the linearizer weights from the JSON config."""
+    if not TOPOLOGY_CONFIG_PATH.exists():
+        print(f"[!] Warning: Topology weights not found at {TOPOLOGY_CONFIG_PATH}. Defaulting to SVO.")
+        return {"SVO": {"nsubj": -10, "root": 0, "obj": 10}}
+    
+    with open(TOPOLOGY_CONFIG_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 # ===========================================================================
 # GF TEMPLATES (The "Pidgin" Generator)
@@ -85,7 +99,7 @@ def get_res_content(gf_name):
   oper
     -- Tier 3 "Pidgin" Type System
     -- We treat everything as simple strings to guarantee compilation.
-    -- Complex morphology belongs in Tier 2 (Contrib) or Tier 1 (RGL).
+    -- Complex morphology belongs in Tier 1 (RGL).
     StrType : Type = {{s : Str}} ;
 
     mkStrType : Str -> StrType = \\s -> {{s = s}} ;
@@ -96,31 +110,33 @@ def get_res_content(gf_name):
 }} ;
 """
 
-def get_syntax_content(gf_name, order):
+def get_syntax_content(gf_name: str, order_key: str, weights_db: Dict) -> str:
     """
-    Generates Syntax{Lang}.gf
-    Implements basic word order logic (SVO, SOV, VSO).
+    Generates Syntax{Lang}.gf using Weighted Topology Sorting.
     """
     
-    # Logic for Subject-Verb-Object (e.g. English, Zulu, Swahili)
-    if order == "SVO":
-        lin_rule = "subj.s ++ verb.s ++ obj.s"
+    # 1. Retrieve weights for the language's specific order (e.g., SOV)
+    # Default to SVO if the key is missing from the DB
+    weights = weights_db.get(order_key, weights_db.get("SVO"))
     
-    # Logic for Subject-Object-Verb (e.g. Japanese, Korean, Quechua)
-    elif order == "SOV":
-        lin_rule = "subj.s ++ obj.s ++ verb.s"
+    # 2. Define the constituents we have in our simple mkCl function
+    # The keys 'nsubj', 'root', 'obj' MUST match keys in topology_weights.json
+    constituents = [
+        {"gf_var": "subj", "role": "nsubj", "weight": weights.get("nsubj", -10)},
+        {"gf_var": "verb", "role": "root",  "weight": weights.get("root", 0)},
+        {"gf_var": "obj",  "role": "obj",   "weight": weights.get("obj", 10)}
+    ]
     
-    # Logic for Verb-Subject-Object (e.g. Arabic, Welsh, Tagalog)
-    elif order == "VSO":
-        lin_rule = "verb.s ++ subj.s ++ obj.s"
+    # 3. Sort by weight (Low -> High = Left -> Right)
+    sorted_constituents = sorted(constituents, key=lambda x: x["weight"])
     
-    # Default fallback
-    else:
-        lin_rule = "subj.s ++ verb.s ++ obj.s"
+    # 4. Generate the GF concatenation string (e.g., "subj.s ++ obj.s ++ verb.s")
+    lin_parts = [f"{item['gf_var']}.s" for item in sorted_constituents]
+    lin_rule = " ++ ".join(lin_parts)
 
     return f"""resource Syntax{gf_name} = open Res{gf_name} in {{
   oper
-    -- Clause Construction
+    -- Clause Construction (Weighted Topology: {order_key})
     mkCl : StrType -> StrType -> StrType -> {{s : Str}} = \\subj, verb, obj -> {{
       s = {lin_rule}
     }} ;
@@ -174,7 +190,7 @@ concrete Wiki{gf_name} of {abstract_name} = open Res{gf_name}, Syntax{gf_name} i
 
     -- VOCABULARY STUBS
     -- These ensure the grammar compiles even if we don't have a dictionary yet.
-    -- In V2, the AI Refiner will replace these with real words.
+    -- In V2, the AI Architect will replace these with real words.
     lex_animal_N = mkStrType "{human_name}_Animal" ;
     lex_cat_N    = mkStrType "{human_name}_Cat" ;
     lex_walk_V   = mkStrType "{human_name}_Walk" ;
@@ -190,6 +206,7 @@ def main():
     print(f"🏭 Language Factory: Initializing Tier 3 Generation...")
     print(f"[*] Target Directory: {OUTPUT_ROOT}")
     
+    weights_db = load_topology_weights()
     clean_directory()
     
     count = 0
@@ -198,11 +215,9 @@ def main():
         order = config["order"]
         
         # IMPORTANT: Map the ISO code to the GF Name Convention (WikiZul, not WikiZulu)
-        # to match the Router's logic in language_map.py.
         gf_name = code.capitalize()  # zul -> Zul
         
         # GF expects lowercase folder names (e.g. gf/generated/src/zul/)
-        # This mirrors the structure of gf-rgl/src/
         folder_name = code.lower()
         lang_dir = OUTPUT_ROOT / folder_name
         lang_dir.mkdir(parents=True, exist_ok=True)
@@ -211,9 +226,9 @@ def main():
         with open(lang_dir / f"Res{gf_name}.gf", "w", encoding="utf-8") as f:
             f.write(get_res_content(gf_name))
             
-        # 2. Write Syntax File
+        # 2. Write Syntax File (Dynamic Topology)
         with open(lang_dir / f"Syntax{gf_name}.gf", "w", encoding="utf-8") as f:
-            f.write(get_syntax_content(gf_name, order))
+            f.write(get_syntax_content(gf_name, order, weights_db))
             
         # 3. Write Concrete Grammar
         with open(lang_dir / f"Wiki{gf_name}.gf", "w", encoding="utf-8") as f:

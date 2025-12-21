@@ -1,131 +1,166 @@
-# ai_services\judge.py
 import json
 import logging
-from . import client
+import re
+from typing import Dict, Any, Optional
+import httpx
+import google.generativeai as genai
+
+from app.shared.config import settings
+from ai_services.prompts import JUDGE_SYSTEM_PROMPT
 
 # Setup Logger
-logger = logging.getLogger("ai_services.judge")
+logger = logging.getLogger(settings.OTEL_SERVICE_NAME)
 
-def _clean_json_response(response_text):
+class JudgeAgent:
     """
-    Helper to extract raw JSON from potential markdown wrapping.
-    e.g., turns "```json\n{...}\n```" into "{...}"
+    The Judge: A strict QA evaluator for Natural Language Generation.
+    1. Evaluates outputs against Gold Standard data.
+    2. Auto-files GitHub issues for regressions (The Whistleblower).
     """
-    if not response_text:
-        return None
-    
-    clean_text = response_text.strip()
-    
-    # Strip markdown code blocks if present
-    if clean_text.startswith("```"):
-        # Find the first newline to skip "```json"
-        first_newline = clean_text.find("\n")
-        if first_newline != -1:
-            clean_text = clean_text[first_newline+1:]
-        
-        # Strip trailing "```"
-        if clean_text.endswith("```"):
-            clean_text = clean_text[:-3]
-            
-    return clean_text.strip()
 
-def generate_gold_standard(concepts, lang_name):
-    """
-    Generates reference sentences for a list of abstract concepts.
-    
-    Args:
-        concepts (list): List of source strings (English sentences or ASTs).
-        lang_name (str): Target language name (e.g., "French").
-        
-    Returns:
-        list: A list of translated strings. Returns empty list on failure.
-    """
-    if not concepts or not lang_name:
-        return []
+    def __init__(self):
+        self.api_key = settings.GOOGLE_API_KEY
+        self.model_name = settings.AI_MODEL_NAME
+        self.github_token = settings.GITHUB_TOKEN
+        self.repo_url = settings.REPO_URL
+        self._client = None
 
-    prompt = f"""
-    Translate the following list of sentences into {lang_name}.
-    Ensure the translation is natural but strictly grammatical.
-    
-    INPUT LIST:
-    {json.dumps(concepts)}
-    
-    INSTRUCTIONS:
-    Return ONLY a raw JSON list of strings. No markdown. No explanations.
-    Example output: ["Sentence 1", "Sentence 2"]
-    """
-    
-    response = client.generate(prompt)
-    clean_json = _clean_json_response(response)
-
-    if not clean_json:
-        return []
-
-    try:
-        data = json.loads(clean_json)
-        if isinstance(data, list):
-            return data
+        if self.api_key:
+            genai.configure(api_key=self.api_key)
+            self._client = genai.GenerativeModel(self.model_name)
         else:
-            logger.warning(f"Gold Gen failed: Expected list, got {type(data)}")
-            return []
-    except json.JSONDecodeError as e:
-        logger.error(f"Gold Gen JSON Error: {e}")
-        return []
+            logger.warning("⚠️ GOOGLE_API_KEY not found. The Judge is presiding in silent mode.")
 
-def evaluate_output(source_concept, generated_text, lang_name):
-    """
-    Scores the quality of the generated text against the source concept.
-    
-    Args:
-        source_concept (str): The intended meaning (English or AST).
-        generated_text (str): The text produced by the GF engine.
-        lang_name (str): Target language.
+    def evaluate_case(self, generated_text: str, gold_case: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Compares the engine's output against the Gold Standard 'expected' string.
         
-    Returns:
-        dict: { "valid": bool, "score": int, "correction": str, "error": str }
-    """
-    # Fail fast on empty input
-    if not generated_text:
-        return {"valid": False, "score": 0, "error": "Empty generation input"}
-
-    prompt = f"""
-    Act as a strict linguistic judge for the language: {lang_name}.
-    
-    TASK: Verify if the GENERATED TEXT correctly matches the SOURCE CONCEPT.
-    
-    SOURCE CONCEPT: "{source_concept}"
-    GENERATED TEXT: "{generated_text}"
-    
-    EVALUATION CRITERIA:
-    1. Is it grammatically correct? (Yes/No)
-    2. Does it preserve the meaning? (Yes/No)
-    3. If No to either, provide the corrected sentence.
-    
-    OUTPUT FORMAT:
-    Return strictly a JSON object with these keys:
-    {{
-        "valid": boolean,
-        "score": integer (0-10),
-        "correction": "string (the corrected sentence or null if perfect)"
-    }}
-    """
-    
-    response = client.generate(prompt)
-    clean_json = _clean_json_response(response)
-
-    if not clean_json:
-        return {"valid": False, "score": 0, "error": "No valid response from AI"}
-
-    try:
-        data = json.loads(clean_json)
-        
-        # Validate schema keys
-        required_keys = ["valid", "score"]
-        if not all(k in data for k in required_keys):
-            return {"valid": False, "score": 0, "error": "Missing keys in AI response"}
+        Args:
+            generated_text: The actual output from the Abstract Wiki Engine.
+            gold_case: A dictionary from gold_standard.json containing 'intent' and 'expected'.
             
-        return data
+        Returns:
+            Dict: { "score": 0.0-1.0, "verdict": "PASS/FAIL", "critique": "..." }
+        """
+        if not self._client:
+            return {"score": 0, "verdict": "SKIPPED", "critique": "AI Agent disabled"}
 
-    except json.JSONDecodeError as e:
-        logger.error(f"Validation JSON Error: {e} | Content: {clean_json[:50]}...")
-        return {"valid": False, "score": 0, "error": "JSON parse error"}
+        expected_text = gold_case.get("expected")
+        lang = gold_case.get("lang")
+        intent = json.dumps(gold_case.get("intent"))
+
+        # Zero-shot check: Exact string match (Fast Pass)
+        if generated_text.strip().lower() == expected_text.strip().lower():
+            return {
+                "score": 1.0,
+                "verdict": "PASS",
+                "critique": "Exact match with Gold Standard."
+            }
+
+        # AI Evaluation (Slow Pass)
+        user_prompt = f"""
+        **CONTEXT:**
+        Target Language: {lang}
+        Semantic Intent: {intent}
+        
+        **COMPARISON:**
+        Gold Standard: "{expected_text}"
+        Actual Output: "{generated_text}"
+        """
+
+        try:
+            response = self._client.generate_content(
+                contents=[
+                    {"role": "user", "parts": [JUDGE_SYSTEM_PROMPT + "\n\n" + user_prompt]}
+                ],
+                generation_config={"temperature": 0.0} # Deterministic grading
+            )
+            
+            result = self._parse_json(response.text)
+            
+            # Auto-Report Regressions if configured
+            if result.get("score", 0) < 0.8 and self.github_token:
+                self._file_github_issue(gold_case, generated_text, result)
+
+            return result
+
+        except Exception as e:
+            logger.error(f"❌ Judge evaluation failed: {e}")
+            return {"score": 0, "verdict": "ERROR", "critique": str(e)}
+
+    def _file_github_issue(self, gold_case: Dict, actual: str, evaluation: Dict) -> None:
+        """
+        The Whistleblower: Files a GitHub issue when quality drops below threshold.
+        """
+        if "github.com" not in self.repo_url:
+            return
+
+        # Extract owner/repo from URL (e.g., https://github.com/owner/repo)
+        try:
+            _, _, _, owner, repo = self.repo_url.rstrip("/").split("/")[:5]
+            api_url = f"https://api.github.com/repos/{owner}/{repo}/issues"
+        except ValueError:
+            logger.error(f"Invalid REPO_URL format: {self.repo_url}")
+            return
+
+        title = f"Regression: {gold_case.get('lang')} - {gold_case.get('id')}"
+        body = f"""
+### 🚨 Quality Regression Detected
+**The Judge** has detected a failure in the Gold Standard test suite.
+
+| Field | Value |
+| :--- | :--- |
+| **Test ID** | `{gold_case.get('id')}` |
+| **Language** | `{gold_case.get('lang')}` |
+| **Expected** | `{gold_case.get('expected')}` |
+| **Actual** | `{actual}` |
+| **Score** | `{evaluation.get('score')}` |
+
+**Critique:**
+> {evaluation.get('critique')}
+
+*Auto-generated by Abstract Wiki Architect v2.0*
+        """
+
+        headers = {
+            "Authorization": f"token {self.github_token}",
+            "Accept": "application/vnd.github.v3+json"
+        }
+
+        try:
+            # Check for existing open issues with same title to avoid duplicates
+            check_res = httpx.get(api_url, headers=headers, params={"state": "open", "labels": "regression"})
+            if check_res.status_code == 200:
+                for issue in check_res.json():
+                    if issue["title"] == title:
+                        logger.info(f"Existing issue found for {title}. Skipping.")
+                        return
+
+            # Create Issue
+            res = httpx.post(api_url, headers=headers, json={
+                "title": title,
+                "body": body,
+                "labels": ["regression", "automated", "judge"]
+            })
+            if res.status_code == 201:
+                logger.info(f"📂 GitHub Issue filed: {title}")
+            else:
+                logger.error(f"Failed to file issue: {res.text}")
+
+        except Exception as e:
+            logger.error(f"Whistleblower error: {e}")
+
+    def _parse_json(self, text: str) -> Dict[str, Any]:
+        """
+        Robust JSON extraction from LLM output.
+        """
+        try:
+            # remove markdown fences
+            clean = re.sub(r"```json|```", "", text).strip()
+            return json.loads(clean)
+        except json.JSONDecodeError:
+            logger.error(f"Judge output invalid JSON: {text}")
+            return {"score": 0, "verdict": "JSON_ERROR", "critique": "Output parsing failed"}
+
+# Global Singleton
+judge = JudgeAgent()

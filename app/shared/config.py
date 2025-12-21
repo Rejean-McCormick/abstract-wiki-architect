@@ -32,21 +32,25 @@ class Settings(BaseSettings):
     OTEL_SERVICE_NAME: str = "architect-backend"
     OTEL_EXPORTER_OTLP_ENDPOINT: Optional[str] = None 
 
-    # --- Messaging (Redis) ---
-    REDIS_HOST: str = "localhost"
-    REDIS_PORT: int = 6379
-    REDIS_DB: int = 0
+    # --- Messaging & State (Redis) ---
+    # v2.0 Update: Unified URL and Session Context configuration
+    REDIS_URL: str = "redis://localhost:6379/0"
     REDIS_QUEUE_NAME: str = "architect_tasks"
-
-    @property
-    def REDIS_URL(self) -> str:
-        # Matches 'redis_broker.py' expectation
-        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+    SESSION_TTL_SEC: int = 600  # Default 10 minutes for Discourse Context
 
     # --- External Services ---
     WIKIDATA_SPARQL_URL: str = "https://query.wikidata.org/sparql"
     WIKIDATA_TIMEOUT: int = 30
     
+    # --- AI & DevOps (v2.0) ---
+    # Credentials for The Architect, Surgeon, and Judge agents
+    GOOGLE_API_KEY: Optional[str] = None
+    AI_MODEL_NAME: str = "gemini-1.5-pro"
+    
+    # GitHub Integration for The Judge (Auto-Ticketing)
+    GITHUB_TOKEN: Optional[str] = None
+    REPO_URL: str = "https://github.com/your-org/abstract-wiki-architect"
+
     # --- Persistence ---
     STORAGE_BACKEND: StorageBackend = StorageBackend.FILESYSTEM
     
@@ -66,10 +70,21 @@ class Settings(BaseSettings):
     # --- Feature Flags ---
     USE_MOCK_GRAMMAR: bool = False 
     GF_LIB_PATH: str = "/usr/local/lib/gf" # Default to Docker/Linux path
-    GOOGLE_API_KEY: Optional[str] = None
+
+    # --- Dynamic Path Resolution ---
+    
+    @property
+    def TOPOLOGY_WEIGHTS_PATH(self) -> str:
+        """v2.0: Path to Udiron linearization weights"""
+        return os.path.join(self.FILESYSTEM_REPO_PATH, "data", "config", "topology_weights.json")
 
     @property
-    def AW_PGF_PATH(self) -> str:
+    def GOLD_STANDARD_PATH(self) -> str:
+        """v2.0: Path to QA test suite"""
+        return os.path.join(self.FILESYSTEM_REPO_PATH, "data", "tests", "gold_standard.json")
+
+    @property
+    def PGF_PATH(self) -> str:
         """
         Dynamically builds the path to the PGF binary.
         Ensures consistency between Backend and Worker services.
