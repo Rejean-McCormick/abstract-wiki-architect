@@ -1,7 +1,1 @@
-concrete WikiFra of AbstractWiki = WikiI ** open SyntaxFra, ParadigmsFra in {
-  lin
-    lex_animal_N = mkNP (mkN "animal"); -- Placeholder
-    lex_walk_V = mkVP (mkV "walk");     -- Placeholder
-    lex_blue_A = mkAP (mkA "blue");     -- Placeholder
-    mkLiteral v = mkNP (mkN v.s);       -- Simple string wrapper
-};
+concrete WikiFra of AbstractWiki = WikiI with (Syntax = SyntaxFre) ** open SyntaxFre, ParadigmsFre in { flags coding = utf8 ; };

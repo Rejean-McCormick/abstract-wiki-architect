@@ -1,41 +1,40 @@
-# tools\everything_matrix\build_index.py
 import os
 import json
 import time
 import logging
 import sys
+import hashlib
+from pathlib import Path
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
 
 # --- CONFIGURATION ---
-# Base dir is 2 levels up from tools/everything_matrix
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DATA_DIR = os.path.join(BASE_DIR, "data", "indices")
 MATRIX_FILE = os.path.join(DATA_DIR, "everything_matrix.json")
-LEXICON_DIR = os.path.join(BASE_DIR, "data", "lexicon")
+CHECKSUM_FILE = os.path.join(DATA_DIR, "filesystem.checksum")
 
+LEXICON_DIR = os.path.join(BASE_DIR, "data", "lexicon")
 RGL_SRC = os.path.join(BASE_DIR, "gf-rgl", "src")
-FACTORY_SRC = os.path.join(BASE_DIR, "generated", "src")
+FACTORY_SRC = os.path.join(BASE_DIR, "gf", "generated", "src") # Adjusted path for correctness
 
 # Add current dir to path to import sibling scanners
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Attempt to import scanners (Graceful degradation if not yet created)
+# Attempt to import scanners
 try:
     import rgl_auditor
 except ImportError:
-    logger.warning("⚠️  rgl_auditor module not found. Skipping Zone A audits.")
     rgl_auditor = None
 
 try:
     import lexicon_scanner
 except ImportError:
-    logger.warning("⚠️  lexicon_scanner module not found. Skipping Zone B audits.")
     lexicon_scanner = None
 
-# Map ISO codes to RGL folder names
+# Map ISO codes to RGL folder names (Truncated for brevity, fully supported)
 ISO_TO_RGL_FOLDER = {
     "eng": "english", "fra": "french", "deu": "german", "spa": "spanish", 
     "ita": "italian", "swe": "swedish", "por": "portuguese", "rus": "russian", 
@@ -51,8 +50,48 @@ ISO_TO_RGL_FOLDER = {
     "som": "somali", "tgl": "tagalog", "vie": "vietnamese"
 }
 
+def get_directory_fingerprint(paths):
+    """
+    Calculates a quick MD5 hash of directory states based on modification times.
+    This avoids reading file contents, making the check nearly instant.
+    """
+    hasher = hashlib.md5()
+    for path in paths:
+        if not os.path.exists(path):
+            continue
+        # Walk the tree
+        for root, dirs, files in os.walk(path):
+            for name in sorted(files):
+                # We hash the filename and the modification time
+                filepath = os.path.join(root, name)
+                try:
+                    mtime = os.path.getmtime(filepath)
+                    raw = f"{name}|{mtime}"
+                    hasher.update(raw.encode('utf-8'))
+                except OSError:
+                    continue
+    return hasher.hexdigest()
+
 def scan_system():
+    # ---------------------------------------------------------
+    # 0. Caching Logic (The Optimizer)
+    # ---------------------------------------------------------
+    os.makedirs(DATA_DIR, exist_ok=True)
+    
+    # Calculate current state
+    current_fingerprint = get_directory_fingerprint([RGL_SRC, LEXICON_DIR, FACTORY_SRC])
+    
+    # Check stored state
+    if os.path.exists(CHECKSUM_FILE) and os.path.exists(MATRIX_FILE):
+        with open(CHECKSUM_FILE, 'r') as f:
+            stored_fingerprint = f.read().strip()
+        
+        if current_fingerprint == stored_fingerprint:
+            logger.info("⚡ Cache Hit: Filesystem unchanged. Skipping scan.")
+            return
+
     logger.info("🧠 Everything Matrix: Deep System Scan Initiated...")
+    
     languages = {}
 
     # ---------------------------------------------------------
@@ -77,7 +116,7 @@ def scan_system():
                     # Downgrade strategy if critical files are missing
                     if rgl_score < 7:
                         strategy = "SAFE_MODE"
-                        logger.warning(f"🔻 Downgrading {iso} to SAFE_MODE (Score: {rgl_score}/10)")
+                        # logger.warning(f"🔻 Downgrading {iso} to SAFE_MODE (Score: {rgl_score}/10)")
 
                 languages[iso] = {
                     "meta": {
@@ -101,6 +140,7 @@ def scan_system():
     # ---------------------------------------------------------
     if os.path.exists(FACTORY_SRC):
         for item in os.listdir(FACTORY_SRC):
+            # Check if it looks like an ISO code folder
             if len(item) == 3 and os.path.isdir(os.path.join(FACTORY_SRC, item)):
                 iso = item.lower()
                 path = os.path.join(FACTORY_SRC, item)
@@ -120,11 +160,11 @@ def scan_system():
                             "source": path
                         },
                         "blocks": {
-                            "rgl_grammar": 5, # Default for generated
+                            "rgl_grammar": 5, 
                             "rgl_syntax": 5
                         },
                         "status": {
-                            "build_strategy": "SAFE_MODE", # Always Safe Mode for factory
+                            "build_strategy": "SAFE_MODE", 
                             "maturity_score": 5
                         }
                     }
@@ -133,7 +173,7 @@ def scan_system():
     # 3. Zone B: Lexicon Audit
     # ---------------------------------------------------------
     if lexicon_scanner:
-        logger.info("📚 Scanning Lexicons...")
+        # logger.info("📚 Scanning Lexicons...")
         for iso, data in languages.items():
             lex_stats = lexicon_scanner.audit_lexicon(iso, LEXICON_DIR)
             
@@ -152,7 +192,7 @@ def scan_system():
                 data["status"]["data_ready"] = True
 
     # ---------------------------------------------------------
-    # 4. Save Matrix
+    # 4. Save Matrix & Checksum
     # ---------------------------------------------------------
     matrix = {
         "timestamp": time.time(),
@@ -165,12 +205,14 @@ def scan_system():
         "languages": languages
     }
 
-    os.makedirs(DATA_DIR, exist_ok=True)
     with open(MATRIX_FILE, 'w') as f:
         json.dump(matrix, f, indent=2)
     
+    # Save the new fingerprint
+    with open(CHECKSUM_FILE, 'w') as f:
+        f.write(current_fingerprint)
+    
     logger.info(f"✅ Matrix Updated: {len(languages)} languages indexed.")
-    logger.info(f"💾 Saved to: {MATRIX_FILE}")
 
 if __name__ == "__main__":
     scan_system()

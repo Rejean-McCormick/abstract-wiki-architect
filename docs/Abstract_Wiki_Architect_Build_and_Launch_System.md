@@ -1,54 +1,55 @@
 
-# 🏛️ Abstract Wiki Architect: Build & Launch System
+# 🚀 Abstract Wiki Architect: Unified Build & Launch System (v2.0)
 
 ## 1. High-Level Architecture
 
-The system follows a **"check, build, serve"** pipeline. It does not simply start the API; it first performs a deep census of your data (The Matrix), compiles the grammar binary (The PGF), and only then launches the runtime services.
+The system follows a strict **"Check, Build, Serve"** pipeline. It does not simply start the API; it first performs a deep census of your data (The Matrix), compiles the grammar binary (The PGF) using a robust two-phase process, and only then launches the runtime services.
+
+The v2.0 architecture replaces fragile OS-scripts with a **Unified Python Task Runner** to ensure speed, atomicity, and portability.
 
 ---
 
-## 2. Level 1: The Commander 🚀
+## 2. Level 1: The Commander (`manage.py`) 🚀
 
-**Script:** `launch.ps1`
-**Role:** The Orchestrator
+**Script:** `manage.py` (Replaces `launch.ps1`)
+**Role:** The Unified CLI & Environment Manager
 **Location:** Root
 
-This is the entry point. It contains no application logic; its job is **environment management** and **sequencing**.
+This is the single entry point for all developer operations. It centralizes logic previously scattered across `.bat`, `.sh`, and `.ps1` files.
 
-* **Pre-Flight:** Kills stale processes (`uvicorn`, `arq`) and verifies Docker/Redis.
-* **Step 1:** Calls **Level 2 (Indexer)** to update the knowledge base.
-* **Step 2:** Calls **Level 2 (Builder)** to compile the binary.
-* **Step 3:** Spawns **Level 4 (Services)** in visible windows.
+### Core Commands
+
+* **`python manage.py start`**: The "Daily Driver". Checks Docker/Redis, runs an incremental build, and launches the API/Worker.
+* **`python manage.py build --clean --parallel 8`**: Forces a clean rebuild using parallel processing.
+* **`python manage.py doctor`**: Runs system diagnostics (identifies Zombie files, checks pathing).
+* **`python manage.py generate --missing`**: Asynchronously calls AI/Factory to create missing grammars (Decoupled from build).
 
 ---
 
-## 3. Level 2: The Builders 🏗️
+## 3. Level 2: The Optimized Builders 🏗️
 
-These scripts run sequentially. If one fails, the launch aborts (unless "Resilience Mode" is active).
+These scripts run sequentially under the `build` command. They are refactored for **Speed** (Caching/Parallelism) and **Safety** (Atomic Writes).
 
 ### A. The Census Taker (Indexer)
 
 * **Script:** `tools/everything_matrix/build_index.py`
-* **Input:** Raw Lexicon Data (`data/lexicon/`) and RGL Source (`gf-rgl/src/`).
-* **Output:** `data/indices/everything_matrix.json`
+* **Optimization:** **Content Hashing (Caching)**.
 * **Logic:**
-* It scans the file system to find every supported language.
-* It imports **Level 3 Specialists** (`rgl_auditor`, `lexicon_scanner`) to grade the quality of each language.
-* It saves a JSON "Matrix" that acts as the source of truth for the Compiler.
+1. Checks the MD5 checksum of `gf-rgl/` and `data/lexicon/`.
+2. **Match:** Loads cached `everything_matrix.json` (0s latency).
+3. **Mismatch:** Rescans the file system and updates the index.
 
 
 
 ### B. The Compiler (Orchestrator)
 
 * **Script:** `gf/build_orchestrator.py`
-* **Input:** `everything_matrix.json`
-* **Output:** `gf/AbstractWiki.pgf` (The binary).
+* **Optimization:** **Parallel Verification & Single-Shot Linking**.
 * **Logic:**
-* **Zombie Cleanup:** Deletes broken/stale generated files.
-* **Generation:** Creates `AbstractWiki.gf` and `WikiI.gf` dynamically.
-* **Resolution:** Finds the best source for each language (Is it in RGL? Is it generated? Is it in Contrib?).
-* **AI Intervention:** If a language is missing, it calls **Level 3 (The Architect)** to generate it.
-* **Compilation:** Calls the external `gf` binary to link everything into a `.pgf`.
+1. **Weighted Topology (Pre-Flight):** Calls `grammar_factory.py` to generate "Safe Mode" grammars for Tier 3 languages (e.g., Zulu, Hausa) using `topology_weights.json`.
+2. **Parallel Verification:** Spawns a process pool (e.g., 8 workers) to compile `.gfo` files for all languages simultaneously.
+3. **Atomic Writes:** Compiles to a `_temp` directory first. Only valid builds are moved to the final folder, permanently eliminating "Zombie" files.
+4. **Single-Shot Link:** Collects *all* valid languages and executes **one single** `gf -make` command to produce the final `AbstractWiki.pgf` binary.
 
 
 
@@ -56,48 +57,37 @@ These scripts run sequentially. If one fails, the launch aborts (unless "Resilie
 
 ## 4. Level 3: The Specialists (Hidden Dependencies) 🧠
 
-These scripts are not run directly by you. They are libraries imported by Level 2 to perform complex analysis or AI generation.
+These are libraries imported by Level 2 to perform complex analysis, generation, or repair.
 
-### A. The RGL Auditor
+### A. The Weighted Topology Factory
 
-* **Script:** `tools/everything_matrix/rgl_auditor.py`
-* **Caller:** `build_index.py`
-* **Function:** `audit_language(iso, path)`
-* **Logic:**
-* Checks for the existence of the "Big 5" GF modules: `Cat`, `Noun`, `Grammar`, `Paradigms`, `Syntax`.
-* Calculates a **Maturity Score (0-10)**.
-* If key files are missing, it flags the language as "SAFE_MODE" so the build doesn't crash.
+* **Script:** `utils/grammar_factory.py`
+* **Role:** Deterministic Generation (Tier 3).
+* **Logic:** Uses `data/config/topology_weights.json` to generate grammatically correct word order (SVO, SOV, VSO) for under-resourced languages without needing AI.
 
-
-
-### B. The Lexicon Scanner
-
-* **Script:** `tools/everything_matrix/lexicon_scanner.py`
-* **Caller:** `build_index.py`
-* **Function:** `audit_lexicon(iso, path)`
-* **Logic:**
-* Audits semantic domains (`core`, `people`, `science`).
-* Counts total word depth.
-* Determines if the language has enough data to be "Production Ready" (Score > 8).
-
-
-
-### C. The AI Agent (Architect & Surgeon)
+### B. The AI Agent (Architect & Surgeon)
 
 * **Script:** `ai_services/architect.py`
-* **Caller:** `build_orchestrator.py`
-* **Logic:**
-* **The Architect:** If `resolve_language_path` fails, this sends a prompt to Google Gemini: *"Write the concrete grammar for Zulu."*
-* **The Surgeon:** If compilation fails, it takes the error log and the broken code, sends it to Gemini, and asks for a patched version.
-* **Sanitization:** Strips Markdown (````gf`) from the LLM output to ensure clean compilation.
+* **Role:** Probabilistic Generation (Tier 3+) & Repair.
+* **Refactor:** **Decoupled**.
+* No longer called implicitly during the build loop (prevents network timeouts).
+* Invoked explicitly via `python manage.py generate`.
+* **Architect:** Generates raw GF code from scratch.
+* **Surgeon:** Patches broken `.gf` files based on compiler logs.
 
 
+
+### C. The Scanners (Auditors)
+
+* **Scripts:** `rgl_auditor.py`, `lexicon_scanner.py`
+* **Role:** Quality Scoring.
+* **Logic:** analyze RGL coverage and Vocabulary depth to assign a **Maturity Score (0-10)**, enabling the Orchestrator to choose between "High Road" (Tier 1) and "Safe Mode" (Tier 3).
 
 ---
 
 ## 5. Level 4: The Runtime Services 🔌
 
-Once Level 2 finishes successfully, Level 1 spawns these persistent processes.
+Once Level 2 finishes successfully, Level 1 spawns these persistent processes in visible windows.
 
 ### A. The API (Brain)
 
@@ -109,16 +99,13 @@ Once Level 2 finishes successfully, Level 1 spawns these persistent processes.
 
 * **Script:** `app/workers/worker.py`
 * **Framework:** ARQ (Redis)
-* **Role:**
-* Loads the `AbstractWiki.pgf` binary into memory.
-* Watches the file system; if `build_orchestrator.py` updates the binary, the Worker **hot-reloads** it without restarting.
-
-
+* **Optimization:** **OS-Native Hot Reload**.
+* **Logic:** Uses `watchfiles` (instead of polling) to reload the `AbstractWiki.pgf` binary into memory the *instant* the builder updates it.
 
 ---
 
 ## Data Flow Summary
 
-1. **Lexicon/RGL** (Files) ➔ **Scanners** (Level 3) ➔ **Indexer** (Level 2) ➔ **Matrix JSON**.
-2. **Matrix JSON** ➔ **Orchestrator** (Level 2) ➔ **Architect** (Level 3, optional) ➔ **GF Compiler** ➔ **PGF Binary**.
-3. **PGF Binary** ➔ **Worker** (Level 4, Memory) ➔ **API** (Level 4, User).
+1. **Filesystem** (Lexicon/RGL) ➔ **Indexer** (Cache Check) ➔ **Matrix JSON**.
+2. **Matrix JSON** ➔ **Orchestrator** (Parallel Build) ➔ **Factory** (Tier 3 Gen) ➔ **GF Compiler** ➔ **PGF Binary**.
+3. **PGF Binary** ➔ **Worker** (Hot Reload) ➔ **API** (User Request).

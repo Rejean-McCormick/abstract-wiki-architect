@@ -5,12 +5,13 @@ import sys
 import glob
 
 # ==============================================================================
-# 🕵️ ABSTRACT WIKI DIAGNOSTIC AUDITOR
+# 🕵️ ABSTRACT WIKI DIAGNOSTIC AUDITOR (v2.0)
 # ==============================================================================
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MATRIX_PATH = os.path.join(ROOT_DIR, "data", "indices", "everything_matrix.json")
 GENERATED_DIR = os.path.join(ROOT_DIR, "gf", "generated", "src")
+CONTRIB_DIR = os.path.join(ROOT_DIR, "gf", "contrib")
 RGL_DIR = os.path.join(ROOT_DIR, "gf-rgl", "src")
 
 COLORS = {
@@ -48,8 +49,8 @@ def check_zombie_file(iso, path):
 def run_audit():
     print_c("HEADER", f"\n🚀 STARTING DEEP SYSTEM AUDIT")
     print_c("HEADER", f"===========================")
-    print(f"📂 Root:   {ROOT_DIR}")
-    print(f"📄 Matrix: {MATRIX_PATH}")
+    print(f"📂 Root:    {ROOT_DIR}")
+    print(f"📄 Matrix:  {MATRIX_PATH}")
 
     if not os.path.exists(MATRIX_PATH):
         print_c("FAIL", "❌ CRITICAL: Matrix file not found!")
@@ -62,34 +63,39 @@ def run_audit():
     print_c("CYAN", f"📊 Matrix Index: {len(langs)} languages found.\n")
 
     zombies_found = []
-    broken_rgl = []
 
-    print(f"{'ISO':<6} | {'STRATEGY':<12} | {'FILE STATUS':<30} | {'RGL PATH'}")
-    print("-" * 80)
+    print(f"{'ISO':<6} | {'STRATEGY':<12} | {'GEN STATUS':<30} | {'CONTRIB STATUS':<20} | {'RGL PATH'}")
+    print("-" * 110)
 
     for iso, data in langs.items():
         strategy = data.get("status", {}).get("build_strategy", "UNKNOWN")
-        
-        # Check Generated File
         suffix = iso.capitalize()
-        gen_path = os.path.join(GENERATED_DIR, iso, f"Wiki{suffix}.gf")
         
-        file_status = check_zombie_file(iso, gen_path)
+        # 1. Check Generated File
+        gen_path = os.path.join(GENERATED_DIR, iso.lower(), f"Wiki{suffix}.gf")
+        gen_status = check_zombie_file(iso, gen_path)
         
-        # Check RGL
+        # 2. Check Contrib File (Often where Zombies hide)
+        contrib_path = os.path.join(CONTRIB_DIR, iso, f"Wiki{suffix}.gf")
+        contrib_status = check_zombie_file(iso, contrib_path)
+
+        # 3. Check RGL
         rgl_folder = data.get("meta", {}).get("folder", "???")
         rgl_path = os.path.join(RGL_DIR, rgl_folder)
         rgl_exists = "✅ Found" if os.path.exists(rgl_path) else "❌ Missing"
 
         # Colorize Row
         row_color = "RESET"
-        if "ZOMBIE" in file_status:
+        if "ZOMBIE" in gen_status:
             row_color = "FAIL"
             zombies_found.append(gen_path)
+        elif "ZOMBIE" in contrib_status:
+            row_color = "FAIL"
+            zombies_found.append(contrib_path)
         elif iso == "tur":
              row_color = "WARN" # Always warn about Turkish
         
-        print_c(row_color, f"{iso:<6} | {strategy:<12} | {file_status:<30} | {rgl_exists} ({rgl_folder})")
+        print_c(row_color, f"{iso:<6} | {strategy:<12} | {gen_status:<30} | {contrib_status:<20} | {rgl_exists} ({rgl_folder})")
 
     print("\n")
     print_c("HEADER", "🩺 DIAGNOSTIC REPORT")

@@ -78,7 +78,7 @@
       "Cat": "gf-rgl/src/english/CatEng.gf",
       "Grammar": "gf-rgl/src/english/GrammarEng.gf",
       "Noun": "gf-rgl/src/english/NounEng.gf",
-      "Paradigms": "gf-rgl/src/english/ParadigmsEng.gf"
+      "Paradigms": "gf-rgl/src/english/Paradigms"
     },
     "path_root": "gf-rgl/src/api"
   },

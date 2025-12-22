@@ -1,9 +1,9 @@
 {
-  "timestamp": 1766353701.8028376,
+  "timestamp": 1766420772.578086,
   "stats": {
-    "total_languages": 45,
+    "total_languages": 77,
     "tier_1_count": 45,
-    "tier_3_count": 0,
+    "tier_3_count": 32,
     "production_ready": 28
   },
   "languages": {
@@ -379,21 +379,22 @@
         "folder": "swahili"
       },
       "paths": {
-        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/swahili"
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/swahili",
+        "factory": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/swa"
       },
       "blocks": {
         "rgl_cat": 10,
         "rgl_noun": 10,
         "rgl_grammar": 10,
         "rgl_paradigms": 10,
-        "rgl_syntax": 0,
+        "rgl_syntax": 10,
         "lex_seed": 3,
         "lex_wide": 0,
         "vocab_size": 8
       },
       "status": {
         "build_strategy": "HIGH_ROAD",
-        "maturity_score": 8.0,
+        "maturity_score": 10.0,
         "data_ready": true
       }
     },
@@ -646,14 +647,14 @@
         "rgl_noun": 10,
         "rgl_grammar": 10,
         "rgl_paradigms": 10,
-        "rgl_syntax": 0,
+        "rgl_syntax": 10,
         "lex_seed": 3,
         "lex_wide": 0,
         "vocab_size": 8
       },
       "status": {
         "build_strategy": "HIGH_ROAD",
-        "maturity_score": 8.0,
+        "maturity_score": 10.0,
         "data_ready": true
       }
     },
@@ -698,7 +699,7 @@
         "rgl_noun": 10,
         "rgl_grammar": 10,
         "rgl_paradigms": 10,
-        "rgl_syntax": 0,
+        "rgl_syntax": 10,
         "lex_seed": 0,
         "lex_wide": 0,
         "vocab_size": 0
@@ -795,7 +796,8 @@
         "folder": "basque"
       },
       "paths": {
-        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/basque"
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/basque",
+        "factory": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/eus"
       },
       "blocks": {
         "rgl_cat": 10,
@@ -1036,7 +1038,7 @@
         "rgl_noun": 10,
         "rgl_grammar": 10,
         "rgl_paradigms": 10,
-        "rgl_syntax": 0,
+        "rgl_syntax": 10,
         "lex_seed": 0,
         "lex_wide": 0,
         "vocab_size": 0
@@ -1055,7 +1057,8 @@
         "folder": "korean"
       },
       "paths": {
-        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/korean"
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/korean",
+        "factory": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/kor"
       },
       "blocks": {
         "rgl_cat": 10,
@@ -1140,7 +1143,7 @@
         "rgl_noun": 10,
         "rgl_grammar": 10,
         "rgl_paradigms": 10,
-        "rgl_syntax": 0,
+        "rgl_syntax": 10,
         "lex_seed": 0,
         "lex_wide": 0,
         "vocab_size": 0
@@ -1159,7 +1162,8 @@
         "folder": "somali"
       },
       "paths": {
-        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/somali"
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf-rgl/src/somali",
+        "factory": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/som"
       },
       "blocks": {
         "rgl_cat": 10,
@@ -1173,6 +1177,710 @@
       },
       "status": {
         "build_strategy": "HIGH_ROAD",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "api": {
+      "meta": {
+        "iso": "api",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/api"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "aym": {
+      "meta": {
+        "iso": "aym",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/aym"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "ben": {
+      "meta": {
+        "iso": "ben",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/ben"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "bre": {
+      "meta": {
+        "iso": "bre",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/bre"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "cym": {
+      "meta": {
+        "iso": "cym",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/cym"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 3,
+        "lex_wide": 0,
+        "vocab_size": 8
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 5,
+        "data_ready": true
+      }
+    },
+    "fry": {
+      "meta": {
+        "iso": "fry",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/fry"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 3,
+        "lex_wide": 0,
+        "vocab_size": 8
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 5,
+        "data_ready": true
+      }
+    },
+    "gla": {
+      "meta": {
+        "iso": "gla",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/gla"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "grn": {
+      "meta": {
+        "iso": "grn",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/grn"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "hau": {
+      "meta": {
+        "iso": "hau",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/hau"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "ibo": {
+      "meta": {
+        "iso": "ibo",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/ibo"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "ind": {
+      "meta": {
+        "iso": "ind",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/ind"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "jav": {
+      "meta": {
+        "iso": "jav",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/jav"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 3,
+        "lex_wide": 0,
+        "vocab_size": 8
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 5,
+        "data_ready": true
+      }
+    },
+    "kaz": {
+      "meta": {
+        "iso": "kaz",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/kaz"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "kin": {
+      "meta": {
+        "iso": "kin",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/kin"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "kur": {
+      "meta": {
+        "iso": "kur",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/kur"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "lin": {
+      "meta": {
+        "iso": "lin",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/lin"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "lug": {
+      "meta": {
+        "iso": "lug",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/lug"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "msa": {
+      "meta": {
+        "iso": "msa",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/msa"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "nah": {
+      "meta": {
+        "iso": "nah",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/nah"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "nav": {
+      "meta": {
+        "iso": "nav",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/nav"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "oci": {
+      "meta": {
+        "iso": "oci",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/oci"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "que": {
+      "meta": {
+        "iso": "que",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/que"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "tam": {
+      "meta": {
+        "iso": "tam",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/tam"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 3,
+        "lex_wide": 0,
+        "vocab_size": 8
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 5,
+        "data_ready": true
+      }
+    },
+    "tat": {
+      "meta": {
+        "iso": "tat",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/tat"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 3,
+        "lex_wide": 0,
+        "vocab_size": 8
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 5,
+        "data_ready": true
+      }
+    },
+    "tel": {
+      "meta": {
+        "iso": "tel",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/tel"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "tgl": {
+      "meta": {
+        "iso": "tgl",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/tgl"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "uzb": {
+      "meta": {
+        "iso": "uzb",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/uzb"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "vie": {
+      "meta": {
+        "iso": "vie",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/vie"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "wol": {
+      "meta": {
+        "iso": "wol",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/wol"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "xho": {
+      "meta": {
+        "iso": "xho",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/xho"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "yor": {
+      "meta": {
+        "iso": "yor",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/yor"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
+        "maturity_score": 3,
+        "data_ready": false
+      }
+    },
+    "zul": {
+      "meta": {
+        "iso": "zul",
+        "tier": 3,
+        "origin": "factory"
+      },
+      "paths": {
+        "source": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect/gf/generated/src/zul"
+      },
+      "blocks": {
+        "rgl_grammar": 5,
+        "rgl_syntax": 5,
+        "lex_seed": 0,
+        "lex_wide": 0,
+        "vocab_size": 0
+      },
+      "status": {
+        "build_strategy": "SAFE_MODE",
         "maturity_score": 3,
         "data_ready": false
       }

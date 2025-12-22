@@ -1,80 +1,60 @@
-# gf\build_orchestrator.py
 import os
 import json
 import subprocess
 import sys
 import shutil
 import glob
+import concurrent.futures
+import multiprocessing
+from pathlib import Path
 from typing import List, Dict, Tuple, Optional
-
-# v2.0 Integration: Graceful AI Fallback
-try:
-    from ai_services.architect import architect
-except (ImportError, ModuleNotFoundError):
-    architect = None
 
 # ===========================================================================
 # CONFIGURATION
 # ===========================================================================
 
-GF_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(GF_DIR)
-MATRIX_PATH = os.path.join(PROJECT_ROOT, "data", "indices", "everything_matrix.json")
-GENERATED_SRC_DIR = os.path.join(PROJECT_ROOT, "gf", "generated", "src")
-BUILD_LOGS_DIR = os.path.join(GF_DIR, "build_logs")
-PGF_OUTPUT_FILE = os.path.join(GF_DIR, "AbstractWiki.pgf")
+# Paths
+GF_DIR = Path(__file__).parent.resolve()
+PROJECT_ROOT = GF_DIR.parent
+MATRIX_PATH = PROJECT_ROOT / "data" / "indices" / "everything_matrix.json"
+GENERATED_SRC_DIR = PROJECT_ROOT / "gf" / "generated" / "src"
+BUILD_LOGS_DIR = GF_DIR / "build_logs"
+PGF_OUTPUT_FILE = GF_DIR / "AbstractWiki.pgf"
 ABSTRACT_NAME = "AbstractWiki"
+CONFIG_DIR = PROJECT_ROOT / "data" / "config"
 
-CODE_TO_NAME_FALLBACK = {
-    "zul": "Zulu", "yor": "Yoruba", "ibo": "Igbo", "hau": "Hausa", 
-    "wol": "Wolof", "kin": "Kinyarwanda"
-}
+# Add Project Root to Path for Imports
+sys.path.append(str(PROJECT_ROOT))
+
+# Optional: Weighted Topology Factory (Tier 3 Generation)
+try:
+    from utils.grammar_factory import GrammarFactory
+    HAS_FACTORY = True
+except ImportError:
+    HAS_FACTORY = False
+
+# Logging Colors
+class Colors:
+    INFO = "\033[94m"
+    SUCCESS = "\033[92m"
+    WARN = "\033[93m"
+    ERROR = "\033[91m"
+    RESET = "\033[0m"
 
 def log(level: str, msg: str):
-    colors = {
-        "INFO": "\033[94m", "SUCCESS": "\033[92m", 
-        "WARN": "\033[93m", "ERROR": "\033[91m", 
-        "DEBUG": "\033[90m", "RESET": "\033[0m",
-        "RAW": "" 
-    }
-    c = colors.get(level, colors["RESET"])
-    if level == "RAW":
-        print(msg)
-    else:
-        print(f"{c}[{level}] {msg}{colors['RESET']}")
+    c = getattr(Colors, level, Colors.RESET)
+    print(f"{c}[{level}] {msg}{Colors.RESET}")
 
 # ===========================================================================
-# MATRIX LOADER
+# 1. CORE LOGIC (Picklable for Parallel Execution)
 # ===========================================================================
 
-def load_build_targets() -> Dict[str, Dict]:
-    log("INFO", f"Loading Matrix from: {MATRIX_PATH}")
-    if not os.path.exists(MATRIX_PATH):
-        log("ERROR", f"Critical: Matrix not found at {MATRIX_PATH}")
-        sys.exit(1)
-    with open(MATRIX_PATH, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    raw_languages = data.get("languages", {})
-    targets = {}
-    for code, entry in raw_languages.items():
-        if entry.get("status", {}).get("build_strategy") != "BROKEN":
-            targets[code] = entry
-    log("INFO", f"Matrix Loaded: {len(targets)} active targets found.")
-    return targets
-
-def get_gf_suffix(iso_code: str, detected_suffix: str = None) -> str:
-    if detected_suffix: return detected_suffix
-    return iso_code.capitalize()
-
-# ===========================================================================
-# GENERATORS
-# ===========================================================================
-
-def generate_abstract():
-    filename = f"{ABSTRACT_NAME}.gf"
-    path = os.path.join(GF_DIR, filename)
-    log("INFO", f"Generating Abstract Grammar: {path}")
-    content = f"""abstract {ABSTRACT_NAME} = {{
+def generate_abstract_and_interface():
+    """Generates the core Abstract grammar files."""
+    # 1. Abstract
+    abs_path = GF_DIR / f"{ABSTRACT_NAME}.gf"
+    log("INFO", f"Generating Abstract Grammar: {abs_path}")
+    abs_content = f"""abstract {ABSTRACT_NAME} = {{
   cat Entity; Property; Fact; Predicate; Modifier; Value;
   fun
     mkFact : Entity -> Predicate -> Fact;
@@ -83,14 +63,12 @@ def generate_abstract():
     mkLiteral : Value -> Entity;
     Entity2NP : Entity -> Entity; Property2AP : Property -> Property; VP2Predicate : Predicate -> Predicate;
 }}\n"""
-    with open(path, 'w', encoding='utf-8') as f: f.write(content)
-    return filename
+    with open(abs_path, 'w', encoding='utf-8') as f: f.write(abs_content)
 
-def generate_interface():
-    filename = "WikiI.gf"
-    path = os.path.join(GF_DIR, filename)
-    log("INFO", f"Generating Interface Grammar: {path}")
-    content = f"""incomplete concrete WikiI of {ABSTRACT_NAME} = open Syntax in {{
+    # 2. Interface
+    iface_path = GF_DIR / "WikiI.gf"
+    log("INFO", f"Generating Interface Grammar: {iface_path}")
+    iface_content = f"""incomplete concrete WikiI of {ABSTRACT_NAME} = open Syntax in {{
   lincat Entity = NP; Property = AP; Fact = S; Predicate = VP; Modifier = Adv; Value = {{s : Str}};
   lin
     mkFact s p = mkS (mkCl s p);
@@ -99,216 +77,265 @@ def generate_interface():
     Entity2NP x = x; Property2AP x = x; VP2Predicate x = x;
     mkLiteral v = mkNP (mkN v.s); 
 }}\n"""
-    with open(path, 'w', encoding='utf-8') as f: f.write(content)
-    return filename
+    with open(iface_path, 'w', encoding='utf-8') as f: f.write(iface_content)
 
-def generate_rgl_connector(iso_code, suffix):
-    filename = f"Wiki{suffix}.gf"
-    path = os.path.join(GF_DIR, filename)
-    content = f"""concrete Wiki{suffix} of {ABSTRACT_NAME} = WikiI ** open Syntax{suffix}, Paradigms{suffix} in {{}};\n"""
-    with open(path, 'w', encoding='utf-8') as f: f.write(content)
-
-# ===========================================================================
-# PATH RESOLUTION
-# ===========================================================================
-
-def resolve_language_path(iso_code: str, lang_entry: Dict, rgl_src_base: str) -> Tuple[Optional[str], Optional[List[str]]]:
-    contrib_base = os.path.join(GF_DIR, "contrib")
-    paths = [GF_DIR, "."] 
-    if rgl_src_base:
-        paths.extend([rgl_src_base, os.path.join(rgl_src_base, "api"), os.path.join(rgl_src_base, "prelude"), os.path.join(rgl_src_base, "abstract"), os.path.join(rgl_src_base, "common")])
-
-    # 1. Contrib
-    default_suffix = iso_code.capitalize()
-    target_file = f"Wiki{default_suffix}.gf"
-    contrib_path = os.path.join(contrib_base, iso_code, target_file)
-    if os.path.exists(contrib_path):
-        paths.append(os.path.dirname(contrib_path))
-        return contrib_path, paths
-
-    # 2. Generated
-    folder = iso_code.lower() 
-    factory_path = os.path.join(GENERATED_SRC_DIR, folder, target_file)
-    if os.path.exists(factory_path):
-        paths.append(os.path.dirname(factory_path))
-        return factory_path, paths
+def get_rgl_base() -> Optional[Path]:
+    """Resolves the location of the RGL library."""
+    # 1. Env Var Override
+    env_path = os.environ.get("GF_LIB_PATH")
+    if env_path and os.path.exists(env_path):
+        return Path(env_path) / "src"
+    
+    # 2. Local Project Sibling
+    internal_path = PROJECT_ROOT / "gf-rgl"
+    if internal_path.exists():
+        return internal_path / "src"
         
-    # 3. RGL (Dynamic Discovery)
-    if rgl_src_base:
-        rgl_folder_name = lang_entry.get("meta", {}).get("folder")
-        if rgl_folder_name:
-            candidate_path = os.path.join(rgl_src_base, rgl_folder_name)
-            if os.path.exists(candidate_path):
-                detected_suffix = default_suffix
-                patterns = [os.path.join(candidate_path, "Grammar*.gf"), os.path.join(candidate_path, "Lang*.gf")]
-                found_file = None
-                for p in patterns:
-                    matches = glob.glob(p)
-                    if matches:
-                        found_file = matches[0]
-                        break
-                
-                if found_file:
-                    detected_suffix = os.path.basename(found_file).replace("Grammar", "").replace("Lang", "").replace(".gf", "")
-                else:
-                    log("WARN", f"[{iso_code}] Folder found ({rgl_folder_name}) but no Grammar/Lang file.")
-
-                connector_file = f"Wiki{detected_suffix}.gf"
-                generated_connector_path = os.path.join(GF_DIR, connector_file)
-                if not os.path.exists(generated_connector_path):
-                    generate_rgl_connector(iso_code, detected_suffix)
-                
-                paths.append(candidate_path)
-                return generated_connector_path, paths
-    return None, None
-
-def get_rgl_base() -> Optional[str]:
-    rgl_base = os.environ.get("GF_LIB_PATH")
-    if rgl_base and os.path.exists(rgl_base): return os.path.join(rgl_base, "src") if os.path.exists(os.path.join(rgl_base, "src")) else rgl_base
-    internal_path = os.path.join(PROJECT_ROOT, "gf-rgl")
-    if os.path.exists(internal_path): return os.path.join(internal_path, "src") if os.path.exists(os.path.join(internal_path, "src")) else internal_path
-    sibling_path = os.path.join(os.path.dirname(PROJECT_ROOT), "gf-rgl")
-    if os.path.exists(sibling_path): return os.path.join(sibling_path, "src") if os.path.exists(os.path.join(sibling_path, "src")) else sibling_path
-    log("WARN", "No RGL Base found.")
     return None
 
-# ===========================================================================
-# AI STUBS
-# ===========================================================================
-def attempt_ai_generation(iso_code, lang_meta):
-    if not architect: return False
-    try:
-        lang_name = lang_meta.get("name", CODE_TO_NAME_FALLBACK.get(iso_code, iso_code))
-        log("INFO", f"🏗️ Architect: Designing grammar for {lang_name} ({iso_code})...")
-        code = architect.generate_grammar(iso_code, lang_name)
-        if not code: return False
-        suffix = get_gf_suffix(iso_code)
-        folder = os.path.join(GENERATED_SRC_DIR, iso_code.lower())
-        os.makedirs(folder, exist_ok=True)
-        with open(os.path.join(folder, f"Wiki{suffix}.gf"), "w", encoding="utf-8") as f: f.write(code)
-        return True
-    except: return False
+def resolve_paths(iso: str, meta: Dict, rgl_base: Optional[Path]) -> Tuple[Optional[Path], List[str]]:
+    """Finds the source file and include paths for a language."""
+    paths = [str(GF_DIR), "."]
+    
+    # Add RGL paths if available
+    if rgl_base:
+        paths.extend([
+            str(rgl_base),
+            str(rgl_base / "api"),
+            str(rgl_base / "prelude"),
+            str(rgl_base / "abstract"),
+            str(rgl_base / "common")
+        ])
 
-def attempt_ai_repair(iso_code, filepath, error_log):
-    if not architect: return False
+    suffix = iso.capitalize()
+    target_file = f"Wiki{suffix}.gf"
+
+    # Strategy A: Check Contrib (Manual Overrides)
+    contrib_path = GF_DIR / "contrib" / iso / target_file
+    if contrib_path.exists():
+        paths.append(str(contrib_path.parent))
+        return contrib_path, paths
+
+    # Strategy B: Check Generated (Factory/AI)
+    gen_path = GENERATED_SRC_DIR / iso.lower() / target_file
+    if gen_path.exists():
+        paths.append(str(gen_path.parent))
+        return gen_path, paths
+
+    # Strategy C: Dynamic RGL Discovery
+    if rgl_base and "folder" in meta:
+        rgl_folder = rgl_base / meta["folder"]
+        if rgl_folder.exists():
+            # 1. Detect actual RGL suffix (e.g. 'Fre' vs 'Fra')
+            # Look for Syntax*.gf
+            candidates = list(rgl_folder.glob("Syntax*.gf"))
+            if candidates:
+                # e.g., SyntaxFre.gf -> Fre
+                detected_suffix = candidates[0].stem.replace("Syntax", "")
+                
+                # 2. Generate Connector if missing
+                connector_path = GF_DIR / f"Wiki{detected_suffix}.gf"
+                if not connector_path.exists():
+                    with open(connector_path, 'w') as f:
+                        f.write(f"concrete Wiki{detected_suffix} of {ABSTRACT_NAME} = WikiI ** open Syntax{detected_suffix}, Paradigms{detected_suffix} in {{}};\n")
+                
+                paths.append(str(rgl_folder))
+                return connector_path, paths
+
+    return None, paths
+
+def attempt_factory_generation(iso: str, meta: Dict) -> bool:
+    """
+    Tier 3 Fallback: Uses Weighted Topology Factory to generate a valid grammar.
+    Replaces the old AI call with a deterministic, local generator.
+    """
+    if not HAS_FACTORY:
+        return False
+        
     try:
-        log("WARN", f"🚑 Surgeon: Repairing {iso_code}...")
-        with open(filepath, "r") as f: broken = f.read()
-        fixed = architect.repair_grammar(broken, error_log)
-        if not fixed: return False
-        shutil.copy(filepath, filepath + ".bak")
-        with open(filepath, "w") as f: f.write(fixed)
+        # Check if we have topology data
+        topo_file = CONFIG_DIR / "topology_weights.json"
+        if not topo_file.exists():
+            return False
+
+        # Init Factory
+        factory = GrammarFactory(weights_path=str(topo_file))
+        
+        # Determine Order (default SVO)
+        order = meta.get("blocks", {}).get("topology", "SVO")
+        
+        # Generate Code
+        code = factory.create_concrete(iso, order)
+        
+        # Save
+        out_dir = GENERATED_SRC_DIR / iso.lower()
+        out_dir.mkdir(parents=True, exist_ok=True)
+        
+        suffix = iso.capitalize()
+        with open(out_dir / f"Wiki{suffix}.gf", 'w') as f:
+            f.write(code)
+            
         return True
-    except: return False
+    except Exception as e:
+        # Silent fail is acceptable here; main loop will catch "file not found"
+        return False
+
+def verify_single_language(args):
+    """
+    Worker Function: Compiles one language in isolation to check validity.
+    Returns: (iso_code, file_path_str, success_bool)
+    """
+    iso, meta, rgl_base_str = args
+    rgl_base = Path(rgl_base_str) if rgl_base_str else None
+    
+    # 1. Resolve or Generate
+    file_path, include_paths = resolve_paths(iso, meta, rgl_base)
+    
+    if not file_path:
+        # Try Factory Generation
+        if attempt_factory_generation(iso, meta):
+            file_path, include_paths = resolve_paths(iso, meta, rgl_base)
+    
+    if not file_path:
+        return iso, None, False
+
+    # 2. Prepare Command
+    # Use -batch -c (Check only)
+    # Deduplicate paths
+    unique_paths = list(dict.fromkeys(include_paths))
+    path_arg = os.pathsep.join(unique_paths)
+    
+    cmd = ["gf", "-batch", "-c", "-path", path_arg, str(file_path)]
+    
+    try:
+        # Run Verification
+        result = subprocess.run(
+            cmd, 
+            cwd=str(GF_DIR), 
+            stdout=subprocess.PIPE, 
+            stderr=subprocess.PIPE, 
+            text=True
+        )
+        
+        if result.returncode == 0:
+            return iso, str(file_path), True
+        else:
+            # Log failure to file for the Surgeon to pick up later
+            err_log = BUILD_LOGS_DIR / f"{iso}_error.log"
+            with open(err_log, 'w') as f:
+                f.write(result.stderr)
+            return iso, str(file_path), False
+            
+    except Exception as e:
+        return iso, None, False
 
 # ===========================================================================
-# MAIN ORCHESTRATOR
+# 2. ORCHESTRATOR MAIN
 # ===========================================================================
 
 def main():
-    log("INFO", "🚀 Abstract Wiki Architect v2.0: Orchestrator Online")
-    if os.path.exists(BUILD_LOGS_DIR): shutil.rmtree(BUILD_LOGS_DIR)
-    os.makedirs(BUILD_LOGS_DIR)
-    targets = load_build_targets()
-    generate_abstract()
-    generate_interface()
-    rgl_base = get_rgl_base()
+    log("INFO", "🚀 Abstract Wiki Architect v2.0: Parallel Orchestrator Online")
     
-    if os.path.exists("AbstractWiki.gfo"): os.remove("AbstractWiki.gfo")
-    try:
-        subprocess.run(["gf", "-batch", "-c", "AbstractWiki.gf"], check=True, cwd=GF_DIR)
-        log("SUCCESS", "Abstract Syntax Verified.")
-    except: log("ERROR", "Fatal: Abstract failed."); sys.exit(1)
-
-    valid_files = []
-    all_paths = []
+    # 1. Environment Prep
+    if BUILD_LOGS_DIR.exists(): shutil.rmtree(BUILD_LOGS_DIR)
+    BUILD_LOGS_DIR.mkdir(parents=True)
     
-    log("INFO", "---------------------------------------------------")
-    log("INFO", "Starting Language Build Loop")
-    log("INFO", "---------------------------------------------------")
-
-    for iso, meta in targets.items():
-        try:
-            # 1. Start Log (Diagnostic)
-            log("INFO", f"👉 Processing {iso}...")
-
-            file_path, paths = resolve_language_path(iso, meta, rgl_base)
-            if not file_path:
-                if attempt_ai_generation(iso, meta): file_path, paths = resolve_language_path(iso, meta, rgl_base)
-            if not file_path: 
-                log("DEBUG", f"   Skipping {iso}: No source found.")
-                continue
-            
-            deduped_paths = list(dict.fromkeys([GF_DIR] + paths))
-            path_arg = os.pathsep.join(deduped_paths)
-            cmd = ["gf", "-batch", "-c", "-path", path_arg, file_path]
-            
-            result = subprocess.run(cmd, cwd=GF_DIR, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            
-            if result.returncode == 0:
-                log("SUCCESS", f"✅ {iso}: Verified")
-                valid_files.append(file_path)
-                all_paths.extend(deduped_paths)
-            else:
-                log("ERROR", f"❌ {iso}: Compilation Failed. Error Output:")
-                
-                # --- EXPLICIT LOGGING ---
-                log("RAW", "------------------------------------------")
-                log("RAW", result.stderr.strip())
-                log("RAW", "------------------------------------------")
-                
-                # --- AUTO-HEAL BLOCK ---
-                abs_file = os.path.abspath(file_path)
-                abs_gen = os.path.abspath(GENERATED_SRC_DIR)
-                
-                if abs_file.startswith(abs_gen):
-                    log("WARN", f"🧹 Deleting broken file to force RGL fallback: {os.path.basename(file_path)}")
-                    try:
-                        os.remove(file_path)
-                        # Re-Resolve
-                        new_file, new_paths = resolve_language_path(iso, meta, rgl_base)
-                        if new_file:
-                            log("INFO", f"   -> Retrying with fresh target...")
-                            d_paths = list(dict.fromkeys([GF_DIR] + new_paths))
-                            p_arg = os.pathsep.join(d_paths)
-                            c = ["gf", "-batch", "-c", "-path", p_arg, new_file]
-                            retry = subprocess.run(c, cwd=GF_DIR, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                            if retry.returncode == 0:
-                                log("SUCCESS", f"✅ {iso}: Auto-Healed & Verified")
-                                valid_files.append(new_file)
-                                all_paths.extend(d_paths)
-                                continue
-                            else:
-                                log("ERROR", f"❌ {iso}: Heal failed.")
-                    except Exception as e:
-                        log("ERROR", f"   -> Deletion failed: {e}")
-                
-                # --- AI REPAIR ---
-                if attempt_ai_repair(iso, file_path, result.stderr):
-                    if subprocess.run(cmd, cwd=GF_DIR).returncode == 0:
-                        log("SUCCESS", f"✅ {iso}: Repaired")
-                        valid_files.append(file_path); all_paths.extend(deduped_paths)
-                else:
-                    log("ERROR", f"💀 {iso}: Skipping.")
-                    with open(os.path.join(BUILD_LOGS_DIR, f"{iso}_error.log"), "w") as f: f.write(result.stderr)
-        except Exception as e:
-            log("ERROR", f"Exception {iso}: {e}")
-
-    if not valid_files: 
-        log("ERROR", "No languages linked. Aborting.")
+    if not MATRIX_PATH.exists():
+        log("ERROR", f"Matrix not found at {MATRIX_PATH}. Run 'build_index.py' first.")
         sys.exit(1)
+        
+    with open(MATRIX_PATH, 'r') as f:
+        matrix = json.load(f)
     
-    final_paths = list(dict.fromkeys(all_paths))
-    path_arg = os.pathsep.join(final_paths)
+    # Filter active targets
+    targets = {
+        k: v for k, v in matrix.get("languages", {}).items() 
+        if v.get("status", {}).get("build_strategy") != "SKIP"
+    }
+    
+    log("INFO", f"Matrix Loaded: {len(targets)} active targets.")
+
+    # 2. Generate Core Files
+    generate_abstract_and_interface()
+    
+    # 3. Verify Abstract
+    log("INFO", "Verifying Abstract Syntax...")
     try:
-        log("INFO", "---------------------------------------------------")
-        log("INFO", f"Linking {len(valid_files)} languages into PGF binary...")
-        log("INFO", "---------------------------------------------------")
-        subprocess.run(["gf", "-batch", "-make", "-path", path_arg, "AbstractWiki.gf"] + valid_files, check=True, cwd=GF_DIR)
-        pgf = os.path.join(GF_DIR, f"{ABSTRACT_NAME}.pgf")
-        if os.path.exists(pgf): shutil.move(pgf, PGF_OUTPUT_FILE)
-        log("SUCCESS", f"📦 Binary created: {PGF_OUTPUT_FILE}")
-    except Exception as e: 
+        subprocess.run(["gf", "-batch", "-c", "AbstractWiki.gf"], check=True, cwd=str(GF_DIR))
+    except subprocess.CalledProcessError:
+        log("ERROR", "Fatal: AbstractWiki.gf failed to compile.")
+        sys.exit(1)
+
+    # 4. Parallel Verification Loop
+    rgl_base = get_rgl_base()
+    rgl_base_str = str(rgl_base) if rgl_base else None
+    
+    # Prepare Arguments for Worker
+    worker_args = [(iso, meta, rgl_base_str) for iso, meta in targets.items()]
+    
+    valid_files = []
+    
+    log("INFO", f"⚡ Verifying {len(targets)} languages in parallel...")
+    
+    # Use CPU count for workers
+    max_workers = multiprocessing.cpu_count()
+    
+    with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+        results = list(executor.map(verify_single_language, worker_args))
+        
+    # 5. Process Results
+    for iso, path, success in results:
+        if success:
+            log("SUCCESS", f"✅ {iso}")
+            valid_files.append(path)
+        else:
+            if path:
+                log("ERROR", f"❌ {iso}: Compilation Failed (See logs)")
+            else:
+                log("WARN", f"⚠️  {iso}: Source not found (Skipped)")
+
+    if not valid_files:
+        log("ERROR", "No languages survived verification. Aborting link.")
+        sys.exit(1)
+
+    # 6. Single-Shot Linking (The "Last Man Standing" Fix)
+    log("INFO", "---------------------------------------------------")
+    log("INFO", f"🔗 Linking {len(valid_files)} languages into PGF binary...")
+    
+    # We must construct the path argument again for the final link
+    # This is a bit redundant but ensures the Linker sees everything
+    all_paths = [str(GF_DIR), "."]
+    if rgl_base:
+        all_paths.append(str(rgl_base))
+        # Add subfolders recursively or explicitly
+        all_paths.extend([str(p.parent) for p in [Path(f) for f in valid_files]])
+    
+    # Dedupe
+    final_path_arg = os.pathsep.join(list(dict.fromkeys(all_paths)))
+    
+    link_cmd = [
+        "gf", 
+        "-batch", 
+        "-make",
+        "-path", final_path_arg,
+        "--name", ABSTRACT_NAME,  # Force internal name
+        "AbstractWiki.gf"
+    ] + valid_files
+    
+    try:
+        subprocess.run(link_cmd, check=True, cwd=str(GF_DIR))
+        
+        # Cleanup artifacts
+        generated_pgf = GF_DIR / f"{ABSTRACT_NAME}.pgf"
+        if generated_pgf.exists():
+            # If output is different name, rename/move
+            if generated_pgf != PGF_OUTPUT_FILE:
+                shutil.move(generated_pgf, PGF_OUTPUT_FILE)
+            log("SUCCESS", f"📦 Binary Created: {PGF_OUTPUT_FILE}")
+        else:
+            log("ERROR", "Binary file missing after success return code?")
+            
+    except subprocess.CalledProcessError as e:
         log("ERROR", f"Linking Failed: {e}")
         sys.exit(1)
 

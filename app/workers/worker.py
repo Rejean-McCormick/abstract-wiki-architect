@@ -1,10 +1,9 @@
-# app\workers\worker.py
+# app/workers/worker.py
 import asyncio
 import os
 import sys
 import subprocess
 import structlog
-import time
 from dataclasses import dataclass
 from typing import Dict, Any, Optional
 
@@ -13,6 +12,13 @@ sys.path.append(os.getcwd())
 
 from arq.connections import RedisSettings
 from opentelemetry.propagate import extract
+
+# v2.0 Optimization: OS-Native File Watching
+try:
+    from watchfiles import awatch
+except ImportError:
+    awatch = None
+
 try:
     import pgf
 except ImportError:
@@ -21,7 +27,7 @@ except ImportError:
 from app.shared.config import settings, StorageBackend
 from app.shared.telemetry import setup_telemetry, get_tracer
 
-# Conditional Import for S3 to avoid crashes if adapter is missing
+# Conditional Import for S3
 try:
     from app.adapters.s3_repo import S3LanguageRepo
 except ImportError:
@@ -60,17 +66,6 @@ class GrammarRuntime:
         """Helper to reload the current configured path."""
         logger.info("runtime_reloading_triggered")
         self.load(settings.AW_PGF_PATH)
-    
-    def check_for_updates(self, pgf_path: str) -> bool:
-        """Checks if the file on disk is newer than the loaded one."""
-        if not os.path.exists(pgf_path):
-            return False
-        
-        current_mtime = os.path.getmtime(pgf_path)
-        if current_mtime > self._last_mtime:
-            logger.info("runtime_detected_file_change", old=self._last_mtime, new=current_mtime)
-            return True
-        return False
 
 # Global Instance
 runtime = GrammarRuntime()
@@ -93,11 +88,9 @@ async def compile_grammar(ctx: Dict[str, Any], language_code: str, trace_context
             
             # 2. Define Paths
             base_dir = settings.FILESYSTEM_REPO_PATH
-            # Adjusted path to match the orchestrator's structure
             src_file = os.path.join(base_dir, "gf", f"Wiki{language_code.capitalize()}.gf")
             
             # 3. Execute GF Compiler
-            # Using -batch to prevent hanging
             cmd = [
                 "gf", 
                 "-batch",
@@ -114,7 +107,7 @@ async def compile_grammar(ctx: Dict[str, Any], language_code: str, trace_context
                     cmd, 
                     capture_output=True, 
                     text=True,
-                    cwd=os.path.join(base_dir, "gf") # Run inside gf/ dir
+                    cwd=os.path.join(base_dir, "gf")
                 )
 
                 if process.returncode != 0:
@@ -140,7 +133,6 @@ async def compile_grammar(ctx: Dict[str, Any], language_code: str, trace_context
                     logger.warning("s3_upload_skipped", msg="PGF file not found locally")
 
             # 5. Hot Reload
-            # Explicit reload after compilation job
             if os.path.exists(settings.AW_PGF_PATH):
                 await runtime.reload()
             
@@ -156,26 +148,51 @@ async def compile_grammar(ctx: Dict[str, Any], language_code: str, trace_context
 
 async def watch_grammar_file(ctx):
     """
-    Background Task: Polls the PGF binary for changes.
-    This ensures the worker picks up builds from build_orchestrator.py.
+    Background Task: Watches the PGF binary for changes.
+    Optimized: Uses 'watchfiles' (OS events) if available, falls back to polling.
     """
     pgf_path = settings.AW_PGF_PATH
-    logger.info("watcher_started", path=pgf_path)
+    pgf_dir = os.path.dirname(pgf_path)
     
-    while True:
+    # Ensure directory exists to watch
+    if not os.path.exists(pgf_dir):
+        logger.warning("watcher_dir_missing", path=pgf_dir)
+        return
+
+    logger.info("watcher_started", path=pgf_path, mechanism="watchfiles" if awatch else "polling")
+
+    if awatch:
         try:
-            if runtime.check_for_updates(pgf_path):
-                logger.info("watcher_triggering_reload")
-                runtime.load(pgf_path)
-            
-            # Poll every 5 seconds (Low overhead)
-            await asyncio.sleep(5)
-        except asyncio.CancelledError:
-            logger.info("watcher_stopped")
-            break
+            # 🚀 v2.0: OS-Native Event Loop
+            # This triggers instantly when build_orchestrator.py atomic move completes
+            async for changes in awatch(pgf_dir):
+                for change_type, file_path in changes:
+                    if os.path.abspath(file_path) == os.path.abspath(pgf_path):
+                        logger.info("watcher_detected_change", file=file_path, type=change_type)
+                        # Small yield to ensure file handle is free
+                        await asyncio.sleep(0.1)
+                        runtime.load(pgf_path)
         except Exception as e:
-            logger.error("watcher_error", error=str(e))
-            await asyncio.sleep(10)
+            logger.error("watcher_crashed", error=str(e))
+    else:
+        # Fallback: Polling Loop (Legacy)
+        while True:
+            try:
+                current_mtime = 0
+                if os.path.exists(pgf_path):
+                    current_mtime = os.path.getmtime(pgf_path)
+                
+                if current_mtime > runtime._last_mtime:
+                    logger.info("watcher_polling_change", old=runtime._last_mtime, new=current_mtime)
+                    runtime.load(pgf_path)
+                
+                await asyncio.sleep(5)
+            except asyncio.CancelledError:
+                logger.info("watcher_stopped")
+                break
+            except Exception as e:
+                logger.error("watcher_error", error=str(e))
+                await asyncio.sleep(10)
 
 # --- ARQ Worker Configuration ---
 
@@ -200,11 +217,8 @@ class WorkerSettings:
     """
     ARQ Configuration Class.
     """
-    redis_settings = RedisSettings(
-        host=settings.REDIS_HOST,
-        port=settings.REDIS_PORT,
-        database=settings.REDIS_DB,
-    )
+    # 🩹 FIX: Use REDIS_URL for v2.0 Architecture
+    redis_settings = RedisSettings.from_dsn(settings.REDIS_URL)
 
     queue_name = settings.REDIS_QUEUE_NAME
     functions = [compile_grammar]
