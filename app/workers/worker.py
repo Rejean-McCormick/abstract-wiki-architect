@@ -28,7 +28,7 @@ except ImportError:
 
 from app.shared.config import settings, StorageBackend
 from app.shared.telemetry import setup_telemetry, get_tracer
-from app.shared.lexicon import lexicon  # <--- NEW: Import the Lexicon Memory Bank
+from app.shared.lexicon import lexicon  # <--- Zone B: Lexicon Memory Bank
 
 # Conditional Import for S3
 try:
@@ -104,7 +104,6 @@ class GrammarRuntime:
     async def reload(self):
         """Helper to reload the current configured path."""
         logger.info("runtime_reloading_triggered")
-        # FIXED: Updated to PGF_PATH
         self.load(settings.PGF_PATH)
 
 # Global Instance
@@ -115,7 +114,6 @@ runtime = GrammarRuntime()
 async def compile_grammar(ctx: Dict[str, Any], language_code: str, trace_context: Dict[str, str] = None) -> str:
     """
     ARQ Job: Compiles a single GF source file (Tier 2/3 dev mode).
-    Note: Production builds are handled by build_orchestrator.py.
     """
     # 1. Link Telemetry Span (Distributed Tracing)
     ctx_otel = extract(trace_context) if trace_context else None
@@ -162,7 +160,6 @@ async def compile_grammar(ctx: Dict[str, Any], language_code: str, trace_context
 
             # 4. Persistence (S3)
             if settings.STORAGE_BACKEND == StorageBackend.S3 and S3LanguageRepo:
-                # FIXED: Updated to PGF_PATH
                 target_pgf = settings.PGF_PATH
                 if os.path.exists(target_pgf):
                     repo = S3LanguageRepo()
@@ -174,7 +171,6 @@ async def compile_grammar(ctx: Dict[str, Any], language_code: str, trace_context
                     logger.warning("s3_upload_skipped", msg="PGF file not found locally")
 
             # 5. Hot Reload
-            # FIXED: Updated to PGF_PATH
             if os.path.exists(settings.PGF_PATH):
                 await runtime.reload()
             
@@ -193,7 +189,6 @@ async def watch_grammar_file(ctx):
     Background Task: Watches the PGF binary for changes.
     Optimized: Uses 'watchfiles' (OS events) if available, falls back to polling.
     """
-    # FIXED: Updated to PGF_PATH
     pgf_path = settings.PGF_PATH
     pgf_dir = os.path.dirname(pgf_path)
     
@@ -207,12 +202,10 @@ async def watch_grammar_file(ctx):
     if awatch:
         try:
             # 🚀 v2.0: OS-Native Event Loop
-            # This triggers instantly when build_orchestrator.py atomic move completes
             async for changes in awatch(pgf_dir):
                 for change_type, file_path in changes:
                     if os.path.abspath(file_path) == os.path.abspath(pgf_path):
                         logger.info("watcher_detected_change", file=file_path, type=change_type)
-                        # Small yield to ensure file handle is free
                         await asyncio.sleep(0.1)
                         runtime.load(pgf_path)
         except Exception as e:
@@ -245,12 +238,10 @@ async def startup(ctx):
     logger.info("worker_startup", queue=settings.REDIS_QUEUE_NAME)
     
     # 1. Initial Load of PGF (Zone A)
-    # FIXED: Updated to PGF_PATH
     runtime.load(settings.PGF_PATH)
     
     # 2. Pre-load Lexicon (Zone B)
     # This prevents 'Cold Start' latency on the first QID lookup request.
-    # We load English by default as it is the primary fallback language.
     lexicon.load_language("eng")
 
     # 3. Start Background Watcher
@@ -260,7 +251,6 @@ async def shutdown(ctx):
     logger.info("worker_shutdown")
     if 'watcher_task' in ctx:
         ctx['watcher_task'].cancel()
-        # STABILITY FIX: Catch CancelledError so reloader doesn't think we crashed
         try:
             await ctx['watcher_task']
         except asyncio.CancelledError:
@@ -272,7 +262,6 @@ class WorkerSettings:
     """
     ARQ Configuration Class.
     """
-    # 🩹 FIX: Use REDIS_URL for v2.0 Architecture
     redis_settings = RedisSettings.from_dsn(settings.REDIS_URL)
 
     queue_name = settings.REDIS_QUEUE_NAME

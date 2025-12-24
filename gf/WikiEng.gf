@@ -1,44 +1,44 @@
--- Tier 1 Concrete Grammar (English)
--- FIXED: Added 'StructuralEng' to imports so in_Prep and and_Conj are defined
-concrete WikiEng of AbstractWiki = open SyntaxEng, ParadigmsEng, SymbolicEng, StructuralEng, Prelude in {
+-- gf/WikiEng.gf
+concrete WikiEng of AbstractWiki = WikiLexiconEng ** open SyntaxEng, ParadigmsEng, SymbolicEng, StructuralEng, Prelude, (R=ResEng) in { 
 
-  lincat
-    Entity = NP;
-    Property = AP;
-    Fact = S;
-    Predicate = VP;
-    Modifier = Adv;   -- Must be 'Adv' to work with mkS
-    Value = SS;       -- Changed from Str to SS (String Structure) for better RGL compatibility
+  lincat 
+    Statement = S ; 
+    Entity = NP ; 
+    Profession = CN ; 
+    Nationality = AP ; 
+    EventObj = NP ; 
 
-  lin
-    -- Core Semantics
-    mkFact subj pred = mkS (mkCl subj pred);
-    mkIsAProperty subj prop = mkS (mkCl subj (mkVP prop));
+  -- === THE NUCLEAR TOOLS (With Type Casting) ===
+  oper
+    robustName : Str -> NP = \s -> lin NP {
+      s = \\c => s ;          
+      a = R.AgP3Sg R.Neutr ;  
+    } ;
 
-    -- Bio: "Subject is Nationality and Profession"
-    -- StructuralEng provides 'and_Conj'
-    mkBio name prof nat = mkS (mkCl name (mkVP (mkAP and_Conj nat prof)));
+    robustCommon : Str -> CN = \s -> lin CN {
+      s = \\n,c => s ;        
+      g = R.Neutr ;           
+    } ;
 
-    -- Event: "Subject participated in Object"
-    -- StructuralEng provides 'in_Prep', fixing the scope error
-    mkEvent subj obj = 
-      mkS (mkCl subj (mkVP (mkV2 (mkV "participate") in_Prep) obj));
+    robustAdj : Str -> AP = \s -> lin AP {
+      s = \\f => s ;          
+      isPre = True ;          
+    } ;
 
-    -- Modifiers
-    FactWithMod fact mod = mkS mod fact;
+  lin 
+    mkEntity pn = mkNP pn ;
+    mkEntityStr s = robustName s.s ; 
 
-    -- String Bridges (Using Symbolic to avoid gluing crash)
-    -- FIXED: accessing the .s field because Value is a record
-    mkLiteral s = symb s.s;
-    mkStrProperty s = mkAP (mkA s.s);
+    mkBioFull s p n = mkS (mkCl s (mkVP (mkCN n p))) ;      
+    mkBioProf s p   = mkS (mkCl s (mkVP (mkNP a_Det p))) ; 
+    mkBioNat  s n   = mkS (mkCl s (mkVP n)) ;        
+    mkEvent   s e   = mkS (mkCl s (mkVP (mkV2 (mkV "participate") in_Prep) e)) ;
 
-    -- Identity Converters
-    Entity2NP e = e;
-    Property2AP p = p;
-    VP2Predicate p = p;
+    lexProf n = mkCN n ; 
+    lexNat  a = mkAP a ; 
+    lexEvent n = mkNP (mkCN n) ; 
 
-    -- Lexicon
-    lex_animal_N = mkNP the_Det (mkN "animal");
-    lex_walk_V   = mkVP (mkV "walk");
-    lex_blue_A   = mkAP (mkA "blue");
+    strProf s  = robustCommon s.s ; 
+    strNat  s  = robustAdj s.s ; 
+    strEvent s = robustName s.s ; 
 }

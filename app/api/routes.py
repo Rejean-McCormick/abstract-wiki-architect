@@ -35,11 +35,12 @@ async def generate_text(
         # --- PHASE 1: ADAPT & GROUND ---
         # Converts { "function": "mkBio", "args": ["Q42"] } 
         # into BioFrame(subject="Douglas Adams", meta={"subject_gf": "douglas_adams_PN"})
-        # The 'target_lang' ensures we fetch the correct translation for the QID.
+        # The 'target_lang' ensures we fetch the correct translation for the QID (v2.1 Requirement).
         domain_frame = ninai_adapter.parse(payload, target_lang=lang_code)
         
         # --- PHASE 2: LINEARIZE (GF ENGINE) ---
         # The C-Runtime uses the 'meta' fields to pick the specific RGL function
+        # Await is critical here as linearization might involve thread-pool execution
         output_text = await gf_wrapper.linearize(lang_code, domain_frame)
         
         # --- PHASE 3: RESPONSE ---
@@ -54,7 +55,7 @@ async def generate_text(
         }
 
     except ValueError as e:
-        # Mapped per Ledger: 422 for Validation/Lexicon Errors
+        # Mapped per Ledger: 422 for Validation/Lexicon Errors (e.g. malformed Ninai JSON)
         log.warning("validation_error", error=str(e))
         raise HTTPException(status_code=422, detail=str(e))
 
@@ -64,6 +65,6 @@ async def generate_text(
         raise HTTPException(status_code=404, detail=f"Language '{lang_code}' not loaded in Runtime.")
 
     except Exception as e:
-        # Mapped per Ledger: 500 for C-Runtime Crashes
+        # Mapped per Ledger: 500 for C-Runtime Crashes or unexpected failures
         log.error("critical_runtime_failure", error=str(e))
         raise HTTPException(status_code=500, detail="GF Runtime Failure")

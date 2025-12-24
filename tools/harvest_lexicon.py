@@ -13,9 +13,12 @@ RE_CONCRETE = re.compile(r"lin\s+(\w+)\s*=\s*(.*?)\s*;")
 RE_STRING = re.compile(r'"([^"]+)"')
 
 # --- CONFIGURATION: WIKIDATA ---
+# v2.1 Upgrade: Now fetches Claims (P106/P27) for Semantic Framing
 SPARQL_TEMPLATE = """
-SELECT ?item ?itemLabel ?itemDescription WHERE {
+SELECT ?item ?itemLabel ?itemDescription ?job ?nat WHERE {
   VALUES ?item { %s }
+  OPTIONAL { ?item wdt:P106 ?job . }  # Occupation
+  OPTIONAL { ?item wdt:P27 ?nat . }   # Citizenship
   SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
 }
 """
@@ -27,7 +30,6 @@ class GFWordNetHarvester:
 
     def load_semantics(self):
         """Step 1: Index the Abstract Keys (Directly from Root)"""
-        # CORRECTED: Look in root, not root/gf
         path = self.root / "WordNet.gf"
         
         if not path.exists():
@@ -48,7 +50,6 @@ class GFWordNetHarvester:
 
     def harvest_lang(self, lang_code, out_dir):
         """Step 2: Extract words from Concrete Grammar"""
-        # CORRECTED: Look in root, not root/gf
         fname = f"WordNet{lang_code.capitalize()}.gf"
         src_file = self.root / fname
 
@@ -96,7 +97,7 @@ class GFWordNetHarvester:
 
 class WikidataHarvester:
     def fetch(self, qids, lang_code):
-        print(f"☁️  Fetching {len(qids)} labels from Wikidata for '{lang_code}'...")
+        print(f"☁️  Fetching {len(qids)} items (Labels + Facts) from Wikidata for '{lang_code}'...")
         values = " ".join([f"wd:{qid}" for qid in qids])
         query = SPARQL_TEMPLATE % (values, lang_code)
         
@@ -107,13 +108,37 @@ class WikidataHarvester:
                 timeout=30
             )
             data = r.json()
-            return {
-                item['item']['value'].split('/')[-1]: {
-                    "lemma": item.get('itemLabel', {}).get('value'),
-                    "desc": item.get('itemDescription', {}).get('value', "")
-                }
-                for item in data['results']['bindings']
-            }
+            
+            # Aggregate Results (One QID can have multiple Jobs/Nationalities)
+            results = {}
+            for row in data['results']['bindings']:
+                qid = row['item']['value'].split('/')[-1]
+                
+                if qid not in results:
+                    results[qid] = {
+                        "lemma": row.get('itemLabel', {}).get('value'),
+                        "desc": row.get('itemDescription', {}).get('value', ""),
+                        "facts": {
+                            "P106": set(), # Occupation
+                            "P27": set()   # Nationality
+                        }
+                    }
+                
+                if 'job' in row:
+                    job_qid = row['job']['value'].split('/')[-1]
+                    results[qid]['facts']['P106'].add(job_qid)
+                    
+                if 'nat' in row:
+                    nat_qid = row['nat']['value'].split('/')[-1]
+                    results[qid]['facts']['P27'].add(nat_qid)
+
+            # Convert sets to lists for JSON serialization
+            for qid in results:
+                results[qid]['facts']['P106'] = list(results[qid]['facts']['P106'])
+                results[qid]['facts']['P27'] = list(results[qid]['facts']['P27'])
+
+            return results
+
         except Exception as e:
             print(f"❌ Wikidata Error: {e}")
             return {}
