@@ -1,0 +1,186 @@
+{
+  "Q42": {
+    "lemma": "Q42",
+    "desc": "British science fiction writer and humorist (1952–2001)",
+    "facts": {
+      "P106": [
+        "Q245068",
+        "Q6625963",
+        "Q18844224",
+        "Q214917",
+        "Q36180",
+        "Q4853732",
+        "Q28389",
+        "Q639669"
+      ],
+      "P27": [
+        "Q145"
+      ]
+    }
+  },
+  "Q7186": {
+    "lemma": "Marie Curie",
+    "desc": "Polish-French physicist and chemist (1867–1934)",
+    "facts": {
+      "P106": [
+        "Q169470",
+        "Q593644",
+        "Q1622272"
+      ],
+      "P27": [
+        "Q207272",
+        "Q34266",
+        "Q142"
+      ]
+    }
+  },
+  "Q7251": {
+    "lemma": "Alan Turing",
+    "desc": "English computer scientist (1912–1954)",
+    "facts": {
+      "P106": [
+        "Q15442776",
+        "Q82594"
+      ],
+      "P27": [
+        "Q145"
+      ]
+    }
+  },
+  "Q142": {
+    "lemma": "France",
+    "desc": "country in Western Europe and other continents (through its overseas territories in America, Africa and Oceania)",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q145": {
+    "lemma": "United Kingdom",
+    "desc": "country in north-west Europe",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q28389": {
+    "lemma": "screenwriter",
+    "desc": "writer who writes for films, TV shows, comics and games",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q34266": {
+    "lemma": "Russian Empire",
+    "desc": "former empire in Eurasia and North America (1721–1917)",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q36180": {
+    "lemma": "writer",
+    "desc": "person who uses written words to communicate ideas and to produce literary works",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q82594": {
+    "lemma": "computer scientist",
+    "desc": "one who studies or practices computer science",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q169470": {
+    "lemma": "physicist",
+    "desc": "scientist who does research in physics",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q207272": {
+    "lemma": "Second Polish Republic",
+    "desc": "country in Central and Eastern Europe (1918–1939)",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q214917": {
+    "lemma": "playwright",
+    "desc": "person who writes plays",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q245068": {
+    "lemma": "comedian",
+    "desc": "person who seeks to entertain an audience, primarily by making them laugh",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q593644": {
+    "lemma": "chemist",
+    "desc": "scientist trained in the study of chemistry",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q639669": {
+    "lemma": "musician",
+    "desc": "person who composes, conducts or performs music",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q1622272": {
+    "lemma": "university teacher",
+    "desc": "person teaching at a university or college",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q4853732": {
+    "lemma": "children's writer",
+    "desc": "writer of literature targeted primarily at children",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q6625963": {
+    "lemma": "novelist",
+    "desc": "writer of novels",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q15442776": {
+    "lemma": "cryptographer",
+    "desc": "specialist on techniques for secure communication in the presence of third parties",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q18844224": {
+    "lemma": "science fiction writer",
+    "desc": "person who writes works of science fiction",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  }
+}

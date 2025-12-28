@@ -1,4 +1,3 @@
-# scripts\lexicon\wikidata_importer.py
 # scripts/lexicon/wikidata_importer.py
 # =========================================================================
 # WIKIDATA IMPORTER & LINKER
@@ -21,14 +20,20 @@ import os
 import requests
 import time
 import logging
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict
 from sqlalchemy import or_
 
-# Add project root to path
+# Add project root to path to allow 'app' imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from architect_http_api.db.session import get_db_session
-from architect_http_api.db.models import LexiconEntry, Translation
+# FIXED: Use standard 'app' namespace consistent with other modules
+try:
+    from app.db.session import get_db_session
+    from app.db.models import LexiconEntry, Translation
+except ImportError:
+    # Fallback if running in an environment where the package is installed as architect_http_api
+    from architect_http_api.db.session import get_db_session
+    from architect_http_api.db.models import LexiconEntry, Translation
 
 # --- LOGGING SETUP ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -37,7 +42,7 @@ logger = logging.getLogger(__name__)
 # --- CONFIGURATION ---
 WIKIDATA_SPARQL_URL = "https://query.wikidata.org/sparql"
 BATCH_SIZE = 20  # Number of labels to query at once (SPARQL limits apply)
-USER_AGENT = "AbstractWikiArchitect/1.0 (mailto:your_email@example.com)"
+USER_AGENT = "AbstractWikiArchitect/2.0 (mailto:admin@abstractwiki.org)"
 
 def fetch_wikidata_ids(labels: List[str]) -> Dict[str, str]:
     """
@@ -49,7 +54,7 @@ def fetch_wikidata_ids(labels: List[str]) -> Dict[str, str]:
     
     # Construct a VALUES clause for batch querying
     # Escaping quotes in labels is important
-    values_str = " ".join([f'"{l.replace("`", "").replace('"', "")}"@en' for l in labels])
+    values_str = " ".join([f'"{l.replace("`", "").replace("\"", "")}"@en' for l in labels])
     
     query = f"""
     SELECT ?label ?item WHERE {{
@@ -58,7 +63,6 @@ def fetch_wikidata_ids(labels: List[str]) -> Dict[str, str]:
       ?item wdt:P31 ?instance . 
       # Optimization: Filter for common concepts (Taxon, Object, Concept)
       # to avoid obscure matches (like a random street named 'Apple').
-      # This is heuristic and can be adjusted.
       FILTER(
         ?instance = wd:Q16521 || # Taxon (animal/plant)
         ?instance = wd:Q5 ||     # Human
@@ -87,7 +91,6 @@ def fetch_wikidata_ids(labels: List[str]) -> Dict[str, str]:
             qid = binding['item']['value'].split('/')[-1] # Extract 'Q312' from URL
             
             # Simple disambiguation: taking the first result provided by Wikidata
-            # (which is often sorted by relevance/sitelinks).
             if label not in results:
                 results[label] = qid
                 
@@ -102,16 +105,14 @@ def run_importer():
     session = get_db_session()
     
     # 1. Find LexiconEntries that have an English translation but NO Wikidata ID
-    #    (Assuming LexiconEntry has a 'wikidata_id' column or 'metadata' field)
-    #    We check Translation for language_code='eng' or 'en'
-    
     logger.info("Fetching unlinked lexicon entries...")
     
-    # This query joins LexiconEntry and Translation to find candidates
+    # Enterprise Standard: Filter for both 'en' (Target) and 'eng' (Legacy RGL)
+    # to ensure complete coverage of the database during migration.
     candidates = (
         session.query(LexiconEntry, Translation.base_form)
         .join(Translation, LexiconEntry.id == Translation.lexicon_entry_id)
-        .filter(Translation.language_code.in_(['eng', 'en']))
+        .filter(Translation.language_code.in_(['en', 'eng']))
         .filter(or_(LexiconEntry.wikidata_id == None, LexiconEntry.wikidata_id == ''))
         .all()
     )
@@ -123,7 +124,6 @@ def run_importer():
         batch = candidates[i : i + BATCH_SIZE]
         
         # Prepare labels for query
-        # batch is list of tuples (LexiconEntry, base_form)
         label_map = {entry.id: base_form for entry, base_form in batch}
         unique_labels = list(set(label_map.values()))
         
@@ -144,7 +144,7 @@ def run_importer():
         session.commit()
         logger.info(f"Updated {updates_count} entries in this batch.")
         
-        # Be nice to the API
+        # Rate limiting for API politeness
         time.sleep(1)
 
     session.close()

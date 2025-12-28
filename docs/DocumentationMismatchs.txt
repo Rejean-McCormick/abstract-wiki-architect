@@ -1,0 +1,32 @@
+Based on the comprehensive analysis of your code dumps and architecture specifications, the **Code version is currently the most accurate "Source of Truth,"** while parts of the **Documentation (the "Doc") are outdated** or provide conflicting specifications.
+
+Here is the breakdown of the discrepancies and why the code is currently leading the architecture:
+
+### 1. The Schema (Input Contract)
+
+* **The Code:** In `app/core/domain/models.py`, the `BioFrame` is defined as a **flat structure** inheriting from `SemanticFrame`. It uses a strict `Literal["bio"]` as a discriminator.
+* **The Doc:** Some sections of the documentation (like the older `04-API_REFERENCE.md`) suggested that English was an outlier (`eng` vs `en`), creating confusion about which standard to follow.
+* **Verdict:** **The Code is best.** It enforces Pydantic validation which will reject any request not following the flat structure or the lowercase `"bio"` tag.
+
+### 2. Language Standard (ISO-2 vs ISO-3)
+
+* **The Code:** Our recent updates to `app/shared/lexicon.py` and `app/adapters/engines/gf_wrapper.py` successfully implement the **Enterprise Standard**. The engine receives a 2-letter code (`en`), the Lexicon Store loads from a 2-letter folder (`data/lexicon/en`), and the Wrapper maps it to the 3-letter GF module (`WikiEng`).
+* **The Doc:** The original `DocsArchitect.json` contained conflicting strategies, such as "Path Hunting" or manual exceptions for English.
+* **Verdict:** **The Code is best.** It resolve the "Split Brain" issue by isolating the 3-letter RGL codes strictly to the GF runtime layer.
+
+### 3. API Routing
+
+* **The Code:** `app/adapters/api/main.py` explicitly mounts routers under the prefix `/api/v1`.
+* **The Doc:** Several "Smoke Test" examples in the setup guides omit this prefix (e.g., calling `/generate` instead of `/api/v1/generate`), which directly caused your `404 Not Found` error.
+* **Verdict:** **The Code is best.** It provides the actual endpoint registration that the web server respects.
+
+---
+
+### Summary Recommendation: "Code-First Alignment"
+
+To bring the system to an enterprise-grade state, you should **align your documentation to the Code**, specifically regarding:
+
+1. **Uniform ISO 639-1 (2-letter)** folders for all languages in `data/lexicon/`.
+2. **Flat JSON payloads** for the `/generate` endpoint.
+3. **Mandatory `/api/v1` prefix** for all REST calls.
+

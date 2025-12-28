@@ -1,7 +1,6 @@
-
 # 🏛️ Engine Architecture & Internals
 
-**Abstract Wiki Architect v2.0**
+**Abstract Wiki Architect v2.1**
 
 ## 1. High-Level System Overview
 
@@ -18,6 +17,7 @@ The architecture separates the system into four distinct layers to ensure modula
 * **Role:** The vocabulary. Stores words and their inherent properties (gender, stems).
 * **Strategy:** **Usage-Based Sharding**. Data is organized by domain (`core`, `people`, `science`) rather than monolithic dictionary files.
 * **Alignment:** Mapped to **Wikidata QIDs** (e.g., `Q42` -> `Alan Turing`) to ensure grounding in the Semantic Web.
+* **Standard:** Strictly uses **ISO 639-1 (2-letter)** directory names (e.g., `data/lexicon/en/`).
 
 #### Layer B: The Grammar Matrix (Logic)
 
@@ -28,7 +28,11 @@ The architecture separates the system into four distinct layers to ensure modula
 #### Layer C: The Renderer (Presentation)
 
 * **Role:** The assembly. Takes an abstract intent and transforms it into text.
-* **Input Port:** **Ninai Adapter** (JSON Object Tree) or internal `BioFrame`.
+* **Input Ports (Dual-Path):**
+* **Strict Path:** Internal `BioFrame` (Flat JSON) for production stability.
+* **Prototype Path:** `UniversalNode` (Recursive Ninai JSON) for experimental flexibility.
+
+
 * **Output Port:** Natural Language Text or **CoNLL-U** (Universal Dependencies).
 
 #### Layer D: The Context (State) [NEW in v2.0]
@@ -47,7 +51,8 @@ To scale from ~40 academic languages to the 300+ required by Wikipedia, we emplo
 
 * **Source:** The official **GF Resource Grammar Library**.
 * **Quality:** Expert-written, linguistically perfect. Handles complex morphology (case declension, verb conjugation).
-* **Examples:** English (`eng`), French (`fra`), Russian (`rus`), Hindi (`hin`).
+* **Examples:** English (`en`), French (`fr`), Russian (`ru`), Hindi (`hi`).
+* **Internal Mapping:** The engine automatically maps the outer 2-letter code (`en`) to the inner 3-letter RGL module (`WikiEng`) at runtime.
 * **Build Strategy:** `HIGH_ROAD`.
 
 ### Tier 2: Manual Contrib (Overrides)
@@ -101,8 +106,8 @@ The system is no longer driven by static config files. It uses a **Dynamic Regis
 Before any build, the system runs a deep-tissue audit:
 
 * **`rgl_auditor.py`**: Scans `gf-rgl/src` to detect which modules (`Cat`, `Noun`, `Paradigms`) exist on disk. It assigns a **Maturity Score (0-10)**.
-* **`lexicon_scanner.py`**: Audits `data/lexicon/` to count vocabulary size.
-* **`build_index.py`**: The master script. It runs the sub-scanners and updates the JSON matrix.
+* **`lexicon_scanner.py`**: Audits `data/lexicon/{iso_2}/` to count vocabulary size.
+* **`build_index.py`**: The master script. It runs the sub-scanners and updates the JSON matrix using strictly **2-letter ISO codes**.
 
 ### Decision Logic
 
@@ -145,7 +150,7 @@ The v2.0 architecture integrates AI Agents to handle "Human-in-the-Loop" tasks a
 * **Role:** The Builder.
 * **Trigger:** Build failure or missing language in the Matrix.
 * **Action:** Generates raw GF code using the **Frozen System Prompt** to create a Tier 3 grammar from scratch.
-* **Loop:** Writes Code  Compiles  Reads Error Log  Rewrites Code.
+* **Loop:** Writes Code → Compiles → Reads Error Log → Rewrites Code.
 
 ### The Judge Agent
 
@@ -158,15 +163,19 @@ The v2.0 architecture integrates AI Agents to handle "Human-in-the-Loop" tasks a
 
 ## 7. Data Flow: The Request Lifecycle
 
-1. **Ingest:** User POSTs a Ninai JSON object to `/api/v1/generate`.
-2. **Adapt:** **Ninai Adapter** parses the recursive JSON tree into an internal `BioFrame`.
+1. **Ingest:** User POSTs a JSON object to `/api/v1/generate/{lang_code}` (e.g., `en`).
+2. **Adapt (Dual-Path):**
+* **Path A (Strict):** If `frame_type="bio"`, validated as `BioFrame`.
+* **Path B (Prototype):** If `function="..."`, parsed as `UniversalNode` by the **Ninai Adapter**.
+
+
 3. **Context:**
 * **Discourse Planner** checks Redis for `X-Session-ID`.
 * If the Subject matches the Session Focus, it applies **Pronominalization** ("She" instead of "Marie").
 
 
 4. **Render:**
-* The engine selects the concrete grammar (e.g., `WikiJpn`).
+* The engine maps the 2-letter code (`en`) to the internal grammar (`WikiEng`).
 * It looks up vocabulary in the **Lexicon**.
 * It applies **Weighted Topology** rules (if Tier 3) or RGL rules (if Tier 1).
 

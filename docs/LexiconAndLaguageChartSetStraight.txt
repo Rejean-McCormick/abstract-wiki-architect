@@ -1,0 +1,76 @@
+# 📘 System Architecture Documentation: Language Standards & Lexicon Strategy
+
+## 1. Executive Summary
+
+The Abstract Wiki Architect currently suffers from a **"Split Brain" Architecture** regarding language identification. The system creates friction between the **Web Standard** (ISO 639-1, 2-letter) used by the API/Wikidata and the **Academic Standard** (RGL, 3-letter) used by the Grammatical Framework engine.
+
+This document outlines the current architectural inconsistency, identifies the root cause of the "eng/en" anomaly, and defines the **Enterprise Grade specification** for normalizing the system.
+
+---
+
+## 2. Architecture Audit: The Three Zones
+
+The system operates across three distinct zones, each adhering to a different naming convention. The failure occurs at the **Interface Boundaries** between these zones.
+
+| Zone | Component | Standard Used | Example (French) | Example (English) | Status |
+| --- | --- | --- | --- | --- | --- |
+| **Zone A** | **Public API & Web** | **ISO 639-1** (2-letter) | `fr` | `en` | ✅ Standard |
+| **Zone B** | **Data Persistence** | **Mixed / Hybrid** | `data/lexicon/fr` | `data/lexicon/eng` | ❌ **Broken** |
+| **Zone C** | **Grammar Engine** | **RGL CN** (3-letter) | `WikiFre` | `WikiEng` | ✅ Standard |
+
+### The Anomaly
+
+* **The Rule:** The Persistence Layer (Zone B) was intended to mirror the Public API (Zone A) to facilitate easy data fetching from external sources like Wikidata.
+* **The Violation:** English (`eng`) is currently stored using the Zone C standard, while all other languages (`fr`, `it`, `de`) use the Zone A standard.
+* **The Risk:** Scripts currently require hardcoded exceptions (`if lang == 'en' then 'eng'`), creating technical debt and brittle tooling.
+
+---
+
+## 3. The Source of Truth
+
+The system possesses a Rosetta Stone configuration file that maps these standards, but it is not being utilized strictly by all tools.
+
+**Artifact:** `config/iso_to_wiki.json`
+
+* **Primary Key:** ISO 639-1 (2-letter) -> Used for API inputs and Folder Names.
+* **Value:** RGL Code (3-letter) -> Used strictly for GF Compilation/Runtime linearizer lookups.
+
+---
+
+## 4. The Enterprise Fix Strategy
+
+To achieve enterprise stability, we will remove ambiguous "Path Hunting" logic and enforce a strict **Normalization Pattern**.
+
+### Phase 1: Data Normalization (The Migration)
+
+We will align the filesystem with the API standard.
+
+* **Action:** Rename the directory `data/lexicon/eng/` to `data/lexicon/en/`.
+* **Result:** All lexicon folders will consistently use 2-letter codes. English will no longer be an outlier.
+
+### Phase 2: Input Standardization (The Harvester)
+
+The Harvesting tools (`harvest_lexicon.py`) must stop auto-converting inputs to 3-letter codes for file storage.
+
+* **Logic Change:** When the script receives `--lang=en` (or `fr`), it should use that exact code for the directory path.
+* **Constraint:** If the script receives a 3-letter code (`eng`), it must look up the 2-letter equivalent in `iso_to_wiki.json` *before* interacting with the filesystem.
+
+### Phase 3: Engine Adaptation (The Wrapper)
+
+The `GFGrammarEngine` is the **only** component allowed to care about 3-letter RGL codes.
+
+* **Logic Change:** The engine receives a request for `en`. It loads lexicon data from `data/lexicon/en/`.
+* **Just-in-Time Translation:** Only when the engine needs to call the binary `pgf` linearizer does it translate `en` -> `WikiEng` using the config map.
+
+---
+
+## 5. Final Architecture Data Flow
+
+Once implemented, the data flow will be unidirectional and consistent:
+
+1. **User Request:** `POST /generate { "lang": "en" }`
+2. **Lexicon Lookup:** System reads `data/lexicon/en/wide.json`.
+3. **Grammar Resolution:** System maps `en` -> `WikiEng`.
+4. **Generation:** System calls `WikiEng.linearize()`.
+
+**Verification:** The existence of `data/lexicon/eng/` will be considered a deprecated artifact and removed. The system will strictly enforce `data/lexicon/{ISO_2}/`.

@@ -1,31 +1,55 @@
 {
-  "_meta": {
-    "language": "en",
+  "Q937": {
+    "lemma": "Albert Einstein",
+    "desc": "German-born theoretical physicist (1879–1955)",
+    "source": "wikidata-harvester",
     "domain": "people",
-    "version": 1
+    "facts": {
+      "P106": [
+        "Q169470"
+      ],
+      "P27": [
+        "Q30",
+        "Q39",
+        "Q183",
+        "Q41304",
+        "Q159631",
+        "Q223050",
+        "Q533534"
+      ]
+    }
   },
-  "entries": {
-    "politician": {
-      "pos": "NOUN",
-      "gloss": "politician",
-      "human": true,
-      "number": "count",
-      "semantic_field": "politics"
-    },
-    "prime_minister": {
-      "pos": "NOUN",
-      "gloss": "prime minister, head of government",
-      "human": true,
-      "multiword": true,
-      "number": "count",
-      "semantic_field": "politics"
-    },
-    "president": {
-      "pos": "NOUN",
-      "gloss": "president, head of state or organization",
-      "human": true,
-      "number": "count",
-      "semantic_field": "politics"
+  "Q7186": {
+    "lemma": "Marie Curie",
+    "desc": "Polish-French physicist and chemist (1867–1934)",
+    "source": "wikidata-harvester",
+    "domain": "people",
+    "facts": {
+      "P106": [
+        "Q169470",
+        "Q593644",
+        "Q1622272"
+      ],
+      "P27": [
+        "Q142",
+        "Q34266",
+        "Q207272"
+      ]
+    }
+  },
+  "Q7251": {
+    "lemma": "Alan Turing",
+    "desc": "English computer scientist (1912–1954)",
+    "source": "wikidata-harvester",
+    "domain": "people",
+    "facts": {
+      "P106": [
+        "Q82594",
+        "Q15442776"
+      ],
+      "P27": [
+        "Q145"
+      ]
     }
   }
 }

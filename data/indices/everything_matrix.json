@@ -1,5 +1,5 @@
 {
-  "timestamp": 1766539362.6071928,
+  "timestamp": 1766960375.1794999,
   "stats": {
     "total_languages": 77,
     "production_ready": 0,
@@ -282,7 +282,7 @@
           "rgl_syntax": 10
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -505,9 +505,9 @@
         },
         "B_LEX": {
           "SEED": 0.0,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
+          "CONC": 0.1,
+          "WIDE": 10.0,
+          "SEM": 5.0
         },
         "C_APP": {
           "PROF": 0.0,
@@ -515,12 +515,12 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 6.0,
+        "maturity_score": 6.7,
         "build_strategy": "SAFE_MODE",
         "runnable": false
       }
@@ -1170,7 +1170,7 @@
           "rgl_syntax": 10
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -1947,7 +1947,7 @@
           "rgl_syntax": 10
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -1984,7 +1984,7 @@
           "rgl_syntax": 10
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -2032,7 +2032,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 1.0,
+          "BIN": 0.0,
           "TEST": 0.0
         }
       },
@@ -2095,7 +2095,7 @@
           "rgl_syntax": 10
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -2243,7 +2243,7 @@
           "rgl_syntax": 10
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -2317,7 +2317,7 @@
           "rgl_syntax": 10
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -2539,7 +2539,7 @@
           "rgl_syntax": 10
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0

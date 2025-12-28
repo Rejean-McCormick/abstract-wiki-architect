@@ -1,7 +1,7 @@
 
 # 🛠️ Setup & Deployment Guide
 
-**Abstract Wiki Architect v2.0**
+**Abstract Wiki Architect v2.1**
 
 This guide covers the installation, configuration, and deployment of the Abstract Wiki Architect. Because the core engine depends on the **Grammatical Framework (GF)** C-libraries (`libpgf`), the backend **must run in a Linux environment**.
 
@@ -37,14 +37,16 @@ To prevent "Path not found" errors, you must understand the mapping between Wind
 /mnt/c/MyCode/AbstractWiki/
 ├── abstract-wiki-architect/      <-- [REPO ROOT] This repository
 │   ├── .env                      <-- Env variables (Shared)
-│   ├── data/                     <-- [NEW] v2.0 Data Assets
-│   │   ├── config/               <-- topology_weights.json (Udiron)
-│   │   └── tests/                <-- gold_standard.json (QA)
+│   ├── data/                     <-- [NEW] v2.1 Data Assets
+│   │   └── lexicon/              <-- Lexicon Store
+│   │       ├── en/               <-- ISO 639-1 (2-letter) standard
+│   │       ├── fr/
+│   │       └── ...
 │   ├── gf/                       <-- Compilation Artifacts
 │   │   └── AbstractWiki.pgf      <-- The Binary (Generated)
 │   └── ...
 └── gf-rgl/                       <-- [EXTERNAL] GF Resource Grammar Library
-    └── src/                      <-- RGL Source files (French, English, etc.)
+    └── src/                      <-- RGL Source files
 
 ```
 
@@ -140,7 +142,7 @@ pip install -r requirements.txt
 ## 5. Configuration (`.env`)
 
 Create a `.env` file in the project root. This configures the paths and services.
-**Note:** v2.0 uses `REDIS_URL` instead of separate host/port variables.
+**Note:** v2.1 uses `REDIS_URL` and strict ISO-2 paths.
 
 **File:** `.env`
 
@@ -170,8 +172,7 @@ SESSION_TTL_SEC=600
 # --- Worker ---
 WORKER_CONCURRENCY=2
 
-# --- v2.0 AI & DevOps Services ---
-# Required for "Architect Agent" (Grammar Gen) and "Judge Agent" (QA)
+# --- v2.1 AI & DevOps Services ---
 GITHUB_TOKEN=your_github_pat_token
 REPO_URL=https://github.com/your-org/abstract-wiki-architect
 GOOGLE_API_KEY=your_gemini_api_key
@@ -203,6 +204,7 @@ Hosts the FastAPI server.
 source venv/bin/activate
 
 # Run Server (Hot Reload Enabled)
+# Note: Factory pattern is required
 uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port 8000 --reload
 
 ```
@@ -284,10 +286,10 @@ You should see:
 * **Cause:** A script (`Setup.sh` or `build_orchestrator.py`) was saved with Windows `CRLF` line endings.
 * **Fix:** Run `dos2unix <filename>` on the offending script.
 
-### "Redis Connection Refused"
+### "404 Not Found" on /generate
 
-* **Cause:** Incorrect `REDIS_URL`.
-* **Fix:** In Hybrid Mode, ensure `.env` has `redis://localhost:6379/0`. In Docker, it should be `redis://redis:6379/0`.
+* **Cause:** You are hitting the old root endpoint.
+* **Fix:** Ensure you prefix your requests with `/api/v1` (e.g., `POST /api/v1/generate/en`).
 
 ### "Last Man Standing" / PGF only has one language
 
@@ -300,26 +302,29 @@ You should see:
 
 Run these commands (in WSL) to verify the engine is functioning.
 
-### Test A: Standard BioFrame (JSON)
+### Test A: Standard BioFrame (Code-First Compliant)
+
+**Updates applied:** Uses `/api/v1` prefix, ISO-2 code `en`, and Flat JSON structure.
 
 ```bash
-curl -X POST "http://localhost:8000/api/v1/generate?lang=eng" \
+curl -X POST "http://localhost:8000/api/v1/generate/en" \
      -H "Content-Type: application/json" \
      -d '{
            "frame_type": "bio",
            "name": "Alan Turing",
-           "profession": "computer_scientist",
-           "nationality": "british"
+           "profession": "computer scientist",
+           "nationality": "british",
+           "gender": "m"
          }'
 
 ```
 
-### Test B: Ninai Protocol (v2.0 Feature)
+### Test B: Ninai Protocol (v2.1 Feature)
 
-Verify the new **Ninai Adapter** is working:
+Verify the new **Ninai Adapter** using the UniversalNode structure:
 
 ```bash
-curl -X POST "http://localhost:8000/api/v1/generate?lang=eng" \
+curl -X POST "http://localhost:8000/api/v1/generate/en" \
      -H "Content-Type: application/json" \
      -d '{
            "function": "ninai.constructors.Statement",
@@ -335,8 +340,12 @@ curl -X POST "http://localhost:8000/api/v1/generate?lang=eng" \
 
 ```json
 {
-  "result": "Alan Turing is a physicist and chemist.",
-  "meta": { "engine": "WikiEng", "adapter": "NinaiAdapter" }
+  "surface_text": "Alan Turing is a physicist and chemist.",
+  "meta": { 
+      "engine": "WikiEng", 
+      "adapter": "NinaiAdapter",
+      "strategy": "SimpNP"
+  }
 }
 
 ```

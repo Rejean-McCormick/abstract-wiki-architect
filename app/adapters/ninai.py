@@ -1,14 +1,14 @@
-# app/adapters/ninai.py
 import logging
 from typing import Any, Dict, List, Optional, Union
 from pydantic import ValidationError
 
 from app.core.domain.frame import BioFrame, EventFrame, RelationalFrame
 from app.shared.config import settings
-from app.shared.lexicon import lexicon  # <--- NEW: Import the Memory Bank
+# FIXED: Point to the Singleton in the correct location (Spec v2.1)
+from app.shared.lexicon import lexicon_store 
 
 # Logger setup
-logger = logging.getLogger(settings.OTEL_SERVICE_NAME)
+logger = logging.getLogger(getattr(settings, "OTEL_SERVICE_NAME", "abstract-wiki"))
 
 # --- CONSTANTS: The Ninai Protocol Ledger ---
 CONSTRUCTOR_STATEMENT = "ninai.constructors.Statement"
@@ -21,7 +21,7 @@ class NinaiAdapter:
     """
     The Bridge between the external Ninai Protocol (Recursive JSON Objects)
     and the internal Abstract Wiki Architect Domain (Flat Pydantic Frames).
-    v2.0 Upgrade: Integrates LexiconRuntime for Entity Grounding.
+    v2.0 Upgrade: Integrates LexiconStore for Entity Grounding.
     """
 
     def parse(self, ninai_payload: Dict[str, Any], target_lang: str = "eng") -> Union[BioFrame, EventFrame, RelationalFrame]:
@@ -29,9 +29,6 @@ class NinaiAdapter:
         Main entry point. Recursively parses the input JSON tree.
         Now accepts 'target_lang' to resolve QIDs using the Lexicon.
         """
-        # 0. Load Lexicon for this language (Lazy Load)
-        lexicon.load_language(target_lang)
-
         # 1. Validate Root Structure
         func = ninai_payload.get("function")
         if func != CONSTRUCTOR_STATEMENT:
@@ -65,41 +62,62 @@ class NinaiAdapter:
             subject_qid = self._extract_qid(subject_node)
             
             # Lookup in Lexicon (Enrichment)
-            # If Ninai sends "Unknown", we use the Lexicon's lemma (e.g., "Douglas Adams")
-            subj_entry = lexicon.lookup(subject_qid, lang) if subject_qid else None
+            # FIXED: Use instance method
+            subj_entry = lexicon_store.get_entry(lang, subject_qid) if subject_qid else None
             
             subject_name = self._extract_label(subject_node)
             if subject_name == "Unknown" and subj_entry:
-                subject_name = subj_entry.lemma
+                subject_name = subj_entry.get("lemma", "Unknown")
 
             # --- Profession (Arg 2) ---
-            prof_node = args[2]
-            prof_qid = self._extract_qid(prof_node)
-            prof_entry = lexicon.lookup(prof_qid, lang) if prof_qid else None
-            
-            # Use GF Function if available (e.g. 'physicist_N'), else raw string
-            if prof_entry and prof_entry.gf_fun:
-                profession_key = prof_entry.gf_fun
+            # If the frame has a profession arg, use it. Otherwise try to auto-fill.
+            if len(args) > 2:
+                prof_node = args[2]
+                prof_qid = self._extract_qid(prof_node)
+                prof_entry = lexicon_store.get_entry(lang, prof_qid) if prof_qid else None
+                
+                # Use GF Function if available (e.g. 'physicist_N'), else raw string
+                if prof_entry and prof_entry.get("gf_fun"):
+                    profession_key = prof_entry["gf_fun"]
+                else:
+                    profession_key = self._extract_value(prof_node)
             else:
-                profession_key = self._extract_value(prof_node)
+                # Auto-fill from Subject P106
+                job_qids = lexicon_store.get_facts(lang, subject_qid, "P106")
+                profession_key = "person"
+                if job_qids:
+                    # Try to resolve the first job QID to a GF function
+                    job_entry = lexicon_store.get_entry(lang, job_qids[0])
+                    if job_entry and job_entry.get("gf_fun"):
+                        profession_key = job_entry["gf_fun"]
+                    elif job_entry:
+                        profession_key = job_entry.get("lemma", "person")
 
             # --- Nationality (Arg 3) ---
             nationality_key = None
             if len(args) > 3:
                 nat_node = args[3]
                 nat_qid = self._extract_qid(nat_node)
-                nat_entry = lexicon.lookup(nat_qid, lang) if nat_qid else None
+                nat_entry = lexicon_store.get_entry(lang, nat_qid) if nat_qid else None
                 
-                if nat_entry and nat_entry.gf_fun:
-                    nationality_key = nat_entry.gf_fun
+                if nat_entry and nat_entry.get("gf_fun"):
+                    nationality_key = nat_entry["gf_fun"]
                 else:
                     nationality_key = self._extract_value(nat_node)
+            else:
+                 # Auto-fill from Subject P27
+                nat_qids = lexicon_store.get_facts(lang, subject_qid, "P27")
+                if nat_qids:
+                     # Try to resolve first nationality
+                    nat_entry = lexicon_store.get_entry(lang, nat_qids[0])
+                    if nat_entry and nat_entry.get("gf_fun"):
+                        nationality_key = nat_entry["gf_fun"]
 
             # --- Construct Frame ---
             # We inject the concrete GF function into 'meta' for the Engine to use
             meta_data = {}
-            if subj_entry:
-                meta_data["subject_gf"] = subj_entry.gf_fun
+            if subj_entry and subj_entry.get("gf_fun"):
+                meta_data["subject_gf"] = subj_entry["gf_fun"]
 
             return BioFrame(
                 frame_type="bio",
@@ -129,17 +147,17 @@ class NinaiAdapter:
             subject_name = self._extract_label(subject_node)
             
             # Lexicon Lookup
-            subj_entry = lexicon.lookup(subject_qid, lang) if subject_qid else None
+            subj_entry = lexicon_store.get_entry(lang, subject_qid) if subject_qid else None
             if subject_name == "Unknown" and subj_entry:
-                subject_name = subj_entry.lemma
+                subject_name = subj_entry.get("lemma", "Unknown")
 
             # Event Object
             event_node = args[2]
             event_name = self._extract_label(event_node)
 
             meta_data = {}
-            if subj_entry:
-                meta_data["subject_gf"] = subj_entry.gf_fun
+            if subj_entry and subj_entry.get("gf_fun"):
+                meta_data["subject_gf"] = subj_entry["gf_fun"]
 
             return EventFrame(
                 frame_type="event",

@@ -1,14 +1,15 @@
+
 # 🔌 API Reference & Semantic Frames
 
-**Abstract Wiki Architect v2.0**
+**Abstract Wiki Architect v2.1**
 
 ## 1. Overview
 
 The Abstract Wiki Architect exposes a **Hybrid Natural Language Generation (NLG) Engine** via a RESTful API.
 It supports two primary input modes:
 
-1. **Semantic Frames:** Simple, flat JSON objects (Internal Format).
-2. **Ninai Protocol:** Recursive JSON Object Trees (Abstract Wikipedia Standard).
+1. **Strict Path (BioFrame):** Simple, flat JSON objects validated against a rigid Pydantic schema.
+2. **Prototype Path (Ninai/UniversalNode):** Recursive JSON Object Trees for experimental grammar functions.
 
 The engine is **deterministic**: the same input + configuration will always produce the same output, unless "Micro-Planning" (Style Injection) is enabled.
 
@@ -33,18 +34,23 @@ In production, if `API_SECRET` is set in the environment variables, you must inc
 
 ### Generate Text
 
-**`POST /generate`**
+**`POST /api/v1/generate/{lang_code}`**
 
-Converts an abstract intent into natural language.
+Generates a natural language sentence from a semantic frame.
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `lang_code` | `string` | **Yes** | The **ISO 639-1 (2-letter)** code (e.g., `en`, `fr`, `zu`). **Do NOT use `eng`.** |
 
 **Query Parameters**
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `lang` | `string` | **Yes** | The 3-letter ISO 639-3 code (e.g., `eng`, `fra`, `zul`). |
 | `style` | `string` | No | `simple` (default) or `formal`. Triggers Micro-Planning. |
 
-**Headers (v2.0 Features)**
+**Headers**
 
 | Header | Value | Description |
 | --- | --- | --- |
@@ -55,9 +61,9 @@ Converts an abstract intent into natural language.
 
 ---
 
-## 4. Input Mode A: Semantic Frames (Internal)
+## 4. Input Mode A: Semantic Frames (Strict Path)
 
-The body must be a single flat JSON object. The `frame_type` field determines the logic.
+The body must be a **single flat JSON object**. Nested structures (like wrapping the frame in an `intent` object) are deprecated for this endpoint.
 
 ### A. Bio Frame (`bio`)
 
@@ -69,7 +75,7 @@ Used for introductory biographical sentences.
 | `name` | `str` | **Yes** | The subject's proper name (e.g., "Alan Turing"). |
 | `profession` | `str` | **Yes** | Lookup key in `people.json` (e.g., "computer_scientist"). |
 | `nationality` | `str` | No | Lookup key in `geography.json` (e.g., "british"). |
-| `gender` | `str` | No | `"m"`, `"f"`, or `"n"`. Critical for inflection. |
+| `gender` | `str` | No | `"m"`, `"f"`, or `null`. Critical for inflection. |
 
 **Example:**
 
@@ -97,12 +103,12 @@ Used for temporal events.
 
 ---
 
-## 5. Input Mode B: Ninai Protocol (Standard)
+## 5. Input Mode B: Ninai Protocol (Prototype Path)
 
-The API natively supports the **Ninai JSON Object Model** used by Abstract Wikipedia. The recursive structure is automatically flattened by the `NinaiAdapter`.
+The API natively supports the **Ninai JSON Object Model** (or `UniversalNode`) used by Abstract Wikipedia. The recursive structure is automatically flattened by the `NinaiAdapter`.
 
 **Schema:**
-The root object must define a `function` key matching the Ninai constructor registry.
+The root object must define a `function` key matching the Ninai constructor registry or a valid GF function.
 
 **Example Request:**
 
@@ -123,16 +129,53 @@ The root object must define a `function` key matching the Ninai constructor regi
 
 ---
 
-## 6. Output Formats
+## 6. System & Utility Endpoints
+
+### Onboard Language
+
+**`POST /api/v1/languages`**
+
+Scaffolds a new language in the system (Saga Pattern).
+
+**Request Body:**
+
+```json
+{
+  "iso_code": "it",
+  "english_name": "Italian"
+}
+
+```
+
+### System Health
+
+**`GET /api/v1/health/ready`**
+
+Returns the status of the Lexicon Store (Zone B) and Grammar Engine (Zone C).
+
+**Response:**
+
+```json
+{
+  "broker": "up",
+  "storage": "up",
+  "engine": "up"
+}
+
+```
+
+---
+
+## 7. Output Formats
 
 ### Standard Text (`Accept: text/plain`)
 
 ```json
 {
-  "result": "Shaka est un guerrier zoulou.",
+  "surface_text": "Shaka est un guerrier zoulou.",
   "meta": {
-    "lang": "fra",
     "engine": "WikiFra",
+    "strategy": "HighRoad",
     "latency_ms": 12
   }
 }
@@ -145,9 +188,8 @@ Returns the CoNLL-U representation for evaluation against treebanks.
 
 ```json
 {
-  "result": "# text = Shaka est un guerrier zoulou.\n1 Shaka _ PROPN _ _ 3 nsubj _ _\n...",
+  "surface_text": "# text = Shaka est un guerrier zoulou.\n1 Shaka _ PROPN _ _ 3 nsubj _ _\n...",
   "meta": {
-    "lang": "fra",
     "exporter": "UDMapping"
   }
 }
@@ -156,28 +198,29 @@ Returns the CoNLL-U representation for evaluation against treebanks.
 
 ---
 
-## 7. Error Handling
+## 8. Error Handling
 
 | Status | Error Type | Cause |
 | --- | --- | --- |
-| **400** | `Bad Request` | Malformed JSON or Ninai parse error. |
-| **404** | `Not Found` | The requested `lang` is not in the `AbstractWiki.pgf` binary. |
-| **422** | `Unprocessable` | A specific word is missing from the Lexicon. |
+| **400** | `Bad Request` | Malformed JSON or Schema Validation failed. |
+| **404** | `Not Found` | The requested `lang_code` is not in the PGF binary. |
+| **422** | `Unprocessable` | A specific word is missing from the Lexicon (`people.json`). |
 | **424** | `Failed Dependency` | UD Exporter failed to map a function (check `UD_MAP`). |
-| **500** | `Server Error` | Internal engine failure. |
+| **500** | `Server Error` | Internal engine failure (e.g., C-Runtime crash). |
 
 ---
 
-## 8. Integration Guide (Python Client)
+## 9. Integration Guide (Python Client)
 
 ```python
 import requests
 import uuid
 
+# Note the /api/v1 prefix
 API_URL = "http://localhost:8000/api/v1/generate"
 SESSION_ID = str(uuid.uuid4())
 
-def generate_sentence(frame: dict, lang: str = "eng") -> str:
+def generate_sentence(frame: dict, lang_code: str = "en") -> str:
     """
     Generates text with context awareness.
     """
@@ -186,13 +229,15 @@ def generate_sentence(frame: dict, lang: str = "eng") -> str:
         "X-Session-ID": SESSION_ID  # Enables 'He/She' logic
     }
     
+    # Use Path Parameter for Language
+    url = f"{API_URL}/{lang_code}"
+    
     response = requests.post(
-        API_URL, 
-        params={"lang": lang}, 
-        json=frame,
+        url, 
+        json=frame, # Flat Dictionary
         headers=headers
     )
     response.raise_for_status()
-    return response.json()["result"]
+    return response.json()["surface_text"]
 
 ```

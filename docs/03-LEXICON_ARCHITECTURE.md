@@ -1,8 +1,12 @@
+Here is the updated **`docs/03-LEXICON_ARCHITECTURE.md`**.
 
+This version strictly enforces the **ISO 639-1 (2-letter)** directory standard (`en` vs `eng`) across the file tree, examples, and scanner logic, aligning with the v2.1 "Code-First" mandate.
+
+---
 
 # 📚 Lexicon Architecture & Workflow
 
-**Abstract Wiki Architect**
+**Abstract Wiki Architect v2.1**
 
 ## 1. Core Philosophy: Usage-Based Sharding
 
@@ -18,24 +22,24 @@ We adopt a **Usage-Based Sharding** strategy:
 
 ## 2. Directory Structure
 
-The lexicon lives in `data/lexicon/` and is organized hierarchically by **ISO 639-3** language code.
+The lexicon lives in `data/lexicon/` and is organized hierarchically by **ISO 639-1 (2-letter)** language code.
 
 ```text
 data/
 ├── lexicon/
 │   ├── schema.json          # Master Validation Schema (Draft-07)
-│   ├── eng/                 # English Namespace
+│   ├── en/                  # English Namespace (NOT 'eng')
 │   │   ├── core.json        # "Skeleton" words (is, the, he, she)
 │   │   ├── people.json      # Professions, Titles, Relations
 │   │   ├── science.json     # Scientific terms (Physics, Nobel Prize)
 │   │   └── geography.json   # Countries, Cities, Demonyms
-│   ├── fra/                 # French Namespace
+│   ├── fr/                  # French Namespace (NOT 'fra')
 │   │   ├── core.json
 │   │   └── ...
-│   └── zul/                 # Zulu Namespace
+│   └── zu/                  # Zulu Namespace (NOT 'zul')
 │       └── ...
 └── imports/                 # Staging area for bulk CSVs
-    ├── eng_wide.csv
+    ├── en_wide.csv
     └── ...
 
 ```
@@ -165,14 +169,14 @@ The **Everything Matrix** uses `lexicon_scanner.py` to grade the vocabulary read
 
 ### Scenario A: Adding a New Language (Bootstrapping)
 
-1. **Create Directory:** `mkdir data/lexicon/zul` (Zulu).
+1. **Create Directory:** `mkdir data/lexicon/zu` (Zulu).
 2. **Generate Seed:** Run the Lexicographer agent (or manually create `core.json`).
 3. **Audit:** Run `python tools/everything_matrix/build_index.py` to confirm the scanner detects the new files.
 
 ### Scenario B: Bulk Import from Wikidata
 
 1. **Fetch:** Use `scripts/fetch_wikidata_labels.py --lang=fr --domain=people`.
-2. **Save:** The script outputs `data/imports/fra_wide.csv`.
+2. **Save:** The script outputs `data/imports/fr_wide.csv`.
 3. **Audit:** The scanner detects the `.csv` and awards a **Zone B Score of 10**.
 4. **Runtime:** The engine lazy-loads the CSV into memory during the first request.
 
@@ -181,6 +185,6 @@ The **Everything Matrix** uses `lexicon_scanner.py` to grade the vocabulary read
 If the API returns `422 Unprocessable Entity`:
 
 1. **Check Log:** The error message will say `Missing key: 'spaceman' in domain 'people'`.
-2. **Edit:** Open `data/lexicon/{lang}/people.json`.
+2. **Edit:** Open `data/lexicon/{lang_code}/people.json`.
 3. **Add:** Insert the entry for "spaceman".
 4. **Restart:** You do **not** need to rebuild the PGF. Just restart the Worker/API to flush the JSON cache.

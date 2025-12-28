@@ -1,11 +1,12 @@
 
+
 # 🏗️ The Build System & Everything Matrix
 
-**Abstract Wiki Architect v2.0**
+**Abstract Wiki Architect v2.1**
 
 ## 1. Overview: Data-Driven Orchestration
 
-In a traditional system, you might hardcode a list of supported languages (e.g., `LANGS = ['eng', 'fra']`).
+In a traditional system, you might hardcode a list of supported languages (e.g., `LANGS = ['en', 'fr']`).
 In the Abstract Wiki Architect, this is forbidden.
 
 Instead, we use a **Data-Driven Architecture**. The system scans its own file system to discover what languages are available, grades their quality, and dynamically decides how to build them. This "Self-Awareness" is stored in a central registry called the **Everything Matrix**.
@@ -27,7 +28,7 @@ The heart of the build system is a JSON file regenerated daily by the scanners.
 
 ### The Schema
 
-The matrix tracks the "Health" of every language across distinct zones.
+The matrix tracks the "Health" of every language across distinct zones. Note that the primary keys are **ISO 639-1 (2-letter)** codes.
 
 ```json
 {
@@ -37,9 +38,9 @@ The matrix tracks the "Health" of every language across distinct zones.
     "production_ready": 12
   },
   "languages": {
-    "fra": {
+    "fr": {
       "meta": {
-        "iso": "fra",
+        "iso": "fr",
         "tier": 1,
         "origin": "rgl",
         "folder": "french"
@@ -92,7 +93,7 @@ Before a build occurs, a suite of Python scripts audits the codebase to populate
 ### C. The Lexicon Scanner (`lexicon_scanner.py`)
 
 * **Role:** Audits **Zone B (The Vocabulary)**.
-* **Logic:** It parses the JSON shards in `data/lexicon/{lang}/` to count actual words.
+* **Logic:** It parses the JSON shards in `data/lexicon/{lang_code}/` (e.g., `data/lexicon/fr/`) to count actual words.
 * **Scoring:**
 * **0:** No files. (Status: `data_ready = False`)
 * **5:** Functional core (< 50 words).
