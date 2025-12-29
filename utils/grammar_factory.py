@@ -1,131 +1,137 @@
 import json
+import logging
 from pathlib import Path
+import sys
 
-# Load Topology Weights
+# --- CONFIGURATION ---
 ROOT_DIR = Path(__file__).parent.parent
-CONFIG_PATH = ROOT_DIR / "data" / "config" / "topology_weights.json"
+CONFIG_DIR = ROOT_DIR / "data" / "config"
+FACTORY_TARGETS_FILE = CONFIG_DIR / "factory_targets.json"
+TOPOLOGY_WEIGHTS_FILE = CONFIG_DIR / "topology_weights.json"
 
+# Setup Logging
+logger = logging.getLogger("GrammarFactory")
+
+# --- SHARED IMPORTS ---
+sys.path.append(str(ROOT_DIR))
+try:
+    from app.shared.languages import ISO_2_TO_3
+except ImportError:
+    ISO_2_TO_3 = {}
+
+# --- DEFAULTS ---
 DEFAULT_WEIGHTS = {
-    "SVO": {"nsubj": -10, "root": 0, "obj": 10},
-    "SOV": {"nsubj": -10, "obj": -5, "root": 0},
-    "VSO": {"root": -10, "nsubj": 0, "obj": 10},
+    "SVO": {"nsubj": -10, "root": 0, "obj": 10, "iobj": 5},
+    "SOV": {"nsubj": -10, "obj": -5, "iobj": -2, "root": 0},
+    "VSO": {"root": -10, "nsubj": 0, "obj": 10, "iobj": 15},
     "VOS": {"root": -10, "obj": 5, "nsubj": 10},
     "OVS": {"obj": -10, "root": 0, "nsubj": 10},
     "OSV": {"obj": -10, "nsubj": -5, "root": 0}
 }
 
-# Simple registry for demonstration. In a real system, this comes from 'everything_matrix.json'
-LANG_ORDERS = {
-    "eng": "SVO", "fra": "SVO", "zul": "SVO", "spa": "SVO", "por": "SVO",
-    "jpn": "SOV", "hin": "SOV", "kor": "SOV", "tur": "SOV", "que": "SOV",
-    "gle": "VSO", "ara": "VSO" 
-}
+def load_json_config(path, default=None):
+    if path.exists():
+        try:
+            with open(path, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.warning(f"⚠️  Failed to load config {path.name}: {e}")
+    return default if default is not None else {}
 
-def load_weights():
-    if CONFIG_PATH.exists():
-        with open(CONFIG_PATH) as f:
-            return json.load(f)
-    return DEFAULT_WEIGHTS
+def get_topology(iso3_code):
+    targets = load_json_config(FACTORY_TARGETS_FILE)
+    if iso3_code in targets:
+        return targets[iso3_code].get("order", "SVO")
+    
+    static_overrides = {
+        "jpn": "SOV", "hin": "SOV", "kor": "SOV", "tur": "SOV", 
+        "urd": "SOV", "fas": "SOV", "ara": "VSO", "heb": "VSO"
+    }
+    return static_overrides.get(iso3_code, "SVO")
 
 def _build_linearization(components, weights):
-    """
-    Sorts components by topological weight and joins them with '++'.
-    components: List of dicts {'code': str, 'role': str}
-    weights: Dict of {role: int}
-    """
-    # Sort by the weight of the role (default to 0 if unknown)
+    # Sort by the weight of the role
     components.sort(key=lambda x: weights.get(x["role"], 0))
-    # Join the GF code strings
+    # Join the GF code strings using '++'
     return " ++ ".join([item["code"] for item in components])
 
 def generate_safe_mode_grammar(lang_code):
     """
-    Generates a minimal Safe Mode grammar that implements the 
-    AbstractWiki SEMANTIC interface defined in AbstractWiki.gf.
-    
-    NOW UPDATED: Uses Weighted Topology for correct word order (SVO/SOV).
+    Generates a Safe Mode grammar.
+    FIX 2.0: Treats 'String' inputs as already-wrapped SS records {s : Str}.
     """
-    weights_db = load_weights()
+    iso3 = ISO_2_TO_3.get(lang_code, lang_code).lower()
+    order = get_topology(iso3)
     
-    # 1. Determine Language Order (Default to SVO)
-    order = LANG_ORDERS.get(lang_code.lower(), "SVO")
+    weights_db = load_json_config(TOPOLOGY_WEIGHTS_FILE, DEFAULT_WEIGHTS)
     weights = weights_db.get(order, weights_db["SVO"])
     
-    # 2. Construct Linearizations
+    # --- 1. Linearization Strategies ---
     
-    # mkBio: Name (nsubj) + "is a" (root) + Prof/Nat (obj)
-    bio_comps = [
-        {"code": "name",      "role": "nsubj"},
-        {"code": "\"is a\"",  "role": "root"},
-        {"code": "nat ++ prof", "role": "obj"} # Bundle nat+prof as Object
-    ]
-    bio_lin = _build_linearization(bio_comps, weights)
+    # Note: We must access '.s' on the arguments because they are SS records
+    # But the result of _build_linearization is a raw Str expression.
+    # We will wrap the RESULT in 'ss(...)'.
 
-    # mkEvent: Subject (nsubj) + "participated in" (root) + Event (obj)
-    event_comps = [
-        {"code": "subject",              "role": "nsubj"},
-        {"code": "\"participated in\"",  "role": "root"},
-        {"code": "event",                "role": "obj"}
-    ]
-    event_lin = _build_linearization(event_comps, weights)
-    
-    # mkFact: Subj (nsubj) + Pred (root)
-    # Note: Predicate usually contains the verb, so we treat it as root
-    fact_comps = [
-        {"code": "subj", "role": "nsubj"},
-        {"code": "pred", "role": "root"}
-    ]
-    fact_lin = _build_linearization(fact_comps, weights)
-    
-    # mkIsAProperty: Subj (nsubj) + "is" (root) + Prop (obj)
-    prop_comps = [
-        {"code": "subj",     "role": "nsubj"},
-        {"code": "\"is\"",   "role": "root"},
-        {"code": "prop",     "role": "obj"}
-    ]
-    prop_lin = _build_linearization(prop_comps, weights)
+    # mkBioProf: Entity (nsubj) + "is a" (root) + Prof (obj)
+    bio_prof_lin = _build_linearization([
+        {"code": "entity.s",   "role": "nsubj"},
+        {"code": "\"is a\"",   "role": "root"},
+        {"code": "prof.s",     "role": "obj"}
+    ], weights)
 
-    gf_code = f"""concrete Wiki{lang_code.title()} of AbstractWiki = open Prelude in {{
+    # mkBioNat: Entity (nsubj) + "is" (root) + Nat (obj)
+    bio_nat_lin = _build_linearization([
+        {"code": "entity.s",   "role": "nsubj"},
+        {"code": "\"is\"",     "role": "root"},
+        {"code": "nat.s",      "role": "obj"} 
+    ], weights)
+
+    # mkBioFull: Entity (nsubj) + "is a" (root) + Nat+Prof (obj)
+    bio_full_lin = _build_linearization([
+        {"code": "entity.s",      "role": "nsubj"},
+        {"code": "\"is a\"",      "role": "root"},
+        {"code": "nat.s ++ prof.s", "role": "obj"} 
+    ], weights)
+
+    # mkEvent: Entity (nsubj) + "participated in" (root) + Event (obj)
+    event_lin = _build_linearization([
+        {"code": "entity.s",            "role": "nsubj"},
+        {"code": "\"participated in\"", "role": "root"},
+        {"code": "event.s",             "role": "obj"}
+    ], weights)
+
+    # --- 2. Generate Code ---
+    lang_name = f"Wiki{lang_code.title()}"
+    
+    # CRITICAL FIX IN 'lin': 
+    # mkEntityStr s = s; (No 'ss' wrapper, because 's' is already SS)
+    # mkBio... = ss (...); (Wrap the result string back into SS)
+
+    gf_code = f"""concrete {lang_name} of AbstractWiki = open Prelude in {{
   lincat
-    Entity = Str;
-    Frame = Str;
-    Property = Str;
-    Fact = Str;
-    Predicate = Str;
-    Modifier = Str;
-    Value = Str;
+    Statement = SS;
+    Entity = SS;
+    Profession = SS;
+    Nationality = SS;
+    EventObj = SS;
 
   lin
-    -- Dynamic Topology for {lang_code} ({order})
-    
-    -- Core Semantics
-    mkFact subj pred = {fact_lin};
-    
-    -- Hardcoded stub for 'is a property'
-    mkIsAProperty subj prop = {prop_lin};
+    -- Dynamic Topology: {iso3} ({order})
 
-    -- Specialized Frames (Schema Alignment)
-    -- Bio: Name -> Profession -> Nationality -> Fact
-    mkBio name prof nat = {bio_lin};
+    -- 1. Wrappers (Pass-through because input is already SS)
+    mkEntityStr s = s;
+    strProf s = s;
+    strNat s = s;
+    strEvent s = s;
+    
+    -- 2. Bio Frames (Wrap the constructed string)
+    mkBioProf entity prof = ss ({bio_prof_lin});
+    mkBioNat entity nat = ss ({bio_nat_lin});
+    mkBioFull entity prof nat = ss ({bio_full_lin});
 
-    -- Event: Subject -> EventObject -> Fact
-    mkEvent subject event = {event_lin};
-    
-    -- Modifiers
-    FactWithMod fact mod = fact ++ mod;
-    
-    -- Lexical Stubs
-    mkLiteral s = s;
-    
-    -- Type Converters
-    Entity2NP e = e;
-    Property2AP p = p;
-    VP2Predicate p = p;
+    -- 3. Event Frames
+    mkEvent entity event = ss ({event_lin});
 
-    -- Required Lexicon Stubs
-    lex_animal_N = "animal";
-    lex_walk_V = "walks";
-    lex_blue_A = "blue";
 }}
 """
     return gf_code

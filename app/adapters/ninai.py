@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from app.core.domain.frame import BioFrame, EventFrame, RelationalFrame
 from app.shared.config import settings
 # FIXED: Point to the Singleton in the correct location (Spec v2.1)
-from app.shared.lexicon import lexicon_store 
+from app.shared.lexicon import lexicon 
 
 # Logger setup
 logger = logging.getLogger(getattr(settings, "OTEL_SERVICE_NAME", "abstract-wiki"))
@@ -63,7 +63,7 @@ class NinaiAdapter:
             
             # Lookup in Lexicon (Enrichment)
             # FIXED: Use instance method
-            subj_entry = lexicon_store.get_entry(lang, subject_qid) if subject_qid else None
+            subj_entry = lexicon.get_entry(lang, subject_qid) if subject_qid else None
             
             subject_name = self._extract_label(subject_node)
             if subject_name == "Unknown" and subj_entry:
@@ -74,7 +74,7 @@ class NinaiAdapter:
             if len(args) > 2:
                 prof_node = args[2]
                 prof_qid = self._extract_qid(prof_node)
-                prof_entry = lexicon_store.get_entry(lang, prof_qid) if prof_qid else None
+                prof_entry = lexicon.get_entry(lang, prof_qid) if prof_qid else None
                 
                 # Use GF Function if available (e.g. 'physicist_N'), else raw string
                 if prof_entry and prof_entry.get("gf_fun"):
@@ -83,11 +83,11 @@ class NinaiAdapter:
                     profession_key = self._extract_value(prof_node)
             else:
                 # Auto-fill from Subject P106
-                job_qids = lexicon_store.get_facts(lang, subject_qid, "P106")
+                job_qids = lexicon.get_facts(lang, subject_qid, "P106")
                 profession_key = "person"
                 if job_qids:
                     # Try to resolve the first job QID to a GF function
-                    job_entry = lexicon_store.get_entry(lang, job_qids[0])
+                    job_entry = lexicon.get_entry(lang, job_qids[0])
                     if job_entry and job_entry.get("gf_fun"):
                         profession_key = job_entry["gf_fun"]
                     elif job_entry:
@@ -98,7 +98,7 @@ class NinaiAdapter:
             if len(args) > 3:
                 nat_node = args[3]
                 nat_qid = self._extract_qid(nat_node)
-                nat_entry = lexicon_store.get_entry(lang, nat_qid) if nat_qid else None
+                nat_entry = lexicon.get_entry(lang, nat_qid) if nat_qid else None
                 
                 if nat_entry and nat_entry.get("gf_fun"):
                     nationality_key = nat_entry["gf_fun"]
@@ -106,10 +106,10 @@ class NinaiAdapter:
                     nationality_key = self._extract_value(nat_node)
             else:
                  # Auto-fill from Subject P27
-                nat_qids = lexicon_store.get_facts(lang, subject_qid, "P27")
+                nat_qids = lexicon.get_facts(lang, subject_qid, "P27")
                 if nat_qids:
                      # Try to resolve first nationality
-                    nat_entry = lexicon_store.get_entry(lang, nat_qids[0])
+                    nat_entry = lexicon.get_entry(lang, nat_qids[0])
                     if nat_entry and nat_entry.get("gf_fun"):
                         nationality_key = nat_entry["gf_fun"]
 
@@ -147,7 +147,7 @@ class NinaiAdapter:
             subject_name = self._extract_label(subject_node)
             
             # Lexicon Lookup
-            subj_entry = lexicon_store.get_entry(lang, subject_qid) if subject_qid else None
+            subj_entry = lexicon.get_entry(lang, subject_qid) if subject_qid else None
             if subject_name == "Unknown" and subj_entry:
                 subject_name = subj_entry.get("lemma", "Unknown")
 

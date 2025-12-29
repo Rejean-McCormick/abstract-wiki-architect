@@ -12,59 +12,66 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # --- CONFIGURATION: SINGLE SOURCE OF TRUTH ---
+BASE_DIR = Path(__file__).parent.parent
+sys.path.append(str(BASE_DIR))  # Allow importing from app.shared
+
+try:
+    # Import the centralized language definition map
+    # This prevents duplication of the ISO-3 <-> ISO-2 mapping logic
+    from app.shared.languages import ISO_3_TO_2, ISO_2_TO_3
+except ImportError:
+    # Fallback if shared module is missing (e.g. during standalone testing)
+    logger.warning("⚠️  Shared language map not found. Using local fallback.")
+    # Basic fallback map
+    ISO_3_TO_2 = {
+        "eng": "en", "fra": "fr", "deu": "de", "spa": "es", "ita": "it",
+        "nld": "nl", "swe": "sv", "rus": "ru", "zho": "zh", "jpn": "ja",
+        "ara": "ar", "hin": "hi", "bul": "bg", "ell": "el", "tur": "tr",
+        "por": "pt", "fin": "fi", "est": "et", "dan": "da", "nob": "no",
+        "pol": "pl", "ron": "ro", "hun": "hu", "slv": "sl", "ukr": "uk"
+    }
+    ISO_2_TO_3 = {v: k for k, v in ISO_3_TO_2.items()}
+
 # We use the Everything Matrix to validate if a language is registered in the system.
 MATRIX_PATH = Path("data/indices/everything_matrix.json")
-
-# Helper map for CLI convenience (Users type 'en', System needs 'eng')
-CLI_INPUT_MAP = {
-    "en": "eng", "fr": "fra", "de": "deu", "es": "spa", "it": "ita",
-    "nl": "nld", "sv": "swe", "ru": "rus", "bg": "bul", "el": "ell",
-    "zh": "zho", "ja": "jpn", "ar": "ara", "hi": "hin"
-}
-
-# --- ISO 639-3 to 639-1 MAP (for Storage & Wikidata) ---
-# Enterprise Standard: Persistence Layer (Zone B) uses 2-letter codes.
-ISO_3_TO_2 = {v: k for k, v in CLI_INPUT_MAP.items()}
 
 def resolve_and_validate_language(input_code: str) -> Optional[str]:
     """
     1. Normalizes input (en -> eng).
-    2. Checks if 'eng' exists in the Everything Matrix.
+    2. Checks if the language is valid via Matrix or Fallback.
     3. Returns the valid ISO 639-3 code (Logic ID) or None.
     """
-    # 1. Normalize Input
     clean_code = input_code.lower().strip()
-    target_iso = CLI_INPUT_MAP.get(clean_code, clean_code)
+    
+    # 1. Normalize Input to ISO-3 (RGL Code)
+    # If 2 chars ('en'), map to 'eng'. If 3 chars ('eng'), keep it.
+    target_iso_3 = ISO_2_TO_3.get(clean_code, clean_code)
 
-    # 2. Load Matrix
-    if not MATRIX_PATH.exists():
-        logger.error(f"❌ Critical: Everything Matrix not found at {MATRIX_PATH}")
-        # Fallback: If matrix is missing, trust the map or the input if it looks ISO-3
-        if len(target_iso) == 3: return target_iso
-        return None
-
-    try:
-        with open(MATRIX_PATH, "r", encoding="utf-8") as f:
-            matrix = json.load(f)
+    # 2. Load Matrix for strict validation
+    if MATRIX_PATH.exists():
+        try:
+            with open(MATRIX_PATH, "r", encoding="utf-8") as f:
+                matrix = json.load(f)
+                registered_langs = matrix.get("languages", {})
+                
+            # Matrix keys are now ISO-2 (en, fr).
+            # We must check if our converted ISO-3 maps to a valid Matrix key.
+            # Convert target back to ISO-2 for lookup
+            matrix_key = ISO_3_TO_2.get(target_iso_3, target_iso_3)
             
-        registered_languages = matrix.get("languages", {})
+            if matrix_key in registered_langs:
+                return target_iso_3
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to read Everything Matrix: {e}")
 
-        # 3. Validate
-        if target_iso in registered_languages:
-            return target_iso
-        
-        # Helper: Check if maybe it matches a folder name (e.g. "french")
-        for iso, data in registered_languages.items():
-            folder = data.get("meta", {}).get("folder", "")
-            if folder == clean_code:
-                return iso
+    # Fallback: If matrix logic failed or matrix missing, rely on the map
+    # We trust the map if we found a valid conversion
+    if len(target_iso_3) == 3:
+        return target_iso_3
 
-        logger.error(f"❌ Language '{target_iso}' is not registered in Everything Matrix.")
-        return None
-
-    except Exception as e:
-        logger.error(f"❌ Failed to read Everything Matrix: {e}")
-        return None
+    logger.error(f"❌ Language '{input_code}' could not be resolved to a valid RGL code.")
+    return None
 
 # --- HARVESTER LOGIC ---
 
@@ -102,7 +109,7 @@ class GFWordNetHarvester:
                     func, sem_id = match.groups()
                     self.semantic_map[func.strip()] = sem_id.strip()
                     count += 1
-        logger.info(f"   Indexed {count} semantic keys.")
+        logger.info(f"    Indexed {count} semantic keys.")
 
     def harvest_lang(self, rgl_code, iso2_code, out_dir):
         """
@@ -110,9 +117,9 @@ class GFWordNetHarvester:
         but saves to the storage folder (using iso2_code e.g. 'en').
         """
         # File finding heuristic: WordNetEng.gf
+        # Try exact code first, then verify via map just in case
         candidates = [
             f"WordNet{rgl_code.capitalize()}.gf",
-            f"WordNet{CLI_INPUT_MAP.get(rgl_code, rgl_code).capitalize()}.gf"
         ]
         
         src_file = None
@@ -161,6 +168,7 @@ class GFWordNetHarvester:
 class WikidataHarvester:
     def fetch(self, qids, lang_code, domain="people"):
         # Determine Wikidata Language Code (prefer 2-letter if available)
+        # lang_code passed here is expected to be ISO-3 (RGL code)
         wd_lang = ISO_3_TO_2.get(lang_code, lang_code)
         
         logger.info(f"☁️  Fetching {len(qids)} items from Wikidata for '{lang_code}' (WD Lang: {wd_lang})...")

@@ -4,7 +4,11 @@ from pathlib import Path
 from typing import Dict, Optional, Any
 from dataclasses import dataclass
 
-from app.shared.config import settings
+# Attempt to load settings
+try:
+    from app.shared.config import settings
+except ImportError:
+    settings = None
 
 logger = structlog.get_logger()
 
@@ -19,55 +23,88 @@ class LexiconEntry:
 class LexiconRuntime:
     """
     Singleton In-Memory Database for Zone B (Lexicon).
-    Maps Abstract IDs (Q42, 02756049-n) -> Concrete Linearizations.
     
-    Architecture:
-    - Lazy Loading: Only loads languages requested by the API.
-    - Sharding: Reads 'wide.json' from the standard 'data/lexicon/{iso2}' directory.
-    - Dual Indexing: Supports lookup by QID (Semantic) and Lemma (String).
+    Configuration:
+    - Loads 'config/iso_to_wiki.json' to build the 3-letter -> 2-letter normalization map.
+    - Lazy loads language shards from 'data/lexicon/{iso2}/wide.json'.
     """
     _instance = None
     _data: Dict[str, Dict[str, LexiconEntry]] = {} 
     _loaded_langs = set()
-
-    # Enterprise Mapping: RGL (3-letter) -> ISO (2-letter)
-    # This ensures that even if the Engine asks for 'eng', we look in 'en'.
-    ISO_MAP_3_TO_2 = {
-        "eng": "en", "fra": "fr", "deu": "de", "nld": "nl", 
-        "ita": "it", "spa": "es", "rus": "ru", "swe": "sv",
-        "pol": "pl", "bul": "bg", "ell": "el", "ron": "ro",
-        "zho": "zh", "jpn": "ja", "ara": "ar", "hin": "hi",
-        "por": "pt", "tur": "tr", "vie": "vi", "kor": "ko"
-    }
+    _iso_map: Dict[str, str] = {} # Dynamic Map: 'eng' -> 'en', 'Afr' -> 'af'
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(LexiconRuntime, cls).__new__(cls)
+            cls._instance._load_iso_config()
         return cls._instance
+
+    def _load_iso_config(self):
+        """
+        Loads 'config/iso_to_wiki.json' to create a unified normalization map.
+        This file maps codes to RGL suffixes (e.g., "en": "Eng", "eng": "Eng").
+        We reverse this to map everything to the 2-letter ISO code.
+        """
+        try:
+            # Path Resolution: ../../config/iso_to_wiki.json
+            root = Path(__file__).parent.parent.parent
+            config_path = root / "config" / "iso_to_wiki.json"
+            
+            if config_path.exists():
+                with open(config_path, 'r') as f:
+                    raw_map = json.load(f)
+                    
+                # Algorithm: Group keys by their RGL value to find the canonical 2-letter code
+                # rgl_groups = {'Eng': ['en', 'eng'], 'Afr': ['af', 'afr']}
+                rgl_groups = {}
+                for code, rgl_suffix in raw_map.items():
+                    if rgl_suffix not in rgl_groups:
+                        rgl_groups[rgl_suffix] = []
+                    rgl_groups[rgl_suffix].append(code)
+
+                # Build the lookup map
+                for rgl_suffix, codes in rgl_groups.items():
+                    # Find the 2-letter code to serve as the canonical ID (e.g. 'en')
+                    canonical = next((c for c in codes if len(c) == 2), codes[0])
+                    
+                    # Map the RGL suffix itself (e.g. 'Eng' -> 'en')
+                    self._iso_map[rgl_suffix.lower()] = canonical
+                    
+                    # Map all variants (e.g. 'eng' -> 'en', 'en' -> 'en')
+                    for c in codes:
+                        self._iso_map[c.lower()] = canonical
+
+                logger.info("lexicon_config_loaded", source=str(config_path), mappings=len(self._iso_map))
+            else:
+                logger.warning("lexicon_config_missing", path=str(config_path))
+                self._use_fallback_map()
+
+        except Exception as e:
+            logger.error("lexicon_init_error", error=str(e))
+            self._use_fallback_map()
+
+    def _use_fallback_map(self):
+        """Minimal fallback for bootstrapping."""
+        self._iso_map = {
+            "eng": "en", "fra": "fr", "deu": "de", "nld": "nl", 
+            "ita": "it", "spa": "es", "rus": "ru", "swe": "sv",
+            "zho": "zh", "jpn": "ja", "ara": "ar", "hin": "hi"
+        }
 
     def _normalize_lang_code(self, code: str) -> str:
         """
-        Enforces the ISO 639-1 (2-letter) standard for Data persistence.
-        e.g. 'eng' -> 'en', 'WikiFra' -> 'fr', 'fr' -> 'fr'
+        Normalizes any input (ISO-2, ISO-3, RGL Suffix, 'Wiki' prefix) to ISO-2.
         """
         code = code.lower()
-        # Handle GF prefixes if present
         if code.startswith("wiki"):
             code = code[4:]
         
-        # Exact match 2-letter
+        # 1. Fast Path: Already 2 letters (and assume it's valid if not in map, or check map)
         if len(code) == 2:
             return code
-        
-        # Map 3-letter to 2-letter
-        if code in self.ISO_MAP_3_TO_2:
-            return self.ISO_MAP_3_TO_2[code]
             
-        # Fallback (though risky for languages like 'swe'!='sw')
-        if len(code) == 3:
-            return code[:2]
-            
-        return code
+        # 2. Config Lookup
+        return self._iso_map.get(code, code[:2])
 
     def load_language(self, lang_code: str):
         """
@@ -78,18 +115,22 @@ class LexiconRuntime:
         if iso2 in self._loaded_langs:
             return
 
-        # Path Resolution: Try settings first, fallback to relative 'data'
+        # Path Resolution
         try:
-            base_path = Path(settings.FILESYSTEM_REPO_PATH)
-        except (AttributeError, TypeError):
+            if settings and hasattr(settings, 'FILESYSTEM_REPO_PATH'):
+                base_path = Path(settings.FILESYSTEM_REPO_PATH)
+            else:
+                base_path = Path("data") # Fallback for worker context
+        except Exception:
             base_path = Path("data")
 
         # STRICT STANDARD: data/lexicon/{iso2}/wide.json
         shard_path = base_path / "data" / "lexicon" / iso2 / "wide.json"
         
-        # Local dev fallback
+        # Local dev fallback check
         if not shard_path.exists():
-            local_path = Path("data") / "lexicon" / iso2 / "wide.json"
+            local_root = Path(__file__).parent.parent.parent
+            local_path = local_root / "data" / "lexicon" / iso2 / "wide.json"
             if local_path.exists():
                 shard_path = local_path
 
@@ -107,7 +148,7 @@ class LexiconRuntime:
             lang_index = {}
             
             for key, val in raw_data.items():
-                # Handle list (v1) or dict (v2) format
+                # Handle v1 (list) or v2 (dict) format
                 entry_data = val[0] if isinstance(val, list) else val
 
                 entry_obj = LexiconEntry(
@@ -118,11 +159,9 @@ class LexiconRuntime:
                     source=entry_data.get('source', 'gf-wordnet')
                 )
 
-                # Index by QID
                 if entry_obj.qid:
                     lang_index[entry_obj.qid] = entry_obj
                 
-                # Index by Lemma
                 lang_index[entry_obj.lemma.lower()] = entry_obj
 
             self._data[iso2] = lang_index
@@ -148,5 +187,5 @@ class LexiconRuntime:
 
         return lang_db.get(key) or lang_db.get(key.lower())
 
-# Global Instance
-lexicon_store = LexiconRuntime()
+# --- EXPORT THE SINGLETON ---
+lexicon = LexiconRuntime()

@@ -1,8 +1,7 @@
-# app\core\domain\models.py
 # app/core/domain/models.py
 from enum import Enum
 from typing import Dict, Any, Optional, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
 
 # --- Enums ---
@@ -42,10 +41,18 @@ class Language(BaseModel):
 class SemanticFrame(BaseModel):
     """
     The input semantic frame representing the abstract intent.
-    Renamed from 'Frame' to 'SemanticFrame' to match system-wide imports.
+    Supports both 'Bio' (Structured) and 'Generic' (Safe Mode) payloads.
     """
-    frame_type: str = Field(..., description="The schema type (e.g., 'bio', 'event')")
+    model_config = ConfigDict(populate_by_name=True)
+
+    frame_type: str = Field(..., description="The schema type (e.g., 'bio', 'event', 'generic')")
     
+    # --- SAFE MODE FIELDS (Generic GF Function Calls) ---
+    # We use 'alias="frame"' so the API accepts {"frame": "mkBio"} but code sees .function
+    function: Optional[str] = Field(None, alias="frame", description="Abstract function name (e.g., 'mkBioProf')")
+    args: List[Any] = Field(default_factory=list, description="Positional arguments for the function")
+
+    # --- STRUCTURED FIELDS (Bio/Event Schemas) ---
     # The primary subject of the frame (e.g., the person in a bio)
     subject: Dict[str, Any] = Field(default_factory=dict)
     

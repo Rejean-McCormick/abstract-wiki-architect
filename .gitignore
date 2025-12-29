@@ -10,15 +10,22 @@ __pycache__/
 venv/
 env/
 .env/
-linux_env/     # Added this to fix the "Function not implemented" error
+linux_env/      # Specific to your WSL setup
 
-# Packaging
+# ---------------------------------
+# Environment Variables
+# ---------------------------------
+.env
+.env.*
+!.env.example   # Always commit the example config!
+
+# ---------------------------------
+# Packaging & Distribution
+# ---------------------------------
 build/
 dist/
 *.egg-info/
 .eggs/
-
-# PyInstaller
 *.spec
 
 # ---------------------------------
@@ -44,15 +51,14 @@ htmlcov/
 # ---------------------------------
 # Project-specific generated data
 # ---------------------------------
-# Ignore all generated dataset directories
+# Generated datasets
 qa_tools/generated_datasets/
 qa/generated_datasets/
-# Re-include the .gitignore file for the generated datasets directory (if one exists)
 !qa/generated_datasets/.gitignore
 
 # Logs
 *.log
-build_logs/    # Added based on your warnings
+build_logs/
 
 # OS-specific
 .DS_Store
@@ -61,16 +67,10 @@ Thumbs.db
 # ---------------------------------
 # Node / frontend artefacts
 # ---------------------------------
+# Global ignore for node_modules (covers frontend and tools)
 node_modules/
-**/node_modules/
 
-# Next.js / React build output
-.next/
-**/architect_frontend/.next/  # Explicitly targeting your frontend folder just in case
-out/
-.next/cache/
-
-# Frontend tooling caches
+# Tooling caches
 .npm/
 .yarn/
 .pnp.*
@@ -78,16 +78,13 @@ out/
 .eslintcache
 .stylelintcache
 
-# Local env / config for frontend
-*.local
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Misc
+# Next.js / React build output
+.next/
+out/
+.next/cache/
 *.tsbuildinfo
-# Explicitly ignore common large build/dependency binaries
+
+# Large binaries
 *.node
 *.a
 *.so
@@ -96,31 +93,34 @@ out/
 *.deb
 
 # ---------------------------------
-# Backend-specific Generated Files
+# Database (SQLite)
 # ---------------------------------
-# SQLAlchemy / Alembic migration artifacts
-# CAUTION: Usually you want to commit alembic.ini and versions/ so others can migrate their DBs.
-alembic.ini
-alembic/versions/
-alembic/script.py.mako
-!alembic/env.py # Keep env.py to configure runtime
-
-# Database file (SQLite default)
 *.db
 *.sqlite
 *.sqlite3
 
-# Grammatical Framework (GF) generated files
-gf/*.pgf
-gf/*.o
+# ---------------------------------
+# Migrations (Alembic)
+# ---------------------------------
+# ⚠️ CAUTION: We keep alembic.ini and versions/ so schema changes are tracked.
+# Only ignore the python cache inside alembic.
+alembic/__pycache__/
+
+# ---------------------------------
+# Grammatical Framework (GF)
+# ---------------------------------
+# Generated binaries (Catch root files like AbstractWiki.gfo)
+*.gfo
+*.pgf
+*.o
+
+# Temporary GF directories
 gf/tmp/
 gf/temp/
-!gf/*.gf # Keep source .gf files
-!gf/*.py # Keep python build scripts
-
-# --- Abstract Wiki Generated Grammars ---
 gf/generated/
 gf/incubator/
-gf/Wiki.pgf
-gf/*.gfo
-!gf/contrib/  # Keep manual contributions!
+
+# Exceptions - Keep these!
+!gf/*.gf        # Keep source grammars
+!gf/*.py        # Keep build scripts
+!gf/contrib/    # Keep manual contributions

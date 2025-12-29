@@ -1,119 +1,58 @@
 {
-  "_meta": {
-    "language": "sw",
+  "Q42": {
+    "lemma": "Q42",
+    "desc": "mwandishi Mwingereza",
+    "source": "wikidata-harvester",
     "domain": "people",
-    "version": 1
+    "facts": {
+      "P106": [
+        "Q28389",
+        "Q36180",
+        "Q214917",
+        "Q245068",
+        "Q639669",
+        "Q4853732",
+        "Q6625963",
+        "Q18844224"
+      ],
+      "P27": [
+        "Q145"
+      ]
+    }
   },
-  "entries": {
-    "mwanasayansi": {
-      "key": "mwanasayansi",
-      "lemma": "mwanasayansi",
-      "pos": "NOUN",
-      "language": "sw",
-      "sense": "profession",
-      "human": true,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
-      "forms": {
-        "sg": "mwanasayansi",
-        "pl": "wanasayansi"
-      },
-      "extra": {
-        "gloss": "scientist",
-        "noun_class_sg": 1,
-        "noun_class_pl": 2
-      }
-    },
-    "daktari": {
-      "key": "daktari",
-      "lemma": "daktari",
-      "pos": "NOUN",
-      "language": "sw",
-      "sense": "profession",
-      "human": true,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
-      "forms": {
-        "sg": "daktari",
-        "pl": "madaktari"
-      },
-      "extra": {
-        "gloss": "doctor",
-        "noun_class_sg": 5,
-        "noun_class_pl": 6
-      }
-    },
-    "mwalimu": {
-      "key": "mwalimu",
-      "lemma": "mwalimu",
-      "pos": "NOUN",
-      "language": "sw",
-      "sense": "profession",
-      "human": true,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "neutral",
-      "wikidata_qid": null,
-      "forms": {
-        "sg": "mwalimu",
-        "pl": "walimu"
-      },
-      "extra": {
-        "gloss": "teacher",
-        "noun_class_sg": 1,
-        "noun_class_pl": 2
-      }
-    },
-    "dkt": {
-      "key": "dkt",
-      "lemma": "Dkt.",
-      "pos": "TITLE",
-      "language": "sw",
-      "sense": "title",
-      "human": true,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "formal",
-      "wikidata_qid": null,
-      "forms": {
-        "plain": "Dkt."
-      },
-      "position": "pre_name",
-      "extra": {
-        "full": "Daktari"
-      }
-    },
-    "prof": {
-      "key": "prof",
-      "lemma": "Prof.",
-      "pos": "TITLE",
-      "language": "sw",
-      "sense": "title",
-      "human": true,
-      "gender": null,
-      "default_number": "sg",
-      "default_formality": "formal",
-      "wikidata_qid": null,
-      "forms": {
-        "plain": "Prof."
-      },
-      "position": "pre_name",
-      "extra": {
-        "full": "Profesor"
-      }
-    },
-    "tuzo_ya_nobel_fizikia": {
-      "key": "tuzo_ya_nobel_fizikia",
-      "label": "Tuzo ya Nobel ya Fizikia",
-      "short_label": "Tuzo ya Nobel ya Fizikia",
-      "wikidata_qid": "Q38104",
-      "extra": {
-        "gloss": "Nobel Prize in Physics"
-      }
+  "Q901": {
+    "lemma": "mwanasayansi",
+    "desc": "person who use scientific methods to study in an area of interest",
+    "source": "wikidata-harvester",
+    "domain": "people",
+    "facts": {
+      "P106": [],
+      "P27": []
+    }
+  },
+  "Q7251": {
+    "lemma": "Alan Turing",
+    "desc": "English computer scientist (1912–1954)",
+    "source": "wikidata-harvester",
+    "domain": "people",
+    "facts": {
+      "P106": [
+        "Q82594",
+        "Q15442776"
+      ],
+      "P27": [
+        "Q145"
+      ]
+    }
+  },
+  "Q36180": {
+    "lemma": "writer",
+    "desc": "person who uses written words to communicate ideas and to produce literary works",
+    "source": "wikidata-harvester",
+    "domain": "people",
+    "facts": {
+      "P106": [],
+      "P27": []
     }
   }
 }

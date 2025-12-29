@@ -96,8 +96,9 @@ def compile_gf(lang_code, strategy):
     
     # Log errors if failed
     if proc.returncode != 0:
+        # Log to file for archival
         with open(LOG_DIR / f"Wiki{lang_code.title()}.log", "w") as f:
-            f.write(proc.stderr)
+            f.write(proc.stderr + "\n" + proc.stdout)
             
     return proc
 
@@ -112,7 +113,16 @@ def phase_1_verify(lang_code, strategy):
     
     if proc.returncode == 0:
         return (lang_code, True, "OK")
-    return (lang_code, False, "Compiler Error")
+    
+    # --- VERBOSE FIX: Capture the actual error message ---
+    error_msg = proc.stderr.strip()
+    if not error_msg:
+        # Sometimes GF prints errors to stdout
+        error_msg = proc.stdout.strip()
+    if not error_msg:
+        error_msg = f"Unknown Error (Exit Code {proc.returncode})"
+        
+    return (lang_code, False, error_msg)
 
 def phase_2_link(valid_langs_map):
     """
@@ -174,6 +184,8 @@ def main():
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(phase_1_verify, t[0], t[1]): t for t in tasks}
         
+
+
         for future in concurrent.futures.as_completed(futures):
             code, strategy = futures[future]
             try:
@@ -182,7 +194,9 @@ def main():
                     valid_langs_map[lang] = strategy
                     print(f"  [+] {lang}: OK ({strategy})")
                 else:
-                    print(f"  [-] {lang}: FAILED ({msg})")
+                    print(f"  [-] {lang}: FAILED")
+                    # FIX: Print the FULL error message to diagnose issues
+                    print(f"      {msg}") 
             except Exception as e:
                 logger.error(f"  [!] Exception for {code}: {e}")
 

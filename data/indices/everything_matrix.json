@@ -1,15 +1,15 @@
 {
-  "timestamp": 1766960375.1794999,
+  "timestamp": 1766976345.3604567,
   "stats": {
-    "total_languages": 77,
+    "total_languages": 88,
     "production_ready": 0,
-    "safe_mode": 45,
-    "skipped": 32
+    "safe_mode": 81,
+    "skipped": 7
   },
   "languages": {
-    "afr": {
+    "af": {
       "meta": {
-        "iso": "afr",
+        "iso": "af",
         "tier": 1,
         "origin": "rgl",
         "folder": "afrikaans"
@@ -34,7 +34,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -44,9 +44,9 @@
         "runnable": false
       }
     },
-    "amh": {
+    "am": {
       "meta": {
-        "iso": "amh",
+        "iso": "am",
         "tier": 1,
         "origin": "rgl",
         "folder": "amharic"
@@ -71,7 +71,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -118,9 +118,9 @@
         "runnable": false
       }
     },
-    "ara": {
+    "ar": {
       "meta": {
-        "iso": "ara",
+        "iso": "ar",
         "tier": 1,
         "origin": "rgl",
         "folder": "arabic"
@@ -145,7 +145,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -155,9 +155,9 @@
         "runnable": false
       }
     },
-    "aym": {
+    "ay": {
       "meta": {
-        "iso": "aym",
+        "iso": "ay",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -182,30 +182,30 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "ben": {
+    "be": {
       "meta": {
-        "iso": "ben",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
+        "iso": "be",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "belarusian"
       },
       "zones": {
         "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 0
         },
         "B_LEX": {
           "SEED": 0.0,
@@ -219,56 +219,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "maturity_score": 4.8,
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "bre": {
+    "bg": {
       "meta": {
-        "iso": "bre",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
-      },
-      "zones": {
-        "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
-        },
-        "B_LEX": {
-          "SEED": 0.0,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
-        "runnable": false
-      }
-    },
-    "bul": {
-      "meta": {
-        "iso": "bul",
+        "iso": "bg",
         "tier": 1,
         "origin": "rgl",
         "folder": "bulgarian"
@@ -293,7 +256,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -303,46 +266,9 @@
         "runnable": false
       }
     },
-    "cat": {
+    "bn": {
       "meta": {
-        "iso": "cat",
-        "tier": 1,
-        "origin": "rgl",
-        "folder": "catalan"
-      },
-      "zones": {
-        "A_RGL": {
-          "rgl_cat": 10,
-          "rgl_noun": 10,
-          "rgl_grammar": 10,
-          "rgl_paradigms": 10,
-          "rgl_syntax": 10
-        },
-        "B_LEX": {
-          "SEED": 0.1,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 6.0,
-        "build_strategy": "SAFE_MODE",
-        "runnable": false
-      }
-    },
-    "cym": {
-      "meta": {
-        "iso": "cym",
+        "iso": "bn",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -367,19 +293,167 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "dan": {
+    "br": {
       "meta": {
-        "iso": "dan",
+        "iso": "br",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 0.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ca": {
+      "meta": {
+        "iso": "ca",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "catalan"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.1,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "cs": {
+      "meta": {
+        "iso": "cs",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "czech"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.1,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "cy": {
+      "meta": {
+        "iso": "cy",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
+        },
+        "B_LEX": {
+          "SEED": 0.1,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 0.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "da": {
+      "meta": {
+        "iso": "da",
         "tier": 1,
         "origin": "rgl",
         "folder": "danish"
@@ -404,7 +478,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -414,9 +488,9 @@
         "runnable": false
       }
     },
-    "deu": {
+    "de": {
       "meta": {
-        "iso": "deu",
+        "iso": "de",
         "tier": 1,
         "origin": "rgl",
         "folder": "german"
@@ -441,7 +515,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -451,9 +525,9 @@
         "runnable": false
       }
     },
-    "ell": {
+    "el": {
       "meta": {
-        "iso": "ell",
+        "iso": "el",
         "tier": 1,
         "origin": "rgl",
         "folder": "greek"
@@ -478,7 +552,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -488,9 +562,9 @@
         "runnable": false
       }
     },
-    "eng": {
+    "en": {
       "meta": {
-        "iso": "eng",
+        "iso": "en",
         "tier": 1,
         "origin": "rgl",
         "folder": "english"
@@ -525,9 +599,46 @@
         "runnable": false
       }
     },
-    "est": {
+    "es": {
       "meta": {
-        "iso": "est",
+        "iso": "es",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "spanish"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.1,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "et": {
+      "meta": {
+        "iso": "et",
         "tier": 1,
         "origin": "rgl",
         "folder": "estonian"
@@ -552,7 +663,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -562,9 +673,9 @@
         "runnable": false
       }
     },
-    "eus": {
+    "eu": {
       "meta": {
-        "iso": "eus",
+        "iso": "eu",
         "tier": 1,
         "origin": "rgl",
         "folder": "basque"
@@ -589,7 +700,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -599,9 +710,9 @@
         "runnable": false
       }
     },
-    "fas": {
+    "fa": {
       "meta": {
-        "iso": "fas",
+        "iso": "fa",
         "tier": 1,
         "origin": "rgl",
         "folder": "persian"
@@ -626,7 +737,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -636,9 +747,9 @@
         "runnable": false
       }
     },
-    "fin": {
+    "fi": {
       "meta": {
-        "iso": "fin",
+        "iso": "fi",
         "tier": 1,
         "origin": "rgl",
         "folder": "finnish"
@@ -663,7 +774,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -673,12 +784,12 @@
         "runnable": false
       }
     },
-    "fra": {
+    "fo": {
       "meta": {
-        "iso": "fra",
+        "iso": "fo",
         "tier": 1,
         "origin": "rgl",
-        "folder": "french"
+        "folder": "faroese"
       },
       "zones": {
         "A_RGL": {
@@ -686,10 +797,10 @@
           "rgl_noun": 10,
           "rgl_grammar": 10,
           "rgl_paradigms": 10,
-          "rgl_syntax": 10
+          "rgl_syntax": 0
         },
         "B_LEX": {
-          "SEED": 0.1,
+          "SEED": 0.0,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -700,19 +811,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 6.0,
+        "maturity_score": 4.8,
         "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "fry": {
+    "fr": {
       "meta": {
-        "iso": "fry",
+        "iso": "fr",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -747,9 +858,9 @@
         "runnable": false
       }
     },
-    "gla": {
+    "fy": {
       "meta": {
-        "iso": "gla",
+        "iso": "fy",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -774,19 +885,56 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "grn": {
+    "gd": {
       "meta": {
-        "iso": "grn",
+        "iso": "gd",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "gaelic"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 4.8,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "gn": {
+      "meta": {
+        "iso": "gn",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -811,19 +959,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "hau": {
+    "ha": {
       "meta": {
-        "iso": "hau",
+        "iso": "ha",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -848,19 +996,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "heb": {
+    "he": {
       "meta": {
-        "iso": "heb",
+        "iso": "he",
         "tier": 1,
         "origin": "rgl",
         "folder": "hebrew"
@@ -885,7 +1033,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -895,9 +1043,9 @@
         "runnable": false
       }
     },
-    "hin": {
+    "hi": {
       "meta": {
-        "iso": "hin",
+        "iso": "hi",
         "tier": 1,
         "origin": "rgl",
         "folder": "hindi"
@@ -922,7 +1070,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -932,9 +1080,46 @@
         "runnable": false
       }
     },
-    "hun": {
+    "hr": {
       "meta": {
-        "iso": "hun",
+        "iso": "hr",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "croatian"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "hu": {
+      "meta": {
+        "iso": "hu",
         "tier": 1,
         "origin": "rgl",
         "folder": "hungarian"
@@ -959,7 +1144,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -969,9 +1154,120 @@
         "runnable": false
       }
     },
-    "ibo": {
+    "hy": {
       "meta": {
-        "iso": "ibo",
+        "iso": "hy",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "armenian"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 4.8,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ia": {
+      "meta": {
+        "iso": "ia",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "interlingua"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "id": {
+      "meta": {
+        "iso": "id",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
+        },
+        "B_LEX": {
+          "SEED": 0.1,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 0.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ig": {
+      "meta": {
+        "iso": "ig",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -996,56 +1292,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "ind": {
+    "is": {
       "meta": {
-        "iso": "ind",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
-      },
-      "zones": {
-        "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
-        },
-        "B_LEX": {
-          "SEED": 0.0,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
-        "runnable": false
-      }
-    },
-    "isl": {
-      "meta": {
-        "iso": "isl",
+        "iso": "is",
         "tier": 1,
         "origin": "rgl",
         "folder": "icelandic"
@@ -1070,7 +1329,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1080,9 +1339,9 @@
         "runnable": false
       }
     },
-    "ita": {
+    "it": {
       "meta": {
-        "iso": "ita",
+        "iso": "it",
         "tier": 1,
         "origin": "rgl",
         "folder": "italian"
@@ -1107,7 +1366,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1117,9 +1376,9 @@
         "runnable": false
       }
     },
-    "jav": {
+    "iu": {
       "meta": {
-        "iso": "jav",
+        "iso": "iu",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -1154,9 +1413,9 @@
         "runnable": false
       }
     },
-    "jpn": {
+    "ja": {
       "meta": {
-        "iso": "jpn",
+        "iso": "ja",
         "tier": 1,
         "origin": "rgl",
         "folder": "japanese"
@@ -1181,7 +1440,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1191,9 +1450,9 @@
         "runnable": false
       }
     },
-    "kaz": {
+    "jv": {
       "meta": {
-        "iso": "kaz",
+        "iso": "jv",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -1218,30 +1477,30 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "kin": {
+    "kk": {
       "meta": {
-        "iso": "kin",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
+        "iso": "kk",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "kazakh"
       },
       "zones": {
         "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
+          "rgl_cat": 10,
+          "rgl_noun": 0,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 0
         },
         "B_LEX": {
           "SEED": 0.0,
@@ -1255,19 +1514,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "maturity_score": 3.6,
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "kor": {
+    "ko": {
       "meta": {
-        "iso": "kor",
+        "iso": "ko",
         "tier": 1,
         "origin": "rgl",
         "folder": "korean"
@@ -1292,7 +1551,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1302,9 +1561,9 @@
         "runnable": false
       }
     },
-    "kur": {
+    "ku": {
       "meta": {
-        "iso": "kur",
+        "iso": "ku",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -1329,19 +1588,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "lat": {
+    "la": {
       "meta": {
-        "iso": "lat",
+        "iso": "la",
         "tier": 1,
         "origin": "rgl",
         "folder": "latin"
@@ -1366,7 +1625,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1376,46 +1635,9 @@
         "runnable": false
       }
     },
-    "lav": {
+    "lg": {
       "meta": {
-        "iso": "lav",
-        "tier": 1,
-        "origin": "rgl",
-        "folder": "latvian"
-      },
-      "zones": {
-        "A_RGL": {
-          "rgl_cat": 10,
-          "rgl_noun": 10,
-          "rgl_grammar": 10,
-          "rgl_paradigms": 10,
-          "rgl_syntax": 10
-        },
-        "B_LEX": {
-          "SEED": 0.1,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 6.0,
-        "build_strategy": "SAFE_MODE",
-        "runnable": false
-      }
-    },
-    "lin": {
-      "meta": {
-        "iso": "lin",
+        "iso": "lg",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -1440,19 +1662,56 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "lit": {
+    "ln": {
       "meta": {
-        "iso": "lit",
+        "iso": "ln",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 0.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "lt": {
+      "meta": {
+        "iso": "lt",
         "tier": 1,
         "origin": "rgl",
         "folder": "lithuanian"
@@ -1477,7 +1736,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1487,9 +1746,83 @@
         "runnable": false
       }
     },
-    "lug": {
+    "lv": {
       "meta": {
-        "iso": "lug",
+        "iso": "lv",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "latvian"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.1,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "mk": {
+      "meta": {
+        "iso": "mk",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "macedonian"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 0,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 3.6,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ml": {
+      "meta": {
+        "iso": "ml",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -1503,7 +1836,7 @@
           "SYN": 0
         },
         "B_LEX": {
-          "SEED": 0.0,
+          "SEED": 0.1,
           "CONC": 0.0,
           "WIDE": 0.0,
           "SEM": 0.0
@@ -1524,9 +1857,83 @@
         "runnable": false
       }
     },
-    "mlt": {
+    "mn": {
       "meta": {
-        "iso": "mlt",
+        "iso": "mn",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "mongolian"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.1,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ms": {
+      "meta": {
+        "iso": "ms",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "malay"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "mt": {
+      "meta": {
+        "iso": "mt",
         "tier": 1,
         "origin": "rgl",
         "folder": "maltese"
@@ -1551,87 +1958,13 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 6.0,
         "build_strategy": "SAFE_MODE",
-        "runnable": false
-      }
-    },
-    "mon": {
-      "meta": {
-        "iso": "mon",
-        "tier": 1,
-        "origin": "rgl",
-        "folder": "mongolian"
-      },
-      "zones": {
-        "A_RGL": {
-          "rgl_cat": 10,
-          "rgl_noun": 10,
-          "rgl_grammar": 10,
-          "rgl_paradigms": 10,
-          "rgl_syntax": 10
-        },
-        "B_LEX": {
-          "SEED": 0.0,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 6.0,
-        "build_strategy": "SAFE_MODE",
-        "runnable": false
-      }
-    },
-    "msa": {
-      "meta": {
-        "iso": "msa",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
-      },
-      "zones": {
-        "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
-        },
-        "B_LEX": {
-          "SEED": 0.0,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -1672,46 +2005,9 @@
         "runnable": false
       }
     },
-    "nav": {
+    "ne": {
       "meta": {
-        "iso": "nav",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
-      },
-      "zones": {
-        "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
-        },
-        "B_LEX": {
-          "SEED": 0.0,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
-        "runnable": false
-      }
-    },
-    "nep": {
-      "meta": {
-        "iso": "nep",
+        "iso": "ne",
         "tier": 1,
         "origin": "rgl",
         "folder": "nepali"
@@ -1736,7 +2032,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1746,9 +2042,9 @@
         "runnable": false
       }
     },
-    "nld": {
+    "nl": {
       "meta": {
-        "iso": "nld",
+        "iso": "nl",
         "tier": 1,
         "origin": "rgl",
         "folder": "dutch"
@@ -1773,7 +2069,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1783,9 +2079,9 @@
         "runnable": false
       }
     },
-    "nno": {
+    "nn": {
       "meta": {
-        "iso": "nno",
+        "iso": "nn",
         "tier": 1,
         "origin": "rgl",
         "folder": "nynorsk"
@@ -1810,7 +2106,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1820,20 +2116,20 @@
         "runnable": false
       }
     },
-    "nob": {
+    "no": {
       "meta": {
-        "iso": "nob",
-        "tier": 1,
-        "origin": "rgl",
-        "folder": "norwegian"
+        "iso": "no",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
       },
       "zones": {
         "A_RGL": {
-          "rgl_cat": 10,
-          "rgl_noun": 10,
-          "rgl_grammar": 10,
-          "rgl_paradigms": 10,
-          "rgl_syntax": 10
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
         },
         "B_LEX": {
           "SEED": 0.1,
@@ -1852,14 +2148,14 @@
         }
       },
       "verdict": {
-        "maturity_score": 6.0,
-        "build_strategy": "SAFE_MODE",
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
-    "oci": {
+    "nv": {
       "meta": {
-        "iso": "oci",
+        "iso": "nv",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -1884,19 +2180,56 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "pan": {
+    "oc": {
       "meta": {
-        "iso": "pan",
+        "iso": "oc",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 0.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "pa": {
+      "meta": {
+        "iso": "pa",
         "tier": 1,
         "origin": "rgl",
         "folder": "punjabi"
@@ -1921,7 +2254,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1931,9 +2264,9 @@
         "runnable": false
       }
     },
-    "pol": {
+    "pl": {
       "meta": {
-        "iso": "pol",
+        "iso": "pl",
         "tier": 1,
         "origin": "rgl",
         "folder": "polish"
@@ -1958,7 +2291,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -1968,9 +2301,9 @@
         "runnable": false
       }
     },
-    "por": {
+    "pt": {
       "meta": {
-        "iso": "por",
+        "iso": "pt",
         "tier": 1,
         "origin": "rgl",
         "folder": "portuguese"
@@ -1995,7 +2328,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -2005,9 +2338,9 @@
         "runnable": false
       }
     },
-    "que": {
+    "qu": {
       "meta": {
-        "iso": "que",
+        "iso": "qu",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -2032,19 +2365,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "ron": {
+    "ro": {
       "meta": {
-        "iso": "ron",
+        "iso": "ro",
         "tier": 1,
         "origin": "rgl",
         "folder": "romanian"
@@ -2069,7 +2402,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -2079,12 +2412,12 @@
         "runnable": false
       }
     },
-    "rus": {
+    "ru": {
       "meta": {
-        "iso": "rus",
+        "iso": "ru",
         "tier": 1,
         "origin": "rgl",
-        "folder": "russian"
+        "folder": "v1"
       },
       "zones": {
         "A_RGL": {
@@ -2092,7 +2425,7 @@
           "rgl_noun": 10,
           "rgl_grammar": 10,
           "rgl_paradigms": 10,
-          "rgl_syntax": 10
+          "rgl_syntax": 0
         },
         "B_LEX": {
           "SEED": 0.1,
@@ -2106,30 +2439,30 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 6.0,
+        "maturity_score": 4.8,
         "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "slv": {
+    "rw": {
       "meta": {
-        "iso": "slv",
-        "tier": 1,
-        "origin": "rgl",
-        "folder": "slovenian"
+        "iso": "rw",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
       },
       "zones": {
         "A_RGL": {
-          "rgl_cat": 10,
-          "rgl_noun": 10,
-          "rgl_grammar": 10,
-          "rgl_paradigms": 10,
-          "rgl_syntax": 10
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
         },
         "B_LEX": {
           "SEED": 0.0,
@@ -2143,19 +2476,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 6.0,
+        "maturity_score": 0.0,
         "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "snd": {
+    "sd": {
       "meta": {
-        "iso": "snd",
+        "iso": "sd",
         "tier": 1,
         "origin": "rgl",
         "folder": "sindhi"
@@ -2180,7 +2513,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -2190,9 +2523,83 @@
         "runnable": false
       }
     },
-    "som": {
+    "sk": {
       "meta": {
-        "iso": "som",
+        "iso": "sk",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "slovak"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "sl": {
+      "meta": {
+        "iso": "sl",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "slovenian"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "so": {
+      "meta": {
+        "iso": "so",
         "tier": 1,
         "origin": "rgl",
         "folder": "somali"
@@ -2217,7 +2624,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -2227,83 +2634,9 @@
         "runnable": false
       }
     },
-    "spa": {
+    "sv": {
       "meta": {
-        "iso": "spa",
-        "tier": 1,
-        "origin": "rgl",
-        "folder": "spanish"
-      },
-      "zones": {
-        "A_RGL": {
-          "rgl_cat": 10,
-          "rgl_noun": 10,
-          "rgl_grammar": 10,
-          "rgl_paradigms": 10,
-          "rgl_syntax": 10
-        },
-        "B_LEX": {
-          "SEED": 0.1,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 6.0,
-        "build_strategy": "SAFE_MODE",
-        "runnable": false
-      }
-    },
-    "swa": {
-      "meta": {
-        "iso": "swa",
-        "tier": 1,
-        "origin": "rgl",
-        "folder": "swahili"
-      },
-      "zones": {
-        "A_RGL": {
-          "rgl_cat": 10,
-          "rgl_noun": 10,
-          "rgl_grammar": 10,
-          "rgl_paradigms": 10,
-          "rgl_syntax": 10
-        },
-        "B_LEX": {
-          "SEED": 0.1,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 6.0,
-        "build_strategy": "SAFE_MODE",
-        "runnable": false
-      }
-    },
-    "swe": {
-      "meta": {
-        "iso": "swe",
+        "iso": "sv",
         "tier": 1,
         "origin": "rgl",
         "folder": "swedish"
@@ -2328,7 +2661,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -2338,20 +2671,57 @@
         "runnable": false
       }
     },
-    "tam": {
+    "sw": {
       "meta": {
-        "iso": "tam",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
+        "iso": "sw",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "swahili"
       },
       "zones": {
         "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
+        },
+        "B_LEX": {
+          "SEED": 0.1,
+          "CONC": 0.1,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ta": {
+      "meta": {
+        "iso": "ta",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "tamil"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 10
         },
         "B_LEX": {
           "SEED": 0.1,
@@ -2365,67 +2735,30 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "maturity_score": 6.0,
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "tat": {
+    "te": {
       "meta": {
-        "iso": "tat",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
+        "iso": "te",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "telugu"
       },
       "zones": {
         "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
-        },
-        "B_LEX": {
-          "SEED": 0.1,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
-        "runnable": false
-      }
-    },
-    "tel": {
-      "meta": {
-        "iso": "tel",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
-      },
-      "zones": {
-        "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 0
         },
         "B_LEX": {
           "SEED": 0.0,
@@ -2439,56 +2772,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "maturity_score": 4.8,
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "tgl": {
+    "th": {
       "meta": {
-        "iso": "tgl",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "tagalog"
-      },
-      "zones": {
-        "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
-        },
-        "B_LEX": {
-          "SEED": 0.0,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
-        "runnable": false
-      }
-    },
-    "tha": {
-      "meta": {
-        "iso": "tha",
+        "iso": "th",
         "tier": 1,
         "origin": "rgl",
         "folder": "thai"
@@ -2513,7 +2809,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -2523,9 +2819,46 @@
         "runnable": false
       }
     },
-    "tur": {
+    "tl": {
       "meta": {
-        "iso": "tur",
+        "iso": "tl",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 0.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "tr": {
+      "meta": {
+        "iso": "tr",
         "tier": 1,
         "origin": "rgl",
         "folder": "turkish"
@@ -2550,7 +2883,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -2560,9 +2893,83 @@
         "runnable": false
       }
     },
-    "urd": {
+    "tt": {
       "meta": {
-        "iso": "urd",
+        "iso": "tt",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 0.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "uk": {
+      "meta": {
+        "iso": "uk",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "ukrainian"
+      },
+      "zones": {
+        "A_RGL": {
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 10,
+          "rgl_paradigms": 10,
+          "rgl_syntax": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 4.8,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ur": {
+      "meta": {
+        "iso": "ur",
         "tier": 1,
         "origin": "rgl",
         "folder": "urdu"
@@ -2587,7 +2994,7 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
@@ -2597,9 +3004,9 @@
         "runnable": false
       }
     },
-    "uzb": {
+    "uz": {
       "meta": {
-        "iso": "uzb",
+        "iso": "uz",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -2624,56 +3031,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "vie": {
+    "vi": {
       "meta": {
-        "iso": "vie",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "vietnamese"
-      },
-      "zones": {
-        "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
-        },
-        "B_LEX": {
-          "SEED": 0.0,
-          "CONC": 0.0,
-          "WIDE": 0.0,
-          "SEM": 0.0
-        },
-        "C_APP": {
-          "PROF": 0.0,
-          "ASST": 0.0,
-          "ROUT": 0.0
-        },
-        "D_QA": {
-          "BIN": 0.0,
-          "TEST": 0.0
-        }
-      },
-      "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
-        "runnable": false
-      }
-    },
-    "wol": {
-      "meta": {
-        "iso": "wol",
+        "iso": "vi",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -2698,19 +3068,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "xho": {
+    "wo": {
       "meta": {
-        "iso": "xho",
+        "iso": "wo",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -2735,19 +3105,19 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "yor": {
+    "xh": {
       "meta": {
-        "iso": "yor",
+        "iso": "xh",
         "tier": 3,
         "origin": "factory",
         "folder": "generated"
@@ -2772,30 +3142,67 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
         "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     },
-    "zho": {
+    "yo": {
       "meta": {
-        "iso": "zho",
-        "tier": 1,
-        "origin": "rgl",
-        "folder": "chinese"
+        "iso": "yo",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
       },
       "zones": {
         "A_RGL": {
-          "rgl_cat": 10,
-          "rgl_noun": 10,
-          "rgl_grammar": 10,
-          "rgl_paradigms": 10,
-          "rgl_syntax": 10
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 1.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "maturity_score": 0.0,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "zh": {
+      "meta": {
+        "iso": "zh",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0,
+          "NOUN": 0,
+          "PARA": 0,
+          "GRAM": 0,
+          "SYN": 0
         },
         "B_LEX": {
           "SEED": 0.1,
@@ -2814,25 +3221,25 @@
         }
       },
       "verdict": {
-        "maturity_score": 6.0,
-        "build_strategy": "SAFE_MODE",
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
-    "zul": {
+    "zu": {
       "meta": {
-        "iso": "zul",
-        "tier": 3,
-        "origin": "factory",
-        "folder": "generated"
+        "iso": "zu",
+        "tier": 1,
+        "origin": "rgl",
+        "folder": "zulu"
       },
       "zones": {
         "A_RGL": {
-          "CAT": 0,
-          "NOUN": 0,
-          "PARA": 0,
-          "GRAM": 0,
-          "SYN": 0
+          "rgl_cat": 10,
+          "rgl_noun": 10,
+          "rgl_grammar": 0,
+          "rgl_paradigms": 0,
+          "rgl_syntax": 0
         },
         "B_LEX": {
           "SEED": 0.0,
@@ -2846,13 +3253,13 @@
           "ROUT": 0.0
         },
         "D_QA": {
-          "BIN": 0.0,
+          "BIN": 1.0,
           "TEST": 0.0
         }
       },
       "verdict": {
-        "maturity_score": 0.0,
-        "build_strategy": "SKIP",
+        "maturity_score": 2.4,
+        "build_strategy": "SAFE_MODE",
         "runnable": false
       }
     }

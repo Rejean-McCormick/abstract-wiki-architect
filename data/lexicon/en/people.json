@@ -1,40 +1,33 @@
 {
-  "Q937": {
-    "lemma": "Albert Einstein",
-    "desc": "German-born theoretical physicist (1879–1955)",
+  "Q42": {
+    "lemma": "Q42",
+    "desc": "British science fiction writer and humorist (1952–2001)",
     "source": "wikidata-harvester",
     "domain": "people",
     "facts": {
       "P106": [
-        "Q169470"
+        "Q28389",
+        "Q36180",
+        "Q214917",
+        "Q245068",
+        "Q639669",
+        "Q4853732",
+        "Q6625963",
+        "Q18844224"
       ],
       "P27": [
-        "Q30",
-        "Q39",
-        "Q183",
-        "Q41304",
-        "Q159631",
-        "Q223050",
-        "Q533534"
+        "Q145"
       ]
     }
   },
-  "Q7186": {
-    "lemma": "Marie Curie",
-    "desc": "Polish-French physicist and chemist (1867–1934)",
+  "Q901": {
+    "lemma": "scientist",
+    "desc": "person who use scientific methods to study in an area of interest",
     "source": "wikidata-harvester",
     "domain": "people",
     "facts": {
-      "P106": [
-        "Q169470",
-        "Q593644",
-        "Q1622272"
-      ],
-      "P27": [
-        "Q142",
-        "Q34266",
-        "Q207272"
-      ]
+      "P106": [],
+      "P27": []
     }
   },
   "Q7251": {
@@ -50,6 +43,16 @@
       "P27": [
         "Q145"
       ]
+    }
+  },
+  "Q36180": {
+    "lemma": "writer",
+    "desc": "person who uses written words to communicate ideas and to produce literary works",
+    "source": "wikidata-harvester",
+    "domain": "people",
+    "facts": {
+      "P106": [],
+      "P27": []
     }
   }
 }

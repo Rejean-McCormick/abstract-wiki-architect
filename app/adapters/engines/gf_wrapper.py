@@ -1,6 +1,8 @@
 import sys
+import os
+import json
 import structlog
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Dict
 from pathlib import Path
 
 try:
@@ -16,7 +18,7 @@ from app.core.domain.exceptions import (
     DomainError
 )
 from app.shared.config import settings
-from app.shared.lexicon import lexicon_store
+from app.shared.lexicon import lexicon
 
 logger = structlog.get_logger()
 
@@ -26,22 +28,51 @@ class GFGrammarEngine(IGrammarEngine):
     Supports Dual-Path: Strict BioFrame and Prototype UniversalNode.
     """
 
-    # Enterprise Mapping: ISO 639-1 (API) -> RGL Code (Grammar)
-    # This bridges Zone A (2-letter) to Zone C (3-letter)
-    ISO_2_TO_RGL = {
-        "en": "Eng", "fr": "Fre", "de": "Ger", "it": "Ita", "es": "Spa",
-        "nl": "Dut", "sv": "Swe", "ru": "Rus", "pl": "Pol", "fi": "Fin",
-        "da": "Dan", "no": "Nor", "pt": "Por", "ro": "Ron", "zh": "Chi",
-        "ja": "Jpn", "ar": "Ara", "hi": "Hin", "tr": "Tur", "he": "Heb"
-    }
-
     def __init__(self, lib_path: str = None):
         # Fallback to AW_PGF_PATH if PGF_PATH isn't set
         self.pgf_path = getattr(settings, "PGF_PATH", None) or getattr(settings, "AW_PGF_PATH", "gf/AbstractWiki.pgf")
         self.grammar: Optional[pgf.PGF] = None
+        self.inventory: Dict[str, Any] = {}
+        self.iso_map: Dict[str, str] = {} # Configuration Map: 'sw' -> 'Swa'
         
-        print(f"[DEBUG] GFGrammarEngine initializing from: {self.pgf_path}")
+        # 1. Load Configurations
+        self._load_inventory()
+        self._load_iso_config()
+        
+        logger.debug(f"GFGrammarEngine initializing from: {self.pgf_path}")
         self._load_grammar()
+
+    def _load_inventory(self):
+        """Loads the dynamic registry of available languages from the indexer."""
+        try:
+            repo_root = Path(os.getcwd())
+            inventory_path = repo_root / "data" / "indices" / "rgl_inventory.json"
+            
+            if inventory_path.exists():
+                with open(inventory_path, "r") as f:
+                    data = json.load(f)
+                    self.inventory = data.get("languages", {})
+                logger.info("gf_inventory_loaded", count=len(self.inventory))
+        except Exception as e:
+            logger.warning("gf_inventory_missing", error=str(e))
+
+    def _load_iso_config(self):
+        """
+        Loads 'config/iso_to_wiki.json' to map ISO codes (en) to RGL suffixes (Eng).
+        This replaces the hardcoded dictionary.
+        """
+        try:
+            repo_root = Path(os.getcwd())
+            config_path = repo_root / "config" / "iso_to_wiki.json"
+            
+            if config_path.exists():
+                with open(config_path, "r") as f:
+                    self.iso_map = json.load(f)
+                logger.info("gf_config_loaded", mappings=len(self.iso_map))
+            else:
+                logger.warning("gf_config_missing", path=str(config_path))
+        except Exception as e:
+            logger.error("gf_config_error", error=str(e))
 
     def _load_grammar(self):
         if not pgf:
@@ -65,7 +96,7 @@ class GFGrammarEngine(IGrammarEngine):
         conc_name = self._resolve_concrete_name(lang_code)
         if not conc_name:
             avail = list(self.grammar.languages.keys())
-            raise LanguageNotFoundError(f"Language {lang_code} not found. Available: {avail}")
+            raise LanguageNotFoundError(f"Language {lang_code} not found in PGF. Available: {len(avail)}")
         
         concrete = self.grammar.languages[conc_name]
 
@@ -95,64 +126,64 @@ class GFGrammarEngine(IGrammarEngine):
     def _resolve_concrete_name(self, lang_code: str) -> Optional[str]:
         """
         Resolves the concrete grammar name (e.g., WikiEng) from the ISO code (e.g., en).
+        Strategy: Config Map -> PGF Check -> Fallback
         """
-        # 1. Try Enterprise Mapping (en -> Eng -> WikiEng)
-        rgl_suffix = self.ISO_2_TO_RGL.get(lang_code.lower())
+        iso_clean = lang_code.lower().strip()
+        
+        # 1. Lookup RGL Suffix from Config (sw -> Swa)
+        rgl_suffix = self.iso_map.get(iso_clean)
+        
         if rgl_suffix:
+            # Try strict RGL name (WikiSwa)
             candidate = f"Wiki{rgl_suffix}"
             if candidate in self.grammar.languages:
                 return candidate
-
-        # 2. Try Direct Capitalization (zul -> Zul -> WikiZul)
-        target_suffix = lang_code.capitalize() 
-        candidate = f"Wiki{target_suffix}"
-        if candidate in self.grammar.languages:
-            return candidate
             
-        # 3. Fallback Scan
-        for name in self.grammar.languages.keys():
-            if name.endswith(target_suffix):
-                return name
+        # 2. Fallback: Direct Capitalization (Legacy/Safe Mode Support)
+        # Your Safe Mode factory generates 'WikiSw' (not WikiSwa), so this catches that.
+        if len(iso_clean) >= 2:
+            candidate = f"Wiki{iso_clean.title()}"
+            if candidate in self.grammar.languages:
+                return candidate
+                
         return None
 
     def _convert_to_gf_ast(self, node: Any, lang_code: str) -> str:
-        # --- PATH 1: Handle Strict BioFrame ---
+        # --- PATH 1: Handle Strict BioFrame (FLAT STRUCTURE) ---
         if isinstance(node, BioFrame):
-            data = node.subject if isinstance(node.subject, dict) else {}
-            
-            name = data.get("name", "Unknown")
-            prof = data.get("profession", "person")
-            nat = data.get("nationality")
+            name = node.name
+            prof = node.profession
+            nat = node.nationality
 
+            # Construct Entity (Subject)
             s_expr = f'(mkEntityStr "{name}")'
             
+            # Construct Profession
             if prof and " " not in prof:
-                p_expr = prof
+                p_expr = f'(strProf "{prof}")' 
             else:
                 p_expr = f'(strProf "{prof}")'
 
+            # Construct Nationality & Dispatch Overload
             if nat:
                 n_expr = f'(strNat "{nat}")'
                 return f"mkBioFull {s_expr} {p_expr} {n_expr}"
             else:
                 return f"mkBioProf {s_expr} {p_expr}"
 
-        # --- PATH 2: Handle Primitives ---
+        # --- PATH 2: Handle Primitives (Strings/Ints) ---
         if isinstance(node, (str, int, float)):
             s_node = str(node)
             
-            # Lookup in Lexicon (Zone B) using the ISO-2 code (lang_code)
-            # The Lexicon Store expects 2-letter codes for file paths
-            entry = lexicon_store.lookup(s_node, lang_code)
+            # Lookup in Lexicon (Zone B)
+            entry = lexicon.lookup(s_node, lang_code)
             lemma = entry.lemma if entry else s_node
             
-            if lemma.replace('.', '', 1).isdigit():
-                return lemma
-            if lemma.startswith('"'):
-                return lemma
-            return f'"{lemma}"'
+            # Escape quotes for GF string literals
+            safe_lemma = lemma.replace('"', '\\"')
+            return f'"{safe_lemma}"'
 
-        # --- PATH 3: Handle Raw Dictionaries ---
+        # --- PATH 3: Handle Raw Dictionaries / UniversalNode ---
         func_name = getattr(node, "function", None) or (node.get("function") if isinstance(node, dict) else None)
         
         if not func_name:
@@ -172,10 +203,12 @@ class GFGrammarEngine(IGrammarEngine):
 
     async def get_supported_languages(self) -> List[str]:
         if not self.grammar: return []
-        return [name[-3:].lower() for name in self.grammar.languages.keys()]
+        return list(self.grammar.languages.keys())
 
     async def reload(self) -> None:
         self._load_grammar()
+        self._load_inventory()
+        self._load_iso_config()
 
     async def health_check(self) -> bool:
         return self.grammar is not None

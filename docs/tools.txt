@@ -1,0 +1,59 @@
+Based on the code dump, here is the comprehensive inventory of tools in your **Abstract Wiki Architect** platform, categorized by their function.
+
+### 1. Core Orchestration (Command Center)
+
+These are your primary entry points for managing the system.
+
+* **`manage.py`**: The central CLI for the project. It likely wraps other tools (build, test, deploy) into a single command interface.
+* **`audit_languages.py`**: A high-level health check script that verifies which languages are valid, broken, or skipped.
+* **`check_all_languages.py`**: A verification script to check the status of all languages in the system.
+* **`build_pipeline.bat` / `launch_all.sh**`: Scripts to bootstrap and start the entire environment (Docker, API, Worker).
+
+### 2. The Build System ("The Factory")
+
+These tools handle the compilation of the Grammatical Framework (GF) code and the construction of the runtime matrix.
+
+* **`builder/strategist.py`**: The planner that decides *how* to build a language (Gold, Silver, Bronze strategies) based on available resources.
+* **`builder/forge.py`**: The execution engine that generates the concrete grammar files (`Wiki*.gf`) based on the strategist's plan.
+* **`builder/compiler.py`**: Wraps the GF binary to compile the source code into the final `.pgf` grammar file.
+* **`builder/healer.py`**: An automated repair tool that dispatches the "Surgeon" agent to fix build failures.
+* **`tools/everything_matrix/build_index.py`**: The specific tool needed to generate `everything_matrix.json`, which indexes the entire state of the system.
+
+### 3. Data Ingestion & Lexicon ("The Refinery")
+
+Tools responsible for fetching data from Wikidata and structuring it into your local lexicon.
+
+* **`build_lexicon_from_wikidata.py`** (Root): The main script for fetching QIDs (e.g., Professions, Planets) and creating JSON shards.
+* **`tools/harvest_lexicon.py`**: A specialized tool for harvesting lexical data, likely with more granular control than the root script.
+* **`scripts/lexicon/wikidata_importer.py`**: An importer designed to enrich the existing database with Wikidata links.
+* **`utils/migrate_lexicon_schema.py`**: A utility to upgrade lexicon JSON files to newer schema versions.
+* **`utils/refresh_lexicon_index.py`**: Updates the internal index of available words for the API.
+
+### 4. AI Agents ("The Staff")
+
+Specialized AI modules that perform complex cognitive tasks.
+
+* **`ai_services/architect.py`**: The "Architect" agent responsible for generating new grammar code for unsupported languages.
+* **`ai_services/judge.py`**: The "Judge" agent that evaluates generated text against a Gold Standard for QA.
+* **`ai_services/lexicographer.py`**: An agent that generates dictionary entries (lexicon) for languages where data is missing.
+* **`ai_services/surgeon.py`**: The "Surgeon" agent that attempts to fix broken code based on compiler error logs.
+* **`utils/ai_refiner.py`**: An AI tool used to "upgrade" a simple Pidgin grammar to a more complex one.
+
+### 5. Quality Assurance (QA)
+
+Tools for testing the system's output and integrity.
+
+* **`qa_tools/universal_test_runner.py`**: The main runner for CSV-based linguistic test suites.
+* **`qa_tools/test_suite_generator.py`**: Generates the template CSV files for human or AI evaluation.
+* **`qa_tools/lexicon_smoke_tests.py`**: Quick tests to ensure the lexicon loads correctly.
+* **`utils/eval_bios_from_wikidata.py`**: A specialized evaluation script for biography generation.
+
+### 6. Diagnostics & Maintenance
+
+Utilities to keep the system clean and mapped.
+
+* **`tools/diagnostic_audit.py`**: Performs a deep audit of the system to find "Zombie" files or broken configs.
+* **`tools/everything_matrix/app_scanner.py`**: Scans the frontend and backend to see which languages are actually active.
+* **`scripts/bootstrap_tier1.py`**: Initializes the Tier 1 (RGL) languages for the first time.
+* **`cleanup_root.py`**: Cleans up temporary files in the root directory.
+* **`generate_path_map.py`**: Generates the map of RGL paths (`rgl_paths.json`) needed by the compiler.
