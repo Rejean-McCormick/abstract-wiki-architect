@@ -4,6 +4,7 @@ import time
 import logging
 import sys
 import hashlib
+import argparse
 from pathlib import Path
 
 # Setup Logging
@@ -20,6 +21,7 @@ MATRIX_FILE = DATA_DIR / "everything_matrix.json"
 CHECKSUM_FILE = DATA_DIR / "filesystem.checksum"
 RGL_INVENTORY_FILE = DATA_DIR / "rgl_inventory.json"
 FACTORY_TARGETS_FILE = CONFIG_DIR / "factory_targets.json"
+ISO_MAP_FILE = BASE_DIR / "config" / "iso_to_wiki.json"
 
 # Asset Paths
 LEXICON_DIR = BASE_DIR / "data" / "lexicon"
@@ -30,10 +32,11 @@ GF_ARTIFACTS = BASE_DIR / "gf"
 # Add current dir to path to import sibling scanners
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Import Scanners
+# --- Import Scanners ---
 try:
-    import rgl_auditor
+    import rgl_scanner as rgl_auditor 
 except ImportError:
+    logger.warning("⚠️ Could not import rgl_scanner. Zone A will be empty.")
     rgl_auditor = None
 
 try:
@@ -46,32 +49,61 @@ try:
 except ImportError:
     qa_scanner = None
 
-# --- THE ROSETTA STONE ---
-# Critical Mapping: ISO 639-3 (RGL/Factory) -> ISO 639-1 (System)
-ISO_3_TO_2 = {
-    # Tier 1 (RGL)
-    "eng": "en", "fra": "fr", "deu": "de", "spa": "es", "ita": "it", 
-    "swe": "sv", "por": "pt", "rus": "ru", "zho": "zh", "jpn": "ja", 
-    "ara": "ar", "hin": "hi", "fin": "fi", "est": "et", "swa": "sw", 
-    "tur": "tr", "bul": "bg", "pol": "pl", "ron": "ro", "nld": "nl", 
-    "dan": "da", "nob": "no", "isl": "is", "ell": "el", "heb": "he", 
-    "lav": "lv", "lit": "lt", "mlt": "mt", "hun": "hu", "cat": "ca", 
-    "eus": "eu", "tha": "th", "urd": "ur", "fas": "fa", "mon": "mn", 
-    "nep": "ne", "pan": "pa", "snd": "sd", "afr": "af", "amh": "am", 
-    "kor": "ko", "lat": "la", "nno": "nn", "slv": "sl", "som": "so", 
-    "tgl": "tl", "vie": "vi", "pes": "fa", "pnb": "pa", "hrv": "hr",
-    "cze": "cs", "dut": "nl", "ger": "de", "gre": "el", "ice": "is",
-    "ina": "ia", "may": "ms", "slo": "sk", "hye": "hy", "bel": "be",
-    "fao": "fo", "gla": "gd", "kaz": "kk", "mkd": "mk", "tel": "te",
-    "ukr": "uk", "zul": "zu", 
+# --- DYNAMIC MAPPING LOADER ---
+def load_iso_map():
+    """
+    Loads the authoritative ISO codes from config/iso_to_wiki.json.
+    Returns a normalization map (iso_lower -> iso_canonical).
+    """
+    if not ISO_MAP_FILE.exists():
+        logger.error(f"❌ ISO Map not found at {ISO_MAP_FILE}")
+        return {}
+
+    try:
+        with open(ISO_MAP_FILE, 'r') as f:
+            raw_map = json.load(f)
+        
+        mapping = {}
+        # Build mapping: Normalize keys to lowercase for robust lookups
+        for iso_code in raw_map.keys():
+            iso_lower = iso_code.lower()
+            mapping[iso_lower] = iso_lower
+            
+        return mapping
+
+    except Exception as e:
+        logger.error(f"❌ Failed to load ISO Map: {e}")
+        return {}
+
+# Load the map dynamically
+ISO_NORM_MAP = load_iso_map()
+
+def load_language_names():
+    """
+    Loads official language names from config/iso_to_wiki.json.
+    Now supports the v2.0 object format: {"eng": {"wiki": "Eng", "name": "English"}}
+    """
+    if not ISO_MAP_FILE.exists():
+        logger.warning(f"⚠️ ISO config not found at {ISO_MAP_FILE}")
+        return {}
     
-    # Tier 3 (Factory Targets)
-    "xho": "xh", "yor": "yo", "ibo": "ig", "hau": "ha", "wol": "wo",
-    "kin": "rw", "lug": "lg", "lin": "ln", "ind": "id", "msa": "ms",
-    "jav": "jv", "tam": "ta", "ben": "bn", "uzb": "uz", "que": "qu",
-    "aym": "ay", "nav": "nv", "grn": "gn", "fry": "fy", "bre": "br",
-    "oci": "oc", "cym": "cy", "tat": "tt", "kur": "ku"
-}
+    try:
+        with open(ISO_MAP_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            
+        name_map = {}
+        for code, info in data.items():
+            # Handle v2.0 object format
+            if isinstance(info, dict):
+                name = info.get("name")
+                if name:
+                    name_map[code.lower()] = name
+            # v1.0 string format (just code->suffix) has no name data, ignore
+            
+        return name_map
+    except Exception as e:
+        logger.error(f"❌ Failed to load language names: {e}")
+        return {}
 
 def load_central_registries():
     """
@@ -89,29 +121,21 @@ def load_central_registries():
                 langs = data.get("languages", {})
                 for rgl_code, info in langs.items():
                     iso3 = rgl_code.lower()
-                    iso2 = ISO_3_TO_2.get(iso3)
+                    # Normalize using our map, or default to self
+                    iso_norm = ISO_NORM_MAP.get(iso3, iso3)
                     
-                    if iso2:
-                        raw_path = info.get("path")
-                        
-                        # --- SMART FIX: Redirect 'api' paths to real source ---
-                        # Some languages (Ara, Cat, Bul) point to 'api' by default.
-                        # We must find their real home by looking at their modules.
-                        if raw_path and raw_path.endswith("api"):
-                            modules = info.get("modules", {})
-                            
-                            # Try 'Cat' first, then 'Grammar', then 'Noun'
-                            # This fixes cases like Catalan which lack 'Cat' but have 'Grammar'
-                            ref_file = modules.get("Cat") or modules.get("Grammar") or modules.get("Noun")
-                            
-                            if ref_file:
-                                # Extract folder: "gf-rgl/src/catalan/GrammarCat.gf" -> "gf-rgl/src/catalan"
-                                raw_path = str(Path(ref_file).parent)
+                    raw_path = info.get("path")
+                    
+                    if raw_path and raw_path.endswith("api"):
+                        modules = info.get("modules", {})
+                        ref_file = modules.get("Cat") or modules.get("Grammar") or modules.get("Noun")
+                        if ref_file:
+                            raw_path = str(Path(ref_file).parent)
 
-                        rgl_map[iso2] = {
-                            "path": raw_path, 
-                            "rgl_code": rgl_code
-                        }
+                    rgl_map[iso_norm] = {
+                        "path": raw_path, 
+                        "rgl_code": rgl_code
+                    }
         except Exception as e:
             logger.error(f"❌ Failed to load RGL Inventory: {e}")
 
@@ -121,9 +145,8 @@ def load_central_registries():
             with open(FACTORY_TARGETS_FILE, 'r') as f:
                 data = json.load(f)
                 for iso3, info in data.items():
-                    iso2 = ISO_3_TO_2.get(iso3)
-                    if iso2:
-                        factory_map[iso2] = info
+                    iso_norm = ISO_NORM_MAP.get(iso3.lower(), iso3.lower())
+                    factory_map[iso_norm] = info
         except Exception as e:
             logger.error(f"❌ Failed to load Factory Targets: {e}")
             
@@ -145,29 +168,34 @@ def get_directory_fingerprint(paths):
     return hasher.hexdigest()
 
 def scan_system():
+    parser = argparse.ArgumentParser(description="Rebuilds the Everything Matrix index.")
+    parser.add_argument("--force", action="store_true", help="Ignore cache and force full rebuild")
+    args, _ = parser.parse_known_args()
+
     # ---------------------------------------------------------
     # 0. Caching Logic
     # ---------------------------------------------------------
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     current_fingerprint = get_directory_fingerprint([RGL_SRC, LEXICON_DIR, FACTORY_SRC])
     
-    if CHECKSUM_FILE.exists() and MATRIX_FILE.exists():
+    if not args.force and CHECKSUM_FILE.exists() and MATRIX_FILE.exists():
         with open(CHECKSUM_FILE, 'r') as f:
             stored_fingerprint = f.read().strip()
         if current_fingerprint == stored_fingerprint:
             logger.info("⚡ Cache Hit: Filesystem unchanged. Skipping scan.")
+            logger.info("   (Run with --force to rebuild anyway)")
             return
 
     logger.info("🧠 Everything Matrix v2.1: Deep System Scan Initiated...")
     
-    # Load Reference Data
     rgl_registry, factory_registry = load_central_registries()
+    name_map = load_language_names()
     
     matrix_langs = {}
     all_isos = set()
 
     # ---------------------------------------------------------
-    # 1. DISCOVERY PHASE (Normalize everything to ISO-2)
+    # 1. DISCOVERY PHASE (Normalize everything to System ISO)
     # ---------------------------------------------------------
     all_isos.update(rgl_registry.keys())
     all_isos.update(factory_registry.keys())
@@ -175,26 +203,27 @@ def scan_system():
     if FACTORY_SRC.exists():
         for p in FACTORY_SRC.iterdir():
             if p.is_dir():
-                iso_norm = ISO_3_TO_2.get(p.name, p.name)
-                all_isos.add(iso_norm)
+                norm = ISO_NORM_MAP.get(p.name.lower(), p.name.lower())
+                all_isos.add(norm)
     
     if LEXICON_DIR.exists():
         for p in LEXICON_DIR.iterdir():
             if p.is_dir():
-                iso_norm = ISO_3_TO_2.get(p.name, p.name)
-                all_isos.add(iso_norm)
+                norm = ISO_NORM_MAP.get(p.name.lower(), p.name.lower())
+                all_isos.add(norm)
 
     # ---------------------------------------------------------
     # 2. SCAN LOOP
     # ---------------------------------------------------------
     for iso in sorted(all_isos):
+        if iso == "api": continue
+
         # --- Zone A: RGL Engine (Logic) ---
         zone_a = {"CAT": 0, "NOUN": 0, "PARA": 0, "GRAM": 0, "SYN": 0}
         tier = 3
         origin = "factory"
         rgl_folder = "generated"
         
-        # Check if it's in the RGL Registry (Tier 1)
         if iso in rgl_registry:
             entry = rgl_registry[iso]
             full_path = BASE_DIR / entry["path"]
@@ -204,7 +233,6 @@ def scan_system():
                 origin = "rgl"
                 rgl_folder = Path(entry["path"]).name
                 
-                # Run Auditor
                 if rgl_auditor:
                     if hasattr(rgl_auditor, 'scan_rgl'):
                         zone_a = rgl_auditor.scan_rgl(iso, full_path)
@@ -234,7 +262,6 @@ def scan_system():
         maturity = round((score_a * 0.6) + (score_b * 0.4), 1)
 
         build_strategy = "SKIP"
-        
         cat_score = zone_a.get("CAT", 0) or zone_a.get("rgl_cat", 0)
         
         if maturity > 7.0 and cat_score == 10:
@@ -246,9 +273,13 @@ def scan_system():
 
         runnable = zone_b["SEED"] >= 2.0 or build_strategy == "HIGH_ROAD"
 
+        # --- Inject Name from Central Config ---
+        display_name = name_map.get(iso, iso.upper()) 
+
         matrix_langs[iso] = {
             "meta": {
                 "iso": iso,
+                "name": display_name,
                 "tier": tier,
                 "origin": origin,
                 "folder": rgl_folder

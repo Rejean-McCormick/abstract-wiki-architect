@@ -1,6 +1,6 @@
-# qa_tools\generate_lexicon_regression_tests.py
+# tools/qa/generate_lexicon_regression_tests.py
 """
-qa_tools/generate_lexicon_regression_tests.py
+tools/qa/generate_lexicon_regression_tests.py
 --------------------------------------------
 
 Generate a pytest module that performs *regression tests* on the lexicon
@@ -9,151 +9,207 @@ files under `data/lexicon/`.
 What it does
 ============
 
-- Scans `data/lexicon/` for `*.json` lexicon files.
-- For each file:
+- Recursively scans `data/lexicon/` for `*.json` lexicon shards.
+- For each shard:
     - Loads the JSON.
-    - Reads the keys under "lemmas".
-    - Sorts them and records the list.
-- Writes `qa/test_lexicon_regression.py` containing:
-    - A constant SNAPSHOTS = { "en_lexicon.json": [...], ... }
-    - A single test that:
-        - Reloads each lexicon file,
-        - Recomputes the sorted lemma list,
-        - Asserts that it exactly matches the snapshot.
+    - Extracts lemma/entry keys from supported sections (currently: "entries", "lemmas").
+    - Sorts keys and records the snapshot.
+- Writes `tests/test_lexicon_regression.py` containing:
+    - SNAPSHOTS = { "en/core.json": [...], "fr/science.json": [...], ... }
+    - A parametrized test that recomputes keys and asserts exact match.
 
 Usage
 =====
 
 From project root:
 
-    python qa_tools/generate_lexicon_regression_tests.py
+    python tools/qa/generate_lexicon_regression_tests.py
 
-Then, in your regular QA run:
+Or with overrides:
+
+    python tools/qa/generate_lexicon_regression_tests.py --lexicon-dir data/lexicon --out tests/test_lexicon_regression.py
+
+Then:
 
     pytest
-
-If you intentionally change the lexicon (add/remove/rename lemmas),
-pytest will fail until you regenerate the regression tests by rerunning
-this script.
 
 Notes
 =====
 
-- This script does *not* validate lexicon contents; it only guards
-  against unintended changes to lemma inventories.
-- It ignores `data/lexicon_schema.json` and any JSON file whose name
-  starts with "." or "_".
+- This guards against unintended changes to lemma inventories (add/remove/rename/move).
+- It does not validate lemma payload contents; use lexicon smoke/schema tests for that.
+- Ignores hidden/special files and directories (names starting with "." or "_") and common schema/index files.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
-import os
 import sys
-from typing import Dict, List
+from pathlib import Path
+from typing import Any, Dict, List, Set
 
-# Ensure project root on path
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if PROJECT_ROOT not in sys.path:
-    sys.path.append(PROJECT_ROOT)
+# ---------------------------------------------------------------------------
+# Project root discovery (robust across working directories)
+# ---------------------------------------------------------------------------
+
+
+def _find_project_root(start: Path) -> Path:
+    """
+    Walk upward from `start` to find a directory that looks like the repo root.
+    Heuristic: contains manage.py and data/.
+    """
+    start = start.resolve()
+    for p in [start, *start.parents]:
+        if (p / "manage.py").is_file() and (p / "data").is_dir():
+            return p
+    # Fallback: assume this file is at <root>/tools/qa/...
+    # (parent = qa, parent = tools, parent = root)
+    try:
+        return start.parents[2]
+    except Exception as e:
+        raise RuntimeError(f"Unable to locate project root from: {start}") from e
+
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = _find_project_root(SCRIPT_DIR)
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from utils.logging_setup import get_logger, init_logging  # type: ignore  # noqa: E402
 
-LEXICON_DIR = os.path.join(PROJECT_ROOT, "data", "lexicon")
-QA_DIR = os.path.join(PROJECT_ROOT, "qa")
-OUTPUT_TEST_FILE = os.path.join(QA_DIR, "test_lexicon_regression.py")
+# Defaults
+DEFAULT_LEXICON_DIR = PROJECT_ROOT / "data" / "lexicon"
+DEFAULT_OUT = PROJECT_ROOT / "tests" / "test_lexicon_regression.py"
+
+# Files to ignore anywhere in the lexicon tree
+IGNORED_FILENAMES = {
+    "lexicon_schema.json",
+    "lexicon_index.json",
+    "index.json",
+}
 
 
 # ---------------------------------------------------------------------------
-# Helpers
+# Lexicon snapshot logic
 # ---------------------------------------------------------------------------
 
 
-def _list_lexicon_files(lexicon_dir: str) -> List[str]:
+def _is_ignored_path(p: Path) -> bool:
     """
-    Return a sorted list of lexicon JSON files (absolute paths) in lexicon_dir,
-    excluding schema / special files.
+    Ignore:
+      - any file/dir part starting with '.' or '_'
+      - common schema/index files
+      - non-json
     """
-    files: List[str] = []
-    for entry in os.listdir(lexicon_dir):
-        if not entry.lower().endswith(".json"):
+    if p.suffix.lower() != ".json":
+        return True
+    if p.name in IGNORED_FILENAMES:
+        return True
+    for part in p.parts:
+        if part.startswith(".") or part.startswith("_"):
+            return True
+    return False
+
+
+def _list_lexicon_files(lexicon_dir: Path) -> List[Path]:
+    """
+    Recursively list lexicon JSON files under lexicon_dir (absolute Paths),
+    excluding schema / special files and hidden folders.
+    """
+    files: List[Path] = []
+    for p in lexicon_dir.rglob("*.json"):
+        if not p.is_file():
             continue
-        if entry.startswith(".") or entry.startswith("_"):
+        if _is_ignored_path(p):
             continue
-        if entry == "lexicon_schema.json":
-            continue
-        full = os.path.join(lexicon_dir, entry)
-        if os.path.isfile(full):
-            files.append(full)
-    files.sort()
+        files.append(p)
+    files.sort(key=lambda x: x.as_posix())
     return files
 
 
-def _collect_snapshots(files: List[str]) -> Dict[str, List[str]]:
+def _extract_inventory_keys(data: Any) -> List[str]:
     """
-    Build a mapping from relative lexicon filename (e.g. 'en_lexicon.json')
-    to a sorted list of lemma keys.
+    Extract a deterministic, sorted lemma inventory from a lexicon shard.
+
+    Supported sections:
+      - "entries" (current shard schema)
+      - "lemmas"  (legacy/compat)
+
+    If neither exists or isn't a dict, inventory is empty.
+    """
+    if not isinstance(data, dict):
+        return []
+
+    keys: Set[str] = set()
+
+    entries = data.get("entries")
+    if isinstance(entries, dict):
+        keys.update(entries.keys())
+
+    lemmas = data.get("lemmas")
+    if isinstance(lemmas, dict):
+        keys.update(lemmas.keys())
+
+    return sorted(keys)
+
+
+def _collect_snapshots(files: List[Path], lexicon_dir: Path) -> Dict[str, List[str]]:
+    """
+    Build mapping from lexicon-relative POSIX path (e.g. 'en/core.json')
+    to a sorted list of lemma keys for that shard.
     """
     log = get_logger(__name__)
     snapshots: Dict[str, List[str]] = {}
 
     for path in files:
-        rel_name = os.path.basename(path)
-        log.info("Collecting lemmas from %s", rel_name)
+        rel = path.relative_to(lexicon_dir).as_posix()
+        log.info("Collecting inventory from %s", rel)
 
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        try:
+            text = path.read_text(encoding="utf-8")
+            data = json.loads(text)
+        except Exception as e:
+            raise RuntimeError(f"Failed to parse JSON: {rel} ({path})") from e
 
-        lemmas = data.get("lemmas")
-        if not isinstance(lemmas, dict):
-            log.warning(
-                "File %s has no top-level 'lemmas' object; treating as empty.",
-                rel_name,
-            )
-            snapshots[rel_name] = []
-            continue
-
-        keys = sorted(lemmas.keys())
-        snapshots[rel_name] = keys
+        snapshots[rel] = _extract_inventory_keys(data)
 
     return snapshots
 
 
 def _render_python_literal(obj: object, indent: int = 4) -> str:
     """
-    Render Python literals (dict/list/str) in a reasonably pretty way
-    for embedding in the generated test file.
-
-    This avoids pulling in `pprint` and gives us fully deterministic,
-    compact output.
+    Deterministic Python-literal rendering for dict/list/str.
+    JSON is a safe subset for these types (no null/true/false expected here).
     """
-    # We rely on json.dumps for simple, deterministic literal formatting.
-    # For our purposes (strings, lists, dicts with simple keys) this is fine.
     return json.dumps(obj, ensure_ascii=False, indent=indent)
 
 
-def _write_test_module(snapshots: Dict[str, List[str]], out_path: str) -> None:
-    """
-    Write the pytest regression module to `out_path`.
-    """
-    rel_lexicon_dir = os.path.relpath(LEXICON_DIR, PROJECT_ROOT)
-    header = f"""\"\"\"Auto-generated lexicon regression tests.
+def _write_test_module(
+    snapshots: Dict[str, List[str]],
+    out_path: Path,
+    lexicon_dir: Path,
+    generator_relpath: str = "tools/qa/generate_lexicon_regression_tests.py",
+) -> None:
+    rel_lexicon_dir = lexicon_dir.relative_to(PROJECT_ROOT).as_posix()
+    rel_out = out_path.relative_to(PROJECT_ROOT).as_posix()
+
+    header = f'''"""Auto-generated lexicon regression tests.
 
 DO NOT EDIT BY HAND.
 
-This file was generated by:
-    qa_tools/generate_lexicon_regression_tests.py
+Generated by:
+    {generator_relpath}
 
-It captures the *current* set of lemma keys per lexicon file in
-`{rel_lexicon_dir}`. The tests ensure that future changes to those
-lexicon files do not silently alter lemma inventories.
+This file snapshots lemma/entry inventories for each lexicon shard under:
+    {rel_lexicon_dir}
 
-If you intentionally modify the lexicon (add/remove/rename lemmas),
-you should re-run the generator:
+If you intentionally modify the lexicon inventory (add/remove/rename/move keys),
+regenerate this file:
 
-    python qa_tools/generate_lexicon_regression_tests.py
-\"\"\"
-
+    python {generator_relpath}
+"""
 
 from __future__ import annotations
 
@@ -162,51 +218,71 @@ import os
 
 import pytest
 
+
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LEXICON_DIR = os.path.join(PROJECT_ROOT, "data", "lexicon")
+LEXICON_DIR = os.path.join(PROJECT_ROOT, "{rel_lexicon_dir.replace('"', '\\"')}")
 
-
-# Snapshot of lemma keys per lexicon file (basename → sorted lemma list)
-SNAPSHOTS = \
-"""
+# Snapshot of lemma keys per lexicon shard (lexicon-relative path -> sorted key list)
+SNAPSHOTS = \\
+'''
 
     body = _render_python_literal(snapshots, indent=4)
-    tests = """
 
-@pytest.mark.parametrize("filename", sorted(SNAPSHOTS.keys()))
-def test_lexicon_lemma_inventory_is_stable(filename: str) -> None:
-    \"\"\"Ensure that the set of lemma keys matches the recorded snapshot.
+    tests = r'''
 
-    This guards against unintended changes in lexicon inventories.
-    If you intended to change the lexicon, regenerate this file by
-    running `qa_tools/generate_lexicon_regression_tests.py`.
-    \"\"\"  # noqa: D401
-    path = os.path.join(LEXICON_DIR, filename)
+def _extract_inventory_keys(data):
+    if not isinstance(data, dict):
+        return []
+    keys = set()
+
+    entries = data.get("entries")
+    if isinstance(entries, dict):
+        keys.update(entries.keys())
+
+    lemmas = data.get("lemmas")
+    if isinstance(lemmas, dict):
+        keys.update(lemmas.keys())
+
+    return sorted(keys)
+
+
+@pytest.mark.parametrize("relpath", sorted(SNAPSHOTS.keys()))
+def test_lexicon_inventory_is_stable(relpath: str) -> None:
+    """Ensure shard key inventories match the recorded snapshot."""  # noqa: D401
+    path = os.path.normpath(os.path.join(LEXICON_DIR, relpath))
     assert os.path.isfile(path), f"Lexicon file not found: {path}"
 
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    lemmas = data.get("lemmas")
-    if not isinstance(lemmas, dict):
-        current = []
-    else:
-        current = sorted(lemmas.keys())
+    current = _extract_inventory_keys(data)
+    expected = SNAPSHOTS[relpath]
 
-    expected = SNAPSHOTS[filename]
-    assert current == expected, (
-        f"Lexicon lemma inventory changed for {filename}.\\n"
-        f"  Expected: {len(expected)} lemmas\\n"
-        f"  Current:  {len(current)} lemmas\\n"
-        "If this change was intentional, regenerate the regression tests."
-    )
-"""
+    if current != expected:
+        cur_set = set(current)
+        exp_set = set(expected)
 
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(header)
-        f.write(body)
-        f.write(tests)
+        added = sorted(cur_set - exp_set)
+        removed = sorted(exp_set - cur_set)
+
+        msg = (
+            f"Lexicon inventory changed for {relpath}.\n"
+            f"  Expected: {len(expected)} keys\n"
+            f"  Current:  {len(current)} keys\n"
+        )
+        if added:
+            msg += "  Added (first 50): " + ", ".join(added[:50]) + ("\n" if len(added) > 50 else "\n")
+        if removed:
+            msg += "  Removed (first 50): " + ", ".join(removed[:50]) + ("\n" if len(removed) > 50 else "\n")
+        msg += "If this change was intentional, regenerate the regression tests."
+        raise AssertionError(msg)
+'''
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(header + body + tests, encoding="utf-8")
+
+    log = get_logger(__name__)
+    log.info("Wrote regression tests to %s", rel_out)
 
 
 # ---------------------------------------------------------------------------
@@ -214,27 +290,49 @@ def test_lexicon_lemma_inventory_is_stable(filename: str) -> None:
 # ---------------------------------------------------------------------------
 
 
-def main(argv: list[str] | None = None) -> None:
+def _parse_args(argv: List[str] | None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate pytest regression tests for lexicon shard inventories.",
+    )
+    parser.add_argument(
+        "--lexicon-dir",
+        type=str,
+        default=str(DEFAULT_LEXICON_DIR),
+        help="Path to lexicon directory (default: data/lexicon).",
+    )
+    parser.add_argument(
+        "--out",
+        type=str,
+        default=str(DEFAULT_OUT),
+        help="Output pytest module path (default: tests/test_lexicon_regression.py).",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: List[str] | None = None) -> None:
     init_logging()
     log = get_logger(__name__)
+    args = _parse_args(argv)
 
-    if not os.path.isdir(LEXICON_DIR):
-        log.error("Lexicon directory not found: %s", LEXICON_DIR)
-        print(f"❌ Lexicon directory not found: {LEXICON_DIR}")
-        sys.exit(1)
+    lexicon_dir = Path(args.lexicon_dir).resolve()
+    out_path = Path(args.out).resolve()
 
-    files = _list_lexicon_files(LEXICON_DIR)
+    if not lexicon_dir.is_dir():
+        log.error("Lexicon directory not found: %s", lexicon_dir)
+        print(f"ERROR: Lexicon directory not found: {lexicon_dir}", file=sys.stderr)
+        raise SystemExit(1)
+
+    files = _list_lexicon_files(lexicon_dir)
     if not files:
-        log.error("No lexicon JSON files found in %s", LEXICON_DIR)
-        print(f"❌ No lexicon JSON files found in: {LEXICON_DIR}")
-        sys.exit(1)
+        log.error("No lexicon JSON files found in %s", lexicon_dir)
+        print(f"ERROR: No lexicon JSON files found in: {lexicon_dir}", file=sys.stderr)
+        raise SystemExit(1)
 
-    snapshots = _collect_snapshots(files)
-    _write_test_module(snapshots, OUTPUT_TEST_FILE)
+    snapshots = _collect_snapshots(files, lexicon_dir)
+    _write_test_module(snapshots, out_path, lexicon_dir)
 
-    rel_out = os.path.relpath(OUTPUT_TEST_FILE, PROJECT_ROOT)
-    print(f"✅ Generated regression tests in {rel_out}")
-    log.info("Generated regression tests in %s", rel_out)
+    rel_out = out_path.relative_to(PROJECT_ROOT).as_posix() if PROJECT_ROOT in out_path.parents else str(out_path)
+    print(f"OK: Generated regression tests at {rel_out}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,7 @@
+{
+  "id": "health_check",
+  "label": "System Health Check",
+  "description": "Verifies that Broker, Storage, and Engine are UP.",
+  "method": "GET",
+  "endpoint": "/health/ready"
+}

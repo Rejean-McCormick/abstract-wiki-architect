@@ -1,57 +1,54 @@
-# app\adapters\persistence\lexicon\cache.py
-# lexicon\cache.py
+# app/adapters/persistence/lexicon/cache.py
+# lexicon/cache.py
 """
 lexicon/cache.py
 ----------------
 
-In-memory caching utilities for the lexicon subsystem.
+Enterprise-grade in-memory caching utilities for the lexicon subsystem.
 
 Goals
 =====
-
-- Avoid re-parsing large JSON lexicon files on every lookup.
-- Provide a simple API to:
-    - get or build a per-language LexiconIndex,
+- Avoid re-parsing large lexicon data on every lookup.
+- Provide a small, testable API to:
+    - get/build a per-language LexiconIndex,
     - preload indexes for multiple languages,
     - clear or inspect the cache.
+- Thread-safe for typical multi-threaded app servers.
+- Deterministic behavior and explicit error surfaces.
 
-This module is intentionally lightweight and does not persist anything to
-disk. If you later add a disk-based cache, this is a good place to hook
-it in (or to delegate to a more advanced caching layer).
+This module does not persist anything to disk.
 
-Typical usage
-=============
-
-    from lexicon.cache import get_or_build_index, preload_languages
-
-    # Preload for a demo
-    preload_languages(["en", "fr", "sw"])
-
-    # Later, when rendering:
-    idx = get_or_build_index("en")
-    lex = idx.lookup_by_lemma("physicist", pos="NOUN")
-
-Implementation note
-===================
-
-This module is usually used *by* lexicon.index (to back `get_index`),
-not the other way around. The separation is purely organizational.
+Implementation notes
+====================
+- We cache by normalized language code (casefold + strip).
+- We use a lock to protect cache mutations.
+- We provide a `warmup_languages` alias for clarity in app startup code.
 """
 
 from __future__ import annotations
 
+import threading
 from typing import Dict, Iterable, List, Optional
 
 from .loader import load_lexicon  # type: ignore[import-not-found]
 from .index import LexiconIndex  # type: ignore[import-not-found]
-
+from .types import Lexicon  # type: ignore[import-not-found]
 
 # ---------------------------------------------------------------------------
 # Internal state
 # ---------------------------------------------------------------------------
 
-# Map: language code → LexiconIndex
+# Map: normalized language code → LexiconIndex
 _INDEX_CACHE: Dict[str, LexiconIndex] = {}
+
+# Lock for cache mutations / double-checked creation
+_CACHE_LOCK = threading.RLock()
+
+
+def _norm_lang(lang: str) -> str:
+    if not isinstance(lang, str):
+        return ""
+    return lang.strip().casefold()
 
 
 # ---------------------------------------------------------------------------
@@ -61,45 +58,69 @@ _INDEX_CACHE: Dict[str, LexiconIndex] = {}
 
 def get_or_build_index(lang: str) -> LexiconIndex:
     """
-    Get a LexiconIndex for the given language, building and caching it
-    if necessary.
+    Get a LexiconIndex for the given language, building and caching it if needed.
 
     Args:
-        lang:
-            Language code (e.g. "en", "fr", "sw").
+        lang: Language code (e.g. "en", "fr", "sw").
 
     Returns:
-        A LexiconIndex instance for that language.
+        LexiconIndex for that language.
 
     Raises:
-        Any exceptions raised by `load_lexicon` or `LexiconIndex` factory
-        methods (e.g. file not found, malformed JSON).
+        ValueError: empty/invalid lang code.
+        FileNotFoundError / JSON errors: bubbled from loader.
+        Any exceptions from LexiconIndex construction.
     """
-    lang = lang.strip()
-    if not lang:
+    nlang = _norm_lang(lang)
+    if not nlang:
         raise ValueError("Language code must be a non-empty string.")
 
-    if lang in _INDEX_CACHE:
-        return _INDEX_CACHE[lang]
+    # Fast path (no lock) for already-cached entries.
+    existing = _INDEX_CACHE.get(nlang)
+    if existing is not None:
+        return existing
 
-    # Load raw lexicon data and build an index
-    lexemes = load_lexicon(lang)
-    index = LexiconIndex.from_lexemes(lexemes)
-    _INDEX_CACHE[lang] = index
-    return index
+    # Slow path: build under lock, double-checking.
+    with _CACHE_LOCK:
+        existing = _INDEX_CACHE.get(nlang)
+        if existing is not None:
+            return existing
+
+        lex = load_lexicon(nlang)
+
+        # load_lexicon historically returned Dict[str, Dict[str, Any]] in this codebase,
+        # but the new enterprise-grade path expects Lexicon for LexiconIndex construction.
+        # Accept both for compatibility.
+        if isinstance(lex, Lexicon):
+            index = LexiconIndex(lex)
+        else:
+            # If a legacy index factory exists in older branches, keep it as fallback.
+            # Otherwise, require callers to migrate loader -> Lexicon.
+            if hasattr(LexiconIndex, "from_lexemes"):
+                index = LexiconIndex.from_lexemes(lex)  # type: ignore[attr-defined]
+            else:
+                raise TypeError(
+                    "load_lexicon() returned legacy mapping, but LexiconIndex requires "
+                    "a Lexicon. Migrate loader to return Lexicon or add LexiconIndex.from_lexemes()."
+                )
+
+        _INDEX_CACHE[nlang] = index
+        return index
 
 
 def set_index(lang: str, index: LexiconIndex) -> None:
     """
     Manually insert or override a cached index for a language.
-
-    This is mainly useful for testing, or if you build the index by
-    other means and want to inject it into the cache.
+    Useful for tests or dependency injection.
     """
-    lang = lang.strip()
-    if not lang:
+    nlang = _norm_lang(lang)
+    if not nlang:
         raise ValueError("Language code must be a non-empty string.")
-    _INDEX_CACHE[lang] = index
+    if index is None:
+        raise ValueError("Index must be non-null.")
+
+    with _CACHE_LOCK:
+        _INDEX_CACHE[nlang] = index
 
 
 def clear_cache(lang: Optional[str] = None) -> None:
@@ -107,42 +128,39 @@ def clear_cache(lang: Optional[str] = None) -> None:
     Clear the in-memory cache.
 
     Args:
-        lang:
-            If provided, only clear the cache entry for this language.
-            If None, clear the entire cache.
+        lang: if provided, clears only that language; otherwise clears all.
     """
-    global _INDEX_CACHE
-
-    if lang is None:
-        _INDEX_CACHE = {}
-    else:
-        _INDEX_CACHE.pop(lang.strip(), None)
+    with _CACHE_LOCK:
+        if lang is None:
+            _INDEX_CACHE.clear()
+            return
+        _INDEX_CACHE.pop(_norm_lang(lang), None)
 
 
 def cached_languages() -> List[str]:
     """
-    Return the list of language codes currently present in the cache.
+    Return cached language codes (normalized).
     """
-    return sorted(_INDEX_CACHE.keys())
+    with _CACHE_LOCK:
+        return sorted(_INDEX_CACHE.keys())
 
 
 def preload_languages(langs: Iterable[str]) -> None:
     """
     Preload lexicon indexes for a list of languages.
 
-    This is mainly useful for demos or benchmarking where you want to
-    avoid measuring the initial load time in the middle of a run.
-
-    Args:
-        langs:
-            Iterable of language codes to preload.
+    This is useful for startup warmups. Errors are propagated; the caller
+    should decide whether to catch and continue.
     """
     for lang in langs:
-        lang = str(lang).strip()
-        if not lang:
+        nlang = _norm_lang(str(lang))
+        if not nlang:
             continue
-        # Build and cache; ignore errors only if you want to be strict.
-        get_or_build_index(lang)
+        get_or_build_index(nlang)
+
+
+# Alias commonly used name in production startup code.
+warmup_languages = preload_languages
 
 
 __all__ = [
@@ -151,4 +169,5 @@ __all__ = [
     "clear_cache",
     "cached_languages",
     "preload_languages",
+    "warmup_languages",
 ]

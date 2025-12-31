@@ -1,4 +1,3 @@
-// architect_frontend/src/components/everything-matrix/LanguageRow.tsx
 import { LanguageEntry } from '@/types/EverythingMatrix';
 import ScoreCell from './ScoreCell';
 
@@ -23,14 +22,22 @@ export default function LanguageRow({ entry }: LanguageRowProps) {
       {/* Sticky Left Column: Metadata */}
       <td className="sticky left-0 z-10 border-b border-r border-slate-200 bg-white px-4 py-3 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
         <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            {/* Display Name or ISO code if name missing */}
-            <span className="font-semibold text-slate-900 text-lg">
-              {meta.iso.toUpperCase()}
+          <div className="flex items-baseline gap-2">
+            {/* Display Full Name if available, fallback to ISO code */}
+            <span className="font-semibold text-slate-900 text-lg whitespace-nowrap">
+              {meta.name || meta.iso.toUpperCase()}
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider">
-              ({meta.origin})
-            </span>
+            
+            {/* Secondary identifier: ISO if name exists, otherwise Origin */}
+            {meta.name ? (
+                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+                  {meta.iso}
+                </span>
+            ) : (
+                <span className="text-xs text-slate-400 uppercase tracking-wider">
+                  ({meta.origin})
+                </span>
+            )}
           </div>
           
           <div className="mt-1 flex items-center gap-2 text-xs">
@@ -40,6 +47,12 @@ export default function LanguageRow({ entry }: LanguageRowProps) {
             <span className="font-mono font-bold text-slate-600">
               {verdict.maturity_score}
             </span>
+             {/* If we showed name above, show origin here to be complete */}
+             {meta.name && (
+                <span className="text-[10px] text-slate-400 uppercase ml-1">
+                  {meta.origin}
+                </span>
+             )}
           </div>
         </div>
       </td>

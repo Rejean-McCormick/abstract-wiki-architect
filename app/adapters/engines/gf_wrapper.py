@@ -59,6 +59,7 @@ class GFGrammarEngine(IGrammarEngine):
     def _load_iso_config(self):
         """
         Loads 'config/iso_to_wiki.json' to map ISO codes (en) to RGL suffixes (Eng).
+        Handles both simple mappings {"en": "Eng"} and rich objects {"en": {"wiki": "Eng", ...}}.
         This replaces the hardcoded dictionary.
         """
         try:
@@ -67,7 +68,20 @@ class GFGrammarEngine(IGrammarEngine):
             
             if config_path.exists():
                 with open(config_path, "r") as f:
-                    self.iso_map = json.load(f)
+                    raw_data = json.load(f)
+                
+                # Normalize data into self.iso_map (Dict[str, str])
+                self.iso_map = {}
+                for code, value in raw_data.items():
+                    if isinstance(value, dict):
+                        # Extract 'wiki' suffix from rich object (v2.0 format)
+                        suffix = value.get("wiki")
+                        if suffix:
+                            self.iso_map[code] = suffix
+                    elif isinstance(value, str):
+                        # Handle legacy string mapping (v1.0 format)
+                        self.iso_map[code] = value
+                        
                 logger.info("gf_config_loaded", mappings=len(self.iso_map))
             else:
                 logger.warning("gf_config_missing", path=str(config_path))

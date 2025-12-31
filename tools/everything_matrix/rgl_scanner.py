@@ -1,4 +1,3 @@
-# tools\everything_matrix\rgl_scanner.py
 import os
 import json
 
@@ -12,10 +11,17 @@ def load_config():
         return {
             "rgl_base_path": "gf-rgl/src",
             "inventory_file": "data/indices/rgl_inventory.json",
-            "ignored_folders": ["doc", "examples", "dist", "bin", "boot"]
+            # FIX: Added "api" to the ignored folders list
+            "ignored_folders": ["doc", "examples", "dist", "bin", "boot", "api"]
         }
     with open(CONFIG_PATH, 'r') as f:
-        return json.load(f)
+        config = json.load(f)
+        # Safety: Ensure "api" is ignored even if config file is loaded
+        # The 'api' folder contains Syntax.gf which looks like a language but isn't.
+        ignored = set(config.get("ignored_folders", []))
+        ignored.add("api")
+        config["ignored_folders"] = list(ignored)
+        return config
 
 def scan_rgl():
     config = load_config()

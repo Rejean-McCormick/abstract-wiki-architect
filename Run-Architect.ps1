@@ -49,4 +49,4 @@ Write-Host "`n[3/3] ✅ Systems Go!" -ForegroundColor Green
 Write-Host "   Browser opening in 5 seconds..." -ForegroundColor Gray
 
 Start-Sleep -Seconds 5
-Start-Process "http://localhost:3000/tools"
+Start-Process "http://localhost:3000/abstract_wiki_architect/tools"

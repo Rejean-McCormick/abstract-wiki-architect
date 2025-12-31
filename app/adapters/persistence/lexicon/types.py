@@ -1,30 +1,50 @@
-# app\adapters\persistence\lexicon\types.py
-# lexicon\types.py
+# app/adapters/persistence/lexicon/types.py
+# lexicon/types.py
 """
 lexicon/types.py
 
 Core type definitions for the lexicon layer.
 
-This module deliberately contains *no I/O* and *no Wikidata calls*.
-It defines Python-side structures that other modules (e.g. loaders,
-morphology engines, or renderers) can rely on when working with
-lexical information coming from JSON files such as:
+This module contains *no I/O* and *no Wikidata calls*. It defines
+Python-side structures that other modules (loaders, morphology engines,
+renderers) can rely on when working with lexical information coming
+from JSON files such as:
 
     - data/lexicon/en_lexicon.json
     - data/lexicon/fr_lexicon.json
     - data/lexicon/ja_lexicon.json
     - data/lexicon/sw_lexicon.json
 
-The goal is to provide a thin, well-documented abstraction over
-those JSON schemas without over-constraining them. Different
-languages can keep their own layout; a loader is responsible for
-mapping them into these types.
+Design goals
+------------
+- Thin, permissive abstractions over heterogeneous per-language schemas.
+- Enterprise-grade hygiene:
+    - explicit typing and safe defaults
+    - lightweight invariant checks
+    - predictable behavior for formatting and form selection
+- Backwards compatibility: keep Lexeme alias and existing field names.
+
+Loaders are responsible for mapping raw JSON dictionaries into these
+types (including populating `extra` for unknown fields).
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Mapping, Optional
+from string import Formatter
+from typing import Any, Dict, Iterable, Mapping, Optional
+
+
+# ---------------------------------------------------------------------------
+# Common type aliases (kept intentionally permissive)
+# ---------------------------------------------------------------------------
+
+PosTag = str
+GenderTag = str
+NumberTag = str
+FormKey = str
+LanguageCode = str
+WikidataId = str
 
 
 # ---------------------------------------------------------------------------
@@ -32,12 +52,12 @@ from typing import Any, Dict, Mapping, Optional
 # ---------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(slots=True)
 class LexiconMeta:
     """
-    Metadata about a single language lexicon file.
+    Metadata about a single language lexicon.
 
-    This is typically read from a `meta` or `_meta` object in JSON, e.g.:
+    Typically read from a `meta` or `_meta` object in JSON, e.g.:
 
         {
           "meta": {
@@ -45,23 +65,11 @@ class LexiconMeta:
             "family": "germanic",
             "version": "1.0",
             "description": "Minimal English lexicon ..."
-          },
-          ...
-        }
-
-    or
-
-        {
-          "_meta": {
-            "language": "fr",
-            "version": "0.1.0",
-            "description": "Minimal French lexicon ..."
-          },
-          ...
+          }
         }
     """
 
-    language: str
+    language: LanguageCode
     """BCP-47-ish language code, e.g. 'en', 'fr', 'ja', 'sw'."""
 
     family: Optional[str] = None
@@ -74,10 +82,11 @@ class LexiconMeta:
     """Human-readable description of the lexicon contents."""
 
     extra: Dict[str, Any] = field(default_factory=dict)
-    """
-    Any additional metadata fields that do not have a dedicated slot
-    (e.g. authorship, license info, timestamps).
-    """
+    """Additional metadata fields not captured above."""
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.language, str) or not self.language.strip():
+            raise ValueError("LexiconMeta.language must be a non-empty string.")
 
 
 # ---------------------------------------------------------------------------
@@ -85,151 +94,86 @@ class LexiconMeta:
 # ---------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(slots=True)
 class BaseLexicalEntry:
     """
     Minimal cross-linguistic lexical entry.
 
-    This is intentionally permissive. Family- or language-specific
-    loaders may populate additional structured fields as needed.
+    This is intentionally permissive. Family- or language-specific loaders
+    may populate additional structured fields as needed.
 
-    Examples of how different JSON schemas can map here:
-
-      * data/lexicon/en_lexicon.json (professions):
-
-            {
-              "lemma": "physicist",
-              "display": "physicist",
-              "gender": "common",
-              "wikidata_qid": "Q169470"
-            }
-
-      * data/lexicon/fr_lexicon.json (entries):
-
-            {
-              "pos": "NOUN",
-              "gender": "m",
-              "default_number": "sg",
-              "semantic_class": "profession",
-              "forms": {
-                "m.sg": "physicien",
-                "f.sg": "physicienne",
-                "m.pl": "physiciens",
-                "f.pl": "physiciennes"
-              }
-            }
-
-      * data/lexicon/sw_lexicon.json (lemmas):
-
-            {
-              "pos": "NOUN",
-              "gloss": "physicist",
-              "human": true,
-              "noun_class_sg": 1,
-              "noun_class_pl": 2,
-              "plural_lemma": "wanasayansi"
-            }
+    Core invariants:
+      - key, lemma, pos, language are non-empty strings
+      - forms is a mapping from string keys to string surface forms
     """
 
     key: str
-    """
-    Stable dictionary key for this entry *within* its lexicon.
-
-    Examples:
-        - "physicist" (profession key in English lexicon)
-        - "Marie Curie" (proper name key in French lexicon)
-        - "mwanasayansi" (lemma key in Swahili lexicon)
-    """
+    """Stable dictionary key for this entry within its lexicon."""
 
     lemma: str
-    """
-    Canonical lemma/surface for this entry in the target language.
+    """Canonical lemma/surface for this entry in the target language."""
 
-    For many entries this is identical to `key`, but it does not have
-    to be (e.g. key "computer_scientist" with lemma "computer scientist").
-    """
+    pos: PosTag
+    """Part-of-speech label, e.g. 'NOUN', 'PROPN', 'ADJ', 'TITLE'."""
 
-    pos: str
-    """
-    Part-of-speech label, e.g. 'NOUN', 'PROPN', 'ADJ', 'TITLE'.
-
-    The exact tagset is project-defined, but POS is useful for:
-      - choosing morphology pathways
-      - filtering in loaders
-    """
-
-    language: str
+    language: LanguageCode
     """Language code, copied from LexiconMeta.language."""
 
-    # --- Core lexical properties ------------------------------------------------
+    # --- Core lexical properties ---------------------------------------------
 
     sense: Optional[str] = None
-    """
-    Optional fine-grained semantic sense label.
-
-    Examples:
-      - "profession"
-      - "country"
-      - "title"
-      - "common_noun"
-    """
+    """Optional fine-grained semantic sense label (e.g. 'profession')."""
 
     human: Optional[bool] = None
-    """
-    Whether this entry denotes a human (True), non-human (False),
-    or if unknown/irrelevant (None).
+    """Whether this entry denotes a human (True), non-human (False), or unknown (None)."""
 
-    Useful for agreement and discourse constraints.
-    """
+    gender: Optional[GenderTag] = None
+    """Default grammatical gender of the lemma, if applicable."""
 
-    gender: Optional[str] = None
-    """
-    Grammatical gender of the lemma's *default* form, if any.
-
-    Examples:
-      - 'm'
-      - 'f'
-      - 'n'
-      - 'common'
-      - None (no gender category)
-    """
-
-    default_number: Optional[str] = None
-    """
-    Default grammatical number of the lemma, e.g. 'sg' or 'pl'.
-    """
+    default_number: Optional[NumberTag] = None
+    """Default grammatical number (e.g. 'sg', 'pl') if applicable."""
 
     default_formality: Optional[str] = None
-    """
-    Default register/formality (e.g. 'neutral', 'polite', 'formal').
+    """Default register/formality (e.g. 'neutral', 'polite', 'formal')."""
 
-    Especially useful for languages like Japanese or Korean.
-    """
+    wikidata_qid: Optional[WikidataId] = None
+    """Optional Wikidata Q-ID linking this entry to a concept."""
 
-    wikidata_qid: Optional[str] = None
-    """
-    Optional Wikidata Q-ID linking this lexeme to a concept.
-    """
+    # --- Inflectional data ---------------------------------------------------
 
-    # --- Inflectional data ------------------------------------------------------
-
-    forms: Dict[str, str] = field(default_factory=dict)
+    forms: Dict[FormKey, str] = field(default_factory=dict)
     """
     Optional mapping from inflectional keys to surface forms.
 
-    This is deliberately unopinionated. Typical patterns include:
+    Common patterns:
       - "m.sg" / "f.sg" / "m.pl" / "f.pl"
       - "sg" / "pl"
       - "plain" / "formal"
     """
 
-    # --- Free-form additional info ---------------------------------------------
+    # --- Free-form additional info -------------------------------------------
 
     extra: Dict[str, Any] = field(default_factory=dict)
-    """
-    Any additional fields present in the JSON that do not have a
-    dedicated attribute (e.g. 'gloss', 'noun_class_sg').
-    """
+    """Any additional fields not captured by dedicated attributes."""
+
+    def __post_init__(self) -> None:
+        for attr_name in ("key", "lemma", "pos", "language"):
+            val = getattr(self, attr_name)
+            if not isinstance(val, str) or not val.strip():
+                raise ValueError(f"{self.__class__.__name__}.{attr_name} must be a non-empty string.")
+
+        # Sanitize forms: keep only str->str items
+        if not isinstance(self.forms, dict):
+            self.forms = {}
+        else:
+            cleaned: Dict[str, str] = {}
+            for k, v in self.forms.items():
+                if isinstance(k, str) and isinstance(v, str) and k.strip() and v.strip():
+                    cleaned[k] = v
+            self.forms = cleaned
+
+        if not isinstance(self.extra, dict):
+            self.extra = {}
 
     # ------------------------------------------------------------------
     # Helper API
@@ -237,55 +181,63 @@ class BaseLexicalEntry:
 
     def get_form(
         self,
-        gender: Optional[str] = None,
-        number: Optional[str] = None,
+        gender: Optional[GenderTag] = None,
+        number: Optional[NumberTag] = None,
         fallback_to_lemma: bool = True,
     ) -> str:
         """
         Lookup an inflected form based on simple gender/number keys.
 
-        This is a best-effort, language-agnostic helper. It assumes
-        that `forms` keys may look like `"m.sg"`, `"f.pl"`, `"sg"`, `"pl"`,
-        etc. Use more specialized logic in family-specific morphology
-        engines when necessary.
+        Best-effort, language-agnostic resolution strategy:
 
-        Resolution strategy:
-
-          1. If both `gender` and `number` are provided:
-                - try `"{gender}.{number}"` (e.g. "f.sg")
-          2. If only `number` is provided:
-                - try `number` (e.g. "sg")
-          3. If only `gender` is provided:
-                - try `gender` (e.g. "f")
-          4. If none of the above match:
-                - if `fallback_to_lemma` → return `lemma`
-                - else → return empty string
+          1. If gender and number are provided: try "{gender}.{number}" (e.g. "f.sg")
+          2. If only number is provided: try "number" (e.g. "sg")
+          3. If only gender is provided: try "gender" (e.g. "f")
+          4. If no match:
+                - if fallback_to_lemma -> return lemma
+                - else -> return empty string
         """
-        # Normalize keys
         g = (gender or "").strip()
         n = (number or "").strip()
 
-        # 1. gender + number (e.g. "f.sg")
         if g and n:
             key = f"{g}.{n}"
             form = self.forms.get(key)
             if form:
                 return form
 
-        # 2. number-only (e.g. "sg")
         if n:
             form = self.forms.get(n)
             if form:
                 return form
 
-        # 3. gender-only (e.g. "f")
         if g:
             form = self.forms.get(g)
             if form:
                 return form
 
-        # 4. Fallback
         return self.lemma if fallback_to_lemma else ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Serialize the entry into a JSON-friendly dict.
+
+        Note: This is a convenience helper; loaders may use their own schema.
+        """
+        return {
+            "key": self.key,
+            "lemma": self.lemma,
+            "pos": self.pos,
+            "language": self.language,
+            "sense": self.sense,
+            "human": self.human,
+            "gender": self.gender,
+            "default_number": self.default_number,
+            "default_formality": self.default_formality,
+            "wikidata_qid": self.wikidata_qid,
+            "forms": dict(self.forms),
+            "extra": dict(self.extra),
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -293,26 +245,11 @@ class BaseLexicalEntry:
 # ---------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(slots=True)
 class Lexeme(BaseLexicalEntry):
     """
     Backwards-compatible alias for the older `Lexeme` concept.
-
-    Historically, some modules (e.g. older versions of lexicon.index)
-    worked directly with `Lexeme` instances created from JSON. The
-    new architecture prefers:
-
-        - BaseLexicalEntry for generic entries
-        - ProfessionEntry / NationalityEntry / TitleEntry / HonourEntry
-          for specialized roles
-        - Lexicon as the container
-
-    This subclass allows older code that imports `Lexeme` to keep
-    working while internally sharing the same shape as
-    BaseLexicalEntry.
     """
-
-    # No extra fields; we inherit everything from BaseLexicalEntry.
     pass
 
 
@@ -321,101 +258,72 @@ class Lexeme(BaseLexicalEntry):
 # ---------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(slots=True)
 class ProfessionEntry(BaseLexicalEntry):
     """
-    Profession / occupation lexeme.
-
-    This is typically used for renderings like "Marie Curie was a
-    Polish physicist". It adds no new required fields beyond
-    BaseLexicalEntry but gives a semantic handle to the type checker.
+    Profession / occupation lexeme (semantic handle for type checking).
     """
-
     sense: Optional[str] = "profession"
 
 
-@dataclass
+@dataclass(slots=True)
 class NationalityEntry(BaseLexicalEntry):
     """
     Nationality or country-related entry.
-
-    Typical JSON (English):
-
-        "polish": {
-          "key": "polish",
-          "adjective": "Polish",
-          "demonym": "Pole",
-          "country_name": "Poland",
-          "wikidata_qid": "Q36"
-        }
     """
 
     adjective: Optional[str] = None
     """Adjectival form, e.g. 'Polish', 'French', 'Japanese'."""
 
     demonym: Optional[str] = None
-    """Noun for person of this nationality, e.g. 'Pole', 'French person'."""
+    """Noun for person of this nationality, e.g. 'Pole'."""
 
     country_name: Optional[str] = None
     """Localized country name, e.g. 'Poland', 'France'."""
 
-    # The `lemma` field is typically the adjective or demonym, depending
-    # on language preference. For some renderings, engines may prefer
-    # `adjective` while for others they may prefer `demonym`.
 
-
-@dataclass
+@dataclass(slots=True)
 class TitleEntry(BaseLexicalEntry):
     """
     Honorific / title entry such as 'Sir', 'Dr', 'Prof.'.
-
-    Example JSON (English):
-
-        "sir": {
-          "lemma": "Sir",
-          "position": "pre_name",
-          "gender": "male"
-        }
     """
 
     position: Optional[str] = None
     """
     Typical values:
-      - "pre_name"  → before given name (e.g. "Dr Marie Curie")
-      - "post_name" → after name (e.g. "Marie Curie, PhD")
+      - "pre_name"  -> before given name (e.g. "Dr Marie Curie")
+      - "post_name" -> after name (e.g. "Marie Curie, PhD")
     """
 
 
-@dataclass
+@dataclass(slots=True)
 class HonourEntry:
     """
     Non-inflecting honour / award label.
-
-    Example JSON (English):
-
-        "nobel_prize_physics": {
-          "label": "Nobel Prize in Physics",
-          "short_label": "the Nobel Prize in Physics",
-          "wikidata_qid": "Q38104"
-        }
     """
 
     key: str
     label: str
     short_label: Optional[str] = None
-    wikidata_qid: Optional[str] = None
+    wikidata_qid: Optional[WikidataId] = None
     extra: Dict[str, Any] = field(default_factory=dict)
 
+    def __post_init__(self) -> None:
+        if not isinstance(self.key, str) or not self.key.strip():
+            raise ValueError("HonourEntry.key must be a non-empty string.")
+        if not isinstance(self.label, str) or not self.label.strip():
+            raise ValueError("HonourEntry.label must be a non-empty string.")
+        if not isinstance(self.extra, dict):
+            self.extra = {}
+
     def display(self, short: bool = False) -> str:
-        """
-        Return either the long or short label, falling back gracefully.
-        """
+        """Return either the long or short label, falling back gracefully."""
         if short and self.short_label:
             return self.short_label
         return self.label
 
 
-@dataclass
+@dataclass(slots=True)
 class NameTemplate:
     """
     Template for assembling personal names, titles, etc.
@@ -430,34 +338,39 @@ class NameTemplate:
 
     key: str
     template: str
+    extra: Dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.key, str) or not self.key.strip():
+            raise ValueError("NameTemplate.key must be a non-empty string.")
+        if not isinstance(self.template, str) or not self.template.strip():
+            raise ValueError("NameTemplate.template must be a non-empty string.")
+        if not isinstance(self.extra, dict):
+            self.extra = {}
+
+    def required_fields(self) -> Iterable[str]:
+        """
+        Yield format field names referenced by the template.
+        """
+        fmt = Formatter()
+        for _, field_name, _, _ in fmt.parse(self.template):
+            if field_name:
+                # field_name may include indexing like "person.given"
+                yield field_name.split("[", 1)[0].split(".", 1)[0]
 
     def format(self, **parts: Any) -> str:
         """
         Apply the template with the given parts.
 
-        Missing keys are turned into empty strings and extra whitespace
-        is collapsed by the caller (if desired).
+        Missing keys become empty strings and extra whitespace is collapsed.
         """
-        safe_parts: Dict[str, Any] = {
-            k: ("" if v is None else v) for k, v in parts.items()
-        }
-        try:
-            text = self.template.format(**safe_parts)
-        except KeyError:
-            # If the template references keys that are not provided,
-            # treat them as empty.
-            all_keys = {
-                field_name
-                for field_name in self.template.split("{")
-                if "}" in field_name
-            }
-            for k in all_keys:
-                k = k.split("}")[0]
-                if k not in safe_parts:
-                    safe_parts[k] = ""
-            text = self.template.format(**safe_parts)
+        safe_parts: Dict[str, Any] = {k: ("" if v is None else v) for k, v in parts.items()}
 
-        # Lightweight normalization: collapse multiple spaces.
+        # Ensure all referenced fields exist to avoid KeyError
+        for k in self.required_fields():
+            safe_parts.setdefault(k, "")
+
+        text = self.template.format(**safe_parts)
         return " ".join(text.split())
 
 
@@ -466,124 +379,67 @@ class NameTemplate:
 # ---------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(slots=True)
 class Lexicon:
     """
     In-memory representation of a single language lexicon.
 
-    This is a convenient, structured view on top of the raw JSON.
-    A loader is expected to:
-
-      1. Read a JSON file into a dict.
-      2. Extract `meta` / `_meta` to build LexiconMeta.
-      3. Convert the remainder into ProfessionEntry / NationalityEntry /
-         BaseLexicalEntry / TitleEntry / HonourEntry / NameTemplate.
-      4. Populate this Lexicon instance.
+    Loaders are expected to populate this container from raw JSON.
     """
 
     meta: LexiconMeta
 
     professions: Dict[str, ProfessionEntry] = field(default_factory=dict)
-    """Profession entries indexed by key (e.g. 'physicist')."""
-
     nationalities: Dict[str, NationalityEntry] = field(default_factory=dict)
-    """Nationality entries indexed by key (e.g. 'polish')."""
-
     titles: Dict[str, TitleEntry] = field(default_factory=dict)
-    """Honorific titles (e.g. 'sir', 'dr', 'prof')."""
-
     honours: Dict[str, HonourEntry] = field(default_factory=dict)
-    """Named honours/awards (e.g. 'nobel_prize_physics')."""
-
     general_entries: Dict[str, BaseLexicalEntry] = field(default_factory=dict)
-    """
-    Catch-all mapping for lexemes that don't fit the above specializations
-    (e.g. French `entries`, Swahili `lemmas`, Japanese `lemmas`).
-    """
-
     name_templates: Dict[str, NameTemplate] = field(default_factory=dict)
-    """Name templates by key, e.g. 'default_person', 'with_title'."""
 
     raw: Dict[str, Any] = field(default_factory=dict)
-    """
-    Optional original JSON (or a subset of it) for debugging and
-    round-tripping. This is not required for normal operation.
-    """
+    """Optional original JSON (or subset) for debugging/round-tripping."""
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.raw, dict):
+            self.raw = {}
 
     # ------------------------------------------------------------------
     # Lookup helpers
     # ------------------------------------------------------------------
 
-    def _lookup_case_insensitive(
-        self,
-        table: Mapping[str, Any],
-        key: str,
-    ) -> Optional[Any]:
+    @staticmethod
+    def _lookup_case_insensitive(table: Mapping[str, Any], key: str) -> Optional[Any]:
         """
-        Case-insensitive lookup into a dictionary, preserving original keys.
+        Case-insensitive lookup into a mapping, preserving original keys.
 
-        This is appropriate for keys like 'physicist', 'polish', etc.
-        For keys where case is semantically meaningful (e.g. 'Marie Curie'),
-        callers may prefer direct indexing using the exact key instead.
+        Prefer this for semantically case-insensitive keys (e.g. 'physicist').
+        For case-sensitive keys (e.g. proper names), callers may want direct access.
         """
         if key in table:
             return table[key]
 
-        lower = key.lower()
+        lower = key.casefold()
         for k, v in table.items():
-            if k.lower() == lower:
+            if isinstance(k, str) and k.casefold() == lower:
                 return v
         return None
 
-    # --- Profession API ----------------------------------------------------
-
     def get_profession(self, key: str) -> Optional[ProfessionEntry]:
-        """
-        Retrieve a profession by its key, using case-insensitive matching.
-        """
         return self._lookup_case_insensitive(self.professions, key)
 
-    # --- Nationality API ---------------------------------------------------
-
     def get_nationality(self, key: str) -> Optional[NationalityEntry]:
-        """
-        Retrieve a nationality by its key, using case-insensitive matching.
-        """
         return self._lookup_case_insensitive(self.nationalities, key)
 
-    # --- Title API ---------------------------------------------------------
-
     def get_title(self, key: str) -> Optional[TitleEntry]:
-        """
-        Retrieve a title/honorific by its key, using case-insensitive matching.
-        """
         return self._lookup_case_insensitive(self.titles, key)
 
-    # --- Honour API --------------------------------------------------------
-
     def get_honour(self, key: str) -> Optional[HonourEntry]:
-        """
-        Retrieve an honour/award entry by its key, using case-insensitive matching.
-        """
         return self._lookup_case_insensitive(self.honours, key)
 
-    # --- General entries ---------------------------------------------------
-
     def get_entry(self, key: str) -> Optional[BaseLexicalEntry]:
-        """
-        Retrieve a generic lexical entry by key, using case-insensitive matching.
-
-        This is mainly intended for lexica like French / Swahili / Japanese
-        whose JSON schema uses a single `entries` or `lemmas` map.
-        """
         return self._lookup_case_insensitive(self.general_entries, key)
 
-    # --- Name templating ---------------------------------------------------
-
     def get_name_template(self, key: str) -> Optional[NameTemplate]:
-        """
-        Retrieve a name template by key, using case-insensitive matching.
-        """
         return self._lookup_case_insensitive(self.name_templates, key)
 
     def format_person_name(
@@ -595,66 +451,43 @@ class Lexicon:
     ) -> str:
         """
         Convenience helper for constructing basic person name strings.
-
-        Typically used with templates like:
-
-            "default_person": "{given} {family}"
-            "with_title": "{title} {given} {family}"
-
-        If `title` is provided and the chosen template references it,
-        the user should ensure the template_key (e.g. "with_title")
-        is appropriate.
         """
         tmpl = self.get_name_template(template_key)
         if not tmpl:
-            # Fallback: naive 'Given Family'
             parts = [p for p in (title, given, family) if p]
             return " ".join(parts)
-
         return tmpl.format(given=given, family=family, title=title)
 
     # ------------------------------------------------------------------
-    # Mutation helpers (for programmatic enrichment of a lexicon)
+    # Mutation helpers
     # ------------------------------------------------------------------
 
     def add_profession(self, entry: ProfessionEntry) -> None:
-        """
-        Add or overwrite a profession entry.
-        """
         self.professions[entry.key] = entry
 
     def add_nationality(self, entry: NationalityEntry) -> None:
-        """
-        Add or overwrite a nationality entry.
-        """
         self.nationalities[entry.key] = entry
 
     def add_title(self, entry: TitleEntry) -> None:
-        """
-        Add or overwrite a title entry.
-        """
         self.titles[entry.key] = entry
 
     def add_honour(self, entry: HonourEntry) -> None:
-        """
-        Add or overwrite an honour/award entry.
-        """
         self.honours[entry.key] = entry
 
     def add_entry(self, entry: BaseLexicalEntry) -> None:
-        """
-        Add or overwrite a general lexical entry.
-        """
         self.general_entries[entry.key] = entry
 
     def add_name_template(self, template: NameTemplate) -> None:
-        """
-        Add or overwrite a name template.
-        """
         self.name_templates[template.key] = template
 
 
 __all__ = [
+    "PosTag",
+    "GenderTag",
+    "NumberTag",
+    "FormKey",
+    "LanguageCode",
+    "WikidataId",
     "LexiconMeta",
     "BaseLexicalEntry",
     "Lexeme",

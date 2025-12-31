@@ -1,100 +1,282 @@
 // architect_frontend/src/components/everything-matrix/MatrixGrid.tsx
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import { EverythingMatrix } from '@/types/EverythingMatrix';
-import LanguageRow from './LanguageRow';
+import { useMemo, useState } from "react";
+import type { EverythingMatrix } from "@/types/EverythingMatrix";
+import LanguageRow from "./LanguageRow";
 
 interface MatrixGridProps {
   matrix: EverythingMatrix;
 }
 
-type SortField = 'iso' | 'maturity' | 'strategy';
-type SortOrder = 'asc' | 'desc';
+type SortField = "iso" | "maturity" | "strategy";
+type SortOrder = "asc" | "desc";
+
+const ZONE_GROUPS: Array<{
+  label: string;
+  colSpan: number;
+  className: string;
+}> = [
+  {
+    label: "Zone A: Logic (RGL)",
+    colSpan: 5,
+    className:
+      "border-b border-r border-slate-200 px-2 py-1 text-center font-bold text-blue-700 bg-blue-50/50",
+  },
+  {
+    label: "Zone B: Data (Lexicon)",
+    colSpan: 4,
+    className:
+      "border-b border-r border-slate-200 px-2 py-1 text-center font-bold text-amber-700 bg-amber-50/50",
+  },
+  {
+    label: "Zone C: Apps",
+    colSpan: 3,
+    className:
+      "border-b border-r border-slate-200 px-2 py-1 text-center font-bold text-purple-700 bg-purple-50/50",
+  },
+  {
+    label: "Zone D: QA",
+    colSpan: 2,
+    className:
+      "border-b border-slate-200 px-2 py-1 text-center font-bold text-emerald-700 bg-emerald-50/50",
+  },
+];
+
+const ZONE_COLUMNS: Array<{
+  key: string;
+  label: string;
+  title: string;
+  className?: string;
+}> = [
+  // Zone A
+  {
+    key: "cat",
+    label: "Cat",
+    title: "Category Definitions",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "noun",
+    label: "Noun",
+    title: "Noun Morphology",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "para",
+    label: "Para",
+    title: "Paradigms",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "gram",
+    label: "Gram",
+    title: "Grammar Core",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "syn",
+    label: "Syn",
+    title: "Syntax API",
+    className: "border-b border-r border-slate-200 px-2 py-2 text-center font-bold",
+  },
+
+  // Zone B
+  {
+    key: "seed",
+    label: "Seed",
+    title: "Core Seed (>150 words)",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "conc",
+    label: "Conc",
+    title: "Domain Concepts (>500)",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "wide",
+    label: "Wide",
+    title: "Wide Import (CSV)",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "sem",
+    label: "Sem",
+    title: "Semantic Alignment (QIDs)",
+    className: "border-b border-r border-slate-200 px-2 py-2 text-center",
+  },
+
+  // Zone C
+  {
+    key: "prof",
+    label: "Prof",
+    title: "Bio-Ready",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "asst",
+    label: "Asst",
+    title: "Assistant-Ready",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "rout",
+    label: "Rout",
+    title: "Topology Routing",
+    className: "border-b border-r border-slate-200 px-2 py-2 text-center",
+  },
+
+  // Zone D
+  {
+    key: "bin",
+    label: "Bin",
+    title: "Binary Compilation",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+  {
+    key: "test",
+    label: "Test",
+    title: "Unit Tests",
+    className: "border-b border-slate-200 px-2 py-2 text-center",
+  },
+];
+
+function sortIndicator(active: boolean, order: SortOrder) {
+  if (!active) return "";
+  return order === "asc" ? " ↑" : " ↓";
+}
+
+function normalizeForSearch(s: string) {
+  // Lowercase + remove diacritics for friendlier search
+  return s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function safeNum(n: unknown, fallback = 0) {
+  const x = typeof n === "number" ? n : Number(n);
+  return Number.isFinite(x) ? x : fallback;
+}
 
 export default function MatrixGrid({ matrix }: MatrixGridProps) {
-  const [search, setSearch] = useState('');
-  const [sortField, setSortField] = useState<SortField>('maturity');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+  const [search, setSearch] = useState("");
+  const [sortField, setSortField] = useState<SortField>("maturity");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
-  // Convert dictionary to array and process
+  const languages = useMemo(() => Object.values(matrix.languages || {}), [matrix.languages]);
+
   const filteredLanguages = useMemo(() => {
-    let langs = Object.values(matrix.languages);
+    const q = normalizeForSearch(search.trim());
+    let langs = languages;
 
-    // 1. Filter
-    if (search) {
-      const q = search.toLowerCase();
-      langs = langs.filter(
-        (l) =>
-          (l.meta.name || '').toLowerCase().includes(q) ||
-          l.meta.iso.toLowerCase().includes(q)
-      );
+    if (q) {
+      langs = langs.filter((l) => {
+        const name = normalizeForSearch(l.meta?.name || "");
+        const iso = normalizeForSearch(l.meta?.iso || "");
+        return name.includes(q) || iso.includes(q);
+      });
     }
 
-    // 2. Sort
-    return langs.sort((a, b) => {
-      let valA: string | number = '';
-      let valB: string | number = '';
+    // stable sort (copy first), with deterministic tie-breakers
+    const sorted = [...langs].sort((a, b) => {
+      let valA: string | number = "";
+      let valB: string | number = "";
 
-      if (sortField === 'iso') {
-        valA = a.meta.iso;
-        valB = b.meta.iso;
-      } else if (sortField === 'strategy') {
-        valA = a.verdict.build_strategy;
-        valB = b.verdict.build_strategy;
+      if (sortField === "iso") {
+        valA = (a.meta?.iso || "").toLowerCase();
+        valB = (b.meta?.iso || "").toLowerCase();
+      } else if (sortField === "strategy") {
+        valA = (a.verdict?.build_strategy || "").toLowerCase();
+        valB = (b.verdict?.build_strategy || "").toLowerCase();
       } else {
-        // Default: Maturity Score
-        valA = a.verdict.maturity_score;
-        valB = b.verdict.maturity_score;
+        valA = safeNum(a.verdict?.maturity_score, 0);
+        valB = safeNum(b.verdict?.maturity_score, 0);
       }
 
-      if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
-      if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+      if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+      if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+
+      // tie-breakers: iso then name (always ascending)
+      const isoA = (a.meta?.iso || "").toLowerCase();
+      const isoB = (b.meta?.iso || "").toLowerCase();
+      if (isoA < isoB) return -1;
+      if (isoA > isoB) return 1;
+
+      const nameA = (a.meta?.name || "").toLowerCase();
+      const nameB = (b.meta?.name || "").toLowerCase();
+      if (nameA < nameB) return -1;
+      if (nameA > nameB) return 1;
+
       return 0;
     });
-  }, [matrix, search, sortField, sortOrder]);
+
+    return sorted;
+  }, [languages, search, sortField, sortOrder]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
     } else {
       setSortField(field);
-      setSortOrder('desc');
+      setSortOrder("desc");
     }
   };
+
+  const activeCount = filteredLanguages.length;
+  const totalCount = languages.length;
 
   return (
     <div className="flex flex-col">
       {/* Controls Toolbar */}
       <div className="flex flex-col gap-4 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <input
-          type="text"
-          placeholder="Search ISO code (e.g. 'fra', 'zul')..."
-          className="w-full rounded-md border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-96"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        
-        <div className="flex gap-2 text-sm text-slate-600">
-           <span>Sort by:</span>
-           <button 
-             onClick={() => handleSort('maturity')}
-             className={`font-medium hover:text-blue-600 ${sortField === 'maturity' ? 'text-blue-700 underline' : ''}`}
-           >
-             Maturity
-           </button>
-           <button 
-             onClick={() => handleSort('iso')}
-             className={`font-medium hover:text-blue-600 ${sortField === 'iso' ? 'text-blue-700 underline' : ''}`}
-           >
-             ISO Code
-           </button>
-           <button 
-             onClick={() => handleSort('strategy')}
-             className={`font-medium hover:text-blue-600 ${sortField === 'strategy' ? 'text-blue-700 underline' : ''}`}
-           >
-             Strategy
-           </button>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <input
+            type="text"
+            placeholder="Search ISO or name (e.g. 'fra', 'Zulu')..."
+            className="w-full rounded-md border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-96"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <div className="text-xs text-slate-500">
+            Showing <span className="font-mono">{activeCount}</span> /{" "}
+            <span className="font-mono">{totalCount}</span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+          <span>Sort by:</span>
+
+          <button
+            onClick={() => handleSort("maturity")}
+            className={`font-medium hover:text-blue-600 ${
+              sortField === "maturity" ? "text-blue-700 underline" : ""
+            }`}
+            title="Sort by maturity score"
+          >
+            Maturity{sortIndicator(sortField === "maturity", sortOrder)}
+          </button>
+
+          <button
+            onClick={() => handleSort("iso")}
+            className={`font-medium hover:text-blue-600 ${
+              sortField === "iso" ? "text-blue-700 underline" : ""
+            }`}
+            title="Sort by ISO code"
+          >
+            ISO Code{sortIndicator(sortField === "iso", sortOrder)}
+          </button>
+
+          <button
+            onClick={() => handleSort("strategy")}
+            className={`font-medium hover:text-blue-600 ${
+              sortField === "strategy" ? "text-blue-700 underline" : ""
+            }`}
+            title="Sort by build strategy"
+          >
+            Strategy{sortIndicator(sortField === "strategy", sortOrder)}
+          </button>
         </div>
       </div>
 
@@ -105,47 +287,33 @@ export default function MatrixGrid({ matrix }: MatrixGridProps) {
           <thead className="bg-slate-50 text-xs uppercase text-slate-500">
             {/* Top Row: Zone Groupings */}
             <tr>
-              <th className="sticky left-0 z-10 border-b border-r border-slate-200 bg-slate-50 px-4 py-2" rowSpan={2}>
-                Language
+              <th
+                className="sticky left-0 z-10 border-b border-r border-slate-200 bg-slate-50 px-4 py-2"
+                rowSpan={2}
+              >
+                <button
+                  onClick={() => handleSort("iso")}
+                  className="text-left hover:text-blue-600"
+                  title="Sort by ISO"
+                >
+                  Language{sortIndicator(sortField === "iso", sortOrder)}
+                </button>
               </th>
-              
-              <th colSpan={5} className="border-b border-r border-slate-200 px-2 py-1 text-center font-bold text-blue-700 bg-blue-50/50">
-                Zone A: Logic (RGL)
-              </th>
-              <th colSpan={4} className="border-b border-r border-slate-200 px-2 py-1 text-center font-bold text-amber-700 bg-amber-50/50">
-                Zone B: Data (Lexicon)
-              </th>
-              <th colSpan={3} className="border-b border-r border-slate-200 px-2 py-1 text-center font-bold text-purple-700 bg-purple-50/50">
-                Zone C: Apps
-              </th>
-              <th colSpan={2} className="border-b border-slate-200 px-2 py-1 text-center font-bold text-emerald-700 bg-emerald-50/50">
-                Zone D: QA
-              </th>
+
+              {ZONE_GROUPS.map((z) => (
+                <th key={z.label} colSpan={z.colSpan} className={z.className}>
+                  {z.label}
+                </th>
+              ))}
             </tr>
 
             {/* Bottom Row: Specific Columns */}
             <tr>
-              {/* Zone A */}
-              <th title="Category Definitions" className="border-b border-slate-200 px-2 py-2 text-center">Cat</th>
-              <th title="Noun Morphology" className="border-b border-slate-200 px-2 py-2 text-center">Noun</th>
-              <th title="Paradigms" className="border-b border-slate-200 px-2 py-2 text-center">Para</th>
-              <th title="Grammar Core" className="border-b border-slate-200 px-2 py-2 text-center">Gram</th>
-              <th title="Syntax API" className="border-b border-r border-slate-200 px-2 py-2 text-center font-bold">Syn</th>
-
-              {/* Zone B */}
-              <th title="Core Seed (>150 words)" className="border-b border-slate-200 px-2 py-2 text-center">Seed</th>
-              <th title="Domain Concepts (>500)" className="border-b border-slate-200 px-2 py-2 text-center">Conc</th>
-              <th title="Wide Import (CSV)" className="border-b border-slate-200 px-2 py-2 text-center">Wide</th>
-              <th title="Semantic Alignment (QIDs)" className="border-b border-r border-slate-200 px-2 py-2 text-center">Sem</th>
-
-              {/* Zone C */}
-              <th title="Bio-Ready" className="border-b border-slate-200 px-2 py-2 text-center">Prof</th>
-              <th title="Assistant-Ready" className="border-b border-slate-200 px-2 py-2 text-center">Asst</th>
-              <th title="Topology Routing" className="border-b border-r border-slate-200 px-2 py-2 text-center">Rout</th>
-
-              {/* Zone D */}
-              <th title="Binary Compilation" className="border-b border-slate-200 px-2 py-2 text-center">Bin</th>
-              <th title="Unit Tests" className="border-b border-slate-200 px-2 py-2 text-center">Test</th>
+              {ZONE_COLUMNS.map((col) => (
+                <th key={col.key} title={col.title} className={col.className}>
+                  {col.label}
+                </th>
+              ))}
             </tr>
           </thead>
 
@@ -153,11 +321,11 @@ export default function MatrixGrid({ matrix }: MatrixGridProps) {
           <tbody className="divide-y divide-slate-100 bg-white">
             {filteredLanguages.length > 0 ? (
               filteredLanguages.map((lang) => (
-                <LanguageRow key={lang.meta.iso} entry={lang} />
+                <LanguageRow key={lang.meta?.iso || lang.meta?.name || Math.random()} entry={lang} />
               ))
             ) : (
               <tr>
-                <td colSpan={15} className="py-8 text-center text-slate-400">
+                <td colSpan={1 + ZONE_COLUMNS.length} className="py-8 text-center text-slate-400">
                   No languages found matching "{search}"
                 </td>
               </tr>

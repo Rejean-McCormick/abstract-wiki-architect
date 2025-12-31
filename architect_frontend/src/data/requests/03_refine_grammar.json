@@ -1,0 +1,12 @@
+{
+  "id": "refine_grammar_ai",
+  "label": "Refine Grammar (AI)",
+  "description": "Asks the LLM to fix word order issues in Zulu.",
+  "method": "POST",
+  "endpoint": "/grammar/refine",
+  "payload": {
+    "lang": "zul",
+    "lang_name": "Zulu",
+    "instructions": "Fix the word order for adjectives. They should follow the noun."
+  }
+}

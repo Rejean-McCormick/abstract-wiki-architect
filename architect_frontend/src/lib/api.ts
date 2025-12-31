@@ -2,26 +2,25 @@
 
 /**
  * Typed wrapper around the Architect HTTP API.
- * Aligned with backend: architect_http_api
- * * Key alignments:
- * - Base URL includes /api/v1 (or root depending on config)
- * - Entities use frame_type/frame_payload (matching schemas/entities.py)
- * - AI uses Command/Patches pattern (matching ai/intent_handler.py)
- * - Generation endpoint handles frame rendering
- * - Frames endpoints handle dynamic registry discovery
+ *
+ * Goals:
+ * - Default base URL targets /api/v1
+ * - Robust against common backend variants during migration:
+ *   - health: /health, /health/live
+ *   - schemas: /schemas/frames/:type, /frames/schemas/:type
+ *   - generate: /generate/:lang (new), /generate (legacy)
  */
 
-/* -------------------------------------------------------------------------- */
-/* Base URL + low-level request helper                                        */
-/* -------------------------------------------------------------------------- */
-
-// Backend default port is 4000 (from config.py), but often mapped to 8000 in dev.
-// We default to root since we updated main.py to serve at root.
-const DEFAULT_API_BASE_PATH = "http://127.0.0.1:8000";
+const DEFAULT_API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "/abstract_wiki_architect/api/v1"
+    : "http://127.0.0.1:8000/api/v1";
 
 const API_BASE_URL = (
-  process.env.NEXT_PUBLIC_ARCHITECT_API_BASE_URL ?? DEFAULT_API_BASE_PATH
+  process.env.NEXT_PUBLIC_ARCHITECT_API_BASE_URL ?? DEFAULT_API_BASE_URL
 ).replace(/\/$/, "");
+
+const DEV_API_KEY = process.env.NEXT_PUBLIC_ARCHITECT_API_KEY;
 
 export class ApiError extends Error {
   readonly status: number;
@@ -35,16 +34,32 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(
-  path: string,
-  init: RequestInit = {},
-): Promise<T> {
-  const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
-  const headers = new Headers(init.headers ?? {});
-  
-  if (!headers.has("Accept")) {
-    headers.set("Accept", "application/json");
+function joinUrl(base: string, path: string): string {
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return `${base}${p}`;
+}
+
+function extractErrorMessage(parsed: unknown, status: number): string {
+  if (typeof parsed === "string" && parsed.trim()) return parsed;
+  if (parsed && typeof parsed === "object") {
+    const obj = parsed as any;
+    if (typeof obj.detail === "string" && obj.detail.trim()) return obj.detail;
+    if (typeof obj.message === "string" && obj.message.trim()) return obj.message;
+    if (typeof obj.error === "string" && obj.error.trim()) return obj.error;
   }
+  return `API request failed with status ${status}`;
+}
+
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const url = joinUrl(API_BASE_URL, path);
+
+  const headers = new Headers(init.headers ?? {});
+  if (!headers.has("Accept")) headers.set("Accept", "application/json");
+
+  // Dev-only header injection (do not rely on this for production security).
+  if (DEV_API_KEY && !headers.has("x-api-key")) headers.set("x-api-key", DEV_API_KEY);
+
   if (
     init.body != null &&
     typeof init.body !== "string" &&
@@ -74,14 +89,23 @@ async function request<T>(
 
   if (!response.ok) {
     console.error("API Request Failed:", url, response.status, parsed);
-    const message =
-      typeof parsed === "object" && parsed !== null && "detail" in parsed
-        ? String((parsed as any).detail)
-        : `API request failed with status ${response.status}`;
-    throw new ApiError(message, response.status, parsed);
+    throw new ApiError(extractErrorMessage(parsed, response.status), response.status, parsed);
   }
 
   return parsed as T;
+}
+
+async function requestWithFallback<T>(paths: string[], init?: RequestInit): Promise<T> {
+  let lastErr: unknown = null;
+  for (const p of paths) {
+    try {
+      return await request<T>(p, init);
+    } catch (e) {
+      lastErr = e;
+      if (e instanceof ApiError && e.status !== 404) break;
+    }
+  }
+  throw lastErr;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -94,9 +118,8 @@ export interface LocalizedLabel {
 }
 
 export interface FrameTypeMeta {
-  frame_type: string;     // e.g. "bio", "event.generic"
-  family: string;         // e.g. "entity", "event"
-  // Title/Description can be a string (legacy) or LocalizedLabel (new)
+  frame_type: string; // e.g. "bio", "event.generic"
+  family: string; // e.g. "entity", "event"
   title?: string | LocalizedLabel;
   description?: string | LocalizedLabel;
   status?: "implemented" | "experimental" | "planned";
@@ -105,37 +128,37 @@ export interface FrameTypeMeta {
 /**
  * Helper to safely extract text from a label that might be a string or object.
  */
-export function getLabelText(val: string | LocalizedLabel | undefined | null): string {
+export function getLabelText(
+  val: string | LocalizedLabel | undefined | null,
+): string {
   if (!val) return "";
   if (typeof val === "string") return val;
   return val.text || "";
 }
 
 /* -------------------------------------------------------------------------- */
-/* Language Types (REQUIRED FOR LANGUAGE SELECTOR)                            */
+/* Language Types                                                             */
 /* -------------------------------------------------------------------------- */
 
 export interface Language {
-  code: string; // e.g. "zul"
+  code: string; // e.g. "zul" (ISO 639-3) or "en" depending on backend
   name: string; // e.g. "Zulu"
   z_id: string; // e.g. "Z1032"
 }
 
 /* -------------------------------------------------------------------------- */
 /* Domain Types (Entities)                                                    */
-/* Matches architect_http_api.schemas.entities.EntityRead                     */
 /* -------------------------------------------------------------------------- */
 
 export interface Entity {
-  id: number; // Backend uses Integer ID
+  id: number;
   name: string;
   slug?: string;
-  lang: string; // e.g. "en", "fr"
-  
-  // Aligned with backend schemas/entities.py
-  frame_type?: string;      // e.g. 'entity.person', 'bio'
-  frame_payload?: Record<string, unknown>; // The actual content
-  
+  lang: string;
+
+  frame_type?: string;
+  frame_payload?: Record<string, unknown>;
+
   short_description?: string;
   notes?: string;
   tags?: string[];
@@ -145,7 +168,6 @@ export interface Entity {
   updated_at: string;
 }
 
-// Matches EntityCreate
 export interface EntityCreatePayload {
   name: string;
   slug?: string;
@@ -156,7 +178,6 @@ export interface EntityCreatePayload {
   tags?: string[];
 }
 
-// Matches EntityUpdate
 export interface EntityUpdatePayload {
   name?: string;
   slug?: string;
@@ -170,7 +191,6 @@ export interface EntityUpdatePayload {
 
 /* -------------------------------------------------------------------------- */
 /* AI / Intelligence Types                                                    */
-/* Matches architect_http_api.schemas.ai (AICommandRequest/Response)          */
 /* -------------------------------------------------------------------------- */
 
 export interface AIMessage {
@@ -179,48 +199,36 @@ export interface AIMessage {
 }
 
 export interface AIFramePatch {
-  path: string;  // e.g. "birth_date" or "relations.0.target"
+  path: string;
   value: unknown;
-  op?: "replace" | "add" | "remove";  
+  op?: "replace" | "add" | "remove";
 }
 
-/**
- * Payload sent to POST /ai/intent
- * (Maps to AICommandRequest in backend)
- */
 export interface IntentRequest {
-  message: string;        // User's natural language input
+  message: string;
   lang?: string;
-  workspace_slug?: string;    // Context context
-  
-  // Context: the current state of the frame being edited
+  workspace_slug?: string;
+
   context_frame?: {
     frame_type: string;
     payload: Record<string, unknown>;
   };
-  
+
   debug?: boolean;
 }
 
-/**
- * Response from POST /ai/intent
- * (Maps to AICommandResponse in backend)
- */
 export interface IntentResponse {
   intent_label: string;
   assistant_messages: AIMessage[];
-  patches: AIFramePatch[];      // Proposed changes to the frame
+  patches: AIFramePatch[];
   debug?: Record<string, unknown>;
 }
 
-/**
- * Payload sent to POST /ai/suggest-fields
- */
 export interface SuggestionRequest {
   frame_type: string;
   current_payload?: Record<string, unknown>;
-  field_name?: string;      // If asking for specific field suggestions
-  partial_input?: string;     // What the user typed so far
+  field_name?: string;
+  partial_input?: string;
 }
 
 export interface SuggestionResponse {
@@ -228,7 +236,7 @@ export interface SuggestionResponse {
     id: string;
     title: string;
     description: string;
-    value?: unknown;      // Suggested value
+    value?: unknown;
     score?: number;
   }>;
 }
@@ -245,12 +253,11 @@ export interface GenerateRequest {
 }
 
 export interface GenerationResult {
-  text: string; // The backend returns 'text' (matches pydantic schema)
+  text: string;
   sentences?: string[];
   lang?: string;
   frame?: Record<string, unknown>;
   debug_info?: Record<string, unknown>;
-  // Fallback for older interface usage
   surface_text?: string;
 }
 
@@ -259,103 +266,106 @@ export interface GenerationResult {
 /* -------------------------------------------------------------------------- */
 
 export interface ArchitectApi {
-  /**
-   * Health-check endpoint.
-   */
   health(): Promise<boolean>;
 
-  // --- Frame Registry (Dynamic Configuration) ---
-
-  /** Get list of all available frame types for menus/dashboards */
   listFrameTypes(): Promise<FrameTypeMeta[]>;
-
-  /** Get the JSON Schema for a specific frame type to build the form */
   getFrameSchema(frameType: string): Promise<Record<string, any>>;
 
-  // --- Language Management (NEW) ---
-  
-  /** Get list of all supported languages */
-  listLanguages(): Promise<Language[]>; // <-- NEW FUNCTION
-
-  // --- Entity Management ---
+  listLanguages(): Promise<Language[]>;
 
   listEntities(params?: { search?: string; frame_type?: string }): Promise<Entity[]>;
-
   getEntity(id: number | string): Promise<Entity>;
-
   createEntity(data: EntityCreatePayload): Promise<Entity>;
-
   updateEntity(id: number | string, data: EntityUpdatePayload): Promise<Entity>;
-
   deleteEntity(id: number | string): Promise<void>;
 
-  // --- AI Features ---
-
-  /**
-   * Process natural language instructions to mutate a frame.
-   */
   processIntent(req: IntentRequest): Promise<IntentResponse>;
-
-  /**
-   * Get field value suggestions.
-   */
   getSuggestions(req: SuggestionRequest): Promise<SuggestionResponse>;
 
-  // --- Generation ---
-
-  /**
-   * Generate surface text from a frame.
-   */
   generate(req: GenerateRequest): Promise<GenerationResult>;
 }
 
-/**
- * Implementation
- */
+/* -------------------------------------------------------------------------- */
+/* Implementation                                                             */
+/* -------------------------------------------------------------------------- */
+
+function normalizeFrameTypes(raw: unknown): FrameTypeMeta[] {
+  if (!Array.isArray(raw)) return [];
+
+  return raw
+    .map((item: any) => {
+      // Preferred shape (target contract)
+      if (item && typeof item === "object" && typeof item.frame_type === "string") {
+        return item as FrameTypeMeta;
+      }
+
+      // Common fallback shape seen in placeholder registries: { id, label, description, schema_ref, icon? }
+      if (item && typeof item === "object" && typeof item.id === "string") {
+        const id: string = item.id;
+        const family =
+          typeof item.family === "string"
+            ? item.family
+            : id.includes(".")
+              ? id.split(".")[0]
+              : "frame";
+
+        return {
+          frame_type: id,
+          family,
+          title: typeof item.label === "string" ? item.label : id,
+          description: typeof item.description === "string" ? item.description : "",
+          status: "implemented",
+        } satisfies FrameTypeMeta;
+      }
+
+      return null;
+    })
+    .filter(Boolean) as FrameTypeMeta[];
+}
+
 export const architectApi: ArchitectApi = {
   async health(): Promise<boolean> {
     try {
-      const data = await request<{ status: string }>("/health");
-      return data.status === "ok";
+      // Prefer the newer liveness endpoint; fall back to older /health if present.
+      const data = await requestWithFallback<any>(["/health/live", "/health"]);
+      return (data?.status ?? "") === "ok";
     } catch {
       return false;
     }
   },
 
-  // --- Frames Registry ---
-
-  listFrameTypes(): Promise<FrameTypeMeta[]> {
-    return request<FrameTypeMeta[]>("/frames/types");
+  async listFrameTypes(): Promise<FrameTypeMeta[]> {
+    const raw = await request<unknown>("/frames/types");
+    return normalizeFrameTypes(raw);
   },
 
   getFrameSchema(frameType: string): Promise<Record<string, any>> {
-    return request<Record<string, any>>(`/frames/schemas/${frameType}`);
+    const ft = encodeURIComponent(frameType);
+    return requestWithFallback<Record<string, any>>([
+      `/schemas/frames/${ft}`,
+      `/frames/schemas/${ft}`,
+    ]);
   },
-  
-  // --- Language Management (IMPLEMENTATION) ---
 
-  listLanguages(): Promise<Language[]> { // <-- NEW IMPLEMENTATION
+  listLanguages(): Promise<Language[]> {
+    // Prefer no trailing slash; FastAPI may redirect; fetch follows 307 for GET.
     return request<Language[]>("/languages");
   },
-
-  // --- Entities ---
 
   listEntities(params): Promise<Entity[]> {
     const query = new URLSearchParams();
     if (params?.search) query.set("search", params.search);
     if (params?.frame_type) query.set("frame_type", params.frame_type);
-    
-    const queryString = query.toString();
-    // FIX: Added trailing slash to avoid 307 Redirect -> 422 Error
-    return request<Entity[]>(`/entities/?${queryString}`);
+
+    const qs = query.toString();
+    return request<Entity[]>(`/entities/${qs ? `?${qs}` : ""}`);
   },
 
   getEntity(id: number | string): Promise<Entity> {
-    return request<Entity>(`/entities/${id}`);
+    return request<Entity>(`/entities/${encodeURIComponent(String(id))}`);
   },
 
   createEntity(data: EntityCreatePayload): Promise<Entity> {
-    // FIX: Added trailing slash to avoid 307 Redirect -> 422 Error
     return request<Entity>("/entities/", {
       method: "POST",
       body: JSON.stringify(data),
@@ -363,19 +373,17 @@ export const architectApi: ArchitectApi = {
   },
 
   updateEntity(id: number | string, data: EntityUpdatePayload): Promise<Entity> {
-    return request<Entity>(`/entities/${id}`, {
+    return request<Entity>(`/entities/${encodeURIComponent(String(id))}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   },
 
   deleteEntity(id: number | string): Promise<void> {
-    return request<void>(`/entities/${id}`, {
+    return request<void>(`/entities/${encodeURIComponent(String(id))}`, {
       method: "DELETE",
     });
   },
-
-  // --- AI ---
 
   processIntent(req: IntentRequest): Promise<IntentResponse> {
     return request<IntentResponse>("/ai/intent", {
@@ -391,13 +399,46 @@ export const architectApi: ArchitectApi = {
     });
   },
 
-  // --- Generation ---
+  async generate(req: GenerateRequest): Promise<GenerationResult> {
+    // Preferred (new): POST /generate/{lang_code} with frame_type/frame_payload.
+    const lang = encodeURIComponent(req.lang);
+    try {
+      return await request<GenerationResult>(`/generate/${lang}`, {
+        method: "POST",
+        body: JSON.stringify({
+          frame_type: req.frame_type,
+          frame_payload: req.frame_payload,
+          options: req.options ?? {},
+        }),
+      });
+    } catch (e) {
+      // Backward-compatible fallback (legacy): POST /generate with frame_slug/language/fields.
+      if (e instanceof ApiError && e.status === 404) {
+        const legacy = await request<any>("/generate", {
+          method: "POST",
+          body: JSON.stringify({
+            frame_slug: req.frame_type,
+            language: req.lang,
+            fields: req.frame_payload,
+            options: req.options ?? {},
+          }),
+        });
 
-  generate(req: GenerateRequest): Promise<GenerationResult> {
-    return request<GenerationResult>("/generate", {
-      method: "POST",
-      body: JSON.stringify(req),
-    });
+        // Best-effort normalization to GenerationResult
+        if (legacy && typeof legacy === "object") {
+          const text = legacy.text ?? legacy.surface_text ?? "";
+          return {
+            text: String(text ?? ""),
+            sentences: Array.isArray(legacy.sentences) ? legacy.sentences : undefined,
+            lang: legacy.lang ?? legacy.language ?? req.lang,
+            frame: legacy.frame ?? undefined,
+            debug_info: legacy.debug_info ?? legacy.debug ?? undefined,
+            surface_text: legacy.surface_text ?? undefined,
+          };
+        }
+      }
+      throw e;
+    }
   },
 };
 
