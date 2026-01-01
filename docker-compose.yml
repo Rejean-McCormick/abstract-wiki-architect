@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  # 1. MESSAGE BROKER
-  # The central nervous system for async tasks (Arq/Celery)
+  # 1. MESSAGE BROKER / JOB QUEUE BACKEND
+  # Redis is used by ARQ as the durable job queue backend.
   redis:
     image: redis:alpine
     container_name: aw_redis
@@ -16,7 +16,7 @@ services:
       retries: 5
 
   # 2. API BACKEND (Hexagonal Adapter)
-  # Serves HTTP requests, publishes events to Redis
+  # Serves HTTP requests; (after refactor) enqueues ARQ jobs in Redis.
   backend:
     build:
       context: .
@@ -24,13 +24,17 @@ services:
     container_name: aw_backend
     env_file: .env
     environment:
-      # [FIX] v2.0 Standard: Use full DSN, not just Host
       - REDIS_URL=redis://redis:6379/0
-      
-      # [FIX] Container Absolute Paths (Overrides Windows/Local .env)
+
+      # Container absolute paths (override Windows/local .env)
       - FILESYSTEM_REPO_PATH=/app
       - GF_LIB_PATH=/app/gf-rgl
-      - PGF_PATH=/app/gf/AbstractWiki.pgf
+
+      # IMPORTANT: current Settings.PGF_PATH honors AW_PGF_PATH, not PGF_PATH
+      - AW_PGF_PATH=/app/gf/AbstractWiki.pgf
+
+      # Keep queue name explicit for ARQ WorkerSettings
+      - REDIS_QUEUE_NAME=architect_tasks
     ports:
       - "8000:8000"
     volumes:
@@ -38,13 +42,11 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    # Use factory flag because 'create_app' is a function
-    # [CONFIRMED] Points to the new canonical entrypoint
     command: uvicorn app.adapters.api.main:create_app --host 0.0.0.0 --port 8000 --reload --factory
     restart: unless-stopped
 
   # 3. ASYNC WORKER (Hexagonal Adapter)
-  # Consumes 'BuildLanguage' and 'Audit' events from Redis
+  # Runs ARQ and consumes jobs from the Redis job queue (NOT Pub/Sub channels).
   worker:
     build:
       context: .
@@ -52,25 +54,24 @@ services:
     container_name: aw_worker
     env_file: .env
     environment:
-      # [FIX] v2.0 Standard
       - REDIS_URL=redis://redis:6379/0
-      
-      # [FIX] Match Backend paths exactly
+
+      # Match Backend paths exactly
       - FILESYSTEM_REPO_PATH=/app
       - GF_LIB_PATH=/app/gf-rgl
-      - PGF_PATH=/app/gf/AbstractWiki.pgf
+      - AW_PGF_PATH=/app/gf/AbstractWiki.pgf
+
+      # Must match WorkerSettings.queue_name
+      - REDIS_QUEUE_NAME=architect_tasks
     volumes:
       - .:/app
     depends_on:
       redis:
         condition: service_healthy
-    # Use the standard 'arq' CLI to run the settings class
-    # --watch app enables code hot-reloading during dev
     command: arq app.workers.worker.WorkerSettings --watch app
     restart: unless-stopped
 
   # 4. FRONTEND (UI Layer)
-  # Next.js application consuming the Backend API
   frontend:
     build:
       context: .
@@ -78,9 +79,6 @@ services:
     container_name: aw_frontend
     env_file: .env
     environment:
-      # [UPDATE] Unified API Configuration
-      # We use a relative path here so the browser routes requests via Nginx (Port 4000).
-      # This eliminates CORS and matches the Enterprise Topology.
       - NEXT_PUBLIC_ARCHITECT_API_BASE_URL=/abstract_wiki_architect/api/v1
     depends_on:
       - backend
@@ -89,8 +87,7 @@ services:
     restart: unless-stopped
 
   # 5. REVERSE PROXY (Primary Entrypoint)
-  # Routes traffic between Frontend and Backend
-  # ACCESS APP HERE: http://localhost:4000/abstract_wiki_architect/
+  # ACCESS: http://localhost:4000/abstract_wiki_architect/
   nginx:
     image: nginx:alpine
     container_name: aw_nginx

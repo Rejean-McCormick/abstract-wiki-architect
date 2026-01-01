@@ -1,632 +1,380 @@
 {
-  "eng": {
+  "en": {
     "name": "English",
-    "language_code": "eng",
+    "language_code": "en",
     "family": "germanic",
     "morphology_family": "germanic",
-    "engine": "germanic",
-    "morphology_config_path": "data/morphology_configs/germanic_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
+    "morphology_config_path": "data/morphology_configs/germanic_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": false, "default_order": "SVO" },
     "copula": { "lemma": "be" }
   },
-  "fra": {
-    "name": "French",
-    "language_code": "fra",
-    "family": "romance",
-    "morphology_family": "romance",
-    "engine": "romance",
-    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "être" }
-  },
-  "ita": {
-    "name": "Italian",
-    "language_code": "ita",
-    "family": "romance",
-    "morphology_family": "romance",
-    "engine": "romance",
-    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "essere" }
-  },
-  "spa": {
-    "name": "Spanish",
-    "language_code": "spa",
-    "family": "romance",
-    "morphology_family": "romance",
-    "engine": "romance",
-    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "ser" }
-  },
-  "por": {
-    "name": "Portuguese",
-    "language_code": "por",
-    "family": "romance",
-    "morphology_family": "romance",
-    "engine": "romance",
-    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "ser" }
-  },
-  "ron": {
-    "name": "Romanian",
-    "language_code": "ron",
-    "family": "romance",
-    "morphology_family": "romance",
-    "engine": "romance",
-    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": true,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "fi" }
-  },
-  "cat": {
-    "name": "Catalan",
-    "language_code": "cat",
-    "family": "romance",
-    "morphology_family": "romance",
-    "engine": "romance",
-    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "ser" }
-  },
-  "jpn": {
-    "name": "Japanese",
-    "language_code": "jpn",
-    "family": "japonic",
-    "morphology_family": "japonic",
-    "engine": "japonic",
-    "morphology_config_path": "data/japonic/ja.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SOV",
-      "topic_comment_preference": "strong"
-    },
-    "basic_word_order": "SOV",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "da" }
-  },
-  "swa": {
-    "name": "Swahili",
-    "language_code": "swa",
-    "family": "bantu",
-    "morphology_family": "bantu",
-    "engine": "bantu",
-    "morphology_config_path": "data/bantu/sw.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "kuwa" }
-  },
-  "kor": {
-    "name": "Korean",
-    "language_code": "kor",
-    "family": "koreanic",
-    "morphology_family": "koreanic",
-    "engine": "koreanic",
-    "morphology_config_path": "data/koreanic/ko.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SOV",
-      "topic_comment_preference": "strong"
-    },
-    "basic_word_order": "SOV",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "이다" }
-  },
-  "tur": {
-    "name": "Turkish",
-    "language_code": "tur",
-    "family": "agglutinative",
-    "morphology_family": "agglutinative",
-    "engine": "agglutinative",
-    "morphology_config_path": "data/morphology_configs/agglutinative_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SOV",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SOV",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "ol" }
-  },
-  "deu": {
+  "de": {
     "name": "German",
-    "language_code": "deu",
+    "language_code": "de",
     "family": "germanic",
     "morphology_family": "germanic",
-    "engine": "germanic",
-    "morphology_config_path": "data/morphology_configs/germanic_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
+    "morphology_config_path": "data/morphology_configs/germanic_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": true, "default_order": "SVO" },
     "copula": { "lemma": "sein" }
   },
-  "nld": {
+  "nl": {
     "name": "Dutch",
-    "language_code": "nld",
+    "language_code": "nl",
     "family": "germanic",
     "morphology_family": "germanic",
-    "engine": "germanic",
-    "morphology_config_path": "data/morphology_configs/germanic_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
+    "morphology_config_path": "data/morphology_configs/germanic_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": true, "default_order": "SVO" },
     "copula": { "lemma": "zijn" }
   },
-  "dan": {
-    "name": "Danish",
-    "language_code": "dan",
-    "family": "germanic",
-    "morphology_family": "germanic",
-    "engine": "germanic",
-    "morphology_config_path": "data/morphology_configs/germanic_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": true,
-      "uses_postposed_definite_article": true,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "være" }
-  },
-  "nob": {
-    "name": "Norwegian",
-    "language_code": "nob",
-    "family": "germanic",
-    "morphology_family": "germanic",
-    "engine": "germanic",
-    "morphology_config_path": "data/morphology_configs/germanic_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": true,
-      "uses_postposed_definite_article": true,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "være" }
-  },
-  "isl": {
-    "name": "Icelandic",
-    "language_code": "isl",
-    "family": "germanic",
-    "morphology_family": "germanic",
-    "engine": "germanic",
-    "morphology_config_path": "data/morphology_configs/germanic_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": true,
-      "uses_postposed_definite_article": true,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "vera" }
-  },
-  "afr": {
-    "name": "Afrikaans",
-    "language_code": "afr",
-    "family": "germanic",
-    "morphology_family": "germanic",
-    "engine": "germanic",
-    "morphology_config_path": "data/morphology_configs/germanic_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "is" }
-  },
-  "hin": {
-    "name": "Hindi",
-    "language_code": "hin",
-    "family": "indo_aryan",
-    "morphology_family": "indo_aryan",
-    "engine": "indo_aryan",
-    "morphology_config_path": "data/indo_aryan/hi.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SOV",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SOV",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "hona" }
-  },
-  "urd": {
-    "name": "Urdu",
-    "language_code": "urd",
-    "family": "indo_aryan",
-    "morphology_family": "indo_aryan",
-    "engine": "indo_aryan",
-    "morphology_config_path": "data/indo_aryan/ur.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SOV",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SOV",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "hona" }
-  },
-  "nep": {
-    "name": "Nepali",
-    "language_code": "nep",
-    "family": "indo_aryan",
-    "morphology_family": "indo_aryan",
-    "engine": "indo_aryan",
-    "morphology_config_path": "data/indo_aryan/ne.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SOV",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SOV",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "hunu" }
-  },
-  "pan": {
-    "name": "Punjabi",
-    "language_code": "pan",
-    "family": "indo_aryan",
-    "morphology_family": "indo_aryan",
-    "engine": "indo_aryan",
-    "morphology_config_path": "data/indo_aryan/pa.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SOV",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SOV",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "hona" }
-  },
-  "rus": {
-    "name": "Russian",
-    "language_code": "rus",
-    "family": "slavic",
-    "morphology_family": "slavic",
-    "engine": "slavic",
-    "morphology_config_path": "data/morphology_configs/slavic_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "byt" }
-  },
-  "bul": {
-    "name": "Bulgarian",
-    "language_code": "bul",
-    "family": "slavic",
-    "morphology_family": "slavic",
-    "engine": "slavic",
-    "morphology_config_path": "data/morphology_configs/slavic_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": true,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "sam" }
-  },
-  "pol": {
-    "name": "Polish",
-    "language_code": "pol",
-    "family": "slavic",
-    "morphology_family": "slavic",
-    "engine": "slavic",
-    "morphology_config_path": "data/morphology_configs/slavic_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "być" }
-  },
-  "zho": {
-    "name": "Chinese",
-    "language_code": "zho",
-    "family": "sino_tibetan",
-    "morphology_family": "isolating",
-    "engine": "isolating",
-    "morphology_config_path": "data/isolating/zh.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "strong"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "shì" }
-  },
-  "tha": {
-    "name": "Thai",
-    "language_code": "tha",
-    "family": "tai_kadai",
-    "morphology_family": "isolating",
-    "engine": "isolating",
-    "morphology_config_path": "data/isolating/th.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "strong"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "pen" }
-  },
-  "ara": {
-    "name": "Arabic",
-    "language_code": "ara",
-    "family": "semitic",
-    "morphology_family": "semitic",
-    "engine": "semitic",
-    "morphology_config_path": "data/semitic/ar.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "VSO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "VSO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "kāna" }
-  },
-  "heb": {
-    "name": "Hebrew",
-    "language_code": "heb",
-    "family": "semitic",
-    "morphology_family": "semitic",
-    "engine": "semitic",
-    "morphology_config_path": "data/semitic/he.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "hayah" }
-  },
-  "mlt": {
-    "name": "Maltese",
-    "language_code": "mlt",
-    "family": "semitic",
-    "morphology_family": "semitic",
-    "engine": "semitic",
-    "morphology_config_path": "data/semitic/mt.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": true,
-      "uses_postposed_definite_article": true,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "kien" }
-  },
-  "fin": {
-    "name": "Finnish",
-    "language_code": "fin",
-    "family": "uralic",
-    "morphology_family": "agglutinative",
-    "engine": "agglutinative",
-    "morphology_config_path": "data/morphology_configs/agglutinative_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "olla" }
-  },
-  "est": {
-    "name": "Estonian",
-    "language_code": "est",
-    "family": "uralic",
-    "morphology_family": "agglutinative",
-    "engine": "agglutinative",
-    "morphology_config_path": "data/morphology_configs/agglutinative_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "olema" }
-  },
-  "hun": {
-    "name": "Hungarian",
-    "language_code": "hun",
-    "family": "uralic",
-    "morphology_family": "agglutinative",
-    "engine": "agglutinative",
-    "morphology_config_path": "data/morphology_configs/agglutinative_matrix.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "strong"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "van" }
-  },
-  "swe": {
+  "sv": {
     "name": "Swedish",
-    "language_code": "swe",
+    "language_code": "sv",
     "family": "germanic",
     "morphology_family": "germanic",
-    "engine": "germanic",
-    "morphology_config_path": "data/morphology_configs/germanic_matrix.json",
-    "features": {
-      "pro_drop": false,
-      "has_gender": true,
-      "uses_postposed_definite_article": true,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
+    "morphology_config_path": "data/morphology_configs/germanic_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": true, "uses_postposed_definite_article": true, "default_order": "SVO" },
     "copula": { "lemma": "vara" }
   },
-  "fas": {
-    "name": "Persian",
-    "language_code": "fas",
-    "family": "iranic",
-    "morphology_family": "iranic",
-    "engine": "iranic",
-    "morphology_config_path": "data/iranic/fa.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SOV",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SOV",
-    "intransitive_adverb_position": "sentence_final",
-    "copula": { "lemma": "budan" }
+  "da": {
+    "name": "Danish",
+    "language_code": "da",
+    "family": "germanic",
+    "morphology_family": "germanic",
+    "morphology_config_path": "data/morphology_configs/germanic_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": true, "uses_postposed_definite_article": true, "default_order": "SVO" },
+    "copula": { "lemma": "være" }
   },
-  "ind": {
+  "no": {
+    "name": "Norwegian",
+    "language_code": "no",
+    "family": "germanic",
+    "morphology_family": "germanic",
+    "morphology_config_path": "data/morphology_configs/germanic_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": true, "uses_postposed_definite_article": true, "default_order": "SVO" },
+    "copula": { "lemma": "være" }
+  },
+  "is": {
+    "name": "Icelandic",
+    "language_code": "is",
+    "family": "germanic",
+    "morphology_family": "germanic",
+    "morphology_config_path": "data/morphology_configs/germanic_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": true, "uses_postposed_definite_article": true, "default_order": "SVO" },
+    "copula": { "lemma": "vera" }
+  },
+  "af": {
+    "name": "Afrikaans",
+    "language_code": "af",
+    "family": "germanic",
+    "morphology_family": "germanic",
+    "morphology_config_path": "data/morphology_configs/germanic_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "is" }
+  },
+  "fr": {
+    "name": "French",
+    "language_code": "fr",
+    "family": "romance",
+    "morphology_family": "romance",
+    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
+    "features": { "pro_drop": false, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "être" }
+  },
+  "it": {
+    "name": "Italian",
+    "language_code": "it",
+    "family": "romance",
+    "morphology_family": "romance",
+    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "essere" }
+  },
+  "es": {
+    "name": "Spanish",
+    "language_code": "es",
+    "family": "romance",
+    "morphology_family": "romance",
+    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "ser" }
+  },
+  "pt": {
+    "name": "Portuguese",
+    "language_code": "pt",
+    "family": "romance",
+    "morphology_family": "romance",
+    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "ser" }
+  },
+  "ro": {
+    "name": "Romanian",
+    "language_code": "ro",
+    "family": "romance",
+    "morphology_family": "romance",
+    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "uses_postposed_definite_article": true, "default_order": "SVO" },
+    "copula": { "lemma": "fi" }
+  },
+  "ca": {
+    "name": "Catalan",
+    "language_code": "ca",
+    "family": "romance",
+    "morphology_family": "romance",
+    "morphology_config_path": "data/morphology_configs/romance_grammar_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "ser" }
+  },
+  "ru": {
+    "name": "Russian",
+    "language_code": "ru",
+    "family": "slavic",
+    "morphology_family": "slavic",
+    "morphology_config_path": "data/morphology_configs/slavic_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "byt" }
+  },
+  "bg": {
+    "name": "Bulgarian",
+    "language_code": "bg",
+    "family": "slavic",
+    "morphology_family": "slavic",
+    "morphology_config_path": "data/morphology_configs/slavic_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "uses_postposed_definite_article": true, "default_order": "SVO" },
+    "copula": { "lemma": "sam" }
+  },
+  "pl": {
+    "name": "Polish",
+    "language_code": "pl",
+    "family": "slavic",
+    "morphology_family": "slavic",
+    "morphology_config_path": "data/morphology_configs/slavic_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "być" }
+  },
+  "cs": {
+    "name": "Czech",
+    "language_code": "cs",
+    "family": "slavic",
+    "morphology_family": "slavic",
+    "morphology_config_path": "data/morphology_configs/slavic_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "být" }
+  },
+  "tr": {
+    "name": "Turkish",
+    "language_code": "tr",
+    "family": "agglutinative",
+    "morphology_family": "agglutinative",
+    "morphology_config_path": "data/morphology_configs/agglutinative_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SOV" },
+    "copula": { "lemma": "ol" }
+  },
+  "hu": {
+    "name": "Hungarian",
+    "language_code": "hu",
+    "family": "uralic",
+    "morphology_family": "agglutinative",
+    "morphology_config_path": "data/morphology_configs/agglutinative_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "van" }
+  },
+  "fi": {
+    "name": "Finnish",
+    "language_code": "fi",
+    "family": "uralic",
+    "morphology_family": "agglutinative",
+    "morphology_config_path": "data/morphology_configs/agglutinative_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "olla" }
+  },
+  "et": {
+    "name": "Estonian",
+    "language_code": "et",
+    "family": "uralic",
+    "morphology_family": "agglutinative",
+    "morphology_config_path": "data/morphology_configs/agglutinative_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "olema" }
+  },
+  "ja": {
+    "name": "Japanese",
+    "language_code": "ja",
+    "family": "japonic",
+    "morphology_family": "japonic",
+    "morphology_config_path": "app/core/morphology/japonic.py",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SOV", "topic_comment_preference": "strong" },
+    "copula": { "lemma": "da" }
+  },
+  "zh": {
+    "name": "Chinese",
+    "language_code": "zh",
+    "family": "sino_tibetan",
+    "morphology_family": "isolating",
+    "morphology_config_path": "data/morphology_configs/isolating_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO", "topic_comment_preference": "strong" },
+    "copula": { "lemma": "shì" }
+  },
+  "th": {
+    "name": "Thai",
+    "language_code": "th",
+    "family": "tai_kadai",
+    "morphology_family": "isolating",
+    "morphology_config_path": "data/morphology_configs/isolating_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO", "topic_comment_preference": "strong" },
+    "copula": { "lemma": "pen" }
+  },
+  "vi": {
+    "name": "Vietnamese",
+    "language_code": "vi",
+    "family": "austroasiatic",
+    "morphology_family": "isolating",
+    "morphology_config_path": "data/morphology_configs/isolating_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "là" }
+  },
+  "ar": {
+    "name": "Arabic",
+    "language_code": "ar",
+    "family": "semitic",
+    "morphology_family": "semitic",
+    "morphology_config_path": "data/morphology_configs/semitic_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "VSO" },
+    "copula": { "lemma": "kāna" }
+  },
+  "he": {
+    "name": "Hebrew",
+    "language_code": "he",
+    "family": "semitic",
+    "morphology_family": "semitic",
+    "morphology_config_path": "data/morphology_configs/semitic_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SVO" },
+    "copula": { "lemma": "hayah" }
+  },
+  "mt": {
+    "name": "Maltese",
+    "language_code": "mt",
+    "family": "semitic",
+    "morphology_family": "semitic",
+    "morphology_config_path": "data/morphology_configs/semitic_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "uses_postposed_definite_article": true, "default_order": "SVO" },
+    "copula": { "lemma": "kien" }
+  },
+  "am": {
+    "name": "Amharic",
+    "language_code": "am",
+    "family": "semitic",
+    "morphology_family": "semitic",
+    "morphology_config_path": "data/morphology_configs/semitic_matrix.json",
+    "features": { "pro_drop": true, "has_gender": true, "uses_postposed_definite_article": true, "default_order": "SOV" },
+    "copula": { "lemma": "naw" }
+  },
+  "sw": {
+    "name": "Swahili",
+    "language_code": "sw",
+    "family": "bantu",
+    "morphology_family": "bantu",
+    "morphology_config_path": "data/morphology_configs/bantu_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "kuwa" }
+  },
+  "zu": {
+    "name": "Zulu",
+    "language_code": "zu",
+    "family": "bantu",
+    "morphology_family": "bantu",
+    "morphology_config_path": "data/morphology_configs/bantu_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "ba" }
+  },
+  "xh": {
+    "name": "Xhosa",
+    "language_code": "xh",
+    "family": "bantu",
+    "morphology_family": "bantu",
+    "morphology_config_path": "data/morphology_configs/bantu_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "ba" }
+  },
+  "rw": {
+    "name": "Kinyarwanda",
+    "language_code": "rw",
+    "family": "bantu",
+    "morphology_family": "bantu",
+    "morphology_config_path": "data/morphology_configs/bantu_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "ba" }
+  },
+  "id": {
     "name": "Indonesian",
-    "language_code": "ind",
+    "language_code": "id",
     "family": "austronesian",
     "morphology_family": "austronesian",
-    "engine": "austronesian",
-    "morphology_config_path": "data/austronesian/id.json",
-    "features": {
-      "pro_drop": true,
-      "has_gender": false,
-      "uses_postposed_definite_article": false,
-      "default_order": "SVO",
-      "topic_comment_preference": "neutral"
-    },
-    "basic_word_order": "SVO",
-    "intransitive_adverb_position": "sentence_final",
+    "morphology_config_path": "data/morphology_configs/austronesian_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
     "copula": { "lemma": "adalah" }
+  },
+  "ms": {
+    "name": "Malay",
+    "language_code": "ms",
+    "family": "austronesian",
+    "morphology_family": "austronesian",
+    "morphology_config_path": "data/morphology_configs/austronesian_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SVO" },
+    "copula": { "lemma": "ialah" }
+  },
+  "tl": {
+    "name": "Tagalog",
+    "language_code": "tl",
+    "family": "austronesian",
+    "morphology_family": "austronesian",
+    "morphology_config_path": "data/morphology_configs/austronesian_matrix.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "VSO" },
+    "copula": { "lemma": "ay" }
+  },
+  "fa": {
+    "name": "Persian",
+    "language_code": "fa",
+    "family": "iranic",
+    "morphology_family": "iranic",
+    "morphology_config_path": "data/iranic/fa.json",
+    "features": { "pro_drop": true, "has_gender": false, "default_order": "SOV" },
+    "copula": { "lemma": "budan" }
+  },
+  "hi": {
+    "name": "Hindi",
+    "language_code": "hi",
+    "family": "indo_aryan",
+    "morphology_family": "indo_aryan",
+    "morphology_config_path": "data/indo_aryan/hi.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SOV" },
+    "copula": { "lemma": "hona" }
+  },
+  "ur": {
+    "name": "Urdu",
+    "language_code": "ur",
+    "family": "indo_aryan",
+    "morphology_family": "indo_aryan",
+    "morphology_config_path": "data/indo_aryan/ur.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SOV" },
+    "copula": { "lemma": "hona" }
+  },
+  "ne": {
+    "name": "Nepali",
+    "language_code": "ne",
+    "family": "indo_aryan",
+    "morphology_family": "indo_aryan",
+    "morphology_config_path": "data/indo_aryan/ne.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SOV" },
+    "copula": { "lemma": "hunu" }
+  },
+  "pa": {
+    "name": "Punjabi",
+    "language_code": "pa",
+    "family": "indo_aryan",
+    "morphology_family": "indo_aryan",
+    "morphology_config_path": "data/indo_aryan/pa.json",
+    "features": { "pro_drop": true, "has_gender": true, "default_order": "SOV" },
+    "copula": { "lemma": "hona" }
   }
 }

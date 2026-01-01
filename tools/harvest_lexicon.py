@@ -1,3 +1,4 @@
+# tools/harvest_lexicon.py
 import argparse
 import json
 import re
@@ -19,6 +20,7 @@ ISO_MAP_CANDIDATES = [
     BASE_DIR / "config" / "iso_to_wiki.json",
     BASE_DIR / "data" / "config" / "iso_to_wiki.json",
 ]
+# [FIX] Use correct relative path for matrix
 MATRIX_PATH = BASE_DIR / "data" / "indices" / "everything_matrix.json"
 
 # Global Maps (Populated on Startup)
@@ -133,6 +135,7 @@ SELECT ?item ?itemLabel ?itemDescription ?job ?nat WHERE {
 
 class GFWordNetHarvester:
     def __init__(self, root_path):
+        # [FIX] Ensure Path object handles OS separators correctly
         self.root = Path(root_path)
         self.semantic_map = {}
 
@@ -164,6 +167,7 @@ class GFWordNetHarvester:
         ]
 
         src_file = None
+        # [FIX] Recursive glob to find nested language files
         for c in candidates:
             found = list(self.root.rglob(c))
             if found:
@@ -200,6 +204,7 @@ class GFWordNetHarvester:
                 lexicon[lemma.lower()] = entry
                 count += 1
 
+        # [FIX] Use Path join for OS independence
         out_path = Path(out_dir) / iso2_code / "wide.json"
         out_path.parent.mkdir(parents=True, exist_ok=True)
         with open(out_path, "w", encoding="utf-8") as f:
@@ -268,7 +273,8 @@ def main():
     wn_parser = subparsers.add_parser("wordnet", help="Mine local GF WordNet files")
     wn_parser.add_argument("--root", required=True, help="Path to gf-wordnet folder")
     wn_parser.add_argument("--lang", required=True, help="Target Language (e.g. en, fr)")
-    wn_parser.add_argument("--out", default="data/lexicon")
+    # [FIX] Default path using platform-agnostic join
+    wn_parser.add_argument("--out", default=str(Path("data") / "lexicon"))
 
     wd_parser = subparsers.add_parser("wikidata", help="Fetch from Wikidata (Free)")
     wd_parser.add_argument("--lang", required=True, help="Target Language (e.g. en, fr)")

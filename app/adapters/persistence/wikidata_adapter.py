@@ -1,4 +1,4 @@
-# app\adapters\persistence\wikidata_adapter.py
+# app/adapters/persistence/wikidata_adapter.py
 import httpx
 import structlog
 from typing import List, Optional, Dict, Any
@@ -36,8 +36,8 @@ class WikidataAdapter:
         Wrapper that applies the Circuit Breaker pattern.
         """
         try:
-            # We wrap the actual network call in the circuit breaker logic
-            return self.circuit_breaker.call(self._fetch_lexemes_internal, qid, lang_code)
+            # [FIX] Use the async version of the circuit breaker call to prevent blocking
+            return await self.circuit_breaker.a_call(self.fetch_lexemes, qid, lang_code)
         except CircuitBreakerOpenError:
             logger.warning("wikidata_circuit_open", qid=qid, lang=lang_code)
             return []
@@ -45,33 +45,14 @@ class WikidataAdapter:
             logger.error("wikidata_fetch_failed", qid=qid, error=str(e))
             return []
 
-    @retry_external_api
-    def _fetch_lexemes_internal(self, qid: str, lang_code: str) -> List[LexiconEntry]:
-        """
-        The actual logic to hit the API. 
-        Note: This is synchronous in the signature for Tenacity compatibility 
-        but uses `httpx` which can be async. For simplicity here with standard 
-        Tenacity decorators, we use the synchronous logic or an async wrapper.
-        
-        Refactoring for Async/Await with Tenacity:
-        The decorator `@retry_external_api` should support async if configured,
-        but here we implement the logic directly using async/await inside the caller 
-        if we weren't using the CB wrapper.
-        
-        *Correction*: The Circuit Breaker `call` method expects a sync function 
-        or we need an async implementation. For this snippet, we will assume 
-        calls are handled appropriately. Below is the logic.
-        """
-        # Since circuit_breaker.call is generic, let's implement the async logic 
-        # directly and let the caller handle the await. 
-        # (Note: In a real async codebase, the CB/Retry decorators would be async-aware).
-        pass
-
     # --- Async Implementation ---
 
+    @retry_external_api
     async def fetch_lexemes(self, qid: str, lang_code: str) -> List[LexiconEntry]:
         """
         Async fetch method with manual retry/circuit logic integration.
+        NOTE: The @retry_external_api decorator must be async-aware for this to work 
+        correctly with 'await'.
         """
         if self.circuit_breaker.state == "open":
             logger.warning("skipping_wikidata_call", reason="circuit_open")

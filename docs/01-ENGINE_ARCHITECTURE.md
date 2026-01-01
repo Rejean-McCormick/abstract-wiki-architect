@@ -76,7 +76,7 @@ To scale from ~40 academic languages to the 300+ required by Wikipedia, we emplo
 
 ## 3. The "Two-Phase" Build Pipeline
 
-We identified a critical issue in the standard GF build process where sequential compilation overwrites the binary (the "Last Man Standing" bug). The new **Build Orchestrator** (`gf/build_orchestrator.py`) implements a strict two-phase process to resolve this.
+We identified a critical issue in the standard GF build process where sequential compilation overwrites the binary (the "Last Man Standing" bug). The new **Build Orchestrator** (`builder/orchestrator.py`) implements a strict two-phase process to resolve this.
 
 ### Phase 1: Isolated Verification
 
@@ -192,7 +192,7 @@ The v2.0 architecture integrates AI Agents to handle "Human-in-the-Loop" tasks a
 
 | Path | Component | Description |
 | --- | --- | --- |
-| **`gf/build_orchestrator.py`** | **The Builder** | The script that runs the Two-Phase compilation & Architect Agent loop. |
+| **`builder/orchestrator.py`** | **The Builder** | The script that runs the Two-Phase compilation & Architect Agent loop. |
 | **`app/adapters/ninai.py`** | **Input Port** | The recursive parser for Ninai JSON objects. |
 | **`app/core/exporters/`** | **Output Port** | Contains `ud_mapping.py` for CoNLL-U export. |
 | **`data/config/topology_weights.json`** | **Configuration** | Defines SVO/SOV/VSO weights for the Factory. |

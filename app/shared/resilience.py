@@ -1,9 +1,10 @@
-# app\shared\resilience.py
+# app/shared/resilience.py
 import time
+import asyncio
 import structlog
 from enum import Enum
 from functools import wraps
-from typing import Callable, Any, Dict
+from typing import Callable, Any, Dict, Coroutine
 from tenacity import (
     retry,
     stop_after_attempt,
@@ -52,8 +53,35 @@ class CircuitBreaker:
         self.last_failure_time = 0.0
 
     def call(self, func: Callable, *args, **kwargs) -> Any:
-        """Executes the function if the circuit is CLOSED or HALF-OPEN."""
-        
+        """Executes the function (Synchronously) if the circuit is CLOSED or HALF-OPEN."""
+        self._check_state()
+
+        try:
+            result = func(*args, **kwargs)
+            self._handle_success()
+            return result
+        except Exception as e:
+            self._handle_failure()
+            raise e
+
+    async def a_call(self, func: Callable[..., Coroutine[Any, Any, Any]], *args, **kwargs) -> Any:
+        """
+        Executes an async function (Coroutine) if the circuit is CLOSED or HALF-OPEN.
+        This is the non-blocking equivalent of call().
+        """
+        self._check_state()
+
+        try:
+            # Await the coroutine
+            result = await func(*args, **kwargs)
+            self._handle_success()
+            return result
+        except Exception as e:
+            self._handle_failure()
+            raise e
+
+    def _check_state(self):
+        """Internal logic to check if the circuit allows execution."""
         if self.state == CircuitState.OPEN:
             # Check if enough time has passed to try again (Half-Open)
             if time.time() - self.last_failure_time > self.recovery_timeout:
@@ -62,19 +90,13 @@ class CircuitBreaker:
                 # Fail fast
                 raise CircuitBreakerOpenError(self.name, self.recovery_timeout)
 
-        try:
-            result = func(*args, **kwargs)
-            
-            # If we succeed in HALF_OPEN, we recover fully
-            if self.state == CircuitState.HALF_OPEN:
-                self._reset()
-            return result
-
-        except Exception as e:
-            self._handle_failure()
-            raise e
+    def _handle_success(self):
+        """Called when a request succeeds. Closes the circuit if it was recovering."""
+        if self.state == CircuitState.HALF_OPEN:
+            self._reset()
 
     def _handle_failure(self):
+        """Called when a request fails. Increments counter or trips the breaker."""
         self.failure_count += 1
         self.last_failure_time = time.time()
         

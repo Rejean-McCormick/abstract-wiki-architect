@@ -1,3 +1,4 @@
+# app/adapters/engines/gf_wrapper.py
 import sys
 import os
 import json
@@ -46,29 +47,62 @@ class GFGrammarEngine(IGrammarEngine):
         """Loads the dynamic registry of available languages from the indexer."""
         try:
             # [FIX] Use configured repo path instead of fragile CWD
-            repo_root = Path(settings.FILESYSTEM_REPO_PATH)
-            # CORRECT PATH: data/indices/ (v2.1 Standard)
-            inventory_path = repo_root / "data" / "indices" / "rgl_inventory.json"
+            # Robust Path Resolution logic
+            candidates = []
+
+            # 1. Highest Priority: Explicit environment variable/settings override
+            if settings and hasattr(settings, 'FILESYSTEM_REPO_PATH'):
+                repo_root = Path(settings.FILESYSTEM_REPO_PATH)
+                candidates.append(repo_root / "data" / "indices" / "rgl_inventory.json")
+
+            # 2. Fallback: Relative to this file (less robust but safe default)
+            candidates.append(Path(__file__).parent.parent.parent.parent / "data" / "indices" / "rgl_inventory.json")
+
+            inventory_path = None
+            for p in candidates:
+                if p.exists():
+                    inventory_path = p
+                    break
             
-            if inventory_path.exists():
+            if inventory_path and inventory_path.exists():
                 with open(inventory_path, "r") as f:
                     data = json.load(f)
                     self.inventory = data.get("languages", {})
                 logger.info("gf_inventory_loaded", count=len(self.inventory))
+            else:
+                 logger.warning("gf_inventory_missing", path=str(inventory_path))
+
         except Exception as e:
-            logger.warning("gf_inventory_missing", error=str(e))
+            logger.warning("gf_inventory_error", error=str(e))
 
     def _load_iso_config(self):
         """
         Loads the 'Rosetta Stone' map to bridge ISO codes (en) to RGL suffixes (Eng).
         """
         try:
-            # [FIX] Use configured repo path instead of fragile CWD
-            repo_root = Path(settings.FILESYSTEM_REPO_PATH)
-            # CORRECT PATH: data/config/ (v2.1 Standard)
-            config_path = repo_root / "data" / "config" / "iso_to_wiki.json"
+            # [FIX] Robust Path Resolution logic for config/iso_to_wiki.json
+            candidates = []
+
+            # 1. Highest Priority: Explicit environment variable/settings override
+            if settings and hasattr(settings, 'FILESYSTEM_REPO_PATH'):
+                repo_root = Path(settings.FILESYSTEM_REPO_PATH)
+                candidates.append(repo_root / "data" / "config" / "iso_to_wiki.json")
+                candidates.append(repo_root / "config" / "iso_to_wiki.json")
+
+            # 2. Relative to this file's location (app/adapters/engines/gf_wrapper.py -> root)
+            # This is reliable because the file structure is static within the package
+            # Walk up 4 levels: app/adapters/engines/gf_wrapper.py -> app/adapters/engines/ -> app/adapters/ -> app/ -> root/
+            project_root = Path(__file__).resolve().parents[3]
+            candidates.append(project_root / "data" / "config" / "iso_to_wiki.json")
+            candidates.append(project_root / "config" / "iso_to_wiki.json")
+
+            config_path = None
+            for p in candidates:
+                if p.exists():
+                    config_path = p
+                    break
             
-            if config_path.exists():
+            if config_path:
                 with open(config_path, "r") as f:
                     raw_data = json.load(f)
                 
@@ -88,11 +122,14 @@ class GFGrammarEngine(IGrammarEngine):
                         
                 logger.info("gf_config_loaded", mappings=len(self.iso_map))
             else:
-                logger.warning("gf_config_missing", path=str(config_path))
+                logger.warning("gf_config_missing", searched_paths=[str(c) for c in candidates])
         except Exception as e:
             logger.error("gf_config_error", error=str(e))
 
     def _load_grammar(self):
+        """
+        Loads the PGF binary and applies the 'Everything Matrix' safety filter.
+        """
         if not pgf:
             logger.warning("gf_runtime_missing", msg="pgf library not installed.")
             return
@@ -100,8 +137,54 @@ class GFGrammarEngine(IGrammarEngine):
         path = Path(self.pgf_path)
         if path.exists():
             try:
+                # 1. Load the Binary (All languages linked)
                 self.grammar = pgf.readPGF(str(path))
-                logger.info("gf_grammar_loaded", path=str(path))
+                
+                # 2. v2.1: Enforce Runnable Verdict (The Safety Filter)
+                # We check the Matrix to identify "Zombie Languages" (linked but empty data)
+                # and remove them from the runtime before the application sees them.
+                
+                # Robust path resolution for Matrix
+                candidates = []
+                if settings and hasattr(settings, 'FILESYSTEM_REPO_PATH'):
+                     candidates.append(Path(settings.FILESYSTEM_REPO_PATH) / "data" / "indices" / "everything_matrix.json")
+                candidates.append(Path(__file__).resolve().parents[3] / "data" / "indices" / "everything_matrix.json")
+                
+                matrix_path = None
+                for p in candidates:
+                    if p.exists():
+                        matrix_path = p
+                        break
+                
+                if matrix_path and matrix_path.exists():
+                    try:
+                        with open(matrix_path, "r") as f:
+                            matrix = json.load(f)
+                        
+                        # Iterate a copy of keys since we might delete
+                        for lang_name in list(self.grammar.languages.keys()):
+                            # Heuristic: Map 'WikiFra' -> 'fra' (last 3 chars, lower)
+                            iso_code = lang_name[-3:].lower()
+                            
+                            lang_data = matrix.get("languages", {}).get(iso_code)
+                            if lang_data:
+                                verdict = lang_data.get("verdict", {})
+                                is_runnable = verdict.get("runnable", True)
+                                
+                                if not is_runnable:
+                                    logger.warning("runtime_purging_zombie_language", 
+                                                 lang=lang_name, 
+                                                 reason="Matrix verdict.runnable=False")
+                                    # Active Purge: Remove from C-Runtime dictionary
+                                    del self.grammar.languages[lang_name]
+                                    
+                    except Exception as e:
+                        logger.error("runtime_matrix_filter_failed", error=str(e))
+                else:
+                    logger.warning("runtime_matrix_missing", path=str(matrix_path))
+
+                logger.info("gf_grammar_loaded", path=str(path), active_languages=list(self.grammar.languages.keys()))
+                
             except Exception as e:
                 logger.error("gf_load_failed", error=str(e))
         else:

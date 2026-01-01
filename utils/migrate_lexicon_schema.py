@@ -1,4 +1,4 @@
-# utils\migrate_lexicon_schema.py
+# utils/migrate_lexicon_schema.py
 """
 utils/migrate_lexicon_schema.py
 -------------------------------
@@ -23,7 +23,7 @@ Normalize all `data/lexicon/*.json` files to the current schema
 - Optionally bumping the metadata version field.
 
 This script is intentionally conservative: it never deletes unknown
-fields; it only *adds* missing keys or renames `_meta` → `meta`.
+fields; it only *adds* missing keys or renames `_meta` -> `meta`.
 
 Usage
 =====
@@ -62,19 +62,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
-try:
-    from utils.logging_setup import get_logger  # type: ignore[attr-defined]
-except Exception:  # pragma: no cover - very small fallback
-    import logging
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    )
-
-    def get_logger(name: str) -> "logging.Logger":
-        return logging.getLogger(name)
-
+from utils.logging_setup import get_logger, init_logging
 
 log = get_logger(__name__)
 
@@ -88,9 +76,9 @@ def _infer_language_from_filename(path: str) -> Optional[str]:
     """
     Infer a language code from filename patterns such as:
 
-        data/lexicon/en_lexicon.json  → en
-        data/lexicon/fr_lexicon.json  → fr
-        data/lexicon/sw_lexicon.json  → sw
+        data/lexicon/en_lexicon.json  -> en
+        data/lexicon/fr_lexicon.json  -> fr
+        data/lexicon/sw_lexicon.json  -> sw
 
     If we cannot infer a language, return None.
     """
@@ -123,7 +111,7 @@ def _ensure_meta_block(
 
     # Remove legacy alias if present
     if "_meta" in data and "meta" not in data:
-        log.info("  - Moving _meta → meta in %s", path)
+        log.info("  - Moving _meta -> meta in %s", path)
         data["meta"] = meta
         del data["_meta"]
     else:
@@ -145,7 +133,7 @@ def _ensure_meta_block(
     # Bump version
     old_version = meta.get("version")
     if old_version != target_version:
-        log.info("  - Bumping meta.version: %r → %r", old_version, target_version)
+        log.info("  - Bumping meta.version: %r -> %r", old_version, target_version)
         meta["version"] = target_version
 
     return meta
@@ -202,7 +190,7 @@ def _migrate_sections(
     Each section is expected to be a dict-of-dicts; we ensure base
     fields for those that are BaseLexicalEntry-like.
     """
-    # Section → default POS (None means do not enforce POS)
+    # Section -> default POS (None means do not enforce POS)
     section_pos = {
         "professions": "NOUN",
         "nationalities": "ADJ",
@@ -361,6 +349,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Optional[List[str]] = None) -> None:
+    # Initialize logging first
+    init_logging()
+
     parser = build_arg_parser()
     args = parser.parse_args(argv)
 

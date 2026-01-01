@@ -117,7 +117,7 @@ Every language is assigned a `maturity_score` based on the audit.
 
 ---
 
-## 5. The Build Orchestrator (`gf/build_orchestrator.py`)
+## 5. The Build Orchestrator (`builder/orchestrator.py`)
 
 This script reads the Matrix and executes the compilation. It solves the critical "Last Man Standing" bug using a **Two-Phase Pipeline** augmented by AI.
 
@@ -169,7 +169,7 @@ Run this to compile the PGF binary with AI assistance enabled.
 ```bash
 # Go to gf directory
 cd gf
-python build_orchestrator.py
+python builder/orchestrator.py
 
 ```
 

@@ -296,7 +296,7 @@ You should see:
 
 ### "Line endings / Syntax error near unexpected token"
 
-* **Cause:** A script (`Setup.sh` or `build_orchestrator.py`) was saved with Windows `CRLF` line endings.
+* **Cause:** A script (`Setup.sh` or `builder/orchestrator.py`) was saved with Windows `CRLF` line endings.
 * **Fix:** Run `dos2unix <filename>` on the offending script.
 
 ### "404 Not Found" on /generate
@@ -307,7 +307,7 @@ You should see:
 ### "Last Man Standing" / PGF only has one language
 
 * **Cause:** You are using the old build loop.
-* **Fix:** Ensure you are using the updated `build_orchestrator.py` which implements the **Two-Phase Build (Verify -> Link)**.
+* **Fix:** Ensure you are using the updated `builder/orchestrator.py` which implements the **Two-Phase Build (Verify -> Link)**.
 
 ---
 

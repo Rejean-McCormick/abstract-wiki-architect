@@ -243,7 +243,7 @@ TOOL_REGISTRY: Dict[str, ToolSpec] = {
     ),
     "compile_pgf": _py_script(
         "compile_pgf",
-        "gf/build_orchestrator.py",
+        "builder/orchestrator.py",
         "Two-phase GF build orchestrator to produce AbstractWiki.pgf.",
         timeout_sec=1800,
         allow_args=True,

@@ -42,7 +42,7 @@
 
 # 3. CRITICAL FILES & SCRIPTS
 # ------------------------------------------------------------------------------
-# BUILDER:     gf/build_orchestrator.py
+# BUILDER:     builder/orchestrator.py
 #              (Runs Verify->Link loop. Triggers 'Architect Agent' on failure).
 # FACTORY:     utils/grammar_factory.py
 #              (Implements Weighted Topology sorting for Tier 3).

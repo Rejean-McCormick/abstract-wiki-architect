@@ -4,7 +4,7 @@ Thank you for your interest in contributing! This project is a complex **Hybrid 
 
 ## 1. The Golden Rules
 
-1. **Never Edit Generated Files:** Do not manually edit files in `generated/src/`. These are overwritten by the **Architect Agent** and `build_orchestrator.py`.
+1. **Never Edit Generated Files:** Do not manually edit files in `generated/src/`. These are overwritten by the **Architect Agent** and `builder/orchestrator.py`.
 2. **Respect the Matrix:** Do not hardcode language lists in Python. If you add a language, register it by creating the file structure and running `tools/everything_matrix/build_index.py`.
 3. **Linux Runtime Only:** The backend depends on `libpgf` (C-library). Do not try to run `uvicorn` or `worker.py` directly on Windows. Use WSL 2 or Docker.
 4. **No Chatty AI:** If you modify the **Architect Agent**, you must strictly adhere to the **Frozen System Prompt** (`ai_services/prompts.py`) to ensure it outputs raw code, not Markdown.
@@ -26,7 +26,7 @@ Thank you for your interest in contributing! This project is a complex **Hybrid 
 
 
 4. **Audit:** Run `python tools/everything_matrix/build_index.py`.
-5. **Build:** Run `python gf/build_orchestrator.py`. (The **Architect Agent** will wake up and write the grammar for you).
+5. **Build:** Run `python builder/orchestrator.py`. (The **Architect Agent** will wake up and write the grammar for you).
 
 ### Reporting Bugs
 

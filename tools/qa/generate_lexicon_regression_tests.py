@@ -226,6 +226,10 @@ LEXICON_DIR = os.path.join(PROJECT_ROOT, "{rel_lexicon_dir.replace('"', '\\"')}"
 SNAPSHOTS = \\
 '''
 
+    # Ensure body starts cleanly; remove trailing backslash from header if present to avoid syntax errors
+    # (Modified here to be safer: "SNAPSHOTS =" with no backslash, relying on Python's auto-concatenation or new lines)
+    header = header.replace("SNAPSHOTS = \\", "SNAPSHOTS = ")
+
     body = _render_python_literal(snapshots, indent=4)
 
     tests = r'''

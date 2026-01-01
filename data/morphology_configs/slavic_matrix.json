@@ -106,4 +106,32 @@
           "gen": {
             "m_sg": "ého",
             "f_sg": "é",
-            "n_s_
+            "n_sg": "ého",
+            "pl": "ých"
+          }
+        },
+        "nationality_soft": {
+          "nom": {
+            "m_sg": "í",
+            "f_sg": "í",
+            "n_sg": "í",
+            "pl": "í"
+          },
+          "gen": {
+            "m_sg": "ího",
+            "f_sg": "í",
+            "n_sg": "ího",
+            "pl": "ích"
+          }
+        }
+      },
+      "defaults": {
+        "nationality_paradigm": "nationality",
+        "nationality_case": "nom",
+        "profession_case": "nom",
+        "profession_number": "sg",
+        "subject_case": "nom"
+      }
+    }
+  }
+}

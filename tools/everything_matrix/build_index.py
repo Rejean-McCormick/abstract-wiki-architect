@@ -315,7 +315,9 @@ def scan_system() -> None:
     ]
 
     p["output_dir"].mkdir(parents=True, exist_ok=True)
-    current_fp = directory_fingerprint(content_roots, config_files=config_files)
+    
+    # [FIX] Added 'content_roots=' keyword argument to match io_utils definition
+    current_fp = directory_fingerprint(content_roots=content_roots, config_files=config_files)
 
     # cache check
     if (not args.force) and p["checksum_file"].is_file() and p["matrix_file"].is_file():
@@ -420,7 +422,7 @@ def scan_system() -> None:
         maturity_1 = compute_maturity(avgs_1, zone_weights)
         strat_1 = choose_build_strategy(
             iso2=iso2,
-            maturity=maturity_1,
+            maturity_score=maturity_1, # [FIX] Renamed maturity -> maturity_score
             zone_a=zone_a_raw,
             zone_b=zone_b,
             zone_d=zone_d,
@@ -434,7 +436,7 @@ def scan_system() -> None:
         maturity_2 = compute_maturity(avgs_2, zone_weights)
         strat_2 = choose_build_strategy(
             iso2=iso2,
-            maturity=maturity_2,
+            maturity_score=maturity_2, # [FIX] Renamed maturity -> maturity_score
             zone_a=zone_a,
             zone_b=zone_b,
             zone_d=zone_d,

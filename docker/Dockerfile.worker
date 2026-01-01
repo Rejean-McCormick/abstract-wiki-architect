@@ -2,65 +2,67 @@
 FROM python:3.11-slim
 
 # Environment Variables
+# - Standardize on PGF_PATH (v2 spec + docker-compose), keep AW_PGF_PATH only as legacy back-compat
+# - Default to /app/gf so both containers read/write the same mounted file
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    # GF Default Library Path
-    GF_LIB_PATH=/usr/local/lib/gf \
-    # The Worker writes the compiled grammar to this path
-    AW_PGF_PATH=/app/data/build/AbstractWiki.pgf \
+    DEBIAN_FRONTEND=noninteractive \
+    \
+    FILESYSTEM_REPO_PATH=/app \
+    \
+    # Prefer the RGL in-repo (matches docker-compose). If you run the image standalone,
+    # this will work because we COPY gf-rgl below.
+    GF_LIB_PATH=/app/gf-rgl \
+    \
+    # Canonical path (v2): services should set/override PGF_PATH, not AW_PGF_PATH
+    PGF_PATH=/app/gf/AbstractWiki.pgf \
+    \
+    # Legacy compatibility (remove once app/shared/config.py stops reading AW_PGF_PATH)
+    AW_PGF_PATH=/app/gf/AbstractWiki.pgf \
+    \
     # Add local bin to path
     PATH="/root/.local/bin:$PATH"
 
 WORKDIR /app
 
 # 1. Install System Dependencies
-# 'curl' is added for the HEALTHCHECK
+# - curl: healthcheck
+# - libgmp-dev: required to build/install the Python 'pgf' module reliably
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     wget \
     curl \
     ca-certificates \
     git \
+    libgmp-dev \
   && rm -rf /var/lib/apt/lists/*
 
 # 2. Install GF (Grammatical Framework)
-# The Worker is the "Compiler" service, so the binary is critical here.
-# Assuming the deb file is available in the build context
 COPY gf-3.12-ubuntu-24.04.deb /tmp/gf.deb
-
 RUN apt-get update && apt-get install -y /tmp/gf.deb \
     && rm /tmp/gf.deb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Install Python Dependencies
-# Copy specific requirements first to leverage Docker cache
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 4. Copy Application Source Code
 COPY app ./app
 
-# 5. Copy Static Data & Grammars
-# The Worker needs source files (src) to compile and a build dir to write to
+# 5. Copy Grammars + Config Data (worker needs Wiki*.gf and iso_to_wiki.json)
 COPY gf ./gf
 COPY data ./data
 
-# Create build directory for persistence
-RUN mkdir -p /app/data/build
+# 5b. Copy RGL sources into the image so the worker can compile without relying on a bind-mount
+COPY gf-rgl ./gf-rgl
 
-# 6. Runtime Configuration
+# Ensure output directory exists (PGF_PATH points into /app/gf by default)
+RUN mkdir -p /app/gf
 
-# HEALTHCHECK (Phase 2 Requirement)
-# Checks if the worker process is responsive and PGF is loaded.
-# Note: 'arq' doesn't expose an HTTP port by default. 
-# For a robust check, we often use a script or a small sidecar. 
-# For v1.0, we rely on the process existence, or you can add a script 
-# that pings Redis to see if this worker ID is registered.
-# For now, a simple process check:
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD pgrep -f "arq app.workers.worker.WorkerSettings" || exit 1
 
 # Start the ARQ worker process
-# Updated path to match the 'app/workers/worker.py' file created earlier
 CMD ["arq", "app.workers.worker.WorkerSettings"]

@@ -27,7 +27,8 @@ sys.path.append(str(Path(__file__).resolve().parent))
 
 try:
     # io_utils.py (canonical shared IO)
-    from io_utils import read_json, write_json_atomic  # type: ignore
+    # [FIX] Import the correct name directly
+    from io_utils import read_json, atomic_write_json  # type: ignore
     # norm.py (canonical shared normalization)
     from norm import build_wiki_to_iso2, load_iso_to_wiki  # type: ignore
 except Exception as e:
@@ -363,7 +364,8 @@ def scan_rgl(
     }
 
     if write_output:
-        write_json_atomic(out_path, final_data)
+        # [FIX] Use atomic_write_json directly
+        atomic_write_json(out_path, final_data)
         _log(f"✅ Inventory saved to {out_path}", quiet=quiet)
         _log(f"   Languages found: {len(final_languages)}", quiet=quiet)
         _log(f"   Families/Shared folders detected: {len(family_folders)}", quiet=quiet)

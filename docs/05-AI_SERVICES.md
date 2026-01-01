@@ -20,8 +20,8 @@ The architecture delegates responsibilities to four distinct AI agents.
 | Agent | Persona | Role | Trigger Event |
 | --- | --- | --- | --- |
 | **The Lexicographer** | *Data Generator* | Bootstraps dictionaries (`core.json`, `people.json`) for new languages. | `build_index.py` detects `lex_seed < 3`. |
-| **The Architect** | *The Builder* | **[NEW]** Generates entire concrete grammars from scratch for "Factory" (Tier 3) languages. | `build_orchestrator.py` detects a missing language file. |
-| **The Surgeon** | *Code Fixer* | Surgically patches broken `.gf` source files based on compiler error logs. | `build_orchestrator.py` detects a compilation failure. |
+| **The Architect** | *The Builder* | **[NEW]** Generates entire concrete grammars from scratch for "Factory" (Tier 3) languages. | `builder/orchestrator.py` detects a missing language file. |
+| **The Surgeon** | *Code Fixer* | Surgically patches broken `.gf` source files based on compiler error logs. | `builder/orchestrator.py` detects a compilation failure. |
 | **The Judge** | *QA Expert* | Grades the naturalness of the generated text against "Gold Standard" reference sentences. | Scheduled CI/CD or `test_gf_dynamic.py`. |
 
 ---
@@ -70,7 +70,7 @@ The client requires the following `env` variables (configured in `app/shared/con
 
 **Workflow:**
 
-1. **Trigger:** `build_orchestrator.py` finds a language in the Matrix (e.g., `WikiHau.gf`) that does not exist on disk.
+1. **Trigger:** `builder/orchestrator.py` finds a language in the Matrix (e.g., `WikiHau.gf`) that does not exist on disk.
 2. **Prompting:** It loads the **Frozen System Prompt** from `prompts.py` to ensure non-chatty, code-only output.
 3. **Constraint:** The prompt includes the **Weighted Topology** (SVO/SOV) from `topology_weights.json`.
 4. **Generation:** The LLM writes the full `concrete WikiHau of AbstractWiki = ...` file.
@@ -86,7 +86,7 @@ The client requires the following `env` variables (configured in `app/shared/con
 
 **Workflow:**
 
-1. **Trigger:** `build_orchestrator.py` fails to compile `WikiZul.gf`.
+1. **Trigger:** `builder/orchestrator.py` fails to compile `WikiZul.gf`.
 2. **Analysis:** The Surgeon reads the error log (`Error: variable 'mkN' not found`) and the broken source code.
 3. **Patching:** It rewrites the GF code to fix the specific error (e.g., changing `mkN` to `mkN0`).
 4. **Verification:** The build is retried (Max 3 attempts).
@@ -118,7 +118,7 @@ The client requires the following `env` variables (configured in `app/shared/con
 
 ### Build Pipeline Integration
 
-The **Architect** and **Surgeon** are hooked directly into `gf/build_orchestrator.py`:
+The **Architect** and **Surgeon** are hooked directly into `builder/orchestrator.py`:
 
 ```python
 # Pseudo-code example of the hook

@@ -1,0 +1,229 @@
+{
+  "_meta": {
+    "family": "bantu",
+    "version": 2.1,
+    "description": "Master Bantu grammar matrix. Handles Noun Class Systems (1-22), Prefix Concordance (Subject/Adjective agreement), Agglutinative Verb structure (STOV), and the Augment (pre-prefix) for definiteness.",
+    "notes": "Engine must identify the 'Noun Class' of the subject (usually Class 1/2 for Biographies) to select the correct Subject Concords and Adjective Prefixes."
+  },
+  "languages": {
+    "sw": {
+      "name": "Swahili",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "augment": {
+          "enabled": false,
+          "notes": "Standard Swahili does not use the initial vowel augment found in other Bantu languages."
+        }
+      },
+      "agreement": {
+        "noun_class": true,
+        "number": true,
+        "notes": "Verbs and Adjectives must agree with the Subject's Noun Class."
+      },
+      "noun_classes": {
+        "standard_pairs": {
+          "human": { "sg": "1", "pl": "2" },
+          "tree": { "sg": "3", "pl": "4" },
+          "group_5_6": { "sg": "5", "pl": "6" },
+          "artifact": { "sg": "7", "pl": "8" },
+          "loanword": { "sg": "9", "pl": "10" },
+          "abstract": { "sg": "11", "pl": null }
+        },
+        "prefixes": {
+          "1": "m",   "2": "wa",
+          "3": "m",   "4": "mi",
+          "5": "ji",  "6": "ma",
+          "7": "ki",  "8": "vi",
+          "9": "n",   "10": "n",
+          "11": "u"
+        },
+        "concords": {
+          "subject": {
+            "1": "a",   "2": "wa",
+            "3": "u",   "4": "i",
+            "5": "li",  "6": "ya",
+            "7": "ki",  "8": "vi",
+            "9": "i",   "10": "zi",
+            "11": "u"
+          },
+          "adjective": {
+            "1": "m",   "2": "wa",
+            "3": "m",   "4": "mi",
+            "5": "l",   "6": "ma",
+            "7": "ki",  "8": "vi",
+            "9": "n",   "10": "n",
+            "11": "m"
+          }
+        }
+      },
+      "morphology": {
+        "system": "agglutinative_prefix",
+        "verb_slots": ["subject", "tense", "relative", "object", "root"],
+        "tense_markers": {
+          "present": "na",
+          "past": "li",
+          "future": "ta",
+          "perfect": "me",
+          "habitual": "hu",
+          "conditional": "ki"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "type": "particle",
+          "present": "ni",
+          "past": "kuwa",
+          "neg_present": "si",
+          "notes": "'ni' is invariant for all classes in present affirmative."
+        }
+      }
+    },
+    "zu": {
+      "name": "Zulu",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "augment": {
+          "enabled": true,
+          "notes": "Nouns almost always start with the Augment (u-, i-, a-) unless in negative/vocative context."
+        }
+      },
+      "agreement": {
+        "noun_class": true,
+        "number": true
+      },
+      "noun_classes": {
+        "standard_pairs": {
+          "human": { "sg": "1", "pl": "2" },
+          "human_proper": { "sg": "1a", "pl": "2a" },
+          "tree": { "sg": "3", "pl": "4" },
+          "group_5_6": { "sg": "5", "pl": "6" },
+          "artifact": { "sg": "7", "pl": "8" },
+          "animal": { "sg": "9", "pl": "10" }
+        },
+        "prefixes": {
+          "1": "um",   "2": "aba",
+          "1a": "u",   "2a": "o",
+          "3": "um",   "4": "imi",
+          "5": "ili",  "6": "ama",
+          "7": "isi",  "8": "izi",
+          "9": "in",   "10": "izin"
+        },
+        "concords": {
+          "subject": {
+            "1": "u",    "2": "ba",
+            "1a": "u",   "2a": "ba",
+            "3": "u",    "4": "i",
+            "5": "li",   "6": "a",
+            "7": "si",   "8": "zi",
+            "9": "i",    "10": "zi"
+          },
+          "adjective": {
+            "1": "om",   "2": "aba",
+            "3": "om",   "4": "emi",
+            "5": "eli",  "6": "ama",
+            "7": "esi",  "8": "ezi",
+            "9": "en",   "10": "ezin"
+          }
+        }
+      },
+      "morphology": {
+        "system": "agglutinative_prefix",
+        "verb_slots": ["subject", "tense", "object", "root"],
+        "tense_markers": {
+          "present": "ya",
+          "past_recent": "e",
+          "future": "zo"
+        },
+        "vowel_coalescence": true
+      },
+      "verbs": {
+        "copula": {
+          "type": "prefix_change",
+          "rule": "agentive_prefix",
+          "present_defaults": {
+            "u": "ngu",
+            "i": "yi",
+            "a": "nga"
+          },
+          "notes": "The copula attaches to the noun. E.g., 'uShaka' (Shaka) -> 'nguShaka' (It is Shaka)."
+        }
+      }
+    },
+    "rw": {
+      "name": "Kinyarwanda",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "augment": {
+          "enabled": true
+        }
+      },
+      "agreement": {
+        "noun_class": true
+      },
+      "noun_classes": {
+        "prefixes": {
+          "1": "um",   "2": "ab",
+          "3": "um",   "4": "im",
+          "5": "ri",   "6": "am",
+          "7": "ki",   "8": "bi",
+          "9": "in",   "10": "in"
+        },
+        "concords": {
+          "subject": {
+            "1": "a",    "2": "ba",
+            "7": "ki",   "8": "bi"
+          }
+        }
+      },
+      "morphology": {
+        "system": "agglutinative_prefix",
+        "verb_slots": ["subject", "tense", "object", "root"]
+      },
+      "verbs": {
+        "copula": {
+          "type": "verb",
+          "present": "ni",
+          "past": "kwari",
+          "notes": "'ni' is the standard identifying copula."
+        }
+      }
+    },
+    "xh": {
+      "name": "Xhosa",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "augment": {
+          "enabled": true
+        }
+      },
+      "noun_classes": {
+        "prefixes": {
+          "1": "um",   "2": "aba",
+          "1a": "u",   "2a": "oo",
+          "3": "um",   "4": "imi",
+          "5": "ili",  "6": "ama",
+          "7": "isi",  "8": "izi",
+          "9": "in",   "10": "izin"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "type": "prefix_change",
+          "present_defaults": {
+            "u": "ngu",
+            "i": "yi",
+            "a": "nga"
+          },
+          "notes": "Similar to Zulu, uses identifying copulative prefixes."
+        }
+      }
+    }
+  }
+}

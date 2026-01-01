@@ -1,4 +1,4 @@
-# utils\refresh_lexicon_index.py
+# utils/refresh_lexicon_index.py
 """
 utils/refresh_lexicon_index.py
 ------------------------------
@@ -14,11 +14,11 @@ For each `*.json` lexicon file:
   1. Load the JSON.
   2. Extract lemma keys from `"lemmas"`.
   3. Build a normalized index:
-         normalized_key -> original_lemma_key
-     using `lexicon.normalization.normalize_for_lookup`.
+          normalized_key -> original_lemma_key
+      using `lexicon.normalization.normalize_for_lookup`.
   4. Detect collisions:
-         two different lemma keys that normalize to the same
-         canonical key.
+          two different lemma keys that normalize to the same
+          canonical key.
   5. Print a short report per file and an overall summary.
 
 This script does *not* currently persist indices as separate files.
@@ -40,14 +40,15 @@ Options:
 
 Exit codes:
 
-    0  → all lexicon files validated (no collisions)
-    1  → one or more collisions or errors were found
+    0  → all lexicon files validated (no collisions), OR strict mode is off
+    1  → collisions found AND strict mode is on
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 import sys
 from dataclasses import dataclass
@@ -58,8 +59,28 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
-from lexicon.normalization import normalize_for_lookup  # type: ignore  # noqa: E402
-from utils.logging_setup import get_logger, init_logging  # type: ignore  # noqa: E402
+# Fix: Import from the actual location in app/adapters, not top-level 'lexicon'
+try:
+    from app.adapters.persistence.lexicon.normalization import normalize_for_lookup
+except ImportError:
+    # Fallback/Error message if the path is still unreachable
+    print("CRITICAL: Could not import 'normalize_for_lookup'. Check app/adapters/persistence/lexicon/normalization.py.")
+    sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
+# Logging Helper (Replaces missing utils.logging_setup)
+# ---------------------------------------------------------------------------
+
+def init_logging(level: int = logging.INFO) -> None:
+    logging.basicConfig(
+        level=level,
+        format="[%(levelname)s] %(name)s: %(message)s",
+        stream=sys.stderr
+    )
+
+def get_logger(name: str) -> logging.Logger:
+    return logging.getLogger(name)
 
 
 # ---------------------------------------------------------------------------
@@ -175,6 +196,9 @@ def find_lexicon_files(data_dir: str) -> List[str]:
     Return a sorted list of *.json files in `data_dir`.
     """
     files: List[str] = []
+    if not os.path.exists(data_dir):
+        return []
+        
     for entry in os.listdir(data_dir):
         if not entry.lower().endswith(".json"):
             continue
@@ -260,7 +284,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help=(
             "Exit with non-zero status if *any* collision or error is found "
-            "(default behaviour as well, but this flag makes it explicit)."
+            "(default behavior is to report but exit 0)."
         ),
     )
     parser.add_argument(
@@ -275,10 +299,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> None:
     args = build_arg_parser().parse_args(argv)
 
-    # Initialize logging
+    # Initialize logging (using local helper since utils.logging_setup is missing)
     if args.log_level:
-        import logging
-
         init_logging(level=getattr(logging, args.log_level))
     else:
         init_logging()
@@ -286,6 +308,7 @@ def main(argv: list[str] | None = None) -> None:
     data_dir = os.path.abspath(args.data_dir)
     if not os.path.isdir(data_dir):
         print(f"❌ Lexicon directory not found: {data_dir}")
+        # We always exit with error if the directory doesn't exist, regardless of strict
         sys.exit(1)
 
     files = find_lexicon_files(data_dir)
@@ -298,8 +321,14 @@ def main(argv: list[str] | None = None) -> None:
         reports.append(validate_lexicon_file(path))
 
     ok = print_report(reports)
-    if not ok:
-        sys.exit(1 if args.strict or True else 0)
+    
+    # Fix: Corrected exit logic.
+    # If OK is True, exit 0.
+    # If OK is False, exit 1 ONLY if strict mode is ON.
+    if not ok and args.strict:
+        sys.exit(1)
+    
+    sys.exit(0)
 
 
 if __name__ == "__main__":

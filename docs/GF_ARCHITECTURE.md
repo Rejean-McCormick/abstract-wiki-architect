@@ -172,7 +172,7 @@ rm gf/Symbolic*.gf gf/Wiki*.gf gf/AbstractWiki.pgf
 
 ```bash
 # Generates code from Lexicon JSONs -> Validates -> Compiles
-python gf/build_orchestrator.py
+python builder/orchestrator.py
 
 ```
 

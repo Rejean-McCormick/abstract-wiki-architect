@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 =============================================================================
-🚀 ABSTRACT WIKI ARCHITECT - UNIFIED COMMANDER (v2.0)
+🚀 ABSTRACT WIKI ARCHITECT - UNIFIED COMMANDER (v2.1)
 =============================================================================
 The single entry point for all developer operations.
 Replaces fragile PowerShell/Shell scripts with robust Python logic.
@@ -26,10 +26,13 @@ from pathlib import Path
 
 # --- CONFIGURATION ---
 ROOT_DIR = Path(__file__).parent.resolve()
-VENV_PYTHON = ROOT_DIR / "venv" / "bin" / "python"
-GF_BUILDER = ROOT_DIR / "gf" / "build_orchestrator.py"
+# [FIX] Robust venv detection
+VENV_BIN = ROOT_DIR / "venv" / "bin"
+VENV_PYTHON = VENV_BIN / "python"
+
+GF_BUILDER = ROOT_DIR / "builder" / "orchestrator.py"
 INDEXER = ROOT_DIR / "tools" / "everything_matrix" / "build_index.py"
-ARCHITECT_CLI = ROOT_DIR / "ai_services" / "architect.py" # To be refactored
+# [FIX] Updated path to v2.1 structure
 GENERATED_DIR = ROOT_DIR / "gf" / "generated" / "src"
 CONTRIB_DIR = ROOT_DIR / "gf" / "contrib"
 BUILD_LOGS = ROOT_DIR / "gf" / "build_logs"
@@ -48,9 +51,24 @@ class Colors:
 def log(msg, color=Colors.ENDC):
     print(f"{color}{msg}{Colors.ENDC}")
 
+def is_wsl():
+    """Detects if we are running in Windows Subsystem for Linux."""
+    if platform.system() == "Linux":
+        try:
+            with open("/proc/version", "r") as f:
+                if "microsoft" in f.read().lower():
+                    return True
+        except:
+            pass
+    return False
+
 def run_cmd(cmd, cwd=ROOT_DIR, check=True, capture=False):
     """Runs a shell command safely."""
     try:
+        # [FIX] Explicitly use the venv environment for subprocesses
+        env = os.environ.copy()
+        env["PATH"] = f"{str(VENV_BIN)}:{env['PATH']}"
+        
         result = subprocess.run(
             cmd, 
             cwd=str(cwd), 
@@ -58,7 +76,8 @@ def run_cmd(cmd, cwd=ROOT_DIR, check=True, capture=False):
             check=check,
             text=True,
             stdout=subprocess.PIPE if capture else None,
-            stderr=subprocess.PIPE if capture else None
+            stderr=subprocess.PIPE if capture else None,
+            env=env
         )
         return result
     except subprocess.CalledProcessError as e:
@@ -75,9 +94,9 @@ def check_env():
     # 1. Docker
     try:
         run_cmd("docker info", capture=True)
-        log("   ✅ Docker is running.", Colors.GREEN)
+        log("    ✅ Docker is running.", Colors.GREEN)
     except:
-        log("   ❌ Docker is NOT running. Please start Docker Desktop.", Colors.FAIL)
+        log("    ❌ Docker is NOT running. Please start Docker Desktop.", Colors.FAIL)
         sys.exit(1)
 
     # 2. Redis
@@ -85,20 +104,20 @@ def check_env():
         # Check if container exists/runs
         res = run_cmd("docker ps -q -f name=aw_redis", capture=True)
         if res.stdout.strip():
-            log("   ✅ Redis container is active.", Colors.GREEN)
+            log("    ✅ Redis container is active.", Colors.GREEN)
         else:
-            log("   ⚠️  Redis container not found/running. Starting...", Colors.WARNING)
+            log("    ⚠️  Redis container not found/running. Starting...", Colors.WARNING)
             run_cmd("docker run -d -p 6379:6379 --name aw_redis redis:alpine")
-            log("   ✅ Redis started.", Colors.GREEN)
+            log("    ✅ Redis started.", Colors.GREEN)
     except Exception as e:
-        log(f"   ❌ Redis check failed: {e}", Colors.FAIL)
+        log(f"    ❌ Redis check failed: {e}", Colors.FAIL)
 
     # 3. GF Binary
     try:
         run_cmd("gf --version", capture=True)
-        log("   ✅ GF compiler found.", Colors.GREEN)
+        log("    ✅ GF compiler found.", Colors.GREEN)
     except:
-        log("   ❌ 'gf' binary not found in PATH.", Colors.FAIL)
+        log("    ❌ 'gf' binary not found in PATH.", Colors.FAIL)
         sys.exit(1)
 
 def clean_artifacts():
@@ -112,18 +131,15 @@ def clean_artifacts():
         ROOT_DIR / "gf" / "AbstractWiki.gfo"
     ]
     
-    # Also clean generated src root if needed, but be careful not to delete .keep
-    # For now, just specific targets and logs
-    
     for target in targets:
         if target.exists():
             if target.is_dir():
                 shutil.rmtree(target)
             else:
                 os.remove(target)
-            log(f"   🗑️  Deleted: {target.relative_to(ROOT_DIR)}")
+            log(f"    🗑️  Deleted: {target.relative_to(ROOT_DIR)}")
         
-    log("   ✅ Clean complete.", Colors.GREEN)
+    log("    ✅ Clean complete.", Colors.GREEN)
 
 def build_system(clean=False, parallel=None):
     """The Build Pipeline."""
@@ -132,6 +148,7 @@ def build_system(clean=False, parallel=None):
 
     log("\n[2/5] 🧠 Indexing Knowledge Layer", Colors.HEADER)
     # Step 1: Indexer
+    # [FIX] Use explicit python interpreter path
     cmd_idx = f"{VENV_PYTHON} {INDEXER}"
     try:
         run_cmd(cmd_idx)
@@ -141,16 +158,13 @@ def build_system(clean=False, parallel=None):
 
     log("\n[3/5] 🏗️  Compiling Grammar Layer", Colors.HEADER)
     # Step 2: Builder
-    # We pass arguments to the orchestrator if needed (future proofing)
     cmd_build = f"{VENV_PYTHON} {GF_BUILDER}"
-    # If we implemented args in build_orchestrator, we would pass --parallel here
+    # Future: Add --parallel arg if supported by build_orchestrator
     
     try:
         run_cmd(cmd_build, cwd=ROOT_DIR / "gf")
     except:
         log("❌ Compilation Failed.", Colors.FAIL)
-        # We don't exit here if we want to allow 'resilience mode', 
-        # but for a strict build command, we should probably fail.
         sys.exit(1)
 
 def kill_stale_processes():
@@ -159,39 +173,47 @@ def kill_stale_processes():
     # WSL specific pkill
     subprocess.run("pkill -f uvicorn || true", shell=True)
     subprocess.run("pkill -f arq || true", shell=True)
-    log("   ✅ Port 8000 freed.", Colors.GREEN)
+    log("    ✅ Port 8000 freed.", Colors.GREEN)
 
 def start_services():
-    """Launches API and Worker in separate visible windows."""
+    """Launches API and Worker."""
     log("\n[5/5] 🚀 Launching Services", Colors.HEADER)
     
-    # We use cmd.exe to pop up windows on Windows via WSL
-    # NOTE: This assumes WSL environment
-    
-    api_cmd = f"cd {ROOT_DIR} && venv/bin/uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port 8000 --reload; echo '❌ API CRASHED'; exec bash"
-    worker_cmd = f"cd {ROOT_DIR} && venv/bin/arq app.workers.worker.WorkerSettings --watch app; echo '❌ WORKER CRASHED'; exec bash"
+    # [FIX] Enforce Canonical Entry Point
+    api_cmd = f"cd {ROOT_DIR} && venv/bin/uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port 8000 --reload"
+    worker_cmd = f"cd {ROOT_DIR} && venv/bin/arq app.workers.worker.WorkerSettings --watch app"
 
-    try:
-        # Spawn API
-        subprocess.Popen(
-            ["cmd.exe", "/c", "start", "wsl", "bash", "-c", api_cmd],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        log("   👉 API Window Spawned.", Colors.CYAN)
+    if is_wsl():
+        # Windows/WSL Mode: Spawn visible windows via cmd.exe
+        try:
+            subprocess.Popen(
+                ["cmd.exe", "/c", "start", "wsl", "bash", "-c", f"{api_cmd}; echo '❌ API CRASHED'; exec bash"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+            log("    👉 API Window Spawned.", Colors.CYAN)
 
-        # Spawn Worker
-        subprocess.Popen(
-            ["cmd.exe", "/c", "start", "wsl", "bash", "-c", worker_cmd],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        log("   👉 Worker Window Spawned.", Colors.CYAN)
-        
-        log("\n✅ SYSTEM ONLINE!", Colors.GREEN)
-        log(f"   🗺️  Docs: http://localhost:8000/docs", Colors.BOLD)
+            subprocess.Popen(
+                ["cmd.exe", "/c", "start", "wsl", "bash", "-c", f"{worker_cmd}; echo '❌ WORKER CRASHED'; exec bash"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+            log("    👉 Worker Window Spawned.", Colors.CYAN)
+            
+            log("\n✅ SYSTEM ONLINE!", Colors.GREEN)
+            log(f"    🗺️  Docs: http://localhost:8000/docs", Colors.BOLD)
+            
+        except FileNotFoundError:
+            log("    ⚠️  'cmd.exe' not found despite WSL check.", Colors.WARNING)
+            _print_manual_commands(api_cmd, worker_cmd)
+            
+    else:
+        # Native Linux / Headless Mode: Cannot spawn windows
+        log("    🐧 Native Linux Detected (No GUI spawning)", Colors.BLUE)
+        _print_manual_commands(api_cmd, worker_cmd)
 
-    except FileNotFoundError:
-        log("   ❌ Could not find 'cmd.exe'. Are you running in WSL?", Colors.FAIL)
-        # Fallback to background processes? No, let's fail loud.
+def _print_manual_commands(api_cmd, worker_cmd):
+    log("\n    Please run these in separate terminals:", Colors.WARNING)
+    log(f"    [Terminal 1] {api_cmd}", Colors.CYAN)
+    log(f"    [Terminal 2] {worker_cmd}", Colors.CYAN)
 
 def generate_missing(lang_code=None):
     """
@@ -199,45 +221,43 @@ def generate_missing(lang_code=None):
     Calls the AI or Factory to generate missing grammars.
     """
     log("\n🎨 Generating Missing Grammars", Colors.HEADER)
-    # This assumes architect.py has a CLI interface (we will add this later)
-    # For now, it's a placeholder for the logic we split out.
     
     cmd = f"{VENV_PYTHON} -m ai_services.architect"
     if lang_code:
         cmd += f" --lang {lang_code}"
     else:
-        cmd += " --missing" # Generate all missing
+        cmd += " --missing" 
         
     try:
         run_cmd(cmd)
-        log("   ✅ Generation complete.", Colors.GREEN)
+        log("    ✅ Generation complete.", Colors.GREEN)
     except:
-        log("   ❌ Generation failed.", Colors.FAIL)
+        log("    ❌ Generation failed.", Colors.FAIL)
 
 def doctor():
     """System Diagnostic Tool."""
     log("\n🩺 Running Doctor...", Colors.HEADER)
     
     # 1. Check Paths
-    log(f"   📂 Root: {ROOT_DIR}")
+    log(f"    📂 Root: {ROOT_DIR}")
     if not (ROOT_DIR / "gf-rgl").exists():
-        log("   ❌ gf-rgl/ folder missing! Run setup.", Colors.FAIL)
+        log("    ❌ gf-rgl/ folder missing! Run setup.", Colors.FAIL)
     else:
-        log("   ✅ gf-rgl/ found.", Colors.GREEN)
+        log("    ✅ gf-rgl/ found.", Colors.GREEN)
 
     # 2. Check Config
     config_file = ROOT_DIR / "app" / "shared" / "config.py"
     if not config_file.exists():
-        log("   ❌ app/shared/config.py missing.", Colors.FAIL)
+        log("    ❌ app/shared/config.py missing.", Colors.FAIL)
     else:
-        log("   ✅ config.py found.", Colors.GREEN)
+        log("    ✅ config.py found.", Colors.GREEN)
 
     # 3. Check Zombies
     zombies = list(GENERATED_DIR.glob("**/Wiki*.gf"))
     if zombies:
-        log(f"   ⚠️  Found {len(zombies)} generated files. Run 'manage.py clean' to reset.", Colors.WARNING)
+        log(f"    ⚠️  Found {len(zombies)} generated files. Run 'manage.py clean' to reset.", Colors.WARNING)
     
-    log("   ✅ Doctor complete.", Colors.GREEN)
+    log("    ✅ Doctor complete.", Colors.GREEN)
 
 # --- MAIN ---
 
@@ -274,7 +294,7 @@ def main():
     if args.command == "start":
         check_env()
         kill_stale_processes()
-        build_system(clean=False) # Incremental by default
+        build_system(clean=False) 
         start_services()
     
     elif args.command == "build":

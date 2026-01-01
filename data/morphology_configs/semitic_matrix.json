@@ -1,0 +1,205 @@
+{
+  "_meta": {
+    "family": "semitic",
+    "version": 2.1,
+    "description": "Master Semitic grammar matrix. Covers the split between Prefix-Article/SVO languages (Arabic, Hebrew, Maltese) and Suffix-Article/SOV languages (Amharic). Handles Root-and-Pattern morphology, Broken Plurals, and Definiteness Agreement.",
+    "notes": "Engine must check 'syntax.construct_state' for genitives and 'agreement.definiteness_matching' for adjectives."
+  },
+  "languages": {
+    "ar": {
+      "name": "Arabic",
+      "syntax": {
+        "basic_word_order": "VSO",
+        "alt_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "construct_state": {
+          "enabled": true,
+          "rule": "head_drops_article",
+          "notes": "Head noun loses 'al-', dependent noun gets Genitive case."
+        }
+      },
+      "agreement": {
+        "gender": true,
+        "number": true,
+        "definiteness_matching": true,
+        "notes": "Adjectives must match the noun's definiteness (e.g. 'al-bayt al-kabir')."
+      },
+      "phonetics": {
+        "sun_letters": ["t", "th", "d", "dh", "r", "z", "s", "sh", "s", "d", "t", "z", "l", "n"],
+        "vowels": ["a", "i", "u", "aa", "ii", "uu"]
+      },
+      "articles": {
+        "type": "prefix",
+        "definite": {
+          "marker": "al-",
+          "assimilates": true,
+          "rule": "sun_moon_assimilation"
+        },
+        "indefinite": {
+          "type": "suffix",
+          "marker": "n",
+          "notes": "Nunation (Tanwin). Often unwritten."
+        }
+      },
+      "morphology": {
+        "system": "root_and_pattern",
+        "plural_strategy": "mixed",
+        "sound_plural": {
+          "masc_nom": "ūn",
+          "masc_acc_gen": "īn",
+          "fem": "āt"
+        },
+        "broken_plural_patterns": [
+          { "template": "CaCC", "plural": "CuCūC" },
+          { "template": "CaCiC", "plural": "CuCCāC" },
+          { "template": "CiCC", "plural": "aCCāC" }
+        ]
+      },
+      "verbs": {
+        "copula": {
+          "present": null,
+          "past": "kāna",
+          "future": "sayakūnu"
+        }
+      }
+    },
+    "he": {
+      "name": "Hebrew",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "construct_state": {
+          "enabled": true,
+          "rule": "head_modification",
+          "transformations": {
+            "plural_masc": { "from": "im", "to": "ei" },
+            "singular_fem": { "from": "ah", "to": "at" }
+          }
+        }
+      },
+      "agreement": {
+        "gender": true,
+        "number": true,
+        "definiteness_matching": true,
+        "notes": "Definite article 'ha-' attaches to both noun and adjective."
+      },
+      "articles": {
+        "type": "prefix",
+        "definite": {
+          "marker": "ha-",
+          "assimilates": false,
+          "notes": "Causes gemination of following letter in vocalized text."
+        },
+        "indefinite": {
+          "marker": "",
+          "type": "none"
+        }
+      },
+      "morphology": {
+        "system": "root_and_pattern_mixed",
+        "plural_strategy": "suffix",
+        "suffixes": {
+          "plural_masc": "im",
+          "plural_fem": "ot",
+          "dual": "ayim"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "present": null,
+          "past": "haya",
+          "future": "yihiye"
+        }
+      }
+    },
+    "mt": {
+      "name": "Maltese",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "construct_state": {
+          "enabled": true,
+          "rule": "head_keeps_article",
+          "notes": "Unlike Ar/He, the head noun in a genitive chain typically retains its article (il-karozza tal-pulizija)."
+        }
+      },
+      "agreement": {
+        "gender": true,
+        "number": true,
+        "definiteness_matching": true
+      },
+      "phonetics": {
+        "sun_letters": ["ċ", "d", "n", "r", "s", "t", "x", "ż", "z"],
+        "vowels": ["a", "e", "i", "o", "u", "ie"]
+      },
+      "articles": {
+        "type": "prefix",
+        "definite": {
+          "marker": "il-",
+          "assimilates": true,
+          "variants": {
+            "vowel_start": "l-",
+            "sun_letter": "C1-",
+            "default": "il-"
+          }
+        },
+        "indefinite": {
+          "marker": "",
+          "type": "none",
+          "notes": "Sometimes uses 'wieħed' (one) for emphasis."
+        }
+      },
+      "verbs": {
+        "copula": {
+          "present": null,
+          "past": "kien"
+        }
+      }
+    },
+    "am": {
+      "name": "Amharic",
+      "syntax": {
+        "basic_word_order": "SOV",
+        "adjective_position": "pre",
+        "bio_default_tense": "present",
+        "construct_state": {
+          "enabled": false,
+          "notes": "Uses 'yä-' prefix on the possessor instead of modifying the head."
+        }
+      },
+      "agreement": {
+        "gender": true,
+        "number": true,
+        "definiteness_matching": false,
+        "notes": "Definite article attaches to the adjective if present, not the noun."
+      },
+      "articles": {
+        "type": "suffix",
+        "definite": {
+          "masc": "-u",
+          "masc_vowel": "-w",
+          "fem": "-wa",
+          "notes": "Attached to the end of the noun phrase (e.g., 'tilliq-u bet' = the big house)."
+        },
+        "indefinite": {
+          "marker": "",
+          "type": "none"
+        }
+      },
+      "morphology": {
+        "system": "suffix_dominant",
+        "plural_suffix": "-och"
+      },
+      "verbs": {
+        "copula": {
+          "present": "naw",
+          "past": "nebbere",
+          "position": "final"
+        }
+      }
+    }
+  }
+}

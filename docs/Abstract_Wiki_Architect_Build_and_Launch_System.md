@@ -43,7 +43,7 @@ These scripts run sequentially under the `build` command. They are refactored fo
 
 ### B. The Compiler (Orchestrator)
 
-* **Script:** `gf/build_orchestrator.py`
+* **Script:** `builder/orchestrator.py`
 * **Optimization:** **Parallel Verification & Single-Shot Linking**.
 * **Logic:**
 1. **Weighted Topology (Pre-Flight):** Calls `grammar_factory.py` to generate "Safe Mode" grammars for Tier 3 languages (e.g., Zulu, Hausa) using `topology_weights.json`.

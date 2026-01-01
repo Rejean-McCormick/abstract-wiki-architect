@@ -1,0 +1,244 @@
+{
+  "_meta": {
+    "family": "romance",
+    "version": 2.1,
+    "description": "Advanced Romance grammar matrix. Includes split definite/indefinite articles, Romanian suffix logic, French BAGS adjective ordering, and Italian preposition fusion.",
+    "notes": "Engine must check 'syntax.article_type' (prefix/suffix) and 'syntax.adjective_rules' before linearizing."
+  },
+  "languages": {
+    "it": {
+      "name": "Italian",
+      "syntax": {
+        "article_type": "prefix",
+        "adjective_position": "post",
+        "preposition_fusion": true
+      },
+      "articles": {
+        "indefinite": {
+          "m": {
+            "default": "un",
+            "vowel": "un",
+            "s_impure": "uno"
+          },
+          "f": {
+            "default": "una",
+            "vowel": "un'"
+          }
+        },
+        "definite": {
+          "m": {
+            "default": "il",
+            "vowel": "l'",
+            "s_impure": "lo",
+            "pl_default": "i",
+            "pl_vowel": "gli",
+            "pl_impure": "gli"
+          },
+          "f": {
+            "default": "la",
+            "vowel": "l'",
+            "pl_default": "le",
+            "pl_vowel": "le"
+          }
+        }
+      },
+      "preposition_fusion": {
+        "di": { "il": "del", "lo": "dello", "la": "della", "i": "dei", "gli": "degli", "le": "delle" },
+        "a":  { "il": "al",  "lo": "allo",  "la": "alla",  "i": "ai",  "gli": "agli",  "le": "alle"  },
+        "da": { "il": "dal", "lo": "dallo", "la": "dalla", "i": "dai", "gli": "dagli", "le": "dalle" },
+        "in": { "il": "nel", "lo": "nello", "la": "nella", "i": "nei", "gli": "negli", "le": "nelle" },
+        "su": { "il": "sul", "lo": "sullo", "la": "sulla", "i": "sui", "gli": "sugli", "le": "sulle" }
+      },
+      "morphology": {
+        "suffixes": [
+          { "ends_with": "tore", "replace_with": "trice" },
+          { "ends_with": "ore",  "replace_with": "rice"  },
+          { "ends_with": "o",    "replace_with": "a"     }
+        ],
+        "irregulars": {
+          "poeta":   "poetessa",
+          "duca":    "duchessa",
+          "re":      "regina",
+          "attore":  "attrice",
+          "scrittore": "scrittrice",
+          "fisico":  "fisica",
+          "medico":  "medica"
+        }
+      },
+      "phonetics": {
+        "impure_triggers": ["s_consonant", "z", "ps", "gn", "x", "y"],
+        "elision": true
+      },
+      "structure": "{name} è {article}{sep}{profession} {nationality}."
+    },
+    "es": {
+      "name": "Spanish",
+      "syntax": {
+        "article_type": "prefix",
+        "adjective_position": "post",
+        "preposition_fusion": true
+      },
+      "articles": {
+        "indefinite": {
+          "m": { "default": "un", "vowel": "un" },
+          "f": { "default": "una", "stressed_a": "un" }
+        },
+        "definite": {
+          "m": { "default": "el", "pl": "los" },
+          "f": { "default": "la", "stressed_a": "el", "pl": "las" }
+        }
+      },
+      "preposition_fusion": {
+        "a": { "el": "al" },
+        "de": { "el": "del" }
+      },
+      "morphology": {
+        "suffixes": [
+          { "ends_with": "or", "replace_with": "ora" },
+          { "ends_with": "án", "replace_with": "ana" },
+          { "ends_with": "o",  "replace_with": "a"   }
+        ],
+        "irregulars": {
+          "rey":       "reina",
+          "actor":     "actriz",
+          "emperador": "emperatriz",
+          "héroe":     "heroína",
+          "escritor":  "escritora",
+          "doctor":    "doctora",
+          "fisico":    "fisica",
+          "quimico":   "quimica",
+          "matematico":"matematica"
+        }
+      },
+      "phonetics": {
+        "impure_triggers": [],
+        "stressed_a_words": ["águila", "agua", "arma", "alma", "área", "hacha", "hambre"],
+        "elision": false
+      },
+      "structure": "{name} es {article}{sep}{profession} {nationality}."
+    },
+    "fr": {
+      "name": "French",
+      "syntax": {
+        "article_type": "prefix",
+        "adjective_position": "post",
+        "adjective_rules": {
+          "pre_nominal": ["grand", "petit", "bon", "mauvais", "jeune", "vieux", "beau", "nouveau", "joli", "gros", "long", "haut"]
+        },
+        "preposition_fusion": true
+      },
+      "articles": {
+        "indefinite": {
+          "m": { "default": "un", "vowel": "un" },
+          "f": { "default": "une", "vowel": "une" }
+        },
+        "definite": {
+          "m": { "default": "le", "vowel": "l'", "pl": "les" },
+          "f": { "default": "la", "vowel": "l'", "pl": "les" }
+        }
+      },
+      "preposition_fusion": {
+        "à": { "le": "au", "les": "aux" },
+        "de": { "le": "du", "les": "des" }
+      },
+      "morphology": {
+        "suffixes": [
+          { "ends_with": "eur", "replace_with": "euse"  },
+          { "ends_with": "teur","replace_with": "trice" },
+          { "ends_with": "ien", "replace_with": "ienne" },
+          { "ends_with": "on",  "replace_with": "onne"  },
+          { "ends_with": "el",  "replace_with": "elle"  }
+        ],
+        "irregulars": {
+          "roi":      "reine",
+          "acteur":   "actrice",
+          "auteur":   "auteure",
+          "docteur":  "docteure",
+          "écrivain": "écrivaine",
+          "scientifique": "scientifique"
+        }
+      },
+      "phonetics": {
+        "elision": true
+      },
+      "structure": "{name} est {article}{sep}{profession} {nationality}."
+    },
+    "pt": {
+      "name": "Portuguese",
+      "syntax": {
+        "article_type": "prefix",
+        "adjective_position": "post",
+        "preposition_fusion": true
+      },
+      "articles": {
+        "indefinite": {
+          "m": { "default": "um", "vowel": "um" },
+          "f": { "default": "uma", "vowel": "uma" }
+        },
+        "definite": {
+          "m": { "default": "o", "pl": "os" },
+          "f": { "default": "a", "pl": "as" }
+        }
+      },
+      "preposition_fusion": {
+        "de": { "o": "do", "a": "da", "os": "dos", "as": "das" },
+        "em": { "o": "no", "a": "na", "os": "nos", "as": "nas" },
+        "a":  { "a": "à",  "as": "às", "o": "ao",  "os": "aos" }
+      },
+      "morphology": {
+        "suffixes": [
+          { "ends_with": "or",  "replace_with": "ora" },
+          { "ends_with": "ês",  "replace_with": "esa" },
+          { "ends_with": "o",   "replace_with": "a"   }
+        ],
+        "irregulars": {
+          "rei":        "rainha",
+          "ator":       "atriz",
+          "escritor":   "escritora",
+          "doutor":     "doutora",
+          "médico":     "médica",
+          "físico":     "física",
+          "químico":    "química",
+          "matemático": "matemática"
+        }
+      },
+      "phonetics": {
+        "elision": false
+      },
+      "structure": "{name} é {article}{sep}{profession} {nationality}."
+    },
+    "ro": {
+      "name": "Romanian",
+      "syntax": {
+        "article_type": "mixed",
+        "notes": "Indefinite articles are prefixes. Definite articles are suffixes attached to the stem.",
+        "adjective_position": "post"
+      },
+      "articles": {
+        "indefinite": {
+          "m": { "default": "un" },
+          "f": { "default": "o" }
+        },
+        "definite": {
+          "m": { "suffix": "ul", "suffix_vowel": "le" },
+          "f": { "suffix": "a", "suffix_vowel": "ua" }
+        }
+      },
+      "morphology": {
+        "suffixes": [
+          { "ends_with": "ian", "replace_with": "iană" },
+          { "ends_with": "an",  "replace_with": "ană"  }
+        ],
+        "irregulars": {
+          "rege":     "regină",
+          "doctor":   "doctoriță",
+          "scriitor": "scriitoare"
+        }
+      },
+      "phonetics": {
+        "elision": false
+      },
+      "structure": "{name} este {article}{sep}{profession} {nationality}."
+    }
+  }
+}

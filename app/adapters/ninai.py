@@ -4,8 +4,8 @@ from pydantic import ValidationError
 
 from app.core.domain.frame import BioFrame, EventFrame, RelationalFrame
 from app.shared.config import settings
-# FIXED: Point to the Singleton in the correct location (Spec v2.1)
-from app.shared.lexicon import lexicon 
+# [FIX] Circular Import: Moved lexicon import inside methods to prevent startup crash
+# from app.shared.lexicon import lexicon 
 
 # Logger setup
 logger = logging.getLogger(getattr(settings, "OTEL_SERVICE_NAME", "abstract-wiki"))
@@ -56,6 +56,9 @@ class NinaiAdapter:
         Parses a Biographical Statement.
         Enriches Entity data using the Lexicon (Zone B).
         """
+        # [FIX] Local import to avoid circular dependency with app.shared.lexicon
+        from app.shared.lexicon import lexicon
+
         try:
             # --- Subject (Arg 1) ---
             subject_node = args[1]
@@ -176,6 +179,9 @@ class NinaiAdapter:
         """
         Parses an Event Statement.
         """
+        # [FIX] Local import to avoid circular dependency
+        from app.shared.lexicon import lexicon
+
         try:
             # Subject
             subject_node = args[1]
@@ -250,6 +256,9 @@ class NinaiAdapter:
         Safely retrieves facts/claims from a lexicon entry.
         Handles the case where lexicon.get_facts() doesn't exist yet.
         """
+        # [FIX] Local import to avoid circular dependency
+        from app.shared.lexicon import lexicon
+
         if not qid: 
             return []
         

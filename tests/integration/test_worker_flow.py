@@ -1,89 +1,123 @@
-# tests\integration\test_worker_flow.py
+# tests/integration/test_worker_flow.py
+import json
+import os
+from unittest.mock import AsyncMock, mock_open, patch
+
 import pytest
-from unittest.mock import AsyncMock, patch
+
 from app.core.domain.events import EventType, SystemEvent
-from app.worker.tasks import BuildTaskHandler
+from app.workers.worker import compile_grammar
+
 
 @pytest.mark.asyncio
 class TestWorkerFlow:
     """
-    Integration-style test verifying the Event -> Worker -> Domain logic flow.
+    Integration-style tests for the ARQ job function in app/workers/worker.py.
+    Note: There is no BuildTaskHandler class in the current codebase.
     """
 
-    async def test_build_event_handling(self, container, mock_grammar_engine, mock_repo):
-        """
-        Scenario: A 'BUILD_REQUESTED' event arrives at the Worker.
-        Expected: 
-        1. The event payload is parsed.
-        2. The grammar engine 'reload' method is called (for full strategy).
-        3. Logging confirms success.
-        """
-        # Arrange
-        handler = BuildTaskHandler()
-        
-        # Construct a raw event as it would come from Redis
-        event_payload = {
-            "lang_code": "deu",
-            "strategy": "full"
-        }
-        
+    async def test_build_requested_event_triggers_compile_job(self):
+        # Arrange: simulate the domain event payload (producer side)
         event = SystemEvent(
             type=EventType.BUILD_REQUESTED,
-            payload=event_payload
+            payload={"lang_code": "deu", "strategy": "full"},
         )
+        lang_code = event.payload["lang_code"]
+
+        base_dir = "/repo"
+        pgf_path = f"{base_dir}/gf/AbstractWiki.pgf"
+        src_file = f"{base_dir}/gf/WikiGer.gf"  # expected via iso_to_wiki mapping for 'deu' -> 'Ger'
+
+        iso_map = {"deu": {"wiki": "Ger"}}
+
+        def fake_os_exists(path: str) -> bool:
+            p = str(path)
+            return p in {src_file, pgf_path}
+
+        def fake_path_exists(self) -> bool:
+            # Only claim the iso_to_wiki file exists; all other Path.exists() checks -> False
+            return str(self).replace("\\", "/").endswith("/data/config/iso_to_wiki.json")
+
+        mock_proc = type(
+            "Proc",
+            (),
+            {"returncode": 0, "stdout": "Wrote AbstractWiki.pgf", "stderr": ""},
+        )()
 
         # Act
-        # We manually invoke the handler, simulating the Redis listener loop
-        await handler.handle(event)
+        with patch.dict(os.environ, {"AW_PGF_PATH": pgf_path}, clear=False), \
+             patch("app.workers.worker.settings.FILESYSTEM_REPO_PATH", base_dir), \
+             patch("app.workers.worker.os.path.exists", side_effect=fake_os_exists), \
+             patch("app.workers.worker.Path.exists", fake_path_exists), \
+             patch("builtins.open", mock_open(read_data=json.dumps(iso_map))), \
+             patch("app.workers.worker.asyncio.to_thread", new_callable=AsyncMock, return_value=mock_proc) as mock_to_thread, \
+             patch("app.workers.worker.runtime.reload", new_callable=AsyncMock) as mock_reload:
+
+            result = await compile_grammar({}, lang_code, trace_context=None)
 
         # Assert
-        
-        # 1. Verify Engine Interaction (The core "Job" of the worker)
-        # For 'full' strategy, we expect a reload
-        mock_grammar_engine.reload.assert_called_once()
-        
-        # 2. Verify Logging (Optional but useful)
-        # We can check if structlog context vars were set or if specific logs were emitted
-        # but that requires capturing logs. For now, asserting the side-effect (engine reload) is sufficient.
+        assert result == "Compiled deu successfully."
 
-    async def test_build_event_fast_strategy(self, container, mock_grammar_engine):
-        """
-        Scenario: A 'fast' strategy build event arrives.
-        Expected: The engine is NOT reloaded (since fast builds are just JSON generation).
-        """
-        # Arrange
-        handler = BuildTaskHandler()
-        event = SystemEvent(
-            type=EventType.BUILD_REQUESTED,
-            payload={"lang_code": "deu", "strategy": "fast"}
-        )
+        mock_reload.assert_called_once()
 
-        # Act
-        await handler.handle(event)
+        mock_to_thread.assert_awaited_once()
+        args, kwargs = mock_to_thread.call_args
+        assert args[0].__name__ == "run"  # subprocess.run
+        cmd = args[1]
+        assert cmd[0] == "gf"
+        assert "-batch" in cmd
+        assert "-make" in cmd
+        assert src_file in cmd
+        assert kwargs["cwd"] == f"{base_dir}/gf"
+        assert kwargs["capture_output"] is True
+        assert kwargs["text"] is True
 
-        # Assert
-        mock_grammar_engine.reload.assert_not_called()
+    async def test_source_file_missing_returns_message(self):
+        base_dir = "/repo"
+        pgf_path = f"{base_dir}/gf/AbstractWiki.pgf"
+        src_file = f"{base_dir}/gf/WikiXyz.gf"  # 'xyz' -> 'Xyz' fallback
 
-    async def test_worker_graceful_failure(self, container, mock_grammar_engine):
-        """
-        Scenario: The handler encounters an exception (e.g. Engine crash).
-        Expected: The exception is logged/caught, ensuring the worker loop doesn't crash.
-        """
-        # Arrange
-        handler = BuildTaskHandler()
-        event = SystemEvent(
-            type=EventType.BUILD_REQUESTED,
-            payload={"lang_code": "deu", "strategy": "full"}
-        )
-        
-        # Simulate a crash in the domain logic
-        # Note: We mock the private method or the engine dependency
-        mock_grammar_engine.reload.side_effect = Exception("Compilation Failed")
+        def fake_os_exists(path: str) -> bool:
+            # Source file missing -> early return (no subprocess call)
+            return str(path) != src_file
 
-        # Act
-        # The handle method wraps logic in try/except, so it should NOT raise.
-        await handler.handle(event)
+        with patch.dict(os.environ, {"AW_PGF_PATH": pgf_path}, clear=False), \
+             patch("app.workers.worker.settings.FILESYSTEM_REPO_PATH", base_dir), \
+             patch("app.workers.worker.os.path.exists", side_effect=fake_os_exists), \
+             patch("app.workers.worker.Path.exists", lambda _self: False), \
+             patch("app.workers.worker.asyncio.to_thread", new_callable=AsyncMock) as mock_to_thread, \
+             patch("app.workers.worker.runtime.reload", new_callable=AsyncMock) as mock_reload:
 
-        # Assert
-        # If we reached here, the worker didn't crash. 
-        mock_grammar_engine.reload.assert_called_once()
+            result = await compile_grammar({}, "xyz", trace_context=None)
+
+        assert result == f"Source file missing: {src_file}"
+        mock_to_thread.assert_not_awaited()
+        mock_reload.assert_not_called()
+
+    async def test_compile_failure_raises_runtimeerror(self):
+        base_dir = "/repo"
+        pgf_path = f"{base_dir}/gf/AbstractWiki.pgf"
+        src_file = f"{base_dir}/gf/WikiEng.gf"  # 'eng' -> 'Eng' fallback (no iso map)
+
+        def fake_os_exists(path: str) -> bool:
+            p = str(path)
+            return p in {src_file, pgf_path}
+
+        mock_proc = type(
+            "Proc",
+            (),
+            {"returncode": 1, "stdout": "", "stderr": "Syntax error"},
+        )()
+
+        with patch.dict(os.environ, {"AW_PGF_PATH": pgf_path}, clear=False), \
+             patch("app.workers.worker.settings.FILESYSTEM_REPO_PATH", base_dir), \
+             patch("app.workers.worker.os.path.exists", side_effect=fake_os_exists), \
+             patch("app.workers.worker.Path.exists", lambda _self: False), \
+             patch("app.workers.worker.asyncio.to_thread", new_callable=AsyncMock, return_value=mock_proc), \
+             patch("app.workers.worker.runtime.reload", new_callable=AsyncMock) as mock_reload:
+
+            with pytest.raises(RuntimeError) as excinfo:
+                await compile_grammar({}, "eng", trace_context=None)
+
+        assert "GF Compilation Failed" in str(excinfo.value)
+        mock_reload.assert_not_called()

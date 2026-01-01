@@ -1,366 +1,186 @@
 {
-  "en": {
-    "meta": {
-      "family": "germanic",
-      "language_code": "en",
-      "name": "English"
-    },
-    "syntax": {
-      "basic_word_order": "SVO",
-      "allows_null_subject": false,
-      "adjective_position": "pre",
-      "genitive_strategy": "of_phrase",
-      "relative_clause_position": "postnominal",
-      "relative_marker": "that",
-      "bio_default_tense": "present"
-    },
-    "articles": {
-      "definite": {
-        "singular": "the",
-        "plural": "the"
+  "_meta": {
+    "family": "germanic",
+    "version": 2.1,
+    "description": "Shared Germanic grammar matrix. Includes perfect German adjective declensions (Weak/Strong/Mixed) and Scandi suffix logic.",
+    "notes": "German adjectives must check the article type (Definite->Weak, Indefinite->Mixed, None->Strong) to select the correct ending."
+  },
+  "languages": {
+    "en": {
+      "meta": { "language_code": "en", "name": "English" },
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "pre",
+        "bio_default_tense": "present"
       },
-      "indefinite": {
-        "singular": {
-          "default": "a",
-          "before_vowel": "an"
-        },
-        "plural": ""
-      }
-    },
-    "nouns": {
-      "gender_defaults": "common",
-      "plural_rules": [
-        {
-          "ends_with": "y",
-          "replace_with": "ies"
-        },
-        {
-          "ends_with": "s",
-          "replace_with": "ses"
-        },
-        {
-          "ends_with": "",
-          "replace_with": "s"
+      "articles": {
+        "definite": { "singular": "the", "plural": "the" },
+        "indefinite": { "singular": { "default": "a", "before_vowel": "an" }, "plural": "" }
+      },
+      "nouns": {
+        "gender_defaults": "common",
+        "irregular_plurals": {
+          "person": "people", "man": "men", "woman": "women",
+          "child": "children", "scientist": "scientists"
         }
-      ],
-      "irregular_plurals": {
-        "person": "people",
-        "man": "men",
-        "woman": "women",
-        "child": "children",
-        "scientist": "scientists"
+      },
+      "adjectives": {
+        "inflects": false
+      },
+      "verbs": {
+        "copula": {
+          "present": { "1sg": "am", "2sg": "are", "3sg": "is", "pl": "are" },
+          "past": { "1sg": "was", "2sg": "were", "3sg": "was", "pl": "were" }
+        }
       }
     },
-    "adjectives": {
-      "degree": {
-        "comparative_suffix": "er",
-        "superlative_suffix": "est",
-        "irregular": {
-          "good": {
-            "comparative": "better",
-            "superlative": "best"
+    "de": {
+      "meta": { "language_code": "de", "name": "German" },
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "pre",
+        "bio_default_tense": "present"
+      },
+      "articles": {
+        "definite": {
+          "m_nom": "der", "f_nom": "die", "n_nom": "das", "pl_nom": "die",
+          "m_acc": "den", "f_acc": "die", "n_acc": "das", "pl_acc": "die"
+        },
+        "indefinite": {
+          "m_nom": "ein", "f_nom": "eine", "n_nom": "ein",
+          "m_acc": "einen", "f_acc": "eine", "n_acc": "ein"
+        }
+      },
+      "nouns": {
+        "genders": ["m", "f", "n"],
+        "plural_suffix_default": "en",
+        "irregular_plurals": {
+          "Mann": "Männer", "Frau": "Frauen", "Kind": "Kinder"
+        }
+      },
+      "adjectives": {
+        "inflects": true,
+        "declension_patterns": {
+          "weak": {
+            "description": "Used after definite articles (der/die/das)",
+            "nom": { "m": "e", "f": "e", "n": "e", "pl": "en" },
+            "acc": { "m": "en", "f": "e", "n": "e", "pl": "en" },
+            "dat": { "m": "en", "f": "en", "n": "en", "pl": "en" },
+            "gen": { "m": "en", "f": "en", "n": "en", "pl": "en" }
           },
-          "bad": {
-            "comparative": "worse",
-            "superlative": "worst"
+          "mixed": {
+            "description": "Used after indefinite articles (ein/eine)",
+            "nom": { "m": "er", "f": "e", "n": "es", "pl": "en" },
+            "acc": { "m": "en", "f": "e", "n": "es", "pl": "en" }
+          },
+          "strong": {
+            "description": "Used with no article",
+            "nom": { "m": "er", "f": "e", "n": "es", "pl": "e" },
+            "acc": { "m": "en", "f": "e", "n": "es", "pl": "e" },
+            "dat": { "m": "em", "f": "er", "n": "em", "pl": "en" }
           }
         }
       },
-      "position": "pre"
-    },
-    "verbs": {
-      "copula": {
-        "present": {
-          "1sg": "am",
-          "2sg": "are",
-          "3sg": "is",
-          "1pl": "are",
-          "2pl": "are",
-          "3pl": "are",
-          "default": "is"
-        },
-        "past": {
-          "1sg": "was",
-          "2sg": "were",
-          "3sg": "was",
-          "1pl": "were",
-          "2pl": "were",
-          "3pl": "were",
-          "default": "was"
-        },
-        "zero_present": false
-      },
-      "past_tense_rules": [
-        {
-          "ends_with": "e",
-          "replace_with": "ed"
-        },
-        {
-          "ends_with": "y",
-          "replace_with": "ied"
-        },
-        {
-          "ends_with": "",
-          "replace_with": "ed"
+      "verbs": {
+        "copula": {
+          "present": { "1sg": "bin", "2sg": "bist", "3sg": "ist", "pl": "sind" },
+          "past": { "1sg": "war", "2sg": "warst", "3sg": "war", "pl": "waren" }
         }
-      ],
-      "irregular_past": {
-        "be": "was",
-        "have": "had",
-        "do": "did",
-        "make": "made",
-        "go": "went",
-        "become": "became"
       }
     },
-    "phonology": {
-      "a_an_vowel_set": ["a", "e", "i", "o", "u"]
-    }
-  },
-  "de": {
-    "meta": {
-      "family": "germanic",
-      "language_code": "de",
-      "name": "German"
-    },
-    "syntax": {
-      "basic_word_order": "SVO",
-      "subordinate_word_order": "SOV",
-      "allows_null_subject": false,
-      "adjective_position": "pre",
-      "relative_clause_position": "postnominal",
-      "relative_marker": "die",
-      "bio_default_tense": "present"
-    },
-    "articles": {
-      "definite": {
-        "masc_sg_nom": "der",
-        "fem_sg_nom": "die",
-        "neut_sg_nom": "das",
-        "pl_nom": "die"
+    "nl": {
+      "meta": { "language_code": "nl", "name": "Dutch" },
+      "syntax": { "bio_default_tense": "present" },
+      "articles": {
+        "definite": { "common": "de", "neuter": "het", "pl": "de" },
+        "indefinite": { "default": "een" }
       },
-      "indefinite": {
-        "masc_sg_nom": "ein",
-        "fem_sg_nom": "eine",
-        "neut_sg_nom": "ein"
-      }
-    },
-    "nouns": {
-      "genders": ["masc", "fem", "neut"],
-      "plural_rules": [
-        {
-          "ends_with": "e",
-          "replace_with": "en"
-        },
-        {
-          "ends_with": "",
-          "replace_with": "e"
+      "adjectives": {
+        "inflects": true,
+        "rules": {
+          "attributive_common": "e",
+          "attributive_neuter_def": "e",
+          "attributive_neuter_indef": "",
+          "predicative": ""
         }
-      ],
-      "irregular_plurals": {
-        "Mann": "Männer",
-        "Frau": "Frauen",
-        "Kind": "Kinder",
-        "Wissenschaftler": "Wissenschaftler",
-        "Wissenschaftlerin": "Wissenschaftlerinnen"
-      }
-    },
-    "adjectives": {
-      "declension_patterns": {
-        "weak": {},
-        "strong": {},
-        "mixed": {}
       },
-      "position": "pre"
-    },
-    "verbs": {
-      "copula": {
-        "present": {
-          "1sg": "bin",
-          "2sg": "bist",
-          "3sg": "ist",
-          "1pl": "sind",
-          "2pl": "seid",
-          "3pl": "sind",
-          "default": "ist"
-        },
-        "past": {
-          "1sg": "war",
-          "2sg": "warst",
-          "3sg": "war",
-          "1pl": "waren",
-          "2pl": "wart",
-          "3pl": "waren",
-          "default": "war"
-        },
-        "zero_present": false
-      },
-      "past_tense_rules": [
-        {
-          "prefix": "ge",
-          "suffix": "t"
+      "verbs": {
+        "copula": {
+          "present": { "1sg": "ben", "2sg": "bent", "3sg": "is", "pl": "zijn" },
+          "past": { "1sg": "was", "2sg": "was", "3sg": "was", "pl": "waren" }
         }
-      ],
-      "irregular_past": {
-        "sein": "war",
-        "haben": "hatte",
-        "werden": "wurde"
       }
-    }
-  },
-  "nl": {
-    "meta": {
-      "family": "germanic",
-      "language_code": "nl",
-      "name": "Dutch"
     },
-    "syntax": {
-      "basic_word_order": "SVO",
-      "subordinate_word_order": "SOV",
-      "allows_null_subject": false,
-      "adjective_position": "pre",
-      "relative_clause_position": "postnominal",
-      "relative_marker": "die",
-      "bio_default_tense": "present"
-    },
-    "articles": {
-      "definite": {
-        "common_sg": "de",
-        "neuter_sg": "het",
-        "pl": "de"
+    "sv": {
+      "meta": { "language_code": "sv", "name": "Swedish" },
+      "syntax": { "bio_default_tense": "present" },
+      "articles": {
+        "type": "suffix",
+        "definite_suffixes": { "common": "en", "neuter": "et", "pl": "na" },
+        "indefinite": { "common": "en", "neuter": "ett" }
       },
-      "indefinite": {
-        "singular": "een",
-        "plural": ""
+      "adjectives": {
+        "inflects": true,
+        "forms": {
+          "common": "",
+          "neuter": "t",
+          "plural": "a",
+          "definite": "a"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "present": { "default": "är" },
+          "past": { "default": "var" }
+        }
       }
     },
-    "verbs": {
-      "copula": {
-        "present": {
-          "1sg": "ben",
-          "2sg": "bent",
-          "3sg": "is",
-          "1pl": "zijn",
-          "2pl": "zijn",
-          "3pl": "zijn",
-          "default": "is"
-        },
-        "past": {
-          "1sg": "was",
-          "2sg": "was",
-          "3sg": "was",
-          "1pl": "waren",
-          "2pl": "waren",
-          "3pl": "waren",
-          "default": "was"
-        },
-        "zero_present": false
-      }
-    }
-  },
-  "sv": {
-    "meta": {
-      "family": "germanic",
-      "language_code": "sv",
-      "name": "Swedish"
-    },
-    "syntax": {
-      "basic_word_order": "SVO",
-      "allows_null_subject": false,
-      "adjective_position": "pre",
-      "relative_clause_position": "postnominal",
-      "relative_marker": "som",
-      "bio_default_tense": "present"
-    },
-    "articles": {
-      "definite_suffix": true,
-      "indefinite": {
-        "common": "en",
-        "neuter": "ett"
+    "da": {
+      "meta": { "language_code": "da", "name": "Danish" },
+      "syntax": { "bio_default_tense": "present" },
+      "articles": {
+        "type": "suffix",
+        "definite_suffixes": { "common": "en", "neuter": "et", "pl": "ne" },
+        "indefinite": { "common": "en", "neuter": "et" }
+      },
+      "adjectives": {
+        "inflects": true,
+        "forms": {
+          "common": "",
+          "neuter": "t",
+          "plural": "e",
+          "definite": "e"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "present": { "default": "er" },
+          "past": { "default": "var" }
+        }
       }
     },
-    "verbs": {
-      "copula": {
-        "present": {
-          "3sg": "är",
-          "default": "är"
-        },
-        "past": {
-          "3sg": "var",
-          "default": "var"
-        },
-        "zero_present": false
-      }
-    }
-  },
-  "da": {
-    "meta": {
-      "family": "germanic",
-      "language_code": "da",
-      "name": "Danish"
-    },
-    "syntax": {
-      "basic_word_order": "SVO",
-      "allows_null_subject": false,
-      "adjective_position": "pre",
-      "relative_clause_position": "postnominal",
-      "relative_marker": "som",
-      "bio_default_tense": "present"
-    },
-    "articles": {
-      "definite_suffix": true,
-      "indefinite": {
-        "common": "en",
-        "neuter": "et"
-      }
-    },
-    "verbs": {
-      "copula": {
-        "present": {
-          "3sg": "er",
-          "default": "er"
-        },
-        "past": {
-          "3sg": "var",
-          "default": "var"
-        },
-        "zero_present": false
-      }
-    }
-  },
-  "no": {
-    "meta": {
-      "family": "germanic",
-      "language_code": "no",
-      "name": "Norwegian"
-    },
-    "syntax": {
-      "basic_word_order": "SVO",
-      "allows_null_subject": false,
-      "adjective_position": "pre",
-      "relative_clause_position": "postnominal",
-      "relative_marker": "som",
-      "bio_default_tense": "present"
-    },
-    "articles": {
-      "definite_suffix": true,
-      "indefinite": {
-        "common": "en",
-        "feminine": "ei",
-        "neuter": "et"
-      }
-    },
-    "verbs": {
-      "copula": {
-        "present": {
-          "3sg": "er",
-          "default": "er"
-        },
-        "past": {
-          "3sg": "var",
-          "default": "var"
-        },
-        "zero_present": false
+    "no": {
+      "meta": { "language_code": "no", "name": "Norwegian" },
+      "syntax": { "bio_default_tense": "present" },
+      "articles": {
+        "type": "suffix",
+        "definite_suffixes": { "m": "en", "f": "a", "n": "et", "pl": "ene" },
+        "indefinite": { "m": "en", "f": "ei", "n": "et" }
+      },
+      "adjectives": {
+        "inflects": true,
+        "forms": {
+          "common": "",
+          "neuter": "t",
+          "plural": "e",
+          "definite": "e"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "present": { "default": "er" },
+          "past": { "default": "var" }
+        }
       }
     }
   }

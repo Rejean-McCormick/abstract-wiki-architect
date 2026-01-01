@@ -1,219 +1,269 @@
 # app/workers/worker.py
 import asyncio
-import os
-import sys
 import json
+import os
 import subprocess
-import structlog
+import sys
 from dataclasses import dataclass
-from typing import Dict, Any, Optional
 from pathlib import Path
+from typing import Any, Dict, Optional, Callable, Coroutine
 
-# Add project root to path for reliable imports
+import structlog
+from arq.connections import RedisSettings
+
+# Add project root to path for reliable imports (container / local)
 sys.path.append(os.getcwd())
 
-from arq.connections import RedisSettings
-from opentelemetry.propagate import extract
-
-# v2.0 Optimization: OS-Native File Watching
+# Optional: OS-native file watching
 try:
-    from watchfiles import awatch
-except ImportError:
+    from watchfiles import awatch  # type: ignore
+except Exception:
     awatch = None
 
+# Optional: PGF runtime (C-runtime python bindings)
 try:
-    import pgf
-except ImportError:
+    import pgf  # type: ignore
+except Exception:
     pgf = None
 
-from app.shared.config import settings, StorageBackend
+from app.shared.config import settings
 from app.shared.telemetry import setup_telemetry, get_tracer
-from app.shared.lexicon import lexicon  # <--- Zone B: Lexicon Memory Bank
+from app.shared.lexicon import lexicon
 
-# Conditional Import for S3
-try:
-    from app.adapters.s3_repo import S3LanguageRepo
-except ImportError:
-    S3LanguageRepo = None
+from app.adapters.messaging.redis_broker import RedisMessageBroker
+from app.core.domain.events import (
+    SystemEvent,
+    EventType,
+    BuildRequestedPayload,
+    BuildFailedPayload,
+)
 
 logger = structlog.get_logger()
 tracer = get_tracer(__name__)
 
-# --- Lazy Singleton Runtime ---
+
+# -----------------------------
+# Runtime: in-memory PGF cache
+# -----------------------------
 @dataclass
 class GrammarRuntime:
     """
-    Singleton that holds loaded PGF binaries in memory.
-    Prevents 'Cold Start' latency for validation/generation tasks.
-    Enforces Matrix 'Runnable' verdicts.
+    Holds a loaded PGF in memory (if pgf runtime is installed).
+    Also supports "zombie language" purging based on the Everything Matrix verdict.
     """
     _pgf: Optional[Any] = None
     _last_mtime: float = 0.0
-    
-    def load(self, pgf_path: str):
-        logger.info("runtime_loading_pgf", path=pgf_path)
-        if pgf and os.path.exists(pgf_path):
-            try:
-                # 1. Load the Binary (All languages linked)
-                self._last_mtime = os.path.getmtime(pgf_path)
-                raw_pgf = pgf.readPGF(pgf_path)
-                
-                # 2. v2.1: Enforce Runnable Verdict (The Safety Filter)
-                # We check the Matrix to identify "Zombie Languages" (linked but empty data)
-                # and remove them from the runtime before the application sees them.
-                matrix_path = Path(settings.FILESYSTEM_REPO_PATH) / "data" / "indices" / "everything_matrix.json"
-                
-                if matrix_path.exists():
-                    try:
-                        with open(matrix_path, "r") as f:
-                            matrix = json.load(f)
-                        
-                        # Iterate a copy of keys since we might delete
-                        for lang_name in list(raw_pgf.languages.keys()):
-                            # Map 'WikiFra' -> 'fra'
-                            iso_code = lang_name[-3:].lower()
-                            
-                            lang_data = matrix.get("languages", {}).get(iso_code)
-                            if lang_data:
-                                is_runnable = lang_data.get("verdict", {}).get("runnable", True)
-                                
-                                if not is_runnable:
-                                    logger.warning("runtime_purging_zombie_language", 
-                                                 lang=lang_name, 
-                                                 reason="Matrix verdict.runnable=False")
-                                    # Active Purge: Remove from C-Runtime dictionary
-                                    del raw_pgf.languages[lang_name]
-                                    
-                    except Exception as e:
-                        logger.error("runtime_matrix_filter_failed", error=str(e))
-                else:
-                    logger.warning("runtime_matrix_missing", path=str(matrix_path))
 
-                # 3. Finalize State
-                self._pgf = raw_pgf
-                logger.info("runtime_pgf_loaded_success", active_languages=list(self._pgf.languages.keys()))
-                
-            except Exception as e:
-                logger.error("runtime_pgf_load_failed", error=str(e))
-        else:
-            logger.warning("runtime_pgf_not_found_or_no_lib", path=pgf_path)
+    def load(self, pgf_path: str) -> None:
+        logger.info("runtime_loading_pgf", path=pgf_path)
+
+        if not pgf:
+            logger.warning("runtime_pgf_lib_missing", note="python 'pgf' module not installed")
+            return
+
+        if not os.path.exists(pgf_path):
+            logger.warning("runtime_pgf_missing", path=pgf_path)
+            return
+
+        try:
+            self._last_mtime = os.path.getmtime(pgf_path)
+            raw_pgf = pgf.readPGF(pgf_path)
+
+            # Purge zombie languages (linked but not runnable) using Everything Matrix
+            matrix_path = Path(settings.FILESYSTEM_REPO_PATH) / "data" / "indices" / "everything_matrix.json"
+            if matrix_path.exists():
+                try:
+                    matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
+                    languages = matrix.get("languages", {})
+                    for lang_name in list(getattr(raw_pgf, "languages", {}).keys()):
+                        iso_guess = lang_name[-3:].lower()
+                        verdict = (languages.get(iso_guess, {}) or {}).get("verdict", {}) or {}
+                        runnable = verdict.get("runnable", True)
+                        if not runnable:
+                            logger.warning(
+                                "runtime_purging_zombie_language",
+                                lang=lang_name,
+                                iso=iso_guess,
+                                reason="matrix.verdict.runnable=False",
+                            )
+                            del raw_pgf.languages[lang_name]
+                except Exception as e:
+                    logger.error("runtime_matrix_filter_failed", error=str(e))
+            else:
+                logger.warning("runtime_matrix_missing", path=str(matrix_path))
+
+            self._pgf = raw_pgf
+            logger.info("runtime_pgf_loaded_success", active_languages=list(self._pgf.languages.keys()))
+        except Exception as e:
+            logger.error("runtime_pgf_load_failed", error=str(e))
 
     def get(self) -> Optional[Any]:
         return self._pgf
 
-    async def reload(self):
-        """Helper to reload the current configured path."""
-        logger.info("runtime_reloading_triggered")
+    async def reload(self) -> None:
+        logger.info("runtime_reloading_triggered", path=settings.PGF_PATH)
         self.load(settings.PGF_PATH)
 
-# Global Instance
+
 runtime = GrammarRuntime()
 
-# --- Job Logic ---
 
-async def compile_grammar(ctx: Dict[str, Any], language_code: str, trace_context: Dict[str, str] = None) -> str:
+# -----------------------------
+# Subprocess helpers
+# -----------------------------
+async def _run_cmd(
+    argv: list[str],
+    *,
+    cwd: Optional[str] = None,
+    env: Optional[Dict[str, str]] = None,
+    timeout_sec: Optional[int] = None,
+) -> subprocess.CompletedProcess:
     """
-    ARQ Job: Compiles a single GF source file (Tier 2/3 dev mode).
+    Run a blocking subprocess in a thread.
+    Captures stdout/stderr for logging and error reporting.
     """
-    # 1. Link Telemetry Span (Distributed Tracing)
-    ctx_otel = extract(trace_context) if trace_context else None
+    def _runner() -> subprocess.CompletedProcess:
+        return subprocess.run(
+            argv,
+            cwd=cwd,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=timeout_sec,
+        )
 
-    with tracer.start_as_current_span("worker_compile_grammar", context=ctx_otel) as span:
-        span.set_attribute("language.code", language_code)
-        
+    logger.info("subprocess_exec", argv=" ".join(argv), cwd=cwd)
+    return await asyncio.to_thread(_runner)
+
+
+# -----------------------------
+# ARQ Jobs
+# -----------------------------
+async def build_language(ctx: Dict[str, Any], request: Dict[str, Any]) -> str:
+    """
+    Canonical job triggered by the Event Bus bridge.
+
+    Implements the *correct* build pipeline (no "single-file pgf" dead end):
+      1) Index knowledge layer: tools/everything_matrix/build_index.py
+      2) Compile/link grammar layer: builder/orchestrator.py (two-phase, AI healing, last-man-standing fix)
+      3) Reload in-memory runtime if available
+      4) Emit BUILD_COMPLETED / BUILD_FAILED
+    """
+    broker: Optional[RedisMessageBroker] = ctx.get("event_broker")
+
+    payload = BuildRequestedPayload(**request)
+    lang_code = payload.lang_code
+    strategy = (payload.strategy or "fast").lower()
+
+    with tracer.start_as_current_span("worker_build_language") as span:
+        span.set_attribute("language.code", lang_code)
+        span.set_attribute("build.strategy", strategy)
+
         try:
-            logger.info("compilation_started", lang=language_code)
-            
-            # 2. Define Paths
-            base_dir = settings.FILESYSTEM_REPO_PATH
-            
-            # [FIX] Resolve RGL suffix (e.g. 'de' -> 'Ger')
-            # Naive capitalization fails for standard languages (de != WikiDe).
-            # We must consult the iso_to_wiki map.
-            rgl_suffix = language_code.capitalize()
-            
-            mapping_path = Path(base_dir) / "data" / "config" / "iso_to_wiki.json"
-            if mapping_path.exists():
-                try:
-                    with open(mapping_path, "r") as f:
-                        iso_map = json.load(f)
-                    
-                    entry = iso_map.get(language_code.lower())
-                    if entry:
-                        if isinstance(entry, dict):
-                            rgl_suffix = entry.get("wiki", rgl_suffix)
-                        elif isinstance(entry, str):
-                            rgl_suffix = entry.replace("Wiki", "")
-                except Exception as e:
-                    logger.warning("worker_iso_map_error", error=str(e))
+            logger.info("build_job_started", lang=lang_code, strategy=strategy)
 
-            src_file = os.path.join(base_dir, "gf", f"Wiki{rgl_suffix}.gf")
-            
-            # 3. Execute GF Compiler
-            cmd = [
-                "gf", 
-                "-batch",
-                "-make", 
-                "--output-format=pgf", 
-                src_file
-            ]
-            
-            if os.path.exists(src_file):
-                logger.info("executing_subprocess", cmd=" ".join(cmd))
-                
-                process = await asyncio.to_thread(
-                    subprocess.run, 
-                    cmd, 
-                    capture_output=True, 
-                    text=True,
-                    cwd=os.path.join(base_dir, "gf")
+            # Emit lifecycle event
+            if broker:
+                await broker.publish(
+                    SystemEvent(
+                        type=EventType.BUILD_STARTED,
+                        payload={"lang_code": lang_code, "strategy": strategy, "requester_id": payload.requester_id},
+                    )
                 )
 
-                if process.returncode != 0:
-                    error_msg = f"GF Compilation Failed: {process.stderr}"
-                    logger.error("compilation_failed", error=error_msg)
-                    raise RuntimeError(error_msg)
-                
-                logger.info("subprocess_success", output=process.stdout[:100])
-            else:
-                logger.warning("source_file_missing", path=src_file)
-                return f"Source file missing: {src_file}"
+            # "fast" means: request exists, but do not attempt full PGF rebuild here.
+            # Full rebuild is "full".
+            if strategy == "fast":
+                logger.info("build_job_fast_noop", lang=lang_code, note="fast strategy does not rebuild PGF")
+                return f"Build fast acknowledged for {lang_code} (no PGF rebuild)."
 
-            # 4. Persistence (S3)
-            if settings.STORAGE_BACKEND == StorageBackend.S3 and S3LanguageRepo:
-                target_pgf = settings.PGF_PATH
-                if os.path.exists(target_pgf):
-                    repo = S3LanguageRepo()
-                    with open(target_pgf, "rb") as f:
-                        content = f.read()
-                        await repo.save_grammar(language_code, content)
-                    logger.info("s3_upload_success", bucket=settings.AWS_BUCKET_NAME)
-                else:
-                    logger.warning("s3_upload_skipped", msg="PGF file not found locally")
+            repo_root = Path(settings.FILESYSTEM_REPO_PATH)
 
-            # 5. Hot Reload
-            if os.path.exists(settings.PGF_PATH):
-                await runtime.reload()
-            
-            logger.info("compilation_complete", lang=language_code)
-            return f"Compiled {language_code} successfully."
+            # Step 1: Indexer (updates data/indices/everything_matrix.json etc.)
+            indexer = repo_root / "tools" / "everything_matrix" / "build_index.py"
+            if not indexer.exists():
+                raise RuntimeError(f"Indexer missing: {indexer}")
+
+            idx_proc = await _run_cmd(
+                [sys.executable, "-u", str(indexer)],
+                cwd=str(repo_root),
+            )
+            if idx_proc.returncode != 0:
+                raise RuntimeError(f"Indexing failed:\n{idx_proc.stderr.strip() or idx_proc.stdout.strip()}")
+
+            # Step 2: Builder (two-phase GF orchestrator)
+            builder = repo_root / "gf" / "build_orchestrator.py"
+            if not builder.exists():
+                raise RuntimeError(f"GF build orchestrator missing: {builder}")
+
+            build_proc = await _run_cmd(
+                [sys.executable, "-u", str(builder)],
+                cwd=str(repo_root / "gf"),
+            )
+            if build_proc.returncode != 0:
+                # Include tail to avoid exploding logs
+                stderr_tail = (build_proc.stderr or "").strip()[-4000:]
+                stdout_tail = (build_proc.stdout or "").strip()[-4000:]
+                raise RuntimeError(
+                    "GF build orchestrator failed.\n"
+                    f"STDERR (tail):\n{stderr_tail}\n\nSTDOUT (tail):\n{stdout_tail}"
+                )
+
+            # Validate artifact
+            pgf_path = settings.PGF_PATH
+            if not os.path.exists(pgf_path):
+                raise RuntimeError(f"Build completed but PGF artifact missing at: {pgf_path}")
+
+            # Hot reload (best-effort)
+            await runtime.reload()
+
+            logger.info("build_job_completed", lang=lang_code, pgf_path=pgf_path)
+
+            if broker:
+                await broker.publish(
+                    SystemEvent(
+                        type=EventType.BUILD_COMPLETED,
+                        payload={"lang_code": lang_code, "strategy": strategy, "pgf_path": pgf_path},
+                    )
+                )
+
+            return f"Built {lang_code} successfully."
 
         except Exception as e:
-            logger.error("job_failed", error=str(e))
+            logger.error("build_job_failed", lang=lang_code, error=str(e))
             span.record_exception(e)
-            raise e
 
-# --- Background Tasks ---
+            if broker:
+                fail = BuildFailedPayload(
+                    lang_code=lang_code,
+                    error_code="WORKER_BUILD_FAILED",
+                    details=str(e),
+                )
+                await broker.publish(
+                    SystemEvent(
+                        type=EventType.BUILD_FAILED,
+                        payload=fail.model_dump(),
+                    )
+                )
+            raise
 
-async def watch_grammar_file(ctx):
+
+# Back-compat alias (if anything still enqueues compile_grammar directly)
+async def compile_grammar(ctx: Dict[str, Any], language_code: str) -> str:
+    return await build_language(ctx, {"lang_code": language_code, "strategy": "full"})
+
+
+# -----------------------------
+# Background tasks
+# -----------------------------
+async def watch_grammar_file(_: Dict[str, Any]) -> None:
     """
-    Background Task: Watches the PGF binary for changes.
-    Optimized: Uses 'watchfiles' (OS events) if available, falls back to polling.
+    Watches settings.PGF_PATH and reloads runtime when it changes.
+    Uses watchfiles when available, otherwise polling.
     """
     pgf_path = settings.PGF_PATH
     pgf_dir = os.path.dirname(pgf_path)
-    
-    # Ensure directory exists to watch
+
     if not os.path.exists(pgf_dir):
         logger.warning("watcher_dir_missing", path=pgf_dir)
         return
@@ -222,72 +272,159 @@ async def watch_grammar_file(ctx):
 
     if awatch:
         try:
-            # 🚀 v2.0: OS-Native Event Loop
             async for changes in awatch(pgf_dir):
                 for change_type, file_path in changes:
                     if os.path.abspath(file_path) == os.path.abspath(pgf_path):
                         logger.info("watcher_detected_change", file=file_path, type=change_type)
                         await asyncio.sleep(0.1)
                         runtime.load(pgf_path)
+        except asyncio.CancelledError:
+            logger.info("watcher_stopped")
         except Exception as e:
             logger.error("watcher_crashed", error=str(e))
     else:
-        # Fallback: Polling Loop (Legacy)
-        while True:
-            try:
-                current_mtime = 0
-                if os.path.exists(pgf_path):
-                    current_mtime = os.path.getmtime(pgf_path)
-                
+        try:
+            while True:
+                current_mtime = os.path.getmtime(pgf_path) if os.path.exists(pgf_path) else 0.0
                 if current_mtime > runtime._last_mtime:
                     logger.info("watcher_polling_change", old=runtime._last_mtime, new=current_mtime)
                     runtime.load(pgf_path)
-                
                 await asyncio.sleep(5)
-            except asyncio.CancelledError:
-                logger.info("watcher_stopped")
-                break
-            except Exception as e:
-                logger.error("watcher_error", error=str(e))
-                await asyncio.sleep(10)
+        except asyncio.CancelledError:
+            logger.info("watcher_stopped")
+        except Exception as e:
+            logger.error("watcher_error", error=str(e))
 
-# --- ARQ Worker Configuration ---
 
-async def startup(ctx):
-    """Lifecycle Hook: Runs when the Worker Container starts."""
+# -----------------------------
+# Event Bus -> ARQ bridge
+# -----------------------------
+async def _event_dedupe(ctx: Dict[str, Any], event_id: str, *, ttl_sec: int = 3600) -> bool:
+    """
+    True if event is new; False if already seen.
+    Uses Redis SET NX with TTL for idempotency.
+    """
+    redis = ctx.get("redis")
+    if not redis or not event_id:
+        return True
+
+    key = f"event_seen:{event_id}"
+    try:
+        # redis here is ArqRedis; supports .set(...) in practice.
+        ok = await redis.set(key, "1", ex=ttl_sec, nx=True)  # type: ignore[attr-defined]
+        return bool(ok)
+    except Exception as e:
+        logger.warning("event_dedupe_failed", event_id=event_id, error=str(e))
+        return True
+
+
+async def _bridge_handler_factory(ctx: Dict[str, Any]) -> Callable[[SystemEvent], Coroutine[Any, Any, None]]:
+    async def handler(event: SystemEvent) -> None:
+        if not await _event_dedupe(ctx, event.id):
+            logger.info("bridge_drop_duplicate_event", event_id=event.id, type=event.type)
+            return
+
+        try:
+            payload = BuildRequestedPayload(**(event.payload or {}))
+        except Exception as e:
+            logger.error("bridge_bad_payload", event_id=event.id, error=str(e), payload=event.payload)
+            return
+
+        # Convert domain event -> infrastructure job
+        request = {
+            "lang_code": payload.lang_code,
+            "strategy": payload.strategy,
+            "requester_id": payload.requester_id,
+            "event_id": event.id,
+            "trace_id": event.trace_id,
+        }
+
+        redis = ctx.get("redis")
+        if not redis:
+            logger.error("bridge_no_arq_redis", note="ctx['redis'] missing; cannot enqueue")
+            return
+
+        job_id = await redis.enqueue_job("build_language", request)  # type: ignore[attr-defined]
+        logger.info("bridge_enqueued_job", event_id=event.id, job_id=job_id, lang=payload.lang_code, strategy=payload.strategy)
+
+    return handler
+
+
+async def _run_bridge(ctx: Dict[str, Any]) -> None:
+    broker: RedisMessageBroker = ctx["event_broker"]
+    handler = await _bridge_handler_factory(ctx)
+
+    logger.info("bridge_subscribing", event_type=EventType.BUILD_REQUESTED)
+    await broker.subscribe(EventType.BUILD_REQUESTED, handler)
+
+
+# -----------------------------
+# ARQ lifecycle
+# -----------------------------
+async def startup(ctx: Dict[str, Any]) -> None:
     setup_telemetry("architect-worker")
     logger.info("worker_startup", queue=settings.REDIS_QUEUE_NAME)
-    
-    # 1. Initial Load of PGF (Zone A)
+
+    # Event broker (pub/sub) used by bridge + lifecycle emits
+    broker = RedisMessageBroker()
+    await broker.connect()
+    ctx["event_broker"] = broker
+
+    # Best-effort: initial PGF load
     runtime.load(settings.PGF_PATH)
-    
-    # 2. Pre-load Lexicon (Zone B)
-    # This prevents 'Cold Start' latency on the first QID lookup request.
-    lexicon.load_language("eng")
 
-    # 3. Start Background Watcher
-    ctx['watcher_task'] = asyncio.create_task(watch_grammar_file(ctx))
+    # Best-effort: warm lexicon (prevents cold-start on first lookup job types)
+    try:
+        lexicon.load_language("eng")
+    except Exception as e:
+        logger.warning("lexicon_warm_failed", error=str(e))
 
-async def shutdown(ctx):
+    # Start tasks
+    ctx["bridge_task"] = asyncio.create_task(_run_bridge(ctx))
+    ctx["watcher_task"] = asyncio.create_task(watch_grammar_file(ctx))
+
+    # Helpful config visibility (does not mutate env; just logs)
+    if os.getenv("PGF_PATH") and not os.getenv("AW_PGF_PATH"):
+        logger.warning(
+            "env_pgf_path_mismatch",
+            note="PGF_PATH is set but AW_PGF_PATH is not; settings.PGF_PATH may ignore PGF_PATH depending on config.py",
+            PGF_PATH=os.getenv("PGF_PATH"),
+        )
+
+
+async def shutdown(ctx: Dict[str, Any]) -> None:
     logger.info("worker_shutdown")
-    if 'watcher_task' in ctx:
-        ctx['watcher_task'].cancel()
+
+    for task_name in ("bridge_task", "watcher_task"):
+        task = ctx.get(task_name)
+        if task:
+            task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
+            except Exception as e:
+                logger.error("shutdown_task_error", task=task_name, error=str(e))
+
+    broker: Optional[RedisMessageBroker] = ctx.get("event_broker")
+    if broker:
         try:
-            await ctx['watcher_task']
-        except asyncio.CancelledError:
-            logger.info("watcher_task_cancelled_cleanly")
+            await broker.disconnect()
         except Exception as e:
-            logger.error("watcher_shutdown_error", error=str(e))
+            logger.error("broker_disconnect_failed", error=str(e))
+
 
 class WorkerSettings:
     """
-    ARQ Configuration Class.
+    ARQ configuration.
     """
     redis_settings = RedisSettings.from_dsn(settings.REDIS_URL)
-
     queue_name = settings.REDIS_QUEUE_NAME
-    functions = [compile_grammar]
-    
+
+    # Job registry
+    functions = [build_language, compile_grammar]
+
     on_startup = startup
     on_shutdown = shutdown
+
     max_jobs = settings.WORKER_CONCURRENCY

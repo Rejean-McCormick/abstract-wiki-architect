@@ -1,4 +1,4 @@
-# utils\build_lexicon_from_wikidata.py
+# utils/build_lexicon_from_wikidata.py
 """
 utils/build_lexicon_from_wikidata.py
 ====================================
@@ -25,27 +25,28 @@ from __future__ import annotations
 import argparse
 import gzip
 import json
+import logging
 import os
 import sys
 from typing import Any, Dict, Iterable, Iterator, Optional, Tuple
 
-# Use local logger setup if available, else standard logging
-try:
-    from utils.logging_setup import get_logger
-    log = get_logger(__name__)
-except ImportError:
-    import logging
-    logging.basicConfig(level=logging.INFO)
-    log = logging.getLogger("build_lexicon")
+# Ensure project root is on path for imports
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.append(PROJECT_ROOT)
 
-SCHEMA_VERSION = 2
+from utils.logging_setup import get_logger, init_logging
+
+log = get_logger(__name__)
+
+SCHEMA_VERSION = "0.2.0"  # Updated to match migrate script string versioning
 
 # ---------------------------------------------------------------------------
 # Domain Classification Config
 # ---------------------------------------------------------------------------
 
 # Known QIDs for broad semantic categories to help sort into domains.
-# This is a heuristic heuristic starter set.
+# This is a heuristic starter set.
 DOMAIN_QID_MAP = {
     # PEOPLE (Professions, Titles, Relations)
     "Q28640": "people",   # profession
@@ -187,13 +188,15 @@ def _build_lexeme_entry(lang_code: str, lexeme: Dict[str, Any]) -> Tuple[Optiona
     domain = _classify_domain(lexeme, pos)
 
     entry = {
+        "key": lemma,  # Added 'key' to comply with new schema requirements
         "lemma": lemma,
         "pos": pos,
         "qid": qid,
         "forms": {
             "default": lemma
         },
-        "source_id": lexeme.get("id")
+        "source_id": lexeme.get("id"),
+        "extra": {} # Added 'extra' to comply with new schema requirements
     }
     
     # Extract forms (inflections)
@@ -266,7 +269,7 @@ def save_shards(sharded_data: Dict[str, Any], out_dir: str, lang_code: str):
         
         # Structure matches Schema V2
         output_obj = {
-            "_meta": {
+            "meta": {
                 "language": lang_code,
                 "domain": domain,
                 "version": SCHEMA_VERSION,
@@ -285,6 +288,9 @@ def save_shards(sharded_data: Dict[str, Any], out_dir: str, lang_code: str):
 # ---------------------------------------------------------------------------
 
 def main():
+    # Initialize logging first
+    init_logging()
+
     parser = argparse.ArgumentParser(
         description="Build domain-sharded lexicon JSONs from Wikidata Lexeme dump."
     )

@@ -14,7 +14,7 @@ export const INVENTORY = {
     "StartWSL.bat",
     "sync_config_from_gf.py",
   ],
-  gf: ["gf/build_orchestrator.py"],
+  gf: ["builder/orchestrator.py"],
   tools: {
     root: [
       "tools/cleanup_root.py",

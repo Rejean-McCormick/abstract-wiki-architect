@@ -6,9 +6,10 @@
  * Goals:
  * - Default base URL targets /api/v1
  * - Robust against common backend variants during migration:
- *   - health: /health, /health/live
- *   - schemas: /schemas/frames/:type, /frames/schemas/:type
- *   - generate: /generate/:lang (new), /generate (legacy)
+ * - health: /health, /health/live
+ * - schemas: /schemas/frames/:type, /frames/schemas/:type
+ * - generate: /generate/:lang (new), /generate (legacy)
+ * - languages: strings (legacy) vs objects (v2.1)
  */
 
 const DEFAULT_API_BASE_URL =
@@ -323,6 +324,20 @@ function normalizeFrameTypes(raw: unknown): FrameTypeMeta[] {
     .filter(Boolean) as FrameTypeMeta[];
 }
 
+function normalizeLanguages(raw: unknown): Language[] {
+  if (!Array.isArray(raw)) return [];
+  // [FIX] Handle legacy backend returning string[] instead of Language[]
+  return raw.map((item: any) => {
+    if (typeof item === "string") {
+      return { code: item, name: item, z_id: "" };
+    }
+    if (item && typeof item === "object" && item.code) {
+      return item as Language;
+    }
+    return null;
+  }).filter(Boolean) as Language[];
+}
+
 export const architectApi: ArchitectApi = {
   async health(): Promise<boolean> {
     try {
@@ -347,9 +362,10 @@ export const architectApi: ArchitectApi = {
     ]);
   },
 
-  listLanguages(): Promise<Language[]> {
+  async listLanguages(): Promise<Language[]> {
     // Prefer no trailing slash; FastAPI may redirect; fetch follows 307 for GET.
-    return request<Language[]>("/languages");
+    const raw = await request<unknown>("/languages");
+    return normalizeLanguages(raw);
   },
 
   listEntities(params): Promise<Entity[]> {
@@ -400,16 +416,21 @@ export const architectApi: ArchitectApi = {
   },
 
   async generate(req: GenerateRequest): Promise<GenerationResult> {
-    // Preferred (new): POST /generate/{lang_code} with frame_type/frame_payload.
+    // Preferred (new): POST /generate/{lang_code}
     const lang = encodeURIComponent(req.lang);
     try {
+      // [FIX] Flatten payload for Strict Path (BioFrame)
+      // The backend expects flat keys (name, profession) at the root, 
+      // NOT nested in 'frame_payload'.
+      const flatBody = {
+        frame_type: req.frame_type,
+        ...req.frame_payload,
+        ...req.options,
+      };
+
       return await request<GenerationResult>(`/generate/${lang}`, {
         method: "POST",
-        body: JSON.stringify({
-          frame_type: req.frame_type,
-          frame_payload: req.frame_payload,
-          options: req.options ?? {},
-        }),
+        body: JSON.stringify(flatBody),
       });
     } catch (e) {
       // Backward-compatible fallback (legacy): POST /generate with frame_slug/language/fields.

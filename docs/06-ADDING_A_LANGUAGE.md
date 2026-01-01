@@ -134,7 +134,7 @@ Now you run the build. For Tier 3 languages, this triggers the **Architect Agent
 
 ```bash
 cd gf
-python build_orchestrator.py
+python builder/orchestrator.py
 
 
 ```
@@ -217,5 +217,5 @@ curl -X POST "http://localhost:8000/api/v1/generate/ha" \
 | **1. Register** | Add **ISO-2 code** to `grammar_factory.py`. | `build_index.py` shows language. |
 | **2. Lexicon** | Run `lexicographer` with `--lang=xx`. | `lex_seed` score >= 5. |
 | **3. Config** | Verify `topology_weights.json`. | N/A |
-| **4. Build** | Run `build_orchestrator.py`. | Language key in PGF binary. |
+| **4. Build** | Run `builder/orchestrator.py`. | Language key in PGF binary. |
 | **5. QA** | Add to `gold_standard.json` & Run Tests. | Judge Score > 8. |

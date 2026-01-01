@@ -36,7 +36,7 @@ export const TOOL_DESCRIPTIONS: Record<string, string> = {
   "tools/ai_refiner.py": "AI-assisted refiner for build/quality tasks (gated).",
 
   // GF build
-  "gf/build_orchestrator.py": "Two-phase GF build orchestrator to produce the master PGF binary.",
+  "builder/orchestrator.py": "Two-phase GF build orchestrator to produce the master PGF binary.",
 
   // Everything Matrix
   "tools/everything_matrix/build_index.py":

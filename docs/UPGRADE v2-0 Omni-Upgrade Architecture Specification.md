@@ -157,7 +157,7 @@ We implement a dedicated Pydantic model for the Redis payload.
 
 ### 5.1 The "Architect" Workflow
 
-This logic runs inside `gf/build_orchestrator.py`.
+This logic runs inside `builder/orchestrator.py`.
 
 1. **Detection:** Scanner identifies a missing language (e.g., `WikiHau.gf`).
 2. **Prompting:** Sends the **Frozen System Prompt** (see Ledger) to Gemini/LLM.
@@ -307,4 +307,4 @@ To execute this "Omni-Upgrade" without breaking the build, follow this strict or
 
 5. **Phase 5: Integration**
 * Wire middleware into `api.py`.
-* Deploy `build_orchestrator.py` with the Architect Agent.
+* Deploy `builder/orchestrator.py` with the Architect Agent.

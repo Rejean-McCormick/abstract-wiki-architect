@@ -1,34 +1,43 @@
-# app\core\ports\message_broker.py
-from typing import Protocol, Any, Callable, Coroutine
-from app.core.domain.events import SystemEvent
+# app/core/ports/message_broker.py
+from __future__ import annotations
+
+from typing import Awaitable, Callable, Protocol
+
+from app.core.domain.events import EventType, SystemEvent
+
+EventHandler = Callable[[SystemEvent], Awaitable[None]]
+
 
 class IMessageBroker(Protocol):
     """
-    Port for the Event Bus.
-    
-    Allows the Core Logic to publish Domain Events and allows the Worker
-    to subscribe to them.
+    Port for the Domain Event Bus (publish/subscribe).
+
+    Notes:
+    - This port is for *events* (pub/sub semantics).
+    - Do NOT overload it with *job queue* semantics (ARQ/Celery enqueue).
+      Model queues via a separate port (e.g., ITaskQueue) to avoid split-brain failures.
     """
 
-    async def publish(self, event: SystemEvent) -> None:
-        """
-        Publishes a domain event to the message broker.
-        
-        Args:
-            event: The fully typed SystemEvent object.
-        """
+    async def connect(self) -> None:
+        """Open underlying connection(s) (called on service startup)."""
         ...
 
-    async def subscribe(self, event_type: str, handler: Callable[[SystemEvent], Coroutine[Any, Any, None]]) -> None:
+    async def disconnect(self) -> None:
+        """Close underlying connection(s) and stop background listeners."""
+        ...
+
+    async def publish(self, event: SystemEvent) -> None:
+        """Publish a domain event to the bus."""
+        ...
+
+    async def subscribe(self, event_type: EventType, handler: EventHandler) -> None:
         """
-        Registers a callback function to be executed when a specific event type occurs.
-        
-        Args:
-            event_type: The string identifier of the event (e.g., 'language.build.requested').
-            handler: An async function that takes a SystemEvent and processes it.
+        Register a handler to run when a specific domain event type is received.
+
+        Implementations should ensure handler exceptions do not crash the listener loop.
         """
         ...
 
     async def health_check(self) -> bool:
-        """Returns True if the broker is connected and reachable."""
+        """Return True iff the broker is connected and reachable."""
         ...

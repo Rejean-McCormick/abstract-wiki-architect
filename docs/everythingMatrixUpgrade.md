@@ -119,7 +119,7 @@ The Matrix is populated by three specialized "Census Takers" running in parallel
 
 ## 5. Decision Logic (The Verdict)
 
-The Orchestrator (`gf/build_orchestrator.py`) reads the `verdict` object to determine the build path.
+The Orchestrator (`builder/orchestrator.py`) reads the `verdict` object to determine the build path.
 
 ### Strategy Table
 

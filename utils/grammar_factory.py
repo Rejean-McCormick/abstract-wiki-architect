@@ -9,7 +9,8 @@ ROOT_DIR = Path(__file__).parent.parent
 CONFIG_DIR = ROOT_DIR / "data" / "config"
 FACTORY_TARGETS_FILE = CONFIG_DIR / "factory_targets.json"
 TOPOLOGY_WEIGHTS_FILE = CONFIG_DIR / "topology_weights.json"
-ISO_MAP_FILE = ROOT_DIR / "config" / "iso_to_wiki.json"  # <--- NEW: Single Source of Truth
+# [FIX] Correct path to v2.1 config location
+ISO_MAP_FILE = CONFIG_DIR / "iso_to_wiki.json" 
 
 # Setup Logging
 logger = logging.getLogger("GrammarFactory")
@@ -54,18 +55,26 @@ def get_topology(iso3_code):
 def get_gf_suffix(code):
     """
     Retrieves the standard GF suffix (e.g., 'Eng') from the chart.
-    This ensures the generated 'concrete WikiEng' matches the filename.
+    Handles both v1 (string) and v2.1 (dict) schema formats.
     """
     mapping = load_json_config(ISO_MAP_FILE)
     
     # Check exact match or lowercase match (e.g. 'eng' -> 'Eng')
-    suffix = mapping.get(code, mapping.get(code.lower()))
+    val = mapping.get(code, mapping.get(code.lower()))
     
-    if suffix:
-        return suffix
+    if not val:
+        # Fallback to TitleCase if not found in map
+        return code.title()
     
-    # Fallback to TitleCase if not found in map
-    return code.title()
+    # [FIX] Handle v2.1 Rich Object Schema {"wiki": "Eng", "tier": 1}
+    if isinstance(val, dict):
+        return val.get("wiki", code.title())
+        
+    # Handle v1 Legacy String "WikiEng" or "Eng"
+    if isinstance(val, str):
+        return val.replace("Wiki", "")
+        
+    return str(val)
 
 def _build_linearization(components, weights):
     # Sort by the weight of the role

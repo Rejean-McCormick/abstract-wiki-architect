@@ -236,8 +236,8 @@ export default function ToolsDashboard() {
       const cli =
         path === "manage.py"
           ? ["python manage.py start", "python manage.py build", "python manage.py doctor"]
-          : path === "gf/build_orchestrator.py"
-          ? ["python gf/build_orchestrator.py", "python manage.py build"]
+          : path === "builder/orchestrator.py" // [FIX] Updated to new path
+          ? ["python builder/orchestrator.py", "python manage.py build"]
           : cliFromPath(path);
 
       const notes = [
@@ -292,6 +292,7 @@ export default function ToolsDashboard() {
         group: meta.group,
         kind: "tool",
         risk,
+        status,
         status,
         desc,
         cli: [meta.cmd.join(" ")],

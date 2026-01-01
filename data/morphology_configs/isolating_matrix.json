@@ -1,0 +1,148 @@
+{
+  "_meta": {
+    "family": "isolating",
+    "version": 2.1,
+    "description": "Master grammar matrix for Isolating/Analytic languages (Chinese, Thai, Vietnamese). Handles obligatory Classifiers (Measure Words), Aspect Particles (Perfective/Progressive), and the Zero Copula for Adjectival Predicates.",
+    "notes": "Engine must insert classifiers between quantifiers and nouns. It must NOT insert a copula if the predicate is an Adjective."
+  },
+  "languages": {
+    "zh": {
+      "name": "Chinese",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "pre",
+        "bio_default_tense": "present",
+        "measure_word_required": true,
+        "adjectival_predicates": {
+          "copula_required": false,
+          "intensifier_default": "hěn",
+          "notes": "Adjectives act as stative verbs. 'Tā hěn gāo' (He very tall), not 'Tā shì gāo'."
+        }
+      },
+      "particles": {
+        "plural": {
+          "marker": "men",
+          "scope": "human_pronouns"
+        },
+        "possessive": "de",
+        "aspect": {
+          "perfective": "le",
+          "progressive": "zài",
+          "experiential": "guò",
+          "notes": "'le' indicates completion, not necessarily past tense."
+        }
+      },
+      "classifiers": {
+        "default": "gè",
+        "ontology": {
+          "human": "gè",
+          "human_honorific": "wèi",
+          "animal": "zhī",
+          "long_flexible": "tiáo",
+          "long_rigid": "gēn",
+          "flat": "zhāng",
+          "book": "běn",
+          "vehicle": "liàng",
+          "building": "zuò"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "type": "verb",
+          "present": "shì",
+          "past": "shì",
+          "negation": "bú",
+          "notes": "Invariant. Used strictly for Noun-Noun predicates (A is B)."
+        }
+      }
+    },
+    "th": {
+      "name": "Thai",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "measure_word_required": true,
+        "adjectival_predicates": {
+          "copula_required": false,
+          "notes": "Adjectives follow the noun. No copula used."
+        }
+      },
+      "particles": {
+        "plural": {
+          "marker": "lǎai",
+          "position": "pre_classifier",
+          "notes": "Plurality often implied by context or 'lǎai' (many)."
+        },
+        "tense": {
+          "past": "dâai",
+          "future": "jà",
+          "progressive": "gam-lang"
+        }
+      },
+      "classifiers": {
+        "default": "an",
+        "ontology": {
+          "human": "khon",
+          "human_honorific": "thân",
+          "animal": "tua",
+          "vehicle": "khan",
+          "book": "lêm",
+          "clothing": "chút"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "type": "split",
+          "identity": "pen",
+          "equality": "khue",
+          "location": "yùu",
+          "notes": "'pen' describes properties/roles. 'khue' equates two things (A = B). 'yùu' is for location."
+        }
+      }
+    },
+    "vi": {
+      "name": "Vietnamese",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "measure_word_required": true,
+        "adjectival_predicates": {
+          "copula_required": false,
+          "notes": "Adjectives function as stative verbs."
+        }
+      },
+      "particles": {
+        "plural": {
+          "marker": "những",
+          "position": "pre_noun",
+          "notes": "'các' is for definite plural, 'những' for indefinite."
+        },
+        "tense": {
+          "past": "đã",
+          "future": "sẽ",
+          "present_continuous": "đang"
+        }
+      },
+      "classifiers": {
+        "default": "cái",
+        "ontology": {
+          "human": "người",
+          "animal": "con",
+          "animate_inanimate_split": true,
+          "book": "quyển",
+          "flat": "tờ"
+        }
+      },
+      "verbs": {
+        "copula": {
+          "type": "verb",
+          "present": "là",
+          "negation": "không phải",
+          "notes": "Invariant 'là' used to link noun phrases."
+        }
+      }
+    }
+  }
+}

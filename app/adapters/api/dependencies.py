@@ -4,7 +4,6 @@ from __future__ import annotations
 import logging
 import re
 import secrets
-from threading import Lock
 from typing import Annotated, Optional
 
 from dependency_injector.wiring import Provide, inject
@@ -23,27 +22,18 @@ from app.shared.container import Container
 logger = logging.getLogger(__name__)
 
 # -----------------------------------------------------------------------------
-# Grammar engine singleton (lazy)
+# Grammar Engine Dependency
 # -----------------------------------------------------------------------------
-_engine_lock = Lock()
-_grammar_engine_instance: Optional[GFGrammarEngine] = None
-
-
-def get_grammar_engine() -> IGrammarEngine:
+@inject
+def get_grammar_engine(
+    # [FIX] Use Container-managed Singleton instead of manual locking.
+    # This prevents race conditions and ensures only one PGF loaded per worker.
+    engine: IGrammarEngine = Depends(Provide[Container.grammar_engine]),
+) -> IGrammarEngine:
     """
-    Returns a process-wide singleton GFGrammarEngine.
-
-    The GF engine is expensive to initialize (loads PGF + metadata). We keep one
-    instance per process and reuse it across requests.
+    Returns the process-wide singleton IGrammarEngine from the DI Container.
     """
-    global _grammar_engine_instance
-    if _grammar_engine_instance is None:
-        with _engine_lock:
-            if _grammar_engine_instance is None:
-                _grammar_engine_instance = GFGrammarEngine()
-
-    assert _grammar_engine_instance is not None
-    return _grammar_engine_instance
+    return engine
 
 
 # -----------------------------------------------------------------------------

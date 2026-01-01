@@ -1,16 +1,34 @@
 {
   "_meta": {
     "name": "Agglutinative Morphology Matrix",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Shared, data-driven configuration for agglutinative morphology (e.g. Turkish, Hungarian, Finnish). This file provides vowel harmony groups and suffix sets (plural, copula, question, tense) that a generic agglutinative engine can use to build words by stacking suffixes with the correct front/back allomorphs.",
-    "notes": "The engine is expected to: (1) inspect the last vowel of the stem; (2) choose the suffix variant from 'front' or 'back'; (3) insert buffer consonants when needed; (4) follow the slot order defined per language."
+    "notes": "The engine is expected to: (1) inspect the last vowel of the stem; (2) choose the suffix variant from 'front', 'back', or high-vowel sets; (3) insert buffer consonants when needed; (4) apply consonant mutation rules (e.g. devoicing) where applicable; (5) follow the slot order defined per language."
   },
   "languages": {
     "tr": {
-      "description": "Turkish-style 2-way vowel harmony with plural, copula, question, and past tense suffix sets.",
+      "description": "Turkish-style 2-way (A-type) and 4-way (I-type) vowel harmony with consonant devoicing rules.",
       "vowel_harmony": {
-        "front_vowels": ["e", "i", "ö", "ü"],
-        "back_vowels": ["a", "ı", "o", "u"]
+        "2_way": {
+          "front": ["e", "i", "ö", "ü"],
+          "back": ["a", "ı", "o", "u"]
+        },
+        "4_way": {
+          "i": ["e", "i"],
+          "ı": ["a", "ı"],
+          "u": ["o", "u"],
+          "ü": ["ö", "ü"]
+        }
+      },
+      "consonant_mutation": {
+        "devoicing": {
+          "triggers": ["f", "s", "t", "k", "ç", "ş", "h", "p"],
+          "transform": {
+            "d": "t",
+            "c": "ç",
+            "g": "k"
+          }
+        }
       },
       "buffer_consonants": {
         "after_vowel": "y",
@@ -27,41 +45,78 @@
       "suffixes": {
         "plural": {
           "type": "number",
-          "front": "ler",
-          "back": "lar"
+          "harmony": "2_way",
+          "variants": {
+            "front": "ler",
+            "back": "lar"
+          }
         },
         "copula_3sg": {
           "type": "copula",
-          "front": "dir",
-          "back": "dır"
+          "harmony": "4_way",
+          "variants": {
+            "i": "dir",
+            "ı": "dır",
+            "u": "dur",
+            "ü": "dür"
+          },
+          "mutates": true
         },
         "copula_3pl": {
           "type": "copula",
-          "front": "dirler",
-          "back": "dırlar"
+          "harmony": "2_way",
+          "variants": {
+            "front": "dirler",
+            "back": "dırlar"
+          },
+          "mutates": true
         },
         "past_copula_3sg": {
           "type": "copula_past",
-          "front": "di",
-          "back": "dı"
+          "harmony": "4_way",
+          "variants": {
+            "i": "di",
+            "ı": "dı",
+            "u": "du",
+            "ü": "dü"
+          },
+          "mutates": true
         },
         "past_copula_3pl": {
           "type": "copula_past",
-          "front": "diler",
-          "back": "dılar"
+          "harmony": "2_way",
+          "variants": {
+            "front": "diler",
+            "back": "dılar"
+          },
+          "mutates": true
         },
         "question": {
           "type": "question",
-          "front": "mi",
-          "back": "mı"
+          "harmony": "4_way",
+          "variants": {
+            "i": "mi",
+            "ı": "mı",
+            "u": "mu",
+            "ü": "mü"
+          },
+          "mutates": false
         }
       }
     },
     "hu": {
-      "description": "Hungarian-style vowel harmony with plural, copula, and possessive-like person marking for simple NPs used as predicates.",
+      "description": "Hungarian-style vowel harmony with linking vowels for pluralization.",
       "vowel_harmony": {
         "front_vowels": ["e", "é", "i", "í", "ö", "ő", "ü", "ű"],
-        "back_vowels": ["a", "á", "o", "ó", "u", "ú"]
+        "back_vowels": ["a", "á", "o", "ó", "u", "ú"],
+        "rounded_front_vowels": ["ö", "ő", "ü", "ű"]
+      },
+      "linking_vowels": {
+        "plural": {
+          "back": "o",
+          "front": "e",
+          "rounded_front": "ö"
+        }
       },
       "buffer_consonants": {
         "after_vowel": "",
@@ -74,30 +129,51 @@
       "suffixes": {
         "plural": {
           "type": "number",
-          "front": "k",
-          "back": "k"
+          "requires_linking_vowel": true,
+          "variants": {
+            "front": "k",
+            "back": "k"
+          }
         },
         "copula_3sg": {
           "type": "copula",
-          "front": "",
-          "back": ""
+          "variants": {
+            "front": "",
+            "back": ""
+          }
         },
         "copula_3pl": {
           "type": "copula",
-          "front": "k",
-          "back": "k"
+          "requires_linking_vowel": true,
+          "variants": {
+            "front": "k",
+            "back": "k"
+          }
         }
       }
     },
     "fi": {
-      "description": "Finnish-style agglutinative morphology without classic front/back allomorphs for the slots we care about (plural, copula). Plural and copula are modeled as simple concatenative suffixes.",
+      "description": "Finnish-style morphology with stem gradation (KPT) and vowel harmony.",
       "vowel_harmony": {
         "front_vowels": ["y", "ä", "ö"],
-        "back_vowels": ["a", "o", "u"]
+        "back_vowels": ["a", "o", "u"],
+        "neutral_vowels": ["e", "i"]
       },
-      "buffer_consonants": {
-        "after_vowel": "",
-        "after_consonant": ""
+      "consonant_gradation": {
+        "triggers": ["closed_syllable"],
+        "rules": {
+          "kk": "k",
+          "pp": "p",
+          "tt": "t",
+          "k": "",
+          "p": "v",
+          "t": "d",
+          "nk": "ng",
+          "nt": "nn",
+          "rt": "rr",
+          "lt": "ll",
+          "mp": "mm"
+        }
       },
       "suffix_order": {
         "nominal_predicate": ["plural", "copula_3sg"],
@@ -106,18 +182,32 @@
       "suffixes": {
         "plural": {
           "type": "number",
-          "front": "t",
-          "back": "t"
+          "variants": {
+            "front": "t",
+            "back": "t"
+          }
         },
         "copula_3sg": {
           "type": "copula",
-          "front": " on",
-          "back": " on"
+          "variants": {
+            "front": " on",
+            "back": " on"
+          }
         },
         "copula_3pl": {
           "type": "copula",
-          "front": " ovat",
-          "back": " ovat"
+          "variants": {
+            "front": " ovat",
+            "back": " ovat"
+          }
+        },
+        "inessive": {
+          "type": "case",
+          "triggers_gradation": true,
+          "variants": {
+            "front": "ssä",
+            "back": "ssa"
+          }
         }
       }
     }

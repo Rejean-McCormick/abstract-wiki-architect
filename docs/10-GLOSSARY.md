@@ -20,7 +20,7 @@ This document defines the specialized terminology used across the project. It br
 
 ### **Hybrid Factory**
 * **Definition:** The strategy of combining expert-written grammars (Tier 1) with auto-generated simplified grammars (Tier 3) to achieve 100% language coverage.
-* **Context:** Used by the `build_orchestrator.py` to decide which source files to include.
+* **Context:** Used by the `builder/orchestrator.py` to decide which source files to include.
 
 ### **Two-Phase Build**
 * **Definition:** The compilation strategy used to solve the "Last Man Standing" bug.

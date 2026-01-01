@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "family": "austronesian",
+    "version": 1.0,
+    "description": "Shared grammar matrix for Austronesian languages. Handles Reduplication (Plurals), Focus Systems (Actor/Object Focus markers), and specialized affixation.",
+    "notes": "Engine must support 'Reduplication' logic (repeating the lemma) and identify the 'Focus' of the sentence to select the correct case markers (ang/ng/sa)."
+  },
+  "languages": {
+    "id": {
+      "name": "Indonesian",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present",
+        "measure_word_optional": true
+      },
+      "morphology": {
+        "plural_strategy": "reduplication",
+        "reduplication_rule": "full",
+        "affixes": {
+          "actor_focus": "meN-",
+          "object_focus": "di-",
+          "passive": "di-",
+          "causative": "-kan"
+        }
+      },
+      "particles": {
+        "relative": "yang",
+        "possessive": "nya"
+      },
+      "verbs": {
+        "copula": {
+          "type": "particle",
+          "present": "adalah",
+          "negation": "bukan",
+          "notes": "'adalah' links nouns. 'merupakan' is a more formal alternative."
+        }
+      }
+    },
+    "ms": {
+      "name": "Malay",
+      "syntax": {
+        "basic_word_order": "SVO",
+        "adjective_position": "post",
+        "bio_default_tense": "present"
+      },
+      "morphology": {
+        "plural_strategy": "reduplication",
+        "reduplication_rule": "full",
+        "affixes": {
+          "actor_focus": "meN-",
+          "object_focus": "di-",
+          "passive": "di-"
+        }
+      },
+      "particles": {
+        "relative": "yang",
+        "possessive": "nya"
+      },
+      "verbs": {
+        "copula": {
+          "type": "particle",
+          "present": "ialah",
+          "present_alt": "adalah",
+          "negation": "bukan",
+          "notes": "'ialah' strictly for equating nouns. 'adalah' for describing properties."
+        }
+      }
+    },
+    "tl": {
+      "name": "Tagalog",
+      "syntax": {
+        "basic_word_order": "VSO",
+        "alt_word_order": "SVO",
+        "adjective_position": "pre",
+        "bio_default_tense": "present",
+        "focus_system": true
+      },
+      "focus_markers": {
+        "actor": {
+          "topic": "ang",
+          "non_topic": "ng"
+        },
+        "object": {
+          "topic": "ang",
+          "actor": "ng",
+          "direction": "sa"
+        },
+        "benefactive": {
+          "topic": "ang",
+          "actor": "ng"
+        }
+      },
+      "morphology": {
+        "plural_strategy": "particle",
+        "plural_marker": "mga",
+        "affixes": {
+          "actor_focus_infix": "-um-",
+          "actor_focus_prefix": "mag-",
+          "object_focus_suffix": "-in",
+          "locative_focus_suffix": "-an"
+        }
+      },
+      "particles": {
+        "linker": "na",
+        "linker_suffix": "-ng"
+      },
+      "verbs": {
+        "copula": {
+          "type": "inversion_marker",
+          "present": "ay",
+          "notes": "'ay' is an inversion marker used in SVO order (Ang tao ay kumakain). VSO order uses no copula."
+        }
+      }
+    }
+  }
+}
