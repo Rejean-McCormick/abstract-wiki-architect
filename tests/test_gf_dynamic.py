@@ -1,101 +1,107 @@
-# test_gf_dynamic.py
+# tests/test_gf_dynamic.py
 import os
 import sys
+import pytest
 import pgf
 
-# --- AI Integration ---
+# --- Configuration ---
+# Allow override via env var, default to the standard build path
+PGF_PATH = os.environ.get("AW_PGF_PATH", os.path.join("gf", "AbstractWiki.pgf"))
+
+# --- AI Integration Setup ---
 try:
     from ai_services import judge
     AI_AVAILABLE = True
 except ImportError:
-    print("⚠️  AI Services not found. Skipping validation.")
     AI_AVAILABLE = False
 
-def run_test():
-    # 1. Locate PGF
-    pgf_path = os.environ.get("AW_PGF_PATH", os.path.join("gf", "Wiki.pgf"))
+# --- Fixtures ---
+
+@pytest.fixture(scope="module")
+def grammar():
+    """
+    Loads the PGF grammar once for the module.
+    Skips the test suite if the binary is missing.
+    """
+    if not os.path.exists(PGF_PATH):
+        pytest.skip(
+            f"PGF binary not found at {PGF_PATH}. "
+            "Run 'builder/orchestrator.py' or 'make build' to generate it."
+        )
     
-    if not os.path.exists(pgf_path):
-        print(f"❌ PGF not found at {pgf_path}")
-        print("   Did you run: build_pipeline.bat ?")
-        sys.exit(1)
-
-    print(f"Loading grammar from: {pgf_path}...")
     try:
-        grammar = pgf.readPGF(pgf_path)
+        return pgf.readPGF(PGF_PATH)
     except Exception as e:
-        print(f"❌ Failed to load PGF: {e}")
-        sys.exit(1)
+        pytest.fail(f"Failed to load PGF at {PGF_PATH}: {e}")
 
+# --- Tests ---
+
+def test_grammar_has_supported_languages(grammar):
+    """
+    Ensures the grammar isn't empty and lists supported languages.
+    """
     languages = grammar.languages.keys()
     count = len(languages)
-    print(f"✅ Grammar loaded successfully.")
-    print(f"🌍 Supported Languages ({count}):")
     
+    assert count > 0, f"PGF at {PGF_PATH} contains 0 languages."
+    
+    # Log for GUI/CLI visibility
     sorted_langs = sorted(languages)
-    if count > 15:
-        print(f"   {', '.join(sorted_langs[:5])} ... {', '.join(sorted_langs[-5:])}")
-    else:
-        print(f"   {', '.join(sorted_langs)}")
-    print("")
+    print(f"\n🌍 Supported Languages ({count}): {', '.join(sorted_langs)}")
 
-    # 2. Define Test Case (Must match Abstract Wiki.gf)
-    # The current forge.py generates 'SimpNP' and 'apple_N'.
-    # Expected Output: "an apple" (Eng), "une pomme" (Fre)
+def test_linearize_simple_phrase(grammar):
+    """
+    Smoke test: Linearize a basic AST in all available languages.
+    AST: 'SimpNP apple_N' (an apple / une pomme)
+    """
+    # 1. Define Test AST
     ast_expr = "SimpNP apple_N"
-    source_concept = "an apple" 
+    source_concept = "an apple"
     
-    print(f"🔬 Testing Linearization for AST: [{ast_expr}]")
-    print("-" * 80)
-    print(f"{'Language':<15} | {'Result':<30} | {'AI Verdict':<30}")
-    print("-" * 80)
-
-    success_count = 0
-    fail_count = 0
-
     try:
         expr = pgf.readExpr(ast_expr)
     except Exception as e:
-        print(f"❌ Syntax Error in test AST: {e}")
-        print(f"   Expression: {ast_expr}")
-        print("   (Ensure these functions exist in gf/Wiki.gf)")
-        sys.exit(1)
+        pytest.fail(f"Syntax Error in test AST '{ast_expr}': {e}")
 
-    # 3. Iterate & Validate
-    # We test ALL languages, but only ask AI to judge major ones to save credits/time.
-    MAJOR_LANGS = ["WikiEng", "WikiFre", "WikiGer", "WikiSpa", "WikiIta"]
-
-    for lang_name in sorted_langs:
+    # 2. Iterate & Validate
+    failures = []
+    success_count = 0
+    
+    # We test ALL languages found in the PGF
+    for lang_name in sorted(grammar.languages.keys()):
         concrete = grammar.languages[lang_name]
+        
         try:
             text = concrete.linearize(expr)
             
-            if text:
-                ai_msg = ""
-                # Call The Judge (only for major languages)
-                if AI_AVAILABLE and lang_name in MAJOR_LANGS:
+            if not text:
+                failures.append(f"{lang_name}: Returned empty string")
+                continue
+
+            # Optional: AI Judging for major languages
+            # We don't fail the test on AI verdict, just report it
+            ai_msg = ""
+            if AI_AVAILABLE and lang_name in ["WikiEng", "WikiFre", "WikiGer"]:
+                try:
                     verdict = judge.evaluate_output(source_concept, text, lang_name)
-                    if verdict.get('valid'):
-                        ai_msg = f"✅ Score: {verdict.get('score')}/10"
-                    else:
-                        ai_msg = f"⚠️ Fix: {verdict.get('correction')}"
-                
-                print(f"{lang_name:<15} | {text:<30} | {ai_msg}")
-                success_count += 1
-            else:
-                print(f"{lang_name:<15} | (No linearization)           |")
-                fail_count += 1
-                
+                    if not verdict.get('valid', True):
+                        ai_msg = f" [AI Warn: {verdict.get('correction')}]"
+                except Exception:
+                    pass # Don't let AI flakiness break the build
+
+            print(f"   [OK] {lang_name:<15} -> {text}{ai_msg}")
+            success_count += 1
+
         except Exception as e:
-            print(f"{lang_name:<15} | ❌ ERROR: {str(e)[:20]}...   |")
-            fail_count += 1
+            failures.append(f"{lang_name}: Linearization error - {e}")
 
-    print("-" * 80)
-    print(f"Test Complete. Success: {success_count}/{count}, Failures: {fail_count}/{count}")
-
-    if fail_count > 0:
-        print("\n⚠️  Some languages failed verification.")
-        sys.exit(0) # Soft fail
-
-if __name__ == "__main__":
-    run_test()
+    # 3. Assert Results
+    if failures:
+        failure_report = "\n".join(failures)
+        pytest.fail(
+            f"Linearization failed for {len(failures)} languages.\n"
+            f"AST: {ast_expr}\n"
+            f"Failures:\n{failure_report}"
+        )
+    
+    assert success_count > 0, "No languages were linearized."

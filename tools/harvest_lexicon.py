@@ -5,12 +5,9 @@ import re
 import requests
 import sys
 import logging
+import time
 from pathlib import Path
-from typing import Optional, Dict, Tuple
-
-# Setup Logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-logger = logging.getLogger(__name__)
+from typing import Optional, Dict, Tuple, List, Any
 
 # --- CONFIGURATION: SINGLE SOURCE OF TRUTH ---
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +24,11 @@ MATRIX_PATH = BASE_DIR / "data" / "indices" / "everything_matrix.json"
 ISO2_TO_RGL: Dict[str, str] = {}  # 'en' -> 'Eng'
 RGL_TO_ISO2: Dict[str, str] = {}  # 'Eng' -> 'en'
 
+# Setup Logger (configured in main for stdout)
+logger = logging.getLogger(__name__)
+
+HARVESTER_VERSION = "harvester/2.2"
+
 
 def _find_iso_map_path() -> Path:
     for p in ISO_MAP_CANDIDATES:
@@ -42,6 +44,8 @@ def load_iso_map() -> None:
     This replaces hardcoded dictionaries and ensures sync with the Engine.
     """
     config_path = _find_iso_map_path()
+    logger.info(f"Loading ISO map from: {config_path}")
+    
     if not config_path.exists():
         logger.error(f"❌ Critical: Config file missing (tried: {', '.join(map(str, ISO_MAP_CANDIDATES))})")
         sys.exit(1)
@@ -50,6 +54,7 @@ def load_iso_map() -> None:
         with open(config_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
+        count = 0
         for iso_code, value in data.items():
             # Only ISO-2 keys should populate ISO2_TO_RGL
             if len(iso_code) != 2:
@@ -67,8 +72,9 @@ def load_iso_map() -> None:
             RGL_TO_ISO2[rgl_suffix] = iso_code
             # Also map the full name just in case 'WikiEng' is passed
             RGL_TO_ISO2[rgl_full] = iso_code
+            count += 1
 
-        logger.info(f"✅ Loaded language config from {config_path} ({len(ISO2_TO_RGL)} ISO-2 entries)")
+        logger.info(f"✅ Loaded {count} ISO-2 entries")
 
     except Exception as e:
         logger.error(f"❌ Failed to parse language config: {e}")
@@ -211,33 +217,56 @@ class GFWordNetHarvester:
             json.dump(lexicon, f, indent=2, ensure_ascii=False)
 
         logger.info(f"✅ Saved {count} words to {out_path}")
+        return count
 
 
 class WikidataHarvester:
-    def fetch(self, qids, iso2_code, domain="people"):
+    def _http_post_with_retry(self, url: str, params: Dict[str, Any], headers: Dict[str, str], max_retries: int = 3) -> Optional[Dict[str, Any]]:
+        backoff = 1
+        for attempt in range(1, max_retries + 1):
+            try:
+                r = requests.get(url, params=params, headers=headers, timeout=30)
+                r.raise_for_status()
+                return r.json()
+            except Exception as e:
+                logger.warning(f"  ⚠️ Attempt {attempt}/{max_retries} failed: {e}")
+                if attempt < max_retries:
+                    time.sleep(backoff)
+                    backoff *= 2
+                else:
+                    logger.error(f"  ❌ Failed after {max_retries} attempts.")
+                    return None
+        return None
+
+    def fetch(self, qids: List[str], iso2_code: str, domain: str = "people") -> Dict[str, Any]:
         logger.info(f"☁️  Fetching {len(qids)} items from Wikidata for '{iso2_code}'...")
 
         chunk_size = 50
         all_results = {}
+        total_chunks = (len(qids) + chunk_size - 1) // chunk_size
 
         for i in range(0, len(qids), chunk_size):
             chunk = qids[i : i + chunk_size]
+            chunk_idx = (i // chunk_size) + 1
+            
+            logger.info(f"  Processing chunk {chunk_idx}/{total_chunks} ({len(chunk)} items)...")
+            
             values = " ".join([f"wd:{qid}" for qid in chunk])
-
             lang_string = f"{iso2_code},en"
             query = SPARQL_TEMPLATE % (values, lang_string)
 
-            try:
-                r = requests.get(
-                    "https://query.wikidata.org/sparql",
-                    params={"format": "json", "query": query},
-                    headers={"User-Agent": "AbstractWikiArchitect/2.0"},
-                    timeout=30,
-                )
-                r.raise_for_status()
-                data = r.json()
+            data = self._http_post_with_retry(
+                "https://query.wikidata.org/sparql",
+                params={"format": "json", "query": query},
+                headers={"User-Agent": "AbstractWikiArchitect/2.2"},
+            )
 
-                for row in data["results"]["bindings"]:
+            if not data:
+                continue
+
+            bindings = data.get("results", {}).get("bindings", [])
+            for row in bindings:
+                try:
                     qid = row["item"]["value"].split("/")[-1]
                     if qid not in all_results:
                         all_results[qid] = {
@@ -257,14 +286,21 @@ class WikidataHarvester:
                         nat_qid = row["nat"]["value"].split("/")[-1]
                         if nat_qid not in all_results[qid]["facts"]["P27"]:
                             all_results[qid]["facts"]["P27"].append(nat_qid)
-
-            except Exception as e:
-                logger.error(f"❌ Wikidata Chunk Error: {e}")
+                except KeyError:
+                    pass
 
         return all_results
 
 
 def main():
+    # 1. Configure logging to stdout for GUI compatibility
+    logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout, force=True)
+    start_time = time.time()
+    
+    print(f"=== LEXICON HARVESTER ({HARVESTER_VERSION}) ===")
+    print(f"Timestamp: {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}")
+    print("-" * 40)
+    
     load_iso_map()
 
     parser = argparse.ArgumentParser(description="Universal Lexicon Harvester (Free/Offline)")
@@ -288,17 +324,21 @@ def main():
         sys.exit(1)
 
     rgl_code, iso2_code = resolved
-    print(f"🔧 Configuration: RGL='{rgl_code}' | ISO='{iso2_code}'")
+    logger.info(f"🔧 Target: RGL='{rgl_code}' | ISO='{iso2_code}'")
+
+    entries_count = 0
+    output_file = ""
 
     if args.source == "wordnet":
         harvester = GFWordNetHarvester(args.root)
         harvester.load_semantics()
-        harvester.harvest_lang(rgl_code, iso2_code, args.out)
+        entries_count = harvester.harvest_lang(rgl_code, iso2_code, args.out)
+        output_file = str(Path(args.out) / iso2_code / "wide.json")
 
     elif args.source == "wikidata":
         input_path = Path(args.input)
         if not input_path.exists():
-            print(f"❌ Input file not found: {args.input}")
+            logger.error(f"❌ Input file not found: {args.input}")
             sys.exit(1)
 
         with open(input_path, "r", encoding="utf-8") as f:
@@ -307,13 +347,24 @@ def main():
 
         harvester = WikidataHarvester()
         data = harvester.fetch(target_qids, iso2_code, args.domain)
+        entries_count = len(data)
 
         out_path = Path(f"data/lexicon/{iso2_code}/{args.domain}.json")
         out_path.parent.mkdir(parents=True, exist_ok=True)
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
+        output_file = str(out_path)
 
-        print(f"✅ Saved {len(data)} entries to {out_path}")
+        logger.info(f"✅ Saved {entries_count} entries")
+
+    duration = time.time() - start_time
+    
+    print("\n=== SUMMARY ===")
+    print(f"Language: {iso2_code}")
+    print(f"Source:   {args.source}")
+    print(f"Entries:  {entries_count}")
+    print(f"Output:   {output_file}")
+    print(f"Duration: {duration:.2f}s")
 
 
 if __name__ == "__main__":

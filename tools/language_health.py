@@ -8,6 +8,11 @@
 # Outputs:
 #   - data/indices/audit_cache.json        (compile cache)
 #   - data/reports/audit_report.json       (combined report: compile + runtime)
+#
+# New Features (v2.1):
+#   - Rich verbose logging (--verbose)
+#   - Machine-readable summary (--json)
+#   - Trace ID propagation
 
 import argparse
 import glob
@@ -17,6 +22,7 @@ import os
 import subprocess
 import sys
 import time
+import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional, Tuple
@@ -405,6 +411,7 @@ def save_report(rows: List[HealthRow], old_compile_cache: Dict[str, Dict[str, An
     with open(REPORT_FILE, "w", encoding="utf-8") as f:
         json.dump(report_obj, f, indent=2)
 
+    # Standard Human-Readable Summary
     print("\n" + "=" * 70)
     print("LANGUAGE HEALTH SUMMARY")
     print("=" * 70)
@@ -427,6 +434,37 @@ def save_report(rows: List[HealthRow], old_compile_cache: Dict[str, Dict[str, An
             print(f"👉 Compile disable script: {script_path}")
 
 
+def _print_verbose_start(args: argparse.Namespace, trace_id: str) -> None:
+    print(f"=== LANGUAGE HEALTH CHECKER STARTED ===")
+    print(f"Trace ID: {trace_id}")
+    print(f"Args: {vars(args)}")
+    print(f"CWD: {os.getcwd()}")
+    print(f"Python: {sys.version.split()[0]}")
+    print("-" * 40)
+
+
+def _print_json_summary(rows: List[HealthRow], trace_id: str) -> None:
+    summary = {
+        "trace_id": trace_id,
+        "total_checked": len(rows),
+        "status_counts": {
+            "OK": sum(1 for r in rows if r.overall_status() == "OK"),
+            "FAIL": sum(1 for r in rows if r.overall_status() == "FAIL"),
+            "SKIPPED": sum(1 for r in rows if r.overall_status() == "SKIPPED"),
+        },
+        "failures": [
+            {
+                "lang": r.gf_lang or r.api_lang,
+                "reason": r.compile.error if r.compile and r.compile.status == "BROKEN" else (r.runtime.error if r.runtime else "Unknown")
+            }
+            for r in rows if r.overall_status() == "FAIL"
+        ]
+    }
+    print("\n--- JSON SUMMARY ---")
+    print(json.dumps(summary, indent=2))
+    print("--------------------")
+
+
 # -----------------------------------------------------------------------------
 # MAIN
 # -----------------------------------------------------------------------------
@@ -440,7 +478,18 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--timeout", type=int, default=20)
     parser.add_argument("--langs", nargs="*", help="Optional subset (e.g., eng fra Eng Fra).")
     parser.add_argument("--no-disable-script", action="store_true")
+    
+    # New flags for enhanced tooling support
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    parser.add_argument("--json", action="store_true", help="Output a JSON summary block at the end")
+    
     args = parser.parse_args(argv)
+
+    # Generate or reuse trace ID
+    trace_id = os.environ.get("TOOL_TRACE_ID", str(uuid.uuid4()))
+
+    if args.verbose:
+        _print_verbose_start(args, trace_id)
 
     want_compile = args.mode in ("compile", "both")
     want_api = args.mode in ("api", "both")
@@ -455,10 +504,16 @@ def main(argv: Optional[List[str]] = None) -> int:
     api_checker: Optional[ArchitectApiRuntimeChecker] = None
     api_codes: List[str] = []
     if want_api:
+        if args.verbose:
+            print(f"[INFO] Initializing API client against {args.api_url}")
         api_checker = ArchitectApiRuntimeChecker(api_url=args.api_url, api_key=args.api_key, timeout_s=args.timeout)
         api_codes = api_checker.discover_languages()
         if not api_codes:
+            if args.verbose:
+                print(f"[WARN] API discovery returned no languages, falling back to GF file list.")
             api_codes = sorted({code.lower() for code in gf_by_code.keys()})
+        elif args.verbose:
+            print(f"[INFO] Discovered {len(api_codes)} languages from API.")
 
     # --- Run compile audit
     compile_results: Dict[str, CompileResult] = {}
@@ -479,9 +534,17 @@ def main(argv: Optional[List[str]] = None) -> int:
                 res = fut.result()
                 compile_results[res.gf_lang] = res
                 icon = "✅" if res.status == "VALID" else "⏩" if res.status == "SKIPPED" else "❌"
-                sys.stdout.write(f"\r   [{i}/{len(compile_targets)}] {icon} {res.gf_lang:<10}")
-                sys.stdout.flush()
-        print()
+                
+                # Verbose mode prints full details, standard mode prints progress bar
+                if args.verbose:
+                    print(f"   [{i}/{len(compile_targets)}] {icon} {res.gf_lang:<10} | {res.duration_s:.2f}s | {res.status}")
+                    if res.error:
+                        print(f"     ERROR: {res.error}")
+                else:
+                    sys.stdout.write(f"\r   [{i}/{len(compile_targets)}] {icon} {res.gf_lang:<10}")
+                    sys.stdout.flush()
+        if not args.verbose:
+            print()
 
     # --- Run runtime audit
     runtime_results: Dict[str, RuntimeResult] = {}
@@ -498,9 +561,16 @@ def main(argv: Optional[List[str]] = None) -> int:
                 res = fut.result()
                 runtime_results[res.api_lang] = res
                 icon = "✅" if res.status == "PASS" else "❌"
-                sys.stdout.write(f"\r   [{i}/{len(runtime_targets)}] {icon} {res.api_lang:<10}")
-                sys.stdout.flush()
-        print()
+                
+                if args.verbose:
+                    print(f"   [{i}/{len(runtime_targets)}] {icon} {res.api_lang:<10} | {res.duration_ms:.2f}ms | {res.status}")
+                    if res.error:
+                        print(f"     ERROR: {res.error}")
+                else:
+                    sys.stdout.write(f"\r   [{i}/{len(runtime_targets)}] {icon} {res.api_lang:<10}")
+                    sys.stdout.flush()
+        if not args.verbose:
+            print()
 
     # --- Merge into HealthRow list
     rows: List[HealthRow] = []
@@ -523,6 +593,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     # --- Save report/cache
     compile_cache = compiler.cache if compiler else {}
     save_report(rows, compile_cache, write_disable_script=(not args.no_disable_script))
+
+    # --- Optional JSON Summary Output
+    if args.json:
+        _print_json_summary(rows, trace_id)
 
     # Exit code (useful for CI)
     return 2 if any(r.overall_status() == "FAIL" for r in rows) else 0

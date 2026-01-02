@@ -68,6 +68,15 @@ PROJECT_ROOT = _find_project_root(THIS_DIR) or _find_project_root(Path.cwd())
 if PROJECT_ROOT and str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+# [REFACTOR] Use standardized logger
+try:
+    from utils.tool_logger import ToolLogger
+    logger = ToolLogger(__file__)
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+    logger = logging.getLogger("TestRunner")
+
 
 # -----------------------------------------------------------------------------
 # Column detection (v2 + legacy)
@@ -180,7 +189,7 @@ class _Renderer:
             from app.adapters.engines.gf_wrapper import GFGrammarEngine
             self._engine = GFGrammarEngine()
         except Exception as e:
-            print(f"Warning: Failed to initialize GFGrammarEngine: {e}")
+            logger.warning(f"Failed to initialize GFGrammarEngine: {e}")
             self._engine = None
 
     def available(self) -> bool:
@@ -340,34 +349,34 @@ def run_universal_tests(
     json_report_path: Optional[Path],
     verbose: bool,
 ) -> int:
-    print("========================================")
-    print("   UNIVERSAL TEST RUNNER (Enterprise)   ")
-    print("========================================")
-    print(f"Dataset dir: {dataset_dir}")
-    print(f"Pattern:     {pattern}")
+    logger.info("========================================")
+    logger.info("   UNIVERSAL TEST RUNNER (Enterprise)   ")
+    logger.info("========================================")
+    logger.info(f"Dataset dir: {dataset_dir}")
+    logger.info(f"Pattern:     {pattern}")
     if lang_filter:
-        print(f"Lang filter: {', '.join(lang_filter)}")
+        logger.info(f"Lang filter: {', '.join(lang_filter)}")
 
     if not dataset_dir.exists():
-        print(f"\nERROR: Test directory not found: {dataset_dir}")
-        print("Hint: Run tools/qa/test_suite_generator.py first, or set AWA_TEST_DATASET_DIR.")
+        logger.error(f"Test directory not found: {dataset_dir}")
+        logger.info("Hint: Run tools/qa/test_suite_generator.py first, or set AWA_TEST_DATASET_DIR.")
         return 2
 
     csv_files = _iter_csv_files(dataset_dir, pattern)
     if not csv_files:
-        print("\nERROR: No CSV files found.")
-        print("Hint: Run tools/qa/test_suite_generator.py first.")
+        logger.error("No CSV files found.")
+        logger.info("Hint: Run tools/qa/test_suite_generator.py first.")
         return 2
 
     renderer = _Renderer()
     if not renderer.available():
-        print("\nERROR: Grammar Engine not available.")
-        print("Hint: Check if AbstractWiki.pgf exists in 'gf/' and 'pgf' library is installed.")
+        logger.error("Grammar Engine not available.")
+        logger.info("Hint: Check if AbstractWiki.pgf exists in 'gf/' and 'pgf' library is installed.")
         return 2
 
     lexicon = _LexiconResolver()
     if verbose:
-        print(f"Lexicon resolver: {'ON' if lexicon.available() else 'OFF'}")
+        logger.info(f"Lexicon resolver: {'ON' if lexicon.available() else 'OFF'}")
 
     started = time.time()
     results: List[CaseResult] = []
@@ -380,9 +389,10 @@ def run_universal_tests(
         if lang_filter and lang.lower() not in {x.lower() for x in lang_filter}:
             continue
 
-        print("\n----------------------------------------")
-        print(f"Suite: {fpath.name}  [lang={lang}]")
-        print("----------------------------------------")
+        logger.info("")
+        logger.info("----------------------------------------")
+        logger.info(f"Suite: {fpath.name}  [lang={lang}]")
+        logger.info("----------------------------------------")
 
         file_pass = file_fail = file_skip = file_crash = 0
         file_active = 0
@@ -390,7 +400,7 @@ def run_universal_tests(
         with fpath.open("r", encoding="utf-8", newline="") as fh:
             reader = csv.DictReader(fh)
             if not reader.fieldnames:
-                print("ERROR: CSV has no headers.")
+                logger.error("CSV has no headers.")
                 continue
 
             fieldnames = list(reader.fieldnames)
@@ -539,10 +549,10 @@ def run_universal_tests(
                         )
 
                         if max_failures_to_print > 0 and file_fail <= max_failures_to_print:
-                            print(f"FAIL {test_id}")
-                            print(f"  Input:    {name} ({gender}) | {profession} | {nationality}")
-                            print(f"  Expected: {expected}")
-                            print(f"  Actual:   {actual}")
+                            logger.error(f"FAIL {test_id}")
+                            logger.info(f"  Input:    {name} ({gender}) | {profession} | {nationality}")
+                            logger.info(f"  Expected: {expected}")
+                            logger.info(f"  Actual:   {actual}")
 
                         if fail_fast:
                             raise RuntimeError("Fail-fast: first mismatch encountered.")
@@ -563,7 +573,7 @@ def run_universal_tests(
                             detail=str(e),
                         )
                     )
-                    print(f"CRASH: {str(e)}")
+                    logger.error(f"CRASH: {str(e)}")
                     if fail_fast:
                         break
 
@@ -571,9 +581,9 @@ def run_universal_tests(
         denom = file_pass + file_fail
         if denom > 0:
             rate = (file_pass / denom) * 100.0
-            print(f"Result: {file_pass} passed, {file_fail} failed, {file_skip} skipped, {file_crash} crashed  ({rate:.1f}% pass)")
+            logger.info(f"Result: {file_pass} passed, {file_fail} failed, {file_skip} skipped, {file_crash} crashed  ({rate:.1f}% pass)")
         else:
-            print(f"Result: {file_pass} passed, {file_fail} failed, {file_skip} skipped, {file_crash} crashed")
+            logger.info(f"Result: {file_pass} passed, {file_fail} failed, {file_skip} skipped, {file_crash} crashed")
 
         if fail_fast and (file_fail > 0 or file_crash > 0):
             break
@@ -581,14 +591,15 @@ def run_universal_tests(
     finished = time.time()
     duration = finished - started
 
-    print("\n========================================")
-    print(f"RUN COMPLETE in {duration:.2f}s")
-    print("========================================")
-    print(f"Passed:  {total_passed}")
-    print(f"Failed:  {total_failed}")
-    print(f"Skipped: {total_skipped}")
-    print(f"Crashed: {total_crashed}")
-    print(f"Active:  {total_active}")
+    logger.info("")
+    logger.info("========================================")
+    logger.info(f"RUN COMPLETE in {duration:.2f}s")
+    logger.info("========================================")
+    logger.info(f"Passed:  {total_passed}")
+    logger.info(f"Failed:  {total_failed}")
+    logger.info(f"Skipped: {total_skipped}")
+    logger.info(f"Crashed: {total_crashed}")
+    logger.info(f"Active:  {total_active}")
 
     summary = RunSummary(
         started_at=started,
@@ -609,17 +620,30 @@ def run_universal_tests(
         }
         json_report_path.parent.mkdir(parents=True, exist_ok=True)
         json_report_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"\nWrote JSON report: {json_report_path}")
+        logger.info(f"\nWrote JSON report: {json_report_path}")
 
     # Exit codes:
     # 0 = success (no fail/crash and at least 1 active test)
     # 1 = fail/crash present
     # 2 = misconfigured / nothing ran
+    
+    exit_code = 0
     if total_failed > 0 or total_crashed > 0:
-        return 1
+        exit_code = 1
     if total_active == 0:
-        return 2
-    return 0
+        exit_code = 2
+
+    # [REFACTOR] Standardized Summary for GUI
+    summary_msg = f"Passed: {total_passed}, Failed: {total_failed}, Crashed: {total_crashed}."
+    
+    if hasattr(logger, "finish"):
+        logger.finish(
+            message=summary_msg,
+            success=(exit_code == 0),
+            details=asdict(summary)
+        )
+        
+    return exit_code
 
 
 # -----------------------------------------------------------------------------
@@ -640,6 +664,10 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
+    # [REFACTOR] Standardized Start
+    if hasattr(logger, "start"):
+        logger.start("Universal Test Runner")
+
     args = _parse_args(argv)
 
     dataset_dir = _resolve_dataset_dir(args.dataset_dir)

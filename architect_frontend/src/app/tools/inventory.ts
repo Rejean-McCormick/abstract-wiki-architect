@@ -1,9 +1,14 @@
-// architect_frontend/src/app/tools/inventory.ts
+// Tools Command Center
+// Inventory v2.5 (generated 2026-01-02)
+// API: http://localhost:8000/api/v1
+// Normal mode shows only backend-wired runnable tools.
+// Enable Power user (debug) to reveal the full inventory.
+
 export const INVENTORY = {
-  version: "2.3",
-  generated_on: "2025-12-29",
+  version: "2.5",
+  generated_on: "2026-01-02",
   root_entrypoints: [
-    "build_pipeline.bat",
+    "Makefile",
     "context_gatherer.py",
     "generate_path_map.py",
     "GitSink.bat",
@@ -13,10 +18,15 @@ export const INVENTORY = {
     "smoke_test.py",
     "StartWSL.bat",
     "sync_config_from_gf.py",
+    "disable_broken_compile.sh",
+    "docker-compose.yml",
+    "tempo.py",
   ],
   gf: ["builder/orchestrator.py"],
   tools: {
     root: [
+      "tools/ai_refiner.py",
+      "tools/bootstrap_tier1.py",
       "tools/cleanup_root.py",
       "tools/diagnostic_audit.py",
       "tools/harvest_lexicon.py",
@@ -30,12 +40,22 @@ export const INVENTORY = {
       "tools/everything_matrix/rgl_scanner.py",
     ],
     qa: [
+      "tools/qa/ambiguity_detector.py",
       "tools/qa/batch_test_generator.py",
       "tools/qa/eval_bios.py",
       "tools/qa/generate_lexicon_regression_tests.py",
       "tools/qa/lexicon_coverage_report.py",
       "tools/qa/test_suite_generator.py",
       "tools/qa/universal_test_runner.py",
+    ],
+    debug: [
+      "tools/debug/visualize_ast.py",
+    ],
+    health: [
+      "tools/health/profiler.py",
+    ],
+    lexicon: [
+      "tools/lexicon/gap_filler.py",
     ],
   },
   scripts: {
@@ -68,11 +88,7 @@ export const INVENTORY = {
     "ai_services/surgeon.py",
   ],
   nlg: ["nlg/api.py", "nlg/cli_frontend.py", "nlg/semantics/__init__.py"],
-  prototypes: [
-    "prototypes/demo_multisentence_bio.py",
-    "prototypes/local_test_runner.py",
-    "prototypes/shared_romance_engine.py",
-  ],
+  prototypes: [],
   tests: {
     root: [
       "tests/__init__.py",

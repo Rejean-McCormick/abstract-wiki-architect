@@ -4,9 +4,11 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
+import time
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict, Iterable, Mapping, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, Mapping, Optional, Tuple, Union, List
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +52,8 @@ NON_DOMAIN_FILES = {
 
 MAX_WIDE_BYTES_TO_LOAD = 5_000_000  # 5 MB
 
+# Internal collector for CLI warnings (populated during scans)
+_SCAN_WARNINGS: List[str] = []
 
 # -----------------------------------------------------------------------------
 # Repo/normalization helpers
@@ -144,8 +148,12 @@ def _safe_load_json(path: Path) -> Optional[JsonObj]:
     try:
         with path.open("r", encoding="utf-8") as f:
             return json.load(f)
-    except Exception:
-        # Keep side-effect-free; caller can treat as "unreadable"
+    except Exception as e:
+        msg = f"Failed to load {path.name}: {e}"
+        # Log to debug so as not to spam stdout during normal runs,
+        # but collect it for the report 'warnings' block.
+        logger.debug(msg)
+        _SCAN_WARNINGS.append(f"{path.name}: {str(e)}")
         return {}
 
 
@@ -460,7 +468,10 @@ def scan_all_lexicons(lex_root: Path) -> Dict[str, Dict[str, float]]:
         return {}
     lex_root = lex_root.resolve()
     if not lex_root.is_dir():
+        logger.warning(f"Lexicon root not found: {lex_root}")
         return {}
+
+    logger.info(f"Scanning lexicon root: {lex_root}")
 
     repo = _project_root_from_lex_root(lex_root)
     iso_to_wiki = _load_iso_to_wiki(str(repo))
@@ -468,8 +479,14 @@ def scan_all_lexicons(lex_root: Path) -> Dict[str, Dict[str, float]]:
 
     out: Dict[str, Dict[str, float]] = {}
     winner_len: Dict[str, int] = {}
+    
+    # Clear warnings before new scan
+    _SCAN_WARNINGS.clear()
 
-    for p in sorted(lex_root.iterdir(), key=lambda x: x.name.casefold()):
+    scan_start = time.time()
+    folders = sorted(lex_root.iterdir(), key=lambda x: x.name.casefold())
+    
+    for p in folders:
         if not p.is_dir():
             continue
 
@@ -491,7 +508,10 @@ def scan_all_lexicons(lex_root: Path) -> Dict[str, Dict[str, float]]:
         if iso2 not in out or cur_len < prev_len:
             out[iso2] = zone_b
             winner_len[iso2] = cur_len
-
+    
+    duration = time.time() - scan_start
+    logger.info(f"Scanned {len(out)} languages in {duration:.2f}s")
+    
     return out
 
 
@@ -499,6 +519,16 @@ def scan_all_lexicons(lex_root: Path) -> Dict[str, Dict[str, float]]:
 # Debug CLI
 # -----------------------------------------------------------------------------
 def _main() -> None:
+    # 1. Setup Logging (Stdout)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(message)s",
+        stream=sys.stdout,
+        force=True
+    )
+    
+    start_time = time.time()
+    
     ap = argparse.ArgumentParser(description="Lexicon scanner (Zone B). Debug tool.")
     ap.add_argument(
         "--lex-root",
@@ -514,14 +544,76 @@ def _main() -> None:
     )
     args = ap.parse_args()
 
+    # 2. Header
+    print(f"=== LEXICON SCANNER ({LEXICON_SCANNER_VERSION}) ===")
+    print(f"Timestamp: {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}")
+    print(f"Lex Root:  {args.lex_root}")
+    print("-" * 40)
+
     lex_root = Path(args.lex_root)
+
+    # 3. Single Language Mode
     if args.lang.strip():
+        print(f"Scanning single language: {args.lang}")
         stats = scan_lexicon_health(args.lang.strip(), lex_root)
+        
+        # Diagnostics Output
+        print("\n--- Diagnostics ---")
+        for k, v in stats.items():
+            print(f"{k:<15}: {v}")
+            
+        print("\n--- JSON Output ---")
         print(json.dumps(stats, indent=2, ensure_ascii=False))
         return
 
+    # 4. Batch Mode
     all_stats = scan_all_lexicons(lex_root)
-    print(json.dumps({"meta": {"scanner": LEXICON_SCANNER_VERSION}, "languages": all_stats}, indent=2, ensure_ascii=False))
+
+    # 5. Calculate Meta Stats
+    total_lemmas = 0 # This is approximate since scan_all_lexicons returns scores, not raw counts
+                     # For exact counts we'd need to expose the inner loop, but this is a debug CLI.
+                     # We will report number of languages instead.
+                     
+    # Generate Sample (Top 3 / Bottom 3 by SEED score)
+    sorted_langs = sorted(all_stats.items(), key=lambda x: x[1].get("SEED", 0.0), reverse=True)
+    sample_size = 3
+    sample = {}
+    
+    if sorted_langs:
+        for iso, data in sorted_langs[:sample_size]:
+            sample[f"TOP_{iso}"] = data
+        for iso, data in sorted_langs[-sample_size:]:
+            sample[f"BOT_{iso}"] = data
+
+    # 6. Structured Output
+    output = {
+        "meta": {
+            "scanner": LEXICON_SCANNER_VERSION,
+            "lexicon_root": str(lex_root),
+            "language_count": len(all_stats),
+            "duration_ms": round((time.time() - start_time) * 1000, 2),
+            "key_mode": "iso2",
+            "schema_version": "v2"
+        },
+        "warnings": _SCAN_WARNINGS[:20], # Limit warnings to prevent flooding
+        "sample": sample,
+        "languages": all_stats
+    }
+    
+    # 7. Final Summary
+    print("\n--- Summary ---")
+    print(f"Languages Scanned: {len(all_stats)}")
+    print(f"Duration:          {output['meta']['duration_ms']}ms")
+    print(f"Warnings:          {len(_SCAN_WARNINGS)} (showing max 20 in JSON)")
+    
+    if _SCAN_WARNINGS:
+        print("\n[Latest Warnings]")
+        for w in _SCAN_WARNINGS[:5]:
+            print(f" - {w}")
+    
+    # 8. Print Full JSON
+    print("\n--- JSON Result ---")
+    print(json.dumps(output, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

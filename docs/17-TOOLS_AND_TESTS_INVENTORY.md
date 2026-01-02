@@ -1,16 +1,21 @@
+Here is the updated **Tools & Tests Inventory (v2.3)**, incorporating the new **Expert Level** tools (`visualize_ast`, `profiler`, `gap_filler`, `ambiguity_detector`) and clarifying the organization.
+
 ---
 
-# 🛠️ Tools & Tests Inventory (v2.2)
+# 🛠️ Tools & Tests Inventory (v2.3)
 
 **Abstract Wiki Architect**
 
 This document is the registry for executable scripts, maintenance tools, and automated tests. It maps each file to its physical location and explains when and how to use it.
 
 **Key policy (Everything Matrix upgrade):**
-- **`tools/everything_matrix/build_index.py` is the only normal refresh entrypoint** for the Everything Matrix.
-- All scanners (`rgl_scanner`, `lexicon_scanner`, `app_scanner`, `qa_scanner`) are **debug tools / libraries**:
-  - **side-effect free by default**
-  - only write shared artifacts when explicitly requested (CLI flags) or when invoked by `build_index.py --regen-*`.
+
+* **`tools/everything_matrix/build_index.py` is the only normal refresh entrypoint** for the Everything Matrix.
+* All scanners (`rgl_scanner`, `lexicon_scanner`, `app_scanner`, `qa_scanner`) are **debug tools / libraries**:
+* **side-effect free by default**
+* only write shared artifacts when explicitly requested (CLI flags) or when invoked by `build_index.py --regen-*`.
+
+
 
 ---
 
@@ -65,10 +70,11 @@ These scripts generate the `everything_matrix.json` registry (“self-awareness�
 
 ---
 
-## 4) 🛠️ General System Tools (Maintenance)
+## 4) 🛠️ General System Tools (Maintenance & Health)
 
 | Tool File | Location | Usage | Description |
 | --- | --- | --- | --- |
+| **`profiler.py`** | `tools/health/` | `python tools/health/profiler.py` | **Performance.** Benchmarks TPS (Transactions Per Second) and memory usage for regression testing. |
 | **`audit_languages.py`** | `tools/` | `python tools/audit_languages.py` | Health check across languages (valid/broken/skipped). |
 | **`check_all_languages.py`** | `tools/` | `python tools/check_all_languages.py` | Deep runtime verification (API payload per language). |
 | **`diagnostic_audit.py`** | `tools/` | `python tools/diagnostic_audit.py` | Forensics for stale/zombie build artifacts. |
@@ -83,6 +89,7 @@ These scripts generate the `everything_matrix.json` registry (“self-awareness�
 
 | Tool File | Location | Usage | Description |
 | --- | --- | --- | --- |
+| **`gap_filler.py`** | `tools/lexicon/` | `python tools/lexicon/gap_filler.py` | **Data Ops.** Compares target vs pivot (English) lexicons to identify missing vocabulary ("easy wins"). |
 | **`build_lexicon_from_wikidata.py`** | `tools/` | `python tools/build_lexicon_from_wikidata.py` | Fetches QIDs from Wikidata and saves JSON shards. |
 | **`harvest_lexicon.py`** | `tools/` | `python tools/harvest_lexicon.py` | Advanced mining from local sources / Wikidata. |
 | **`seed_lexicon_ai.py`** | `utils/` | `python utils/seed_lexicon_ai.py` | AI seeding for `core.json` vocabulary lists. |
@@ -96,6 +103,8 @@ These scripts generate the `everything_matrix.json` registry (“self-awareness�
 
 | File Type | Location | Usage | Description |
 | --- | --- | --- | --- |
+| **Debugger** | **`tools/debug/visualize_ast.py`** | `python tools/debug/visualize_ast.py` | **AST Visualizer.** Converts GF parse trees into JSON/Graphs for debugging grammar structure. |
+| **AI QA** | **`tools/qa/ambiguity_detector.py`** | `python tools/qa/ambiguity_detector.py` | **Ambiguity Trap.** Uses AI to generate sentences that test grammar robustness against ambiguity. |
 | Simple Runner | `tools/qa/test_runner.py` | `python tools/qa/test_runner.py` | CSV runner (simple) for `test_suite_*.csv`. |
 | Universal Runner | `tools/qa/universal_test_runner.py` | `python tools/qa/universal_test_runner.py` | CSV runner (advanced) for complex construction testing. |
 | Suite Generator | `tools/qa/test_suite_generator.py` | `python tools/qa/test_suite_generator.py` | Creates empty CSV test templates. |

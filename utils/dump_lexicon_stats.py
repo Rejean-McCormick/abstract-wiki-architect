@@ -1,4 +1,4 @@
-# utils\dump_lexicon_stats.py
+# utils/dump_lexicon_stats.py
 """
 utils/dump_lexicon_stats.py
 ---------------------------
@@ -41,12 +41,29 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from collections import Counter, defaultdict
 from typing import Dict, Iterable, List, Tuple
 
+# ---------------------------------------------------------------------------
+# Project root & logging
+# ---------------------------------------------------------------------------
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.append(PROJECT_ROOT)
+    
 DEFAULT_LEXICON_DIR = os.path.join(PROJECT_ROOT, "data", "lexicon")
+
+# [REFACTOR] Use the standardized ToolLogger for GUI-compatible output
+try:
+    from utils.tool_logger import ToolLogger
+    logger = ToolLogger(__file__)
+except ImportError:
+    # Fallback for standalone runs without the new logger module
+    import logging
+    logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
+    logger = logging.getLogger("dump_stats")
 
 
 # ---------------------------------------------------------------------------
@@ -61,7 +78,7 @@ def _infer_lang_from_filename(filename: str) -> str:
     Heuristic:
         - Take the stem (filename without extension).
         - Use the part before the first underscore, if present.
-          Example: "en_lexicon" → "en", "en_people" → "en"
+          Example: "en_lexicon" -> "en", "en_people" -> "en"
         - Otherwise use the whole stem.
     """
     stem = os.path.splitext(os.path.basename(filename))[0]
@@ -94,6 +111,8 @@ def find_lexicon_files(
     by_lang: Dict[str, List[str]] = defaultdict(list)
 
     if not os.path.isdir(lexicon_dir):
+        # We raise here because this is a critical setup error
+        logger.error(f"Lexicon directory not found: {lexicon_dir}")
         raise FileNotFoundError(f"Lexicon directory not found: {lexicon_dir}")
 
     for entry in os.listdir(lexicon_dir):
@@ -126,12 +145,16 @@ def load_lemmas_from_files(files: Iterable[str]) -> Dict[str, dict]:
     """
     merged: Dict[str, dict] = {}
     for path in files:
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        lemmas = data.get("lemmas", {})
-        if not isinstance(lemmas, dict):
-            continue
-        merged.update(lemmas)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            lemmas = data.get("lemmas", {})
+            if not isinstance(lemmas, dict):
+                continue
+            merged.update(lemmas)
+        except Exception as e:
+            logger.warning(f"Failed to read {path}: {e}")
+            
     return merged
 
 
@@ -181,24 +204,28 @@ def print_stats(
     total_lemmas: int,
 ) -> None:
     """
-    Pretty-print stats for a single language.
+    Pretty-print stats for a single language using the standardized logger.
     """
-    print(f"\n=== Lexicon stats for '{lang}' ===")
-    print(f"Files: {', '.join(os.path.basename(f) for f in files)}")
-    print(f"Total lemmas: {total_lemmas}")
+    # Use logger.info instead of print so it's captured by the GUI console stream
+    logger.info(f"=== Lexicon stats for '{lang}' ===")
+    
+    file_list = ", ".join(os.path.basename(f) for f in files)
+    logger.info(f"  Files: {file_list}")
+    logger.info(f"  Total lemmas: {total_lemmas}")
 
     if total_lemmas == 0:
-        print("No lemmas found.")
+        logger.warning("  No lemmas found.")
         return
 
-    print("\nBy POS:")
+    logger.info("  By POS:")
     for pos, count in pos_counts.most_common():
         pct = 100.0 * count / total_lemmas
-        print(f"  {pos:<8} {count:5d} ({pct:5.1f}%)")
+        logger.info(f"    {pos:<8} {count:5d} ({pct:5.1f}%)")
 
-    print("\nSelected categories:")
-    print(f"  Human nouns:          {human_nouns}")
-    print(f"  Nationality adjectives: {nationality_adjs}")
+    logger.info("  Selected categories:")
+    logger.info(f"    Human nouns:          {human_nouns}")
+    logger.info(f"    Nationality adjectives: {nationality_adjs}")
+    logger.info("") # Spacer
 
 
 # ---------------------------------------------------------------------------
@@ -227,23 +254,40 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: List[str] | None = None) -> None:
+    # [REFACTOR] Standardized Start
+    if hasattr(logger, "start"):
+        logger.start("Lexicon Stats Dump")
+
     parser = build_arg_parser()
     args = parser.parse_args(argv)
 
     lexicon_dir = os.path.abspath(args.lexicon_dir)
-    lang_files = find_lexicon_files(lexicon_dir, langs=args.langs)
+    
+    try:
+        lang_files = find_lexicon_files(lexicon_dir, langs=args.langs)
+    except FileNotFoundError:
+        # Error already logged inside find_lexicon_files
+        sys.exit(1)
 
     if not lang_files:
         if args.langs:
-            print(
+            logger.warning(
                 f"No lexicon JSON files found for languages {args.langs} in {lexicon_dir}."
             )
         else:
-            print(f"No lexicon JSON files found in {lexicon_dir}.")
-        return
+            logger.warning(f"No lexicon JSON files found in {lexicon_dir}.")
+        
+        # Early exit if nothing to do
+        if hasattr(logger, "finish"):
+            logger.finish("No files found.", success=False)
+        sys.exit(0)
 
-    print(f"Lexicon directory: {lexicon_dir}")
-    print(f"Languages found: {', '.join(sorted(lang_files.keys()))}")
+    logger.info(f"Lexicon directory: {lexicon_dir}")
+    logger.info(f"Languages found: {', '.join(sorted(lang_files.keys()))}")
+
+    # Accumulate global stats for the summary
+    global_lemmas = 0
+    langs_processed = 0
 
     for lang, files in sorted(lang_files.items()):
         lemmas = load_lemmas_from_files(files)
@@ -253,8 +297,20 @@ def main(argv: List[str] | None = None) -> None:
         print_stats(
             lang, files, pos_counts, human_nouns, nationality_adjs, total_lemmas
         )
+        global_lemmas += total_lemmas
+        langs_processed += 1
 
-    print("")  # final newline
+    # [REFACTOR] Standardized Summary
+    summary_data = {
+        "languages_scanned": langs_processed,
+        "total_lemmas_found": global_lemmas
+    }
+    
+    if hasattr(logger, "finish"):
+        logger.finish(
+            message=f"Stats dump complete. Found {global_lemmas} entries across {langs_processed} languages.",
+            details=summary_data
+        )
 
 
 if __name__ == "__main__":

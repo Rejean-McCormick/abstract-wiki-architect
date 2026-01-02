@@ -1,7 +1,14 @@
 // architect_frontend/src/app/tools/page.tsx
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import {
   Terminal,
@@ -19,6 +26,7 @@ import {
   EyeOff,
   Filter,
   ChevronRight,
+  Ban,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,6 +54,9 @@ import {
 import { RiskBadge, StatusBadge, WiringBadge } from "./components/Badges";
 import { iconForCategory } from "./components/icons";
 
+// Visualizer
+import ASTViewer from "@/components/tools/ASTViewer";
+
 // ----------------------------------------------------------------------------
 // Types
 // ----------------------------------------------------------------------------
@@ -55,16 +66,61 @@ type HealthReady = {
   engine?: string;
 };
 
+type ToolRunEvent = {
+  ts: string;
+  level: string;
+  step: string;
+  message: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: Record<string, any>;
+};
+
+type ToolRunTruncation = {
+  stdout: boolean;
+  stderr: boolean;
+  limit_chars: number;
+};
+
+type ToolRunArgsRejected = {
+  arg: string;
+  reason: string;
+};
+
+type ToolSummary = {
+  id: string;
+  label: string;
+  description: string;
+  timeout_sec: number;
+};
+
 type ToolRunResponse = {
+  trace_id: string;
   success: boolean;
+  command: string;
+  // legacy compat
   output?: string;
   error?: string;
-  return_code?: number; // legacy
-  exit_code?: number; // current backend
-  tool_id?: string;
-  command?: string;
-  truncated?: boolean;
-  duration_ms?: number;
+
+  stdout: string;
+  stderr: string;
+  stdout_chars: number;
+  stderr_chars: number;
+
+  exit_code: number;
+  duration_ms: number;
+  started_at: string;
+  ended_at: string;
+
+  cwd: string;
+  repo_root: string;
+  tool: ToolSummary;
+
+  args_received: string[];
+  args_accepted: string[];
+  args_rejected: ToolRunArgsRejected[];
+
+  truncation: ToolRunTruncation;
+  events: ToolRunEvent[];
 };
 
 type ToolItem = {
@@ -80,17 +136,15 @@ type ToolItem = {
   cli: string[];
   notes: string[];
   uiSteps: string[];
-  wiredToolId?: string; // if wired, exact backend allowlisted tool_id
-  toolIdGuess: string; // best-effort guess for display/search
-  commandPreview?: string; // backend registry command preview (if wired)
-  hiddenInNormalMode?: boolean; // derived (debug-only)
+  wiredToolId?: string;
+  toolIdGuess: string;
+  commandPreview?: string;
+  hiddenInNormalMode?: boolean;
 };
 
 const TOOL_ID_BY_PATH: Record<string, string> = Object.fromEntries(
   Object.entries(BACKEND_TOOL_REGISTRY).map(([toolId, meta]) => [meta.path, toolId])
 );
-
-const WIRED_TOOL_IDS = new Set<string>(Object.keys(BACKEND_TOOL_REGISTRY));
 
 // ----------------------------------------------------------------------------
 // API base normalization (supports both host base and /api/v1 base).
@@ -102,6 +156,12 @@ const RAW_API_BASE =
 
 const API_V1 = normalizeApiV1(RAW_API_BASE);
 const REPO_URL = normalizeRepoUrl(process.env.NEXT_PUBLIC_REPO_URL || "");
+
+// ----------------------------------------------------------------------------
+// Local persistence
+// ----------------------------------------------------------------------------
+const LS_PREFS_KEY = "tools_dashboard_prefs_v2";
+const LS_ARGS_KEY = "tools_dashboard_args_v1";
 
 // ----------------------------------------------------------------------------
 // UI Helpers
@@ -126,11 +186,107 @@ function healthBadge(label: string, value?: string) {
 }
 
 function clampLines(n: number) {
-  // tailwind line-clamp-x class generator guard
   if (n <= 1) return "line-clamp-1";
   if (n === 2) return "line-clamp-2";
   if (n === 3) return "line-clamp-3";
   return "line-clamp-4";
+}
+
+function safeJsonParse<T>(s: string): { ok: true; value: T } | { ok: false; error: unknown } {
+  try {
+    return { ok: true, value: JSON.parse(s) as T };
+  } catch (e) {
+    return { ok: false, error: e };
+  }
+}
+
+function normalizeToolRunResponse(
+  toolId: string,
+  rawText: string,
+  parsed: ToolRunResponse | null,
+  httpMeta?: { ok: boolean; status: number; statusText: string }
+): ToolRunResponse {
+  // If we got a parsed object, ensure required fields exist.
+  if (parsed) {
+    return {
+      trace_id: parsed.trace_id ?? "",
+      success: Boolean(parsed.success),
+      command: parsed.command ?? "",
+      output: parsed.output,
+      error: parsed.error,
+
+      stdout: parsed.stdout ?? "",
+      stderr: parsed.stderr ?? "",
+      stdout_chars: Number.isFinite(parsed.stdout_chars) ? parsed.stdout_chars : (parsed.stdout?.length ?? 0),
+      stderr_chars: Number.isFinite(parsed.stderr_chars) ? parsed.stderr_chars : (parsed.stderr?.length ?? 0),
+
+      exit_code: Number.isFinite(parsed.exit_code) ? parsed.exit_code : (parsed.success ? 0 : -1),
+      duration_ms: Number.isFinite(parsed.duration_ms) ? parsed.duration_ms : 0,
+      started_at: parsed.started_at ?? "",
+      ended_at: parsed.ended_at ?? "",
+
+      cwd: parsed.cwd ?? "",
+      repo_root: parsed.repo_root ?? "",
+      tool: parsed.tool ?? { id: toolId, label: "", description: "", timeout_sec: 0 },
+
+      args_received: parsed.args_received ?? [],
+      args_accepted: parsed.args_accepted ?? [],
+      args_rejected: parsed.args_rejected ?? [],
+
+      truncation: parsed.truncation ?? { stdout: false, stderr: false, limit_chars: 0 },
+      events: parsed.events ?? [],
+    };
+  }
+
+  // If parsing failed, present a structured error.
+  const httpLine = httpMeta
+    ? `HTTP ${httpMeta.status} ${httpMeta.statusText}${httpMeta.ok ? "" : " (non-2xx)"}`
+    : "HTTP (unknown)";
+
+  return {
+    trace_id: "",
+    success: false,
+    command: "",
+    output: "",
+    error: `${httpLine}\n\n${rawText || "(empty response)"}`,
+
+    stdout: "",
+    stderr: rawText || "",
+    stdout_chars: 0,
+    stderr_chars: rawText?.length ?? 0,
+
+    exit_code: -1,
+    duration_ms: 0,
+    started_at: "",
+    ended_at: "",
+
+    cwd: "",
+    repo_root: "",
+    tool: { id: toolId, label: "", description: "", timeout_sec: 0 },
+
+    args_received: [],
+    args_accepted: [],
+    args_rejected: [],
+
+    truncation: { stdout: false, stderr: false, limit_chars: 0 },
+    events: [],
+  };
+}
+
+function formatEventTime(ts: string) {
+  // keep lightweight and stable
+  const t = ts.split("T")[1] || ts;
+  return t.replace("Z", "");
+}
+
+function appendConsoleBlock(
+  prev: string,
+  block: string | string[],
+  opts?: { leadingBlank?: boolean }
+) {
+  const lines = Array.isArray(block) ? block : [block];
+  const prefix = opts?.leadingBlank ? "\n" : "";
+  return prev + prefix + lines.join("\n");
 }
 
 // ----------------------------------------------------------------------------
@@ -140,16 +296,23 @@ export default function ToolsDashboard() {
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
-  const [consoleOutput, setConsoleOutput] = useState<string>(
-    `// Tools Command Center\n` +
+  const [consoleOutput, setConsoleOutput] = useState<string>(() => {
+    return (
+      `// Tools Command Center\n` +
       `// Inventory v${INVENTORY.version} (generated ${INVENTORY.generated_on})\n` +
       `// API: ${API_V1}\n` +
       `// Normal mode shows only backend-wired runnable tools.\n` +
-      `// Enable Power user (debug) to reveal the full inventory.`
-  );
+      `// Enable Power user (debug) to reveal the full inventory.\n`
+    );
+  });
 
   const [lastStatus, setLastStatus] = useState<"success" | "error" | null>(null);
   const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query);
+
+  // Visualizer State
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [visualData, setVisualData] = useState<any>(null);
 
   // Power user (debug) gate
   const [powerUser, setPowerUser] = useState(false);
@@ -172,10 +335,100 @@ export default function ToolsDashboard() {
 
   const [argsByToolId, setArgsByToolId] = useState<Record<string, string>>({});
 
-  const refreshHealth = async () => {
-    setHealthLoading(true);
+  // Capture the last full response object for "Copy JSON Bundle"
+  const [lastResponseJson, setLastResponseJson] = useState<string | null>(null);
+
+  // Abort running tool
+  const runAbortRef = useRef<AbortController | null>(null);
+
+  // ----------------------------------------------------------------------------
+  // Load persisted prefs
+  // ----------------------------------------------------------------------------
+  useEffect(() => {
     try {
-      const res = await fetch(`${API_V1}/health/ready`, { cache: "no-store" });
+      const prefsRaw = localStorage.getItem(LS_PREFS_KEY);
+      if (prefsRaw) {
+        const parsed = safeJsonParse<{
+          powerUser?: boolean;
+          showLegacy?: boolean;
+          showTests?: boolean;
+          showInternal?: boolean;
+          wiredOnly?: boolean;
+          showHeavy?: boolean;
+          leftCollapsed?: boolean;
+          autoScrollConsole?: boolean;
+        }>(prefsRaw);
+        if (parsed.ok && parsed.value) {
+          setPowerUser(Boolean(parsed.value.powerUser));
+          if (typeof parsed.value.showLegacy === "boolean") setShowLegacy(parsed.value.showLegacy);
+          if (typeof parsed.value.showTests === "boolean") setShowTests(parsed.value.showTests);
+          if (typeof parsed.value.showInternal === "boolean") setShowInternal(parsed.value.showInternal);
+          if (typeof parsed.value.wiredOnly === "boolean") setWiredOnly(parsed.value.wiredOnly);
+          if (typeof parsed.value.showHeavy === "boolean") setShowHeavy(parsed.value.showHeavy);
+          if (typeof parsed.value.leftCollapsed === "boolean") setLeftCollapsed(parsed.value.leftCollapsed);
+          if (typeof parsed.value.autoScrollConsole === "boolean")
+            setAutoScrollConsole(parsed.value.autoScrollConsole);
+        }
+      }
+
+      const argsRaw = localStorage.getItem(LS_ARGS_KEY);
+      if (argsRaw) {
+        const parsedArgs = safeJsonParse<Record<string, string>>(argsRaw);
+        if (parsedArgs.ok && parsedArgs.value) {
+          setArgsByToolId(parsedArgs.value);
+        }
+      }
+    } catch {
+      // ignore
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist prefs
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        LS_PREFS_KEY,
+        JSON.stringify(
+          {
+            powerUser,
+            showLegacy,
+            showTests,
+            showInternal,
+            wiredOnly,
+            showHeavy,
+            leftCollapsed,
+            autoScrollConsole,
+          },
+          null,
+          0
+        )
+      );
+    } catch {
+      // ignore
+    }
+  }, [powerUser, showLegacy, showTests, showInternal, wiredOnly, showHeavy, leftCollapsed, autoScrollConsole]);
+
+  // Persist args
+  useEffect(() => {
+    try {
+      localStorage.setItem(LS_ARGS_KEY, JSON.stringify(argsByToolId, null, 0));
+    } catch {
+      // ignore
+    }
+  }, [argsByToolId]);
+
+  // ----------------------------------------------------------------------------
+  // Health
+  // ----------------------------------------------------------------------------
+  const refreshHealth = useCallback(async () => {
+    setHealthLoading(true);
+    const controller = new AbortController();
+    try {
+      const res = await fetch(`${API_V1}/health/ready`, {
+        cache: "no-store",
+        signal: controller.signal,
+      });
       const data = (await res.json()) as HealthReady;
       setHealth(data);
     } catch {
@@ -183,12 +436,11 @@ export default function ToolsDashboard() {
     } finally {
       setHealthLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     refreshHealth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refreshHealth]);
 
   // Auto-scroll console to bottom on output changes (opt-out)
   useEffect(() => {
@@ -198,31 +450,47 @@ export default function ToolsDashboard() {
     el.scrollTop = el.scrollHeight;
   }, [consoleOutput, autoScrollConsole]);
 
+  // ----------------------------------------------------------------------------
+  // Inventory -> items (deduped paths)
+  // ----------------------------------------------------------------------------
   const items: ToolItem[] = useMemo(() => {
     const allPaths: string[] = [];
+    const seen = new Set<string>();
 
-    allPaths.push(...(INVENTORY.root_entrypoints as readonly string[]));
-    allPaths.push(...(INVENTORY.gf as readonly string[]));
-    allPaths.push(...(INVENTORY.tools.root || []));
-    allPaths.push(...(INVENTORY.tools.everything_matrix || []));
-    allPaths.push(...(INVENTORY.tools.qa || []));
-    allPaths.push(...(INVENTORY.scripts.root || []));
-    allPaths.push(...(INVENTORY.scripts.lexicon || []));
-    allPaths.push(...(INVENTORY.utils as readonly string[]));
-    allPaths.push(...(INVENTORY.ai_services as readonly string[]));
-    allPaths.push(...(INVENTORY.nlg as readonly string[]));
-    allPaths.push(...(INVENTORY.prototypes as readonly string[]));
-    allPaths.push(...(INVENTORY.tests.root || []));
-    allPaths.push(...(INVENTORY.tests.http_api_legacy || []));
-    allPaths.push(...(INVENTORY.tests.adapters_core_integration || []));
+    const addMany = (arr?: readonly string[] | string[]) => {
+      if (!arr) return;
+      for (const p of arr) {
+        if (!p) continue;
+        if (seen.has(p)) continue;
+        seen.add(p);
+        allPaths.push(p);
+      }
+    };
+
+    addMany(INVENTORY.root_entrypoints as readonly string[]);
+    addMany(INVENTORY.gf as readonly string[]);
+    addMany(INVENTORY.tools.root || []);
+    addMany(INVENTORY.tools.everything_matrix || []);
+    addMany(INVENTORY.tools.qa || []);
+    addMany(INVENTORY.tools.debug || []);
+    addMany(INVENTORY.tools.health || []);
+    addMany(INVENTORY.tools.lexicon || []);
+
+    addMany(INVENTORY.scripts.root || []);
+    addMany(INVENTORY.scripts.lexicon || []);
+    addMany(INVENTORY.utils as readonly string[]);
+    addMany(INVENTORY.ai_services as readonly string[]);
+    addMany(INVENTORY.nlg as readonly string[]);
+    addMany(INVENTORY.prototypes as readonly string[]);
+    addMany(INVENTORY.tests.root || []);
+    addMany(INVENTORY.tests.http_api_legacy || []);
+    addMany(INVENTORY.tests.adapters_core_integration || []);
 
     const out: ToolItem[] = [];
 
     // 1) Build items from inventory (repo browsing)
     for (const path of allPaths) {
       const cls = classify(INVENTORY.root_entrypoints as readonly string[], path);
-
-      // Respect classify() exclusion policy (keeps UI noise down even in debug)
       if (cls.excludeFromUI) continue;
 
       const status = cls.statusOverride ?? statusFromPath(path);
@@ -236,7 +504,7 @@ export default function ToolsDashboard() {
       const cli =
         path === "manage.py"
           ? ["python manage.py start", "python manage.py build", "python manage.py doctor"]
-          : path === "builder/orchestrator.py" // [FIX] Updated to new path
+          : path === "builder/orchestrator.py"
           ? ["python builder/orchestrator.py", "python manage.py build"]
           : cliFromPath(path);
 
@@ -292,8 +560,7 @@ export default function ToolsDashboard() {
         group: meta.group,
         kind: "tool",
         risk,
-        status,
-        status,
+        status, // ✅ fixed (previously duplicated)
         desc,
         cli: [meta.cmd.join(" ")],
         notes: [
@@ -318,18 +585,19 @@ export default function ToolsDashboard() {
     return out;
   }, []);
 
+  // ----------------------------------------------------------------------------
+  // Filtering (deferred search)
+  // ----------------------------------------------------------------------------
   const filteredItems = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = deferredQuery.trim().toLowerCase();
 
-    // Normal mode is intentionally conservative:
-    // - wired only
-    // - hide legacy/tests/internal
-    // - hide heavy tools unless toggled (default: hidden in normal mode)
     const effectiveWiredOnly = powerUser ? wiredOnly : true;
     const effectiveShowLegacy = powerUser ? showLegacy : false;
     const effectiveShowTests = powerUser ? showTests : false;
     const effectiveShowInternal = powerUser ? showInternal : false;
-    const effectiveShowHeavy = powerUser ? showHeavy : false;
+
+    // ✅ Important: in normal mode, DO NOT silently hide heavy tools
+    const effectiveShowHeavy = powerUser ? showHeavy : true;
 
     return items.filter((it) => {
       if (!effectiveShowHeavy && it.risk === "heavy") return false;
@@ -339,7 +607,6 @@ export default function ToolsDashboard() {
       if (!effectiveShowTests && it.kind === "test") return false;
       if (!effectiveShowInternal && it.status === "internal") return false;
 
-      // In normal mode, respect classify() visibility/hideByDefault (if provided)
       if (!powerUser && it.hiddenInNormalMode) return false;
 
       if (!q) return true;
@@ -353,7 +620,7 @@ export default function ToolsDashboard() {
         (it.wiredToolId ? it.wiredToolId.toLowerCase().includes(q) : false)
       );
     });
-  }, [items, query, powerUser, showLegacy, showTests, showInternal, wiredOnly, showHeavy]);
+  }, [items, deferredQuery, powerUser, showLegacy, showTests, showInternal, wiredOnly, showHeavy]);
 
   const grouped = useMemo(() => {
     const byCat = new Map<string, Map<string, ToolItem[]>>();
@@ -377,7 +644,6 @@ export default function ToolsDashboard() {
     [items, selectedKey]
   );
 
-  // If the selected item becomes invisible under the current filters, clear selection
   useEffect(() => {
     if (!selectedKey) return;
     const stillVisible = filteredItems.some((x) => x.key === selectedKey);
@@ -387,93 +653,192 @@ export default function ToolsDashboard() {
   const wiredCount = useMemo(() => items.filter((x) => Boolean(x.wiredToolId)).length, [items]);
   const visibleCount = filteredItems.length;
 
-  const runTool = async (it: ToolItem) => {
-    const toolId = it.wiredToolId;
-    if (!toolId) return;
-
-    const argsStr = argsByToolId[toolId] || "";
-    const args = parseCliArgs(argsStr);
-
-    const requiresConfirm = it.risk === "heavy" || it.risk === "moderate";
-    if (requiresConfirm) {
-      const ok = window.confirm(
-        `Run "${it.title}"?\n\nRisk: ${it.risk.toUpperCase()}\nTool ID: ${toolId}\nArgs: ${args.join(
-          " "
-        )}\n\nProceed?`
+  // ----------------------------------------------------------------------------
+  // Run tooling
+  // ----------------------------------------------------------------------------
+  const cancelRun = useCallback(() => {
+    if (runAbortRef.current) {
+      runAbortRef.current.abort();
+      runAbortRef.current = null;
+      setConsoleOutput((prev) =>
+        appendConsoleBlock(prev, ["", "[CANCEL] Abort requested by user."], { leadingBlank: true })
       );
-      if (!ok) return;
     }
+  }, []);
 
-    setActiveToolId(toolId);
-    setLastStatus(null);
+  const runTool = useCallback(
+    async (it: ToolItem) => {
+      const toolId = it.wiredToolId;
+      if (!toolId) return;
 
-    setConsoleOutput((prev) => {
-      const header =
-        `\n\n> Executing: ${it.title}\n` +
-        `  tool_id=${toolId}\n` +
-        `  args=${args.join(" ")}\n` +
-        `----------------------------------------`;
-      return prev + header;
-    });
+      // Reset Visualizer
+      setVisualData(null);
 
-    try {
-      const res = await fetch(`${API_V1}/tools/run`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tool_id: toolId, args }),
-      });
+      const argsStr = argsByToolId[toolId] || "";
+      const args = parseCliArgs(argsStr);
 
-      let data: ToolRunResponse | null = null;
+      const requiresConfirm = it.risk === "heavy" || it.risk === "moderate";
+      if (requiresConfirm) {
+        const ok = window.confirm(
+          `Run "${it.title}"?\n\nRisk: ${it.risk.toUpperCase()}\nTool ID: ${toolId}\nArgs: ${args.join(
+            " "
+          )}\n\nProceed?`
+        );
+        if (!ok) return;
+      }
+
+      // Abort any previous run (shouldn’t happen, but keeps state sane)
+      if (runAbortRef.current) runAbortRef.current.abort();
+      const controller = new AbortController();
+      runAbortRef.current = controller;
+
+      setActiveToolId(toolId);
+      setLastStatus(null);
+      setLastResponseJson(null);
+
+      setConsoleOutput((prev) =>
+        appendConsoleBlock(
+          prev,
+          [
+            "",
+            `> Executing: ${it.title}`,
+            `  tool_id=${toolId}`,
+            `  args=${args.join(" ")}`,
+            `----------------------------------------`,
+          ],
+          { leadingBlank: true }
+        )
+      );
+
+      const startedAt = performance.now();
+
       try {
-        data = (await res.json()) as ToolRunResponse;
-      } catch {
-        data = { success: false, error: await res.text() };
-      }
-
-      const rc =
-        typeof data?.exit_code === "number"
-          ? data.exit_code
-          : typeof data?.return_code === "number"
-          ? data.return_code
-          : data?.success
-          ? 0
-          : -1;
-
-      if (data?.success) {
-        setLastStatus("success");
-        setConsoleOutput((prev) => {
-          const cmd = data?.command ? `\n[COMMAND]\n${data.command}\n` : "";
-          const out = data?.output ? `\n[OUTPUT]\n${data.output}\n` : "\n[OUTPUT]\n";
-          const meta =
-            typeof data?.duration_ms === "number" || data?.truncated
-              ? `\n[META]${typeof data?.duration_ms === "number" ? ` duration_ms=${data.duration_ms}` : ""}${
-                  data?.truncated ? " truncated=true" : ""
-                }\n`
-              : "";
-          return prev + `${cmd}${meta}${out}\n[SUCCESS] exit_code=${rc}`;
+        const res = await fetch(`${API_V1}/tools/run`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tool_id: toolId, args }),
+          cache: "no-store",
+          signal: controller.signal,
         });
-      } else {
-        setLastStatus("error");
-        setConsoleOutput((prev) => {
-          const cmd = data?.command ? `\n[COMMAND]\n${data.command}\n` : "";
-          const out = data?.output ? `\n[OUTPUT]\n${data.output}\n` : "";
-          const err = data?.error ? `\n[ERROR]\n${data.error}\n` : "\n[ERROR]\nUnknown error";
-          const meta =
-            typeof data?.duration_ms === "number" || data?.truncated
-              ? `\n[META]${typeof data?.duration_ms === "number" ? ` duration_ms=${data.duration_ms}` : ""}${
-                  data?.truncated ? " truncated=true" : ""
-                }\n`
-              : "";
-          return prev + `${cmd}${meta}${out}${err}\n[FAILED] exit_code=${rc}`;
-        });
+
+        const httpMeta = { ok: res.ok, status: res.status, statusText: res.statusText };
+        const rawText = await res.text();
+
+        const parsedTry = safeJsonParse<ToolRunResponse>(rawText);
+        const normalized = normalizeToolRunResponse(
+          toolId,
+          rawText,
+          parsedTry.ok ? parsedTry.value : null,
+          httpMeta
+        );
+
+        setLastResponseJson(JSON.stringify(normalized, null, 2));
+
+        const durationMs = Math.max(0, Math.round(performance.now() - startedAt));
+
+        if (normalized.success) {
+          setLastStatus("success");
+          setConsoleOutput((prev) => {
+            const lines: string[] = [];
+            lines.push(`[TRACE] ${normalized.trace_id}`);
+            lines.push(
+              `[TIME]  Started: ${normalized.started_at || "(server)"} | Client duration: ${durationMs}ms | Server: ${
+                normalized.duration_ms
+              }ms`
+            );
+
+            if (normalized.events && normalized.events.length > 0) {
+              lines.push(`\n[LIFECYCLE]`);
+              normalized.events.forEach((e) => {
+                lines.push(`  ${formatEventTime(e.ts)} [${e.level}] ${e.step}: ${e.message}`);
+              });
+            }
+
+            if (normalized.args_rejected && normalized.args_rejected.length > 0) {
+              lines.push(`\n[WARN] Rejected Arguments:`);
+              normalized.args_rejected.forEach((r) => lines.push(`  - ${r.arg}: ${r.reason}`));
+            }
+
+            if (normalized.stdout) {
+              lines.push(`\n[STDOUT] (${normalized.stdout_chars} chars)`);
+              lines.push(normalized.stdout);
+              if (normalized.truncation?.stdout) lines.push("... [TRUNCATED]");
+            }
+
+            if (normalized.stderr) {
+              lines.push(`\n[STDERR] (${normalized.stderr_chars} chars)`);
+              lines.push(normalized.stderr);
+              if (normalized.truncation?.stderr) lines.push("... [TRUNCATED]");
+            }
+
+            lines.push(`\n[SUCCESS] exit_code=${normalized.exit_code}`);
+            return appendConsoleBlock(prev, lines, { leadingBlank: true });
+          });
+
+          // Visualizer Logic (prefer stdout; fallback to output)
+          const outputJson = normalized.stdout || normalized.output;
+          if (toolId === "visualize_ast" && outputJson) {
+            const visTry = safeJsonParse<any>(outputJson);
+            if (visTry.ok && visTry.value) {
+              const tree = visTry.value.tree ?? visTry.value.ast ?? null;
+              if (tree) setVisualData(tree);
+            } else {
+              // don’t fail the run; just log
+              setConsoleOutput((prev) =>
+                appendConsoleBlock(prev, ["", "[AST] Could not parse visualizer JSON output."], {
+                  leadingBlank: true,
+                })
+              );
+            }
+          }
+        } else {
+          setLastStatus("error");
+          setConsoleOutput((prev) => {
+            const lines: string[] = [];
+            lines.push(`[TRACE] ${normalized.trace_id || "(none)"}`);
+            lines.push(`[FAILED] exit_code=${normalized.exit_code}`);
+
+            if (normalized.events && normalized.events.length > 0) {
+              lines.push(`\n[LIFECYCLE]`);
+              normalized.events.forEach((e) => {
+                lines.push(`  ${formatEventTime(e.ts)} [${e.level}] ${e.step}: ${e.message}`);
+              });
+            }
+
+            if (normalized.stdout) {
+              lines.push(`\n[STDOUT]`);
+              lines.push(normalized.stdout);
+            }
+
+            const errText = normalized.stderr || normalized.error || "Unknown Error";
+            lines.push(`\n[STDERR]`);
+            lines.push(errText);
+
+            return appendConsoleBlock(prev, lines, { leadingBlank: true });
+          });
+        }
+      } catch (e: any) {
+        if (e?.name === "AbortError") {
+          setLastStatus("error");
+          setConsoleOutput((prev) =>
+            appendConsoleBlock(prev, ["", "[ABORTED] Request cancelled."], { leadingBlank: true })
+          );
+        } else {
+          setLastStatus("error");
+          setConsoleOutput((prev) =>
+            appendConsoleBlock(prev, [``, `[NETWORK ERROR]: ${e?.message || String(e)}`], {
+              leadingBlank: true,
+            })
+          );
+        }
+      } finally {
+        // Only clear if we are still the active controller
+        runAbortRef.current = null;
+        setActiveToolId(null);
       }
-    } catch (e: any) {
-      setLastStatus("error");
-      setConsoleOutput((prev) => prev + `\n[NETWORK ERROR]: ${e?.message || String(e)}`);
-    } finally {
-      setActiveToolId(null);
-    }
-  };
+    },
+    [argsByToolId]
+  );
 
   const selectedToolId = selected?.wiredToolId || null;
 
@@ -536,15 +901,27 @@ export default function ToolsDashboard() {
                   </span>
 
                   <label className="flex items-center gap-2 text-sm text-slate-600">
-                    <input type="checkbox" checked={wiredOnly} onChange={(e) => setWiredOnly(e.target.checked)} />
+                    <input
+                      type="checkbox"
+                      checked={wiredOnly}
+                      onChange={(e) => setWiredOnly(e.target.checked)}
+                    />
                     Wired only
                   </label>
                   <label className="flex items-center gap-2 text-sm text-slate-600">
-                    <input type="checkbox" checked={showLegacy} onChange={(e) => setShowLegacy(e.target.checked)} />
+                    <input
+                      type="checkbox"
+                      checked={showLegacy}
+                      onChange={(e) => setShowLegacy(e.target.checked)}
+                    />
                     Show legacy
                   </label>
                   <label className="flex items-center gap-2 text-sm text-slate-600">
-                    <input type="checkbox" checked={showTests} onChange={(e) => setShowTests(e.target.checked)} />
+                    <input
+                      type="checkbox"
+                      checked={showTests}
+                      onChange={(e) => setShowTests(e.target.checked)}
+                    />
                     Show tests
                   </label>
                   <label className="flex items-center gap-2 text-sm text-slate-600">
@@ -556,7 +933,11 @@ export default function ToolsDashboard() {
                     Show internal
                   </label>
                   <label className="flex items-center gap-2 text-sm text-slate-600">
-                    <input type="checkbox" checked={showHeavy} onChange={(e) => setShowHeavy(e.target.checked)} />
+                    <input
+                      type="checkbox"
+                      checked={showHeavy}
+                      onChange={(e) => setShowHeavy(e.target.checked)}
+                    />
                     Show heavy
                   </label>
                 </div>
@@ -569,7 +950,8 @@ export default function ToolsDashboard() {
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="text-xs text-slate-500">
               API: <span className="font-mono">{API_V1}</span> • Visible:{" "}
-              <span className="font-mono">{visibleCount}</span> / <span className="font-mono">{items.length}</span> • Wired tools:{" "}
+              <span className="font-mono">{visibleCount}</span> /{" "}
+              <span className="font-mono">{items.length}</span> • Wired tools:{" "}
               <span className="font-mono">{wiredCount}</span>
               {REPO_URL ? (
                 <>
@@ -591,7 +973,13 @@ export default function ToolsDashboard() {
                 {healthBadge("storage", health?.storage)}
                 {healthBadge("engine", health?.engine)}
               </span>
-              <Button variant="outline" size="sm" className="h-8" onClick={refreshHealth} disabled={healthLoading}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8"
+                onClick={refreshHealth}
+                disabled={healthLoading}
+              >
                 {healthLoading ? (
                   <span className="inline-flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin" /> Checking
@@ -643,19 +1031,27 @@ export default function ToolsDashboard() {
                             >
                               <div className="flex items-start justify-between gap-3 p-3">
                                 <button
+                                  type="button"
                                   onClick={() => setSelectedKey(it.key)}
                                   className="flex-1 text-left"
                                   disabled={activeToolId !== null}
                                 >
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <span className="font-semibold text-slate-800 text-sm">{it.title}</span>
-                                    <WiringBadge wired={Boolean(it.wiredToolId)} hidden={!powerUser && Boolean(it.hiddenInNormalMode)} />
+                                    <WiringBadge
+                                      wired={Boolean(it.wiredToolId)}
+                                      hidden={!powerUser && Boolean(it.hiddenInNormalMode)}
+                                    />
                                     <RiskBadge risk={it.risk} />
                                     <StatusBadge status={it.status} />
                                   </div>
-                                  <div className="text-[11px] text-slate-400 font-mono mt-1 truncate">{it.path}</div>
+                                  <div className="text-[11px] text-slate-400 font-mono mt-1 truncate">
+                                    {it.path}
+                                  </div>
                                   {it.desc ? (
-                                    <div className={`text-xs text-slate-500 mt-1 ${clampLines(2)}`}>{it.desc}</div>
+                                    <div className={`text-xs text-slate-500 mt-1 ${clampLines(2)}`}>
+                                      {it.desc}
+                                    </div>
                                   ) : null}
                                 </button>
 
@@ -674,7 +1070,11 @@ export default function ToolsDashboard() {
                                     onClick={() => runTool(it)}
                                     disabled={activeToolId !== null || !it.wiredToolId}
                                     variant={it.risk === "heavy" ? "destructive" : "default"}
-                                    title={it.wiredToolId ? "Run (backend-wired)" : "Run disabled (not in backend allowlist)"}
+                                    title={
+                                      it.wiredToolId
+                                        ? "Run (backend-wired)"
+                                        : "Run disabled (not in backend allowlist)"
+                                    }
                                   >
                                     {isRunning ? (
                                       <span className="inline-flex items-center gap-2">
@@ -705,6 +1105,7 @@ export default function ToolsDashboard() {
             <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
               <CardTitle className="text-sm flex items-center gap-2">
                 <button
+                  type="button"
                   className="inline-flex items-center gap-1 text-slate-500 hover:text-slate-800"
                   title={leftCollapsed ? "Show tool list" : "Hide tool list"}
                   onClick={() => setLeftCollapsed((v) => !v)}
@@ -732,7 +1133,10 @@ export default function ToolsDashboard() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-semibold">{selected.title}</span>
-                    <WiringBadge wired={Boolean(selected.wiredToolId)} hidden={!powerUser && Boolean(selected.hiddenInNormalMode)} />
+                    <WiringBadge
+                      wired={Boolean(selected.wiredToolId)}
+                      hidden={!powerUser && Boolean(selected.hiddenInNormalMode)}
+                    />
                     <RiskBadge risk={selected.risk} />
                     <StatusBadge status={selected.status} />
                     <span className="text-xs text-slate-500">
@@ -771,6 +1175,7 @@ export default function ToolsDashboard() {
                       <div className="font-mono text-xs flex items-center justify-between gap-2">
                         <span>{selected.wiredToolId ?? "—"}</span>
                         <button
+                          type="button"
                           className="text-slate-500 hover:text-slate-800 disabled:opacity-50"
                           onClick={() => selected.wiredToolId && copyToClipboard(selected.wiredToolId)}
                           disabled={!selected.wiredToolId}
@@ -788,7 +1193,8 @@ export default function ToolsDashboard() {
                       ) : (
                         <>
                           <div className="mt-2 text-[11px] text-slate-500">
-                            Command preview: <span className="font-mono">{selected.commandPreview || "(unknown)"}</span>
+                            Command preview:{" "}
+                            <span className="font-mono">{selected.commandPreview || "(unknown)"}</span>
                           </div>
 
                           <div className="mt-3">
@@ -861,6 +1267,7 @@ export default function ToolsDashboard() {
                           <div key={cmd} className="font-mono text-xs flex items-center justify-between gap-2">
                             <span className="truncate">{cmd}</span>
                             <button
+                              type="button"
                               className="text-slate-500 hover:text-slate-800"
                               onClick={() => copyToClipboard(cmd)}
                               title="Copy command"
@@ -912,21 +1319,24 @@ export default function ToolsDashboard() {
           </Card>
 
           {/* Console */}
-          <Card className="flex-1 flex flex-col bg-slate-950 border-slate-800 shadow-2xl overflow-hidden">
-            <CardHeader className="py-3 px-4 border-b border-slate-800 bg-slate-900/50 flex flex-row items-center justify-between">
+          <Card className="flex-1 flex flex-col bg-slate-950 border-slate-800 shadow-2xl overflow-hidden min-h-[400px]">
+            <CardHeader className="py-3 px-4 border-b border-slate-800 bg-slate-900/50 flex flex-row items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-slate-400" />
                 <CardTitle className="text-xs font-mono uppercase tracking-widest text-slate-400">
                   Console Output
                 </CardTitle>
               </div>
+
               <div className="flex items-center gap-3">
                 {selectedToolId ? (
                   <span className="text-[10px] text-slate-500 font-mono">
                     active_tool: {activeToolId ?? "—"} • selected: {selectedToolId}
                   </span>
                 ) : (
-                  <span className="text-[10px] text-slate-500 font-mono">active_tool: {activeToolId ?? "—"}</span>
+                  <span className="text-[10px] text-slate-500 font-mono">
+                    active_tool: {activeToolId ?? "—"}
+                  </span>
                 )}
 
                 <label className="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
@@ -938,6 +1348,18 @@ export default function ToolsDashboard() {
                   autoscroll
                 </label>
 
+                {activeToolId && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 text-[10px] text-amber-500 hover:text-amber-300"
+                    onClick={cancelRun}
+                    title="Cancel the in-flight run request"
+                  >
+                    <Ban className="w-3 h-3 mr-1" /> Cancel
+                  </Button>
+                )}
+
                 {lastStatus === "success" && (
                   <span className="flex items-center gap-1 text-xs text-green-500">
                     <CheckCircle2 className="w-3 h-3" /> Success
@@ -948,31 +1370,70 @@ export default function ToolsDashboard() {
                     <XCircle className="w-3 h-3" /> Failed
                   </span>
                 )}
+
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-6 text-[10px] text-slate-500 hover:text-slate-300"
-                  onClick={() => setConsoleOutput("// Console cleared.")}
+                  onClick={() => {
+                    setConsoleOutput("// Console cleared.\n");
+                    setVisualData(null);
+                    setLastResponseJson(null);
+                    setLastStatus(null);
+                  }}
                 >
                   Clear
                 </Button>
+
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-6 text-[10px] text-slate-500 hover:text-slate-300"
                   onClick={() => copyToClipboard(consoleOutput)}
-                  title="Copy console"
+                  title="Copy console text"
                 >
-                  Copy
+                  Copy Text
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 text-[10px] text-sky-500 hover:text-sky-300"
+                  onClick={() => lastResponseJson && copyToClipboard(lastResponseJson)}
+                  disabled={!lastResponseJson}
+                  title="Copy full JSON response object for debugging"
+                >
+                  Copy JSON Bundle
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="flex-1 p-0 relative group">
+
+            <CardContent className="flex-1 p-0 relative group flex flex-col min-h-0">
+              {/* AST Visualizer Overlay */}
+              {visualData && (
+                <div className="border-b border-slate-800 bg-white relative shrink-0 h-[500px] overflow-hidden">
+                  <div className="absolute top-2 right-2 z-10 flex gap-2">
+                    <div className="bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-80 pointer-events-none">
+                      Interactive Visualizer Active
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 text-xs bg-white text-slate-800 border-slate-300 hover:bg-slate-100"
+                      onClick={() => setVisualData(null)}
+                    >
+                      Close Visualizer
+                    </Button>
+                  </div>
+                  <ASTViewer data={visualData} height={500} />
+                </div>
+              )}
+
               <textarea
                 ref={consoleRef}
                 readOnly
                 value={consoleOutput}
-                className="w-full h-full bg-slate-950 text-slate-300 font-mono text-xs p-4 resize-none focus:outline-none scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent"
+                className="w-full flex-1 bg-slate-950 text-slate-300 font-mono text-xs p-4 resize-none focus:outline-none scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent min-h-[100px]"
               />
             </CardContent>
           </Card>
@@ -1034,6 +1495,7 @@ export default function ToolsDashboard() {
                                     <div className="font-mono text-xs flex items-center justify-between gap-2">
                                       <span>{it.wiredToolId ?? "—"}</span>
                                       <button
+                                        type="button"
                                         className="text-slate-500 hover:text-slate-800 disabled:opacity-50"
                                         onClick={() => it.wiredToolId && copyToClipboard(it.wiredToolId)}
                                         disabled={!it.wiredToolId}
@@ -1104,6 +1566,7 @@ export default function ToolsDashboard() {
                                         <div key={cmd} className="font-mono text-xs flex items-center justify-between gap-2">
                                           <span className="truncate">{cmd}</span>
                                           <button
+                                            type="button"
                                             className="text-slate-500 hover:text-slate-800"
                                             onClick={() => copyToClipboard(cmd)}
                                             title="Copy command"

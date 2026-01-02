@@ -65,6 +65,15 @@ except Exception:  # pragma: no cover
     SchemaIssue = None  # type: ignore
     validate_lexicon_structure = None  # type: ignore
 
+# [REFACTOR] Use standardized logger
+try:
+    from utils.tool_logger import ToolLogger
+    logger = ToolLogger(__file__)
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+    logger = logging.getLogger("LexiconCoverage")
+
 
 # -----------------------------------------------------------------------------
 # Targets (coverage heuristics)
@@ -531,28 +540,29 @@ def print_human(report: CoverageReport, include_files: bool = False) -> None:
             ]
         )
 
-    print(_render_table(rows))
-    print("")
-    print("Totals:", json.dumps(report.totals, indent=2))
-    print("")
+    # Use Logger instead of print to ensure it's captured by the GUI
+    logger.info(_render_table(rows))
+    logger.info("")
+    logger.info(f"Totals: {json.dumps(report.totals, indent=2)}")
+    logger.info("")
 
     if include_files:
         for l in report.languages:
-            print(f"[{l.lang}] {l.dir_rel}")
+            logger.info(f"[{l.lang}] {l.dir_rel}")
             for fr in l.shard_files:
                 issue_summary = ""
                 if fr.issues:
                     e = sum(1 for i in fr.issues if i.level.lower() == "error")
                     w = sum(1 for i in fr.issues if i.level.lower() == "warning")
                     issue_summary = f"  issues={e}E/{w}W"
-                print(f"  - {fr.shard:10s}  {fr.kind:7s}  items={fr.total_items:4d}  qids={fr.qid_items:4d}{issue_summary}  {fr.rel_path}")
+                logger.info(f"  - {fr.shard:10s}  {fr.kind:7s}  items={fr.total_items:4d}  qids={fr.qid_items:4d}{issue_summary}  {fr.rel_path}")
                 for iss in fr.issues[:15]:
-                    print(f"      [{iss.level.upper():7s}] {iss.path}: {iss.message}")
+                    logger.info(f"      [{iss.level.upper():7s}] {iss.path}: {iss.message}")
                 if len(fr.issues) > 15:
-                    print(f"      ... ({len(fr.issues) - 15} more)")
+                    logger.info(f"      ... ({len(fr.issues) - 15} more)")
             if l.missing_shards:
-                print(f"  missing shards: {', '.join(l.missing_shards)}")
-            print("")
+                logger.info(f"  missing shards: {', '.join(l.missing_shards)}")
+            logger.info("")
 
 
 # -----------------------------------------------------------------------------
@@ -586,6 +596,10 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
+    # [REFACTOR] Standardized Start
+    if hasattr(logger, "start"):
+        logger.start("Lexicon Coverage Analysis")
+
     args = parse_args(argv)
 
     lexicon_dir = Path(args.lexicon_dir).resolve()
@@ -605,9 +619,20 @@ def main(argv: Optional[List[str]] = None) -> int:
     # Write outputs for operators
     write_outputs(report, out_json=out_json, write_md=not bool(args.no_md))
 
+    exit_code = 0
     if args.fail_on_errors and report.totals.get("sum_errors", 0) > 0:
-        return 1
-    return 0
+        exit_code = 1
+
+    # [REFACTOR] Standardized Summary
+    summary_msg = f"Report generated. Languages: {report.totals['languages']}, Errors: {report.totals['sum_errors']}."
+    if hasattr(logger, "finish"):
+        logger.finish(
+            message=summary_msg,
+            success=(exit_code == 0),
+            details=report.totals
+        )
+    
+    return exit_code
 
 
 if __name__ == "__main__":

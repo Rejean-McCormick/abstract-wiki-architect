@@ -48,7 +48,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import logging
 import os
 import sys
 from dataclasses import dataclass
@@ -58,6 +57,8 @@ from typing import Dict, List, Tuple
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
+
+from utils.tool_logger import ToolLogger
 
 # Fix: Import from the actual location in app/adapters, not top-level 'lexicon'
 try:
@@ -69,18 +70,10 @@ except ImportError:
 
 
 # ---------------------------------------------------------------------------
-# Logging Helper (Replaces missing utils.logging_setup)
+# Logging Setup
 # ---------------------------------------------------------------------------
 
-def init_logging(level: int = logging.INFO) -> None:
-    logging.basicConfig(
-        level=level,
-        format="[%(levelname)s] %(name)s: %(message)s",
-        stream=sys.stderr
-    )
-
-def get_logger(name: str) -> logging.Logger:
-    return logging.getLogger(name)
+log = ToolLogger("refresh_index")
 
 
 # ---------------------------------------------------------------------------
@@ -130,7 +123,6 @@ def validate_lexicon_file(path: str) -> FileReport:
     Returns:
         FileReport with summary stats and collision info.
     """
-    log = get_logger(__name__)
     language = infer_language_from_filename(path)
 
     collisions: List[Tuple[str, List[str]]] = []
@@ -162,8 +154,6 @@ def validate_lexicon_file(path: str) -> FileReport:
 
     lemma_keys = list(lemmas_obj.keys())
     total_lemmas = len(lemma_keys)
-
-    log.debug("Validating %s (%d lemmas)", path, total_lemmas)
 
     # Build normalized index and track collisions manually to provide
     # detailed reports.
@@ -287,44 +277,33 @@ def build_arg_parser() -> argparse.ArgumentParser:
             "(default behavior is to report but exit 0)."
         ),
     )
-    parser.add_argument(
-        "--log-level",
-        default=None,
-        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        help="Optional log level override for this run.",
-    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> None:
     args = build_arg_parser().parse_args(argv)
 
-    # Initialize logging (using local helper since utils.logging_setup is missing)
-    if args.log_level:
-        init_logging(level=getattr(logging, args.log_level))
-    else:
-        init_logging()
+    log.header({"Data Dir": args.data_dir, "Strict Mode": args.strict})
 
     data_dir = os.path.abspath(args.data_dir)
     if not os.path.isdir(data_dir):
-        print(f"❌ Lexicon directory not found: {data_dir}")
-        # We always exit with error if the directory doesn't exist, regardless of strict
-        sys.exit(1)
+        log.error(f"Lexicon directory not found: {data_dir}", fatal=True)
 
     files = find_lexicon_files(data_dir)
     if not files:
-        print(f"❌ No lexicon JSON files found in: {data_dir}")
-        sys.exit(1)
+        log.error(f"No lexicon JSON files found in: {data_dir}", fatal=True)
+
+    log.stage("Scan", f"Found {len(files)} lexicon files.")
 
     reports: List[FileReport] = []
     for path in files:
         reports.append(validate_lexicon_file(path))
 
+    # Print detailed report to stdout
     ok = print_report(reports)
     
-    # Fix: Corrected exit logic.
-    # If OK is True, exit 0.
-    # If OK is False, exit 1 ONLY if strict mode is ON.
+    log.summary({"Files Scanned": len(files), "Validation Passed": ok}, success=ok)
+    
     if not ok and args.strict:
         sys.exit(1)
     

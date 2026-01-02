@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import DevDashboard from "./dashboard";
+import { INVENTORY } from "../tools/inventory";
 import type { TestDefinition } from "@/types/test-runner";
 
 async function getAvailableTests(): Promise<TestDefinition[]> {
@@ -43,5 +44,14 @@ async function getAvailableTests(): Promise<TestDefinition[]> {
 
 export default async function DevPage() {
   const tests = await getAvailableTests();
-  return <DevDashboard availableTests={tests} />;
+
+  // We pass the INVENTORY to the dashboard so it can locate the 
+  // new "Expert" tools (Profiler, Ambiguity Detector) for the 
+  // Advanced Diagnostics tab.
+  return (
+    <DevDashboard 
+      availableTests={tests} 
+      inventory={INVENTORY}
+    />
+  );
 }

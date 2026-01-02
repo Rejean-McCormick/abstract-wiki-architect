@@ -27,11 +27,11 @@ From project root:
 
 Or with overrides:
 
-    python tools/qa/generate_lexicon_regression_tests.py --lexicon-dir data/lexicon --out tests/test_lexicon_regression.py
+    python tools/qa/generate_lexicon_regression_tests.py --langs en,fr --verbose
 
 Then:
 
-    pytest
+    pytest tests/test_lexicon_regression.py
 
 Notes
 =====
@@ -46,13 +46,14 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
+import os
 from pathlib import Path
-from typing import Any, Dict, List, Set
+from typing import Any, Dict, List, Set, Optional
 
 # ---------------------------------------------------------------------------
 # Project root discovery (robust across working directories)
 # ---------------------------------------------------------------------------
-
 
 def _find_project_root(start: Path) -> Path:
     """
@@ -64,7 +65,6 @@ def _find_project_root(start: Path) -> Path:
         if (p / "manage.py").is_file() and (p / "data").is_dir():
             return p
     # Fallback: assume this file is at <root>/tools/qa/...
-    # (parent = qa, parent = tools, parent = root)
     try:
         return start.parents[2]
     except Exception as e:
@@ -77,8 +77,6 @@ PROJECT_ROOT = _find_project_root(SCRIPT_DIR)
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from utils.logging_setup import get_logger, init_logging  # type: ignore  # noqa: E402
-
 # Defaults
 DEFAULT_LEXICON_DIR = PROJECT_ROOT / "data" / "lexicon"
 DEFAULT_OUT = PROJECT_ROOT / "tests" / "test_lexicon_regression.py"
@@ -90,11 +88,25 @@ IGNORED_FILENAMES = {
     "index.json",
 }
 
+# ---------------------------------------------------------------------------
+# Logging Helper
+# ---------------------------------------------------------------------------
+
+def print_header(lexicon_dir: Path, output_file: Path, verbose: bool):
+    print("========================================")
+    print("   LEXICON REGRESSION TEST GENERATOR")
+    print("========================================")
+    print(f"Time:        {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Lexicon Dir: {lexicon_dir}")
+    print(f"Output File: {output_file}")
+    if verbose:
+        print("Verbose:     ON")
+    print("----------------------------------------")
+    sys.stdout.flush()
 
 # ---------------------------------------------------------------------------
 # Lexicon snapshot logic
 # ---------------------------------------------------------------------------
-
 
 def _is_ignored_path(p: Path) -> bool:
     """
@@ -112,32 +124,40 @@ def _is_ignored_path(p: Path) -> bool:
             return True
     return False
 
-
-def _list_lexicon_files(lexicon_dir: Path) -> List[Path]:
+def _list_lexicon_files(lexicon_dir: Path, langs_filter: Optional[Set[str]] = None) -> List[Path]:
     """
     Recursively list lexicon JSON files under lexicon_dir (absolute Paths),
     excluding schema / special files and hidden folders.
+    Optionally filters by language (top-level folder name).
     """
     files: List[Path] = []
+    # Using glob("**/*.json") would be simpler but rglob is robust
     for p in lexicon_dir.rglob("*.json"):
         if not p.is_file():
             continue
         if _is_ignored_path(p):
             continue
+        
+        # Apply language filter if present
+        # Assumption: data/lexicon/{lang}/...
+        if langs_filter:
+            try:
+                rel = p.relative_to(lexicon_dir)
+                lang = rel.parts[0].lower()
+                if lang not in langs_filter:
+                    continue
+            except Exception:
+                pass
+                
         files.append(p)
+        
     files.sort(key=lambda x: x.as_posix())
     return files
-
 
 def _extract_inventory_keys(data: Any) -> List[str]:
     """
     Extract a deterministic, sorted lemma inventory from a lexicon shard.
-
-    Supported sections:
-      - "entries" (current shard schema)
-      - "lemmas"  (legacy/compat)
-
-    If neither exists or isn't a dict, inventory is empty.
+    Supported sections: "entries", "lemmas"
     """
     if not isinstance(data, dict):
         return []
@@ -154,37 +174,51 @@ def _extract_inventory_keys(data: Any) -> List[str]:
 
     return sorted(keys)
 
-
-def _collect_snapshots(files: List[Path], lexicon_dir: Path) -> Dict[str, List[str]]:
+def _collect_snapshots(
+    files: List[Path], 
+    lexicon_dir: Path, 
+    limit: Optional[int] = None,
+    verbose: bool = False
+) -> Dict[str, List[str]]:
     """
     Build mapping from lexicon-relative POSIX path (e.g. 'en/core.json')
     to a sorted list of lemma keys for that shard.
     """
-    log = get_logger(__name__)
     snapshots: Dict[str, List[str]] = {}
-
+    count = 0
+    errors = 0
+    
     for path in files:
+        if limit and count >= limit:
+            break
+            
         rel = path.relative_to(lexicon_dir).as_posix()
-        log.info("Collecting inventory from %s", rel)
-
+        
         try:
             text = path.read_text(encoding="utf-8")
             data = json.loads(text)
+            keys = _extract_inventory_keys(data)
+            snapshots[rel] = keys
+            
+            if verbose:
+                print(f"   [OK]   {rel:<40} ({len(keys)} keys)")
+                
         except Exception as e:
-            raise RuntimeError(f"Failed to parse JSON: {rel} ({path})") from e
-
-        snapshots[rel] = _extract_inventory_keys(data)
-
+            print(f"   [FAIL] {rel}: {e}")
+            errors += 1
+            
+        count += 1
+        
+    if verbose and errors > 0:
+        print(f"\n⚠️  Encountered {errors} errors while parsing files.")
+        
     return snapshots
-
 
 def _render_python_literal(obj: object, indent: int = 4) -> str:
     """
     Deterministic Python-literal rendering for dict/list/str.
-    JSON is a safe subset for these types (no null/true/false expected here).
     """
     return json.dumps(obj, ensure_ascii=False, indent=indent)
-
 
 def _write_test_module(
     snapshots: Dict[str, List[str]],
@@ -193,7 +227,7 @@ def _write_test_module(
     generator_relpath: str = "tools/qa/generate_lexicon_regression_tests.py",
 ) -> None:
     rel_lexicon_dir = lexicon_dir.relative_to(PROJECT_ROOT).as_posix()
-    rel_out = out_path.relative_to(PROJECT_ROOT).as_posix()
+    rel_out = out_path.relative_to(PROJECT_ROOT).as_posix() if PROJECT_ROOT in out_path.parents else str(out_path)
 
     header = f'''"""Auto-generated lexicon regression tests.
 
@@ -226,10 +260,8 @@ LEXICON_DIR = os.path.join(PROJECT_ROOT, "{rel_lexicon_dir.replace('"', '\\"')}"
 SNAPSHOTS = \\
 '''
 
-    # Ensure body starts cleanly; remove trailing backslash from header if present to avoid syntax errors
-    # (Modified here to be safer: "SNAPSHOTS =" with no backslash, relying on Python's auto-concatenation or new lines)
+    # Ensure body starts cleanly
     header = header.replace("SNAPSHOTS = \\", "SNAPSHOTS = ")
-
     body = _render_python_literal(snapshots, indent=4)
 
     tests = r'''
@@ -285,16 +317,11 @@ def test_lexicon_inventory_is_stable(relpath: str) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(header + body + tests, encoding="utf-8")
 
-    log = get_logger(__name__)
-    log.info("Wrote regression tests to %s", rel_out)
-
-
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
-
-def _parse_args(argv: List[str] | None) -> argparse.Namespace:
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate pytest regression tests for lexicon shard inventories.",
     )
@@ -310,34 +337,63 @@ def _parse_args(argv: List[str] | None) -> argparse.Namespace:
         default=str(DEFAULT_OUT),
         help="Output pytest module path (default: tests/test_lexicon_regression.py).",
     )
-    return parser.parse_args(argv)
-
-
-def main(argv: List[str] | None = None) -> None:
-    init_logging()
-    log = get_logger(__name__)
-    args = _parse_args(argv)
+    parser.add_argument(
+        "--langs",
+        help="Comma-separated list of language codes to scan (e.g. en,fr)."
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        help="Max number of files to process."
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Enable detailed logging."
+    )
+    
+    args = parser.parse_args()
 
     lexicon_dir = Path(args.lexicon_dir).resolve()
     out_path = Path(args.out).resolve()
+    
+    # Header
+    print_header(lexicon_dir, out_path, args.verbose)
+    start_time = time.time()
 
     if not lexicon_dir.is_dir():
-        log.error("Lexicon directory not found: %s", lexicon_dir)
-        print(f"ERROR: Lexicon directory not found: {lexicon_dir}", file=sys.stderr)
-        raise SystemExit(1)
+        print(f"❌ Error: Lexicon directory not found at {lexicon_dir}")
+        sys.exit(1)
 
-    files = _list_lexicon_files(lexicon_dir)
+    # Filter Langs
+    langs_filter = None
+    if args.langs:
+        langs_filter = {l.strip().lower() for l in args.langs.split(",") if l.strip()}
+        if args.verbose:
+            print(f"🔍 Filtering languages: {sorted(langs_filter)}")
+
+    files = _list_lexicon_files(lexicon_dir, langs_filter)
+    
     if not files:
-        log.error("No lexicon JSON files found in %s", lexicon_dir)
-        print(f"ERROR: No lexicon JSON files found in: {lexicon_dir}", file=sys.stderr)
-        raise SystemExit(1)
+        print(f"❌ No lexicon JSON files found in {lexicon_dir}")
+        sys.exit(1)
+        
+    print(f"🔍 Found {len(files)} lexicon shards.")
 
-    snapshots = _collect_snapshots(files, lexicon_dir)
+    snapshots = _collect_snapshots(files, lexicon_dir, limit=args.limit, verbose=args.verbose)
     _write_test_module(snapshots, out_path, lexicon_dir)
+    
+    duration = time.time() - start_time
+    total_keys = sum(len(k) for k in snapshots.values())
 
-    rel_out = out_path.relative_to(PROJECT_ROOT).as_posix() if PROJECT_ROOT in out_path.parents else str(out_path)
-    print(f"OK: Generated regression tests at {rel_out}")
-
+    print("----------------------------------------")
+    print("   SUMMARY")
+    print("----------------------------------------")
+    print(f"Snapshots:   {len(snapshots)}")
+    print(f"Total Keys:  {total_keys}")
+    print(f"Output:      {out_path.name}")
+    print(f"Duration:    {duration:.2f}s")
+    print("========================================")
 
 if __name__ == "__main__":
     main()

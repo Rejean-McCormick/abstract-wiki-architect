@@ -1,7 +1,7 @@
-
+# tests/test_lexicon_smoke.py
 """
-
-===============================
+tests/test_lexicon_smoke.py
+===========================
 
 Lightweight structural checks for all lexicon data.
 
@@ -10,7 +10,7 @@ This module is designed to work both:
 - As a pytest test file (functions named `test_*`), and
 - As a standalone script:
 
-      python qa_tools/lexicon_smoke_tests.py
+      python tests/test_lexicon_smoke.py
 
 It validates:
 
@@ -24,16 +24,20 @@ It validates:
 from __future__ import annotations
 
 import os
-from typing import List, Tuple
+import sys
+from typing import List, Tuple, Dict
+
+# Ensure project root is on path
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 from lexicon.loader import available_languages, load_lexicon
 from lexicon.schema import SchemaIssue, validate_lexicon_structure
-
-from utils.logging_setup import get_logger
+from utils.logging_setup import get_logger, init_logging
 
 log = get_logger(__name__)
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEXICON_DIR = os.path.join(PROJECT_ROOT, "data", "lexicon")
 
 
@@ -81,7 +85,11 @@ def test_lexicon_directory_exists() -> None:
     """
     Ensure the data/lexicon directory exists.
     """
-    assert os.path.isdir(LEXICON_DIR), f"Lexicon directory not found: {LEXICON_DIR}"
+    assert os.path.isdir(LEXICON_DIR), (
+        f"Lexicon directory not found at expected path:\n"
+        f"  Path: {LEXICON_DIR}\n"
+        f"  Hint: Create the directory or check PROJECT_ROOT resolution."
+    )
 
 
 def test_at_least_one_language_detected() -> None:
@@ -89,9 +97,11 @@ def test_at_least_one_language_detected() -> None:
     Ensure the loader finds at least one language configuration.
     """
     langs = available_languages()
-    assert (
-        len(langs) > 0
-    ), f"No language directories found in {LEXICON_DIR}. Expected at least one folder (e.g. 'en', 'fr')."
+    assert len(langs) > 0, (
+        f"No language directories found in {LEXICON_DIR}.\n"
+        f"  Expected at least one folder (e.g. 'en', 'fr').\n"
+        f"  Detected: {langs}"
+    )
 
 
 def test_language_directories_integrity() -> None:
@@ -100,7 +110,9 @@ def test_language_directories_integrity() -> None:
     a corresponding directory or legacy file exists.
     """
     missing = []
-    for lang in available_languages():
+    langs = available_languages()
+    
+    for lang in langs:
         # It must be either a directory (new standard) or a file (legacy fallback)
         dir_path = os.path.join(LEXICON_DIR, lang)
         file_path = os.path.join(LEXICON_DIR, f"{lang}_lexicon.json")
@@ -108,7 +120,11 @@ def test_language_directories_integrity() -> None:
         if not os.path.isdir(dir_path) and not os.path.isfile(file_path):
             missing.append(lang)
 
-    assert not missing, f"Missing lexicon source for languages: {missing}"
+    assert not missing, (
+        f"Missing lexicon source for languages: {missing}\n"
+        f"  Root: {LEXICON_DIR}\n"
+        f"  Hint: Run 'utils/seed_lexicon_ai.py --langs {','.join(missing)}' to bootstrap."
+    )
 
 
 def test_lexicon_schema_has_no_errors() -> None:
@@ -116,20 +132,32 @@ def test_lexicon_schema_has_no_errors() -> None:
     Validate merged lexicon structure for each language and ensure there are
     no *error*-level issues. Warnings are allowed.
     """
-    problems: List[str] = []
+    problems_by_lang: Dict[str, List[str]] = {}
+    total_errors = 0
 
     for lang, issues in _collect_schema_issues():
         error_messages = [
-            f"{lang}::{issue.path}: {issue.message}"
+            f"{issue.path}: {issue.message}"
             for issue in issues
             if issue.level.lower() == "error"
         ]
         if error_messages:
-            problems.extend(error_messages)
+            problems_by_lang[lang] = error_messages
+            total_errors += len(error_messages)
 
-    assert not problems, "Lexicon schema validation failed:\n  - " + "\n  - ".join(
-        problems
-    )
+    if total_errors > 0:
+        msg = ["Lexicon schema validation failed."]
+        for lang, errors in problems_by_lang.items():
+            msg.append(f"\n[{lang.upper()}]: {len(errors)} errors")
+            # Cap output at 5 errors per language to avoid spamming logs
+            for err in errors[:5]:
+                msg.append(f"  - {err}")
+            if len(errors) > 5:
+                msg.append(f"  ... and {len(errors) - 5} more.")
+        
+        msg.append("\n👉 Remediation Hint: Run 'python utils/migrate_lexicon_schema.py --all' to fix common schema issues.")
+        
+        raise AssertionError("\n".join(msg))
 
 
 # ---------------------------------------------------------------------------
@@ -182,11 +210,11 @@ def _print_human_report() -> int:
         return 0
     else:
         print("❌ Some lexica have schema errors. See report above.")
+        print("👉 Hint: Try 'python utils/migrate_lexicon_schema.py --all' to auto-fix.")
         return 1
 
 
 if __name__ == "__main__":
-    import sys
-
+    init_logging()
     exit_code = _print_human_report()
     sys.exit(exit_code)

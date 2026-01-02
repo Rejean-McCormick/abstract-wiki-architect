@@ -22,24 +22,73 @@ export type ToolRunRequest = {
   dry_run?: boolean;
 };
 
+// --- Rich Telemetry Types ---
+
+export type ToolRunEvent = {
+  ts: string;
+  level: string; // 'INFO' | 'WARN' | 'ERROR'
+  step: string;
+  message: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: Record<string, any>;
+};
+
+export type ToolRunTruncation = {
+  stdout: boolean;
+  stderr: boolean;
+  limit_chars: number;
+};
+
+export type ToolRunArgsRejected = {
+  arg: string;
+  reason: string;
+};
+
+export type ToolSummary = {
+  id: string;
+  label: string;
+  description: string;
+  timeout_sec: number;
+};
+
 /**
  * /tools/run response
  * (matches backend ToolRunResponse, with legacy fields tolerated)
  */
 export type ToolRunResponse = {
+  // Identity & Lifecycle
+  trace_id: string;
   success: boolean;
-  command?: string;
+  exit_code: number;
+  duration_ms: number;
+  started_at: string;
+  ended_at: string;
+
+  // Command Context
+  command: string;
+  cwd: string;
+  repo_root: string;
+  tool: ToolSummary;
+
+  // Streams (Rich)
+  stdout: string;
+  stderr: string;
+  stdout_chars: number;
+  stderr_chars: number;
+  truncation: ToolRunTruncation;
+
+  // Streams (Legacy/Fallback aliases)
   output?: string;
   error?: string;
+  return_code?: number; // legacy alias for exit_code
 
-  // backend (current)
-  exit_code?: number;
-  duration_ms?: number;
-  truncated?: boolean;
+  // Argument Validation
+  args_received: string[];
+  args_accepted: string[];
+  args_rejected: ToolRunArgsRejected[];
 
-  // legacy tolerance
-  return_code?: number;
-  tool_id?: string;
+  // Telemetry
+  events: ToolRunEvent[];
 };
 
 export type ConsoleStatus = "success" | "error" | null;
@@ -74,4 +123,5 @@ export type ToolItem = {
   wiredToolId?: string; // exact backend allowlisted tool_id
   toolIdGuess: string; // best-effort guess for display/search
   commandPreview?: string; // backend registry command preview (if wired)
+  hiddenInNormalMode?: boolean; // derived (debug-only)
 };

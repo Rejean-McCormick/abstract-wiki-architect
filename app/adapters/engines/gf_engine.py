@@ -75,6 +75,7 @@ class GFEngine(IGrammarEngine):
         """
         Converts the semantic Frame into text using the GF engine.
         """
+        
         if not self._pgf:
             raise ExternalServiceError("GF Engine is not initialized. PGF file missing or corrupt.")
             

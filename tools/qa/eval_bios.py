@@ -1,4 +1,4 @@
-# utils/eval_bios_from_wikidata.py
+# utils/eval_bios.py
 """
 Evaluate biography rendering on a sample of Wikidata humans.
 
@@ -101,10 +101,10 @@ from typing import Any, Dict, Iterable, List, Optional
 from app.adapters.engines.gf_wrapper import GFGrammarEngine
 from app.core.domain.frame import BioFrame
 
-from utils.logging_setup import get_logger
+from utils.tool_logger import ToolLogger
 
-logger = get_logger(__name__)
-
+# Setup logging
+log = ToolLogger("eval_bios")
 
 # ---------------------------------------------------------------------------
 # Data model
@@ -171,7 +171,7 @@ def _ensure_list(value: Any) -> List[str]:
 
 
 def _load_json_records(path: Path) -> List[Dict[str, Any]]:
-    logger.info("Loading JSON records from %s", path)
+    log.info(f"Loading JSON records from {path}")
     text = path.read_text(encoding="utf-8").strip()
     if not text:
         return []
@@ -188,7 +188,7 @@ def _load_json_records(path: Path) -> List[Dict[str, Any]]:
 
 
 def _load_csv_records(path: Path) -> List[Dict[str, Any]]:
-    logger.info("Loading CSV records from %s", path)
+    log.info(f"Loading CSV records from {path}")
     records: List[Dict[str, Any]] = []
     with path.open("r", encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
@@ -215,7 +215,7 @@ def load_local_persons(path: Path) -> List[PersonRecord]:
         try:
             pid = str(rec.get("id") or rec.get("qid") or "").strip()
             if not pid:
-                logger.warning("Skipping record without id: %r", rec)
+                log.warning(f"Skipping record without id: {rec}")
                 continue
 
             label = str(rec.get("label") or rec.get("name") or pid).strip()
@@ -240,10 +240,8 @@ def load_local_persons(path: Path) -> List[PersonRecord]:
                 try:
                     gold_bios = json.loads(gold_bios_raw)
                 except json.JSONDecodeError:
-                    logger.warning(
-                        "Could not parse gold_bios JSON for id=%s: %r",
-                        pid,
-                        gold_bios_raw,
+                    log.warning(
+                        f"Could not parse gold_bios JSON for id={pid}: {gold_bios_raw}"
                     )
             elif isinstance(gold_bios_raw, dict):
                 gold_bios = {
@@ -263,9 +261,9 @@ def load_local_persons(path: Path) -> List[PersonRecord]:
                 )
             )
         except Exception as exc:  # pragma: no cover - defensive
-            logger.exception("Error processing record %r: %s", rec, exc)
+            log.error(f"Error processing record {rec}: {exc}")
 
-    logger.info("Loaded %d person records from %s", len(persons), path)
+    log.info(f"Loaded {len(persons)} person records from {path}")
     return persons
 
 
@@ -296,7 +294,7 @@ def fetch_wikidata_persons(limit: int) -> List[PersonRecord]:
             "Install it with 'pip install requests' or use --source local."
         ) from exc
 
-    logger.info("Querying Wikidata SPARQL endpoint for %d humans…", limit)
+    log.info(f"Querying Wikidata SPARQL endpoint for {limit} humans…")
 
     endpoint = "https://query.wikidata.org/sparql"
 
@@ -385,7 +383,7 @@ def fetch_wikidata_persons(limit: int) -> List[PersonRecord]:
             )
         )
 
-    logger.info("Retrieved %d distinct persons from Wikidata", len(persons))
+    log.info(f"Retrieved {len(persons)} distinct persons from Wikidata")
     return persons
 
 
@@ -413,11 +411,11 @@ def _render_bio_adapter(
         try:
             _engine = GFGrammarEngine()
         except Exception as e:
-            logger.error("Failed to initialize GFGrammarEngine: %s", e)
+            log.error(f"Failed to initialize GFGrammarEngine: {e}")
             return ""
 
     if not _engine.grammar:
-        logger.warning("GFGrammarEngine loaded but no grammar found. Check Wiki.pgf.")
+        log.warning("GFGrammarEngine loaded but no grammar found. Check Wiki.pgf.")
         return ""
 
     # 2. Construct v2.1 Frame
@@ -439,7 +437,7 @@ def _render_bio_adapter(
         sentence = asyncio.run(_engine.generate(lang_code, frame))
         return sentence.text
     except Exception as e:
-        logger.warning("Rendering failed for %s (%s): %s", name, lang_code, e)
+        log.warning(f"Rendering failed for {name} ({lang_code}): {e}")
         return ""
 
 
@@ -480,8 +478,8 @@ def evaluate_persons(
                 output = (output or "").strip()
                 rendered = bool(output)
             except Exception as exc:  # pragma: no cover - defensive
-                logger.warning(
-                    "Rendering failed for id=%s, lang=%s: %s", person.id, lang, exc
+                log.warning(
+                    f"Rendering failed for id={person.id}, lang={lang}: {exc}"
                 )
 
             gold = person.gold_bios.get(lang)
@@ -544,7 +542,7 @@ def dump_results_csv(results: List[EvalResult], path: Path) -> None:
     """
     Save detailed results to a CSV file for later analysis.
     """
-    logger.info("Writing detailed results CSV to %s", path)
+    log.info(f"Writing detailed results CSV to {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
@@ -664,59 +662,56 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
 def main(argv: Optional[List[str]] = None) -> None:
     args = parse_args(argv)
 
+    log.header({
+        "Source": args.source,
+        "Langs": args.langs,
+        "Limit": args.limit
+    })
+
     random.seed(args.seed)
 
     langs = [lang.strip() for lang in args.langs.split(",") if lang.strip()]
     if not langs:
-        print("No languages specified via --langs.", file=sys.stderr)
-        sys.exit(1)
+        log.error("No languages specified via --langs.", fatal=True)
 
     if args.source == "local":
         if not args.input:
-            print(
-                "--input is required when --source local (JSON/JSONL/CSV of people).",
-                file=sys.stderr,
-            )
-            sys.exit(1)
+            log.error("--input is required when --source local (JSON/JSONL/CSV of people).", fatal=True)
+        
         input_path = Path(args.input)
         if not input_path.exists():
-            print(f"Input file not found: {input_path}", file=sys.stderr)
-            sys.exit(1)
+            log.error(f"Input file not found: {input_path}", fatal=True)
 
+        log.stage("Fetch", f"Loading persons from {input_path}...")
         persons = load_local_persons(input_path)
 
     else:  # args.source == "wikidata"
+        log.stage("Fetch", f"Querying Wikidata for {args.limit} persons...")
         persons = fetch_wikidata_persons(limit=args.limit)
 
     if not persons:
-        print("No person records loaded; nothing to evaluate.", file=sys.stderr)
-        sys.exit(1)
+        log.error("No person records loaded; nothing to evaluate.", fatal=True)
 
     # If we fetched more than limit in local mode, subsample.
     if args.source == "local" and len(persons) > args.limit:
-        logger.info(
-            "Subsampling %d persons out of %d with seed=%d",
-            args.limit,
-            len(persons),
-            args.seed,
+        log.info(
+            f"Subsampling {args.limit} persons out of {len(persons)} with seed={args.seed}"
         )
         persons = random.sample(persons, args.limit)
 
-    logger.info(
-        "Evaluating %d persons across %d language(s): %s",
-        len(persons),
-        len(langs),
-        ", ".join(langs),
-    )
-
+    log.stage("Evaluate", f"Rendering bios for {len(persons)} persons in {len(langs)} languages...")
+    
     results = evaluate_persons(persons, langs, max_items=args.limit)
     summarize_results(results)
 
     if args.output_csv:
+        log.stage("Export", f"Writing results to {args.output_csv}")
         dump_results_csv(results, Path(args.output_csv))
 
     if args.print_samples > 0:
         print_sample_outputs(persons, results, langs, args.print_samples)
+
+    log.summary({"Total Pairs": len(results)})
 
 
 if __name__ == "__main__":

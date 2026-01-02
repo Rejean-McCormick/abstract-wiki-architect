@@ -1,0 +1,71 @@
+# TODO: Refactor `tools/` and `utils/` Directory Structure
+
+## 1. Objective
+
+Consolidate and organize the Python scripts currently scattered across `tools/` and `utils/` to improve maintainability, clarify intent, and standardize logging output for the Abstract Wiki Architect GUI.
+
+## 2. Current State Analysis
+
+* **`tools/`**: Contains CLI applications for operators (e.g., QA suites, ambiguity detectors).
+* **`utils/`**: Contains helper libraries and data operations scripts (e.g., lexicon ingestion, migration), effectively functioning as a second "tools" folder.
+* **Issue**: This split is semantic rather than functional, leading to ambiguity about where scripts belong. `utils/build_lexicon_from_wikidata.py` is a prime example of a tool residing in `utils/`.
+* **Constraint**: Simply moving files will break the **Tool Registry** (backend mapping of IDs to paths) and **Documentation**.
+
+## 3. Optimal Sorting Strategy
+
+Instead of a massive file relocation that risks breaking the system, we will adopt a **"Soft Migration"** strategy. We will keep the files in their current locations to preserve registry links but refactor their internal logic to share a common foundation.
+
+### A. Create a Shared Foundation
+
+* **Action**: Create a new helper module: `utils/tool_logger.py`.
+* **Purpose**: This module will standardize logging across *all* scripts in both folders. It will force logs to `stdout` (so the GUI sees them as output, not errors) and enforce a consistent header/stage/summary format.
+
+### B. Standardize Scripts in Place
+
+Refactor the following scripts to import and use `utils.tool_logger.ToolLogger`:
+
+**Group 1: Data Operations (Keep in `utils/`)**
+
+* `utils/build_lexicon_from_wikidata.py`: Update to use `ToolLogger` for "Ingest", "Classify", and "Write" stages.
+* `utils/refresh_lexicon_index.py`: Update to log validation steps and collision warnings to stdout.
+* `utils/migrate_lexicon_schema.py`: Update to log migration progress and file modification counts.
+* `utils/dump_lexicon_stats.py`: Update to print a standardized header and summary.
+
+**Group 2: Quality Assurance (Keep in `tools/qa/`)**
+
+* `tools/qa/lexicon_coverage_report.py`: Update to log coverage targets and analysis stages to stdout.
+* `tools/qa/universal_test_runner.py`: Update to log suite execution progress and final pass/fail summary.
+* `tools/qa/batch_test_generator.py`: Update to log generation steps.
+* `tools/qa/ambiguity_detector.py`: Update to log parsing progress.
+* `tools/qa/eval_bios.py`: Update to log data fetching and evaluation stages.
+
+## 4. Implications & Risks
+
+### Implications
+
+1. **GUI Compatibility**: The GUI console will finally show real-time progress bars and structured logs for all tools, instead of just errors or silence.
+2. **Code Deduplication**: We remove ad-hoc logging setup code from 8+ files, replacing it with a single, robust import.
+3. **No Broken Links**: By keeping files in their current paths, we avoid breaking the `app/adapters/api/routers/tools.py` registry or existing operator documentation.
+
+### Risks
+
+1. **Import Path Depth**: Scripts in `tools/qa/` might need to adjust their `sys.path` appending logic to correctly import `utils.tool_logger`.
+* *Mitigation*: Ensure every script calculates `PROJECT_ROOT` dynamically based on its own `__file__` location before adding it to `sys.path`.
+
+
+2. **Output Parsing**: If any external tools rely on specific raw text output from these scripts (e.g., a CI pipeline grepping for "Error:"), the new formatted headers might break that regex.
+* *Mitigation*: The `ToolLogger` will keep "Error:" and "Warning:" prefixes standard to maintain compatibility.
+
+
+
+## 5. Next Steps (Execution Plan)
+
+1. [ ] Create `utils/tool_logger.py` with the standardized class.
+2. [ ] Refactor `utils/` scripts one by one to use the new logger.
+3. [ ] Refactor `tools/qa/` scripts to use the new logger.
+4. [ ] Test each tool via the CLI to ensure output is clean and informative.
+5. [ ] Verify the GUI displays the new logs correctly.
+
+---
+
+**Status**: Ready for Implementation

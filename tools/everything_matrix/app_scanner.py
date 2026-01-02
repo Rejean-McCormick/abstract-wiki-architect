@@ -3,10 +3,18 @@ from __future__ import annotations
 
 import json
 import logging
+import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping, Optional, Tuple
+
+# Add project root for utils import
+root_dir = Path(__file__).resolve().parents[2]
+if str(root_dir) not in sys.path:
+    sys.path.append(str(root_dir))
+
+from utils.tool_run_logging import tool_logging
 
 logger = logging.getLogger(__name__)
 
@@ -540,21 +548,36 @@ def scan_app_health(iso: str, repo_root: Optional[Path] = None) -> Dict[str, int
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
-    results = scan_application(key_mode="iso2")
-    meta = {
-        "scanner": SCANNER_VERSION,
-        "generated_at": int(time.time()),
-        "generated_at_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "languages": len(results),
-        "key_mode": "iso2",
-    }
-    print(
-        json.dumps(
-            {"meta": meta, "languages": results},
-            indent=2,
-            ensure_ascii=False,
-            sort_keys=True,
-        )
-    )
-    print(f"✅ Scanned application layer for {len(results)} languages.")
+    with tool_logging("app_scanner") as ctx:
+        ctx.log_stage("Configuration")
+        # Logic to resolve paths...
+        repo = _project_root()
+        
+        ctx.log_stage("Scanning Profiles & Assets")
+        results = scan_application(key_mode="iso2")
+        
+        # Prepare Metadata
+        meta = {
+            "scanner": SCANNER_VERSION,
+            "generated_at": int(time.time()),
+            "generated_at_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "count": len(results),
+            "root": str(repo),
+            "key_mode": "iso2"
+        }
+        
+        # Diagnostics
+        diagnostics = []
+        if len(results) == 0:
+            diagnostics.append("Warning: No profiles found. Check language_profiles.json.")
+        
+        output = {
+            "meta": meta,
+            "languages": results,
+            "diagnostics": diagnostics
+        }
+        
+        # Print JSON to stdout (for GUI consumption)
+        print(json.dumps(output, indent=2, ensure_ascii=False, sort_keys=True))
+        
+        ctx.finish({"languages_scanned": len(results)})

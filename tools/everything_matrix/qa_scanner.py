@@ -1,81 +1,114 @@
 # tools/everything_matrix/qa_scanner.py
 from __future__ import annotations
 
+import argparse
+import json
+import logging
 import os
 import re
+import sys
+import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Any, Dict, Mapping, Optional, Set
+from typing import Any, Dict, Optional, Set, List
+
+# Robust import for norm.py
+try:
+    from .norm import load_iso_to_wiki, norm_to_iso2
+except ImportError:
+    sys.path.append(str(Path(__file__).resolve().parent))
+    from norm import load_iso_to_wiki, norm_to_iso2
 
 try:
     import pgf  # type: ignore
 except ImportError:
     pgf = None
 
-# Aligned with the suite:
-# - Side-effect free by default
-# - Provides one-shot API for build_index.py:
-#     scan_all_artifacts(gf_root) -> {iso2: {"BIN": float, "TEST": float}}
-# - Keeps scan_artifacts(iso2, gf_root) for debug / compatibility
-# - Uses shared normalization (iso2 canonical) via norm.py
-# - No printing by default (library mode); CLI/debug can print
-import norm
-import scoring
+logger = logging.getLogger(__name__)
 
-SCANNER_VERSION = "qa_scanner/2.5"
+SCANNER_VERSION = "qa_scanner/3.1"
+
+# ---- Maturity scoring (0-10) ----
+ABSENT = 0
+PLANNED = 1
+SCAFFOLDED = 3
+DRAFT = 5
+BETA = 7
+PRE_FINAL = 8
+FINAL = 10
 
 # --- GLOBAL CACHE ---
-# Prevent reloading the ~50MB PGF binary many times.
 _CACHED_GRAMMAR: Any = None
 _CACHED_PGF_PATH: Optional[Path] = None
+_DIAGNOSTICS: List[str] = []
+
+# -------------------------
+# Path resolution
+# -------------------------
+def _resolve_repo_root_from_gf(gf_root: Path) -> Path:
+    gf_root = gf_root.resolve()
+    # Expected: <repo>/gf
+    if gf_root.name == "gf":
+        return gf_root.parent
+    # If someone passed repo root by mistake, try to recover
+    if (gf_root / "gf").is_dir():
+        return gf_root
+    return gf_root.parent
+
+def _resolve_iso_map_path(repo_root: Path) -> Path:
+    env_override = os.getenv("AWA_ISO_TO_WIKI", "").strip()
+    if env_override:
+        return Path(env_override)
+    return repo_root / "data" / "config" / "iso_to_wiki.json"
+
+def _resolve_junit_path(repo_root: Path) -> Path:
+    env_override = os.getenv("AWA_JUNIT_XML", "").strip()
+    if env_override:
+        return Path(env_override)
+    return repo_root / "data" / "tests" / "reports" / "junit.xml"
 
 # -------------------------
 # PGF loading (singleton)
 # -------------------------
-
-
 def load_grammar_once(pgf_path: Path):
-    """
-    Singleton loader for the PGF binary.
-    Loads it once into memory and returns the reference for subsequent calls.
-    """
     global _CACHED_GRAMMAR, _CACHED_PGF_PATH
 
     if _CACHED_GRAMMAR is not None and _CACHED_PGF_PATH == pgf_path:
         return _CACHED_GRAMMAR
 
     if not pgf:
+        _DIAGNOSTICS.append("PGF library not installed/importable")
         _CACHED_GRAMMAR = None
         _CACHED_PGF_PATH = pgf_path
         return None
 
     if pgf_path.is_file():
         try:
+            logger.info(f"Loading grammar from {pgf_path}")
             _CACHED_GRAMMAR = pgf.readPGF(str(pgf_path))
             _CACHED_PGF_PATH = pgf_path
             return _CACHED_GRAMMAR
-        except Exception:
+        except Exception as e:
+            msg = f"Failed to load PGF at {pgf_path}: {e}"
+            logger.error(msg)
+            _DIAGNOSTICS.append(msg)
             _CACHED_GRAMMAR = None
             _CACHED_PGF_PATH = pgf_path
             return None
 
+    msg = f"PGF file not found at {pgf_path}"
+    logger.warning(msg)
+    _DIAGNOSTICS.append(msg)
     _CACHED_GRAMMAR = None
     _CACHED_PGF_PATH = pgf_path
     return None
 
-
 # -------------------------
 # JUnit parsing
 # -------------------------
-
 _LANG_TOKEN_RE_TEMPLATE = r"(^|[^a-z0-9]){tok}([^a-z0-9]|$)"
 
-
 def _compile_lang_matchers(iso2: str) -> Set[re.Pattern]:
-    """
-    Regex matchers for attributing a testcase to a language.
-    We are strict enough to avoid many false positives.
-    """
     tok = (iso2 or "").strip().casefold()
     matchers: Set[re.Pattern] = set()
     if not tok:
@@ -90,12 +123,9 @@ def _compile_lang_matchers(iso2: str) -> Set[re.Pattern]:
         rf"language\s*=\s*{re.escape(tok)}(\b|[^a-z0-9])",
         _LANG_TOKEN_RE_TEMPLATE.format(tok=re.escape(tok)),
     ]
-
     for p in patterns:
         matchers.add(re.compile(p, re.IGNORECASE))
-
     return matchers
-
 
 def _testcase_text(testcase: ET.Element) -> str:
     parts = [
@@ -105,33 +135,30 @@ def _testcase_text(testcase: ET.Element) -> str:
     ]
     return " ".join(parts).lower()
 
-
 def _is_failure(testcase: ET.Element) -> bool:
     return testcase.find("failure") is not None or testcase.find("error") is not None
-
 
 def _is_skipped(testcase: ET.Element) -> bool:
     return testcase.find("skipped") is not None
 
-
 def _parse_junit_report_pass_rates(path: Path, *, iso2s: Set[str]) -> Dict[str, float]:
-    """
-    Parses a JUnit XML file once and returns per-iso2 pass rates.
-
-    Rules:
-    - Only counts testcases whose identifiers appear to reference that iso2.
-    - Skipped tests are excluded from the denominator.
-    - If no matching testcases are found for a language, rate is 0.0.
-    """
     rates: Dict[str, float] = {k: 0.0 for k in iso2s}
-    if not path.is_file() or not iso2s:
+
+    if not iso2s:
         return rates
+
+    if not path.is_file():
+        msg = f"JUnit report not found at {path}"
+        logger.warning(msg)
+        _DIAGNOSTICS.append(msg)
+        return rates
+
+    logger.info(f"Parsing JUnit report: {path}")
 
     try:
         tree = ET.parse(path)
         root = tree.getroot()
 
-        # Precompile all matchers once
         matchers_by_iso2: Dict[str, Set[re.Pattern]] = {
             iso2: _compile_lang_matchers(iso2) for iso2 in iso2s
         }
@@ -139,13 +166,13 @@ def _parse_junit_report_pass_rates(path: Path, *, iso2s: Set[str]) -> Dict[str, 
         totals: Dict[str, int] = {k: 0 for k in iso2s}
         passed: Dict[str, int] = {k: 0 for k in iso2s}
 
+        case_count = 0
         for testcase in root.iter("testcase"):
+            case_count += 1
             text = _testcase_text(testcase)
-
             if _is_skipped(testcase):
                 continue
 
-            # Determine attribution (can match multiple; we count each match independently)
             hit_any = False
             for iso2, matchers in matchers_by_iso2.items():
                 if not matchers:
@@ -155,185 +182,175 @@ def _parse_junit_report_pass_rates(path: Path, *, iso2s: Set[str]) -> Dict[str, 
                     totals[iso2] += 1
                     if not _is_failure(testcase):
                         passed[iso2] += 1
-
             if not hit_any:
                 continue
 
+        logger.info(f"Parsed {case_count} test cases.")
+
         for iso2 in iso2s:
             t = totals.get(iso2, 0)
-            if t <= 0:
-                rates[iso2] = 0.0
-            else:
-                rates[iso2] = round(passed.get(iso2, 0) / t, 4)
+            rates[iso2] = 0.0 if t <= 0 else round(passed.get(iso2, 0) / t, 4)
 
         return rates
 
-    except ET.ParseError:
+    except Exception as e:
+        msg = f"Failed to parse JUnit XML: {e}"
+        logger.error(msg)
+        _DIAGNOSTICS.append(msg)
         return rates
-    except Exception:
-        return rates
-
-
-def _resolve_junit_path(*, repo: Path, cfg: Mapping[str, Any]) -> Path:
-    """
-    Default expected path: <repo>/data/tests/reports/junit.xml
-    Optional override via env var: AWA_JUNIT_XML
-    Optional override via config: cfg["qa"]["junit_xml"]
-    """
-    env_override = os.getenv("AWA_JUNIT_XML", "").strip()
-    if env_override:
-        return Path(env_override)
-
-    qa_cfg = cfg.get("qa") if isinstance(cfg.get("qa"), dict) else {}
-    rel = qa_cfg.get("junit_xml")
-    if isinstance(rel, str) and rel.strip():
-        return repo / rel
-
-    return repo / "data" / "tests" / "reports" / "junit.xml"
-
 
 # -------------------------
-# Zone D scanning
+# Scanner Logic
 # -------------------------
+def scan_all_artifacts(
+    gf_root: Path,
+    *,
+    iso_map_path: Optional[Path] = None,
+    junit_path: Optional[Path] = None,
+) -> Dict[str, Dict[str, float]]:
+    # Clear diagnostics for this run
+    _DIAGNOSTICS.clear()
 
-
-def scan_artifacts(iso2: str, gf_root: Path) -> Dict[str, float]:
-    """
-    Debug / compatibility API: per-language scan.
-
-    Returns (0.0 - 10.0 scale):
-      BIN: 10.0 if language is present in AbstractWiki.pgf, else 0.0.
-      TEST: pass_rate * 10 from junit attribution (single-language parse here).
-            (Build Index will use scan_all_artifacts for one-shot parsing instead.)
-    """
-    iso2 = (iso2 or "").strip().casefold()
-    stats: Dict[str, float] = {"BIN": 0.0, "TEST": 0.0}
-
-    if len(iso2) != 2 or not isinstance(gf_root, Path):
-        return stats
-
-    ctx = norm.NormContext.load()
-    repo = ctx.repo
-
-    # 1) BIN via PGF
-    pgf_path = gf_root / "AbstractWiki.pgf"
-    grammar = load_grammar_once(pgf_path)
-    if grammar:
-        try:
-            # old naming: WikiFr / WikiFR
-            target1 = f"Wiki{iso2.capitalize()}"
-            target2 = f"Wiki{iso2.upper()}"
-            langs = getattr(grammar, "languages", None)
-            if isinstance(langs, dict):
-                if target1 in langs or target2 in langs:
-                    stats["BIN"] = 10.0
-                else:
-                    # suffix fallback
-                    for key in langs.keys():
-                        if str(key).endswith(iso2.capitalize()) or str(key).endswith(iso2.upper()):
-                            stats["BIN"] = 10.0
-                            break
-        except Exception:
-            pass
-
-    # 2) TEST via JUnit (single-language fallback parse)
-    junit_path = _resolve_junit_path(repo=repo, cfg=ctx.cfg)
-    rates = _parse_junit_report_pass_rates(junit_path, iso2s={iso2})
-    stats["TEST"] = round(float(rates.get(iso2, 0.0)) * 10.0, 1)
-
-    stats["BIN"] = scoring.clamp10(stats["BIN"])
-    stats["TEST"] = scoring.clamp10(stats["TEST"])
-    return stats
-
-
-def scan_all_artifacts(gf_root: Path) -> Dict[str, Dict[str, float]]:
-    """
-    Contract for build_index.py:
-      scan_all_artifacts(gf_root) -> {iso2: {"BIN": float, "TEST": float}}
-
-    One-shot behavior:
-      - Loads AbstractWiki.pgf once
-      - Parses junit.xml once
-      - Produces iso2-keyed results (lowercase)
-    """
     out: Dict[str, Dict[str, float]] = {}
     if not isinstance(gf_root, Path):
         return out
 
-    ctx = norm.NormContext.load()
-    repo = ctx.repo
+    gf_root = gf_root.resolve()
+    repo_root = _resolve_repo_root_from_gf(gf_root)
 
-    # Universe: start from iso map (authoritative list) + folders present in gf/generated/src
-    iso2s: Set[str] = set(ctx.iso2_names.keys())
+    logger.info(f"Scanning artifacts in: {repo_root}")
 
-    # Add any iso2-looking folders from gf/generated/src (helps when iso map lags)
-    gen_src = gf_root / "generated" / "src"
-    if gen_src.is_dir():
-        for p in gen_src.iterdir():
-            if p.is_dir():
-                iso2 = ctx.to_iso2(p.name)
-                if iso2:
-                    iso2s.add(iso2)
+    # 1) ISO map (FIXED): pass a FILE PATH into load_iso_to_wiki()
+    iso_map_file = (iso_map_path or _resolve_iso_map_path(repo_root)).resolve()
+
+    if not iso_map_file.is_file():
+        msg = f"ISO map not found at {iso_map_file}"
+        logger.warning(msg)
+        _DIAGNOSTICS.append(msg)
+        iso_map: Dict[str, Any] = {}
+    else:
+        iso_map = load_iso_to_wiki(iso_map_file)
+
+    iso2s: Set[str] = set(iso_map.keys())
+    logger.info(f"Loaded ISO map with {len(iso2s)} languages (path={iso_map_file})")
 
     if not iso2s:
-        return out
+        _DIAGNOSTICS.append(
+            f"ISO map loaded 0 languages. Verify file content/format: {iso_map_file}"
+        )
 
-    # 1) BIN via PGF once
+    # 2) PGF presence / binary scoring
     pgf_path = gf_root / "AbstractWiki.pgf"
     grammar = load_grammar_once(pgf_path)
-
     bin_by_iso2: Dict[str, float] = {k: 0.0 for k in iso2s}
+
     if grammar:
         try:
             langs = getattr(grammar, "languages", None)
             if isinstance(langs, dict):
                 lang_keys = list(langs.keys())
+                logger.info(f"Found {len(lang_keys)} concrete languages in PGF")
                 for iso2 in iso2s:
+                    # Check for WikiFr, WikiFR, etc.
                     target1 = f"Wiki{iso2.capitalize()}"
                     target2 = f"Wiki{iso2.upper()}"
                     if target1 in langs or target2 in langs:
                         bin_by_iso2[iso2] = 10.0
                         continue
-                    # suffix fallback (slower, but still one-shot overall)
+                    # Suffix check (fallback)
                     for key in lang_keys:
                         sk = str(key)
                         if sk.endswith(iso2.capitalize()) or sk.endswith(iso2.upper()):
                             bin_by_iso2[iso2] = 10.0
                             break
-        except Exception:
-            pass
+        except Exception as e:
+            _DIAGNOSTICS.append(f"Error checking PGF languages: {e}")
+    else:
+        logger.warning("No grammar loaded, binary scores will be 0.")
 
-    # 2) TEST via JUnit once
-    junit_path = _resolve_junit_path(repo=repo, cfg=ctx.cfg)
-    pass_rates = _parse_junit_report_pass_rates(junit_path, iso2s=iso2s)
+    # 3) Test results (JUnit)
+    junit_file = (junit_path or _resolve_junit_path(repo_root)).resolve()
+    pass_rates = _parse_junit_report_pass_rates(junit_file, iso2s=iso2s)
 
     for iso2 in sorted(iso2s):
         out[iso2] = {
-            "BIN": scoring.clamp10(bin_by_iso2.get(iso2, 0.0)),
-            "TEST": scoring.clamp10(round(float(pass_rates.get(iso2, 0.0)) * 10.0, 1)),
+            "BIN": bin_by_iso2.get(iso2, 0.0),
+            "TEST": round(float(pass_rates.get(iso2, 0.0)) * 10.0, 1),
         }
 
     return out
 
+def _build_cli() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(description="QA scanner for Everything Matrix (BIN + TEST scores).")
+    p.add_argument("--gf-root", type=str, default="", help="Path to gf/ directory (default: <repo>/gf).")
+    p.add_argument("--repo-root", type=str, default="", help="Repo root override (default: inferred from gf-root).")
+    p.add_argument("--iso-map", type=str, default="", help="iso_to_wiki.json override (default: data/config/iso_to_wiki.json).")
+    p.add_argument("--junit", type=str, default="", help="JUnit XML override (default: data/tests/reports/junit.xml).")
+    p.add_argument("--json-only", action="store_true", help="Print only JSON result (no summary/header).")
+    p.add_argument("--verbose", action="store_true", help="Enable more detailed logging.")
+    return p
 
 if __name__ == "__main__":
-    import logging
-    import time
-    import json
+    args = _build_cli().parse_args()
 
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    # Configure stdout logging for GUI
+    level = logging.INFO if args.verbose else logging.WARNING
+    logging.basicConfig(level=level, format="%(message)s", stream=sys.stdout, force=True)
 
-    ctx = norm.NormContext.load()
-    qa_cfg = ctx.cfg.get("qa") if isinstance(ctx.cfg.get("qa"), dict) else {}
-    gf_root = ctx.repo / str(qa_cfg.get("gf_root", "gf"))
+    start_time = time.time()
 
-    results = scan_all_artifacts(gf_root)
-    meta = {
-        "scanner": SCANNER_VERSION,
-        "generated_at": int(time.time()),
-        "generated_at_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "languages": len(results),
-        "gf_root": str(gf_root).replace("\\", "/"),
+    # Resolve roots
+    here = Path(__file__).resolve()
+    default_repo = here.parents[2]
+    repo_root = Path(args.repo_root).resolve() if args.repo_root else default_repo
+    gf_root = Path(args.gf_root).resolve() if args.gf_root else (repo_root / "gf")
+
+    iso_map_path = Path(args.iso_map).resolve() if args.iso_map else None
+    junit_path = Path(args.junit).resolve() if args.junit else None
+
+    if not args.json_only:
+        print(f"=== QA SCANNER ({SCANNER_VERSION}) ===")
+        print(f"Timestamp: {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}")
+        print(f"Repo Root: {repo_root}")
+        print(f"GF Root:   {gf_root}")
+        if iso_map_path:
+            print(f"ISO Map:   {iso_map_path}")
+        if junit_path:
+            print(f"JUnit:     {junit_path}")
+        print("-" * 40)
+
+    results = scan_all_artifacts(
+        gf_root,
+        iso_map_path=iso_map_path,
+        junit_path=junit_path,
+    )
+
+    duration_ms = round((time.time() - start_time) * 1000, 2)
+
+    output = {
+        "meta": {
+            "scanner": SCANNER_VERSION,
+            "repo_root": str(repo_root),
+            "gf_root": str(gf_root),
+            "iso_map_path": str((iso_map_path or _resolve_iso_map_path(_resolve_repo_root_from_gf(gf_root))).resolve()),
+            "junit_path": str((junit_path or _resolve_junit_path(_resolve_repo_root_from_gf(gf_root))).resolve()),
+            "duration_ms": duration_ms,
+            "diagnostic_count": len(_DIAGNOSTICS),
+        },
+        "diagnostics": _DIAGNOSTICS[:50],
+        "languages": results,
     }
-    print(json.dumps({"meta": meta, "languages": results}, indent=2, ensure_ascii=False, sort_keys=True))
-    print(f"✅ Scanned QA artifacts for {len(results)} languages.")
+
+    if not args.json_only:
+        print("\n--- Summary ---")
+        print(f"Languages Scanned: {len(results)}")
+        print(f"Duration:          {duration_ms}ms")
+        print(f"Diagnostics:       {len(_DIAGNOSTICS)}")
+        if _DIAGNOSTICS:
+            print("\n[Diagnostics]")
+            for d in _DIAGNOSTICS[:50]:
+                print(f" - {d}")
+
+        print("\n--- JSON Result ---")
+
+    print(json.dumps(output, indent=2))

@@ -1,7 +1,26 @@
-# qa_tools\batch_test_generator.py
+# qa_tools/batch_test_generator.py
 import csv
 import os
 import random
+import sys
+from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Project root & logging
+# ---------------------------------------------------------------------------
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
+
+# [REFACTOR] Use standardized logger
+try:
+    from utils.tool_logger import ToolLogger
+    logger = ToolLogger(__file__)
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+    logger = logging.getLogger("TestGen")
+
 
 # ---------------------------------------------------------------------------
 # 1. DATASETS
@@ -439,6 +458,12 @@ def generate_sentence(name, gender, prof, nat, lang):
 
 
 def main():
+    # [REFACTOR] Standardized Start
+    if hasattr(logger, "start"):
+        logger.start("Batch Test Generator")
+    else:
+        logger.info("Starting Batch Test Generator")
+
     output_dir = os.path.join("qa_tools", "generated_datasets")
     os.makedirs(output_dir, exist_ok=True)
 
@@ -458,6 +483,7 @@ def main():
         "ta",
     ]
     num_samples = 50
+    generated_count = 0
 
     for lang in target_langs:
         filename = f"test_suite_{lang}.csv"
@@ -465,10 +491,10 @@ def main():
 
         # Check if we have data for this language
         if lang not in CONFIG or lang not in VOCAB["professions"].get("Physicist", {}):
-            print(f"Skipping {lang} (No base data in VOCAB/CONFIG)")
+            logger.warning(f"Skipping {lang} (No base data in VOCAB/CONFIG)")
             continue
 
-        print(f"Generating {num_samples} samples for {lang.upper()}...")
+        logger.info(f"Generating {num_samples} samples for {lang.upper()}...")
 
         rows = []
 
@@ -504,8 +530,21 @@ def main():
             writer = csv.DictWriter(f, fieldnames=headers)
             writer.writeheader()
             writer.writerows(rows)
-
-    print("Done. Files generated in qa_tools/generated_datasets/")
+            generated_count += 1
+    
+    # [REFACTOR] Standardized Summary
+    summary_data = {
+        "datasets_generated": generated_count,
+        "output_dir": output_dir
+    }
+    
+    if hasattr(logger, "finish"):
+        logger.finish(
+            message=f"Done. Generated {generated_count} test suites in {output_dir}",
+            details=summary_data
+        )
+    else:
+        logger.info(f"Done. Files generated in {output_dir}")
 
 
 if __name__ == "__main__":

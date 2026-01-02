@@ -62,10 +62,15 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
-from utils.logging_setup import get_logger, init_logging
-
-log = get_logger(__name__)
-
+# [REFACTOR] Use the standardized ToolLogger for GUI-compatible output
+try:
+    from utils.tool_logger import ToolLogger
+    logger = ToolLogger(__file__)
+except ImportError:
+    # Fallback for standalone runs without the new logger module
+    import logging
+    logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
+    logger = logging.getLogger("migrate_schema")
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -111,7 +116,7 @@ def _ensure_meta_block(
 
     # Remove legacy alias if present
     if "_meta" in data and "meta" not in data:
-        log.info("  - Moving _meta -> meta in %s", path)
+        logger.info(f"  - Moving _meta -> meta in {path}")
         data["meta"] = meta
         del data["_meta"]
     else:
@@ -121,19 +126,17 @@ def _ensure_meta_block(
     if "language" not in meta or not meta.get("language"):
         inferred = _infer_language_from_filename(path)
         if inferred:
-            log.info(
-                "  - meta.language missing; inferring '%s' from filename.", inferred
-            )
+            logger.info(f"  - meta.language missing; inferring '{inferred}' from filename.")
             meta["language"] = inferred
         else:
-            log.warning(
-                "  - Could not infer language for %s; meta.language stays unset.", path
+            logger.warning(
+                f"  - Could not infer language for {path}; meta.language stays unset."
             )
 
     # Bump version
     old_version = meta.get("version")
     if old_version != target_version:
-        log.info("  - Bumping meta.version: %r -> %r", old_version, target_version)
+        logger.info(f"  - Bumping meta.version: {old_version!r} -> {target_version!r}")
         meta["version"] = target_version
 
     return meta
@@ -204,11 +207,11 @@ def _migrate_sections(
         if not isinstance(entries, dict):
             continue
 
-        log.info("  - Normalizing section '%s' (%d entries)", section, len(entries))
+        logger.info(f"  - Normalizing section '{section}' ({len(entries)} entries)")
         for key, entry in entries.items():
             if not isinstance(entry, dict):
-                log.warning(
-                    "    • Skipping non-dict entry under '%s[%s]'", section, key
+                logger.warning(
+                    f"    • Skipping non-dict entry under '{section}[{key}]'"
                 )
                 continue
             _ensure_base_entry_fields(
@@ -221,10 +224,10 @@ def _migrate_sections(
     # honours: ensure required keys but no BaseLexicalEntry fields
     honours = data.get("honours")
     if isinstance(honours, dict):
-        log.info("  - Normalizing section 'honours' (%d entries)", len(honours))
+        logger.info(f"  - Normalizing section 'honours' ({len(honours)} entries)")
         for key, entry in honours.items():
             if not isinstance(entry, dict):
-                log.warning("    • Skipping non-dict honour '%s'", key)
+                logger.warning(f"    • Skipping non-dict honour '{key}'")
                 continue
             if "key" not in entry or not entry["key"]:
                 entry["key"] = key
@@ -237,12 +240,12 @@ def _migrate_sections(
     # name_templates: ensure key
     templates = data.get("name_templates")
     if isinstance(templates, dict):
-        log.info(
-            "  - Normalizing section 'name_templates' (%d entries)", len(templates)
+        logger.info(
+            f"  - Normalizing section 'name_templates' ({len(templates)} entries)"
         )
         for key, entry in templates.items():
             if not isinstance(entry, dict):
-                log.warning("    • Skipping non-dict template '%s'", key)
+                logger.warning(f"    • Skipping non-dict template '{key}'")
                 continue
             if "key" not in entry or not entry["key"]:
                 entry["key"] = key
@@ -260,17 +263,17 @@ def migrate_file(
 
     Returns True if the file was modified, False if no change was made.
     """
-    log.info("Migrating %s", path)
+    logger.info(f"Migrating {path}")
 
     with open(path, "r", encoding="utf-8") as f:
         try:
             data = json.load(f)
         except json.JSONDecodeError as e:
-            log.error("  ! JSON parse error in %s: %s", path, e)
+            logger.error(f"  ! JSON parse error in {path}: {e}")
             return False
 
     if not isinstance(data, dict):
-        log.error("  ! Top-level JSON is not an object in %s", path)
+        logger.error(f"  ! Top-level JSON is not an object in {path}")
         return False
 
     original = json.dumps(data, ensure_ascii=False, sort_keys=True)
@@ -285,24 +288,24 @@ def migrate_file(
     # Check if anything changed
     migrated = json.dumps(data, ensure_ascii=False, sort_keys=True)
     if migrated == original:
-        log.info("  - No changes needed.")
+        logger.info("  - No changes needed.")
         return False
 
     if dry_run:
-        log.info("  - Changes detected (dry-run; not writing).")
+        logger.info("  - Changes detected (dry-run; not writing).")
         return True
 
     # Backup
     if backup:
         backup_path = path + ".bak"
         shutil.copy2(path, backup_path)
-        log.info("  - Created backup: %s", backup_path)
+        logger.info(f"  - Created backup: {backup_path}")
 
     # Write back
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    log.info("  - File updated.")
+    logger.info("  - File updated.")
 
     return True
 
@@ -349,8 +352,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Optional[List[str]] = None) -> None:
-    # Initialize logging first
-    init_logging()
+    # [REFACTOR] Standardized Start
+    if hasattr(logger, "start"):
+        logger.start("Lexicon Schema Migration")
 
     parser = build_arg_parser()
     args = parser.parse_args(argv)
@@ -368,14 +372,18 @@ def main(argv: Optional[List[str]] = None) -> None:
         sys.exit(1)
 
     if not files:
-        log.error("No lexicon files found to migrate.")
+        logger.error("No lexicon files found to migrate.")
         sys.exit(1)
 
     modified_count = 0
+    scanned_count = 0
+
     for path in files:
         if not os.path.isfile(path):
-            log.warning("Skipping non-file path: %s", path)
+            logger.warning(f"Skipping non-file path: {path}")
             continue
+        
+        scanned_count += 1
         changed = migrate_file(
             path,
             target_version=args.target_version,
@@ -385,10 +393,22 @@ def main(argv: Optional[List[str]] = None) -> None:
         if changed:
             modified_count += 1
 
-    if args.dry_run:
-        log.info("Dry-run complete. Files that would be modified: %d", modified_count)
+    # [REFACTOR] Standardized Summary
+    status_msg = "Dry-run complete" if args.dry_run else "Migration complete"
+    summary_data = {
+        "scanned_files": scanned_count,
+        "modified_files": modified_count,
+        "target_version": args.target_version
+    }
+    
+    if hasattr(logger, "finish"):
+        logger.finish(
+            message=f"{status_msg}. Modified {modified_count}/{scanned_count} files.",
+            details=summary_data
+        )
     else:
-        log.info("Migration complete. Files modified: %d", modified_count)
+        # Fallback logging
+        logger.info(f"{status_msg}. Files modified: {modified_count}")
 
 
 if __name__ == "__main__":

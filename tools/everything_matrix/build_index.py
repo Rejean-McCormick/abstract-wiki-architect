@@ -76,7 +76,7 @@ def _load_config() -> Dict[str, Any]:
 
     # v1 flat shape (in canonical location) -> adapt into v2 in-memory
     # NOTE: This is NOT “legacy config file” support; it’s in-file shape migration.
-    logger.warning("Config at %s uses v1 flat shape; adapting to v2 shape in-memory.", CONFIG_FILE)
+    # logger.warning("Config at %s uses v1 flat shape; adapting to v2 shape in-memory.", CONFIG_FILE)
     out: Dict[str, Any] = dict(cfg)
 
     out.setdefault("rgl", {})
@@ -280,6 +280,7 @@ def scan_system() -> None:
     parser = argparse.ArgumentParser(description="Build the Everything Matrix index (single orchestrator).")
     parser.add_argument("--force", action="store_true", help="Ignore cache and force rebuild")
     parser.add_argument("--touch-timestamp", action="store_true", help="Rewrite timestamp on cache hit")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging (DEBUG level)")
 
     # explicit regeneration flags
     parser.add_argument("--regen-rgl", action="store_true", help="Regenerate data/indices/rgl_inventory.json")
@@ -291,7 +292,20 @@ def scan_system() -> None:
     if args.regen_rgl or args.regen_lex or args.regen_app or args.regen_qa:
         args.force = True
 
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+
+    # HEADER
+    logger.info("=== EVERYTHING MATRIX ORCHESTRATOR ===")
+    logger.info(f"Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    logger.info(f"CWD: {Path.cwd()}")
+
     cfg = _load_config()
+    # Check if v1 adapted or v2 native
+    raw_cfg = read_json(CONFIG_FILE)
+    is_v1 = isinstance(raw_cfg, dict) and "rgl" not in raw_cfg
+    logger.info(f"Config: {CONFIG_FILE} (Detected: {'v1-flat' if is_v1 else 'v2-nested'})")
+
     p = _paths(BASE_DIR, cfg)
 
     cfg_matrix = cfg.get("matrix", {}) if isinstance(cfg.get("matrix"), dict) else {}
@@ -316,8 +330,9 @@ def scan_system() -> None:
 
     p["output_dir"].mkdir(parents=True, exist_ok=True)
     
-    # [FIX] Added 'content_roots=' keyword argument to match io_utils definition
+    # Fingerprint check
     current_fp = directory_fingerprint(content_roots=content_roots, config_files=config_files)
+    logger.debug(f"Calculated Fingerprint: {current_fp[:12]}...")
 
     # cache check
     if (not args.force) and p["checksum_file"].is_file() and p["matrix_file"].is_file():
@@ -330,12 +345,17 @@ def scan_system() -> None:
                     matrix["timestamp"] = ts
                     matrix["timestamp_iso"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(ts))
                     atomic_write_json(p["matrix_file"], matrix)
-                    logger.info("Cache hit (inputs unchanged). Timestamp refreshed.")
+                    logger.info("✅ Cache HIT. Inputs unchanged. Timestamp refreshed.")
                 else:
-                    logger.info("Cache hit (inputs unchanged). Matrix unreadable; skipping refresh.")
+                    logger.info("✅ Cache HIT. Inputs unchanged. Matrix unreadable; skipping refresh.")
             else:
-                logger.info("Cache hit (inputs unchanged).")
+                logger.info("✅ Cache HIT. Inputs unchanged.")
             return
+        else:
+            logger.info(f"♻️  Cache MISS. Stored: {stored[:12]}... != Current: {current_fp[:12]}...")
+    else:
+        if args.force:
+            logger.info("🔨 Force rebuild requested.")
 
     logger.info("Everything Matrix build starting (scoring_version=%s).", scoring_version)
 
@@ -349,10 +369,19 @@ def scan_system() -> None:
     factory_registry = _load_factory_targets(p["factory_targets_file"], wiki_to_iso2=wiki_to_iso2)
 
     # 3) One-shot scans per zone (no per-iso rescans here)
-    # regen flags just force this run; each zone still scanned once.
+    logger.info("--- Phase 1: One-Shot Scans ---")
+    
+    logger.info("Calling lexicon_scanner...")
     lex_inv = _scan_all_lexicons(p["lex_root"])
+    logger.info(f"  -> Lexicon inventory: {len(lex_inv)} languages.")
+
+    logger.info("Calling app_scanner...")
     app_inv = _scan_all_apps(BASE_DIR)
+    logger.info(f"  -> App inventory: {len(app_inv)} languages.")
+    
+    logger.info("Calling qa_scanner...")
     qa_inv = _scan_all_artifacts(p["gf_root"])
+    logger.info(f"  -> QA inventory: {len(qa_inv)} languages.")
 
     # 4) Build universe (iso2)
     all_isos: Set[str] = set()
@@ -382,11 +411,16 @@ def scan_system() -> None:
     zone_weights = {**default_weights, **zone_weights_cfg}
 
     # 6) assemble matrix
+    logger.info("--- Phase 2: Synthesis & Scoring ---")
     matrix_langs: Dict[str, Any] = {}
 
     zeros_b = {"SEED": 0.0, "CONC": 0.0, "WIDE": 0.0, "SEM": 0.0}
     zeros_c = {"PROF": 0.0, "ASST": 0.0, "ROUT": 0.0}
     zeros_d = {"BIN": 0.0, "TEST": 0.0}
+
+    # Tracking skips for summary
+    skip_counts: Dict[str, int] = {}
+    MAX_VERBOSE_SKIPS = 5  # limit how many we print per reason
 
     for iso2 in sorted(all_isos):
         if not iso2 or iso2 == "api":
@@ -422,7 +456,7 @@ def scan_system() -> None:
         maturity_1 = compute_maturity(avgs_1, zone_weights)
         strat_1 = choose_build_strategy(
             iso2=iso2,
-            maturity_score=maturity_1, # [FIX] Renamed maturity -> maturity_score
+            maturity_score=maturity_1,
             zone_a=zone_a_raw,
             zone_b=zone_b,
             zone_d=zone_d,
@@ -436,7 +470,7 @@ def scan_system() -> None:
         maturity_2 = compute_maturity(avgs_2, zone_weights)
         strat_2 = choose_build_strategy(
             iso2=iso2,
-            maturity_score=maturity_2, # [FIX] Renamed maturity -> maturity_score
+            maturity_score=maturity_2,
             zone_a=zone_a,
             zone_b=zone_b,
             zone_d=zone_d,
@@ -445,6 +479,18 @@ def scan_system() -> None:
         )
 
         runnable = (float(zone_b.get("SEED", 0.0)) >= 2.0) or (strat_2 == "HIGH_ROAD")
+
+        if args.verbose and strat_2 == "SKIP":
+            # Simple heuristic reasoning for debug logs
+            reason = "low_maturity"
+            if float(zone_a_raw.get("CAT", 0)) == 0 and float(zone_b.get("SEED", 0)) == 0:
+                reason = "empty_lang"
+            elif avgs_1["A_RGL"] < 2.0 and not (iso2 in factory_registry):
+                reason = "low_rgl_no_factory"
+            
+            skip_counts[reason] = skip_counts.get(reason, 0) + 1
+            if skip_counts[reason] <= MAX_VERBOSE_SKIPS:
+                logger.debug(f"Skipping {iso2}: {reason} (Mat: {maturity_2:.1f})")
 
         matrix_langs[iso2] = {
             "meta": {
@@ -494,9 +540,23 @@ def scan_system() -> None:
     atomic_write_json(p["matrix_file"], matrix)
     p["checksum_file"].write_text(current_fp, encoding="utf-8")
 
-    logger.info("Matrix updated: %s languages.", len(matrix_langs))
-    logger.info("Output: %s", p["matrix_file"])
-    logger.info("Fingerprint: %s", p["checksum_file"])
+    logger.info("--- Build Summary ---")
+    logger.info(f"Total Languages:  {matrix['stats']['total_languages']}")
+    logger.info(f"Production Ready: {matrix['stats']['production_ready']}")
+    logger.info(f"Build Strategies: HIGH_ROAD={matrix['stats']['high_road']}, SAFE_MODE={matrix['stats']['safe_mode']}, SKIP={matrix['stats']['skipped']}")
+    
+    # Show top skip reasons if we collected any
+    if args.verbose and skip_counts:
+        logger.debug("Top Skip Reasons:")
+        for r, c in sorted(skip_counts.items(), key=lambda x: x[1], reverse=True):
+            logger.debug(f"  {r}: {c}")
+
+    logger.info(f"💾 Written to: {p['matrix_file']}")
+    try:
+        size = p['matrix_file'].stat().st_size
+        logger.info(f"   Size: {size} bytes")
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":

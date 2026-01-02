@@ -5,6 +5,7 @@ from app.shared.config import settings
 # --- Adapters ---
 from app.adapters.messaging.redis_broker import RedisMessageBroker
 from app.adapters.persistence.filesystem_repo import FileSystemLexiconRepository
+from app.adapters.task_queue import ArqTaskQueue  # <-- ADDED
 
 # Note: Only import S3 repo if you actually have that file, otherwise comment it out
 try:
@@ -37,6 +38,8 @@ class Container(containers.DeclarativeContainer):
             "app.adapters.api.routers.languages",  # [RESTORED] This router exists now
             "app.adapters.api.routers.health",
             "app.adapters.api.dependencies",
+            # "app.adapters.api.routers.entities", # Uncomment if you added these routers
+            # "app.adapters.api.routers.frames",   # Uncomment if you added these routers
         ]
     )
 
@@ -44,6 +47,9 @@ class Container(containers.DeclarativeContainer):
     
     # Message Broker
     message_broker = providers.Singleton(RedisMessageBroker)
+
+    # Task Queue (ARQ)
+    task_queue = providers.Singleton(ArqTaskQueue)  # <-- ADDED
 
     # Persistence (Selector: S3 vs FileSystem)
     if settings.STORAGE_BACKEND == "s3" and S3LanguageRepo:
@@ -80,7 +86,7 @@ class Container(containers.DeclarativeContainer):
 
     build_language_use_case = providers.Factory(
         BuildLanguage,
-        broker=message_broker
+        task_queue=task_queue  # <-- FIX: Injects task_queue instead of broker
     )
 
     onboard_language_saga = providers.Factory(

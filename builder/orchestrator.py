@@ -1,9 +1,11 @@
+# builder/orchestrator.py
 import os
 import subprocess
 import sys
 import json
 import logging
 import concurrent.futures
+import time
 from pathlib import Path
 
 # --- Setup Paths ---
@@ -21,7 +23,8 @@ except ImportError:
     generate_safe_mode_grammar = None
 
 # --- Configuration ---
-logging.basicConfig(level=logging.INFO, format="%(message)s")
+# GUI Compatibility: Force logging to stdout
+logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout, force=True)
 logger = logging.getLogger("Orchestrator")
 
 GF_DIR = ROOT_DIR / "gf"
@@ -137,8 +140,14 @@ def compile_gf(lang_code, strategy):
     proc = subprocess.run(cmd, cwd=str(GF_DIR), capture_output=True, text=True)
     
     if proc.returncode != 0:
-        with open(LOG_DIR / f"{gf_filename}.log", "w", encoding='utf-8') as f:
+        # Log to file
+        log_path = LOG_DIR / f"{gf_filename}.log"
+        with open(log_path, "w", encoding='utf-8') as f:
             f.write(proc.stderr + "\n" + proc.stdout)
+        
+        # Log tail to stdout for GUI visibility
+        logger.error(f"   [STDERR {lang_code}] {proc.stderr.strip()[-500:]}")
+        logger.error(f"   [LOG] See {log_path}")
             
     return proc
 
@@ -161,6 +170,9 @@ def phase_2_link(valid_langs_map):
     """
     Phase 2: Link all valid .gfo files into a single AbstractWiki.pgf binary.
     """
+    start_time = time.time()
+    logger.info("\n=== PHASE 2: LINKING PGF ===")
+    
     if not valid_langs_map:
         logger.error("❌ No valid languages to link! Build aborted.")
         sys.exit(1)
@@ -177,15 +189,27 @@ def phase_2_link(valid_langs_map):
     
     cmd = ["gf", "-make", "-path", path_args, "-name", "AbstractWiki", "AbstractWiki.gf"] + targets
 
-    logger.info(f"🔗 Linking {len(targets)} languages into PGF binary...")
+    logger.info(f"🔗 Linking {len(targets)} languages...")
+    logger.info(f"   [CMD] {' '.join(cmd[:5])} ... ({len(targets)} files)")
+
     proc = subprocess.run(cmd, cwd=str(GF_DIR), capture_output=True, text=True)
 
+    duration = time.time() - start_time
+    
     if proc.returncode == 0:
-        logger.info("✅ BUILD SUCCESS: AbstractWiki.pgf created.")
+        logger.info(f"✅ BUILD SUCCESS: AbstractWiki.pgf created in {duration:.2f}s")
+        # Print binary size
+        pgf_path = GF_DIR / "AbstractWiki.pgf"
+        if pgf_path.exists():
+            size_mb = pgf_path.stat().st_size / (1024 * 1024)
+            logger.info(f"   [ARTIFACT] {pgf_path} ({size_mb:.2f} MB)")
     else:
-        logger.error(f"❌ LINK FAILED:\n{proc.stderr}")
+        logger.error(f"❌ LINK FAILED in {duration:.2f}s")
+        logger.error(f"   [STDERR]\n{proc.stderr.strip()}")
 
 def main():
+    start_global = time.time()
+    
     matrix = load_matrix()
     tasks = []
     
@@ -200,9 +224,11 @@ def main():
         logger.info("⚠️  Matrix empty. Using bootstrap defaults.")
         tasks = [("eng", "HIGH_ROAD")]
 
-    logger.info(f"🏗️  Phase 1: Verifying {len(tasks)} languages...")
+    logger.info(f"=== PHASE 1: COMPILATION ===")
+    logger.info(f"Targeting {len(tasks)} languages")
     
     valid_langs_map = {}
+    phase1_start = time.time()
     
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(phase_1_verify, t[0], t[1]): t for t in tasks}
@@ -213,14 +239,24 @@ def main():
                 lang, success, msg = future.result()
                 if success:
                     valid_langs_map[lang] = strategy
-                    print(f"  [+] {lang}: OK ({strategy})")
+                    logger.info(f"  [OK] {lang} ({strategy})")
                 else:
-                    print(f"  [-] {lang}: FAILED")
-                    print(f"      {msg}") 
+                    logger.info(f"  [FAIL] {lang}: {msg.splitlines()[0][:100]}...") 
             except Exception as e:
-                logger.error(f"  [!] Exception for {code}: {e}")
+                logger.error(f"  [ERR] Exception for {code}: {e}")
 
+    logger.info(f"Phase 1 complete in {time.time() - phase1_start:.2f}s")
+    
+    # Enter Phase 2
     phase_2_link(valid_langs_map)
+    
+    total_duration = time.time() - start_global
+    logger.info("\n=== BUILD SUMMARY ===")
+    logger.info(f"Total Duration: {total_duration:.2f}s")
+    logger.info(f"Languages: {len(valid_langs_map)}/{len(tasks)} compiled")
+    
+    if len(valid_langs_map) == 0:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
