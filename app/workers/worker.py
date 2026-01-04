@@ -75,18 +75,24 @@ class GrammarRuntime:
                 try:
                     matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
                     languages = matrix.get("languages", {})
+                    # Iterate over a list of keys to avoid modification issues during iteration
                     for lang_name in list(getattr(raw_pgf, "languages", {}).keys()):
                         iso_guess = lang_name[-3:].lower()
                         verdict = (languages.get(iso_guess, {}) or {}).get("verdict", {}) or {}
                         runnable = verdict.get("runnable", True)
+                        
                         if not runnable:
                             logger.warning(
-                                "runtime_purging_zombie_language",
+                                "runtime_zombie_language_detected",
                                 lang=lang_name,
                                 iso=iso_guess,
                                 reason="matrix.verdict.runnable=False",
                             )
-                            del raw_pgf.languages[lang_name]
+                            # [FIX] REMOVED the deletion line. Newer GF bindings return a read-only 
+                            # mappingproxy which crashes on 'del'. It is harmless to keep the 
+                            # language loaded in the backend memory.
+                            # del raw_pgf.languages[lang_name] 
+
                 except Exception as e:
                     logger.error("runtime_matrix_filter_failed", error=str(e))
             else:

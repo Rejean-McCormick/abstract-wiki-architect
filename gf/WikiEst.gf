@@ -1,1 +1,8 @@
-concrete WikiEst of AbstractWiki = WikiI with (Syntax = SyntaxEst) ** open SyntaxEst, ParadigmsEst in { flags coding = utf8 ; };
+concrete WikiEst of AbstractWiki = open SyntaxEst, ParadigmsEst in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}

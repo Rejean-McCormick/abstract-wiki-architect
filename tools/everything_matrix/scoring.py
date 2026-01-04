@@ -112,7 +112,11 @@ def choose_build_strategy(
     high_cfg = cfg_matrix.get("high_road", {}) if isinstance(cfg_matrix.get("high_road"), dict) else {}
     skip_cfg = cfg_matrix.get("skip", {}) if isinstance(cfg_matrix.get("skip"), dict) else {}
 
-    min_maturity = float(high_cfg.get("min_maturity", 8.0))
+    # [FIX] Lowered min_maturity from 8.0 to 4.0.
+    # Logic: Zone A (RGL) weight is 0.40. If RGL is perfect (10.0), score is 4.0.
+    # This allows languages with RGL but no App/QA to still build as HIGH_ROAD.
+    min_maturity = float(high_cfg.get("min_maturity", 4.0))
+    
     min_cat = float(high_cfg.get("min_cat", 10.0))
     min_seed = float(high_cfg.get("min_seed", 2.0))
     min_bin = float(high_cfg.get("min_bin", 0.0))

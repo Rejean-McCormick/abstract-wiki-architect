@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 API_KEY = os.getenv("GOOGLE_API_KEY")
 # Default to 1.5-pro for reasoning, but allow override (e.g. "gemini-1.5-flash" for speed)
-MODEL_NAME = os.getenv("ARCHITECT_AI_MODEL", "gemini-1.5-pro")
+MODEL_NAME = os.getenv("ARCHITECT_AI_MODEL", "gemini-2.0-flash")
 
 # --- Logging Setup ---
 logger = logging.getLogger("ai_services")

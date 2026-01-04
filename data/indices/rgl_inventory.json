@@ -1,16 +1,16 @@
 {
   "meta": {
-    "scanner": "rgl_scanner/2.0",
-    "generated_at": 1767214155,
-    "generated_at_iso": "2025-12-31T20:49:15Z",
+    "scanner": "rgl_scanner/2.4",
+    "generated_at": 1767554982,
+    "generated_at_iso": "2026-01-04T19:29:42Z",
     "inventory_key_mode": "iso2",
     "rgl_base_path": "gf-rgl/src",
-    "iso_map_file": "config/iso_to_wiki.json"
+    "iso_map_file": "data/config/iso_to_wiki.json"
   },
   "stats": {
-    "languages_found": 61,
-    "families_found": 29,
-    "full_rgl_5_of_5": 51
+    "languages_found": 65,
+    "families_found": 25,
+    "full_rgl_5_of_5": 53
   },
   "languages": {
     "af": {
@@ -143,6 +143,27 @@
       },
       "module_count": 5,
       "completeness": 1.0
+    },
+    "cgg": {
+      "path": "gf-rgl/src/rukiga",
+      "wiki": "Cgg",
+      "iso2": "cgg",
+      "iso3": null,
+      "modules": {
+        "Cat": "gf-rgl/src/rukiga/CatCgg.gf",
+        "Grammar": "gf-rgl/src/rukiga/GrammarCgg.gf",
+        "Noun": "gf-rgl/src/rukiga/NounCgg.gf",
+        "Paradigms": "gf-rgl/src/rukiga/ParadigmsCgg.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
     },
     "cs": {
       "path": "gf-rgl/src/api",
@@ -428,6 +449,28 @@
       "module_count": 4,
       "completeness": 0.8
     },
+    "grc": {
+      "path": "gf-rgl/src/ancient_greek",
+      "wiki": "Grc",
+      "iso2": "grc",
+      "iso3": null,
+      "modules": {
+        "Cat": "gf-rgl/src/ancient_greek/CatGrc.gf",
+        "Grammar": "gf-rgl/src/ancient_greek/GrammarGrc.gf",
+        "Noun": "gf-rgl/src/ancient_greek/NounGrc.gf",
+        "Paradigms": "gf-rgl/src/ancient_greek/ParadigmsGrc.gf",
+        "Syntax": "gf-rgl/src/ancient_greek/SyntaxGrc.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
     "he": {
       "path": "gf-rgl/src/hebrew",
       "wiki": "Heb",
@@ -624,6 +667,27 @@
       },
       "module_count": 5,
       "completeness": 1.0
+    },
+    "kam": {
+      "path": "gf-rgl/src/kikamba",
+      "wiki": "Kam",
+      "iso2": "kam",
+      "iso3": null,
+      "modules": {
+        "Cat": "gf-rgl/src/kikamba/CatKam.gf",
+        "Grammar": "gf-rgl/src/kikamba/GrammarKam.gf",
+        "Noun": "gf-rgl/src/kikamba/NounKam.gf",
+        "Paradigms": "gf-rgl/src/kikamba/ParadigmsKam.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
     },
     "kk": {
       "path": "gf-rgl/src/kazakh",
@@ -1017,6 +1081,28 @@
       "module_count": 5,
       "completeness": 1.0
     },
+    "sco": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Sco",
+      "iso2": "sco",
+      "iso3": null,
+      "modules": {
+        "Cat": "gf-rgl/src/scots/CatSco.gf",
+        "Grammar": "gf-rgl/src/scots/GrammarSco.gf",
+        "Noun": "gf-rgl/src/scots/NounSco.gf",
+        "Paradigms": "gf-rgl/src/scots/ParadigmsSco.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxSco.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
     "sd": {
       "path": "gf-rgl/src/api",
       "wiki": "Snd",
@@ -1348,7 +1434,6 @@
     "abstract",
     "abstract_ext",
     "abstract_to_api",
-    "ancient_greek",
     "bantu",
     "common",
     "demo",
@@ -1359,15 +1444,12 @@
     "greenlandic",
     "hindustani",
     "infinitives",
-    "kikamba",
     "lexica",
     "libraryBrowser",
     "morphodict",
     "prelude",
     "romance",
-    "rukiga",
     "scandinavian",
-    "scots",
     "src",
     "stemmed",
     "sysu",

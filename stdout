@@ -1,0 +1,1460 @@
+{
+  "meta": {
+    "scanner": "rgl_scanner/2.4",
+    "generated_at": 1767549834,
+    "generated_at_iso": "2026-01-04T18:03:54Z",
+    "inventory_key_mode": "iso2",
+    "rgl_base_path": "gf-rgl/src",
+    "iso_map_file": "data/config/iso_to_wiki.json"
+  },
+  "stats": {
+    "languages_found": 65,
+    "families_found": 25,
+    "full_rgl_5_of_5": 53
+  },
+  "languages": {
+    "af": {
+      "path": "gf-rgl/src/afrikaans",
+      "wiki": "Afr",
+      "iso2": "af",
+      "iso3": "afr",
+      "modules": {
+        "Cat": "gf-rgl/src/afrikaans/CatAfr.gf",
+        "Grammar": "gf-rgl/src/afrikaans/GrammarAfr.gf",
+        "Noun": "gf-rgl/src/afrikaans/NounAfr.gf",
+        "Paradigms": "gf-rgl/src/afrikaans/ParadigmsAfr.gf",
+        "Syntax": "gf-rgl/src/afrikaans/SyntaxAfr.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "am": {
+      "path": "gf-rgl/src/amharic",
+      "wiki": "Amh",
+      "iso2": "am",
+      "iso3": "amh",
+      "modules": {
+        "Cat": "gf-rgl/src/amharic/CatAmh.gf",
+        "Grammar": "gf-rgl/src/amharic/GrammarAmh.gf",
+        "Noun": "gf-rgl/src/amharic/NounAmh.gf",
+        "Paradigms": "gf-rgl/src/amharic/ParadigmsAmh.gf",
+        "Syntax": "gf-rgl/src/amharic/SyntaxAmh.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "ar": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Ara",
+      "iso2": "ar",
+      "iso3": "ara",
+      "modules": {
+        "Cat": "gf-rgl/src/arabic/CatAra.gf",
+        "Grammar": "gf-rgl/src/arabic/GrammarAra.gf",
+        "Noun": "gf-rgl/src/arabic/NounAra.gf",
+        "Paradigms": "gf-rgl/src/arabic/ParadigmsAra.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxAra.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "be": {
+      "path": "gf-rgl/src/belarusian",
+      "wiki": "Bel",
+      "iso2": "be",
+      "iso3": "bel",
+      "modules": {
+        "Cat": "gf-rgl/src/belarusian/CatBel.gf",
+        "Grammar": "gf-rgl/src/belarusian/GrammarBel.gf",
+        "Noun": "gf-rgl/src/belarusian/NounBel.gf",
+        "Paradigms": "gf-rgl/src/belarusian/ParadigmsBel.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "bg": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Bul",
+      "iso2": "bg",
+      "iso3": "bul",
+      "modules": {
+        "Cat": "gf-rgl/src/bulgarian/CatBul.gf",
+        "Grammar": "gf-rgl/src/bulgarian/GrammarBul.gf",
+        "Noun": "gf-rgl/src/bulgarian/NounBul.gf",
+        "Paradigms": "gf-rgl/src/bulgarian/ParadigmsBul.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxBul.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "ca": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Cat",
+      "iso2": "ca",
+      "iso3": "cat",
+      "modules": {
+        "Cat": "gf-rgl/src/catalan/CatCat.gf",
+        "Grammar": "gf-rgl/src/catalan/GrammarCat.gf",
+        "Noun": "gf-rgl/src/catalan/NounCat.gf",
+        "Paradigms": "gf-rgl/src/catalan/ParadigmsCat.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxCat.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "cgg": {
+      "path": "gf-rgl/src/rukiga",
+      "wiki": "Cgg",
+      "iso2": "cgg",
+      "iso3": null,
+      "modules": {
+        "Cat": "gf-rgl/src/rukiga/CatCgg.gf",
+        "Grammar": "gf-rgl/src/rukiga/GrammarCgg.gf",
+        "Noun": "gf-rgl/src/rukiga/NounCgg.gf",
+        "Paradigms": "gf-rgl/src/rukiga/ParadigmsCgg.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "cs": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Cze",
+      "iso2": "cs",
+      "iso3": "ces",
+      "modules": {
+        "Cat": "gf-rgl/src/czech/CatCze.gf",
+        "Grammar": "gf-rgl/src/czech/GrammarCze.gf",
+        "Noun": "gf-rgl/src/czech/NounCze.gf",
+        "Paradigms": "gf-rgl/src/czech/ParadigmsCze.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxCze.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "da": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Dan",
+      "iso2": "da",
+      "iso3": "dan",
+      "modules": {
+        "Cat": "gf-rgl/src/danish/CatDan.gf",
+        "Grammar": "gf-rgl/src/danish/GrammarDan.gf",
+        "Noun": "gf-rgl/src/danish/NounDan.gf",
+        "Paradigms": "gf-rgl/src/danish/ParadigmsDan.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxDan.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "de": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Ger",
+      "iso2": "de",
+      "iso3": "deu",
+      "modules": {
+        "Cat": "gf-rgl/src/german/CatGer.gf",
+        "Grammar": "gf-rgl/src/german/GrammarGer.gf",
+        "Noun": "gf-rgl/src/german/NounGer.gf",
+        "Paradigms": "gf-rgl/src/german/ParadigmsGer.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxGer.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "el": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Gre",
+      "iso2": "el",
+      "iso3": "ell",
+      "modules": {
+        "Cat": "gf-rgl/src/greek/CatGre.gf",
+        "Grammar": "gf-rgl/src/greek/GrammarGre.gf",
+        "Noun": "gf-rgl/src/greek/NounGre.gf",
+        "Paradigms": "gf-rgl/src/greek/ParadigmsGre.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxGre.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "en": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Eng",
+      "iso2": "en",
+      "iso3": "eng",
+      "modules": {
+        "Cat": "gf-rgl/src/english/CatEng.gf",
+        "Grammar": "gf-rgl/src/english/GrammarEng.gf",
+        "Noun": "gf-rgl/src/english/NounEng.gf",
+        "Paradigms": "gf-rgl/src/english/ParadigmsEng.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxEng.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "es": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Spa",
+      "iso2": "es",
+      "iso3": "spa",
+      "modules": {
+        "Cat": "gf-rgl/src/spanish/CatSpa.gf",
+        "Grammar": "gf-rgl/src/spanish/GrammarSpa.gf",
+        "Noun": "gf-rgl/src/spanish/NounSpa.gf",
+        "Paradigms": "gf-rgl/src/spanish/ParadigmsSpa.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxSpa.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "et": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Est",
+      "iso2": "et",
+      "iso3": "est",
+      "modules": {
+        "Cat": "gf-rgl/src/estonian/CatEst.gf",
+        "Grammar": "gf-rgl/src/estonian/GrammarEst.gf",
+        "Noun": "gf-rgl/src/estonian/NounEst.gf",
+        "Paradigms": "gf-rgl/src/estonian/ParadigmsEst.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxEst.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "eu": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Eus",
+      "iso2": "eu",
+      "iso3": "eus",
+      "modules": {
+        "Cat": "gf-rgl/src/basque/CatEus.gf",
+        "Grammar": "gf-rgl/src/basque/GrammarEus.gf",
+        "Noun": "gf-rgl/src/basque/NounEus.gf",
+        "Paradigms": "gf-rgl/src/basque/ParadigmsEus.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxEus.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "fa": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Pes",
+      "iso2": "fa",
+      "iso3": "fas",
+      "modules": {
+        "Cat": "gf-rgl/src/persian/CatPes.gf",
+        "Grammar": "gf-rgl/src/persian/GrammarPes.gf",
+        "Noun": "gf-rgl/src/persian/NounPes.gf",
+        "Paradigms": "gf-rgl/src/persian/ParadigmsPes.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxPes.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "fi": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Fin",
+      "iso2": "fi",
+      "iso3": "fin",
+      "modules": {
+        "Cat": "gf-rgl/src/finnish/CatFin.gf",
+        "Grammar": "gf-rgl/src/finnish/GrammarFin.gf",
+        "Noun": "gf-rgl/src/finnish/NounFin.gf",
+        "Paradigms": "gf-rgl/src/finnish/ParadigmsFin.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxFin.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "fo": {
+      "path": "gf-rgl/src/faroese",
+      "wiki": "Fao",
+      "iso2": "fo",
+      "iso3": "fao",
+      "modules": {
+        "Cat": "gf-rgl/src/faroese/CatFao.gf",
+        "Grammar": "gf-rgl/src/faroese/GrammarFao.gf",
+        "Noun": "gf-rgl/src/faroese/NounFao.gf",
+        "Paradigms": "gf-rgl/src/faroese/ParadigmsFao.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "fr": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Fre",
+      "iso2": "fr",
+      "iso3": "fra",
+      "modules": {
+        "Cat": "gf-rgl/src/french/CatFre.gf",
+        "Grammar": "gf-rgl/src/french/GrammarFre.gf",
+        "Noun": "gf-rgl/src/french/NounFre.gf",
+        "Paradigms": "gf-rgl/src/french/ParadigmsFre.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxFre.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "gd": {
+      "path": "gf-rgl/src/gaelic",
+      "wiki": "Gla",
+      "iso2": "gd",
+      "iso3": "gla",
+      "modules": {
+        "Cat": "gf-rgl/src/gaelic/CatGla.gf",
+        "Grammar": "gf-rgl/src/gaelic/GrammarGla.gf",
+        "Noun": "gf-rgl/src/gaelic/NounGla.gf",
+        "Paradigms": "gf-rgl/src/gaelic/ParadigmsGla.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "grc": {
+      "path": "gf-rgl/src/ancient_greek",
+      "wiki": "Grc",
+      "iso2": "grc",
+      "iso3": null,
+      "modules": {
+        "Cat": "gf-rgl/src/ancient_greek/CatGrc.gf",
+        "Grammar": "gf-rgl/src/ancient_greek/GrammarGrc.gf",
+        "Noun": "gf-rgl/src/ancient_greek/NounGrc.gf",
+        "Paradigms": "gf-rgl/src/ancient_greek/ParadigmsGrc.gf",
+        "Syntax": "gf-rgl/src/ancient_greek/SyntaxGrc.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "he": {
+      "path": "gf-rgl/src/hebrew",
+      "wiki": "Heb",
+      "iso2": "he",
+      "iso3": "heb",
+      "modules": {
+        "Cat": "gf-rgl/src/hebrew/CatHeb.gf",
+        "Grammar": "gf-rgl/src/hebrew/GrammarHeb.gf",
+        "Noun": "gf-rgl/src/hebrew/NounHeb.gf",
+        "Paradigms": "gf-rgl/src/hebrew/ParadigmsHeb.gf",
+        "Syntax": "gf-rgl/src/hebrew/SyntaxHeb.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "hi": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Hin",
+      "iso2": "hi",
+      "iso3": "hin",
+      "modules": {
+        "Cat": "gf-rgl/src/hindi/CatHin.gf",
+        "Grammar": "gf-rgl/src/hindi/GrammarHin.gf",
+        "Noun": "gf-rgl/src/hindi/NounHin.gf",
+        "Paradigms": "gf-rgl/src/hindi/ParadigmsHin.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxHin.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "hr": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Hrv",
+      "iso2": "hr",
+      "iso3": "hrv",
+      "modules": {
+        "Cat": "gf-rgl/src/croatian/CatHrv.gf",
+        "Grammar": "gf-rgl/src/croatian/GrammarHrv.gf",
+        "Noun": "gf-rgl/src/croatian/NounHrv.gf",
+        "Paradigms": "gf-rgl/src/croatian/ParadigmsHrv.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxHrv.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "hu": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Hun",
+      "iso2": "hu",
+      "iso3": "hun",
+      "modules": {
+        "Cat": "gf-rgl/src/hungarian/CatHun.gf",
+        "Grammar": "gf-rgl/src/hungarian/GrammarHun.gf",
+        "Noun": "gf-rgl/src/hungarian/NounHun.gf",
+        "Paradigms": "gf-rgl/src/hungarian/ParadigmsHun.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxHun.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "hy": {
+      "path": "gf-rgl/src/armenian",
+      "wiki": "Hye",
+      "iso2": "hy",
+      "iso3": "hye",
+      "modules": {
+        "Cat": "gf-rgl/src/armenian/CatHye.gf",
+        "Grammar": "gf-rgl/src/armenian/GrammarHye.gf",
+        "Noun": "gf-rgl/src/armenian/NounHye.gf",
+        "Paradigms": "gf-rgl/src/armenian/ParadigmsHye.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "ia": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Ina",
+      "iso2": "ia",
+      "iso3": "ina",
+      "modules": {
+        "Cat": "gf-rgl/src/interlingua/CatIna.gf",
+        "Grammar": "gf-rgl/src/interlingua/GrammarIna.gf",
+        "Noun": "gf-rgl/src/interlingua/NounIna.gf",
+        "Paradigms": "gf-rgl/src/interlingua/ParadigmsIna.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxIna.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "is": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Ice",
+      "iso2": "is",
+      "iso3": "ice",
+      "modules": {
+        "Cat": "gf-rgl/src/icelandic/CatIce.gf",
+        "Grammar": "gf-rgl/src/icelandic/GrammarIce.gf",
+        "Noun": "gf-rgl/src/icelandic/NounIce.gf",
+        "Paradigms": "gf-rgl/src/icelandic/ParadigmsIce.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxIce.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "it": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Ita",
+      "iso2": "it",
+      "iso3": "ita",
+      "modules": {
+        "Cat": "gf-rgl/src/italian/CatIta.gf",
+        "Grammar": "gf-rgl/src/italian/GrammarIta.gf",
+        "Noun": "gf-rgl/src/italian/NounIta.gf",
+        "Paradigms": "gf-rgl/src/italian/ParadigmsIta.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxIta.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "ja": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Jpn",
+      "iso2": "ja",
+      "iso3": "jpn",
+      "modules": {
+        "Cat": "gf-rgl/src/japanese/CatJpn.gf",
+        "Grammar": "gf-rgl/src/japanese/GrammarJpn.gf",
+        "Noun": "gf-rgl/src/japanese/NounJpn.gf",
+        "Paradigms": "gf-rgl/src/japanese/ParadigmsJpn.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxJpn.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "kam": {
+      "path": "gf-rgl/src/kikamba",
+      "wiki": "Kam",
+      "iso2": "kam",
+      "iso3": null,
+      "modules": {
+        "Cat": "gf-rgl/src/kikamba/CatKam.gf",
+        "Grammar": "gf-rgl/src/kikamba/GrammarKam.gf",
+        "Noun": "gf-rgl/src/kikamba/NounKam.gf",
+        "Paradigms": "gf-rgl/src/kikamba/ParadigmsKam.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "kk": {
+      "path": "gf-rgl/src/kazakh",
+      "wiki": "Kaz",
+      "iso2": "kk",
+      "iso3": "kaz",
+      "modules": {
+        "Cat": "gf-rgl/src/kazakh/CatKaz.gf",
+        "Grammar": "gf-rgl/src/kazakh/GrammarKaz.gf",
+        "Paradigms": "gf-rgl/src/kazakh/ParadigmsKaz.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 0,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 3,
+      "completeness": 0.6
+    },
+    "ko": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Kor",
+      "iso2": "ko",
+      "iso3": "kor",
+      "modules": {
+        "Cat": "gf-rgl/src/korean/CatKor.gf",
+        "Grammar": "gf-rgl/src/korean/GrammarKor.gf",
+        "Noun": "gf-rgl/src/korean/NounKor.gf",
+        "Paradigms": "gf-rgl/src/korean/ParadigmsKor.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxKor.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "la": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Lat",
+      "iso2": "la",
+      "iso3": "lat",
+      "modules": {
+        "Cat": "gf-rgl/src/latin/CatLat.gf",
+        "Grammar": "gf-rgl/src/latin/GrammarLat.gf",
+        "Noun": "gf-rgl/src/latin/NounLat.gf",
+        "Paradigms": "gf-rgl/src/latin/ParadigmsLat.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxLat.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "lt": {
+      "path": "gf-rgl/src/lithuanian",
+      "wiki": "Lit",
+      "iso2": "lt",
+      "iso3": "lit",
+      "modules": {
+        "Cat": "gf-rgl/src/lithuanian/CatLit.gf",
+        "Grammar": "gf-rgl/src/lithuanian/GrammarLit.gf",
+        "Noun": "gf-rgl/src/lithuanian/NounLit.gf",
+        "Paradigms": "gf-rgl/src/lithuanian/ParadigmsLit.gf",
+        "Syntax": "gf-rgl/src/lithuanian/SyntaxLit.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "lv": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Lav",
+      "iso2": "lv",
+      "iso3": "lav",
+      "modules": {
+        "Cat": "gf-rgl/src/latvian/CatLav.gf",
+        "Grammar": "gf-rgl/src/latvian/GrammarLav.gf",
+        "Noun": "gf-rgl/src/latvian/NounLav.gf",
+        "Paradigms": "gf-rgl/src/latvian/ParadigmsLav.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxLav.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "mk": {
+      "path": "gf-rgl/src/macedonian",
+      "wiki": "Mkd",
+      "iso2": "mk",
+      "iso3": "mkd",
+      "modules": {
+        "Cat": "gf-rgl/src/macedonian/CatMkd.gf",
+        "Grammar": "gf-rgl/src/macedonian/GrammarMkd.gf",
+        "Paradigms": "gf-rgl/src/macedonian/ParadigmsMkd.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 0,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 3,
+      "completeness": 0.6
+    },
+    "mn": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Mon",
+      "iso2": "mn",
+      "iso3": "mon",
+      "modules": {
+        "Cat": "gf-rgl/src/mongolian/CatMon.gf",
+        "Grammar": "gf-rgl/src/mongolian/GrammarMon.gf",
+        "Noun": "gf-rgl/src/mongolian/NounMon.gf",
+        "Paradigms": "gf-rgl/src/mongolian/ParadigmsMon.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxMon.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "ms": {
+      "path": "gf-rgl/src/api",
+      "wiki": "May",
+      "iso2": "ms",
+      "iso3": "may",
+      "modules": {
+        "Cat": "gf-rgl/src/malay/CatMay.gf",
+        "Grammar": "gf-rgl/src/malay/GrammarMay.gf",
+        "Noun": "gf-rgl/src/malay/NounMay.gf",
+        "Paradigms": "gf-rgl/src/malay/ParadigmsMay.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxMay.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "mt": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Mlt",
+      "iso2": "mt",
+      "iso3": "mlt",
+      "modules": {
+        "Cat": "gf-rgl/src/maltese/CatMlt.gf",
+        "Grammar": "gf-rgl/src/maltese/GrammarMlt.gf",
+        "Noun": "gf-rgl/src/maltese/NounMlt.gf",
+        "Paradigms": "gf-rgl/src/maltese/ParadigmsMlt.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxMlt.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "nb": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Nor",
+      "iso2": "nb",
+      "iso3": "nob",
+      "modules": {
+        "Cat": "gf-rgl/src/norwegian/CatNor.gf",
+        "Grammar": "gf-rgl/src/norwegian/GrammarNor.gf",
+        "Noun": "gf-rgl/src/norwegian/NounNor.gf",
+        "Paradigms": "gf-rgl/src/norwegian/ParadigmsNor.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxNor.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "ne": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Nep",
+      "iso2": "ne",
+      "iso3": "nep",
+      "modules": {
+        "Cat": "gf-rgl/src/nepali/CatNep.gf",
+        "Grammar": "gf-rgl/src/nepali/GrammarNep.gf",
+        "Noun": "gf-rgl/src/nepali/NounNep.gf",
+        "Paradigms": "gf-rgl/src/nepali/ParadigmsNep.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxNep.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "nl": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Dut",
+      "iso2": "nl",
+      "iso3": "dut",
+      "modules": {
+        "Cat": "gf-rgl/src/dutch/CatDut.gf",
+        "Grammar": "gf-rgl/src/dutch/GrammarDut.gf",
+        "Noun": "gf-rgl/src/dutch/NounDut.gf",
+        "Paradigms": "gf-rgl/src/dutch/ParadigmsDut.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxDut.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "nn": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Nno",
+      "iso2": "nn",
+      "iso3": "nno",
+      "modules": {
+        "Cat": "gf-rgl/src/nynorsk/CatNno.gf",
+        "Grammar": "gf-rgl/src/nynorsk/GrammarNno.gf",
+        "Noun": "gf-rgl/src/nynorsk/NounNno.gf",
+        "Paradigms": "gf-rgl/src/nynorsk/ParadigmsNno.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxNno.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "pa": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Pnb",
+      "iso2": "pa",
+      "iso3": "pan",
+      "modules": {
+        "Cat": "gf-rgl/src/punjabi/CatPnb.gf",
+        "Grammar": "gf-rgl/src/punjabi/GrammarPnb.gf",
+        "Noun": "gf-rgl/src/punjabi/NounPnb.gf",
+        "Paradigms": "gf-rgl/src/punjabi/ParadigmsPnb.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxPnb.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "pl": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Pol",
+      "iso2": "pl",
+      "iso3": "pol",
+      "modules": {
+        "Cat": "gf-rgl/src/polish/CatPol.gf",
+        "Grammar": "gf-rgl/src/polish/GrammarPol.gf",
+        "Noun": "gf-rgl/src/polish/NounPol.gf",
+        "Paradigms": "gf-rgl/src/polish/ParadigmsPol.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxPol.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "pt": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Por",
+      "iso2": "pt",
+      "iso3": "por",
+      "modules": {
+        "Cat": "gf-rgl/src/portuguese/CatPor.gf",
+        "Grammar": "gf-rgl/src/portuguese/GrammarPor.gf",
+        "Noun": "gf-rgl/src/portuguese/NounPor.gf",
+        "Paradigms": "gf-rgl/src/portuguese/ParadigmsPor.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxPor.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "ro": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Ron",
+      "iso2": "ro",
+      "iso3": "ron",
+      "modules": {
+        "Cat": "gf-rgl/src/romanian/CatRon.gf",
+        "Grammar": "gf-rgl/src/romanian/GrammarRon.gf",
+        "Noun": "gf-rgl/src/romanian/NounRon.gf",
+        "Paradigms": "gf-rgl/src/romanian/ParadigmsRon.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxRon.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "ru": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Rus",
+      "iso2": "ru",
+      "iso3": "rus",
+      "modules": {
+        "Cat": "gf-rgl/src/russian/CatRus.gf",
+        "Grammar": "gf-rgl/src/russian/GrammarRus.gf",
+        "Noun": "gf-rgl/src/russian/NounRus.gf",
+        "Paradigms": "gf-rgl/src/russian/ParadigmsRus.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxRus.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "sco": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Sco",
+      "iso2": "sco",
+      "iso3": null,
+      "modules": {
+        "Cat": "gf-rgl/src/scots/CatSco.gf",
+        "Grammar": "gf-rgl/src/scots/GrammarSco.gf",
+        "Noun": "gf-rgl/src/scots/NounSco.gf",
+        "Paradigms": "gf-rgl/src/scots/ParadigmsSco.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxSco.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "sd": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Snd",
+      "iso2": "sd",
+      "iso3": "snd",
+      "modules": {
+        "Cat": "gf-rgl/src/sindhi/CatSnd.gf",
+        "Grammar": "gf-rgl/src/sindhi/GrammarSnd.gf",
+        "Noun": "gf-rgl/src/sindhi/NounSnd.gf",
+        "Paradigms": "gf-rgl/src/sindhi/ParadigmsSnd.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxSnd.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "sk": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Slo",
+      "iso2": "sk",
+      "iso3": "slk",
+      "modules": {
+        "Cat": "gf-rgl/src/slovak/CatSlo.gf",
+        "Grammar": "gf-rgl/src/slovak/GrammarSlo.gf",
+        "Noun": "gf-rgl/src/slovak/NounSlo.gf",
+        "Paradigms": "gf-rgl/src/slovak/ParadigmsSlo.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxSlo.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "sl": {
+      "path": "gf-rgl/src/slovenian",
+      "wiki": "Slv",
+      "iso2": "sl",
+      "iso3": "slv",
+      "modules": {
+        "Cat": "gf-rgl/src/slovenian/CatSlv.gf",
+        "Grammar": "gf-rgl/src/slovenian/GrammarSlv.gf",
+        "Noun": "gf-rgl/src/slovenian/NounSlv.gf",
+        "Paradigms": "gf-rgl/src/slovenian/ParadigmsSlv.gf",
+        "Syntax": "gf-rgl/src/slovenian/SyntaxSlv.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "so": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Som",
+      "iso2": "so",
+      "iso3": "som",
+      "modules": {
+        "Cat": "gf-rgl/src/somali/CatSom.gf",
+        "Grammar": "gf-rgl/src/somali/GrammarSom.gf",
+        "Noun": "gf-rgl/src/somali/NounSom.gf",
+        "Paradigms": "gf-rgl/src/somali/ParadigmsSom.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxSom.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "sq": {
+      "path": "gf-rgl/src/albanian",
+      "wiki": "Sqi",
+      "iso2": "sq",
+      "iso3": "sqi",
+      "modules": {
+        "Cat": "gf-rgl/src/albanian/CatSqi.gf",
+        "Grammar": "gf-rgl/src/albanian/GrammarSqi.gf",
+        "Noun": "gf-rgl/src/albanian/NounSqi.gf",
+        "Paradigms": "gf-rgl/src/albanian/ParadigmsSqi.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "sv": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Swe",
+      "iso2": "sv",
+      "iso3": "swe",
+      "modules": {
+        "Cat": "gf-rgl/src/swedish/CatSwe.gf",
+        "Grammar": "gf-rgl/src/swedish/GrammarSwe.gf",
+        "Noun": "gf-rgl/src/swedish/NounSwe.gf",
+        "Paradigms": "gf-rgl/src/swedish/ParadigmsSwe.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxSwe.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "sw": {
+      "path": "gf-rgl/src/swahili",
+      "wiki": "Swa",
+      "iso2": "sw",
+      "iso3": "swa",
+      "modules": {
+        "Cat": "gf-rgl/src/swahili/CatSwa.gf",
+        "Grammar": "gf-rgl/src/swahili/GrammarSwa.gf",
+        "Noun": "gf-rgl/src/swahili/NounSwa.gf",
+        "Paradigms": "gf-rgl/src/swahili/ParadigmsSwa.gf",
+        "Syntax": "gf-rgl/src/swahili/SyntaxSwa.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "ta": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Tam",
+      "iso2": "ta",
+      "iso3": "tam",
+      "modules": {
+        "Cat": "gf-rgl/src/tamil/CatTam.gf",
+        "Grammar": "gf-rgl/src/tamil/GrammarTam.gf",
+        "Noun": "gf-rgl/src/tamil/NounTam.gf",
+        "Paradigms": "gf-rgl/src/tamil/ParadigmsTam.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxTam.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "te": {
+      "path": "gf-rgl/src/telugu",
+      "wiki": "Tel",
+      "iso2": "te",
+      "iso3": "tel",
+      "modules": {
+        "Cat": "gf-rgl/src/telugu/CatTel.gf",
+        "Grammar": "gf-rgl/src/telugu/GrammarTel.gf",
+        "Noun": "gf-rgl/src/telugu/NounTel.gf",
+        "Paradigms": "gf-rgl/src/telugu/ParadigmsTel.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "th": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Tha",
+      "iso2": "th",
+      "iso3": "tha",
+      "modules": {
+        "Cat": "gf-rgl/src/thai/CatTha.gf",
+        "Grammar": "gf-rgl/src/thai/GrammarTha.gf",
+        "Noun": "gf-rgl/src/thai/NounTha.gf",
+        "Paradigms": "gf-rgl/src/thai/ParadigmsTha.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxTha.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "tr": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Tur",
+      "iso2": "tr",
+      "iso3": "tur",
+      "modules": {
+        "Cat": "gf-rgl/src/turkish/CatTur.gf",
+        "Grammar": "gf-rgl/src/turkish/GrammarTur.gf",
+        "Noun": "gf-rgl/src/turkish/NounTur.gf",
+        "Paradigms": "gf-rgl/src/turkish/ParadigmsTur.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxTur.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "uk": {
+      "path": "gf-rgl/src/ukrainian",
+      "wiki": "Ukr",
+      "iso2": "uk",
+      "iso3": "ukr",
+      "modules": {
+        "Cat": "gf-rgl/src/ukrainian/CatUkr.gf",
+        "Grammar": "gf-rgl/src/ukrainian/GrammarUkr.gf",
+        "Noun": "gf-rgl/src/ukrainian/NounUkr.gf",
+        "Paradigms": "gf-rgl/src/ukrainian/ParadigmsUkr.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    },
+    "ur": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Urd",
+      "iso2": "ur",
+      "iso3": "urd",
+      "modules": {
+        "Cat": "gf-rgl/src/urdu/CatUrd.gf",
+        "Grammar": "gf-rgl/src/urdu/GrammarUrd.gf",
+        "Noun": "gf-rgl/src/urdu/NounUrd.gf",
+        "Paradigms": "gf-rgl/src/urdu/ParadigmsUrd.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxUrd.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "zh": {
+      "path": "gf-rgl/src/api",
+      "wiki": "Chi",
+      "iso2": "zh",
+      "iso3": "chi",
+      "modules": {
+        "Cat": "gf-rgl/src/chinese/CatChi.gf",
+        "Grammar": "gf-rgl/src/chinese/GrammarChi.gf",
+        "Noun": "gf-rgl/src/chinese/NounChi.gf",
+        "Paradigms": "gf-rgl/src/chinese/ParadigmsChi.gf",
+        "Syntax": "gf-rgl/src/api/SyntaxChi.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 10
+      },
+      "module_count": 5,
+      "completeness": 1.0
+    },
+    "zu": {
+      "path": "gf-rgl/src/zulu",
+      "wiki": "Zul",
+      "iso2": "zu",
+      "iso3": "zul",
+      "modules": {
+        "Cat": "gf-rgl/src/zulu/CatZul.gf",
+        "Grammar": "gf-rgl/src/zulu/GrammarZul.gf",
+        "Noun": "gf-rgl/src/zulu/NounZul.gf",
+        "Paradigms": "gf-rgl/src/zulu/ParadigmsZul.gf"
+      },
+      "blocks": {
+        "CAT": 10,
+        "NOUN": 10,
+        "PARA": 10,
+        "GRAM": 10,
+        "SYN": 0
+      },
+      "module_count": 4,
+      "completeness": 0.8
+    }
+  },
+  "families": [
+    "abstract",
+    "abstract_ext",
+    "abstract_to_api",
+    "bantu",
+    "common",
+    "demo",
+    "egekusii",
+    "exper",
+    "frequency",
+    "grammar_ext",
+    "greenlandic",
+    "hindustani",
+    "infinitives",
+    "lexica",
+    "libraryBrowser",
+    "morphodict",
+    "prelude",
+    "romance",
+    "scandinavian",
+    "src",
+    "stemmed",
+    "sysu",
+    "tagged",
+    "TEMPLATE",
+    "wiktionary"
+  ]
+}

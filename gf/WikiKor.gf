@@ -1,1 +1,8 @@
-concrete WikiKor of AbstractWiki = WikiI with (Syntax = SyntaxKor) ** open SyntaxKor, ParadigmsKor in { flags coding = utf8 ; };
+concrete WikiKor of AbstractWiki = open SyntaxKor, ParadigmsKor in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}

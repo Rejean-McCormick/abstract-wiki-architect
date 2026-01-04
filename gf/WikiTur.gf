@@ -1,1 +1,8 @@
-concrete WikiTur of AbstractWiki = WikiI with (Syntax = SyntaxTur) ** open SyntaxTur, ParadigmsTur in { flags coding = utf8 ; };
+concrete WikiTur of AbstractWiki = open SyntaxTur, ParadigmsTur in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}

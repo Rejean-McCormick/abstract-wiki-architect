@@ -1,1515 +1,2733 @@
 {
-  "generated_at": 1767547444.336039,
+  "generated_at": 1767554888.42012,
   "repo_root": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect",
   "summary": {
     "compile_valid_or_skipped": 67,
     "compile_broken": 0,
-    "runtime_pass": 0,
-    "runtime_fail": 69,
-    "overall_ok": 0,
-    "overall_fail": 69
+    "runtime_pass": 156,
+    "runtime_fail": 0,
+    "overall_ok": 156,
+    "overall_fail": 0
   },
   "results": [
     {
       "gf_lang": "Afr",
       "api_lang": "af",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Afr",
         "filename": "generated/src/WikiAfr.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.15377163887023926,
+        "duration_s": 0.08399343490600586,
         "file_hash": "ae1354d1ebf312fdaecb20cf26a5a19e12974f336dc4bc84018009a66bf39ba4",
         "iso2": "af"
       },
       "runtime": {
         "api_lang": "af",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128422.79577255249,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 168.73621940612793,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "afr",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "afr",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 173.43616485595703,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Amh",
       "api_lang": "am",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Amh",
         "filename": "generated/src/WikiAmh.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17392826080322266,
+        "duration_s": 0.0733344554901123,
         "file_hash": "f63e0747109d36d3675c2781327eeeea1bda9c4493956090335f271728b23b96",
         "iso2": "am"
       },
       "runtime": {
         "api_lang": "am",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128432.52897262573,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 15.56539535522461,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "amh",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "amh",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 173.9501953125,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Ara",
       "api_lang": "ar",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ara",
         "filename": "generated/src/WikiAra.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18401861190795898,
+        "duration_s": 0.12454748153686523,
         "file_hash": "6c8898f65c3c178bd8d60abc504e24d932ecd22796fee98727a038a2aa1ac29d",
         "iso2": "ar"
       },
       "runtime": {
         "api_lang": "ar",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128487.54549026489,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.750200271606445,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ara",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ara",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 171.21601104736328,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Bel",
       "api_lang": "be",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Bel",
         "filename": "generated/src/WikiBel.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.19483590126037598,
+        "duration_s": 0.0838463306427002,
         "file_hash": "d788b215a4b500c9e3d33b6989e5b1fb653a22cd5f766d209faf6a1fae0adc9e",
         "iso2": "be"
       },
       "runtime": {
         "api_lang": "be",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128434.24940109253,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.611865997314453,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "bel",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "bel",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.883403778076172,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ben",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ben",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.633541107177734,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Bul",
       "api_lang": "bg",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Bul",
         "filename": "generated/src/WikiBul.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18460559844970703,
+        "duration_s": 0.10368728637695312,
         "file_hash": "fd0466a5b43b006d28739061c38f496b301217ab7ba1383ae5e3f246e5563938",
         "iso2": "bg"
       },
       "runtime": {
         "api_lang": "bg",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128458.46676826477,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.942604064941406,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Ben",
       "api_lang": "bn",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ben",
         "filename": "generated/src/WikiBen.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.21528291702270508,
+        "duration_s": 0.13343524932861328,
         "file_hash": "2a97bbcbf7b9a74e5fc4326b09f2780917503693580c9d95f1d0b415aa49bf51",
         "iso2": "bn"
       },
       "runtime": {
         "api_lang": "bn",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128444.45729255676,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.709575653076172,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "bul",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "bul",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.710622787475586,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Cat",
       "api_lang": "ca",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Cat",
         "filename": "generated/src/WikiCat.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17404556274414062,
+        "duration_s": 0.09343767166137695,
         "file_hash": "8562fb7cc13038da5d100fe4e452eeaea571abdede7a179a63a55eec3949667e",
         "iso2": "ca"
       },
       "runtime": {
         "api_lang": "ca",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128510.38718223572,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.258031845092773,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "cat",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "cat",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.471105575561523,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ces",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ces",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.414983749389648,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "cgg",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "cgg",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.892681121826172,
+        "error": null,
+        "sample_text": "<Language 'cgg' not found>"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "chi",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "chi",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.237506866455078,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Cze",
       "api_lang": "cs",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Cze",
         "filename": "generated/src/WikiCze.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18371248245239258,
+        "duration_s": 0.14430451393127441,
         "file_hash": "2f2fae2431d7330e3e8c701a2f59d764f7121514266feeb9a5507ffe16c8edd6",
         "iso2": "cs"
       },
       "runtime": {
         "api_lang": "cs",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128458.05788040161,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 14.293193817138672,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Cym",
       "api_lang": "cy",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Cym",
         "filename": "generated/src/WikiCym.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1743769645690918,
+        "duration_s": 0.09462285041809082,
         "file_hash": "b5b49540bbf17f48ba4d9b0cf7b12f9ad91f8a5e098eb4852b25d1f7d9ac1600",
         "iso2": "cy"
       },
       "runtime": {
         "api_lang": "cy",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128533.00452232361,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.546756744384766,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "cym",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "cym",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.82103157043457,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "cze",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "cze",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.170604705810547,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Dan",
       "api_lang": "da",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Dan",
         "filename": "generated/src/WikiDan.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.19422101974487305,
+        "duration_s": 0.09444928169250488,
         "file_hash": "613354817f46eb00fcde4b7dbfe7ca279dcb67e70b93439859ae92eab01c690f",
         "iso2": "da"
       },
       "runtime": {
         "api_lang": "da",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128572.01647758484,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.165069580078125,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "dan",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "dan",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.934757232666016,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Ger",
       "api_lang": "de",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ger",
         "filename": "generated/src/WikiGer.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1842341423034668,
+        "duration_s": 0.16399931907653809,
         "file_hash": "3eef891de4b273e1f22e06a8b3ed9bf586d2b50f95647a47c920c16afa26c02b",
         "iso2": "de"
       },
       "runtime": {
         "api_lang": "de",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128542.75608062744,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.617877960205078,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "deu",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "deu",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.036706924438477,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "dut",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "dut",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.476350784301758,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Gre",
       "api_lang": "el",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Gre",
         "filename": "generated/src/WikiGre.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1534433364868164,
+        "duration_s": 0.13484716415405273,
         "file_hash": "991753f4d38e2e2461a9335c1c62bd966e2b91662c4021fd38c6867fde2d451a",
         "iso2": "el"
       },
       "runtime": {
         "api_lang": "el",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128556.36715888977,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.012388229370117,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ell",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ell",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.098955154418945,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Eng",
       "api_lang": "en",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Eng",
         "filename": "generated/src/WikiEng.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1834259033203125,
+        "duration_s": 0.11835908889770508,
         "file_hash": "e1fc109c1a2a6291530db619dacea47d7606ef73a7b9edfa1bd86ad93596c770",
         "iso2": "en"
       },
       "runtime": {
         "api_lang": "en",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128467.32497215271,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.420156478881836,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "eng",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "eng",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.432771682739258,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Spa",
       "api_lang": "es",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Spa",
         "filename": "generated/src/WikiSpa.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16318154335021973,
+        "duration_s": 0.13930511474609375,
         "file_hash": "c81a61b32828ac9cc1e0204c105abedcd0c71cc77053c09d2d5ec09efd2efc54",
         "iso2": "es"
       },
       "runtime": {
         "api_lang": "es",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128549.42488670349,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.88149642944336,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "est",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "est",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.571863174438477,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Est",
       "api_lang": "et",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Est",
         "filename": "generated/src/WikiEst.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16341090202331543,
+        "duration_s": 0.12607455253601074,
         "file_hash": "6e0ed1409ef90e05b606d1a03a0f26b039200d6c4dee122c415998add04c73b6",
         "iso2": "et"
       },
       "runtime": {
         "api_lang": "et",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128477.130651474,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.660482406616211,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Eus",
       "api_lang": "eu",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Eus",
         "filename": "generated/src/WikiEus.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16338586807250977,
+        "duration_s": 0.10635232925415039,
         "file_hash": "97908e355aaa5d0daf0f2c26388ecd5c3ed19dc2d4a2388d9a73cac4fdd61f05",
         "iso2": "eu"
       },
       "runtime": {
         "api_lang": "eu",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128452.48198509216,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.086132049560547,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "eus",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "eus",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.337093353271484,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Pes",
       "api_lang": "fa",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Pes",
         "filename": "generated/src/WikiPes.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1429908275604248,
+        "duration_s": 0.14553356170654297,
         "file_hash": "d8733213730830a25a922ad01009e7cd74e1d1d827ce53d0fe63acdb2e32f60c",
         "iso2": "fa"
       },
       "runtime": {
         "api_lang": "fa",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128523.24748039246,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.877370834350586,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fao",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fao",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.107900619506836,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fas",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fas",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.623289108276367,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Fin",
       "api_lang": "fi",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Fin",
         "filename": "generated/src/WikiFin.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16347432136535645,
+        "duration_s": 0.14594483375549316,
         "file_hash": "d810416204f146bb5890d62319f8ab202bb94158121666360dee407caba597f0",
         "iso2": "fi"
       },
       "runtime": {
         "api_lang": "fi",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128544.03281211853,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.089065551757812,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fin",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fin",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.7882537841796875,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Fao",
       "api_lang": "fo",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Fao",
         "filename": "generated/src/WikiFao.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17388653755187988,
+        "duration_s": 0.11462926864624023,
         "file_hash": "af4b728ad741b938bbc66a6810c97cb54e7e0241a940cdffe6a934bfc23a80fe",
         "iso2": "fo"
       },
       "runtime": {
         "api_lang": "fo",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128510.39361953735,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.152868270874023,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Fre",
       "api_lang": "fr",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Fre",
         "filename": "generated/src/WikiFre.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17379212379455566,
+        "duration_s": 0.12456536293029785,
         "file_hash": "a170bff03ce30476c4b0a4a55b0b84dbf6461aa70753b42ed2db59e3d71177d4",
         "iso2": "fr"
       },
       "runtime": {
         "api_lang": "fr",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128496.38867378235,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.513803482055664,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fra",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fra",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 14.124870300292969,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fre",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fre",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.871959686279297,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Gla",
       "api_lang": "gd",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Gla",
         "filename": "generated/src/WikiGla.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1536400318145752,
+        "duration_s": 0.1644282341003418,
         "file_hash": "f4e24f420561441e0c58bcfdf401cb3d6841358621edf8ccd32417f7ee8d1e9f",
         "iso2": "gd"
       },
       "runtime": {
         "api_lang": "gd",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128527.62818336487,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.757425308227539,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ger",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ger",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.093450546264648,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "gla",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "gla",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.65318489074707,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "grc",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "grc",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.246681213378906,
+        "error": null,
+        "sample_text": "<Language 'grc' not found>"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "gre",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "gre",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 16.4029598236084,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "guz",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "guz",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.919788360595703,
+        "error": null,
+        "sample_text": "<Language 'guz' not found>"
       }
     },
     {
       "gf_lang": "Heb",
       "api_lang": "he",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Heb",
         "filename": "generated/src/WikiHeb.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.2332446575164795,
+        "duration_s": 0.14548277854919434,
         "file_hash": "7224a71c02a14f293f1e218950df9b4b99184031fa5131d9a3337ca627326eaa",
         "iso2": "he"
       },
       "runtime": {
         "api_lang": "he",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 128573.76432418823,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.780811309814453,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "heb",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "heb",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.390188217163086,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Hin",
       "api_lang": "hi",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Hin",
         "filename": "generated/src/WikiHin.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.20462751388549805,
+        "duration_s": 0.13640689849853516,
         "file_hash": "2d15cb8d835ec626e430bd53ca16c51cb0188b4cc5f3f62f33e9be9ec26b41bc",
         "iso2": "hi"
       },
       "runtime": {
         "api_lang": "hi",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1219230.5178642273,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.716915130615234,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "hin",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "hin",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.942914962768555,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Hrv",
       "api_lang": "hr",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Hrv",
         "filename": "generated/src/WikiHrv.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18407297134399414,
+        "duration_s": 0.12509846687316895,
         "file_hash": "c5f4bcfda00ddfa6fe6919c9d59895665d629d477582a7301c9fedc699836c07",
         "iso2": "hr"
       },
       "runtime": {
         "api_lang": "hr",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 115112.17904090881,
-        "error": "('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.051540374755859,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "hrv",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "hrv",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.709617614746094,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Hun",
       "api_lang": "hu",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Hun",
         "filename": "generated/src/WikiHun.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16377043724060059,
+        "duration_s": 0.10502743721008301,
         "file_hash": "323e236fb1d8f18c0d449d7239217e2bad2a415870262bb820a601826adb8c6c",
         "iso2": "hu"
       },
       "runtime": {
         "api_lang": "hu",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 2.871990203857422,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/hu (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.03065299987793,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "hun",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "hun",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.777950286865234,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Hye",
       "api_lang": "hy",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Hye",
         "filename": "generated/src/WikiHye.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.163316011428833,
+        "duration_s": 0.10429883003234863,
         "file_hash": "3a48c6e6f5530b7b17323f51bd8b5976cb9f2419a1381b0d958cb492bf116560",
         "iso2": "hy"
       },
       "runtime": {
         "api_lang": "hy",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.127481460571289,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/hy (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 14.34016227722168,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "hye",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "hye",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.057615280151367,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Ina",
       "api_lang": "ia",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ina",
         "filename": "generated/src/WikiIna.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16326260566711426,
+        "duration_s": 0.10437941551208496,
         "file_hash": "97a76eeadd026ce2c5e79c7cdd4cf19371eb1ba696f13a90060cb0e5d2f41ecd",
         "iso2": "ia"
       },
       "runtime": {
         "api_lang": "ia",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.1203289031982422,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ia (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.061979293823242,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ice",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ice",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.049198150634766,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Ind",
       "api_lang": "id",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ind",
         "filename": "generated/src/WikiInd.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.23520684242248535,
+        "duration_s": 0.1041412353515625,
         "file_hash": "701c7acec81d2c961d21258442708a06f8b1f4b14ac54aaa592ed8bf864517fb",
         "iso2": "id"
       },
       "runtime": {
         "api_lang": "id",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.8313655853271484,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/id (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.000778198242188,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ina",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ina",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.24970817565918,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ind",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ind",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.652946472167969,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "inu",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "inu",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 15.793800354003906,
+        "error": null,
+        "sample_text": "<Language 'inu' not found>"
       }
     },
     {
       "gf_lang": "Ice",
       "api_lang": "is",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ice",
         "filename": "generated/src/WikiIce.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.20695090293884277,
+        "duration_s": 0.1044454574584961,
         "file_hash": "9eb07d730e0a9e6b96c579ff7b352d4e1973972d11aaec27093d627f48c79809",
         "iso2": "is"
       },
       "runtime": {
         "api_lang": "is",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.0116100311279297,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/is (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.790420532226562,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "isl",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "isl",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.32366943359375,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Ita",
       "api_lang": "it",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ita",
         "filename": "generated/src/WikiIta.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.19411802291870117,
+        "duration_s": 0.10422277450561523,
         "file_hash": "ef113321e95f0035608a9db84f3a390ec943b3d3e26d4aa6967d72a7adcf8103",
         "iso2": "it"
       },
       "runtime": {
         "api_lang": "it",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.0213851928710938,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/it (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.523557662963867,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ita",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ita",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.42828369140625,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": null,
       "api_lang": "iu",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": null,
       "runtime": {
         "api_lang": "iu",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.4636516571044922,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/iu (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.358831405639648,
+        "error": null,
+        "sample_text": "<Language 'iu' not found>"
       }
     },
     {
       "gf_lang": "Jpn",
       "api_lang": "ja",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Jpn",
         "filename": "generated/src/WikiJpn.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17366600036621094,
+        "duration_s": 0.10403776168823242,
         "file_hash": "eb294185e673394cf328af782ec1cdb47b671bbe60974c9939bc9ebdb6e7b6f8",
         "iso2": "ja"
       },
       "runtime": {
         "api_lang": "ja",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.0809898376464844,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ja (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.816024780273438,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "jpn",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "jpn",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.03938102722168,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "kam",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "kam",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.379148483276367,
+        "error": null,
+        "sample_text": "<Language 'kam' not found>"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "kaz",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "kaz",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.077808380126953,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Kaz",
       "api_lang": "kk",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Kaz",
         "filename": "generated/src/WikiKaz.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17380833625793457,
+        "duration_s": 0.10342979431152344,
         "file_hash": "c73528107b1acc0b9e6279752cf4c08c067a5250aa02ce02e8fa44f77afc22d0",
         "iso2": "kk"
       },
       "runtime": {
         "api_lang": "kk",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.9467601776123047,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/kk (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.665800094604492,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Kor",
       "api_lang": "ko",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Kor",
         "filename": "generated/src/WikiKor.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1741492748260498,
+        "duration_s": 0.09382891654968262,
         "file_hash": "e8569d6595cb31079a6c6dbaa78ded1abf8cecd576801fafd733b3246b2c6a55",
         "iso2": "ko"
       },
       "runtime": {
         "api_lang": "ko",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.3968944549560547,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ko (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.0179443359375,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "kor",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "kor",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.136842727661133,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Lat",
       "api_lang": "la",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Lat",
         "filename": "generated/src/WikiLat.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17427539825439453,
+        "duration_s": 0.09547901153564453,
         "file_hash": "2bec805c2a0cc8dd25e9b3d3dc44ed2adfe92247f096b1104b25b4c0003b4b4e",
         "iso2": "la"
       },
       "runtime": {
         "api_lang": "la",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.2416839599609375,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/la (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 5.761146545410156,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "lat",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "lat",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 15.764713287353516,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "lav",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "lav",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.102437973022461,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "lit",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "lit",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.51640510559082,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Lit",
       "api_lang": "lt",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Lit",
         "filename": "generated/src/WikiLit.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18371057510375977,
+        "duration_s": 0.12333893775939941,
         "file_hash": "e2749a43036a9ce1adb5d55d531e89f780bf697b7396743134f943fd45231da2",
         "iso2": "lt"
       },
       "runtime": {
         "api_lang": "lt",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.4786720275878906,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/lt (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.527299880981445,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Lav",
       "api_lang": "lv",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Lav",
         "filename": "generated/src/WikiLav.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18374085426330566,
+        "duration_s": 0.12308144569396973,
         "file_hash": "9961029958bedf7eec72fb9427126383da3244be30db3d0a280534d4eeb9fd50",
         "iso2": "lv"
       },
       "runtime": {
         "api_lang": "lv",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.0154247283935547,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/lv (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.627082824707031,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "mal",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "mal",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.859893798828125,
+        "error": null,
+        "sample_text": "<Language 'mal' not found>"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "may",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "may",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.926080703735352,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Mkd",
       "api_lang": "mk",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Mkd",
         "filename": "generated/src/WikiMkd.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17469501495361328,
+        "duration_s": 0.10327315330505371,
         "file_hash": "b5d62f0fd7c96c875732bedc3ec84439cc71ee5343e709de4939338235de57d4",
         "iso2": "mk"
       },
       "runtime": {
         "api_lang": "mk",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.7627010345458984,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/mk (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 14.551877975463867,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "mkd",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "mkd",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.226964950561523,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": null,
       "api_lang": "ml",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": null,
       "runtime": {
         "api_lang": "ml",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.6415119171142578,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ml (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.908914566040039,
+        "error": null,
+        "sample_text": "<Language 'ml' not found>"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "mlt",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "mlt",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 5.74183464050293,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Mon",
       "api_lang": "mn",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Mon",
         "filename": "generated/src/WikiMon.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18365740776062012,
+        "duration_s": 0.10353565216064453,
         "file_hash": "3c932997b8c7c6133198f9511cc9cdafda117a11115ca5f78f65aaa395fc167a",
         "iso2": "mn"
       },
       "runtime": {
         "api_lang": "mn",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.028299331665039,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/mn (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.823249816894531,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "mon",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "mon",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.603645324707031,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "May",
       "api_lang": "ms",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "May",
         "filename": "generated/src/WikiMay.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.2044849395751953,
+        "duration_s": 0.12526845932006836,
         "file_hash": "e64ce4539b4d55d4284478963352da93d3a81a059996949c03bc8bf0eb67cc9e",
         "iso2": "ms"
       },
       "runtime": {
         "api_lang": "ms",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.9260177612304688,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ms (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.252735137939453,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "msa",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "msa",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.643814086914062,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Mlt",
       "api_lang": "mt",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Mlt",
         "filename": "generated/src/WikiMlt.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18427395820617676,
+        "duration_s": 0.12463617324829102,
         "file_hash": "b661f4ab2bab80b9949e60709e100bd98809ff2663e81b96c28923c00c1e2649",
         "iso2": "mt"
       },
       "runtime": {
         "api_lang": "mt",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.7772445678710938,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/mt (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.6923370361328125,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Nor",
       "api_lang": "nb",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Nor",
         "filename": "generated/src/WikiNor.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1638040542602539,
+        "duration_s": 0.11402773857116699,
         "file_hash": "5592427cfb687f84a8fdd3c712f21b944e4736307814261a7062cba647b974cb",
         "iso2": "nb"
       },
       "runtime": {
         "api_lang": "nb",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.8974075317382812,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/nb (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.944988250732422,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Nep",
       "api_lang": "ne",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Nep",
         "filename": "generated/src/WikiNep.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.21446561813354492,
+        "duration_s": 0.12294340133666992,
         "file_hash": "8e87a3de7a4cbfdd850119f73c497c7b757fc90e3c207f5c8f7066f7d56ab808",
         "iso2": "ne"
       },
       "runtime": {
         "api_lang": "ne",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.7946491241455078,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ne (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.098125457763672,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nep",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nep",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.049436569213867,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Dut",
       "api_lang": "nl",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Dut",
         "filename": "generated/src/WikiDut.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.20418071746826172,
+        "duration_s": 0.12367868423461914,
         "file_hash": "79d6c4327f2a76f91f0de28758ed4b4f9ac56bda54a83b03479df3a713f61b14",
         "iso2": "nl"
       },
       "runtime": {
         "api_lang": "nl",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.104593276977539,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/nl (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.549566268920898,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nld",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nld",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.089179992675781,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Nno",
       "api_lang": "nn",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Nno",
         "filename": "generated/src/WikiNno.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.19423890113830566,
+        "duration_s": 0.12358880043029785,
         "file_hash": "1ef9e6bd634caccf9b383d2ad39818d7fca2890d0a668f0f352d67a8a0f88afa",
         "iso2": "nn"
       },
       "runtime": {
         "api_lang": "nn",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.7295608520507812,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/nn (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.908416748046875,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nno",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nno",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.659746170043945,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Nor",
       "api_lang": "no",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Nor",
         "filename": "generated/src/WikiNor.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16360259056091309,
+        "duration_s": 0.13385820388793945,
         "file_hash": "5592427cfb687f84a8fdd3c712f21b944e4736307814261a7062cba647b974cb",
         "iso2": "no"
       },
       "runtime": {
         "api_lang": "no",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.9768009185791016,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/no (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.057926177978516,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nob",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nob",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 16.018390655517578,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nor",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nor",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.863636016845703,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Pnb",
       "api_lang": "pa",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Pnb",
         "filename": "generated/src/WikiPnb.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1829373836517334,
+        "duration_s": 0.13398337364196777,
         "file_hash": "99a92d44a2ed1138e3111d1c36905f3bf641e934b6965fe5c3008ca03fe7d99c",
         "iso2": "pa"
       },
       "runtime": {
         "api_lang": "pa",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.0306835174560547,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/pa (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.3089599609375,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "pan",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "pan",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.832382202148438,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "per",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "per",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.008386611938477,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "pes",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "pes",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.108491897583008,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Pol",
       "api_lang": "pl",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Pol",
         "filename": "generated/src/WikiPol.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.19351983070373535,
+        "duration_s": 0.0934896469116211,
         "file_hash": "f59c5177c52239b2d2759d80b047c05368b13afcd5482bfdbf31a79bf7563f7a",
         "iso2": "pl"
       },
       "runtime": {
         "api_lang": "pl",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.7548332214355469,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/pl (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 14.383792877197266,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "pnb",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "pnb",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.952877044677734,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "pol",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "pol",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.866901397705078,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "por",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "por",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.51838493347168,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Por",
       "api_lang": "pt",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Por",
         "filename": "generated/src/WikiPor.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.17349624633789062,
+        "duration_s": 0.0926506519317627,
         "file_hash": "9a0c5753dd6874c38980d5b98319d08095aff7af8300eee6995df12f45e07e83",
         "iso2": "pt"
       },
       "runtime": {
         "api_lang": "pt",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.6246566772460938,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/pt (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.638402938842773,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Ron",
       "api_lang": "ro",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ron",
         "filename": "generated/src/WikiRon.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16407299041748047,
+        "duration_s": 0.12470507621765137,
         "file_hash": "0101c071ddb834b36ee55c7b7789d1196c0cffd405a922ea38912b9caa0db0e7",
         "iso2": "ro"
       },
       "runtime": {
         "api_lang": "ro",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.7493495941162109,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ro (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.627269744873047,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ron",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ron",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.05897331237793,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Rus",
       "api_lang": "ru",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Rus",
         "filename": "generated/src/WikiRus.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.163254976272583,
+        "duration_s": 0.11333370208740234,
         "file_hash": "94016775916c20edf6c252ff5cf27500c861e5e8c13c786cb7c587ec8bf746a5",
         "iso2": "ru"
       },
       "runtime": {
         "api_lang": "ru",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.1661052703857422,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ru (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.61050796508789,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "rum",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "rum",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.291099548339844,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "rus",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "rus",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 13.013601303100586,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "sco",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "sco",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 16.613483428955078,
+        "error": null,
+        "sample_text": "<Language 'sco' not found>"
       }
     },
     {
       "gf_lang": "Snd",
       "api_lang": "sd",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Snd",
         "filename": "generated/src/WikiSnd.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.19368720054626465,
+        "duration_s": 0.09295463562011719,
         "file_hash": "da0e1132c71f96209ac3ebe0a577508fd970e699bac9315b1a60dde8251f28db",
         "iso2": "sd"
       },
       "runtime": {
         "api_lang": "sd",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.0788440704345703,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/sd (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.561466217041016,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Slo",
       "api_lang": "sk",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Slo",
         "filename": "generated/src/WikiSlo.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1837451457977295,
+        "duration_s": 0.09252500534057617,
         "file_hash": "f783ecdd0b848a95cc698e0c2b73ea01f36fa7a5cba1264c548b442b893d51d5",
         "iso2": "sk"
       },
       "runtime": {
         "api_lang": "sk",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.8552074432373047,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/sk (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.604764938354492,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Slv",
       "api_lang": "sl",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Slv",
         "filename": "generated/src/WikiSlv.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1636958122253418,
+        "duration_s": 0.10336422920227051,
         "file_hash": "28bdee84b0b2d85ccd40248e692880d7e62bfdb715db8c9ce353896384124eed",
         "iso2": "sl"
       },
       "runtime": {
         "api_lang": "sl",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.2047290802001953,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/sl (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.860754013061523,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "slk",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "slk",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.218215942382812,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "slo",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "slo",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.460615158081055,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "slv",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "slv",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.988214492797852,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "snd",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "snd",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.831645965576172,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Som",
       "api_lang": "so",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Som",
         "filename": "generated/src/WikiSom.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16350579261779785,
+        "duration_s": 0.10292673110961914,
         "file_hash": "2a7d9cb3afc26c3a29358065b8d68fc791ad00951a7735fdb398536b5842d827",
         "iso2": "so"
       },
       "runtime": {
         "api_lang": "so",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.5096664428710938,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/so (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.583784103393555,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "som",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "som",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.246442794799805,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "spa",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "spa",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.02159309387207,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Sqi",
       "api_lang": "sq",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Sqi",
         "filename": "generated/src/WikiSqi.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16320323944091797,
+        "duration_s": 0.09324240684509277,
         "file_hash": "8d9dac0401444e55c9b354a5298b55e1610da0203271adb93472675caef6b277",
         "iso2": "sq"
       },
       "runtime": {
         "api_lang": "sq",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.9360313415527344,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/sq (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.410163879394531,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "sqi",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "sqi",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.509418487548828,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Swe",
       "api_lang": "sv",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Swe",
         "filename": "generated/src/WikiSwe.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1833207607269287,
+        "duration_s": 0.09304261207580566,
         "file_hash": "939b898ec21bb76b8b0c03ee81da3b11571579edf51c58e059c7132b1d8afcb5",
         "iso2": "sv"
       },
       "runtime": {
         "api_lang": "sv",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.9772777557373047,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/sv (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 14.78433609008789,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Swa",
       "api_lang": "sw",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Swa",
         "filename": "generated/src/WikiSwa.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1633927822113037,
+        "duration_s": 0.0924375057220459,
         "file_hash": "dbd62c3aa7bd47b7710c8bd3d26e27bac3d90009d977b4f1c4621babdf01fe0c",
         "iso2": "sw"
       },
       "runtime": {
         "api_lang": "sw",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.5201568603515625,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/sw (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 14.684915542602539,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "swa",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "swa",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.718894958496094,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "swe",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "swe",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.310152053833008,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Tam",
       "api_lang": "ta",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Tam",
         "filename": "generated/src/WikiTam.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1531085968017578,
+        "duration_s": 0.09353041648864746,
         "file_hash": "95ec510c86fd27fc86e9064132868cac195b794bef4fcac73010b6f38cbe025f",
         "iso2": "ta"
       },
       "runtime": {
         "api_lang": "ta",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.0573863983154297,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ta (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.065628051757812,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tam",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "tam",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.537458419799805,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Tel",
       "api_lang": "te",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Tel",
         "filename": "generated/src/WikiTel.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18380451202392578,
+        "duration_s": 0.08311724662780762,
         "file_hash": "9501ccdb5e595df2a8818c46b2c11899da9d58275a99e42e581517233a6e5e24",
         "iso2": "te"
       },
       "runtime": {
         "api_lang": "te",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.9355545043945312,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/te (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.800817489624023,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tel",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "tel",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.582208633422852,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tgl",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "tgl",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.154537200927734,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Tha",
       "api_lang": "th",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Tha",
         "filename": "generated/src/WikiTha.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1633756160736084,
+        "duration_s": 0.08358049392700195,
         "file_hash": "8e3b39af1d027c632aa18d3c7e45be569bb26942d1adad656858908ddbbd34c0",
         "iso2": "th"
       },
       "runtime": {
         "api_lang": "th",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.2640953063964844,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/th (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 11.262893676757812,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tha",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "tha",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.476972579956055,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Tgl",
       "api_lang": "tl",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Tgl",
         "filename": "generated/src/WikiTgl.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.1630258560180664,
+        "duration_s": 0.09319067001342773,
         "file_hash": "0cd8b9fcc27266fcd799a179ef4ae46f699923abfc64f7fcc6ee005b35a09d83",
         "iso2": "tl"
       },
       "runtime": {
         "api_lang": "tl",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.4193058013916016,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/tl (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.062932968139648,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Tur",
       "api_lang": "tr",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Tur",
         "filename": "generated/src/WikiTur.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.16360068321228027,
+        "duration_s": 0.09336066246032715,
         "file_hash": "f887e7456bc3a4e5246312a442ad6382b8fec0240f3e68f1adbfe430b03674c8",
         "iso2": "tr"
       },
       "runtime": {
         "api_lang": "tr",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.2257099151611328,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/tr (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 5.600452423095703,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tur",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "tur",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 15.965938568115234,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Ukr",
       "api_lang": "uk",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Ukr",
         "filename": "generated/src/WikiUkr.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18379688262939453,
+        "duration_s": 0.08400154113769531,
         "file_hash": "62e8332ba56ad9791ec5b011d328e56c0db110ced9696e378905cb89210e79ad",
         "iso2": "uk"
       },
       "runtime": {
         "api_lang": "uk",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.3403892517089844,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/uk (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.07754898071289,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ukr",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ukr",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.534524917602539,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Urd",
       "api_lang": "ur",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Urd",
         "filename": "generated/src/WikiUrd.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.18390345573425293,
+        "duration_s": 0.08326339721679688,
         "file_hash": "13eee6b850cc49867a4b9f706d681cfea684210565b1deb615de6482f244db3c",
         "iso2": "ur"
       },
       "runtime": {
         "api_lang": "ur",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.2736320495605469,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/ur (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 6.16145133972168,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "urd",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "urd",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 9.347915649414062,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Vie",
       "api_lang": "vi",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Vie",
         "filename": "generated/src/WikiVie.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.21355628967285156,
+        "duration_s": 0.09241676330566406,
         "file_hash": "49054e9e8db4c90254fdf49eff9250da0bdc97d99fb16025c05e149d41e5ebf1",
         "iso2": "vi"
       },
       "runtime": {
         "api_lang": "vi",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.3093948364257812,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/vi (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 5.130767822265625,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "vie",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "vie",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 12.194395065307617,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Chi",
       "api_lang": "zh",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Chi",
         "filename": "generated/src/WikiChi.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.2138059139251709,
+        "duration_s": 0.0935513973236084,
         "file_hash": "1ba5111f34804946028f500cf250a657157c19d43398394b731703c252eda51b",
         "iso2": "zh"
       },
       "runtime": {
         "api_lang": "zh",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 1.5301704406738281,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/zh (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 7.342338562011719,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "zho",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "zho",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 10.758638381958008,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     },
     {
       "gf_lang": "Zul",
       "api_lang": "zu",
-      "overall": "FAIL",
+      "overall": "OK",
       "compile": {
         "gf_lang": "Zul",
         "filename": "generated/src/WikiZul.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.20392727851867676,
+        "duration_s": 0.14420056343078613,
         "file_hash": "352e3beb22ff2342399c5eab78b71e2e5666166f00369acf8bc3193f2904c02f",
         "iso2": "zu"
       },
       "runtime": {
         "api_lang": "zu",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 0.9896755218505859,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/v1/generate/zu (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8000): Failed to establish a new connection: [Errno 111] Connection refused\"))",
-        "sample_text": null
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 5.024433135986328,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "zul",
+      "overall": "OK",
+      "compile": null,
+      "runtime": {
+        "api_lang": "zul",
+        "status": "PASS",
+        "http_status": 200,
+        "duration_ms": 8.084297180175781,
+        "error": null,
+        "sample_text": "Alan Turing is a person"
       }
     }
   ]

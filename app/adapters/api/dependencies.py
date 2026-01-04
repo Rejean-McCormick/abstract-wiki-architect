@@ -7,20 +7,18 @@ import re
 import secrets
 from typing import Annotated, Optional
 
-# [FIX] Added 'inject' to imports
-from dependency_injector.wiring import Provide, inject
 from fastapi import Depends, Header, HTTPException, Security, status
 from fastapi.security import APIKeyHeader
 
 from app.adapters.llm_adapter import GeminiAdapter
 from app.core.ports.grammar_engine import IGrammarEngine
-from app.core.ports.message_broker import IMessageBroker
-from app.core.ports.task_queue import ITaskQueue
 from app.core.use_cases.build_language import BuildLanguage
 from app.core.use_cases.generate_text import GenerateText
 from app.core.use_cases.onboard_language_saga import OnboardLanguageSaga
 from app.shared.config import AppEnv, settings
-from app.shared.container import Container
+
+# [FIX] REMOVED top-level import to break circular dependency
+# from app.shared.container import container 
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +26,11 @@ logger = logging.getLogger(__name__)
 # -----------------------------------------------------------------------------
 # Grammar Engine Dependency
 # -----------------------------------------------------------------------------
-@inject  # [FIX] Added decorator to enable DI wiring
-def get_grammar_engine(
-    # [FIX] Removed Depends(), use Provide[...] directly as default value
-    engine: IGrammarEngine = Provide[Container.grammar_engine],
-) -> IGrammarEngine:
+def get_grammar_engine() -> IGrammarEngine:
     """Returns the process-wide singleton IGrammarEngine from the DI Container."""
-    return engine
+    # [FIX] Lazy import: Only grab container when the function is CALLED
+    from app.shared.container import container
+    return container.grammar_engine()
 
 
 # -----------------------------------------------------------------------------
@@ -42,22 +38,13 @@ def get_grammar_engine(
 # -----------------------------------------------------------------------------
 api_key_scheme = APIKeyHeader(name="X-API-Key", auto_error=False)
 
-# Used when API_SECRET/API_KEY is not configured in non-prod environments.
-# (Keeps tests/dev deterministic; prod still fails closed.)
 DEFAULT_DEV_API_KEY = "dev-api-key"
 
 
 def _configured_api_secret() -> Optional[str]:
-    """
-    Returns the configured server API secret.
-
-    Backwards-compatible: supports both API_SECRET and legacy API_KEY naming,
-    both from settings and environment.
-    """
     configured = getattr(settings, "API_SECRET", None) or getattr(settings, "API_KEY", None)
     if configured:
         return configured
-
     return os.getenv("API_SECRET") or os.getenv("API_KEY")
 
 
@@ -71,7 +58,6 @@ def _normalize_presented_key(x_api_key: Optional[str]) -> Optional[str]:
 
 
 def _split_secrets(configured: str) -> list[str]:
-    # Allow comma-separated or whitespace-separated lists for rotation/multi-key setups.
     parts = re.split(r"[,\s]+", configured.strip())
     return [p for p in parts if p]
 
@@ -86,14 +72,6 @@ def _is_valid_key(presented: str, configured: str) -> bool:
 async def verify_api_key(x_api_key: Optional[str] = Security(api_key_scheme)) -> str:
     """
     Validates the Server API Key (Admin Access).
-
-    Behavior:
-    - PRODUCTION: fails closed if API_SECRET is missing.
-    - non-PRODUCTION: if API_SECRET/API_KEY is missing, uses DEFAULT_DEV_API_KEY
-      (so auth is still enforced and tests are deterministic).
-
-    Notes:
-    - Missing/invalid credentials return 403 (tests expect 403).
     """
     configured = _configured_api_secret()
     if not configured:
@@ -130,17 +108,10 @@ async def get_user_llm_key(
         Header(description="User's Gemini API Key (Optional)"),
     ] = None,
 ) -> Optional[str]:
-    """Extracts the user's personal LLM key from headers."""
     return x_user_llm_key
 
 
 def get_llm_adapter(user_key: Optional[str] = Depends(get_user_llm_key)) -> GeminiAdapter:
-    """
-    Creates a request-scoped LLM adapter.
-
-    If user_key is provided, it is used; otherwise the adapter falls back to
-    server configuration (settings.GEMINI_API_KEY) internally.
-    """
     return GeminiAdapter(user_api_key=user_key)
 
 
@@ -155,23 +126,20 @@ def get_generate_text_use_case(
     return GenerateText(engine=engine, llm=llm_adapter)
 
 
-@inject  # [FIX] Added decorator
-def get_build_language_use_case(
-    # [FIX] Removed Depends(), just use Provide[...]
-    task_queue: ITaskQueue = Provide[Container.task_queue],
-    broker: Optional[IMessageBroker] = Provide[Container.message_broker],
-) -> BuildLanguage:
-    """Dependency to construct the BuildLanguage interactor with broker wired."""
-    return BuildLanguage(task_queue=task_queue, broker=broker)
+def get_build_language_use_case() -> BuildLanguage:
+    """Dependency to construct the BuildLanguage interactor."""
+    # [FIX] Lazy import
+    from app.shared.container import container
+    return container.build_language_use_case()
 
 
-@inject  # [FIX] Added decorator
 def get_onboard_saga(
     llm_adapter: GeminiAdapter = Depends(get_llm_adapter),
-    # [FIX] Removed Depends(), just use Provide[...]
-    saga: OnboardLanguageSaga = Provide[Container.onboard_language_saga],
 ) -> OnboardLanguageSaga:
-    """Dependency to inject the OnboardLanguageSaga (container-managed)."""
+    """Dependency to inject the OnboardLanguageSaga."""
+    # [FIX] Lazy import
+    from app.shared.container import container
+    saga = container.onboard_language_saga()
     if hasattr(saga, "llm"):
         saga.llm = llm_adapter
     return saga

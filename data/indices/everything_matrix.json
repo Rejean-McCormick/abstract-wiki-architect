@@ -1,12 +1,12 @@
 {
-  "timestamp": 1767476157.7357397,
-  "timestamp_iso": "2026-01-03T21:35:57Z",
+  "timestamp": 1767564067.3269866,
+  "timestamp_iso": "2026-01-04T22:01:07Z",
   "scoring_version": "2.4",
   "stats": {
     "total_languages": 156,
     "production_ready": 0,
-    "high_road": 0,
-    "safe_mode": 66,
+    "high_road": 30,
+    "safe_mode": 36,
     "skipped": 90,
     "runnable": 34
   },
@@ -58,7 +58,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.9,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -262,7 +262,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.3,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -517,7 +517,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.2,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -670,7 +670,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.9,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -925,7 +925,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.3,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -1231,7 +1231,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.3,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -1384,7 +1384,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.6,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -1588,7 +1588,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.2,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -1690,7 +1690,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.9,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -1843,7 +1843,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.1,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -2149,7 +2149,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.0,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -2608,7 +2608,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.0,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -2710,7 +2710,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.1,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -3526,7 +3526,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.2,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -3679,7 +3679,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.9,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -4036,7 +4036,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.3,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -4291,7 +4291,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.3,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -4648,7 +4648,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.3,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -4852,7 +4852,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.9,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -5056,7 +5056,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.2,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -5617,7 +5617,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.0,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -5821,7 +5821,7 @@
           "D_QA": 5.0
         },
         "maturity_score": 5.3,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -5872,7 +5872,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.8,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -5974,7 +5974,7 @@
           "D_QA": 5.0
         },
         "maturity_score": 5.6,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -6790,7 +6790,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.2,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -6841,7 +6841,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.1,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -7249,7 +7249,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.9,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -7402,7 +7402,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.4,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -7606,7 +7606,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 4.6,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },
@@ -7810,7 +7810,7 @@
           "D_QA": 0.0
         },
         "maturity_score": 5.3,
-        "build_strategy": "SAFE_MODE",
+        "build_strategy": "HIGH_ROAD",
         "runnable": true
       }
     },

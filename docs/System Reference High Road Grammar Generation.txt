@@ -1,0 +1,110 @@
+
+# 🏗️ System Reference: High Road Grammar Generation
+
+### 1. Core Logic Flow
+
+The system generates "Tier 3" (AI-generated) languages by following this strict pipeline:
+
+1. **Matrix Input:** `manage.py` reads target languages (ISO-3 codes) from `data/indices/everything_matrix.json`.
+2. **Architect Processing:** `ai_services/architect.py` receives a target (e.g., `zho`).
+3. **RGL Translation:** The Architect converts ISO-3 (`zho`) to GF-RGL (`Chi`) using `data/config/iso_to_wiki.json`.
+4. **Generation:** Gemini 2.0 Flash writes the grammar using a **standalone skeleton** (no `WikiI` inheritance).
+5. **Direct Output:** The sanitized file is written directly to `gf/WikiChi.gf`.
+6. **Compilation:** `manage.py build` compiles `gf/AbstractWiki.pgf` including the new file.
+
+---
+
+### 2. Critical Paths
+
+| Component | Path | Description |
+| --- | --- | --- |
+| **Generator Output** | **`gf/`** | **CRITICAL.** Files are written directly to the root GF folder. `gf/generated/src/` is deprecated/unused for High Road. |
+| **Abstract Grammar** | `gf/AbstractWiki.gf` | The abstract syntax defining `Fact`, `Entity`, `Predicate`. |
+| **ISO Mapping** | `data/config/iso_to_wiki.json` | Maps `zho` -> `Chi`, `afr` -> `Afr`. Essential for correct filenames. |
+| **Agent Logic** | `ai_services/architect.py` | Contains the Prompt Skeleton and Regex Sanitizer. |
+
+---
+
+### 3. The Architect Agent Rules
+
+When generating code, the `ArchitectAgent` enforces these strict rules to ensure compilation:
+
+#### A. Naming Convention
+
+* **Input:** ISO-3 Code (e.g., `tur`).
+* **Internal Logic:** Lookup RGL code.
+* **Filename:** `WikiTur.gf` (Not `WikiTur.gf` unless RGL matches ISO).
+* **Module Name:** `concrete WikiTur of AbstractWiki`.
+
+#### B. The Prompt Skeleton
+
+The prompt explicitly provides this structure to prevent hallucinations:
+
+```haskell
+concrete WikiXxx of AbstractWiki = open SyntaxXxx, ParadigmsXxx in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ; -- MUST BE 'VP'. 'VPS' IS INVALID.
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}
+
+```
+
+#### C. Forbidden Patterns (Sanitizer Logic)
+
+The `_sanitize_output` function uses Regex to aggressively remove these patterns if the AI hallucinates them:
+
+1. **Inheritance:** `= WikiI` or `= Wiki` is stripped. The grammar must be **standalone** using `open`.
+2. **Wrong Abstract:** `of Wiki` is rewritten to `of AbstractWiki`.
+3. **Invalid Syntax:** `Predicate = VPS` is strictly forbidden (replaced by `VP` in the skeleton).
+
+---
+
+### 4. Operational Commands
+
+**To Regenerate Missing Languages:**
+
+```bash
+# Checks gf/ for existence. If missing, generates and saves to gf/
+python manage.py generate --missing
+
+```
+
+**To Force Regenerate (Overwrite):**
+
+```bash
+# Ignores existing files. Useful for fixing buggy content across all languages.
+python manage.py generate --force
+
+```
+
+**To Build the PGF:**
+
+```bash
+# Compiles everything in gf/ into the final binary
+python manage.py build
+
+```
+
+### 5. Troubleshooting Reference
+
+* **Error:** `File Wiki.gf does not exist`
+* **Cause:** The file contains `concrete X of Wiki`.
+* **Fix:** The Regex Sanitizer in `architect.py` handles this. Check `_sanitize_output`.
+
+
+* **Error:** `constant not found: VPS`
+* **Cause:** The prompt asked for `VPS`.
+* **Fix:** Ensure the prompt skeleton in `architect.py` specifies `Predicate = VP`.
+
+
+* **Error:** `File WikiI.gf does not exist`
+* **Cause:** The code uses `concrete ... = WikiI`.
+* **Fix:** The Regex Sanitizer removes `= WikiI`. Verify `_sanitize_output` logic.
+
+
+* **Build Size is Small (~20KB):**
+* **Cause:** Generated files are in `gf/generated/src` instead of `gf/`.
+* **Fix:** Verify `GENERATED_SRC_DIR = PROJECT_ROOT / "gf"` in `architect.py`.

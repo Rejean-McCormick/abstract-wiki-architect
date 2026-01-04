@@ -1,1 +1,8 @@
-concrete WikiSnd of AbstractWiki = WikiI with (Syntax = SyntaxSnd) ** open SyntaxSnd, ParadigmsSnd in { flags coding = utf8 ; };
+concrete WikiSnd of AbstractWiki = open SyntaxSnd, ParadigmsSnd in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}

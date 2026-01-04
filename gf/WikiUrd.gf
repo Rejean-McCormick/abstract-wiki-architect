@@ -1,1 +1,8 @@
-concrete WikiUrd of AbstractWiki = WikiI with (Syntax = SyntaxUrd) ** open SyntaxUrd, ParadigmsUrd in { flags coding = utf8 ; };
+concrete WikiUrd of AbstractWiki = open SyntaxUrd, ParadigmsUrd in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}

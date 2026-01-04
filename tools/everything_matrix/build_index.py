@@ -163,7 +163,8 @@ def _ensure_rgl_inventory(*, inventory_file: Path, regen: bool) -> Optional[Dict
             return None
         logger.info("Regenerating RGL inventory via rgl_scanner.scan_rgl()")
         try:
-            rgl_scanner.scan_rgl()  # type: ignore[attr-defined]
+            # [FIX] Force write to disk so subsequent reads find the new data
+            rgl_scanner.scan_rgl(write_output=True, output_file=inventory_file)  # type: ignore[attr-defined]
         except Exception as e:
             logger.warning("rgl_scanner.scan_rgl() failed: %s", e)
 

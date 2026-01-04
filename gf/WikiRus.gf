@@ -1,1 +1,8 @@
-concrete WikiRus of AbstractWiki = WikiI with (Syntax = SyntaxRus) ** open SyntaxRus, ParadigmsRus in { flags coding = utf8 ; };
+concrete WikiRus of AbstractWiki = open SyntaxRus, ParadigmsRus in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}

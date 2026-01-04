@@ -1,7 +1,8 @@
-concrete WikiGer of AbstractWiki = WikiI with (Syntax = SyntaxGer) ** open SyntaxGer, ParadigmsGer in { 
+concrete WikiGer of AbstractWiki = open SyntaxGer, ParadigmsGer in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
   lin
-    -- We explicitly tell GF that Tier is 'neuter'
-    lex_animal_N = mkNP the_Det (mkN "Tier" neuter) ;
-    lex_walk_V   = mkVP (mkV "gehen") ;
-    lex_blue_A   = mkAP (mkA "blau") ;
-} ;
+    mkFact s p = mkS (mkCl s p) ;
+}

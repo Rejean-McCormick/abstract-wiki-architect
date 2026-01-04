@@ -1,1 +1,8 @@
-concrete WikiSwe of AbstractWiki = WikiI with (Syntax = SyntaxSwe) ** open SyntaxSwe, ParadigmsSwe in { flags coding = utf8 ; };
+concrete WikiSwe of AbstractWiki = open SyntaxSwe, ParadigmsSwe in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}

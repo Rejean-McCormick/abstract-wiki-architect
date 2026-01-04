@@ -1,1 +1,8 @@
-concrete WikiDan of AbstractWiki = WikiI with (Syntax = SyntaxDan) ** open SyntaxDan, ParadigmsDan in { flags coding = utf8 ; };
+concrete WikiDan of AbstractWiki = open SyntaxDan, ParadigmsDan in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}

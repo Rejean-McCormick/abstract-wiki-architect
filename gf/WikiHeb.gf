@@ -1,1 +1,8 @@
-concrete WikiHeb of AbstractWiki = WikiI with (Syntax = SyntaxHeb) ** open SyntaxHeb, ParadigmsHeb in { flags coding = utf8 ; };
+concrete WikiHeb of AbstractWiki = open SyntaxHeb, ParadigmsHeb in {
+  lincat
+    Fact = S ;
+    Entity = NP ;
+    Predicate = VP ;
+  lin
+    mkFact s p = mkS (mkCl s p) ;
+}
