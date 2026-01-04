@@ -2,7 +2,7 @@
 from typing import Any, Dict
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock  # kept (even though unused)
 
 from app.adapters.api.main import create_app
 from app.adapters.api.dependencies import get_generate_text_use_case
@@ -18,14 +18,26 @@ class FakeGenerateTextUseCase:
     """
     async def execute(self, lang_code: str, frame: Any) -> Sentence:
         # Simulate successful generation logic
-        # We extract the subject name safely depending on frame type
         subject_name = "Unknown"
+        
+        # [FIX] Handle both BioFrame objects and Ninai (recursive dicts)
+        # 1. Pydantic Model (BioFrame)
         if hasattr(frame, "subject"):
             if isinstance(frame.subject, dict):
                 subject_name = frame.subject.get("name", "Unknown")
             elif hasattr(frame.subject, "name"):
                 subject_name = frame.subject.name
-
+                
+        # 2. Ninai Protocol (Recursive Dict) - Simplified Extraction
+        # In a real scenario, the NinaiAdapter converts this to a Frame BEFORE
+        # calling the UseCase. If the UseCase receives a raw dict, it means
+        # the Router passed it directly (which shouldn't happen with correct Adapter binding),
+        # or we are testing a lower-level path.
+        # However, for this Mock, we just want to return a string.
+        
+        # If frame came from NinaiAdapter, it is ALREADY a Frame object.
+        # So the logic above (hasattr frame, "subject") covers it.
+        
         return Sentence(
             text=f"Fake generated text for {subject_name} in {lang_code}",
             lang_code=lang_code,
@@ -76,10 +88,15 @@ def test_generate_endpoint_success(client: TestClient) -> None:
     """
     payload = _valid_bio_payload()
     lang_code = "eng"
+    
+    # [FIX] Add Auth Header (pytest default key)
+    headers = {"x-api-key": "test-api-key"}
 
-    # Note: verify_api_key dependency is active. 
-    # Since Settings.API_SECRET is None by default in test env, it bypasses auth.
-    response = client.post(f"{API_PREFIX}/generate/{lang_code}", json=payload)
+    response = client.post(
+        f"{API_PREFIX}/generate/{lang_code}", 
+        json=payload,
+        headers=headers
+    )
     
     assert response.status_code == 200
     data = response.json()
@@ -97,8 +114,15 @@ def test_generate_validation_error(client: TestClient) -> None:
     # Missing 'frame_type' and 'subject'
     invalid_payload = {"broken": "data"}
     lang_code = "eng"
+    
+    # [FIX] Add Auth Header (pytest default key)
+    headers = {"x-api-key": "test-api-key"}
 
-    response = client.post(f"{API_PREFIX}/generate/{lang_code}", json=invalid_payload)
+    response = client.post(
+        f"{API_PREFIX}/generate/{lang_code}", 
+        json=invalid_payload,
+        headers=headers
+    )
     
     assert response.status_code == 422
 
@@ -117,10 +141,15 @@ def test_generate_ninai_protocol_detection(client: TestClient) -> None:
         ]
     }
     
-    response = client.post(f"{API_PREFIX}/generate/eng", json=ninai_payload)
+    # [FIX] Add Auth Header (pytest default key)
+    headers = {"x-api-key": "test-api-key"}
     
-    # Should succeed (200) if adapter works, or 422 if adapter validation fails.
-    # Since we mocked the UseCase, we just need to ensure the Router accepts it 
-    # and calls the UseCase.
+    response = client.post(
+        f"{API_PREFIX}/generate/eng", 
+        json=ninai_payload,
+        headers=headers
+    )
+    
+    # Should succeed (200) if adapter works
     assert response.status_code == 200
     assert "Ada Lovelace" in response.json()["text"]

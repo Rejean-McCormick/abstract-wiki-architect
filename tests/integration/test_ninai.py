@@ -1,4 +1,4 @@
-# tests\integration\test_ninai.py
+# tests/integration/test_ninai.py
 import pytest
 from app.adapters.ninai import ninai_adapter
 from app.core.domain.frame import BioFrame
@@ -54,13 +54,14 @@ def invalid_ninai_root():
 
 @pytest.fixture
 def malformed_bio_missing_args():
-    """Bio Statement missing mandatory profession."""
+    """Bio Statement missing mandatory arguments (like Subject)."""
+    # NOTE: In v2.1, Missing profession might be auto-filled by Lexicon,
+    # so we remove the Subject (Arg 1) to force a crash.
     return {
         "function": "ninai.constructors.Statement",
         "args": [
-            {"type": "ninai.types.Bio"},
-            {"function": "ninai.constructors.Entity", "args": ["Q1", "Person"]}
-            # Missing Profession
+            {"type": "ninai.types.Bio"}
+            # Missing Subject entirely
         ]
     }
 
@@ -76,10 +77,14 @@ def test_parse_valid_bio_standard(valid_ninai_bio):
     
     assert isinstance(result, BioFrame)
     assert result.frame_type == "bio"
+    # [FIX] Access fields via property alias OR nested subject dict
     assert result.name == "Alan Turing"
     assert result.qid == "Q7251"
-    assert result.profession == "computer_scientist"
-    assert result.nationality == "british"
+    
+    # [FIX] Access fields directly on the Pydantic model
+    # The adapter populates these fields directly on the Entity object
+    assert result.subject.profession == "computer_scientist"
+    assert result.subject.nationality == "british"
 
 def test_parse_valid_bio_recursive(valid_ninai_bio_recursive_entity):
     """
@@ -90,9 +95,10 @@ def test_parse_valid_bio_recursive(valid_ninai_bio_recursive_entity):
     
     assert isinstance(result, BioFrame)
     assert result.name == "Alan Turing"
-    # Ensure it extracted the label "computer_scientist" from the Entity wrapper
-    assert result.profession == "computer_scientist" 
-    assert result.nationality is None
+    
+    # [FIX] Access fields directly on the Pydantic model
+    assert result.subject.profession == "computer_scientist" 
+    assert result.subject.nationality is None
 
 def test_invalid_root_structure(invalid_ninai_root):
     """

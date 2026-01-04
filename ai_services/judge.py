@@ -1,16 +1,30 @@
-# ai_services\judge.py
+# ai_services/judge.py
 import json
 import logging
 import re
 from typing import Dict, Any, Optional
+
 import httpx
 import google.generativeai as genai
 
 from app.shared.config import settings
 from ai_services.prompts import JUDGE_SYSTEM_PROMPT
 
-# Setup Logger
 logger = logging.getLogger(settings.OTEL_SERVICE_NAME)
+
+
+def _looks_like_auth_error(msg: str) -> bool:
+    m = (msg or "").upper()
+    return (
+        "API_KEY_INVALID" in m
+        or "API KEY NOT VALID" in m
+        or "PLEASE PASS A VALID API KEY" in m
+        or "UNAUTHENTICATED" in m
+        or "PERMISSION_DENIED" in m
+        or "401" in m
+        or "403" in m
+    )
+
 
 class JudgeAgent:
     """
@@ -27,43 +41,43 @@ class JudgeAgent:
         self._client = None
 
         if self.api_key:
-            genai.configure(api_key=self.api_key)
-            self._client = genai.GenerativeModel(self.model_name)
+            try:
+                genai.configure(api_key=self.api_key)
+                self._client = genai.GenerativeModel(self.model_name)
+            except Exception as e:
+                # If init fails (rare), run in disabled mode
+                logger.error(f"❌ Judge init failed; disabling AI Judge. Error: {e}")
+                self._client = None
         else:
             logger.warning("⚠️ GOOGLE_API_KEY not found. The Judge is presiding in silent mode.")
 
     def evaluate_case(self, generated_text: str, gold_case: Dict[str, Any]) -> Dict[str, Any]:
         """
         Compares the engine's output against the Gold Standard 'expected' string.
-        
-        Args:
-            generated_text: The actual output from the Abstract Wiki Engine.
-            gold_case: A dictionary from gold_standard.json containing 'intent' and 'expected'.
-            
+
         Returns:
-            Dict: { "score": 0.0-1.0, "verdict": "PASS/FAIL", "critique": "..." }
+            Dict: { "score": 0.0-1.0, "verdict": "PASS/FAIL/SKIPPED/ERROR", "critique": "..." }
         """
         if not self._client:
             return {"score": 0, "verdict": "SKIPPED", "critique": "AI Agent disabled"}
 
-        expected_text = gold_case.get("expected")
+        expected_text = gold_case.get("expected") or ""
         lang = gold_case.get("lang")
         intent = json.dumps(gold_case.get("intent"))
 
-        # Zero-shot check: Exact string match (Fast Pass)
+        # Fast pass: case-insensitive exact match
         if generated_text.strip().lower() == expected_text.strip().lower():
             return {
                 "score": 1.0,
                 "verdict": "PASS",
-                "critique": "Exact match with Gold Standard."
+                "critique": "Exact match with Gold Standard.",
             }
 
-        # AI Evaluation (Slow Pass)
         user_prompt = f"""
         **CONTEXT:**
         Target Language: {lang}
         Semantic Intent: {intent}
-        
+
         **COMPARISON:**
         Gold Standard: "{expected_text}"
         Actual Output: "{generated_text}"
@@ -74,29 +88,39 @@ class JudgeAgent:
                 contents=[
                     {"role": "user", "parts": [JUDGE_SYSTEM_PROMPT + "\n\n" + user_prompt]}
                 ],
-                generation_config={"temperature": 0.0} # Deterministic grading
+                generation_config={"temperature": 0.0},
             )
-            
-            result = self._parse_json(response.text)
-            
-            # Auto-Report Regressions if configured
+
+            result = self._parse_json(getattr(response, "text", "") or "")
+
+            # Auto-report regressions if configured
             if result.get("score", 0) < 0.8 and self.github_token:
                 self._file_github_issue(gold_case, generated_text, result)
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Judge evaluation failed: {e}")
-            return {"score": 0, "verdict": "ERROR", "critique": str(e)}
+            msg = str(e)
+            logger.error(f"❌ Judge evaluation failed: {msg}")
+
+            # If auth/key is bad, disable judge for the rest of the run and SKIP
+            if _looks_like_auth_error(msg):
+                self._client = None
+                return {
+                    "score": 0,
+                    "verdict": "SKIPPED",
+                    "critique": msg,
+                }
+
+            return {"score": 0, "verdict": "ERROR", "critique": msg}
 
     def _file_github_issue(self, gold_case: Dict, actual: str, evaluation: Dict) -> None:
         """
         The Whistleblower: Files a GitHub issue when quality drops below threshold.
         """
-        if "github.com" not in self.repo_url:
+        if "github.com" not in (self.repo_url or ""):
             return
 
-        # Extract owner/repo from URL (e.g., https://github.com/owner/repo)
         try:
             _, _, _, owner, repo = self.repo_url.rstrip("/").split("/")[:5]
             api_url = f"https://api.github.com/repos/{owner}/{repo}/issues"
@@ -125,24 +149,22 @@ class JudgeAgent:
 
         headers = {
             "Authorization": f"token {self.github_token}",
-            "Accept": "application/vnd.github.v3+json"
+            "Accept": "application/vnd.github.v3+json",
         }
 
         try:
-            # Check for existing open issues with same title to avoid duplicates
             check_res = httpx.get(api_url, headers=headers, params={"state": "open", "labels": "regression"})
             if check_res.status_code == 200:
                 for issue in check_res.json():
-                    if issue["title"] == title:
+                    if issue.get("title") == title:
                         logger.info(f"Existing issue found for {title}. Skipping.")
                         return
 
-            # Create Issue
-            res = httpx.post(api_url, headers=headers, json={
-                "title": title,
-                "body": body,
-                "labels": ["regression", "automated", "judge"]
-            })
+            res = httpx.post(
+                api_url,
+                headers=headers,
+                json={"title": title, "body": body, "labels": ["regression", "automated", "judge"]},
+            )
             if res.status_code == 201:
                 logger.info(f"📂 GitHub Issue filed: {title}")
             else:
@@ -156,12 +178,12 @@ class JudgeAgent:
         Robust JSON extraction from LLM output.
         """
         try:
-            # remove markdown fences
             clean = re.sub(r"```json|```", "", text).strip()
             return json.loads(clean)
         except json.JSONDecodeError:
             logger.error(f"Judge output invalid JSON: {text}")
             return {"score": 0, "verdict": "JSON_ERROR", "critique": "Output parsing failed"}
+
 
 # Global Singleton
 judge = JudgeAgent()

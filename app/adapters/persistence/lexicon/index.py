@@ -5,27 +5,28 @@ lexicon/index.py
 
 Enterprise-grade in-memory index over lexicon data.
 
-This index is designed to work with the current codebase reality:
-- loader.load_lexicon(lang) returns a flattened mapping:
-    Dict[surface_form, Dict[str, Any]]
-  where each value is a feature bundle (pos, gender, qid, number, etc.).
-- The public lexicon package expects:
-    - lookup_by_lemma(lemma, pos=None) -> Lexeme|None
-    - lookup_by_qid(qid) -> Lexeme|None
-    - lookup_form(lemma, features, pos=None) -> Form|None
+This index supports two input shapes (for backwards compatibility with tests
+and for the current loader reality):
+
+1) A full Lexicon object (used by unit tests and some in-memory builders)
+2) A flattened mapping produced by the loader:
+      Dict[surface_form, Dict[str, Any]]
+   where each value is a feature bundle (pos, gender, qid, number, etc.).
+
+Public expectations across the codebase:
+- lookup_profession(lemma_or_key) -> BaseLexicalEntry|None
+- lookup_nationality(lemma_or_key) -> NationalityEntry|None
+- lookup_any(lemma_or_key) -> BaseLexicalEntry|None
+- lookup_by_lemma(lemma, pos=None) -> Lexeme|None
+- lookup_by_qid(qid) -> Lexeme|None
+- lookup_form(lemma, features, pos=None) -> Form|None
 
 Design goals
 ------------
-- No filesystem knowledge (loader handles I/O).
 - Deterministic behavior; stable "first writer wins" semantics.
 - Case-insensitive lookups, with optional robust normalization
   (underscores/spaces/dashes/punctuation) without mutating stored data.
 - Minimal surface area used by engines/routers.
-
-This module does not:
-- lemmatize,
-- perform fuzzy search,
-- call Wikidata.
 """
 
 from __future__ import annotations
@@ -33,7 +34,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, Mapping, Optional, Tuple
 
-from .types import Form, Lexeme
+from .types import (
+    BaseLexicalEntry,
+    Form,
+    Lexeme,
+    Lexicon,
+    NationalityEntry,
+)
 
 try:
     from .normalization import normalize_for_lookup  # type: ignore
@@ -60,25 +67,30 @@ def _norm_key(s: str) -> str:
 @dataclass
 class LexiconIndex:
     """
-    Index over a flattened lexicon mapping: surface_form -> features dict.
-
-    Primary indices:
-      - lemma index: (normalized lemma, pos?) -> Lexeme
-      - qid index: normalized qid -> Lexeme
-      - form lookup: best-effort from lemma + feature bundle
+    Index over either:
+      - a Lexicon object, OR
+      - a flattened mapping: surface_form -> features dict
 
     Notes:
-      - "lemma" in the loader output is represented by the surface_form keys.
-        We treat keys as lemmas/surfaces and store them as Lexeme.lemma.
-      - Feature bundles are stored in Lexeme.extra for compatibility.
-      - Optional normalization adds robustness for lookup inputs.
+      - When initialized with a Lexicon, this index preserves the original entry
+        objects (ProfessionEntry, NationalityEntry, etc.) for lookup_* methods.
+      - Independently, we also build a "flat" view to support lookup_by_lemma,
+        lookup_by_qid, and lookup_form consistently.
     """
 
-    lexemes: Dict[str, Dict[str, Any]]
+    lexemes: Any  # Lexicon | Dict[str, Dict[str, Any]]
 
     def __post_init__(self) -> None:
-        if not isinstance(self.lexemes, dict):
-            raise TypeError("LexiconIndex expects a dict mapping surface_form -> feature dict.")
+        # Keep a reference to the rich Lexicon if provided.
+        self._lexicon: Optional[Lexicon] = self.lexemes if isinstance(self.lexemes, Lexicon) else None
+
+        # Build the flat mapping used by lemma/qid/form APIs.
+        if isinstance(self.lexemes, dict):
+            self._flat: Dict[str, Dict[str, Any]] = self.lexemes
+        elif isinstance(self.lexemes, Lexicon):
+            self._flat = self._flatten_lexicon(self.lexemes)
+        else:
+            raise TypeError("LexiconIndex expects a Lexicon or a dict mapping surface_form -> feature dict.")
 
         # (lemma_norm, pos_norm or None) -> Lexeme
         self._lemma_index: Dict[Tuple[str, Optional[str]], Lexeme] = {}
@@ -89,14 +101,51 @@ class LexiconIndex:
         # Normalized key -> original surface key (first writer wins)
         self._surface_canon: Dict[str, str] = {}
 
-        self._build()
+        # Extra indexes expected by tests / public wrapper
+        self._profession_index: Dict[str, BaseLexicalEntry] = {}
+        self._nationality_index: Dict[str, NationalityEntry] = {}
+        self._any_index: Dict[str, BaseLexicalEntry] = {}
+
+        # Build indices
+        self._build_flat_indices()
+        if self._lexicon is not None:
+            self._build_rich_indices(self._lexicon)
 
     # ------------------------------------------------------------------
-    # Construction
+    # Construction helpers
     # ------------------------------------------------------------------
 
-    def _build(self) -> None:
-        for surface, feats in self.lexemes.items():
+    def _flatten_lexicon(self, lex: Lexicon) -> Dict[str, Dict[str, Any]]:
+        """
+        Convert a rich Lexicon object into the flattened mapping expected by
+        the lemma/qid/form APIs.
+
+        First writer wins on duplicate lemma keys.
+        """
+        flat: Dict[str, Dict[str, Any]] = {}
+
+        for table in (
+            lex.professions,
+            lex.nationalities,
+            lex.titles,
+            lex.honours,
+            lex.general_entries,
+        ):
+            for entry in table.values():
+                surface = entry.lemma or entry.key
+                if not isinstance(surface, str) or not surface.strip():
+                    continue
+                if surface in flat:
+                    continue
+                flat[surface] = entry.to_dict()
+
+        return flat
+
+    def _build_flat_indices(self) -> None:
+        """
+        Build lemma/qid indices from the flattened mapping.
+        """
+        for surface, feats in self._flat.items():
             if not isinstance(surface, str) or not surface.strip():
                 continue
             if not isinstance(feats, Mapping):
@@ -112,25 +161,24 @@ class LexiconIndex:
             pos_raw = feats.get("pos")
             pos_norm = _casefold(pos_raw) if isinstance(pos_raw, str) and pos_raw.strip() else None
 
-            # Build Lexeme
             lex = Lexeme(
-                key=surface_raw,
+                key=str(feats.get("key") or surface_raw),
                 lemma=surface_raw,
                 pos=str(pos_raw) if isinstance(pos_raw, str) else (str(pos_raw) if pos_raw is not None else "UNKNOWN"),
-                language=str(feats.get("lang") or feats.get("language") or ""),
+                language=str(feats.get("lang") or feats.get("language") or feats.get("language_code") or ""),
+                sense=str(feats.get("sense") or ""),
                 human=feats.get("human") if isinstance(feats.get("human"), bool) else None,
                 gender=str(feats.get("gender")) if feats.get("gender") is not None else None,
                 default_number=str(feats.get("default_number")) if feats.get("default_number") is not None else feats.get("number"),
+                default_formality=str(feats.get("default_formality")) if feats.get("default_formality") is not None else feats.get("formality"),
                 wikidata_qid=str(feats.get("qid") or feats.get("wikidata_qid")) if (feats.get("qid") or feats.get("wikidata_qid")) else None,
                 forms=dict(feats.get("forms")) if isinstance(feats.get("forms"), Mapping) else {},
                 extra=dict(feats),
             )
 
-            # lemma indices
             key_any = (surface_norm, None)
             key_pos = (surface_norm, pos_norm)
 
-            # First-writer-wins for exact-pos bucket and any-pos fallback.
             if surface_norm and surface_norm not in self._lemma_anypos_index:
                 self._lemma_anypos_index[surface_norm] = lex
 
@@ -142,15 +190,89 @@ class LexiconIndex:
                     if key_any not in self._lemma_index:
                         self._lemma_index[key_any] = lex
 
-            # qid index
             qid = lex.wikidata_qid
             if isinstance(qid, str) and qid.strip():
                 qid_norm = _norm_key(qid)
                 if qid_norm and qid_norm not in self._qid_index:
                     self._qid_index[qid_norm] = lex
 
+    def _add_alias(self, idx: Dict[str, Any], key: Optional[str], value: Any) -> None:
+        if not isinstance(key, str) or not key.strip():
+            return
+        k = _norm_key(key)
+        if k and k not in idx:
+            idx[k] = value
+
+    def _build_rich_indices(self, lex: Lexicon) -> None:
+        """
+        Build lookup_profession/lookup_nationality/lookup_any indices from the rich Lexicon.
+        These indices preserve the original entry objects (important for NationalityEntry fields).
+        """
+        # professions
+        for entry in lex.professions.values():
+            self._add_alias(self._profession_index, entry.lemma, entry)
+            self._add_alias(self._profession_index, entry.key, entry)
+
+            self._add_alias(self._any_index, entry.lemma, entry)
+            self._add_alias(self._any_index, entry.key, entry)
+
+        # nationalities
+        for entry in lex.nationalities.values():
+            self._add_alias(self._nationality_index, entry.lemma, entry)
+            self._add_alias(self._nationality_index, entry.key, entry)
+            self._add_alias(self._nationality_index, entry.adjective, entry)
+            self._add_alias(self._nationality_index, entry.demonym, entry)
+
+            self._add_alias(self._any_index, entry.lemma, entry)
+            self._add_alias(self._any_index, entry.key, entry)
+            self._add_alias(self._any_index, entry.adjective, entry)
+            self._add_alias(self._any_index, entry.demonym, entry)
+
+        # titles / honours / general entries should be discoverable via lookup_any
+        for table in (lex.titles, lex.honours, lex.general_entries):
+            for entry in table.values():
+                self._add_alias(self._any_index, entry.lemma, entry)
+                self._add_alias(self._any_index, entry.key, entry)
+
     # ------------------------------------------------------------------
-    # Public API expected by lexicon.__init__
+    # Public API expected by tests / lexicon.__init__
+    # ------------------------------------------------------------------
+
+    def lookup_profession(self, lemma_or_key: str) -> Optional[BaseLexicalEntry]:
+        if not isinstance(lemma_or_key, str) or not lemma_or_key.strip():
+            return None
+
+        k = _norm_key(lemma_or_key)
+        if self._profession_index:
+            return self._profession_index.get(k)
+
+        # Fallback: if initialized only with flat mapping, try lemma lookup
+        hit = self.lookup_by_lemma(lemma_or_key, pos=None)
+        return hit
+
+    def lookup_nationality(self, lemma_or_key: str) -> Optional[NationalityEntry]:
+        if not isinstance(lemma_or_key, str) or not lemma_or_key.strip():
+            return None
+
+        k = _norm_key(lemma_or_key)
+        if self._nationality_index:
+            return self._nationality_index.get(k)
+
+        return None
+
+    def lookup_any(self, lemma_or_key: str) -> Optional[BaseLexicalEntry]:
+        if not isinstance(lemma_or_key, str) or not lemma_or_key.strip():
+            return None
+
+        k = _norm_key(lemma_or_key)
+        if self._any_index:
+            return self._any_index.get(k)
+
+        # Fallback: flat mapping only
+        return self.lookup_by_lemma(lemma_or_key, pos=None)
+
+    # ------------------------------------------------------------------
+    # Flat mapping API (used by engines/routers)
     # ------------------------------------------------------------------
 
     def lookup_by_lemma(self, lemma: str, *, pos: Optional[str] = None) -> Optional[Lexeme]:
@@ -167,12 +289,10 @@ class LexiconIndex:
             if hit is not None:
                 return hit
 
-        # Fall back to any-POS match for that lemma
         hit = self._lemma_anypos_index.get(lemma_norm)
         if hit is not None:
             return hit
 
-        # As a last resort, try stored "UNKNOWN"/None pos bucket
         return self._lemma_index.get((lemma_norm, None))
 
     def lookup_by_qid(self, qid: str) -> Optional[Lexeme]:
@@ -192,27 +312,12 @@ class LexiconIndex:
     ) -> Optional[Form]:
         """
         Best-effort form lookup from a lemma + features.
-
-        Current flattened loader schema commonly provides:
-          - "number" from the expanded tag (sg/pl)
-          - "gender" refined from tag (m/f/etc)
-          - sometimes "forms" is present on the lemma entry (less common in current loader)
-
-        Strategy:
-          1) resolve lexeme by lemma (+ optional pos)
-          2) if lexeme.forms exists and features suggest a key like "f.sg" or "sg", use it
-          3) else try to find a surface form in the flattened mapping that matches
-             requested (pos, gender, number) and shares the same qid if available
-          4) fall back to the lemma itself if nothing else fits
         """
         if not isinstance(lemma, str) or not lemma.strip():
             return None
 
         features = features or {}
-        lex = self.lookup_by_lemma(lemma, pos=pos)
-        if lex is None:
-            # Still allow "raw" lookups: maybe the lemma is already a surface form
-            lex = self.lookup_by_lemma(lemma, pos=None)
+        lex = self.lookup_by_lemma(lemma, pos=pos) or self.lookup_by_lemma(lemma, pos=None)
         if lex is None:
             return None
 
@@ -224,7 +329,6 @@ class LexiconIndex:
 
         # 2) direct forms map (if present)
         if lex.forms:
-            # Most common composite keys: "f.sg" / "m.pl"
             if gender and number:
                 k = f"{gender}.{number}"
                 if k in lex.forms and isinstance(lex.forms[k], str):
@@ -240,26 +344,23 @@ class LexiconIndex:
 
         best_surface: Optional[str] = None
 
-        for surface, feats in self.lexemes.items():
+        for surface, feats in self._flat.items():
             if not isinstance(surface, str) or not isinstance(feats, Mapping):
                 continue
 
-            # Must share qid if we have one; otherwise skip this constraint
             cand_qid = feats.get("qid") or feats.get("wikidata_qid")
             if qid and isinstance(cand_qid, str) and cand_qid.strip():
                 if _norm_key(cand_qid) != _norm_key(qid):
                     continue
             elif qid:
-                continue  # if lex has qid, require candidate qid too
+                continue
 
-            # POS constraint if provided
             if pos_norm is not None:
                 cand_pos = feats.get("pos")
                 cand_pos_norm = _casefold(cand_pos) if isinstance(cand_pos, str) and cand_pos.strip() else None
                 if cand_pos_norm != pos_norm:
                     continue
 
-            # Feature constraints
             if gender is not None:
                 cand_gender = feats.get("gender")
                 if cand_gender is None or str(cand_gender) != gender:
@@ -270,7 +371,7 @@ class LexiconIndex:
                     continue
 
             best_surface = surface
-            break  # first-writer-wins / deterministic traversal order depends on dict order
+            break
 
         if best_surface:
             out_features: Dict[str, Any] = {}
@@ -280,8 +381,10 @@ class LexiconIndex:
                 out_features["number"] = number
             return Form(surface=best_surface, features=out_features)
 
-        # 4) fallback to lemma itself
-        return Form(surface=lex.lemma, features={k: v for k, v in (("gender", gender), ("number", number)) if v is not None})
+        return Form(
+            surface=lex.lemma,
+            features={k: v for k, v in (("gender", gender), ("number", number)) if v is not None},
+        )
 
 
 __all__ = ["LexiconIndex"]

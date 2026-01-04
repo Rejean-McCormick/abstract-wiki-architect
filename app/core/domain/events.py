@@ -1,6 +1,6 @@
-# app\core\domain\events.py
+# app/core/domain/events.py
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Dict, Any, Optional
 from datetime import datetime
 import uuid
@@ -40,8 +40,8 @@ class SystemEvent(BaseModel):
     trace_id: Optional[str] = None
     timestamp: float = Field(default_factory=lambda: datetime.utcnow().timestamp())
 
-    class Config:
-        use_enum_values = True
+    # Pydantic V2 Configuration
+    model_config = ConfigDict(use_enum_values=True)
 
 # --- Specific Payloads (Optional but recommended for strict typing) ---
 

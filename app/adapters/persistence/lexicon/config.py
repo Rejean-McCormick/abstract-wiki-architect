@@ -1,7 +1,5 @@
-# app/adapters/persistence/lexicon/config.py
-# lexicon/config.py
 """
-lexicon/config.py
+app/adapters/persistence/lexicon/config.py
 -----------------
 
 Configuration knobs for the lexicon subsystem.
@@ -192,50 +190,51 @@ class LexiconConfig:
         """
         Build a LexiconConfig instance using environment variables as overrides.
         """
-        lex_dir = _clean_dir(os.getenv("AW_LEXICON_DIR", cls.lexicon_dir), default=cls.lexicon_dir)
+        # [FIX] Use string literal default "data/lexicon" to avoid accessing slot descriptor on class
+        lex_dir = _clean_dir(os.getenv("AW_LEXICON_DIR"), default="data/lexicon")
 
         max_lemmas = _parse_int(
             os.getenv("AW_LEXICON_MAX_LEMMAS", ""),
-            cls.max_lemmas_per_language,
+            0,  # [FIX] Use literal 0
             min_value=0,
         )
 
         eager = _parse_bool(
             os.getenv("AW_LEXICON_EAGER_LOAD", ""),
-            cls.eager_load,
+            False,  # [FIX] Use literal False
         )
 
         # Compatibility: allow both AW_LEXICON_STRICT_SCHEMA and AW_LEXICON_SCHEMA_STRICT
         strict_schema = _parse_bool(
             os.getenv("AW_LEXICON_STRICT_SCHEMA", os.getenv("AW_LEXICON_SCHEMA_STRICT", "")),
-            cls.strict_schema,
+            False,
         )
 
         validate_on_load = _parse_bool(
             os.getenv("AW_LEXICON_VALIDATE_ON_LOAD", ""),
-            cls.validate_on_load,
+            False,
         )
 
         normalize_keys = _parse_bool(
             os.getenv("AW_LEXICON_NORMALIZE_KEYS", ""),
-            cls.normalize_keys,
+            False,
         )
 
         log_collisions = _parse_bool(
             os.getenv("AW_LEXICON_LOG_COLLISIONS", ""),
-            cls.log_collisions,
+            False,
         )
 
         log_level = _parse_log_level(os.getenv("AW_LEXICON_LOG_LEVEL", ""))
 
         cache_enabled = _parse_bool(
             os.getenv("AW_LEXICON_CACHE_ENABLED", ""),
-            cls.cache_enabled,
+            True,  # Default True
         )
 
         cache_max_langs = _parse_int(
             os.getenv("AW_LEXICON_CACHE_MAX_LANGS", ""),
-            cls.cache_max_langs,
+            0,
             min_value=0,
         )
 

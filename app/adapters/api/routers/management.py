@@ -1,7 +1,10 @@
 # app/adapters/api/routers/management.py
-from typing import Any, Dict
+from __future__ import annotations
+
+from typing import Any
 
 import structlog
+from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
@@ -14,11 +17,8 @@ from app.core.use_cases.build_language import BuildLanguage
 from app.core.domain.exceptions import DomainError
 
 # Adapters & Infrastructure
-from app.adapters.api.dependencies import (
-    get_onboard_saga,
-    get_build_language_use_case,
-    verify_api_key,
-)
+from app.adapters.api.dependencies import verify_api_key
+from app.shared.container import Container
 
 logger = structlog.get_logger()
 
@@ -72,10 +72,11 @@ class BuildRequest(BaseModel):
     summary="Onboard a New Language",
     response_description="Confirmation of the onboarding start",
 )
+@inject
 async def onboard_language(
     request: LanguageOnboardRequest,
-    saga: OnboardLanguageSaga = Depends(get_onboard_saga),
-) -> Dict[str, Any]:
+    saga: OnboardLanguageSaga = Depends(Provide[Container.onboard_language_saga]),
+) -> dict[str, Any]:
     """
     [ADMIN ONLY] Starts the onboarding process for a new language.
 
@@ -120,11 +121,12 @@ async def onboard_language(
     status_code=status.HTTP_202_ACCEPTED,
     summary="Trigger Language Rebuild",
 )
+@inject
 async def trigger_build(
     lang_code: str,
     request: BuildRequest = Body(..., description="Build request options"),
-    use_case: BuildLanguage = Depends(get_build_language_use_case),
-) -> Dict[str, Any]:
+    use_case: BuildLanguage = Depends(Provide[Container.build_language_use_case]),
+) -> dict[str, Any]:
     """
     [ADMIN ONLY] Manually triggers a build/compilation for an existing language.
 

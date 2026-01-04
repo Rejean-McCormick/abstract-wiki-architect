@@ -1,1565 +1,2732 @@
 {
-  "generated_at": 1767389491.6020012,
+  "generated_at": 1767496134.130475,
+  "repo_root": "/mnt/c/MyCode/AbstractWiki/abstract-wiki-architect",
   "summary": {
-    "compile_valid_or_skipped": 2,
-    "compile_broken": 72,
+    "compile_valid_or_skipped": 67,
+    "compile_broken": 0,
     "runtime_pass": 0,
-    "runtime_fail": 74,
+    "runtime_fail": 156,
     "overall_ok": 0,
-    "overall_fail": 74
+    "overall_fail": 156
   },
   "results": [
     {
       "gf_lang": "Afr",
-      "api_lang": "afr",
+      "api_lang": "af",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Afr",
-        "filename": "WikiAfr.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7009296417236328,
-        "file_hash": "708dd3b8c28d964efddcfbb04fe8d7257481deb5b551539f27c1eddf3baf46ba"
+        "filename": "generated/src/WikiAfr.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11744332313537598,
+        "file_hash": "ae1354d1ebf312fdaecb20cf26a5a19e12974f336dc4bc84018009a66bf39ba4",
+        "iso2": "af"
       },
+      "runtime": {
+        "api_lang": "af",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 24.226665496826172,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "afr",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "afr",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20747.7970123291,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 33.74838829040527,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Amh",
-      "api_lang": "amh",
+      "api_lang": "am",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Amh",
-        "filename": "WikiAmh.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6416704654693604,
-        "file_hash": "e9694bf3402b79f00dfecd8a81a060a2588d26ce09f32ce004247cf2bdb6898d"
+        "filename": "generated/src/WikiAmh.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11243820190429688,
+        "file_hash": "f63e0747109d36d3675c2781327eeeea1bda9c4493956090335f271728b23b96",
+        "iso2": "am"
       },
+      "runtime": {
+        "api_lang": "am",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 21.04496955871582,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "amh",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "amh",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20755.772590637207,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 25.07305145263672,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Ara",
-      "api_lang": "ara",
+      "api_lang": "ar",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Ara",
-        "filename": "WikiAra.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7394194602966309,
-        "file_hash": "4d796c5fed118d931a9dcd38dabd2e7312231e3ddd0398a2e3c7f55961f1f3d0"
+        "filename": "generated/src/WikiAra.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11675858497619629,
+        "file_hash": "6c8898f65c3c178bd8d60abc504e24d932ecd22796fee98727a038a2aa1ac29d",
+        "iso2": "ar"
       },
+      "runtime": {
+        "api_lang": "ar",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 30.540943145751953,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ara",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "ara",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20751.68228149414,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 24.498701095581055,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Bel",
-      "api_lang": "bel",
+      "api_lang": "be",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Bel",
-        "filename": "WikiBel.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.7003879547119141,
-        "file_hash": "bcfd12f4f39a9621383684dfb72253f71a05cb4b3c4f76226e2b7972ef2f8438"
+        "filename": "generated/src/WikiBel.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.2072582244873047,
+        "file_hash": "d788b215a4b500c9e3d33b6989e5b1fb653a22cd5f766d209faf6a1fae0adc9e",
+        "iso2": "be"
       },
+      "runtime": {
+        "api_lang": "be",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.943122863769531,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "bel",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "bel",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20760.154962539673,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 18.223285675048828,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ben",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ben",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 23.591041564941406,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Bul",
-      "api_lang": "bul",
+      "api_lang": "bg",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Bul",
-        "filename": "WikiBul.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6373052597045898,
-        "file_hash": "9ade6aeea6c50a70576c51344a52f741d307e99ac487fc2b8c89dc5877991cad"
+        "filename": "generated/src/WikiBul.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11404132843017578,
+        "file_hash": "fd0466a5b43b006d28739061c38f496b301217ab7ba1383ae5e3f246e5563938",
+        "iso2": "bg"
       },
+      "runtime": {
+        "api_lang": "bg",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 29.22201156616211,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Ben",
+      "api_lang": "bn",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Ben",
+        "filename": "generated/src/WikiBen.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.12091469764709473,
+        "file_hash": "2a97bbcbf7b9a74e5fc4326b09f2780917503693580c9d95f1d0b415aa49bf51",
+        "iso2": "bn"
+      },
+      "runtime": {
+        "api_lang": "bn",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 17.729759216308594,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "bul",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "bul",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20756.737232208252,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 18.558025360107422,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Cat",
-      "api_lang": "cat",
+      "api_lang": "ca",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Cat",
-        "filename": "WikiCat.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6350059509277344,
-        "file_hash": "7752a2271cde66524808d3d56256a013fa7b21328d7704c7993155fa42d1f93e"
+        "filename": "generated/src/WikiCat.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11539292335510254,
+        "file_hash": "8562fb7cc13038da5d100fe4e452eeaea571abdede7a179a63a55eec3949667e",
+        "iso2": "ca"
       },
+      "runtime": {
+        "api_lang": "ca",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 9.931564331054688,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "cat",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "cat",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20753.441333770752,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 31.550168991088867,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
-      "gf_lang": "Cgg",
+      "gf_lang": null,
+      "api_lang": "ces",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ces",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 11.288642883300781,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
       "api_lang": "cgg",
       "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Cgg",
-        "filename": "WikiCgg.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.635505199432373,
-        "file_hash": "be71f8249e726a8db07fe84b724b603720e91fcc6a4d718e8e67494bb3d9056b"
-      },
+      "compile": null,
       "runtime": {
         "api_lang": "cgg",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20757.01904296875,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 24.73282814025879,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
-      "gf_lang": "Chi",
+      "gf_lang": null,
       "api_lang": "chi",
       "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Chi",
-        "filename": "WikiChi.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.5955662727355957,
-        "file_hash": "0f312659926a83770d30e020a3495def56df9eede6c78c0bf0c8329b303d8849"
-      },
+      "compile": null,
       "runtime": {
         "api_lang": "chi",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20745.423078536987,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 13.886451721191406,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Cze",
-      "api_lang": "cze",
+      "api_lang": "cs",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Cze",
-        "filename": "WikiCze.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.682300329208374,
-        "file_hash": "3ceb14aca163b4769ce802b06edb38ca4a3215ddbf633fb52e0e2738098098ed"
+        "filename": "generated/src/WikiCze.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.12239956855773926,
+        "file_hash": "2f2fae2431d7330e3e8c701a2f59d764f7121514266feeb9a5507ffe16c8edd6",
+        "iso2": "cs"
       },
+      "runtime": {
+        "api_lang": "cs",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.756057739257812,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Cym",
+      "api_lang": "cy",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Cym",
+        "filename": "generated/src/WikiCym.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10732436180114746,
+        "file_hash": "b5b49540bbf17f48ba4d9b0cf7b12f9ad91f8a5e098eb4852b25d1f7d9ac1600",
+        "iso2": "cy"
+      },
+      "runtime": {
+        "api_lang": "cy",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.932300567626953,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "cym",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "cym",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.547016143798828,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "cze",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "cze",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20755.091905593872,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 10.460376739501953,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Dan",
-      "api_lang": "dan",
+      "api_lang": "da",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Dan",
-        "filename": "WikiDan.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6304018497467041,
-        "file_hash": "6e15e798b4870edd01da41c57cdd22d91f439bf4179b714629e87f239099702a"
+        "filename": "generated/src/WikiDan.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11673331260681152,
+        "file_hash": "613354817f46eb00fcde4b7dbfe7ca279dcb67e70b93439859ae92eab01c690f",
+        "iso2": "da"
       },
+      "runtime": {
+        "api_lang": "da",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 40.12775421142578,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "dan",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "dan",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20747.82919883728,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Deu",
-      "api_lang": "deu",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Deu",
-        "filename": "WikiDeu.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6627340316772461,
-        "file_hash": "012f905355e6c5111b690e55f6184f041572193f479bad774f94f7f46034317a"
-      },
-      "runtime": {
-        "api_lang": "deu",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20754.28080558777,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Dut",
-      "api_lang": "dut",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Dut",
-        "filename": "WikiDut.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.5972304344177246,
-        "file_hash": "b4718fcd1a96371caeabdadb723c5a9ea16924826655f30e4cd3fac4af996429"
-      },
-      "runtime": {
-        "api_lang": "dut",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20750.561475753784,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Ell",
-      "api_lang": "ell",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Ell",
-        "filename": "WikiEll.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.5625357627868652,
-        "file_hash": "1c7113c415703793191aecb4f4db8a41c129b6657ec2c3933eac53e78821041a"
-      },
-      "runtime": {
-        "api_lang": "ell",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20020.268440246582,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Eng",
-      "api_lang": "eng",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Eng",
-        "filename": "WikiEng.gf",
-        "status": "BROKEN",
-        "error": "\u001b[34m",
-        "duration_s": 6.007289171218872,
-        "file_hash": "63ce6b4e91bbdec85555b64174d27572bb11c6f44651a7d66f28be4645c48de0"
-      },
-      "runtime": {
-        "api_lang": "eng",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20020.30062675476,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Est",
-      "api_lang": "est",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Est",
-        "filename": "WikiEst.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.5326938629150391,
-        "file_hash": "04d7bc856fe29e689f4dfb690c366e32cdd7c58800473ecacb4795643cc0da14"
-      },
-      "runtime": {
-        "api_lang": "est",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20022.5510597229,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Eus",
-      "api_lang": "eus",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Eus",
-        "filename": "WikiEus.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.5537552833557129,
-        "file_hash": "803eb6ac98e8146fd9a43331ac90f4a64cd3b5b9aa436a7f30505c31472f9d2d"
-      },
-      "runtime": {
-        "api_lang": "eus",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20022.189617156982,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Ext",
-      "api_lang": "ext",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Ext",
-        "filename": "WikiExt.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6130151748657227,
-        "file_hash": "7ddace77043e59eb75d424ca14e8db3aa860c8c9260deb600a6db9995bfb3b58"
-      },
-      "runtime": {
-        "api_lang": "ext",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20031.821489334106,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Fao",
-      "api_lang": "fao",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Fao",
-        "filename": "WikiFao.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.5423753261566162,
-        "file_hash": "1cca67849e3b071a6f4ba9e83313b6dd27680f4b06c299d26bcfcc2b89aa6ba9"
-      },
-      "runtime": {
-        "api_lang": "fao",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20021.848678588867,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Fas",
-      "api_lang": "fas",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Fas",
-        "filename": "WikiFas.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6142001152038574,
-        "file_hash": "c3c570ce0d699984d8e8c6db2817bf2b515576c282a8d11c6350499dfd570fb7"
-      },
-      "runtime": {
-        "api_lang": "fas",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20018.351316452026,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Fin",
-      "api_lang": "fin",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Fin",
-        "filename": "WikiFin.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.624037504196167,
-        "file_hash": "15595734a683c34ebd24a55921157fd07e7d249d12a7187cdf3fdffb2379321f"
-      },
-      "runtime": {
-        "api_lang": "fin",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20024.153470993042,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Fra",
-      "api_lang": "fra",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Fra",
-        "filename": "WikiFra.gf",
-        "status": "BROKEN",
-        "error": "WikiFra.gf:",
-        "duration_s": 6.235883474349976,
-        "file_hash": "1926d78c030c03cc553fcc7f50fab4840da7ba17afaee120cae308b7fc26017e"
-      },
-      "runtime": {
-        "api_lang": "fra",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20027.574062347412,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 8.392095565795898,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Ger",
-      "api_lang": "ger",
+      "api_lang": "de",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Ger",
-        "filename": "WikiGer.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.5533523559570312,
-        "file_hash": "fd14cb577553937a171d279c30824697f0143bc1c2a377f196a6f759b80902b6"
+        "filename": "generated/src/WikiGer.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11659073829650879,
+        "file_hash": "3eef891de4b273e1f22e06a8b3ed9bf586d2b50f95647a47c920c16afa26c02b",
+        "iso2": "de"
       },
       "runtime": {
-        "api_lang": "ger",
+        "api_lang": "de",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20026.292324066162,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 27.107715606689453,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
-      "gf_lang": "Gla",
-      "api_lang": "gla",
+      "gf_lang": null,
+      "api_lang": "deu",
       "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Gla",
-        "filename": "WikiGla.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.5534648895263672,
-        "file_hash": "d775ef29270f358e2fc3f6340f5d35d7271bd410d14b22559556f26912d495a4"
-      },
+      "compile": null,
       "runtime": {
-        "api_lang": "gla",
+        "api_lang": "deu",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20009.48929786682,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 11.898517608642578,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
-      "gf_lang": "Grc",
-      "api_lang": "grc",
+      "gf_lang": null,
+      "api_lang": "dut",
       "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Grc",
-        "filename": "WikiGrc.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6336238384246826,
-        "file_hash": "76113f4b9754dfdc5252e2250ac7db5c3dcd6d1ab5b5575ab55eeebd5dfd31aa"
-      },
+      "compile": null,
       "runtime": {
-        "api_lang": "grc",
+        "api_lang": "dut",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20004.13966178894,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 18.719196319580078,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Gre",
-      "api_lang": "gre",
+      "api_lang": "el",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Gre",
-        "filename": "WikiGre.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.643892765045166,
-        "file_hash": "aae46850bc7877f3be6d274944781e355a9fa243bb3dedb78dccf3d9019b2e28"
-      },
-      "runtime": {
-        "api_lang": "gre",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20306.100130081177,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Gus",
-      "api_lang": "gus",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Gus",
-        "filename": "WikiGus.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6434450149536133,
-        "file_hash": "dd2c1cbcdba9ce82399d8f5ad5a19e1de0c7d8814b09307dedbb1a6fde8bc57a"
-      },
-      "runtime": {
-        "api_lang": "gus",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20316.509008407593,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Heb",
-      "api_lang": "heb",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Heb",
-        "filename": "WikiHeb.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6737370491027832,
-        "file_hash": "aab247b6501308ffda841d58020702819b828cbd7b708d1deb93cdf23e58bf39"
-      },
-      "runtime": {
-        "api_lang": "heb",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20315.963983535767,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Hin",
-      "api_lang": "hin",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Hin",
-        "filename": "WikiHin.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6755332946777344,
-        "file_hash": "d48472ec206db6c6928a35fdecfd5fec05ad798f9b6524804fd1c446ff6387cb"
-      },
-      "runtime": {
-        "api_lang": "hin",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20315.471172332764,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Hrv",
-      "api_lang": "hrv",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Hrv",
-        "filename": "WikiHrv.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6036171913146973,
-        "file_hash": "5ddd80bb3098b0cf2303aa742078af5b53eb5fde5b026553be20633f7e70be5c"
-      },
-      "runtime": {
-        "api_lang": "hrv",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20304.617404937744,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Hun",
-      "api_lang": "hun",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Hun",
-        "filename": "WikiHun.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6237485408782959,
-        "file_hash": "a7bd7702a8a733d1bc1cc4bb4d6fee2d19b13ec974aa7315c13c084e3d04e14e"
-      },
-      "runtime": {
-        "api_lang": "hun",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20304.91852760315,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Hye",
-      "api_lang": "hye",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Hye",
-        "filename": "WikiHye.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6030874252319336,
-        "file_hash": "11ac8a37753a39a5c46228f9cf4eada6124b2090dbc2c7e22ce0a4ebb5f9c13d"
-      },
-      "runtime": {
-        "api_lang": "hye",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20313.938856124878,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Ice",
-      "api_lang": "ice",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Ice",
-        "filename": "WikiIce.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6631526947021484,
-        "file_hash": "10e86bfa3eef05dbe0e4ed745b443b4243e75f6c138aa7552a6ac93e3c928749"
-      },
-      "runtime": {
-        "api_lang": "ice",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20315.10305404663,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Ina",
-      "api_lang": "ina",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Ina",
-        "filename": "WikiIna.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6328909397125244,
-        "file_hash": "4b4dd5bd35b2a3cd1e5a171dfbfbe122f79470854f4c7bc5abe18011fa794de6"
-      },
-      "runtime": {
-        "api_lang": "ina",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20313.645124435425,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Isl",
-      "api_lang": "isl",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Isl",
-        "filename": "WikiIsl.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6449413299560547,
-        "file_hash": "38ef691e445384f90c895c4a67381a9cc2a9dbd37ad0795076dcd7e51a81fc22"
-      },
-      "runtime": {
-        "api_lang": "isl",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20313.69376182556,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Ita",
-      "api_lang": "ita",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Ita",
-        "filename": "WikiIta.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.673285722732544,
-        "file_hash": "94e4dd6d16c7b3fecd5062c73e7f8d002fdafee8f55b724cc029a5fbc12f34da"
-      },
-      "runtime": {
-        "api_lang": "ita",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20315.595149993896,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Jpn",
-      "api_lang": "jpn",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Jpn",
-        "filename": "WikiJpn.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.673506498336792,
-        "file_hash": "b4148da3859c7cf1f34ba098ec18ce9d53ea0161dbe45e3d006b2e1b524226f6"
-      },
-      "runtime": {
-        "api_lang": "jpn",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20313.73906135559,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Kam",
-      "api_lang": "kam",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Kam",
-        "filename": "WikiKam.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6235597133636475,
-        "file_hash": "0866d25c8f6a35a857e4c09f3245cfb21f32ea072dc8c4334df05d6d0ad0603a"
-      },
-      "runtime": {
-        "api_lang": "kam",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21178.67398262024,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Kaz",
-      "api_lang": "kaz",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Kaz",
-        "filename": "WikiKaz.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6947355270385742,
-        "file_hash": "3931a16588bf7ad4830695731cde56a98d0dbb1192bb7ac0fa51578bc3dc3e23"
-      },
-      "runtime": {
-        "api_lang": "kaz",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21181.514501571655,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Kor",
-      "api_lang": "kor",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Kor",
-        "filename": "WikiKor.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6839959621429443,
-        "file_hash": "d3495c688c5fdcb818b6f82fcdd0d30d3eb6b085891f1b41bbad4acbe9fe2545"
-      },
-      "runtime": {
-        "api_lang": "kor",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21179.028272628784,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Lat",
-      "api_lang": "lat",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Lat",
-        "filename": "WikiLat.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7337722778320312,
-        "file_hash": "53d991269d095b30614f74eb1bd80d086050cb64325eef2d841e82b0c66b3649"
-      },
-      "runtime": {
-        "api_lang": "lat",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21185.540199279785,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Lav",
-      "api_lang": "lav",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Lav",
-        "filename": "WikiLav.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7156205177307129,
-        "file_hash": "9fb6750f7f3491049612c5ce30a654334fb32f161e22af71e5522c1f46533f5a"
-      },
-      "runtime": {
-        "api_lang": "lav",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21185.50992012024,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Lexicon",
-      "api_lang": "lexicon",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Lexicon",
-        "filename": "WikiLexicon.gf",
+        "filename": "generated/src/WikiGre.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 0.6865882873535156,
-        "file_hash": "76c7857e20e239b3afef2bd99e073865a675e1a708ad12cca1ea452dbcc63ebd"
+        "duration_s": 0.1169428825378418,
+        "file_hash": "991753f4d38e2e2461a9335c1c62bd966e2b91662c4021fd38c6867fde2d451a",
+        "iso2": "el"
       },
       "runtime": {
-        "api_lang": "lexicon",
+        "api_lang": "el",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21172.573804855347,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 21.50726318359375,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
-      "gf_lang": "LexiconEng",
-      "api_lang": "lexiconeng",
+      "gf_lang": null,
+      "api_lang": "ell",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ell",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 11.260271072387695,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Eng",
+      "api_lang": "en",
       "overall": "FAIL",
       "compile": {
-        "gf_lang": "LexiconEng",
-        "filename": "WikiLexiconEng.gf",
+        "gf_lang": "Eng",
+        "filename": "generated/src/WikiEng.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 2.7752718925476074,
-        "file_hash": "da367fa73f119c1bbd85db7be2ea3307d9c3b48a4f50a4c73e2fdcfa6b9c4028"
+        "duration_s": 0.10495114326477051,
+        "file_hash": "e1fc109c1a2a6291530db619dacea47d7606ef73a7b9edfa1bd86ad93596c770",
+        "iso2": "en"
       },
       "runtime": {
-        "api_lang": "lexiconeng",
+        "api_lang": "en",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21183.12978744507,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 15.873193740844727,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
-      "gf_lang": "Lit",
-      "api_lang": "lit",
+      "gf_lang": null,
+      "api_lang": "eng",
       "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Lit",
-        "filename": "WikiLit.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6934421062469482,
-        "file_hash": "b11abccbf7fa51f4c2eaab8fb7413169c90294ee833628dc5064c33103f156cf"
-      },
+      "compile": null,
       "runtime": {
-        "api_lang": "lit",
+        "api_lang": "eng",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21181.538105010986,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "May",
-      "api_lang": "may",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "May",
-        "filename": "WikiMay.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6634080410003662,
-        "file_hash": "572b9bf86e5d9a4650fbd73a571acd18594f60eb1b7ad9540f8a0c2cc8932c33"
-      },
-      "runtime": {
-        "api_lang": "may",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21181.53405189514,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Mkd",
-      "api_lang": "mkd",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Mkd",
-        "filename": "WikiMkd.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6439571380615234,
-        "file_hash": "236e8adfc40176b843bade65b0c25ca9091a8435a22a754fc7dc26584bc28903"
-      },
-      "runtime": {
-        "api_lang": "mkd",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21184.12733078003,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Mlt",
-      "api_lang": "mlt",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Mlt",
-        "filename": "WikiMlt.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6851756572723389,
-        "file_hash": "26612d3647c80af1001b40db76471df214c5460b1ee34fc35c5f835557c1b642"
-      },
-      "runtime": {
-        "api_lang": "mlt",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21180.46236038208,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Mon",
-      "api_lang": "mon",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Mon",
-        "filename": "WikiMon.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6333723068237305,
-        "file_hash": "5969a3dbd86f77720adf894cd18473853898141bac3d013802f16d1fda8c04b8"
-      },
-      "runtime": {
-        "api_lang": "mon",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 21182.870626449585,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Nep",
-      "api_lang": "nep",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Nep",
-        "filename": "WikiNep.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6543023586273193,
-        "file_hash": "0b0cc240464ec5312474fdd9c30f5d2446b8da0f08ddbbd77a137392c2e42ae7"
-      },
-      "runtime": {
-        "api_lang": "nep",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20014.23954963684,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Nld",
-      "api_lang": "nld",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Nld",
-        "filename": "WikiNld.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6741659641265869,
-        "file_hash": "336851b97f450f7a91ea53df5d888cd0f969506463f4e3065880de090441d17d"
-      },
-      "runtime": {
-        "api_lang": "nld",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20019.710540771484,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Nno",
-      "api_lang": "nno",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Nno",
-        "filename": "WikiNno.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6637556552886963,
-        "file_hash": "65d85f12f0029e24fd75997be75d854a8de8e9e325a8b243dd347d0201a81b64"
-      },
-      "runtime": {
-        "api_lang": "nno",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20023.460626602173,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Nob",
-      "api_lang": "nob",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Nob",
-        "filename": "WikiNob.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6435751914978027,
-        "file_hash": "0ccd8b988d68960c2db7b438569304a7591d8b4784769afab77ca233dee7e3e6"
-      },
-      "runtime": {
-        "api_lang": "nob",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20021.53182029724,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Nor",
-      "api_lang": "nor",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Nor",
-        "filename": "WikiNor.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6943707466125488,
-        "file_hash": "1388465e6c9ae0461f207ee26c3248d7b15baa472d4184109edb633c4f09e00a"
-      },
-      "runtime": {
-        "api_lang": "nor",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20022.968530654907,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Pan",
-      "api_lang": "pan",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Pan",
-        "filename": "WikiPan.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7041141986846924,
-        "file_hash": "abed4d1240ff646df2e7ae46720c2ef7f60d20cc57cc04bbb74703da546e412a"
-      },
-      "runtime": {
-        "api_lang": "pan",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20009.124517440796,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Pes",
-      "api_lang": "pes",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Pes",
-        "filename": "WikiPes.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.7033662796020508,
-        "file_hash": "ffcca8e24ada94275ecebd5fc2cb32a9df53aa78198fcca384da0657742189b6"
-      },
-      "runtime": {
-        "api_lang": "pes",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20006.920337677002,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Pnb",
-      "api_lang": "pnb",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Pnb",
-        "filename": "WikiPnb.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.7335379123687744,
-        "file_hash": "fb252726dceacc1486763f4dc23f9401dd61eb9c3a4da8e23daac250fc2205d9"
-      },
-      "runtime": {
-        "api_lang": "pnb",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20013.06128501892,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Pol",
-      "api_lang": "pol",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Pol",
-        "filename": "WikiPol.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7137563228607178,
-        "file_hash": "e66980cec0988e68976f3b822432be0a96b47e79350d1714194ad659e36a0f75"
-      },
-      "runtime": {
-        "api_lang": "pol",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20020.19238471985,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Por",
-      "api_lang": "por",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Por",
-        "filename": "WikiPor.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7644741535186768,
-        "file_hash": "dc614902a56c3dfd2686dfdc86ebc4544952f04b4c0d1ee238ef9b1af7111ff4"
-      },
-      "runtime": {
-        "api_lang": "por",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20016.886949539185,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Ron",
-      "api_lang": "ron",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Ron",
-        "filename": "WikiRon.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7041616439819336,
-        "file_hash": "da865d02def1711c8812894a80741b30e5d15c22a74be2898f7456d5fd413aaa"
-      },
-      "runtime": {
-        "api_lang": "ron",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20017.5142288208,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Rus",
-      "api_lang": "rus",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Rus",
-        "filename": "WikiRus.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7041289806365967,
-        "file_hash": "eecb2edbe3cba52e157d78b54b41397ce74bcfa9d762af45985366443856afd7"
-      },
-      "runtime": {
-        "api_lang": "rus",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20019.909620285034,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Sco",
-      "api_lang": "sco",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Sco",
-        "filename": "WikiSco.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.6953012943267822,
-        "file_hash": "1d460f90e85631a58ae53858dd634bf321065697600346576ce484f947fcb929"
-      },
-      "runtime": {
-        "api_lang": "sco",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20872.260093688965,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Slo",
-      "api_lang": "slo",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Slo",
-        "filename": "WikiSlo.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.7749717235565186,
-        "file_hash": "7cbc5c82d7607139ab71b27fa52b16f27522d103b34185f11bcb9df956912376"
-      },
-      "runtime": {
-        "api_lang": "slo",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20865.75722694397,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Slv",
-      "api_lang": "slv",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Slv",
-        "filename": "WikiSlv.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.8348433971405029,
-        "file_hash": "bc2145936962944db4aa8f1cd51e804a14a1cfbc484a3b154927c45b97aeb269"
-      },
-      "runtime": {
-        "api_lang": "slv",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20863.537788391113,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
-        "sample_text": null
-      }
-    },
-    {
-      "gf_lang": "Snd",
-      "api_lang": "snd",
-      "overall": "FAIL",
-      "compile": {
-        "gf_lang": "Snd",
-        "filename": "WikiSnd.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.8237969875335693,
-        "file_hash": "e5cdabaac19026e92d9573a617ddcc2e149b54b9af983ef3858a32283e9b1627"
-      },
-      "runtime": {
-        "api_lang": "snd",
-        "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20878.230333328247,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 21.908283233642578,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Spa",
-      "api_lang": "spa",
+      "api_lang": "es",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Spa",
-        "filename": "WikiSpa.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7842733860015869,
-        "file_hash": "71cd985bb9840e213f57dfc069cae72d8c8953fde86abb1a90685c8592ea2a47"
+        "filename": "generated/src/WikiSpa.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10581088066101074,
+        "file_hash": "c81a61b32828ac9cc1e0204c105abedcd0c71cc77053c09d2d5ec09efd2efc54",
+        "iso2": "es"
       },
+      "runtime": {
+        "api_lang": "es",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.994144439697266,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "est",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "est",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 11.875391006469727,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Est",
+      "api_lang": "et",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Est",
+        "filename": "generated/src/WikiEst.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.12006592750549316,
+        "file_hash": "6e0ed1409ef90e05b606d1a03a0f26b039200d6c4dee122c415998add04c73b6",
+        "iso2": "et"
+      },
+      "runtime": {
+        "api_lang": "et",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.014814376831055,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Eus",
+      "api_lang": "eu",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Eus",
+        "filename": "generated/src/WikiEus.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10485291481018066,
+        "file_hash": "97908e355aaa5d0daf0f2c26388ecd5c3ed19dc2d4a2388d9a73cac4fdd61f05",
+        "iso2": "eu"
+      },
+      "runtime": {
+        "api_lang": "eu",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 13.901710510253906,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "eus",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "eus",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 31.45742416381836,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Pes",
+      "api_lang": "fa",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Pes",
+        "filename": "generated/src/WikiPes.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1049346923828125,
+        "file_hash": "d8733213730830a25a922ad01009e7cd74e1d1d827ce53d0fe63acdb2e32f60c",
+        "iso2": "fa"
+      },
+      "runtime": {
+        "api_lang": "fa",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.071868896484375,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fao",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fao",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 32.782793045043945,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fas",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fas",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 21.14129066467285,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Fin",
+      "api_lang": "fi",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Fin",
+        "filename": "generated/src/WikiFin.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1085660457611084,
+        "file_hash": "d810416204f146bb5890d62319f8ab202bb94158121666360dee407caba597f0",
+        "iso2": "fi"
+      },
+      "runtime": {
+        "api_lang": "fi",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 10.226726531982422,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fin",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fin",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.625953674316406,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Fao",
+      "api_lang": "fo",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Fao",
+        "filename": "generated/src/WikiFao.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10579800605773926,
+        "file_hash": "af4b728ad741b938bbc66a6810c97cb54e7e0241a940cdffe6a934bfc23a80fe",
+        "iso2": "fo"
+      },
+      "runtime": {
+        "api_lang": "fo",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.207052230834961,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Fre",
+      "api_lang": "fr",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Fre",
+        "filename": "generated/src/WikiFre.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10623884201049805,
+        "file_hash": "a170bff03ce30476c4b0a4a55b0b84dbf6461aa70753b42ed2db59e3d71177d4",
+        "iso2": "fr"
+      },
+      "runtime": {
+        "api_lang": "fr",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.674186706542969,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fra",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fra",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 6.754875183105469,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "fre",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "fre",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 13.288259506225586,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Gla",
+      "api_lang": "gd",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Gla",
+        "filename": "generated/src/WikiGla.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11439847946166992,
+        "file_hash": "f4e24f420561441e0c58bcfdf401cb3d6841358621edf8ccd32417f7ee8d1e9f",
+        "iso2": "gd"
+      },
+      "runtime": {
+        "api_lang": "gd",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 22.750139236450195,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ger",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ger",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 17.729997634887695,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "gla",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "gla",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 26.39937400817871,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "grc",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "grc",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.371063232421875,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "gre",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "gre",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 3.5407543182373047,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "guz",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "guz",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.64566993713379,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Heb",
+      "api_lang": "he",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Heb",
+        "filename": "generated/src/WikiHeb.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10472774505615234,
+        "file_hash": "7224a71c02a14f293f1e218950df9b4b99184031fa5131d9a3337ca627326eaa",
+        "iso2": "he"
+      },
+      "runtime": {
+        "api_lang": "he",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.994497299194336,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "heb",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "heb",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 17.876863479614258,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Hin",
+      "api_lang": "hi",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Hin",
+        "filename": "generated/src/WikiHin.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11517214775085449,
+        "file_hash": "2d15cb8d835ec626e430bd53ca16c51cb0188b4cc5f3f62f33e9be9ec26b41bc",
+        "iso2": "hi"
+      },
+      "runtime": {
+        "api_lang": "hi",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.20085334777832,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "hin",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "hin",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 5.4454803466796875,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Hrv",
+      "api_lang": "hr",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Hrv",
+        "filename": "generated/src/WikiHrv.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.12535667419433594,
+        "file_hash": "c5f4bcfda00ddfa6fe6919c9d59895665d629d477582a7301c9fedc699836c07",
+        "iso2": "hr"
+      },
+      "runtime": {
+        "api_lang": "hr",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.5772647857666,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "hrv",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "hrv",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 23.056745529174805,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Hun",
+      "api_lang": "hu",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Hun",
+        "filename": "generated/src/WikiHun.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10387825965881348,
+        "file_hash": "323e236fb1d8f18c0d449d7239217e2bad2a415870262bb820a601826adb8c6c",
+        "iso2": "hu"
+      },
+      "runtime": {
+        "api_lang": "hu",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 11.223793029785156,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "hun",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "hun",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 17.365455627441406,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Hye",
+      "api_lang": "hy",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Hye",
+        "filename": "generated/src/WikiHye.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10612106323242188,
+        "file_hash": "3a48c6e6f5530b7b17323f51bd8b5976cb9f2419a1381b0d958cb492bf116560",
+        "iso2": "hy"
+      },
+      "runtime": {
+        "api_lang": "hy",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 21.763086318969727,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "hye",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "hye",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 8.935928344726562,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Ina",
+      "api_lang": "ia",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Ina",
+        "filename": "generated/src/WikiIna.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10482025146484375,
+        "file_hash": "97a76eeadd026ce2c5e79c7cdd4cf19371eb1ba696f13a90060cb0e5d2f41ecd",
+        "iso2": "ia"
+      },
+      "runtime": {
+        "api_lang": "ia",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.333175659179688,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ice",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ice",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.753984451293945,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Ind",
+      "api_lang": "id",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Ind",
+        "filename": "generated/src/WikiInd.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10370230674743652,
+        "file_hash": "701c7acec81d2c961d21258442708a06f8b1f4b14ac54aaa592ed8bf864517fb",
+        "iso2": "id"
+      },
+      "runtime": {
+        "api_lang": "id",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 8.557558059692383,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ina",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ina",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 9.19651985168457,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ind",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ind",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 17.757415771484375,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "inu",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "inu",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.454032897949219,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Ice",
+      "api_lang": "is",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Ice",
+        "filename": "generated/src/WikiIce.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11653637886047363,
+        "file_hash": "9eb07d730e0a9e6b96c579ff7b352d4e1973972d11aaec27093d627f48c79809",
+        "iso2": "is"
+      },
+      "runtime": {
+        "api_lang": "is",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.18196678161621,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "isl",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "isl",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.309043884277344,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Ita",
+      "api_lang": "it",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Ita",
+        "filename": "generated/src/WikiIta.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.09571957588195801,
+        "file_hash": "ef113321e95f0035608a9db84f3a390ec943b3d3e26d4aa6967d72a7adcf8103",
+        "iso2": "it"
+      },
+      "runtime": {
+        "api_lang": "it",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 18.709897994995117,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ita",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ita",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.045238494873047,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "iu",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "iu",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.436100006103516,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Jpn",
+      "api_lang": "ja",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Jpn",
+        "filename": "generated/src/WikiJpn.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11382722854614258,
+        "file_hash": "eb294185e673394cf328af782ec1cdb47b671bbe60974c9939bc9ebdb6e7b6f8",
+        "iso2": "ja"
+      },
+      "runtime": {
+        "api_lang": "ja",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 23.83589744567871,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "jpn",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "jpn",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 25.774478912353516,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "kam",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "kam",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 17.38286018371582,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "kaz",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "kaz",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.059926986694336,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Kaz",
+      "api_lang": "kk",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Kaz",
+        "filename": "generated/src/WikiKaz.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.12426209449768066,
+        "file_hash": "c73528107b1acc0b9e6279752cf4c08c067a5250aa02ce02e8fa44f77afc22d0",
+        "iso2": "kk"
+      },
+      "runtime": {
+        "api_lang": "kk",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 23.170948028564453,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Kor",
+      "api_lang": "ko",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Kor",
+        "filename": "generated/src/WikiKor.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11373424530029297,
+        "file_hash": "e8569d6595cb31079a6c6dbaa78ded1abf8cecd576801fafd733b3246b2c6a55",
+        "iso2": "ko"
+      },
+      "runtime": {
+        "api_lang": "ko",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.98615264892578,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "kor",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "kor",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.379024505615234,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Lat",
+      "api_lang": "la",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Lat",
+        "filename": "generated/src/WikiLat.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.13431143760681152,
+        "file_hash": "2bec805c2a0cc8dd25e9b3d3dc44ed2adfe92247f096b1104b25b4c0003b4b4e",
+        "iso2": "la"
+      },
+      "runtime": {
+        "api_lang": "la",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.680789947509766,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "lat",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "lat",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.879133224487305,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "lav",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "lav",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 20.89214324951172,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "lit",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "lit",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.637874603271484,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Lit",
+      "api_lang": "lt",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Lit",
+        "filename": "generated/src/WikiLit.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1250624656677246,
+        "file_hash": "e2749a43036a9ce1adb5d55d531e89f780bf697b7396743134f943fd45231da2",
+        "iso2": "lt"
+      },
+      "runtime": {
+        "api_lang": "lt",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.150712966918945,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Lav",
+      "api_lang": "lv",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Lav",
+        "filename": "generated/src/WikiLav.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10485649108886719,
+        "file_hash": "9961029958bedf7eec72fb9427126383da3244be30db3d0a280534d4eeb9fd50",
+        "iso2": "lv"
+      },
+      "runtime": {
+        "api_lang": "lv",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.979528427124023,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "mal",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "mal",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 20.011425018310547,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "may",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "may",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 22.047758102416992,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Mkd",
+      "api_lang": "mk",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Mkd",
+        "filename": "generated/src/WikiMkd.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10505127906799316,
+        "file_hash": "b5d62f0fd7c96c875732bedc3ec84439cc71ee5343e709de4939338235de57d4",
+        "iso2": "mk"
+      },
+      "runtime": {
+        "api_lang": "mk",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.79759407043457,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "mkd",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "mkd",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 17.43340492248535,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ml",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ml",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.593217849731445,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "mlt",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "mlt",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 23.468017578125,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Mon",
+      "api_lang": "mn",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Mon",
+        "filename": "generated/src/WikiMon.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10626387596130371,
+        "file_hash": "3c932997b8c7c6133198f9511cc9cdafda117a11115ca5f78f65aaa395fc167a",
+        "iso2": "mn"
+      },
+      "runtime": {
+        "api_lang": "mn",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.68073844909668,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "mon",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "mon",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.468338012695312,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "May",
+      "api_lang": "ms",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "May",
+        "filename": "generated/src/WikiMay.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1141202449798584,
+        "file_hash": "e64ce4539b4d55d4284478963352da93d3a81a059996949c03bc8bf0eb67cc9e",
+        "iso2": "ms"
+      },
+      "runtime": {
+        "api_lang": "ms",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 20.162105560302734,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "msa",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "msa",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 10.102510452270508,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Mlt",
+      "api_lang": "mt",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Mlt",
+        "filename": "generated/src/WikiMlt.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11522650718688965,
+        "file_hash": "b661f4ab2bab80b9949e60709e100bd98809ff2663e81b96c28923c00c1e2649",
+        "iso2": "mt"
+      },
+      "runtime": {
+        "api_lang": "mt",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 11.92784309387207,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Nor",
+      "api_lang": "nb",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Nor",
+        "filename": "generated/src/WikiNor.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10394906997680664,
+        "file_hash": "5592427cfb687f84a8fdd3c712f21b944e4736307814261a7062cba647b974cb",
+        "iso2": "nb"
+      },
+      "runtime": {
+        "api_lang": "nb",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 11.370182037353516,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Nep",
+      "api_lang": "ne",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Nep",
+        "filename": "generated/src/WikiNep.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10506343841552734,
+        "file_hash": "8e87a3de7a4cbfdd850119f73c497c7b757fc90e3c207f5c8f7066f7d56ab808",
+        "iso2": "ne"
+      },
+      "runtime": {
+        "api_lang": "ne",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 10.696172714233398,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nep",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nep",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 25.400400161743164,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Dut",
+      "api_lang": "nl",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Dut",
+        "filename": "generated/src/WikiDut.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.11507177352905273,
+        "file_hash": "79d6c4327f2a76f91f0de28758ed4b4f9ac56bda54a83b03479df3a713f61b14",
+        "iso2": "nl"
+      },
+      "runtime": {
+        "api_lang": "nl",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.97993278503418,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nld",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nld",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 20.623445510864258,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Nno",
+      "api_lang": "nn",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Nno",
+        "filename": "generated/src/WikiNno.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.12571144104003906,
+        "file_hash": "1ef9e6bd634caccf9b383d2ad39818d7fca2890d0a668f0f352d67a8a0f88afa",
+        "iso2": "nn"
+      },
+      "runtime": {
+        "api_lang": "nn",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.13163948059082,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nno",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nno",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.06893539428711,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Nor",
+      "api_lang": "no",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Nor",
+        "filename": "generated/src/WikiNor.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.12502455711364746,
+        "file_hash": "5592427cfb687f84a8fdd3c712f21b944e4736307814261a7062cba647b974cb",
+        "iso2": "no"
+      },
+      "runtime": {
+        "api_lang": "no",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 25.3908634185791,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nob",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nob",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.278982162475586,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "nor",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "nor",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.185304641723633,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Pnb",
+      "api_lang": "pa",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Pnb",
+        "filename": "generated/src/WikiPnb.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.13347172737121582,
+        "file_hash": "99a92d44a2ed1138e3111d1c36905f3bf641e934b6965fe5c3008ca03fe7d99c",
+        "iso2": "pa"
+      },
+      "runtime": {
+        "api_lang": "pa",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 22.002458572387695,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "pan",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "pan",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.578964233398438,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "per",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "per",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 11.678457260131836,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "pes",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "pes",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 23.294448852539062,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Pol",
+      "api_lang": "pl",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Pol",
+        "filename": "generated/src/WikiPol.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.14352107048034668,
+        "file_hash": "f59c5177c52239b2d2759d80b047c05368b13afcd5482bfdbf31a79bf7563f7a",
+        "iso2": "pl"
+      },
+      "runtime": {
+        "api_lang": "pl",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.692928314208984,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "pnb",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "pnb",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.10565185546875,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "pol",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "pol",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.068241119384766,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "por",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "por",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 21.476030349731445,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Por",
+      "api_lang": "pt",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Por",
+        "filename": "generated/src/WikiPor.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10456395149230957,
+        "file_hash": "9a0c5753dd6874c38980d5b98319d08095aff7af8300eee6995df12f45e07e83",
+        "iso2": "pt"
+      },
+      "runtime": {
+        "api_lang": "pt",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 16.276121139526367,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Ron",
+      "api_lang": "ro",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Ron",
+        "filename": "generated/src/WikiRon.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1163339614868164,
+        "file_hash": "0101c071ddb834b36ee55c7b7789d1196c0cffd405a922ea38912b9caa0db0e7",
+        "iso2": "ro"
+      },
+      "runtime": {
+        "api_lang": "ro",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 21.952390670776367,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ron",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "ron",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 8.287906646728516,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Rus",
+      "api_lang": "ru",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Rus",
+        "filename": "generated/src/WikiRus.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1043696403503418,
+        "file_hash": "94016775916c20edf6c252ff5cf27500c861e5e8c13c786cb7c587ec8bf746a5",
+        "iso2": "ru"
+      },
+      "runtime": {
+        "api_lang": "ru",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 18.49508285522461,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "rum",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "rum",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.757301330566406,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "rus",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "rus",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.596151351928711,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "sco",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "sco",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.766838073730469,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Snd",
+      "api_lang": "sd",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Snd",
+        "filename": "generated/src/WikiSnd.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10280585289001465,
+        "file_hash": "da0e1132c71f96209ac3ebe0a577508fd970e699bac9315b1a60dde8251f28db",
+        "iso2": "sd"
+      },
+      "runtime": {
+        "api_lang": "sd",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.558221817016602,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Slo",
+      "api_lang": "sk",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Slo",
+        "filename": "generated/src/WikiSlo.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1250009536743164,
+        "file_hash": "f783ecdd0b848a95cc698e0c2b73ea01f36fa7a5cba1264c548b442b893d51d5",
+        "iso2": "sk"
+      },
+      "runtime": {
+        "api_lang": "sk",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 15.223979949951172,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Slv",
+      "api_lang": "sl",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Slv",
+        "filename": "generated/src/WikiSlv.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10438752174377441,
+        "file_hash": "28bdee84b0b2d85ccd40248e692880d7e62bfdb715db8c9ce353896384124eed",
+        "iso2": "sl"
+      },
+      "runtime": {
+        "api_lang": "sl",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 17.17209815979004,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "slk",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "slk",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 21.71945571899414,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "slo",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "slo",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 25.970458984375,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "slv",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "slv",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 11.372804641723633,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "snd",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "snd",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 22.15886116027832,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Som",
+      "api_lang": "so",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Som",
+        "filename": "generated/src/WikiSom.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.12621116638183594,
+        "file_hash": "2a7d9cb3afc26c3a29358065b8d68fc791ad00951a7735fdb398536b5842d827",
+        "iso2": "so"
+      },
+      "runtime": {
+        "api_lang": "so",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.130229949951172,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "som",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "som",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 18.245458602905273,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "spa",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "spa",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20862.3948097229,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 9.114265441894531,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Sqi",
-      "api_lang": "sqi",
+      "api_lang": "sq",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Sqi",
-        "filename": "WikiSqi.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.7733514308929443,
-        "file_hash": "4711999cfe2c6da57a3df6c569dccf5d857bdcad97b5e057e7591686b203e173"
+        "filename": "generated/src/WikiSqi.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1357421875,
+        "file_hash": "8d9dac0401444e55c9b354a5298b55e1610da0203271adb93472675caef6b277",
+        "iso2": "sq"
       },
+      "runtime": {
+        "api_lang": "sq",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 23.421764373779297,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "sqi",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "sqi",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20876.292943954468,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 12.887239456176758,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Swe",
-      "api_lang": "swe",
+      "api_lang": "sv",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Swe",
-        "filename": "WikiSwe.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.7341725826263428,
-        "file_hash": "5f3f1c6903d164e6eabef102266514de9a3981cf7839ecd46b5b06feb7e4cfe1"
+        "filename": "generated/src/WikiSwe.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.13406682014465332,
+        "file_hash": "939b898ec21bb76b8b0c03ee81da3b11571579edf51c58e059c7132b1d8afcb5",
+        "iso2": "sv"
       },
+      "runtime": {
+        "api_lang": "sv",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 28.151988983154297,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Swa",
+      "api_lang": "sw",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Swa",
+        "filename": "generated/src/WikiSwa.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1349315643310547,
+        "file_hash": "dbd62c3aa7bd47b7710c8bd3d26e27bac3d90009d977b4f1c4621babdf01fe0c",
+        "iso2": "sw"
+      },
+      "runtime": {
+        "api_lang": "sw",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.887809753417969,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "swa",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "swa",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 13.082742691040039,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "swe",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "swe",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20863.147735595703,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 20.97296714782715,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Tam",
-      "api_lang": "tam",
+      "api_lang": "ta",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Tam",
-        "filename": "WikiTam.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.754136323928833,
-        "file_hash": "8555da11011ab0630ed07caa59a755d37943fbeb0c425340b784d06e7feff127"
+        "filename": "generated/src/WikiTam.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.14515137672424316,
+        "file_hash": "95ec510c86fd27fc86e9064132868cac195b794bef4fcac73010b6f38cbe025f",
+        "iso2": "ta"
       },
+      "runtime": {
+        "api_lang": "ta",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 20.0955867767334,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tam",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "tam",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20875.57101249695,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 14.454126358032227,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Tel",
-      "api_lang": "tel",
+      "api_lang": "te",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Tel",
-        "filename": "WikiTel.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.7746386528015137,
-        "file_hash": "f4555d8f604ccf5f1fd9eecdbfb08e100c5dacae5151a9126a756fb199035bc5"
+        "filename": "generated/src/WikiTel.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.13570332527160645,
+        "file_hash": "9501ccdb5e595df2a8818c46b2c11899da9d58275a99e42e581517233a6e5e24",
+        "iso2": "te"
       },
+      "runtime": {
+        "api_lang": "te",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.561891555786133,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tel",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "tel",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20876.205444335938,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 16.848325729370117,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tgl",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "tgl",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 19.153356552124023,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Tha",
-      "api_lang": "tha",
+      "api_lang": "th",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Tha",
-        "filename": "WikiTha.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6940796375274658,
-        "file_hash": "05ef9dd80a553f75f834c11658b5623898ccaae7edf51d8f0957e48afa2fa17d"
+        "filename": "generated/src/WikiTha.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.1053156852722168,
+        "file_hash": "8e3b39af1d027c632aa18d3c7e45be569bb26942d1adad656858908ddbbd34c0",
+        "iso2": "th"
       },
+      "runtime": {
+        "api_lang": "th",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 21.89326286315918,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tha",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "tha",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20875.30565261841,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 17.293691635131836,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Tgl",
+      "api_lang": "tl",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Tgl",
+        "filename": "generated/src/WikiTgl.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10448169708251953,
+        "file_hash": "0cd8b9fcc27266fcd799a179ef4ae46f699923abfc64f7fcc6ee005b35a09d83",
+        "iso2": "tl"
+      },
+      "runtime": {
+        "api_lang": "tl",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.440774917602539,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Tur",
-      "api_lang": "tur",
+      "api_lang": "tr",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Tur",
-        "filename": "WikiTur.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.6635134220123291,
-        "file_hash": "a855abd819d79e59c2a218936c05e7b73a02aab6d4dc7980c7cb8788c70cac6b"
+        "filename": "generated/src/WikiTur.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10334897041320801,
+        "file_hash": "f887e7456bc3a4e5246312a442ad6382b8fec0240f3e68f1adbfe430b03674c8",
+        "iso2": "tr"
       },
+      "runtime": {
+        "api_lang": "tr",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 8.351325988769531,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "tur",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "tur",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20868.783235549927,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 12.454748153686523,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Ukr",
-      "api_lang": "ukr",
+      "api_lang": "uk",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Ukr",
-        "filename": "WikiUkr.gf",
-        "status": "BROKEN",
-        "error": "File Wiki.gf does not exist.",
-        "duration_s": 0.4535496234893799,
-        "file_hash": "7cf8849dc524b8586b2c919ff25514bd82ab9ea94258e593de7814beab3ed25f"
+        "filename": "generated/src/WikiUkr.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.09547090530395508,
+        "file_hash": "62e8332ba56ad9791ec5b011d328e56c0db110ced9696e378905cb89210e79ad",
+        "iso2": "uk"
       },
+      "runtime": {
+        "api_lang": "uk",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.906167984008789,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "ukr",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "ukr",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20876.54685974121,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 23.845911026000977,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
       "gf_lang": "Urd",
-      "api_lang": "urd",
+      "api_lang": "ur",
       "overall": "FAIL",
       "compile": {
         "gf_lang": "Urd",
-        "filename": "WikiUrd.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.46465492248535156,
-        "file_hash": "e89232e8bd7154bd4e6592ab35d9d058cea328de2302b57acff4471f09da8a90"
+        "filename": "generated/src/WikiUrd.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.09607625007629395,
+        "file_hash": "13eee6b850cc49867a4b9f706d681cfea684210565b1deb615de6482f244db3c",
+        "iso2": "ur"
       },
       "runtime": {
-        "api_lang": "urd",
+        "api_lang": "ur",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20727.904319763184,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 18.840312957763672,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     },
     {
-      "gf_lang": "Zho",
-      "api_lang": "zho",
+      "gf_lang": null,
+      "api_lang": "urd",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "urd",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 14.536619186401367,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Vie",
+      "api_lang": "vi",
       "overall": "FAIL",
       "compile": {
-        "gf_lang": "Zho",
-        "filename": "WikiZho.gf",
-        "status": "BROKEN",
-        "error": "File WikiI.gf does not exist.",
-        "duration_s": 0.4766228199005127,
-        "file_hash": "a5a9bb5e9b1bc9ca6985d00cedf21f780787a8b35da96a04e8d74e134c4fac54"
+        "gf_lang": "Vie",
+        "filename": "generated/src/WikiVie.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10420441627502441,
+        "file_hash": "49054e9e8db4c90254fdf49eff9250da0bdc97d99fb16025c05e149d41e5ebf1",
+        "iso2": "vi"
       },
+      "runtime": {
+        "api_lang": "vi",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 12.863636016845703,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "vie",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "vie",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 13.52691650390625,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Chi",
+      "api_lang": "zh",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Chi",
+        "filename": "generated/src/WikiChi.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.10335850715637207,
+        "file_hash": "1ba5111f34804946028f500cf250a657157c19d43398394b731703c252eda51b",
+        "iso2": "zh"
+      },
+      "runtime": {
+        "api_lang": "zh",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 13.118982315063477,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "zho",
+      "overall": "FAIL",
+      "compile": null,
       "runtime": {
         "api_lang": "zho",
         "status": "FAIL",
-        "http_status": null,
-        "duration_ms": 20743.36528778076,
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=20)",
+        "http_status": 403,
+        "duration_ms": 10.345697402954102,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": "Zul",
+      "api_lang": "zu",
+      "overall": "FAIL",
+      "compile": {
+        "gf_lang": "Zul",
+        "filename": "generated/src/WikiZul.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 0.13678264617919922,
+        "file_hash": "352e3beb22ff2342399c5eab78b71e2e5666166f00369acf8bc3193f2904c02f",
+        "iso2": "zu"
+      },
+      "runtime": {
+        "api_lang": "zu",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 10.398387908935547,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
+        "sample_text": null
+      }
+    },
+    {
+      "gf_lang": null,
+      "api_lang": "zul",
+      "overall": "FAIL",
+      "compile": null,
+      "runtime": {
+        "api_lang": "zul",
+        "status": "FAIL",
+        "http_status": 403,
+        "duration_ms": 8.775949478149414,
+        "error": "{\"detail\":\"Missing X-API-Key header\"}",
         "sample_text": null
       }
     }

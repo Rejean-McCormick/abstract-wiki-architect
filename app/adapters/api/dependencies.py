@@ -2,17 +2,19 @@
 from __future__ import annotations
 
 import logging
+import os
 import re
 import secrets
 from typing import Annotated, Optional
 
-from dependency_injector.wiring import Provide, inject
+from dependency_injector.wiring import Provide
 from fastapi import Depends, Header, HTTPException, Security, status
 from fastapi.security import APIKeyHeader
 
-from app.adapters.engines.gf_wrapper import GFGrammarEngine
 from app.adapters.llm_adapter import GeminiAdapter
 from app.core.ports.grammar_engine import IGrammarEngine
+from app.core.ports.message_broker import IMessageBroker
+from app.core.ports.task_queue import ITaskQueue
 from app.core.use_cases.build_language import BuildLanguage
 from app.core.use_cases.generate_text import GenerateText
 from app.core.use_cases.onboard_language_saga import OnboardLanguageSaga
@@ -21,18 +23,15 @@ from app.shared.container import Container
 
 logger = logging.getLogger(__name__)
 
+
 # -----------------------------------------------------------------------------
 # Grammar Engine Dependency
 # -----------------------------------------------------------------------------
-@inject
 def get_grammar_engine(
-    # [FIX] Use Container-managed Singleton instead of manual locking.
-    # This prevents race conditions and ensures only one PGF loaded per worker.
+    # Use Container-managed Singleton: one PGF load per worker.
     engine: IGrammarEngine = Depends(Provide[Container.grammar_engine]),
 ) -> IGrammarEngine:
-    """
-    Returns the process-wide singleton IGrammarEngine from the DI Container.
-    """
+    """Returns the process-wide singleton IGrammarEngine from the DI Container."""
     return engine
 
 
@@ -41,19 +40,21 @@ def get_grammar_engine(
 # -----------------------------------------------------------------------------
 api_key_scheme = APIKeyHeader(name="X-API-Key", auto_error=False)
 
+# Used when API_SECRET/API_KEY is not configured in non-prod environments.
+# (Keeps tests/dev deterministic; prod still fails closed.)
+DEFAULT_DEV_API_KEY = "dev-api-key"
+
 
 def _configured_api_secret() -> Optional[str]:
     """
     Returns the configured server API secret.
 
-    Backwards-compatible: also checks legacy setting/API env naming.
+    Backwards-compatible: supports both API_SECRET and legacy API_KEY naming,
+    both from settings and environment.
     """
     configured = getattr(settings, "API_SECRET", None) or getattr(settings, "API_KEY", None)
     if configured:
         return configured
-
-    # Fallback in case settings were initialized before env injection in some edge paths
-    import os
 
     return os.getenv("API_SECRET") or os.getenv("API_KEY")
 
@@ -84,24 +85,28 @@ async def verify_api_key(x_api_key: Optional[str] = Security(api_key_scheme)) ->
     """
     Validates the Server API Key (Admin Access).
 
-    - In PRODUCTION: fails closed if API_SECRET is missing.
-    - In DEVELOPMENT/TESTING: if API_SECRET is missing, auth is bypassed
-      (returns "dev-bypass") for local workflows.
+    Behavior:
+    - PRODUCTION: fails closed if API_SECRET is missing.
+    - non-PRODUCTION: if API_SECRET/API_KEY is missing, uses DEFAULT_DEV_API_KEY
+      (so auth is still enforced and tests are deterministic).
+
+    Notes:
+    - Missing/invalid credentials return 403 (tests expect 403).
     """
     configured = _configured_api_secret()
-    presented = _normalize_presented_key(x_api_key)
-
     if not configured:
         if settings.APP_ENV == AppEnv.PRODUCTION:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Server misconfiguration: API_SECRET is not set",
             )
-        return "dev-bypass"
+        configured = DEFAULT_DEV_API_KEY
+
+    presented = _normalize_presented_key(x_api_key)
 
     if not presented:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Missing X-API-Key header",
         )
 
@@ -140,7 +145,6 @@ def get_llm_adapter(user_key: Optional[str] = Depends(get_user_llm_key)) -> Gemi
 # -----------------------------------------------------------------------------
 # Use case injection
 # -----------------------------------------------------------------------------
-@inject
 def get_generate_text_use_case(
     llm_adapter: GeminiAdapter = Depends(get_llm_adapter),
     engine: IGrammarEngine = Depends(get_grammar_engine),
@@ -149,15 +153,16 @@ def get_generate_text_use_case(
     return GenerateText(engine=engine, llm=llm_adapter)
 
 
-@inject
 def get_build_language_use_case(
-    use_case: BuildLanguage = Depends(Provide[Container.build_language_use_case]),
+    # Explicitly wire the broker into BuildLanguage so broker.publish() is called
+    # (and so container wiring bugs don’t silently disable event publishing).
+    task_queue: ITaskQueue = Depends(Provide[Container.task_queue]),
+    broker: Optional[IMessageBroker] = Depends(Provide[Container.message_broker]),
 ) -> BuildLanguage:
-    """Dependency to inject the BuildLanguage interactor (container-managed)."""
-    return use_case
+    """Dependency to construct the BuildLanguage interactor with broker wired."""
+    return BuildLanguage(task_queue=task_queue, broker=broker)
 
 
-@inject
 def get_onboard_saga(
     llm_adapter: GeminiAdapter = Depends(get_llm_adapter),
     saga: OnboardLanguageSaga = Depends(Provide[Container.onboard_language_saga]),

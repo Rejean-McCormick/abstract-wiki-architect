@@ -1,13 +1,13 @@
 {
-  "timestamp": 1767385026.6492999,
-  "timestamp_iso": "2026-01-02T20:17:06Z",
+  "timestamp": 1767476157.7357397,
+  "timestamp_iso": "2026-01-03T21:35:57Z",
   "scoring_version": "2.4",
   "stats": {
-    "total_languages": 69,
+    "total_languages": 156,
     "production_ready": 0,
     "high_road": 0,
     "safe_mode": 66,
-    "skipped": 3,
+    "skipped": 90,
     "runnable": 34
   },
   "languages": {
@@ -62,6 +62,57 @@
         "runnable": true
       }
     },
+    "afr": {
+      "meta": {
+        "iso": "afr",
+        "name": "AFR",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "am": {
       "meta": {
         "iso": "am",
@@ -110,6 +161,57 @@
         },
         "maturity_score": 4.7,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "amh": {
+      "meta": {
+        "iso": "amh",
+        "name": "AMH",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -164,6 +266,57 @@
         "runnable": true
       }
     },
+    "ara": {
+      "meta": {
+        "iso": "ara",
+        "name": "ARA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "be": {
       "meta": {
         "iso": "be",
@@ -212,6 +365,108 @@
         },
         "maturity_score": 3.6,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "bel": {
+      "meta": {
+        "iso": "bel",
+        "name": "BEL",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "ben": {
+      "meta": {
+        "iso": "ben",
+        "name": "BEN",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -317,6 +572,57 @@
         "runnable": true
       }
     },
+    "bul": {
+      "meta": {
+        "iso": "bul",
+        "name": "BUL",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "ca": {
       "meta": {
         "iso": "ca",
@@ -366,6 +672,210 @@
         "maturity_score": 4.9,
         "build_strategy": "SAFE_MODE",
         "runnable": true
+      }
+    },
+    "cat": {
+      "meta": {
+        "iso": "cat",
+        "name": "CAT",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "ces": {
+      "meta": {
+        "iso": "ces",
+        "name": "CES",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "cgg": {
+      "meta": {
+        "iso": "cgg",
+        "name": "CGG",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "chi": {
+      "meta": {
+        "iso": "chi",
+        "name": "CHI",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "cs": {
@@ -470,6 +980,108 @@
         "runnable": true
       }
     },
+    "cym": {
+      "meta": {
+        "iso": "cym",
+        "name": "CYM",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "cze": {
+      "meta": {
+        "iso": "cze",
+        "name": "CZE",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "da": {
       "meta": {
         "iso": "da",
@@ -518,6 +1130,57 @@
         },
         "maturity_score": 5.2,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "dan": {
+      "meta": {
+        "iso": "dan",
+        "name": "DAN",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -572,6 +1235,108 @@
         "runnable": true
       }
     },
+    "deu": {
+      "meta": {
+        "iso": "deu",
+        "name": "DEU",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "dut": {
+      "meta": {
+        "iso": "dut",
+        "name": "DUT",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "el": {
       "meta": {
         "iso": "el",
@@ -621,6 +1386,57 @@
         "maturity_score": 4.6,
         "build_strategy": "SAFE_MODE",
         "runnable": true
+      }
+    },
+    "ell": {
+      "meta": {
+        "iso": "ell",
+        "name": "ELL",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "en": {
@@ -674,6 +1490,57 @@
         "runnable": false
       }
     },
+    "eng": {
+      "meta": {
+        "iso": "eng",
+        "name": "ENG",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "es": {
       "meta": {
         "iso": "es",
@@ -723,6 +1590,57 @@
         "maturity_score": 5.2,
         "build_strategy": "SAFE_MODE",
         "runnable": true
+      }
+    },
+    "est": {
+      "meta": {
+        "iso": "est",
+        "name": "EST",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "et": {
@@ -827,6 +1745,57 @@
         "runnable": false
       }
     },
+    "eus": {
+      "meta": {
+        "iso": "eus",
+        "name": "EUS",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "fa": {
       "meta": {
         "iso": "fa",
@@ -878,6 +1847,108 @@
         "runnable": true
       }
     },
+    "fao": {
+      "meta": {
+        "iso": "fao",
+        "name": "FAO",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "fas": {
+      "meta": {
+        "iso": "fas",
+        "name": "FAS",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "fi": {
       "meta": {
         "iso": "fi",
@@ -926,6 +1997,57 @@
         },
         "maturity_score": 5.5,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "fin": {
+      "meta": {
+        "iso": "fin",
+        "name": "FIN",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -1031,6 +2153,108 @@
         "runnable": true
       }
     },
+    "fra": {
+      "meta": {
+        "iso": "fra",
+        "name": "FRA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "fre": {
+      "meta": {
+        "iso": "fre",
+        "name": "FRE",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "gd": {
       "meta": {
         "iso": "gd",
@@ -1079,6 +2303,261 @@
         },
         "maturity_score": 3.6,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ger": {
+      "meta": {
+        "iso": "ger",
+        "name": "GER",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "gla": {
+      "meta": {
+        "iso": "gla",
+        "name": "GLA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "grc": {
+      "meta": {
+        "iso": "grc",
+        "name": "GRC",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "gre": {
+      "meta": {
+        "iso": "gre",
+        "name": "GRE",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "guz": {
+      "meta": {
+        "iso": "guz",
+        "name": "GUZ",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -1133,6 +2612,57 @@
         "runnable": true
       }
     },
+    "heb": {
+      "meta": {
+        "iso": "heb",
+        "name": "HEB",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "hi": {
       "meta": {
         "iso": "hi",
@@ -1184,6 +2714,57 @@
         "runnable": true
       }
     },
+    "hin": {
+      "meta": {
+        "iso": "hin",
+        "name": "HIN",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "hr": {
       "meta": {
         "iso": "hr",
@@ -1232,6 +2813,57 @@
         },
         "maturity_score": 4.0,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "hrv": {
+      "meta": {
+        "iso": "hrv",
+        "name": "HRV",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -1286,6 +2918,57 @@
         "runnable": false
       }
     },
+    "hun": {
+      "meta": {
+        "iso": "hun",
+        "name": "HUN",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "hy": {
       "meta": {
         "iso": "hy",
@@ -1334,6 +3017,57 @@
         },
         "maturity_score": 3.6,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "hye": {
+      "meta": {
+        "iso": "hye",
+        "name": "HYE",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -1388,6 +3122,57 @@
         "runnable": false
       }
     },
+    "ice": {
+      "meta": {
+        "iso": "ice",
+        "name": "ICE",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "id": {
       "meta": {
         "iso": "id",
@@ -1439,6 +3224,159 @@
         "runnable": true
       }
     },
+    "ina": {
+      "meta": {
+        "iso": "ina",
+        "name": "INA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "ind": {
+      "meta": {
+        "iso": "ind",
+        "name": "IND",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "inu": {
+      "meta": {
+        "iso": "inu",
+        "name": "INU",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "is": {
       "meta": {
         "iso": "is",
@@ -1468,7 +3406,7 @@
         },
         "D_QA": {
           "BIN": 0.0,
-          "TEST": 0.0
+          "TEST": 10.0
         }
       },
       "verdict": {
@@ -1483,10 +3421,61 @@
           "A_RGL": 10.0,
           "B_LEX": 0.0,
           "C_APP": 2.33,
+          "D_QA": 5.0
+        },
+        "maturity_score": 4.8,
+        "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "isl": {
+      "meta": {
+        "iso": "isl",
+        "name": "ISL",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
           "D_QA": 0.0
         },
-        "maturity_score": 4.3,
-        "build_strategy": "SAFE_MODE",
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -1539,6 +3528,57 @@
         "maturity_score": 5.2,
         "build_strategy": "SAFE_MODE",
         "runnable": true
+      }
+    },
+    "ita": {
+      "meta": {
+        "iso": "ita",
+        "name": "ITA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "iu": {
@@ -1643,6 +3683,159 @@
         "runnable": true
       }
     },
+    "jpn": {
+      "meta": {
+        "iso": "jpn",
+        "name": "JPN",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "kam": {
+      "meta": {
+        "iso": "kam",
+        "name": "KAM",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "kaz": {
+      "meta": {
+        "iso": "kaz",
+        "name": "KAZ",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "kk": {
       "meta": {
         "iso": "kk",
@@ -1745,6 +3938,57 @@
         "runnable": false
       }
     },
+    "kor": {
+      "meta": {
+        "iso": "kor",
+        "name": "KOR",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "la": {
       "meta": {
         "iso": "la",
@@ -1794,6 +4038,159 @@
         "maturity_score": 4.3,
         "build_strategy": "SAFE_MODE",
         "runnable": true
+      }
+    },
+    "lat": {
+      "meta": {
+        "iso": "lat",
+        "name": "LAT",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "lav": {
+      "meta": {
+        "iso": "lav",
+        "name": "LAV",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "lit": {
+      "meta": {
+        "iso": "lit",
+        "name": "LIT",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "lt": {
@@ -1898,6 +4295,108 @@
         "runnable": true
       }
     },
+    "mal": {
+      "meta": {
+        "iso": "mal",
+        "name": "MAL",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "may": {
+      "meta": {
+        "iso": "may",
+        "name": "MAY",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "mk": {
       "meta": {
         "iso": "mk",
@@ -1949,6 +4448,57 @@
         "runnable": false
       }
     },
+    "mkd": {
+      "meta": {
+        "iso": "mkd",
+        "name": "MKD",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "ml": {
       "meta": {
         "iso": "ml",
@@ -1956,6 +4506,57 @@
         "tier": 3,
         "origin": "lexicon",
         "folder": ""
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "mlt": {
+      "meta": {
+        "iso": "mlt",
+        "name": "MLT",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
       },
       "zones": {
         "A_RGL": {
@@ -2051,6 +4652,57 @@
         "runnable": true
       }
     },
+    "mon": {
+      "meta": {
+        "iso": "mon",
+        "name": "MON",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "ms": {
       "meta": {
         "iso": "ms",
@@ -2099,6 +4751,57 @@
         },
         "maturity_score": 4.7,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "msa": {
+      "meta": {
+        "iso": "msa",
+        "name": "MSA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -2255,6 +4958,57 @@
         "runnable": false
       }
     },
+    "nep": {
+      "meta": {
+        "iso": "nep",
+        "name": "NEP",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "nl": {
       "meta": {
         "iso": "nl",
@@ -2304,6 +5058,57 @@
         "maturity_score": 5.2,
         "build_strategy": "SAFE_MODE",
         "runnable": true
+      }
+    },
+    "nld": {
+      "meta": {
+        "iso": "nld",
+        "name": "NLD",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "nn": {
@@ -2357,6 +5162,57 @@
         "runnable": false
       }
     },
+    "nno": {
+      "meta": {
+        "iso": "nno",
+        "name": "NNO",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "no": {
       "meta": {
         "iso": "no",
@@ -2386,7 +5242,7 @@
         },
         "D_QA": {
           "BIN": 0.0,
-          "TEST": 0.0
+          "TEST": 10.0
         }
       },
       "verdict": {
@@ -2401,11 +5257,113 @@
           "A_RGL": 0.0,
           "B_LEX": 0.85,
           "C_APP": 0.0,
-          "D_QA": 0.0
+          "D_QA": 5.0
         },
-        "maturity_score": 0.3,
+        "maturity_score": 0.8,
         "build_strategy": "SKIP",
         "runnable": true
+      }
+    },
+    "nob": {
+      "meta": {
+        "iso": "nob",
+        "name": "NOB",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "nor": {
+      "meta": {
+        "iso": "nor",
+        "name": "NOR",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "pa": {
@@ -2456,6 +5414,159 @@
         },
         "maturity_score": 4.3,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "pan": {
+      "meta": {
+        "iso": "pan",
+        "name": "PAN",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "per": {
+      "meta": {
+        "iso": "per",
+        "name": "PER",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "pes": {
+      "meta": {
+        "iso": "pes",
+        "name": "PES",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -2510,6 +5621,159 @@
         "runnable": true
       }
     },
+    "pnb": {
+      "meta": {
+        "iso": "pnb",
+        "name": "PNB",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "pol": {
+      "meta": {
+        "iso": "pol",
+        "name": "POL",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "por": {
+      "meta": {
+        "iso": "por",
+        "name": "POR",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "pt": {
       "meta": {
         "iso": "pt",
@@ -2539,7 +5803,7 @@
         },
         "D_QA": {
           "BIN": 0.0,
-          "TEST": 0.0
+          "TEST": 10.0
         }
       },
       "verdict": {
@@ -2554,9 +5818,9 @@
           "A_RGL": 10.0,
           "B_LEX": 1.18,
           "C_APP": 2.33,
-          "D_QA": 0.0
+          "D_QA": 5.0
         },
-        "maturity_score": 4.8,
+        "maturity_score": 5.3,
         "build_strategy": "SAFE_MODE",
         "runnable": true
       }
@@ -2612,6 +5876,57 @@
         "runnable": true
       }
     },
+    "ron": {
+      "meta": {
+        "iso": "ron",
+        "name": "RON",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "ru": {
       "meta": {
         "iso": "ru",
@@ -2641,7 +5956,7 @@
         },
         "D_QA": {
           "BIN": 0.0,
-          "TEST": 0.0
+          "TEST": 10.0
         }
       },
       "verdict": {
@@ -2656,11 +5971,164 @@
           "A_RGL": 10.0,
           "B_LEX": 1.2,
           "C_APP": 4.33,
-          "D_QA": 0.0
+          "D_QA": 5.0
         },
-        "maturity_score": 5.1,
+        "maturity_score": 5.6,
         "build_strategy": "SAFE_MODE",
         "runnable": true
+      }
+    },
+    "rum": {
+      "meta": {
+        "iso": "rum",
+        "name": "RUM",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "rus": {
+      "meta": {
+        "iso": "rus",
+        "name": "RUS",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "sco": {
+      "meta": {
+        "iso": "sco",
+        "name": "SCO",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "sd": {
@@ -2816,6 +6284,210 @@
         "runnable": false
       }
     },
+    "slk": {
+      "meta": {
+        "iso": "slk",
+        "name": "SLK",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "slo": {
+      "meta": {
+        "iso": "slo",
+        "name": "SLO",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "slv": {
+      "meta": {
+        "iso": "slv",
+        "name": "SLV",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "snd": {
+      "meta": {
+        "iso": "snd",
+        "name": "SND",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "so": {
       "meta": {
         "iso": "so",
@@ -2867,6 +6539,108 @@
         "runnable": false
       }
     },
+    "som": {
+      "meta": {
+        "iso": "som",
+        "name": "SOM",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "spa": {
+      "meta": {
+        "iso": "spa",
+        "name": "SPA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "sq": {
       "meta": {
         "iso": "sq",
@@ -2915,6 +6689,57 @@
         },
         "maturity_score": 3.6,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "sqi": {
+      "meta": {
+        "iso": "sqi",
+        "name": "SQI",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -3020,6 +6845,108 @@
         "runnable": true
       }
     },
+    "swa": {
+      "meta": {
+        "iso": "swa",
+        "name": "SWA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "swe": {
+      "meta": {
+        "iso": "swe",
+        "name": "SWE",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "ta": {
       "meta": {
         "iso": "ta",
@@ -3068,6 +6995,57 @@
         },
         "maturity_score": 4.2,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "tam": {
+      "meta": {
+        "iso": "tam",
+        "name": "TAM",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -3122,6 +7100,108 @@
         "runnable": false
       }
     },
+    "tel": {
+      "meta": {
+        "iso": "tel",
+        "name": "TEL",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
+    "tgl": {
+      "meta": {
+        "iso": "tgl",
+        "name": "TGL",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "th": {
       "meta": {
         "iso": "th",
@@ -3171,6 +7251,57 @@
         "maturity_score": 4.9,
         "build_strategy": "SAFE_MODE",
         "runnable": true
+      }
+    },
+    "tha": {
+      "meta": {
+        "iso": "tha",
+        "name": "THA",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
       }
     },
     "tl": {
@@ -3275,6 +7406,57 @@
         "runnable": true
       }
     },
+    "tur": {
+      "meta": {
+        "iso": "tur",
+        "name": "TUR",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "uk": {
       "meta": {
         "iso": "uk",
@@ -3323,6 +7505,57 @@
         },
         "maturity_score": 3.6,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "ukr": {
+      "meta": {
+        "iso": "ukr",
+        "name": "UKR",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -3377,6 +7610,57 @@
         "runnable": true
       }
     },
+    "urd": {
+      "meta": {
+        "iso": "urd",
+        "name": "URD",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "vi": {
       "meta": {
         "iso": "vi",
@@ -3425,6 +7709,57 @@
         },
         "maturity_score": 0.6,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "vie": {
+      "meta": {
+        "iso": "vie",
+        "name": "VIE",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     },
@@ -3479,6 +7814,57 @@
         "runnable": true
       }
     },
+    "zho": {
+      "meta": {
+        "iso": "zho",
+        "name": "ZHO",
+        "tier": 3,
+        "origin": "factory",
+        "folder": "generated"
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
+        "runnable": false
+      }
+    },
     "zu": {
       "meta": {
         "iso": "zu",
@@ -3527,6 +7913,57 @@
         },
         "maturity_score": 4.3,
         "build_strategy": "SAFE_MODE",
+        "runnable": false
+      }
+    },
+    "zul": {
+      "meta": {
+        "iso": "zul",
+        "name": "ZUL",
+        "tier": 3,
+        "origin": "lexicon",
+        "folder": ""
+      },
+      "zones": {
+        "A_RGL": {
+          "CAT": 0.0,
+          "NOUN": 0.0,
+          "PARA": 0.0,
+          "GRAM": 0.0,
+          "SYN": 0.0
+        },
+        "B_LEX": {
+          "SEED": 0.0,
+          "CONC": 0.0,
+          "WIDE": 0.0,
+          "SEM": 0.0
+        },
+        "C_APP": {
+          "PROF": 0.0,
+          "ASST": 0.0,
+          "ROUT": 0.0
+        },
+        "D_QA": {
+          "BIN": 0.0,
+          "TEST": 0.0
+        }
+      },
+      "verdict": {
+        "scoring_version": "2.4",
+        "zone_weights": {
+          "A_RGL": 0.4,
+          "B_LEX": 0.35,
+          "C_APP": 0.15,
+          "D_QA": 0.1
+        },
+        "zone_averages": {
+          "A_RGL": 0.0,
+          "B_LEX": 0.0,
+          "C_APP": 0.0,
+          "D_QA": 0.0
+        },
+        "maturity_score": 0.0,
+        "build_strategy": "SKIP",
         "runnable": false
       }
     }

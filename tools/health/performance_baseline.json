@@ -1,0 +1,7 @@
+{
+  "total_time_sec": 0.148,
+  "avg_latency_ms": 0.15,
+  "throughput_tps": 6755.67,
+  "peak_memory_mb": 0.0836,
+  "success_rate": 1.0
+}

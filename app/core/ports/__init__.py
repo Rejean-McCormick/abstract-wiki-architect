@@ -1,112 +1,131 @@
 # app/core/ports/__init__.py
-"""
-Core Ports (Interfaces).
+from typing import Any, Dict, List, Optional, Protocol, Union
 
-This package defines the abstract base classes (Protocols) that the
-Infrastructure Adapters must implement. These interfaces allow the Core
-Domain to interact with the outside world (Database, Redis, GF) without
-knowing the implementation details.
-"""
-
-from abc import ABC, abstractmethod
-from typing import Optional, List, Dict, Any, Callable, Coroutine
-
-# Import domain models for type hints
-from app.core.domain.models import LexiconEntry, Frame, Sentence
+# [FIX] Import Frame from models, NOT from frame.py
+from app.core.domain.models import Sentence, Frame
 from app.core.domain.events import SystemEvent
 
-# =========================================================
-# 1. PERSISTENCE PORTS (Databases & Files)
-# =========================================================
+# ==============================================================================
+# AI & GENERATION PORTS
+# ==============================================================================
 
-class LanguageRepo(ABC):
+class IGrammarEngine(Protocol):
     """
-    Port for storing Language Grammars and Metadata (Zone A).
+    Interface for the Abstract Wikipedia Grammar Engine (GF/PGF).
     """
-    @abstractmethod
-    async def save_grammar(self, language_code: str, content: str) -> None:
-        """Persist a grammar file."""
-        pass
+    grammar: Any  # Exposes the underlying PGF object if needed
 
-    @abstractmethod
-    async def get_grammar(self, language_code: str) -> Optional[str]:
-        """Retrieve a grammar file by language code."""
-        pass
+    async def generate(self, lang_code: str, frame: Union[Frame, Dict[str, Any]]) -> Sentence:
+        """Generates text from an abstract frame."""
+        ...
 
-    @abstractmethod
-    async def list_languages(self) -> List[Any]:
-        """
-        List all available languages.
-        Returns: List of Dicts/Objects (metadata).
-        """
-        pass
+    async def get_supported_languages(self) -> List[str]:
+        """Returns list of supported ISO 639-3 codes (e.g. ['eng', 'deu'])."""
+        ...
 
-class LexiconRepo(ABC):
+    async def reload(self) -> None:
+        """Hot-reloads the grammar from disk."""
+        ...
+
+    async def health_check(self) -> bool:
+        """Returns True if engine is operational."""
+        ...
+
+
+class LLMPort(Protocol):
     """
-    Port for accessing Vocabulary Data (Zone B).
+    Interface for Large Language Models (AI Services).
     """
-    @abstractmethod
-    async def get_entry(self, iso_code: str, word: str) -> Optional[LexiconEntry]:
-        """Retrieves a single lexicon entry by word/lemma."""
-        pass
-
-    @abstractmethod
-    async def save_entry(self, iso_code: str, entry: LexiconEntry) -> None:
-        """Saves or updates a lexicon entry."""
-        pass
-
-    @abstractmethod
-    async def get_entries_by_concept(self, lang_code: str, qid: str) -> List[LexiconEntry]:
-        """Finds all entries linked to a specific Wikidata QID."""
-        pass
-
-# =========================================================
-# 2. GENERATION PORTS (Engines & AI)
-# =========================================================
-
-class IGrammarEngine(ABC):
-    """
-    Port for the Rule-Based Grammar Engine (GF or Python).
-    """
-    @abstractmethod
-    async def generate(self, lang_code: str, frame: Frame) -> Sentence:
-        """Converts a Semantic Frame into a Sentence."""
-        pass
-
-class LLMPort(ABC):
-    """
-    Port for Large Language Models (AI Services).
-    """
-    @abstractmethod
     def generate_text(self, prompt: str) -> str:
         """Send a prompt to the LLM and get the response text."""
-        pass
+        ...
 
-# =========================================================
-# 3. INFRASTRUCTURE PORTS (Messaging)
-# =========================================================
 
-class IMessageBroker(ABC):
+# ==============================================================================
+# INFRASTRUCTURE PORTS
+# ==============================================================================
+
+class IMessageBroker(Protocol):
     """
-    Port for the Event Bus (Redis/RabbitMQ).
+    Interface for Event Bus (Pub/Sub).
     """
-    @abstractmethod
-    async def publish(self, event: SystemEvent) -> None:
-        """Publishes a domain event."""
-        pass
+    async def publish(self, event: Any) -> None:
+        ...
 
-    @abstractmethod
-    async def subscribe(self, event_type: str, handler: Callable[[SystemEvent], Coroutine[Any, Any, None]]) -> None:
-        """Subscribes to a specific event type."""
-        pass
+    async def subscribe(self, channel: str, handler: Any) -> None:
+        ...
 
-# =========================================================
+    async def connect(self) -> None:
+        ...
+
+    async def disconnect(self) -> None:
+        ...
+
+    async def health_check(self) -> bool:
+        ...
+
+
+class TaskQueue(Protocol):
+    """
+    Interface for Async Job Queue (e.g., Redis/ARQ).
+    """
+    async def connect(self) -> None:
+        ...
+
+    async def disconnect(self) -> None:
+        ...
+
+    async def enqueue(self, function_name: str, **kwargs) -> Optional[str]:
+        """
+        Enqueues a job.
+        :param function_name: The name of the worker function to execute.
+        :param kwargs: Arguments to pass to the function.
+        :return: Job ID or None.
+        """
+        ...
+
+
+# ==============================================================================
+# REPOSITORY PORTS
+# ==============================================================================
+
+class LexiconRepo(Protocol):
+    """
+    Interface for Lexical Knowledge Base (Entries, Lemmas).
+    """
+    async def get_entry(self, lang: str, key: str) -> Optional[Dict[str, Any]]:
+        ...
+
+    async def save_entry(self, lang: str, entry: Dict[str, Any]) -> None:
+        ...
+
+    async def health_check(self) -> bool:
+        ...
+
+
+class LanguageRepo(Protocol):
+    """
+    Interface for Language Metadata & Grammar Registry.
+    """
+    async def save_grammar(self, code: str, metadata_json: str) -> None:
+        """Persists language configuration/metadata."""
+        ...
+
+    async def list_languages(self) -> List[Dict[str, Any]]:
+        """Returns list of onboarded languages."""
+        ...
+
+    async def health_check(self) -> bool:
+        ...
+
+# ==============================================================================
 # EXPORTS
-# =========================================================
+# ==============================================================================
 __all__ = [
     "LanguageRepo",
     "LexiconRepo",
     "IGrammarEngine",
     "LLMPort",
     "IMessageBroker",
+    "TaskQueue",
 ]

@@ -66,11 +66,7 @@ wikidata = [
 
 [project.scripts]
 architect-api = "app.adapters.api.main:start"
-
-# FIX: old path "app.worker.main:start" does not exist; real worker module is under app.workers.*
-# (requires app.workers.worker:start to exist as a callable)
 architect-worker = "app.workers.worker:start"
-
 nlg-cli = "nlg.cli_frontend:main"
 lexicon-cli = "lexicon.cli:main"
 
@@ -83,14 +79,9 @@ Issues = "https://github.com/Rejean-McCormick/abstract-wiki-architect/issues"
 include-package-data = true
 
 [tool.setuptools.packages.find]
-# keep root discovery, but prevent setuptools from walking huge/non-package trees (e.g., gf/, gf-grl/, etc.)
 where = ["."]
 include = ["app*","nlg*","utils*","builder*","ai_services*"]
 exclude = ["gf","gf-*","gf_grl*","gf-grl*","gf_rgl*","gf-rgl*","data*","schemas*","architect_frontend*","docs*","tests*","dist*","build*",".venv*","venv*"]
-
-# -------------------------
-# Tool configuration
-# -------------------------
 
 [tool.black]
 line-length = 88

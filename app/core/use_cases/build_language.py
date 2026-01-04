@@ -1,9 +1,12 @@
 # app/core/use_cases/build_language.py
 import structlog
+from typing import Optional
+
 from opentelemetry.propagate import inject
 
 from app.core.domain.events import SystemEvent, EventType, BuildRequestedPayload
 from app.core.domain.exceptions import DomainError
+from app.core.ports.message_broker import IMessageBroker
 from app.core.ports.task_queue import ITaskQueue
 from app.shared.observability import get_tracer
 
@@ -20,12 +23,15 @@ class BuildLanguage:
     Responsibilities:
     1. Validate the build request parameters (strategy, lang_code).
     2. Construct a domain correlation envelope (SystemEvent).
-    3. Enqueue a background job via the TaskQueue port (ARQ adapter).
+    3. Publish BUILD_REQUESTED to the message broker (domain event).
+    4. Enqueue a background job via the TaskQueue port (ARQ adapter).
     """
 
-    def __init__(self, task_queue: ITaskQueue):
-        # Inject the TaskQueue Port (job queue, not pub/sub)
+    def __init__(self, task_queue: ITaskQueue, broker: Optional[IMessageBroker] = None):
+        # Job queue adapter (ARQ)
         self.task_queue = task_queue
+        # Pub/Sub broker for domain events (Redis pub/sub adapter)
+        self.broker = broker
 
     async def execute(self, lang_code: str, strategy: str = "fast") -> str:
         """
@@ -38,6 +44,8 @@ class BuildLanguage:
         Returns:
             str: Correlation ID for tracking the request.
         """
+        strategy = (strategy or "fast").lower()
+
         with tracer.start_as_current_span("use_case.build_language") as span:
             span.set_attribute("app.lang_code", lang_code)
             span.set_attribute("app.build_strategy", strategy)
@@ -62,6 +70,10 @@ class BuildLanguage:
                     trace_id=trace_id_hex,
                 )
 
+                # 3b. Publish domain event (what tests expect)
+                if self.broker is not None:
+                    await self.broker.publish(event)
+
                 # 4. Inject distributed trace context for the worker job
                 trace_context: dict[str, str] = {}
                 inject(trace_context)
@@ -82,7 +94,6 @@ class BuildLanguage:
                     strategy=strategy,
                 )
 
-                # Return correlation ID so clients can track status elsewhere
                 return event.id
 
             except DomainError:

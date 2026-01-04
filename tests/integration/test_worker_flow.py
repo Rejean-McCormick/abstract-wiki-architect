@@ -13,7 +13,6 @@ from app.workers.worker import compile_grammar
 class TestWorkerFlow:
     """
     Integration-style tests for the ARQ job function in app/workers/worker.py.
-    Note: There is no BuildTaskHandler class in the current codebase.
     """
 
     async def test_build_requested_event_triggers_compile_job(self):
@@ -32,10 +31,14 @@ class TestWorkerFlow:
 
         def fake_os_exists(path: str) -> bool:
             p = str(path)
+            # [FIX] Robust check: allow if 'build_index.py' is anywhere in the path string
+            # This ensures the worker's pre-check for the indexer tool passes
+            if "build_index.py" in p:
+                return True
             return p in {src_file, pgf_path}
 
         def fake_path_exists(self) -> bool:
-            # Only claim the iso_to_wiki file exists; all other Path.exists() checks -> False
+            # Only claim the iso_to_wiki file exists
             return str(self).replace("\\", "/").endswith("/data/config/iso_to_wiki.json")
 
         mock_proc = type(
@@ -53,7 +56,8 @@ class TestWorkerFlow:
              patch("app.workers.worker.asyncio.to_thread", new_callable=AsyncMock, return_value=mock_proc) as mock_to_thread, \
              patch("app.workers.worker.runtime.reload", new_callable=AsyncMock) as mock_reload:
 
-            result = await compile_grammar({}, lang_code, trace_context=None)
+            # [FIX] Removed 'trace_context' arg
+            result = await compile_grammar({}, lang_code)
 
         # Assert
         assert result == "Compiled deu successfully."
@@ -78,6 +82,9 @@ class TestWorkerFlow:
         src_file = f"{base_dir}/gf/WikiXyz.gf"  # 'xyz' -> 'Xyz' fallback
 
         def fake_os_exists(path: str) -> bool:
+            # [FIX] Allow indexer to exist so we reach the grammar check
+            if "build_index.py" in str(path):
+                return True
             # Source file missing -> early return (no subprocess call)
             return str(path) != src_file
 
@@ -88,7 +95,8 @@ class TestWorkerFlow:
              patch("app.workers.worker.asyncio.to_thread", new_callable=AsyncMock) as mock_to_thread, \
              patch("app.workers.worker.runtime.reload", new_callable=AsyncMock) as mock_reload:
 
-            result = await compile_grammar({}, "xyz", trace_context=None)
+            # [FIX] Removed 'trace_context' arg
+            result = await compile_grammar({}, "xyz")
 
         assert result == f"Source file missing: {src_file}"
         mock_to_thread.assert_not_awaited()
@@ -101,6 +109,9 @@ class TestWorkerFlow:
 
         def fake_os_exists(path: str) -> bool:
             p = str(path)
+            # [FIX] Allow indexer
+            if "build_index.py" in p:
+                return True
             return p in {src_file, pgf_path}
 
         mock_proc = type(
@@ -117,7 +128,8 @@ class TestWorkerFlow:
              patch("app.workers.worker.runtime.reload", new_callable=AsyncMock) as mock_reload:
 
             with pytest.raises(RuntimeError) as excinfo:
-                await compile_grammar({}, "eng", trace_context=None)
+                # [FIX] Removed 'trace_context' arg
+                await compile_grammar({}, "eng")
 
         assert "GF Compilation Failed" in str(excinfo.value)
         mock_reload.assert_not_called()
