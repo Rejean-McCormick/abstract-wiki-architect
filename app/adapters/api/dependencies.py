@@ -74,6 +74,13 @@ async def verify_api_key(x_api_key: Optional[str] = Security(api_key_scheme)) ->
     Validates the Server API Key (Admin Access).
     """
     configured = _configured_api_secret()
+
+    # [FIX] DEV MODE BYPASS: If we are in development and no key is sent, allow access.
+    # This fixes the 403 Forbidden error when running local tools that don't send headers.
+    if settings.APP_ENV == AppEnv.DEVELOPMENT:
+        if not x_api_key:
+            return DEFAULT_DEV_API_KEY
+
     if not configured:
         if settings.APP_ENV == AppEnv.PRODUCTION:
             raise HTTPException(

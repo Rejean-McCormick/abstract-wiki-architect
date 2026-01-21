@@ -822,15 +822,13 @@ def _render_cmd(spec: ToolSpec) -> List[str]:
     return [part.format(target=str(target_path)) for part in spec.cmd]
 
 
+# app/adapters/api/routers/tools.py
+
 def _run_process_extended(
     cmd: Sequence[str],
     timeout_sec: int,
     env_updates: Dict[str, str],
 ) -> Tuple[int, str, str, int]:
-    """
-    Runs the process with environment injection.
-    Returns (exit_code, stdout, stderr, duration_ms)
-    """
     env = os.environ.copy()
     env["PYTHONUNBUFFERED"] = "1"
     env["PYTHONPATH"] = str(REPO_ROOT) + os.pathsep + env.get("PYTHONPATH", "")
@@ -844,17 +842,31 @@ def _run_process_extended(
             env=env,
             capture_output=True,
             text=True,
+            encoding="utf-8",      # <--- FIX 1: Support Emojis
+            errors="replace",      # <--- FIX 2: Prevent Crashes
             timeout=timeout_sec,
             check=False,
         )
         duration_ms = int((time.time() - started) * 1000)
         return proc.returncode, proc.stdout or "", proc.stderr or "", duration_ms
+    except Exception as e:
+        # <--- FIX 3: Catch OS errors so the frontend gets a real error message
+        duration_ms = int((time.time() - started) * 1000)
+        return 127, "", f"CRITICAL RUNNER ERROR: {str(e)}", duration_ms
+
     except subprocess.TimeoutExpired as e:
         duration_ms = int((time.time() - started) * 1000)
         stdout = (e.stdout or "") if isinstance(e.stdout, str) else ""
         stderr = (e.stderr or "") if isinstance(e.stderr, str) else ""
-        stderr = (stderr + "\n" if stderr else "") + f"Process timed out (limit: {timeout_sec}s)."
+        stderr += f"\nProcess timed out (limit: {timeout_sec}s)."
         return 124, stdout, stderr, duration_ms
+
+    except Exception as e:
+        # [FIX] Catch-all for OS errors (permissions, missing file, etc.)
+        duration_ms = int((time.time() - started) * 1000)
+        # Return 127 (Command Not Found standard) or 1 for generic error
+        error_msg = f"CRITICAL RUNNER ERROR: {str(e)}\n"
+        return 127, "", error_msg, duration_ms
 
 
 # -----------------------------------------------------------------------------

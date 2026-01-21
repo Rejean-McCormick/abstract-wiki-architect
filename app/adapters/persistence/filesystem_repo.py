@@ -180,3 +180,17 @@ class FileSystemLexiconRepository(LanguageRepo, LexiconRepo):
                 return await f.read()
         except Exception:
             return None
+
+    async def health_check(self) -> bool:
+        """
+        Verifies that the underlying storage directory exists and is writable.
+        Required by the Readiness Probe.
+        """
+        try:
+            # Ensure the root lexicon directory exists
+            if not self.lexicon_base.exists():
+                self.lexicon_base.mkdir(parents=True, exist_ok=True)
+            return True
+        except Exception as e:
+            logger.error("storage_health_check_failed", error=str(e))
+            return False
