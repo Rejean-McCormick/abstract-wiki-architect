@@ -12,6 +12,11 @@ Usage:
     python manage.py clean       # Nuke generated artifacts (Zombie killer)
     python manage.py doctor      # System health check
     python manage.py generate    # AI/Factory generation for missing languages
+
+Notes:
+  - Backend operations must run in WSL/Linux (GF/libpgf). Native Windows is not supported for build/align/start.
+  - Default start uses NO hot-reload/no watch to avoid watchfiles OOM crashes.
+    Use: python manage.py start --reload --watch  (dev only; may crash under low memory)
 """
 
 from __future__ import annotations
@@ -59,8 +64,8 @@ ALIGN_MODULE = ROOT_DIR / "builder" / "alignment.py"  # fallback if script isn't
 CANON_GENERATED_ROOT = ROOT_DIR / "generated"
 LEGACY_GENERATED_ROOT = ROOT_DIR / "gf" / "generated"
 
-CANON_GENERATED_DIR = CANON_GENERATED_ROOT / "src"          # canonical
-LEGACY_GENERATED_DIR = LEGACY_GENERATED_ROOT / "src"        # legacy
+CANON_GENERATED_DIR = CANON_GENERATED_ROOT / "src"  # canonical
+LEGACY_GENERATED_DIR = LEGACY_GENERATED_ROOT / "src"  # legacy
 
 GENERATED_DIR = CANON_GENERATED_DIR
 
@@ -75,14 +80,14 @@ DEFAULT_RGL_REF = os.environ.get(RGL_REF_ENV) or os.environ.get(RGL_COMMIT_ENV) 
 
 # Colors for terminal output
 class Colors:
-    HEADER = '\033[95m'
-    BLUE = '\033[94m'
-    CYAN = '\033[96m'
-    GREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
+    HEADER = "\033[95m"
+    BLUE = "\033[94m"
+    CYAN = "\033[96m"
+    GREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
 
 
 def log(msg: str, color: str = Colors.ENDC) -> None:
@@ -98,6 +103,18 @@ def is_wsl() -> bool:
         except Exception:
             return False
     return False
+
+
+def require_linux_runtime(action: str) -> None:
+    """
+    Hard stop for native Windows runs.
+    Backend depends on Linux-only libs (GF/libpgf) and Windows filesystem semantics can break the build dirs.
+    """
+    if IS_WINDOWS and not is_wsl():
+        log(f"❌ {action} must run in WSL/Linux (not native Windows).", Colors.FAIL)
+        log("   Open a WSL shell at repo root and run the command there.", Colors.WARNING)
+        log("   If present: run wsl_shell_venv.bat (repo root).", Colors.WARNING)
+        sys.exit(2)
 
 
 def _path_with_venv() -> str:
@@ -197,12 +214,20 @@ def reconcile_generated_dirs(verbose: bool = False) -> None:
     """
     Ensure:
       - generated/src exists (canonical)
-      - gf/generated/src exists (legacy)
+      - gf/generated/src exists (legacy) [WSL/Linux only]
       - best effort to unify via symlink
       - fallback: bidirectional sync to reduce shadowing/staleness
     """
-    LEGACY_GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+    # Always keep canonical dir present.
     CANON_GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Native Windows cannot safely manage the legacy tree (and backend isn't supported there anyway).
+    if IS_WINDOWS and not is_wsl():
+        if verbose:
+            log("    ⚠️  Native Windows: skipping gf/generated/src reconciliation.", Colors.WARNING)
+        return
+
+    LEGACY_GENERATED_DIR.mkdir(parents=True, exist_ok=True)
 
     linked = _safe_symlink(CANON_GENERATED_ROOT, LEGACY_GENERATED_ROOT)
 
@@ -273,6 +298,7 @@ def _print_tail(label: str, text: str, n: int = 40) -> None:
 
 # --- Alignment capability probing (prevents arg mismatch like --tier / langs parsing) ---
 
+
 def _get_align_entry() -> list[str]:
     if ALIGN_SCRIPT.exists():
         return [PYTHON, str(ALIGN_SCRIPT)]
@@ -311,8 +337,11 @@ def _langs_mode(help_text: str) -> Literal["multi", "single"]:
 
 # --- COMMANDS ---
 
+
 def check_env() -> None:
     """Pre-flight checks for Docker, Redis, and GF."""
+    require_linux_runtime("check_env")
+
     log("\n[1/5] 🏥 Health Check", Colors.HEADER)
 
     docker_cmd = "docker"
@@ -362,6 +391,7 @@ def check_env() -> None:
     gf_exe = "gf"
     try:
         from builder.orchestrator import config as orch_config  # type: ignore
+
         gf_exe = orch_config.GF_BIN  # type: ignore[attr-defined]
     except Exception:
         gf_exe = "gf"
@@ -376,6 +406,8 @@ def check_env() -> None:
 
 def clean_artifacts() -> None:
     """Cleanup of generated/build artifacts (handles both generated/src and gf/generated/src)."""
+    require_linux_runtime("clean_artifacts")
+
     reconcile_generated_dirs(verbose=False)
 
     log("\n🧹 Cleaning Artifacts...", Colors.WARNING)
@@ -385,11 +417,13 @@ def clean_artifacts() -> None:
     for base in (CANON_GENERATED_DIR, LEGACY_GENERATED_DIR):
         targets.extend([base / "bul", base / "pol"])
 
-    targets.extend([
-        BUILD_LOGS,
-        ROOT_DIR / "gf" / "semantik_architect.gfo",
-        ROOT_DIR / "gf" / "semantik_architect.pgf",
-    ])
+    targets.extend(
+        [
+            BUILD_LOGS,
+            ROOT_DIR / "gf" / "semantik_architect.gfo",
+            ROOT_DIR / "gf" / "semantik_architect.pgf",
+        ]
+    )
 
     for target in targets:
         if target.exists():
@@ -418,6 +452,8 @@ def align_system(
 
     Key: this wrapper probes align_system.py --help so we DON'T pass flags it doesn't support.
     """
+    require_linux_runtime("align_system")
+
     reconcile_generated_dirs(verbose=True)
     log("\n🧭 Aligning GF/RGL System", Colors.HEADER)
 
@@ -480,6 +516,8 @@ def build_system(
     rgl_ref: Optional[str] = None,
 ) -> None:
     """The Build Pipeline."""
+    require_linux_runtime("build_system")
+
     reconcile_generated_dirs(verbose=True)
 
     if clean:
@@ -511,7 +549,7 @@ def build_system(
         pgf_path = build_pgf(
             strategy=strategy,
             langs=langs,
-            clean=False,          # manage.py already cleaned if requested
+            clean=False,  # manage.py already cleaned if requested
             verbose=False,
             max_workers=parallel,
             no_preflight=False,
@@ -528,54 +566,33 @@ def build_system(
 
 def kill_stale_processes() -> None:
     """Kills old uvicorn/arq processes to free ports."""
-    log("\n[4/5] 🔫 Process Cleanup", Colors.HEADER)
+    require_linux_runtime("kill_stale_processes")
 
-    if IS_WINDOWS and not is_wsl():
-        log("    ⚠️  Process cleanup skipped on native Windows.", Colors.WARNING)
-        return
+    log("\n[4/5] 🔫 Process Cleanup", Colors.HEADER)
 
     subprocess.run("pkill -f uvicorn || true", shell=True)
     subprocess.run("pkill -f arq || true", shell=True)
     log("    ✅ Port 8000 freed.", Colors.GREEN)
 
 
-def start_services() -> None:
-    """Launches API and Worker."""
+def start_services(reload: bool = False, watch: bool = False) -> None:
+    """Launches API and Worker (prints commands by default)."""
+    require_linux_runtime("start_services")
+
     log("\n[5/5] 🚀 Launching Services", Colors.HEADER)
 
-    api_cmd = f"cd {ROOT_DIR} && {PYTHON} -m uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port 8000 --reload"
-    worker_cmd = f"cd {ROOT_DIR} && {PYTHON} -m arq app.workers.worker.WorkerSettings --watch app"
+    api_cmd = (
+        f"cd {ROOT_DIR} && {PYTHON} -m uvicorn app.adapters.api.main:create_app "
+        f"--factory --host 0.0.0.0 --port 8000"
+    )
+    worker_cmd = f"cd {ROOT_DIR} && {PYTHON} -m arq app.workers.worker.WorkerSettings"
 
-    if IS_WINDOWS and not is_wsl():
-        log("    🪟 Native Windows Detected (no auto-spawn).", Colors.BLUE)
-        _print_manual_commands(api_cmd, worker_cmd)
-        return
+    if reload:
+        api_cmd += " --reload"
+    if watch:
+        worker_cmd += " --watch app"
 
-    if is_wsl():
-        try:
-            subprocess.Popen(
-                ["cmd.exe", "/c", "start", "wsl", "bash", "-c",
-                 f"{api_cmd}; echo '❌ API CRASHED'; exec bash"],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-            )
-            log("    👉 API Window Spawned.", Colors.CYAN)
-
-            subprocess.Popen(
-                ["cmd.exe", "/c", "start", "wsl", "bash", "-c",
-                 f"{worker_cmd}; echo '❌ WORKER CRASHED'; exec bash"],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-            )
-            log("    👉 Worker Window Spawned.", Colors.CYAN)
-
-            log("\n✅ SYSTEM ONLINE!", Colors.GREEN)
-            log("    🗺️  Docs: http://localhost:8000/docs", Colors.BOLD)
-
-        except FileNotFoundError:
-            log("    ⚠️  'cmd.exe' not found despite WSL check.", Colors.WARNING)
-            _print_manual_commands(api_cmd, worker_cmd)
-    else:
-        log("    🐧 Linux Detected (no GUI spawning)", Colors.BLUE)
-        _print_manual_commands(api_cmd, worker_cmd)
+    _print_manual_commands(api_cmd, worker_cmd)
 
 
 def _print_manual_commands(api_cmd: str, worker_cmd: str) -> None:
@@ -586,6 +603,8 @@ def _print_manual_commands(api_cmd: str, worker_cmd: str) -> None:
 
 def generate_missing(lang_code: Optional[str] = None) -> None:
     """Generate missing grammars via AI/Factory."""
+    require_linux_runtime("generate_missing")
+
     reconcile_generated_dirs(verbose=True)
     log("\n🎨 Generating Missing Grammars", Colors.HEADER)
 
@@ -612,6 +631,8 @@ def generate_missing(lang_code: Optional[str] = None) -> None:
 
 def doctor() -> None:
     """System Diagnostic Tool."""
+    require_linux_runtime("doctor")
+
     reconcile_generated_dirs(verbose=True)
 
     log("\n🩺 Running Doctor...", Colors.HEADER)
@@ -652,11 +673,14 @@ def doctor() -> None:
 
 # --- MAIN ---
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Semantik Architect Commander")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    subparsers.add_parser("start", help="Full Launch: Check, Align, Build, Run")
+    start_parser = subparsers.add_parser("start", help="Full Launch: Check, Align, Build, Run")
+    start_parser.add_argument("--reload", action="store_true", help="Enable uvicorn reload (dev only; may crash under low memory)")
+    start_parser.add_argument("--watch", action="store_true", help="Enable arq watch (dev only; may crash under low memory)")
 
     build_parser = subparsers.add_parser("build", help="Compile grammars")
     build_parser.add_argument("--clean", action="store_true", help="Clean artifacts first")
@@ -713,10 +737,11 @@ def main() -> None:
         sys.exit(0)
 
     if args.command == "start":
+        require_linux_runtime("start")
         check_env()
         kill_stale_processes()
         build_system(clean=False, parallel=None, langs=None, strategy="AUTO", align=True, rgl_ref=None)
-        start_services()
+        start_services(reload=bool(args.reload), watch=bool(args.watch))
 
     elif args.command == "build":
         build_system(

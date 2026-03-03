@@ -3,11 +3,11 @@ requires = ["setuptools>=65.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "abstract-wiki-architect"
-version = "2.0.0"
-description = "Industrial-grade, resilient NLG system for Abstract Wikipedia."
+name = "semantik-architect"
+version = "2.1.0"
+description = "Industrial-grade, resilient NLG + GF orchestration system (Semantik Architect / Abstract Wikipedia)."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [
   { name = "Semantik Architect Contributors" }
@@ -36,9 +36,13 @@ api = [
   "uvicorn[standard]>=0.27.0",
   "redis>=5.0.1",
   "arq>=0.25.0",
+
   "opentelemetry-api>=1.22.0",
   "opentelemetry-sdk>=1.22.0",
   "opentelemetry-instrumentation-fastapi>=0.43b0",
+  # Required for: from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+  "opentelemetry-exporter-otlp-proto-http>=1.22.0",
+
   "sqlalchemy>=2.0.0",
   "alembic>=1.12.0",
   "httpx>=0.26.0",
@@ -68,12 +72,12 @@ wikidata = [
 architect-api = "app.adapters.api.main:start"
 architect-worker = "app.workers.worker:start"
 nlg-cli = "nlg.cli_frontend:main"
-lexicon-cli = "lexicon.cli:main"
+lexicon-cli = "app.adapters.persistence.lexicon.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/Rejean-McCormick/abstract-wiki-architect"
-Source = "https://github.com/Rejean-McCormick/abstract-wiki-architect"
-Issues = "https://github.com/Rejean-McCormick/abstract-wiki-architect/issues"
+Homepage = "https://github.com/Rejean-McCormick/SemantiK_Architect"
+Source = "https://github.com/Rejean-McCormick/SemantiK_Architect"
+Issues = "https://github.com/Rejean-McCormick/SemantiK_Architect/issues"
 
 [tool.setuptools]
 include-package-data = true
@@ -85,7 +89,7 @@ exclude = ["gf","gf-*","gf_grl*","gf-grl*","gf_rgl*","gf-rgl*","data*","schemas*
 
 [tool.black]
 line-length = 88
-target-version = ["py310"]
+target-version = ["py312"]
 exclude = '''
 /(
   \.git
@@ -110,7 +114,7 @@ exclude = [
 ]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 ignore_missing_imports = true
 disallow_untyped_defs = false
 warn_unused_ignores = true

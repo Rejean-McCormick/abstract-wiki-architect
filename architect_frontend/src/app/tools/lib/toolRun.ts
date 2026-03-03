@@ -118,7 +118,6 @@ function normalizeDryArgs(args: string[]) {
   for (const a of args) {
     if (a === "--dry") {
       sawDry = true;
-      // Convert alias to canonical flag sent to backend/tools
       if (!sawDryRun) out.push("--dry-run");
       sawDryRun = true;
       continue;
@@ -129,7 +128,6 @@ function normalizeDryArgs(args: string[]) {
       continue;
     }
 
-    // Optional: tolerate explicit true/false forms
     if (a.startsWith("--dry=") || a.startsWith("--dry-run=")) {
       const [, rawVal = ""] = a.split("=", 2);
       const v = rawVal.trim().toLowerCase();
@@ -141,9 +139,8 @@ function normalizeDryArgs(args: string[]) {
         sawDryRun = true;
         if (!out.includes("--dry-run")) out.push("--dry-run");
       } else if (falsy) {
-        // If someone explicitly sets false, just drop it (don’t add --dry-run)
+        // drop explicit false
       } else {
-        // Unknown value -> pass through unchanged
         out.push(a);
       }
       continue;
@@ -235,14 +232,12 @@ export function normalizeToolRunResponse(
     events: toEvents(p.events),
   };
 
-  // Optional extras (preserve when present)
   if (typeof p.run_id === "string") normalized.run_id = p.run_id;
   if (Array.isArray(p.argv)) normalized.argv = strArray(p.argv);
   if (typeof p.tool_id === "string") normalized.tool_id = p.tool_id;
   if (typeof p.output === "string") normalized.output = p.output;
   if (typeof p.error === "string") normalized.error = p.error;
 
-  // Preserve richer fields without over-validating (backend may evolve)
   if ("stdout_json" in (p as any)) normalized.stdout_json = (p as any).stdout_json;
   if ("stderr_json" in (p as any)) normalized.stderr_json = (p as any).stderr_json;
   if (Array.isArray((p as any).artifacts)) normalized.artifacts = (p as any).artifacts;
@@ -290,19 +285,24 @@ export function formatRunForConsole(normalized: ToolRunResponse, clientDurationM
     if (normalized.truncation?.stderr) lines.push("... [TRUNCATED]");
   }
 
-  lines.push(
-    normalized.success
-      ? `\n[SUCCESS] exit_code=${normalized.exit_code}`
-      : `\n[FAILED] exit_code=${normalized.exit_code}`
-  );
+  lines.push(normalized.success ? `\n[SUCCESS] exit_code=${normalized.exit_code}` : `\n[FAILED] exit_code=${normalized.exit_code}`);
 
-  // If backend put detail in `error` but stderr is empty, show it.
   if (!normalized.success && !normalized.stderr && normalized.error) {
     lines.push(`\n[ERROR]`);
     lines.push(normalized.error);
   }
 
   return lines;
+}
+
+function toNetworkErrorDetail(err: unknown, url: string): string {
+  if (err instanceof DOMException && err.name === "AbortError") return `Request aborted: ${url}`;
+  if (err instanceof Error) return `${err.name}: ${err.message}\nURL: ${url}`;
+  return `Unknown network error\nURL: ${url}`;
+}
+
+function getPublicApiKey(): string {
+  return process.env.NEXT_PUBLIC_ARCHITECT_API_KEY || process.env.NEXT_PUBLIC_API_KEY || "";
 }
 
 /**
@@ -317,19 +317,25 @@ export async function runToolOnce(opts: RunToolOnceOptions): Promise<RunToolResu
 
   const signal = controller ? mergeAbortSignals(opts.signal, controller.signal) : opts.signal;
 
-  // Normalize alias flags and infer dry-run intent from args when not passed explicitly.
   const inArgs = normalizeDryArgs(Array.isArray(opts.args) ? opts.args : []);
   const effectiveDryRun = Boolean(opts.dryRun ?? inArgs.dryFromArgs);
 
   const startedAt = performance.now();
+  const url = `${opts.apiV1}/tools/run`;
+
   try {
-    const res = await fetchImpl(`${opts.apiV1}/tools/run`, {
+    const apiKey = getPublicApiKey();
+
+    const res = await fetchImpl(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(apiKey ? { "X-API-Key": apiKey } : {}),
+      },
       body: JSON.stringify({
         tool_id: opts.toolId,
         args: inArgs.args,
-        ...(effectiveDryRun ? { dry_run: true } : {}),
+        dry_run: effectiveDryRun,
       }),
       cache: "no-store",
       signal,
@@ -342,6 +348,12 @@ export async function runToolOnce(opts: RunToolOnceOptions): Promise<RunToolResu
     const normalized = normalizeToolRunResponse(opts.toolId, rawText, parsedTry.ok ? parsedTry.value : null, http);
 
     const clientDurationMs = Math.max(0, Math.round(performance.now() - startedAt));
+    return { http, rawText, normalized, clientDurationMs };
+  } catch (e) {
+    const clientDurationMs = Math.max(0, Math.round(performance.now() - startedAt));
+    const http: HttpMeta = { ok: false, status: 0, statusText: "NETWORK_ERROR" };
+    const rawText = toNetworkErrorDetail(e, url);
+    const normalized = normalizeToolRunResponse(opts.toolId, rawText, null, http);
     return { http, rawText, normalized, clientDurationMs };
   } finally {
     if (timeout) clearTimeout(timeout);

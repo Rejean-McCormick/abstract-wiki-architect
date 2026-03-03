@@ -40,9 +40,9 @@ const P_VERBOSE: ToolParameter = { flag: "--verbose", description: "Enable detai
 const P_JSON: ToolParameter = { flag: "--json", description: "Emit machine-readable JSON summary (if supported)" };
 
 const P_DRY_RUN: ToolParameter = {
-  flag: "--dry",
+  flag: "--dry-run",
   description: "Dry run. Show what would happen without writing changes",
-  example: "--dry",
+  example: "--dry-run",
 };
 
 function withParams(...params: ToolParameter[]) {
@@ -63,15 +63,15 @@ export const BACKEND_TOOL_REGISTRY = {
     group: "Health & Cleanup",
     risk: "safe",
     longDescription:
-      "Comprehensive check of the language pipeline. Verifies GF compilation status and tests the API generation endpoint with a sample payload.",
+      "Comprehensive check of the language pipeline. Verifies GF compilation status and tests the API generation endpoint with a sample payload. (API key is env-only; do not pass secrets via argv.)",
     parameterDocs: withParams(
       { flag: "--mode", description: "compile | api | both (default)", example: "--mode compile" },
       { flag: "--fast", description: "Skip re-check of VALID files using cache" },
-      { flag: "--parallel", description: "Run language checks in parallel (when supported)" },
-      { flag: "--api-url", description: "Override API URL used by api-mode checks", example: "--api-url http://localhost:8000" },
-      { flag: "--api-key", description: "API key for api-mode checks (if required)", example: "--api-key $ARCHITECT_API_KEY" },
+      { flag: "--parallel", description: "Parallelism level for checks (integer)", example: "--parallel 4" },
+      { flag: "--api-url", description: "Override API URL used by api-mode checks", example: "--api-url http://127.0.0.1:8000" },
       { flag: "--timeout", description: "Per-request timeout (seconds)", example: "--timeout 30" },
-      { flag: "--langs", description: "Limit to specific codes", example: "--langs en fr" },
+      { flag: "--limit", description: "Limit number of languages checked (0 = all)", example: "--limit 10" },
+      { flag: "--langs", description: "Limit to specific ISO-2 codes", example: "--langs en fr" },
       { flag: "--no-disable-script", description: "Do not disable (or rewrite) scripts as part of checks" },
       P_VERBOSE,
       P_JSON
@@ -115,10 +115,10 @@ export const BACKEND_TOOL_REGISTRY = {
     risk: "safe",
     category: "Diagnostics & Maintenance",
     group: "Performance",
-    longDescription: "Benchmarks the Grammar Engine's latency, throughput, and memory usage.",
+    longDescription: "Benchmarks the Grammar Engine's latency, throughput, and memory usage. Prints JSON results to stdout.",
     parameterDocs: withParams(
       { flag: "--lang", description: "Target language code", example: "--lang en" },
-      { flag: "--iterations", description: "Number of sentences to generate", example: "--iterations 1000" },
+      { flag: "--iterations", description: "Number of linearizations to run", example: "--iterations 1000" },
       { flag: "--update-baseline", description: "Save current stats as the new baseline" },
       {
         flag: "--threshold",
@@ -228,16 +228,19 @@ export const BACKEND_TOOL_REGISTRY = {
   // --- GF BUILD ---
   compile_pgf: {
     title: "Compile PGF (Build Orchestrator)",
-    path: "builder/orchestrator.py",
-    cmd: ["python", "builder/orchestrator.py"],
+    path: "builder/orchestrator/__main__.py",
+    cmd: ["python", "-m", "builder.orchestrator"],
     category: "Build System",
     group: "GF Build",
     risk: "heavy",
-    longDescription: "Orchestrates the full compilation of the SemantikArchitect grammar into a PGF binary.",
+    longDescription: "Orchestrates the full compilation of the SemantikArchitect grammar into a PGF binary (two-phase: verify → link).",
     parameterDocs: withParams(
-      { flag: "--strategy", description: "Build strategy (implementation-defined)", example: "--strategy incremental" },
+      { flag: "--strategy", description: "Build strategy", example: "--strategy AUTO" },
       { flag: "--langs", description: "Limit build to specific languages", example: "--langs en fr" },
       { flag: "--clean", description: "Clean build artifacts before compiling" },
+      { flag: "--max-workers", description: "Thread pool size for compilation", example: "--max-workers 4" },
+      { flag: "--no-preflight", description: "Skip RGL pin/bridge preflight checks" },
+      { flag: "--regen-safe", description: "Regenerate SAFE_MODE grammars even if present" },
       P_VERBOSE
     ),
     supportsVerbose: true,
@@ -270,11 +273,12 @@ export const BACKEND_TOOL_REGISTRY = {
     risk: "safe",
     category: "Lexicon & Data",
     group: "Analysis",
-    longDescription: "Compares a target language lexicon against a pivot to identify missing concepts.",
+    longDescription:
+      "Compares two flat lexicon JSON files to identify missing concepts (expects {lang}.json under the data dir, default: data/).",
     parameterDocs: withParams(
-      { flag: "--target", description: "Language to analyze", required: true, example: "--target spa" },
-      { flag: "--pivot", description: "Reference language (default: eng)", example: "--pivot eng" },
-      { flag: "--data-dir", description: "Override lexicon data directory", example: "--data-dir data/lexicon" },
+      { flag: "--target", description: "Target language code (file name without .json)", required: true, example: "--target spa" },
+      { flag: "--pivot", description: "Pivot language code (default: eng)", example: "--pivot eng" },
+      { flag: "--data-dir", description: "Base directory to search for {lang}.json files", example: "--data-dir data" },
       { flag: "--json-out", description: "Save report to file", example: "--json-out out/gaps_spa.json" },
       P_VERBOSE
     ),
@@ -290,12 +294,24 @@ export const BACKEND_TOOL_REGISTRY = {
     group: "Mining & Harvesting",
     risk: "moderate",
     longDescription:
-      "Universal Lexicon Harvester. Subcommands: `wordnet` (labels/lemmas) and `wikidata` (labels + P106/P27 facts).",
+      "Universal Lexicon Harvester. Subcommands: `wordnet` (mine GF WordNet files) and `wikidata` (placeholder/no-op in current build).",
     parameterDocs: withParams(
-      { flag: "wordnet", description: "Subcommand: harvest from WordNet (positional)", example: "wordnet --lang en --root data/wordnet" },
-      { flag: "wikidata", description: "Subcommand: harvest from Wikidata for explicit QIDs (positional)", example: "wikidata --lang en --input qids.json --domain people" },
+      {
+        flag: "wordnet",
+        description: "Subcommand: harvest from WordNet (positional)",
+        example: "wordnet --lang en --root /mnt/c/MyCode/SemantiK_Architect/gf-wordnet --out data/lexicon",
+      },
+      {
+        flag: "wikidata",
+        description: "Subcommand: harvest from Wikidata for explicit QIDs (positional)",
+        example: "wikidata --lang en --input qids.json --domain people --out data/lexicon",
+      },
       { flag: "--lang", description: "Target language (iso2)", example: "--lang en" },
-      { flag: "--root", description: "WordNet root directory (wordnet only)", example: "--root data/wordnet" },
+      {
+        flag: "--root",
+        description: "WordNet root (repo root, its gf/ dir, or WordNet.gf path) (wordnet only)",
+        example: "--root /mnt/c/MyCode/SemantiK_Architect/gf-wordnet",
+      },
       { flag: "--out", description: "Output directory for shard JSON files", example: "--out data/lexicon" },
       { flag: "--input", description: "Input JSON containing QIDs (wikidata only)", example: "--input qids.json" },
       { flag: "--domain", description: "Shard/domain name (wikidata only)", example: "--domain people" }
@@ -303,9 +319,9 @@ export const BACKEND_TOOL_REGISTRY = {
     commonFailureModes: [
       "Missing subcommand: first arg must be 'wordnet' or 'wikidata'.",
       "Wikidata mode: missing --input qids.json.",
-      "WordNet mode: missing --root.",
+      "WordNet mode: missing --root (must point to a directory containing WordNet.gf).",
     ],
-    supportsVerbose: true,
+    supportsVerbose: false,
     supportsJson: false,
   },
 
@@ -446,11 +462,14 @@ export const BACKEND_TOOL_REGISTRY = {
     group: "QA Tools",
     risk: "moderate",
     parameterDocs: withParams(
-      { flag: "--suite", description: "Specific test suite CSV to run", example: "--suite tools/qa/generated_datasets/test_suite_en.csv" },
-      { flag: "--in", description: "Input directory (if suite paths are relative)", example: "--in tools/qa/generated_datasets" },
-      { flag: "--out", description: "Output report path", example: "--out out/test_results.json" },
-      { flag: "--langs", description: "Filter by language", example: "--langs en fr" },
+      { flag: "--dataset-dir", description: "Directory containing CSV datasets", example: "--dataset-dir tools/qa/generated_datasets" },
+      { flag: "--pattern", description: "Filename glob/pattern to select datasets", example: '--pattern "test_suite_*.csv"' },
+      { flag: "--langs", description: "Filter by language codes", example: "--langs en fr" },
       { flag: "--limit", description: "Limit test cases executed", example: "--limit 500" },
+      { flag: "--fail-fast", description: "Stop on first failure" },
+      { flag: "--strict", description: "Treat warnings as failures / stricter assertions (tool-defined)" },
+      { flag: "--print-failures", description: "Write failing cases to a file", example: "--print-failures out/failures.txt" },
+      { flag: "--json-report", description: "Write JSON report to a file", example: "--json-report out/test_results.json" },
       P_VERBOSE
     ),
     supportsVerbose: true,

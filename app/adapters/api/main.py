@@ -34,6 +34,13 @@ def _normalize_root_path(value: str | None) -> str:
     return v.rstrip("/")
 
 
+def _parse_csv_env(name: str, default: list[str]) -> list[str]:
+    raw = (os.getenv(name) or "").strip()
+    if not raw:
+        return default
+    return [x.strip() for x in raw.split(",") if x.strip()]
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -105,13 +112,26 @@ def create_app() -> FastAPI:
         redoc_url=None,
     )
 
-    # Global Middleware
+    # Global Middleware (CORS)
+    #
+    # IMPORTANT (browser CORS rule):
+    # - allow_origins=["*"] cannot be used with allow_credentials=True.
+    # - Tools Command Center runs in the browser; invalid CORS config will surface as "Failed to fetch".
+    #
+    # Local dev frontend runs at :3000 and calls backend at :8000.
+    # Default to allowing localhost origins; override with ARCHITECT_CORS_ORIGINS (comma-separated).
+    default_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    allow_origins = _parse_csv_env("ARCHITECT_CORS_ORIGINS", default_origins) if is_dev else _parse_csv_env("ARCHITECT_CORS_ORIGINS", [])
+    allow_all = len(allow_origins) == 0
+
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # TODO: Restrict in production
-        allow_credentials=True,
+        allow_origins=["*"] if allow_all else allow_origins,
+        allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"],
+        expose_headers=["*"],
+        max_age=600,
     )
 
     # --- Router Registration ---
@@ -124,6 +144,7 @@ def create_app() -> FastAPI:
     # Public Read Endpoints
     app.include_router(languages.router, prefix="/api/v1/languages", tags=["Languages"])
     app.include_router(entities.router, prefix="/api/v1/entities", tags=["Entities"])
+    app.include_router(frames.router, prefix="/api/v1/entities", tags=["Entities"])
     app.include_router(frames.router, prefix="/api/v1/frames", tags=["Frames"])
 
     # AI (public helper endpoints)

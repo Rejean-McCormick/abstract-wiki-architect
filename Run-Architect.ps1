@@ -6,6 +6,7 @@
     - Starts API in WSL (uvicorn) and Worker in WSL (arq)
     - Starts frontend in Windows (npm run dev)
     - Writes WSL helper scripts into .\logs and keeps WSL windows open for debugging
+    - Performs a reliable backend readiness probe (HTTP) with retries
 
 .NOTES
     Recommended:
@@ -22,10 +23,23 @@ param(
     [switch]$SkipFrontend,
     [switch]$SkipBrowser,
     [switch]$NoVerbose,
+    [switch]$CleanupOnly,
+
+    # Default is OFF to avoid watchfiles crashes in WSL.
+    # Use -EnableReload / -EnableWatch only if you explicitly want file-watching reloads.
+    [switch]$EnableReload,
+    [switch]$EnableWatch,
+
+    # Prevents killing an already-running backend on reruns (recommended when you are only relaunching frontend/browser).
+    [switch]$NoPortClear,
+
     [string]$WinRepoOverride = "",
     [int]$BackendPort = 8000,
     [int]$BrowserDelaySeconds = 5,
-    [string]$LaunchUrl = "http://localhost:3000/semantik_architect/tools"
+    [string]$LaunchUrl = "http://localhost:3000/semantik_architect/tools",
+
+    # Backend HTTP probe retry window (seconds)
+    [int]$BackendProbeTimeoutSeconds = 10
 )
 
 Set-StrictMode -Version Latest
@@ -88,12 +102,34 @@ $BashCmd
 & wsl.exe --cd '$WslRepo' --exec bash -lc `$BashCmd
 
 Write-Host ''
-Write-Host ('WSL exited with code: ' + `$LASTEXITCODE) -ForegroundColor Yellow
+if (`$LASTEXITCODE -eq 0) {
+  Write-Host ('WSL session ended (code 0).') -ForegroundColor DarkGray
+} else {
+  Write-Host ('WSL exited with code: ' + `$LASTEXITCODE) -ForegroundColor Yellow
+}
 Read-Host 'Press Enter to close this window' | Out-Null
 "@
 
     Set-Content -Path $helperPath -Value $helperContent -Encoding UTF8
     Start-Process $psHost -ArgumentList @("-NoExit","-NoProfile","-ExecutionPolicy","Bypass","-File",$helperPath)
+}
+
+function Invoke-WslBackendProbe {
+    param(
+        [Parameter(Mandatory=$true)][int]$Port,
+        [Parameter(Mandatory=$true)][int]$TimeoutSeconds
+    )
+
+    for ($i = 1; $i -le $TimeoutSeconds; $i++) {
+        $out = & wsl.exe --exec bash -lc "curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:$Port/api/v1/health/ready || true"
+        if ($out -eq "200") {
+            Write-Host "READY_200" -ForegroundColor Green
+            return
+        }
+        Start-Sleep -Seconds 1
+    }
+
+    Write-Host "NOT_READY" -ForegroundColor Yellow
 }
 
 # -----------------------------
@@ -140,9 +176,13 @@ Write-Host "Logs dir:     $LogsDirWin" -ForegroundColor Gray
 Write-Verbose "Parameters:"
 Write-Verbose "  KillAllNode=$KillAllNode"
 Write-Verbose "  SkipApi=$SkipApi SkipWorker=$SkipWorker SkipFrontend=$SkipFrontend SkipBrowser=$SkipBrowser"
+Write-Verbose "  CleanupOnly=$CleanupOnly"
+Write-Verbose "  EnableReload=$EnableReload EnableWatch=$EnableWatch"
+Write-Verbose "  NoPortClear=$NoPortClear"
 Write-Verbose "  BackendPort=$BackendPort"
 Write-Verbose "  BrowserDelaySeconds=$BrowserDelaySeconds"
 Write-Verbose "  LaunchUrl=$LaunchUrl"
+Write-Verbose "  BackendProbeTimeoutSeconds=$BackendProbeTimeoutSeconds"
 
 # -----------------------------
 # 2) Sanity checks
@@ -183,13 +223,22 @@ if ($KillAllNode) {
     }
 }
 
-# Clear backend port in WSL (best effort)
-try {
-    $killPortCmd = "command -v fuser >/dev/null 2>&1 && fuser -k $BackendPort/tcp >/dev/null 2>&1 || true"
-    wsl.exe --exec bash -lc $killPortCmd | Out-Null
-    Write-Host "  - Cleared port $BackendPort (WSL)" -ForegroundColor Gray
-} catch {
-    Write-Warning "WSL port cleanup warnings: $($_.Exception.Message)"
+# Clear backend port in WSL only when we intend to (avoid killing a healthy backend on rerun)
+if (-not $NoPortClear -and -not $SkipApi) {
+    try {
+        $killPortCmd = "command -v fuser >/dev/null 2>&1 && fuser -k $BackendPort/tcp >/dev/null 2>&1 || true"
+        wsl.exe --exec bash -lc $killPortCmd | Out-Null
+        Write-Host "  - Cleared port $BackendPort (WSL)" -ForegroundColor Gray
+    } catch {
+        Write-Warning "WSL port cleanup warnings: $($_.Exception.Message)"
+    }
+} else {
+    Write-Host "  - Port clear skipped (NoPortClear or SkipApi enabled)" -ForegroundColor Gray
+}
+
+if ($CleanupOnly) {
+    Write-Host "`nCleanupOnly requested; exiting after cleanup." -ForegroundColor Yellow
+    exit 0
 }
 
 # -----------------------------
@@ -197,6 +246,9 @@ try {
 # -----------------------------
 $ApiScriptWin    = Join-Path $LogsDirWin "start_api.sh"
 $WorkerScriptWin = Join-Path $LogsDirWin "start_worker.sh"
+
+$uvicornReload = if ($EnableReload) { "--reload" } else { "" }
+$arqWatch      = if ($EnableWatch)  { "--watch app" } else { "" }
 
 # IMPORTANT: single-quoted here-strings so PowerShell does not expand ${TS}, $ROOT, $(...)
 $commonHeader = @'
@@ -209,6 +261,10 @@ cd "$ROOT" || exit 1
 
 TS="$(date +%Y%m%d_%H%M%S)"
 mkdir -p logs
+
+# Reduce watchfiles/inotify pressure on some WSL setups
+export WATCHFILES_FORCE_POLLING="${WATCHFILES_FORCE_POLLING:-1}"
+export PYTHONUNBUFFERED=1
 
 pick_venv() {
   if [ -f venv/bin/activate ]; then echo "venv"; return; fi
@@ -244,18 +300,19 @@ echo "PGF check:"
 ls -l gf/semantik_architect.pgf 2>/dev/null || echo "MISSING_PGF"
 
 PORT="${1:-8000}"
+RELOAD_ARGS="__UVICORN_RELOAD__"
 
 echo ""
 echo "Starting API:"
-echo "  python3 -m uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port ${PORT} --reload"
-python3 -m uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port "${PORT}" --reload
+echo "  python3 -m uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port ${PORT} ${RELOAD_ARGS}"
+python3 -m uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port "${PORT}" ${RELOAD_ARGS}
 STATUS=$?
 echo "uvicorn exit code: ${STATUS}"
 
 echo ""
 echo "Dropping into an interactive shell."
 exec bash -li
-'@.Trim().Replace('__COMMON__', $commonHeader)
+'@.Trim().Replace('__COMMON__', $commonHeader).Replace('__UVICORN_RELOAD__', $uvicornReload)
 
 $workerScript = @'
 __COMMON__
@@ -279,17 +336,19 @@ fi
 echo "PY=$(command -v python3 2>/dev/null || true)"
 python3 --version 2>/dev/null || true
 
+WATCH_ARGS="__ARQ_WATCH__"
+
 echo ""
 echo "Starting worker:"
-echo "  python3 -m arq app.workers.worker.WorkerSettings --watch app"
-python3 -m arq app.workers.worker.WorkerSettings --watch app
+echo "  python3 -m arq app.workers.worker.WorkerSettings ${WATCH_ARGS}"
+python3 -m arq app.workers.worker.WorkerSettings ${WATCH_ARGS}
 STATUS=$?
 echo "worker exit code: ${STATUS}"
 
 echo ""
 echo "Dropping into an interactive shell."
 exec bash -li
-'@.Trim().Replace('__COMMON__', $commonHeader)
+'@.Trim().Replace('__COMMON__', $commonHeader).Replace('__ARQ_WATCH__', $arqWatch)
 
 Write-TextFileLF -Path $ApiScriptWin    -Content $apiScript
 Write-TextFileLF -Path $WorkerScriptWin -Content $workerScript
@@ -358,7 +417,5 @@ if (-not $SkipBrowser) {
 }
 
 Write-Host ""
-Write-Host "Quick check (backend listener):" -ForegroundColor Gray
-try {
-    wsl.exe --exec bash -lc "ss -ltnp 2>/dev/null | grep ':8000 ' || echo NO_LISTENER_8000"
-} catch { }
+Write-Host "Quick check (backend ready HTTP probe):" -ForegroundColor Gray
+Invoke-WslBackendProbe -Port $BackendPort -TimeoutSeconds $BackendProbeTimeoutSeconds | Out-Host

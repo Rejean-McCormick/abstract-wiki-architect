@@ -5,7 +5,7 @@ import concurrent.futures
 import json
 import logging
 import os
-import re
+import shlex
 import shutil
 import subprocess
 import time
@@ -25,6 +25,14 @@ except Exception:
 
 logger = logging.getLogger("Orchestrator")
 
+# The PGF artifact name should be stable and match what the API expects.
+PGF_BASENAME = "semantik_architect"
+# Known legacy names we might encounter from older runs.
+LEGACY_PGF_FILENAMES = (
+    "SemantikArchitect.pgf",
+    "AbstractWiki.pgf",
+)
+
 
 def _get_env_rgl_ref() -> Optional[str]:
     """
@@ -42,6 +50,11 @@ def _get_env_rgl_ref() -> Optional[str]:
 # -----------------------------------------------------------------------------
 # Subprocess helpers
 # -----------------------------------------------------------------------------
+def _format_cmd(cmd: List[str]) -> str:
+    # Stable, readable command string for logs.
+    return " ".join(shlex.quote(c) for c in cmd)
+
+
 def _run(cmd: List[str], cwd: Path, timeout: Optional[int] = None) -> subprocess.CompletedProcess:
     return subprocess.run(
         cmd,
@@ -136,14 +149,17 @@ def clean_artifacts() -> None:
     _ensure_dirs()
     logger.info("🧹 Cleaning build artifacts...")
 
-    pgf = config.GF_DIR / "semantik_architect.pgf"
-    if pgf.exists():
-        try:
-            pgf.unlink()
-        except Exception:
-            pass
+    # Remove current and known legacy PGF names.
+    for fname in (f"{PGF_BASENAME}.pgf", *LEGACY_PGF_FILENAMES):
+        p = config.GF_DIR / fname
+        if p.exists():
+            try:
+                p.unlink()
+            except Exception:
+                pass
 
-    _clean_dir_patterns(config.GF_DIR, ("*.gfo", "*.log", "*.tmp"))
+    # Remove object/log/tmp artifacts (keep .gf sources).
+    _clean_dir_patterns(config.GF_DIR, ("*.gfo", "*.tmp"))
 
     for gen_dir in (
         config.SAFE_MODE_SRC,
@@ -152,11 +168,12 @@ def clean_artifacts() -> None:
         config.GENERATED_SRC_DEFAULT,
     ):
         if gen_dir.exists():
-            _clean_dir_patterns(gen_dir, ("*.gfo", "*.log", "*.tmp"))
+            _clean_dir_patterns(gen_dir, ("*.gfo", "*.tmp"))
 
     if config.CONTRIB_DIR.exists():
-        _clean_dir_patterns(config.CONTRIB_DIR, ("*.gfo", "*.log", "*.tmp"))
+        _clean_dir_patterns(config.CONTRIB_DIR, ("*.gfo", "*.tmp"))
 
+    # Build logs are owned by the orchestrator; safe to wipe.
     if config.LOG_DIR.exists():
         for p in config.LOG_DIR.glob("*"):
             try:
@@ -382,6 +399,13 @@ def _is_safe_mode_file(p: Path) -> bool:
         return False
 
 
+def _validate_strategy(strategy: str) -> str:
+    s = (strategy or "").strip().upper()
+    if s not in ("HIGH_ROAD", "SAFE_MODE"):
+        raise ValueError(f"Invalid strategy '{strategy}'. Expected HIGH_ROAD or SAFE_MODE.")
+    return s
+
+
 def ensure_source_exists(lang_code: str, strategy: str, *, regen_safe: bool = False) -> Path:
     """
     Ensures the .gf source file exists before compilation.
@@ -391,6 +415,8 @@ def ensure_source_exists(lang_code: str, strategy: str, *, regen_safe: bool = Fa
     SAFE_MODE: always lives under SAFE_MODE_SRC to avoid stale HIGH_ROAD contamination.
     """
     _ensure_dirs()
+    strategy = _validate_strategy(strategy)
+    lang_code = (lang_code or "").strip()
 
     gf_filename = iso_map.get_gf_name(lang_code)
 
@@ -438,6 +464,8 @@ def compile_gf(lang_code: str, strategy: str, *, regen_safe: bool = False) -> Tu
     Returns (proc, source_path).
     """
     _ensure_dirs()
+    strategy = _validate_strategy(strategy)
+    lang_code = (lang_code or "").strip()
 
     gf_filename = iso_map.get_gf_name(lang_code)
     source_path = ensure_source_exists(lang_code, strategy, regen_safe=regen_safe)
@@ -456,7 +484,7 @@ def compile_gf(lang_code: str, strategy: str, *, regen_safe: bool = False) -> Tu
         log_path = config.LOG_DIR / f"{gf_filename}.log"
         try:
             log_path.write_text(
-                " ".join(cmd) + "\n\n" + (proc.stderr or "") + "\n" + (proc.stdout or ""),
+                _format_cmd(cmd) + "\n\n" + (proc.stderr or "") + "\n" + (proc.stdout or ""),
                 encoding="utf-8",
             )
         except Exception:
@@ -488,6 +516,22 @@ class LinkedLang:
     source_path: Path
 
 
+def _find_any_pgf_candidate() -> Optional[Path]:
+    try:
+        pgfs = list(config.GF_DIR.glob("*.pgf"))
+    except Exception:
+        return None
+    if not pgfs:
+        return None
+    # Prefer known legacy names; otherwise pick the most recently modified PGF.
+    for fname in LEGACY_PGF_FILENAMES:
+        p = config.GF_DIR / fname
+        if p.exists():
+            return p
+    pgfs.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+    return pgfs[0]
+
+
 def phase_2_link(valid_langs: List[LinkedLang]) -> Path:
     """Phase 2: Link all valid languages into a single semantik_architect.pgf binary."""
     start_time = time.time()
@@ -497,36 +541,62 @@ def phase_2_link(valid_langs: List[LinkedLang]) -> Path:
         logger.error("❌ No valid languages to link! Build aborted.")
         raise SystemExit(1)
 
-    targets = [str(ll.source_path.resolve()) for ll in valid_langs]
+    main_abstract = config.GF_DIR / "SemantikArchitect.gf"
+    if not main_abstract.exists():
+        raise FileNotFoundError(f"Missing main abstract grammar: {main_abstract}")
+
+    # Deterministic order for linking.
+    ordered = sorted(valid_langs, key=lambda x: x.code)
+    targets = [str(ll.source_path.resolve()) for ll in ordered]
+
+    # IMPORTANT: -name controls the produced <name>.pgf filename.
+    pgf_name = PGF_BASENAME
+    expected_pgf = config.GF_DIR / f"{pgf_name}.pgf"
+
     cmd = [
         config.GF_BIN,
         "-make",
         "-path",
         gf_path.gf_path_args(),
         "-name",
-        "SemantikArchitect",
-        "SemantikArchitect.gf",
+        pgf_name,
+        main_abstract.name,  # run in cwd=config.GF_DIR
         *targets,
     ]
 
     logger.info(f"🔗 Linking {len(targets)} languages...")
-    logger.info(f"   [CMD] {config.GF_BIN} -make -path <...> -name semantik_architect SemantikArchitect.gf ... ({len(targets)} files)")
+    logger.info(f"   [CMD] {_format_cmd(cmd)}")
 
     proc = _run(cmd, cwd=config.GF_DIR)
     duration = time.time() - start_time
 
-    pgf_path = config.GF_DIR / "semantik_architect.pgf"
     if proc.returncode == 0:
-        logger.info(f"✅ BUILD SUCCESS: semantik_architect.pgf created in {duration:.2f}s")
-        if pgf_path.exists():
-            size_mb = pgf_path.stat().st_size / (1024 * 1024)
-            logger.info(f"   [ARTIFACT] {pgf_path} ({size_mb:.2f} MB)")
+        logger.info(f"✅ BUILD SUCCESS: {expected_pgf.name} created in {duration:.2f}s")
+
+        if not expected_pgf.exists():
+            # Robust fallback: if GF produced a differently-cased or legacy-named PGF, copy it to expected name.
+            candidate = _find_any_pgf_candidate()
+            if candidate and candidate.exists():
+                try:
+                    shutil.copyfile(candidate, expected_pgf)
+                    logger.warning(
+                        f"⚠️ PGF produced as {candidate.name}; copied to expected {expected_pgf.name}."
+                    )
+                except Exception:
+                    pass
+
+        if expected_pgf.exists():
+            size_mb = expected_pgf.stat().st_size / (1024 * 1024)
+            logger.info(f"   [ARTIFACT] {expected_pgf} ({size_mb:.2f} MB)")
         else:
-            logger.warning("⚠️ Build reported success but semantik_architect.pgf not found.")
-        return pgf_path
+            logger.warning(f"⚠️ Build reported success but {expected_pgf.name} not found.")
+        return expected_pgf
 
     logger.error(f"❌ LINK FAILED in {duration:.2f}s")
-    logger.error(f"   [STDERR]\n{(proc.stderr or '').strip()}")
+    if proc.stderr:
+        logger.error(f"   [STDERR]\n{proc.stderr.strip()}")
+    if proc.stdout:
+        logger.error(f"   [STDOUT]\n{proc.stdout.strip()}")
     raise SystemExit(proc.returncode or 1)
 
 
@@ -559,29 +629,40 @@ def build_pgf(
     matrix = load_matrix()
     tasks: List[Tuple[str, str]] = []
 
-    if strategy != "AUTO":
-        selected = langs or ["en"]
-        tasks = [(code, strategy) for code in selected]
-        logger.info(f"⚙️  Forced strategy: {strategy} for {len(tasks)} language(s)")
+    strat_in = (strategy or "").strip().upper()
+    if strat_in != "AUTO":
+        forced = _validate_strategy(strat_in)
+        selected = [c.strip() for c in (langs or ["en"]) if c and c.strip()]
+        tasks = [(code, forced) for code in selected]
+        logger.info(f"⚙️  Forced strategy: {forced} for {len(tasks)} language(s)")
     else:
         if matrix:
-            langs_filter = set(langs) if langs else None
+            langs_filter = set([c.strip() for c in langs]) if langs else None
             languages = matrix.get("languages", {})
             if isinstance(languages, dict):
                 for code, data in languages.items():
+                    if not isinstance(code, str):
+                        continue
+                    code = code.strip()
+                    if not code:
+                        continue
                     if langs_filter is not None and code not in langs_filter:
                         continue
-                    # tolerate both old and new matrix shapes
+
                     blob = data if isinstance(data, dict) else {}
                     verdict = blob.get("verdict") or blob.get("status") or {}
                     verdict = verdict if isinstance(verdict, dict) else {}
-                    strat = str(verdict.get("build_strategy") or "SKIP")
+                    strat = str(verdict.get("build_strategy") or "SKIP").strip().upper()
+
                     if strat in ("HIGH_ROAD", "SAFE_MODE"):
                         tasks.append((code, strat))
 
         if not tasks:
             logger.info("⚠️  No tasks from matrix. Using bootstrap defaults.")
             tasks = [("en", "HIGH_ROAD")]
+
+    # Deterministic compilation order (execution may still be parallel).
+    tasks = sorted(tasks, key=lambda x: x[0])
 
     _ensure_executable_exists(config.GF_BIN)
 

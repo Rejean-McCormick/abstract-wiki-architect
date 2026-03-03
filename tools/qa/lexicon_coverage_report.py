@@ -10,7 +10,7 @@ filesystem lexicon under:
 
 It is designed to be callable from:
 - CLI:  python tools/qa/lexicon_coverage_report.py
-- UI:   tool_id = "lexicon_coverage"  (see app/adapters/api/routers/tools.py)
+- UI:   tool_id = "lexicon_coverage"
 
 What it reports
 ---------------
@@ -25,7 +25,8 @@ Per language:
 Outputs
 -------
 - Always prints a human-readable summary to stdout.
-- Also writes JSON + Markdown reports by default to:
+- Writes JSON and/or Markdown reports (default: both).
+  Output paths default to:
     data/reports/lexicon_coverage_report.json
     data/reports/lexicon_coverage_report.md
 
@@ -39,7 +40,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
 from dataclasses import asdict, dataclass
@@ -68,10 +68,12 @@ except Exception:  # pragma: no cover
 # [REFACTOR] Use standardized logger
 try:
     from utils.tool_logger import ToolLogger
+
     logger = ToolLogger(__file__)
 except ImportError:
     import logging
-    logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
     logger = logging.getLogger("LexiconCoverage")
 
 
@@ -79,9 +81,9 @@ except ImportError:
 # Targets (coverage heuristics)
 # -----------------------------------------------------------------------------
 DEFAULT_TARGETS = {
-    "core": 150,      # “glue” lexemes
-    "conc": 500,      # domain lexemes (people/science/geography/…)
-    "bio_min": 50,    # semantic/QID-linked entries (heuristic)
+    "core": 150,  # “glue” lexemes
+    "conc": 500,  # domain lexemes (people/science/geography/…)
+    "bio_min": 50,  # semantic/QID-linked entries (heuristic)
 }
 
 
@@ -163,9 +165,9 @@ def _infer_lang_from_path(path: Path, lexicon_dir: Path) -> str:
 
 
 def _is_language_dir(name: str) -> bool:
-    # Enterprise default: 2-letter ISO-639-1 folder names (en, fr, …)
+    # Primary layout uses ISO-639-1 folders (en, fr, …).
     # Keep permissive enough for edge cases, but avoid __pycache__/files.
-    return bool(re.fullmatch(r"[a-z]{2}", name))
+    return bool(re.fullmatch(r"[a-z]{2,3}", name))
 
 
 def _shard_name_from_file(path: Path) -> str:
@@ -176,7 +178,6 @@ def _extract_sections(data: Dict[str, Any]) -> Iterable[Tuple[str, Dict[str, Any
     """
     Returns (section_name, section_dict, require_pos).
     """
-    # Entries/lemmas: typical lexeme objects should carry POS.
     for section_name, require_pos in [
         ("entries", True),
         ("lemmas", True),
@@ -205,10 +206,8 @@ def _looks_like_wide_dump(data: Any) -> bool:
     """
     if not isinstance(data, dict) or not data:
         return False
-    # If it has lexicon-like sections, it's not wide.
     if any(k in data for k in ("entries", "lemmas", "meta", "_meta")):
         return False
-    # If a meaningful portion are QID keys, treat as wide.
     keys = list(data.keys())
     qid_keys = sum(1 for k in keys[: min(len(keys), 50)] if isinstance(k, str) and QID_RE.match(k))
     return qid_keys >= max(5, int(0.4 * min(len(keys), 50)))
@@ -228,7 +227,6 @@ def _validate_with_app_schema(lang: str, data: Any) -> List[Issue]:
         return [Issue(level="error", path="__validator__", message=f"Validator crashed: {e}")]
 
     for it in raw_issues:
-        # SchemaIssue is expected to have fields: level, path, message
         lvl = getattr(it, "level", "warning")
         pth = getattr(it, "path", "")
         msg = getattr(it, "message", str(it))
@@ -252,9 +250,7 @@ def _analyze_file(path: Path, lexicon_dir: Path) -> FileReport:
             issues=[Issue(level="error", path="__file__", message=f"Failed to read JSON: {err}")],
         )
 
-    # Wide dump?
     if _looks_like_wide_dump(data):
-        # Treat each top-level QID key as an “item”
         keys = [k for k in data.keys() if isinstance(k, str)]
         qids = sum(1 for k in keys if QID_RE.match(k))
         return FileReport(
@@ -267,7 +263,6 @@ def _analyze_file(path: Path, lexicon_dir: Path) -> FileReport:
             issues=[],
         )
 
-    # Lexeme file?
     if isinstance(data, dict):
         lang = _infer_lang_from_path(path, lexicon_dir)
         counts: Dict[str, int] = {}
@@ -281,7 +276,6 @@ def _analyze_file(path: Path, lexicon_dir: Path) -> FileReport:
 
         issues = _validate_with_app_schema(lang, data)
 
-        # Minimal sanity checks for meta language alignment (best-effort)
         meta = data.get("meta") if isinstance(data.get("meta"), dict) else data.get("_meta")
         if isinstance(meta, dict):
             meta_lang = meta.get("language")
@@ -304,7 +298,6 @@ def _analyze_file(path: Path, lexicon_dir: Path) -> FileReport:
             issues=issues,
         )
 
-    # Unknown structure
     return FileReport(
         rel_path=rel_path,
         shard=shard,
@@ -352,6 +345,20 @@ def _render_md_table(rows: List[List[str]]) -> str:
     return "\n".join(out)
 
 
+def _split_lang_tokens(tokens: Optional[List[str]]) -> List[str]:
+    if not tokens:
+        return []
+    out: List[str] = []
+    for t in tokens:
+        if not t:
+            continue
+        for part in str(t).split(","):
+            p = part.strip().lower()
+            if p:
+                out.append(p)
+    return out
+
+
 # -----------------------------------------------------------------------------
 # Main analysis
 # -----------------------------------------------------------------------------
@@ -378,7 +385,6 @@ def build_report(
 
         shard_reports: List[FileReport] = [_analyze_file(p, lexicon_dir) for p in json_files]
 
-        # shard totals + collisions across lexeme shards
         shard_totals: Dict[str, int] = {}
         shard_lemmas: Dict[str, set[str]] = {}
         total_lexemes = 0
@@ -397,9 +403,6 @@ def build_report(
                     warnings += 1
 
             if fr.kind == "lexeme":
-                # lemma keys live inside entries/lemmas/etc; we approximate by counting unique keys across sections
-                # (for collision detection, we need actual keys -> re-read JSON only when necessary)
-                # keep it fast: only do collision detection by loading once per file
                 p = PROJECT_ROOT / fr.rel_path
                 data, _ = _safe_read_json(p)
                 keys: set[str] = set()
@@ -411,23 +414,23 @@ def build_report(
                 shard_lemmas[fr.shard] = keys
                 total_lexemes += len(keys)
 
-        # collisions: same lemma appears in more than one shard
         lemma_to_shards: Dict[str, int] = {}
         for shard, keys in shard_lemmas.items():
             for k in keys:
                 lemma_to_shards[k] = lemma_to_shards.get(k, 0) + 1
         collisions = sum(1 for _, n in lemma_to_shards.items() if n >= 2)
 
-        # Missing "expected" shards (soft expectations; do not fail)
         expected = ["core", "people", "science", "geography"]
         missing = [s for s in expected if s not in shard_totals]
 
-        # conc: everything except core + wide (heuristic)
         core_count = shard_totals.get("core", 0)
-        conc_count = sum(
-            v for s, v in shard_totals.items()
-            if s not in ("core", "wide")  # wide can be lexeme or qid dump; handled via kind mostly
-        )
+        conc_count = 0
+        for fr in shard_reports:
+            if fr.kind != "lexeme":
+                continue
+            if fr.shard == "core":
+                continue
+            conc_count += fr.total_items
 
         scores = {
             "CORE": _score_0_10(core_count, target_core),
@@ -451,7 +454,6 @@ def build_report(
             )
         )
 
-    # Totals
     totals = {
         "languages": len(language_reports),
         "sum_lexemes": sum(l.total_lexemes for l in language_reports),
@@ -471,21 +473,41 @@ def build_report(
     )
 
 
-def write_outputs(report: CoverageReport, out_json: Path, write_md: bool = True) -> Tuple[Path, Optional[Path]]:
-    out_json.parent.mkdir(parents=True, exist_ok=True)
-    out_json.write_text(json.dumps(asdict(report), indent=2, ensure_ascii=False), encoding="utf-8")
+def _resolve_output_paths(out: Path) -> Tuple[Path, Path]:
+    out = out.resolve()
+    if out.suffix.lower() == ".md":
+        return out.with_suffix(".json"), out
+    if out.suffix.lower() == ".json":
+        return out, out.with_suffix(".md")
+    return out.with_suffix(".json"), out.with_suffix(".md")
+
+
+def write_outputs(
+    report: CoverageReport,
+    out_base: Path,
+    write_json: bool = True,
+    write_md: bool = True,
+) -> Tuple[Optional[Path], Optional[Path]]:
+    out_json, out_md = _resolve_output_paths(out_base)
+
+    if write_json:
+        out_json.parent.mkdir(parents=True, exist_ok=True)
+        out_json.write_text(json.dumps(asdict(report), indent=2, ensure_ascii=False), encoding="utf-8")
+    else:
+        out_json = None  # type: ignore
 
     md_path: Optional[Path] = None
     if write_md:
-        md_path = out_json.with_suffix(".md")
+        md_path = out_md
+        md_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # summary table
-        rows = [
-            ["lang", "core", "conc", "qids", "lexemes", "collisions", "errors", "warnings", "CORE", "CONC", "BIO"],
-        ]
+        rows = [["lang", "core", "conc", "qids", "lexemes", "collisions", "errors", "warnings", "CORE", "CONC", "BIO"]]
         for l in report.languages:
             core = l.shard_totals.get("core", 0)
-            conc = sum(v for s, v in l.shard_totals.items() if s not in ("core", "wide"))
+            conc = 0
+            for fr in l.shard_files:
+                if fr.kind == "lexeme" and fr.shard != "core":
+                    conc += fr.total_items
             rows.append(
                 [
                     l.lang,
@@ -503,10 +525,12 @@ def write_outputs(report: CoverageReport, out_json: Path, write_md: bool = True)
             )
 
         md = []
-        md.append(f"# Lexicon Coverage Report\n")
+        md.append("# Lexicon Coverage Report\n")
         md.append(f"- Generated at: `{report.generated_at}`")
         md.append(f"- Lexicon dir: `{report.lexicon_dir}`")
-        md.append(f"- Targets: core={report.targets['core']}, conc={report.targets['conc']}, bio_min={report.targets['bio_min']}\n")
+        md.append(
+            f"- Targets: core={report.targets['core']}, conc={report.targets['conc']}, bio_min={report.targets['bio_min']}\n"
+        )
         md.append("## Summary\n")
         md.append(_render_md_table(rows))
         md.append("\n## Totals\n")
@@ -514,16 +538,17 @@ def write_outputs(report: CoverageReport, out_json: Path, write_md: bool = True)
 
         md_path.write_text("\n".join(md), encoding="utf-8")
 
-    return out_json, md_path
+    return (out_json if write_json else None), md_path
 
 
 def print_human(report: CoverageReport, include_files: bool = False) -> None:
-    rows = [
-        ["lang", "core", "conc", "qids", "lexemes", "collisions", "errors", "warnings", "CORE", "CONC", "BIO"],
-    ]
+    rows = [["lang", "core", "conc", "qids", "lexemes", "collisions", "errors", "warnings", "CORE", "CONC", "BIO"]]
     for l in report.languages:
         core = l.shard_totals.get("core", 0)
-        conc = sum(v for s, v in l.shard_totals.items() if s not in ("core", "wide"))
+        conc = 0
+        for fr in l.shard_files:
+            if fr.kind == "lexeme" and fr.shard != "core":
+                conc += fr.total_items
         rows.append(
             [
                 l.lang,
@@ -540,29 +565,31 @@ def print_human(report: CoverageReport, include_files: bool = False) -> None:
             ]
         )
 
-    # Use Logger instead of print to ensure it's captured by the GUI
-    logger.info(_render_table(rows))
-    logger.info("")
-    logger.info(f"Totals: {json.dumps(report.totals, indent=2)}")
-    logger.info("")
+    table = _render_table(rows)
+    print(table)
+    print("")
+    print("Totals: " + json.dumps(report.totals, indent=2))
+    print("")
 
     if include_files:
         for l in report.languages:
-            logger.info(f"[{l.lang}] {l.dir_rel}")
+            print(f"[{l.lang}] {l.dir_rel}")
             for fr in l.shard_files:
                 issue_summary = ""
                 if fr.issues:
                     e = sum(1 for i in fr.issues if i.level.lower() == "error")
                     w = sum(1 for i in fr.issues if i.level.lower() == "warning")
                     issue_summary = f"  issues={e}E/{w}W"
-                logger.info(f"  - {fr.shard:10s}  {fr.kind:7s}  items={fr.total_items:4d}  qids={fr.qid_items:4d}{issue_summary}  {fr.rel_path}")
+                print(
+                    f"  - {fr.shard:10s}  {fr.kind:7s}  items={fr.total_items:4d}  qids={fr.qid_items:4d}{issue_summary}  {fr.rel_path}"
+                )
                 for iss in fr.issues[:15]:
-                    logger.info(f"      [{iss.level.upper():7s}] {iss.path}: {iss.message}")
+                    print(f"      [{iss.level.upper():7s}] {iss.path}: {iss.message}")
                 if len(fr.issues) > 15:
-                    logger.info(f"      ... ({len(fr.issues) - 15} more)")
+                    print(f"      ... ({len(fr.issues) - 15} more)")
             if l.missing_shards:
-                logger.info(f"  missing shards: {', '.join(l.missing_shards)}")
-            logger.info("")
+                print(f"  missing shards: {', '.join(l.missing_shards)}")
+            print("")
 
 
 # -----------------------------------------------------------------------------
@@ -575,63 +602,95 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         default=str(PROJECT_ROOT / "data" / "lexicon"),
         help="Path to data/lexicon directory (default: data/lexicon).",
     )
+
+    # UI/registry-compatible filter (preferred)
+    p.add_argument(
+        "--langs",
+        nargs="*",
+        default=None,
+        help="Optional subset of languages (space-separated and/or comma-separated), e.g. --langs en fr OR --langs en,fr",
+    )
+
+    # Backward-compatible alias (repeatable)
     p.add_argument(
         "--lang",
         action="append",
         default=[],
-        help="Limit to a specific language (repeatable). Example: --lang fr --lang en",
+        help="(Deprecated) Repeatable language filter. Prefer --langs. Example: --lang fr --lang en",
     )
+
     p.add_argument("--target-core", type=int, default=DEFAULT_TARGETS["core"])
     p.add_argument("--target-conc", type=int, default=DEFAULT_TARGETS["conc"])
     p.add_argument("--target-bio", type=int, default=DEFAULT_TARGETS["bio_min"])
+
     p.add_argument(
         "--out",
         default=str(PROJECT_ROOT / "data" / "reports" / "lexicon_coverage_report.json"),
-        help="Output JSON path (default: data/reports/lexicon_coverage_report.json).",
+        help="Output base path. If .json/.md is provided, the companion format is derived automatically.",
     )
-    p.add_argument("--no-md", action="store_true", help="Do not write markdown companion file.")
-    p.add_argument("--include-files", action="store_true", help="Print per-file breakdown.")
+
+    # UI/registry-compatible format selection
+    p.add_argument(
+        "--format",
+        choices=["json", "md", "both"],
+        default="both",
+        help="Which report files to write (default: both).",
+    )
+
+    # UI/registry-compatible verbosity (also enables per-file breakdown)
+    p.add_argument("--verbose", action="store_true", help="Show per-file breakdown and issues.")
+
+    # Backward-compatible alias (repeatable usage in earlier drafts)
+    p.add_argument("--include-files", action="store_true", help="(Alias) Same as --verbose.")
+
     p.add_argument("--fail-on-errors", action="store_true", help="Exit 1 if any schema ERROR is found.")
     return p.parse_args(argv)
 
 
 def main(argv: Optional[List[str]] = None) -> int:
-    # [REFACTOR] Standardized Start
     if hasattr(logger, "start"):
         logger.start("Lexicon Coverage Analysis")
 
     args = parse_args(argv)
 
     lexicon_dir = Path(args.lexicon_dir).resolve()
-    out_json = Path(args.out).resolve()
+
+    only_langs: List[str] = []
+    only_langs.extend(_split_lang_tokens(args.langs))
+    only_langs.extend(_split_lang_tokens(args.lang))
+    only_langs = [x for x in only_langs if x]
 
     report = build_report(
         lexicon_dir=lexicon_dir,
         target_core=int(args.target_core),
         target_conc=int(args.target_conc),
         target_bio=int(args.target_bio),
-        only_langs=args.lang if args.lang else None,
+        only_langs=only_langs if only_langs else None,
     )
 
-    # Always print summary (UI expects console output)
-    print_human(report, include_files=bool(args.include_files))
+    include_files = bool(args.verbose) or bool(args.include_files)
+    print_human(report, include_files=include_files)
 
-    # Write outputs for operators
-    write_outputs(report, out_json=out_json, write_md=not bool(args.no_md))
+    out_base = Path(args.out)
+    fmt = str(args.format).lower()
+    write_json = fmt in ("json", "both")
+    write_md = fmt in ("md", "both")
+
+    out_json, out_md = write_outputs(report, out_base=out_base, write_json=write_json, write_md=write_md)
 
     exit_code = 0
     if args.fail_on_errors and report.totals.get("sum_errors", 0) > 0:
         exit_code = 1
 
-    # [REFACTOR] Standardized Summary
-    summary_msg = f"Report generated. Languages: {report.totals['languages']}, Errors: {report.totals['sum_errors']}."
     if hasattr(logger, "finish"):
-        logger.finish(
-            message=summary_msg,
-            success=(exit_code == 0),
-            details=report.totals
-        )
-    
+        summary_msg = f"Report generated. Languages: {report.totals['languages']}, Errors: {report.totals['sum_errors']}."
+        details: Dict[str, Any] = dict(report.totals)
+        if out_json is not None:
+            details["out_json"] = str(out_json)
+        if out_md is not None:
+            details["out_md"] = str(out_md)
+        logger.finish(message=summary_msg, success=(exit_code == 0), details=details)
+
     return exit_code
 
 

@@ -1,55 +1,35 @@
 {
-  "generated_at": 1772203389.5744457,
-  "repo_root": "C:\\MyCode\\SemantiK_Architect\\Semantik_architect",
+  "generated_at": 1772567630.1107628,
+  "repo_root": "/mnt/c/MyCode/SemantiK_Architect/Semantik_architect",
   "summary": {
-    "compile_valid_or_skipped": 0,
+    "compile_valid_or_skipped": 1,
     "compile_broken": 0,
-    "runtime_pass": 3,
+    "runtime_pass": 1,
     "runtime_fail": 0,
-    "overall_ok": 3,
+    "overall_ok": 1,
     "overall_fail": 0
   },
   "results": [
     {
-      "gf_lang": null,
-      "api_lang": "de",
-      "overall": "OK",
-      "compile": null,
-      "runtime": {
-        "api_lang": "de",
-        "status": "PASS",
-        "http_status": 200,
-        "duration_ms": 47.50514030456543,
-        "error": null,
-        "sample_text": "Shaka is a warrior ( zulu )"
-      }
-    },
-    {
-      "gf_lang": null,
+      "gf_lang": "Eng",
       "api_lang": "en",
       "overall": "OK",
-      "compile": null,
+      "compile": {
+        "gf_lang": "Eng",
+        "filename": "gf/WikiEng.gf",
+        "status": "VALID",
+        "error": null,
+        "duration_s": 2.9380340576171875,
+        "file_hash": "6e6a7236e78edf879478bd01f73ac0caa98806a00b5d34b8fda0281ec84aac32",
+        "iso2": "en"
+      },
       "runtime": {
         "api_lang": "en",
         "status": "PASS",
         "http_status": 200,
-        "duration_ms": 50.63199996948242,
+        "duration_ms": 3.4859180450439453,
         "error": null,
         "sample_text": "Shaka is a zulu warrior"
-      }
-    },
-    {
-      "gf_lang": null,
-      "api_lang": "fr",
-      "overall": "OK",
-      "compile": null,
-      "runtime": {
-        "api_lang": "fr",
-        "status": "PASS",
-        "http_status": 200,
-        "duration_ms": 48.74587059020996,
-        "error": null,
-        "sample_text": "Shaka is a warrior ( zulu )"
       }
     }
   ]

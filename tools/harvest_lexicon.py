@@ -1,5 +1,5 @@
 # tools/harvest_lexicon.py
-# "The Universal Harvester" - v2.8 (Auto-Pilot + Layout-Aware Edition)
+# "The Universal Harvester" - v2.9 (Auto-Pilot + Layout-Aware + Wikidata Enabled)
 #
 # Fixes:
 #   - Smart gf-wordnet layout resolution:
@@ -11,13 +11,20 @@
 #       * captures optional trailing comment after ';'
 #   - Optional marking of "--guessed" entries (default ON; use --no-mark-guessed to disable)
 #   - Repo-relative default output path (CWD independent)
+#   - Wikidata harvesting implemented:
+#       * reads QIDs from --input (list or dict keyed by QIDs)
+#       * fetches labels/descriptions + (optional) P106/P27 for people domain
+#       * writes to data/lexicon/{iso2}/{domain}.json (repo-relative if not absolute)
 #
 # Notes:
-#   - Keeps WordNet harvesting stable: frame is harvested into data/lexicon/{iso2}/wide.json
+#   - WordNet harvesting stays stable: data/lexicon/{iso2}/wide.json
+#   - Wikidata harvesting writes: data/lexicon/{iso2}/{domain}.json (e.g. people.json, geography.json)
+#   - Output format remains legacy-flat dict for maximum runtime compatibility.
 
 import argparse
 import json
 import logging
+import os
 import re
 import sys
 import time
@@ -28,7 +35,7 @@ import requests
 
 
 # --- CONFIGURATION: SINGLE SOURCE OF TRUTH ---
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent  # repo root
 
 # Prefer repo-root config if present, otherwise data/config
 ISO_MAP_CANDIDATES = [
@@ -45,7 +52,7 @@ RGL_TO_ISO2: Dict[str, str] = {}  # 'Eng' -> 'en' (also 'WikiEng' -> 'en')
 
 logger = logging.getLogger(__name__)
 
-HARVESTER_VERSION = "harvester/2.8-layout-aware"
+HARVESTER_VERSION = "harvester/2.9-layout-aware+wikidata"
 
 # --- HARVESTER LOGIC ---
 # Abstract: fun apple_N : N ; -- 02756049-n  OR -- Q1234
@@ -67,15 +74,43 @@ RE_LIN_START = re.compile(r"(?m)^\s*lin\s+(" + RE_GFID.pattern + r")\s*=\s*")
 # guessed marker (support variations like "-- guessed" too)
 RE_GUESSED = re.compile(r"--\s*guessed\b", re.IGNORECASE)
 
+WIKIDATA_SPARQL_ENDPOINT = os.environ.get("WIKIDATA_SPARQL_ENDPOINT", "https://query.wikidata.org/sparql")
+WIKIDATA_USER_AGENT = os.environ.get(
+    "WIKIDATA_USER_AGENT",
+    "SemantikArchitect/harvest_lexicon (https://github.com/; contact: local-dev)",
+)
 
+# We include job/nationality fields; they are most useful for domain=people.
 SPARQL_TEMPLATE = """
-SELECT ?item ?itemLabel ?itemDescription ?job ?nat WHERE {
+SELECT ?item ?itemLabel ?itemDescription ?job ?jobLabel ?nat ?natLabel WHERE {
   VALUES ?item { %s }
   OPTIONAL { ?item wdt:P106 ?job . }
   OPTIONAL { ?item wdt:P27 ?nat . }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
 }
 """
+
+
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    v = raw.strip().lower()
+    if v in ("1", "true", "yes", "y", "on"):
+        return True
+    if v in ("0", "false", "no", "n", "off"):
+        return False
+    return default
+
+
+def _env_choice(name: str, default: str, allowed: List[str]) -> str:
+    raw = os.environ.get(name)
+    if not raw:
+        return default
+    v = raw.strip().lower()
+    if v in allowed:
+        return v
+    return default
 
 
 def _find_iso_map_path() -> Path:
@@ -203,7 +238,6 @@ def auto_detect_gf_root() -> Optional[Path]:
     try:
         found = list(BASE_DIR.rglob("WordNet.gf"))
         if found:
-            # return repo root if it looks like .../gf/WordNet.gf
             gf_dir = found[0].parent
             if gf_dir.name == "gf":
                 return gf_dir.parent
@@ -324,13 +358,11 @@ def _find_wordnet_lang_file(repo_root: Path, gf_dir: Path, rgl_code: str) -> Opt
                 continue
 
     # Third: module-name sniffing as a last resort
-    # If filenames differ, scan WordNet*.gf and look for "concrete WordNet{Lang} of WordNet"
     expected_mod = f"WordNet{rgl_code}"
     try:
         for p in gf_dir.rglob("WordNet*.gf"):
             if p.name == "WordNet.gf":
                 continue
-            # cheap read head
             head = p.read_text(encoding="utf-8", errors="ignore")[:8000]
             if f"concrete {expected_mod} " in head and " of WordNet" in head:
                 return p.resolve()
@@ -418,11 +450,42 @@ def _iter_concrete_lin_defs(content: str) -> Iterator[Tuple[str, str, str]]:
             i += 1
 
         if rhs_end is None:
-            # Malformed or unusual file; skip safely.
             continue
 
         rhs = content[rhs_start:rhs_end].strip()
         yield func, rhs, trailing
+
+
+def _resolve_out_root(out_dir: str) -> Path:
+    out_root = Path(out_dir)
+    if not out_root.is_absolute():
+        out_root = (BASE_DIR / out_root).resolve()
+    return out_root
+
+
+def _safe_load_json_dict(path: Path) -> Dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        return raw if isinstance(raw, dict) else {}
+    except Exception:
+        return {}
+
+
+def _merge_flat_dict(existing: Dict[str, Any], incoming: Dict[str, Any]) -> Tuple[Dict[str, Any], int, int]:
+    added = 0
+    updated = 0
+    out = dict(existing)
+    for k, v in incoming.items():
+        if k not in out:
+            out[k] = v
+            added += 1
+        else:
+            if out[k] != v:
+                out[k] = v
+                updated += 1
+    return out, added, updated
 
 
 class GFWordNetHarvester:
@@ -439,7 +502,7 @@ class GFWordNetHarvester:
             logger.error(f"❌ Critical: cannot resolve gf-wordnet layout from --root {root_path}: {e}")
             sys.exit(1)
 
-        logger.debug(f"Resolved gf-wordnet layout:")
+        logger.debug("Resolved gf-wordnet layout:")
         logger.debug(f"  repo_root = {self.repo_root}")
         logger.debug(f"  gf_dir    = {self.gf_dir}")
         logger.debug(f"  WordNet   = {self.wordnet_abstract}")
@@ -475,9 +538,9 @@ class GFWordNetHarvester:
             if avail:
                 logger.warning(f"    Found WordNet languages: {', '.join(avail)}")
                 if "Eng" not in avail:
-                    logger.warning("    NOTE: 'Eng' is not present in the repo scan; verify gf-wordnet contains WordNetEng.gf.")
+                    logger.warning("    NOTE: 'Eng' is not present; verify gf-wordnet contains WordNetEng.gf.")
             else:
-                logger.warning("    Found no WordNet{Lang}.gf files at all (repo may be incomplete / wrong root).")
+                logger.warning("    Found no WordNet{Lang}.gf files (repo may be incomplete / wrong root).")
             return 0
 
         logger.info(f"🚜 Harvesting {rgl_code} from {src_file}...")
@@ -495,7 +558,6 @@ class GFWordNetHarvester:
                 if not strings:
                     continue
 
-                # Lemma heuristic
                 if lemma_mode == "join" and len(strings) > 1:
                     lemma = " ".join(strings).strip()
                 else:
@@ -507,39 +569,30 @@ class GFWordNetHarvester:
                 sem_id = self.semantic_map.get(func, "")
                 entry: Dict[str, Any] = {"lemma": lemma, "gf_fun": func, "source": "gf-wordnet"}
 
-                # guessed marker (optional)
                 if mark_guessed and (RE_GUESSED.search(trailing) or RE_GUESSED.search(rhs)):
                     entry["status"] = "guessed"
 
-                # semantic id routing
                 if sem_id.startswith("Q") and RE_QID.match(sem_id):
                     entry["qid"] = sem_id
                 elif sem_id and RE_WNID.match(sem_id):
                     entry["wnid"] = sem_id
                 elif sem_id:
-                    entry["sem"] = sem_id  # unknown format, keep for debugging
+                    entry["sem"] = sem_id
 
-                # Optional: preserve multi-string evidence
                 if len(strings) > 1:
                     entry["strings"] = strings
 
-                # Key by lemma lowercase (existing behavior)
                 k = lemma.lower()
                 if k not in lexicon:
                     lexicon[k] = entry
                     count += 1
                 else:
-                    # Keep first entry stable; attach collision info to avoid silent loss
                     prev = lexicon[k]
                     if isinstance(prev, dict):
                         prev.setdefault("collisions", 0)
                         prev["collisions"] += 1
 
-            out_root = Path(out_dir)
-            if not out_root.is_absolute():
-                # make output repo-relative, not CWD-relative
-                out_root = (BASE_DIR / out_root).resolve()
-
+            out_root = _resolve_out_root(out_dir)
             out_path = out_root / iso2_code / "wide.json"
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_path.write_text(json.dumps(lexicon, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -553,22 +606,104 @@ class GFWordNetHarvester:
 
 
 class WikidataHarvester:
-    def _http_get_with_retry(self, url, params, headers, max_retries=3):
-        backoff = 1
+    def _http_get_with_retry(self, url: str, params: dict, headers: dict, max_retries: int = 4) -> Optional[dict]:
+        backoff = 1.0
         for attempt in range(1, max_retries + 1):
             try:
-                r = requests.get(url, params=params, headers=headers, timeout=30)
+                r = requests.get(url, params=params, headers=headers, timeout=45)
                 r.raise_for_status()
                 return r.json()
             except Exception as e:
                 logger.warning(f"  ⚠️ Attempt {attempt} failed: {e}")
                 time.sleep(backoff)
-                backoff *= 2
+                backoff = min(backoff * 2.0, 16.0)
         return None
 
-    def fetch(self, qids, iso2_code, domain="people"):
-        # Placeholder (kept for compatibility)
-        return {}
+    @staticmethod
+    def _qid_from_uri(uri: str) -> Optional[str]:
+        if not uri:
+            return None
+        # e.g. http://www.wikidata.org/entity/Q42
+        tail = uri.rsplit("/", 1)[-1]
+        return tail if RE_QID.match(tail) else None
+
+    def fetch(
+        self,
+        qids: List[str],
+        iso2_code: str,
+        domain: str = "people",
+        batch_size: int = 120,
+    ) -> Dict[str, Any]:
+        if not qids:
+            return {}
+
+        headers = {
+            "Accept": "application/sparql-results+json",
+            "User-Agent": WIKIDATA_USER_AGENT,
+        }
+
+        lang_pref = f"{iso2_code},en"
+
+        out: Dict[str, Any] = {}
+
+        for i in range(0, len(qids), batch_size):
+            batch = qids[i : i + batch_size]
+            values = " ".join([f"wd:{q}" for q in batch])
+            query = SPARQL_TEMPLATE % (values, lang_pref)
+
+            payload = self._http_get_with_retry(
+                WIKIDATA_SPARQL_ENDPOINT,
+                params={"format": "json", "query": query},
+                headers=headers,
+            )
+            if not payload:
+                continue
+
+            bindings = (((payload or {}).get("results") or {}).get("bindings") or [])
+            for b in bindings:
+                item_uri = ((b.get("item") or {}).get("value") or "")
+                qid = self._qid_from_uri(item_uri)
+                if not qid:
+                    continue
+
+                label = ((b.get("itemLabel") or {}).get("value") or "").strip()
+                if not label:
+                    continue
+
+                desc = ((b.get("itemDescription") or {}).get("value") or "").strip()
+
+                job_label = ((b.get("jobLabel") or {}).get("value") or "").strip()
+                nat_label = ((b.get("natLabel") or {}).get("value") or "").strip()
+
+                entry: Dict[str, Any] = {
+                    "lemma": label,
+                    "qid": qid,
+                    "source": "wikidata",
+                    "domain": domain,
+                }
+                if desc:
+                    entry["sense"] = desc
+
+                facts: Dict[str, Any] = {}
+                # Only attach these for people (otherwise they are usually irrelevant/noisy)
+                if domain == "people":
+                    if job_label:
+                        facts["profession"] = job_label
+                    if nat_label:
+                        facts["nationality"] = nat_label
+                if facts:
+                    entry["facts"] = facts
+
+                k = label.lower()
+                if k not in out:
+                    out[k] = entry
+                else:
+                    prev = out[k]
+                    if isinstance(prev, dict):
+                        prev.setdefault("collisions", 0)
+                        prev["collisions"] += 1
+
+        return out
 
 
 def main() -> None:
@@ -585,9 +720,14 @@ def main() -> None:
         print(f"📍 Auto-detected Root: {detected_root}")
         sys.argv.extend(["wordnet", "--root", str(detected_root), "--lang", "en"])
 
+    # Defaults controllable via env (GUI-friendly, no argv required)
+    env_lemma_mode = _env_choice("HARVEST_LEMMA_MODE", "first", ["first", "join"])
+    env_mark_guessed = _env_bool("HARVEST_MARK_GUESSED", True)
+    env_log_level = os.environ.get("HARVEST_LOG_LEVEL", "").strip().upper()
+
     # --- STANDARD ARGUMENT PARSING ---
     parser = argparse.ArgumentParser(description="Universal Lexicon Harvester")
-    parser.add_argument("-v", "--verbose", action="store_true", help="Enable debug logging")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable debug logging (CLI only; GUI can use HARVEST_LOG_LEVEL=DEBUG)")
 
     subparsers = parser.add_subparsers(dest="source", required=True)
 
@@ -603,28 +743,32 @@ def main() -> None:
     wn_parser.add_argument(
         "--lemma-mode",
         choices=["first", "join"],
-        default="first",
-        help='If multiple string literals exist, use "first" or join them with spaces.',
+        default=env_lemma_mode,
+        help='If multiple string literals exist, use "first" or join them with spaces. (Env: HARVEST_LEMMA_MODE)',
     )
     wn_parser.add_argument(
         "--no-mark-guessed",
         dest="mark_guessed",
         action="store_false",
-        help="Do not set entry['status']='guessed' when '--guessed' is detected.",
+        help="Do not set entry['status']='guessed' when '--guessed' is detected. (Env: HARVEST_MARK_GUESSED=0)",
     )
-    wn_parser.set_defaults(mark_guessed=True)
+    wn_parser.set_defaults(mark_guessed=env_mark_guessed)
 
     # Wikidata Subparser
-    wd_parser = subparsers.add_parser("wikidata", help="Fetch from Wikidata")
+    wd_parser = subparsers.add_parser("wikidata", help="Fetch labels/metadata from Wikidata for a list of QIDs")
     wd_parser.add_argument("--lang", required=True, help="Target Language")
-    wd_parser.add_argument("--input", required=True, help="JSON file containing QIDs")
-    wd_parser.add_argument("--domain", default="people", help="Shard name")
-    wd_parser.add_argument("--out", default=str(Path("data") / "lexicon"), help="Output root")
+    wd_parser.add_argument("--input", required=True, help="JSON file containing QIDs (list or dict keyed by QIDs)")
+    wd_parser.add_argument("--domain", default="people", help="Shard name / output filename (e.g. people, geography, science)")
+    wd_parser.add_argument("--out", default=str(Path("data") / "lexicon"), help="Output root (repo-relative if not absolute)")
 
     args = parser.parse_args()
 
     # --- LOGGING ---
-    log_level = logging.DEBUG if getattr(args, "verbose", False) else logging.INFO
+    if env_log_level in ("DEBUG", "INFO", "WARNING", "ERROR"):
+        log_level = getattr(logging, env_log_level, logging.INFO)
+    else:
+        log_level = logging.DEBUG if getattr(args, "verbose", False) else logging.INFO
+
     logging.basicConfig(level=log_level, format="%(message)s", stream=sys.stdout, force=True)
 
     print(f"=== LEXICON HARVESTER ({HARVESTER_VERSION}) ===")
@@ -644,13 +788,51 @@ def main() -> None:
             rgl_code,
             iso2_code,
             args.out,
-            lemma_mode=args.lemma_mode,
-            mark_guessed=getattr(args, "mark_guessed", True),
+            lemma_mode=getattr(args, "lemma_mode", env_lemma_mode),
+            mark_guessed=getattr(args, "mark_guessed", env_mark_guessed),
         )
+        return
 
-    elif args.source == "wikidata":
-        # Placeholder path
-        pass
+    if args.source == "wikidata":
+        in_path = Path(args.input)
+        if not in_path.is_absolute():
+            in_path = (BASE_DIR / in_path).resolve()
+
+        if not in_path.exists():
+            logger.error(f"❌ Input file not found: {in_path}")
+            sys.exit(1)
+
+        try:
+            raw = json.loads(in_path.read_text(encoding="utf-8"))
+            qids = _normalize_qids(raw)
+        except Exception as e:
+            logger.error(f"❌ Failed to read/parse QID input: {e}")
+            sys.exit(1)
+
+        if not qids:
+            logger.error("❌ No valid QIDs found in input.")
+            sys.exit(1)
+
+        domain = (args.domain or "people").strip()
+        if not domain:
+            domain = "people"
+
+        logger.info(f"🌐 Fetching {len(qids)} QIDs from Wikidata (domain={domain}, lang={iso2_code})...")
+        wd = WikidataHarvester()
+        fetched = wd.fetch(qids=qids, iso2_code=iso2_code, domain=domain)
+
+        out_root = _resolve_out_root(args.out)
+        out_path = out_root / iso2_code / f"{domain}.json"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        existing = _safe_load_json_dict(out_path)
+        merged, added, updated = _merge_flat_dict(existing, fetched)
+        out_path.write_text(json.dumps(merged, indent=2, ensure_ascii=False), encoding="utf-8")
+
+        logger.info(f"✅ Saved {len(fetched)} fetched entries to {out_path}")
+        if existing:
+            logger.info(f"   Merge summary: added={added}, updated={updated}, total={len(merged)}")
+        return
 
 
 if __name__ == "__main__":
