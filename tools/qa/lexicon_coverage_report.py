@@ -58,32 +58,69 @@ if str(PROJECT_ROOT) not in sys.path:
 # Prefer the canonical in-repo validator (lightweight, no jsonschema dependency)
 try:
     from app.adapters.persistence.lexicon.schema import (  # type: ignore
-        SchemaIssue,
         validate_lexicon_structure,
     )
 except Exception:  # pragma: no cover
-    SchemaIssue = None  # type: ignore
     validate_lexicon_structure = None  # type: ignore
 
-# [REFACTOR] Use standardized logger
+
+# -----------------------------------------------------------------------------
+# Standardized logging (stdout)
+# -----------------------------------------------------------------------------
 try:
-    from utils.tool_logger import ToolLogger
+    from utils.tool_logger import ToolLogger  # type: ignore
+except Exception:  # pragma: no cover
+    class ToolLogger:  # type: ignore
+        """
+        Fallback shim so the tool still runs even if utils/tool_logger.py
+        hasn't been created yet. Prints to stdout in a ToolLogger-like style.
+        """
+        def __init__(self, tool_name: str) -> None:
+            self.tool_name = str(tool_name)
 
-    logger = ToolLogger(__file__)
-except ImportError:
-    import logging
+        def header(self, meta: Optional[Dict[str, Any]] = None) -> None:
+            print(f"\n=== {self.tool_name} ===")
+            if meta:
+                for k, v in meta.items():
+                    print(f"{k}: {v}")
+            print("")
 
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
-    logger = logging.getLogger("LexiconCoverage")
+        def stage(self, name: str, message: str = "") -> None:
+            if message:
+                print(f"[{name}] {message}")
+            else:
+                print(f"[{name}]")
+
+        def info(self, message: str) -> None:
+            print(message)
+
+        def warning(self, message: str) -> None:
+            print(f"Warning: {message}")
+
+        def error(self, message: str, fatal: bool = False) -> None:
+            print(f"Error: {message}")
+            if fatal:
+                raise SystemExit(1)
+
+        def summary(self, details: Optional[Dict[str, Any]] = None, success: bool = True) -> None:
+            status = "SUCCESS" if success else "FAILED"
+            print(f"\n=== SUMMARY: {status} ===")
+            if details:
+                for k, v in details.items():
+                    print(f"{k}: {v}")
+            print("")
+
+
+log = ToolLogger("lexicon_coverage")
 
 
 # -----------------------------------------------------------------------------
 # Targets (coverage heuristics)
 # -----------------------------------------------------------------------------
 DEFAULT_TARGETS = {
-    "core": 150,  # “glue” lexemes
-    "conc": 500,  # domain lexemes (people/science/geography/…)
-    "bio_min": 50,  # semantic/QID-linked entries (heuristic)
+    "core": 150,     # “glue” lexemes
+    "conc": 500,     # domain lexemes (people/science/geography/…)
+    "bio_min": 50,   # semantic/QID-linked entries (heuristic)
 }
 
 
@@ -209,8 +246,9 @@ def _looks_like_wide_dump(data: Any) -> bool:
     if any(k in data for k in ("entries", "lemmas", "meta", "_meta")):
         return False
     keys = list(data.keys())
-    qid_keys = sum(1 for k in keys[: min(len(keys), 50)] if isinstance(k, str) and QID_RE.match(k))
-    return qid_keys >= max(5, int(0.4 * min(len(keys), 50)))
+    sample = keys[: min(len(keys), 50)]
+    qid_keys = sum(1 for k in sample if isinstance(k, str) and QID_RE.match(k))
+    return qid_keys >= max(5, int(0.4 * len(sample)))
 
 
 def _validate_with_app_schema(lang: str, data: Any) -> List[Issue]:
@@ -323,7 +361,7 @@ def _render_table(rows: List[List[str]]) -> str:
     for r in rows:
         for i, c in enumerate(r):
             widths[i] = max(widths[i], len(c))
-    out_lines = []
+    out_lines: List[str] = []
     for ri, r in enumerate(rows):
         line = "  ".join(c.ljust(widths[i]) for i, c in enumerate(r))
         out_lines.append(line)
@@ -640,7 +678,7 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     # UI/registry-compatible verbosity (also enables per-file breakdown)
     p.add_argument("--verbose", action="store_true", help="Show per-file breakdown and issues.")
 
-    # Backward-compatible alias (repeatable usage in earlier drafts)
+    # Backward-compatible alias
     p.add_argument("--include-files", action="store_true", help="(Alias) Same as --verbose.")
 
     p.add_argument("--fail-on-errors", action="store_true", help="Exit 1 if any schema ERROR is found.")
@@ -648,17 +686,32 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
-    if hasattr(logger, "start"):
-        logger.start("Lexicon Coverage Analysis")
-
     args = parse_args(argv)
 
     lexicon_dir = Path(args.lexicon_dir).resolve()
+    out_base = Path(args.out).resolve()
 
     only_langs: List[str] = []
     only_langs.extend(_split_lang_tokens(args.langs))
     only_langs.extend(_split_lang_tokens(args.lang))
     only_langs = [x for x in only_langs if x]
+
+    log.header(
+        {
+            "Lexicon Dir": str(lexicon_dir),
+            "Lang Filter": ", ".join(only_langs) if only_langs else "(all)",
+            "Targets": f"core={args.target_core}, conc={args.target_conc}, bio_min={args.target_bio}",
+            "Format": str(args.format),
+            "Out Base": str(out_base),
+            "Verbose": bool(args.verbose) or bool(args.include_files),
+            "Fail On Errors": bool(args.fail_on_errors),
+        }
+    )
+
+    if not lexicon_dir.is_dir():
+        log.error(f"Lexicon directory not found: {lexicon_dir}", fatal=True)
+
+    log.stage("Scan", "Building coverage report...")
 
     report = build_report(
         lexicon_dir=lexicon_dir,
@@ -669,28 +722,28 @@ def main(argv: Optional[List[str]] = None) -> int:
     )
 
     include_files = bool(args.verbose) or bool(args.include_files)
+
+    log.stage("Report", "Printing human-readable summary...")
     print_human(report, include_files=include_files)
 
-    out_base = Path(args.out)
     fmt = str(args.format).lower()
     write_json = fmt in ("json", "both")
     write_md = fmt in ("md", "both")
 
+    log.stage("Write", f"Writing outputs ({fmt})...")
     out_json, out_md = write_outputs(report, out_base=out_base, write_json=write_json, write_md=write_md)
 
     exit_code = 0
-    if args.fail_on_errors and report.totals.get("sum_errors", 0) > 0:
+    if args.fail_on_errors and int(report.totals.get("sum_errors", 0)) > 0:
         exit_code = 1
 
-    if hasattr(logger, "finish"):
-        summary_msg = f"Report generated. Languages: {report.totals['languages']}, Errors: {report.totals['sum_errors']}."
-        details: Dict[str, Any] = dict(report.totals)
-        if out_json is not None:
-            details["out_json"] = str(out_json)
-        if out_md is not None:
-            details["out_md"] = str(out_md)
-        logger.finish(message=summary_msg, success=(exit_code == 0), details=details)
+    summary: Dict[str, Any] = dict(report.totals)
+    if out_json is not None:
+        summary["out_json"] = str(out_json)
+    if out_md is not None:
+        summary["out_md"] = str(out_md)
 
+    log.summary(summary, success=(exit_code == 0))
     return exit_code
 
 

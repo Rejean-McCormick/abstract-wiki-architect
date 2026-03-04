@@ -23,9 +23,9 @@ project:
       }
     }
 
-By default it scans all *.json files under data/lexicon/, merges files
-for the same language (e.g. en_lexicon.json + en_people.json), and
-prints per-language stats.
+By default it scans all *.json files under data/lexicon/ (recursively),
+merges files for the same language (e.g. en_lexicon.json + en_people.json),
+and prints per-language stats.
 
 Usage
 =====
@@ -35,6 +35,9 @@ From project root:
     python utils/dump_lexicon_stats.py
     python utils/dump_lexicon_stats.py --langs en fr
     python utils/dump_lexicon_stats.py --format json --out /tmp/lexicon_stats.json
+
+Machine-readable stdout JSON (no logs mixed in):
+    python utils/dump_lexicon_stats.py --format json
 """
 
 from __future__ import annotations
@@ -46,7 +49,8 @@ import sys
 from collections import Counter, defaultdict
 from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
+from typing import Iterable, List, Mapping, Optional, Tuple
+
 
 # ---------------------------------------------------------------------------
 # Project root & logging
@@ -58,47 +62,63 @@ if str(PROJECT_ROOT) not in sys.path:
 
 DEFAULT_LEXICON_DIR = PROJECT_ROOT / "data" / "lexicon"
 
-# [REFACTOR] Use the standardized ToolLogger for GUI-compatible output
+
+def _make_fallback_logger(name: str):
+    """
+    Fallback logger that writes to stdout (GUI-friendly).
+    Exposes .info/.warning/.error and optional .start/.stage/.finish shims.
+    """
+    import logging
+
+    logger = logging.getLogger(name)
+    if not logger.handlers:
+        logger.setLevel(logging.INFO)
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(logging.Formatter("[%(levelname)s] %(message)s"))
+        logger.addHandler(handler)
+        logger.propagate = False
+
+    # Shims to match ToolLogger-ish calls
+    def _start(title: str = "") -> None:
+        if title:
+            logger.info(title)
+
+    def _stage(stage: str, message: str = "") -> None:
+        logger.info(f"[{stage}] {message}".rstrip())
+
+    def _finish(message: str = "", *, success: Optional[bool] = None, details: Optional[dict] = None) -> None:
+        prefix = "OK" if success is True else ("FAIL" if success is False else "DONE")
+        line = f"{prefix}: {message}".strip()
+        logger.info(line)
+        if details:
+            logger.info(json.dumps(details, ensure_ascii=False))
+
+    logger.start = _start  # type: ignore[attr-defined]
+    logger.stage = _stage  # type: ignore[attr-defined]
+    logger.finish = _finish  # type: ignore[attr-defined]
+    return logger
+
+
+# Prefer new standardized logger, fallback to stdout logger.
 try:
     from utils.tool_logger import ToolLogger  # type: ignore
-    logger = ToolLogger(__file__)
+
+    log = ToolLogger(__file__)
 except Exception:  # pragma: no cover
-    import logging
-    logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
-    logger = logging.getLogger("dump_stats")
+    log = _make_fallback_logger("dump_lexicon_stats")
 
 
-def _logger_start(title: str) -> None:
-    """Call ToolLogger.start if available, but be robust to signature differences."""
-    if hasattr(logger, "start"):
+def _call_if_exists(obj, method: str, *args, **kwargs) -> None:
+    fn = getattr(obj, method, None)
+    if callable(fn):
         try:
-            logger.start(title)  # type: ignore[attr-defined]
+            fn(*args, **kwargs)
         except TypeError:
-            # Some ToolLogger variants may not accept args
+            # Be forgiving if signatures differ slightly across logger versions.
             try:
-                logger.start()  # type: ignore[attr-defined]
+                fn(*args)
             except Exception:
                 pass
-
-
-def _logger_finish(message: str, *, success: Optional[bool] = None, details: Optional[dict] = None) -> None:
-    """Call ToolLogger.finish if available, but be robust to signature differences."""
-    if not hasattr(logger, "finish"):
-        return
-    try:
-        # Most flexible attempt (keywords)
-        kwargs: dict = {}
-        if success is not None:
-            kwargs["success"] = success
-        if details is not None:
-            kwargs["details"] = details
-        logger.finish(message=message, **kwargs)  # type: ignore[attr-defined]
-    except TypeError:
-        # Fallback: positional message only
-        try:
-            logger.finish(message)  # type: ignore[attr-defined]
-        except Exception:
-            pass
 
 
 # ---------------------------------------------------------------------------
@@ -110,52 +130,41 @@ def _infer_lang_from_filename(filename: str) -> str:
     Infer a language code from a lexicon JSON filename.
 
     Heuristic:
-        - Take the stem (filename without extension).
-        - Use the part before the first underscore, if present.
-          Example: "en_lexicon" -> "en", "en_people" -> "en"
-        - Otherwise use the whole stem.
+      - Use the part before the first underscore, if present.
+        Example: "en_lexicon" -> "en", "en_people" -> "en"
+      - Otherwise use the whole stem.
     """
     stem = Path(filename).stem
     return stem.split("_", 1)[0] if "_" in stem else stem
 
 
-def find_lexicon_files(lexicon_dir: str | Path, langs: Iterable[str] | None = None) -> Dict[str, List[str]]:
+def find_lexicon_files(lexicon_dir: str | Path, langs: Optional[Iterable[str]] = None) -> dict[str, List[str]]:
     """
-    Scan lexicon_dir for JSON lexicon files and group them by language code.
-
-    Args:
-        lexicon_dir:
-            Directory containing *.json lexicon files.
-        langs:
-            Optional iterable of language codes to restrict to. If None,
-            all languages are included.
-
-    Returns:
-        Mapping: lang_code → list of JSON file paths (absolute).
+    Scan lexicon_dir for JSON lexicon files (recursively) and group them by language code.
     """
     lexicon_dir = Path(lexicon_dir)
 
-    target_langs = {s.strip() for s in langs if s.strip()} if langs is not None else None
-    by_lang: Dict[str, List[str]] = defaultdict(list)
+    target_langs = {s.strip() for s in langs if s and s.strip()} if langs is not None else None
+    by_lang: dict[str, List[str]] = defaultdict(list)
 
     if not lexicon_dir.is_dir():
-        logger.error(f"Lexicon directory not found: {lexicon_dir}")
         raise FileNotFoundError(f"Lexicon directory not found: {lexicon_dir}")
 
-    # Deterministic ordering
-    for path in sorted(lexicon_dir.iterdir(), key=lambda p: p.name):
-        if not path.is_file() or path.suffix.lower() != ".json":
-            continue
+    # Recursive scan, deterministic ordering (by relative path then name)
+    all_json = sorted(
+        (p for p in lexicon_dir.rglob("*.json") if p.is_file()),
+        key=lambda p: str(p.relative_to(lexicon_dir)).lower(),
+    )
 
+    for path in all_json:
         lang = _infer_lang_from_filename(path.name)
         if target_langs is not None and lang not in target_langs:
             continue
-
         by_lang[lang].append(str(path.resolve()))
 
-    # Also sort each language group deterministically
+    # Deterministic ordering within language (by basename, then full path)
     for lang in list(by_lang.keys()):
-        by_lang[lang].sort(key=lambda p: os.path.basename(p))
+        by_lang[lang].sort(key=lambda p: (os.path.basename(p).lower(), p.lower()))
 
     return by_lang
 
@@ -169,8 +178,8 @@ class MergeInfo:
     files_read: int = 0
     files_failed: int = 0
     overrides: int = 0
-    invalid_lemmas_container: int = 0   # "lemmas" exists but is not a dict
-    invalid_entries: int = 0            # lemma entry is not a dict
+    invalid_lemmas_container: int = 0  # "lemmas" exists but is not a dict
+    invalid_entries: int = 0           # lemma entry is not a dict
 
 
 @dataclass
@@ -178,7 +187,7 @@ class LangStats:
     lang: str
     files: List[str]
     total_lemmas: int
-    pos_counts: Dict[str, int]
+    pos_counts: dict[str, int]
     human_nouns: int
     nationality_adjs: int
     overrides: int
@@ -192,18 +201,21 @@ class LangStats:
     def nationality_adjs_pct(self) -> float:
         return (100.0 * self.nationality_adjs / self.total_lemmas) if self.total_lemmas else 0.0
 
+    def to_json_dict(self) -> dict:
+        d = asdict(self)
+        d["human_nouns_pct"] = self.human_nouns_pct
+        d["nationality_adjs_pct"] = self.nationality_adjs_pct
+        return d
 
-def load_lemmas_from_files(files: Iterable[str]) -> Tuple[Dict[str, dict], MergeInfo]:
+
+def load_lemmas_from_files(files: Iterable[str]) -> Tuple[dict[str, dict], MergeInfo]:
     """
     Load and merge lemma dictionaries from a list of JSON files.
 
     For identical lemma keys across files for the same language,
     later files override earlier ones.
-
-    Returns:
-        (merged_lemmas, merge_info)
     """
-    merged: Dict[str, dict] = {}
+    merged: dict[str, dict] = {}
     info = MergeInfo()
 
     for path in files:
@@ -220,23 +232,19 @@ def load_lemmas_from_files(files: Iterable[str]) -> Tuple[Dict[str, dict], Merge
             for k, v in lemmas.items():
                 if k in merged:
                     info.overrides += 1
-                # Only store dict entries; keep count of invalid ones.
                 if isinstance(v, dict):
-                    merged[k] = v
+                    merged[str(k)] = v
                 else:
                     info.invalid_entries += 1
 
         except Exception as e:
             info.files_failed += 1
-            logger.warning(f"Failed to read {path}: {e}")
+            _call_if_exists(log, "warning", f"Failed to read {path}: {e}")
 
     return merged, info
 
 
 def compute_stats_for_lang(lang: str, lemmas: Mapping[str, dict], merge_info: MergeInfo) -> LangStats:
-    """
-    Compute basic statistics for a single language.
-    """
     pos_counts: Counter[str] = Counter()
     human_nouns = 0
     nationality_adjs = 0
@@ -259,7 +267,7 @@ def compute_stats_for_lang(lang: str, lemmas: Mapping[str, dict], merge_info: Me
 
     return LangStats(
         lang=lang,
-        files=[],  # filled by caller
+        files=[],
         total_lemmas=len(lemmas),
         pos_counts=dict(pos_counts),
         human_nouns=human_nouns,
@@ -269,34 +277,45 @@ def compute_stats_for_lang(lang: str, lemmas: Mapping[str, dict], merge_info: Me
     )
 
 
-def print_stats(stats: LangStats) -> None:
-    """
-    Pretty-print stats for a single language using the standardized logger.
-    """
-    logger.info(f"=== Lexicon stats for '{stats.lang}' ===")
+def print_stats(stats: LangStats, *, base_dir: Path) -> None:
+    _call_if_exists(log, "info", f"=== Lexicon stats for '{stats.lang}' ===")
 
-    file_list = ", ".join(os.path.basename(f) for f in stats.files)
-    logger.info(f"  Files: {file_list}")
-    logger.info(f"  Total lemmas: {stats.total_lemmas}")
-    logger.info(f"  Merge overrides (later file wins): {stats.overrides}")
+    # Friendlier file list: relative to base_dir if possible
+    def _rel(p: str) -> str:
+        try:
+            return str(Path(p).resolve().relative_to(base_dir))
+        except Exception:
+            return os.path.basename(p)
+
+    file_list = ", ".join(_rel(f) for f in stats.files)
+    _call_if_exists(log, "info", f"  Files: {file_list}")
+    _call_if_exists(log, "info", f"  Total lemmas: {stats.total_lemmas}")
+    _call_if_exists(log, "info", f"  Merge overrides (later file wins): {stats.overrides}")
     if stats.invalid_entries:
-        logger.warning(f"  Invalid lemma entries skipped: {stats.invalid_entries}")
+        _call_if_exists(log, "warning", f"  Invalid lemma entries skipped: {stats.invalid_entries}")
 
     if stats.total_lemmas == 0:
-        logger.warning("  No lemmas found.")
-        logger.info("")  # Spacer
+        _call_if_exists(log, "warning", "  No lemmas found.")
+        _call_if_exists(log, "info", "")
         return
 
-    logger.info("  By POS:")
-    # Deterministic: sort primarily by count desc, then POS name asc
+    _call_if_exists(log, "info", "  By POS:")
     for pos, count in sorted(stats.pos_counts.items(), key=lambda kv: (-kv[1], kv[0])):
         pct = 100.0 * count / stats.total_lemmas
-        logger.info(f"    {pos:<8} {count:5d} ({pct:5.1f}%)")
+        _call_if_exists(log, "info", f"    {pos:<8} {count:5d} ({pct:5.1f}%)")
 
-    logger.info("  Selected categories:")
-    logger.info(f"    Human nouns:             {stats.human_nouns} ({stats.human_nouns_pct:5.1f}%)")
-    logger.info(f"    Nationality adjectives:  {stats.nationality_adjs} ({stats.nationality_adjs_pct:5.1f}%)")
-    logger.info("")  # Spacer
+    _call_if_exists(log, "info", "  Selected categories:")
+    _call_if_exists(
+        log,
+        "info",
+        f"    Human nouns:             {stats.human_nouns} ({stats.human_nouns_pct:5.1f}%)",
+    )
+    _call_if_exists(
+        log,
+        "info",
+        f"    Nationality adjectives:  {stats.nationality_adjs} ({stats.nationality_adjs_pct:5.1f}%)",
+    )
+    _call_if_exists(log, "info", "")
 
 
 # ---------------------------------------------------------------------------
@@ -327,23 +346,32 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--out",
         default=None,
-        help="Optional output file path. If omitted, JSON is printed to stdout (and text uses logger).",
+        help="Optional output file path. If omitted and --format json, JSON is printed to stdout with no logs.",
     )
     return parser
 
 
-def main(argv: List[str] | None = None) -> None:
-    _logger_start("Lexicon Stats Dump")
-
+def main(argv: Optional[List[str]] = None) -> None:
     parser = build_arg_parser()
     args = parser.parse_args(argv)
 
+    # If user wants machine-readable JSON on stdout, do NOT emit logs.
+    machine_stdout_json = (args.format == "json" and not args.out)
+
     lexicon_dir = Path(args.lexicon_dir).expanduser().resolve()
+
+    if not machine_stdout_json:
+        _call_if_exists(log, "start", "Lexicon Stats Dump")
+        _call_if_exists(log, "stage", "Scan", f"Directory: {lexicon_dir}")
 
     try:
         lang_files = find_lexicon_files(lexicon_dir, langs=args.langs)
     except FileNotFoundError:
-        _logger_finish("Lexicon directory not found.", success=False)
+        if machine_stdout_json:
+            print(json.dumps({"error": "Lexicon directory not found", "lexicon_dir": str(lexicon_dir)}, indent=2))
+        else:
+            _call_if_exists(log, "error", f"Lexicon directory not found: {lexicon_dir}")
+            _call_if_exists(log, "finish", "Lexicon directory not found.", success=False, details={"lexicon_dir": str(lexicon_dir)})
         sys.exit(1)
 
     if not lang_files:
@@ -352,12 +380,16 @@ def main(argv: List[str] | None = None) -> None:
             if args.langs
             else f"No lexicon JSON files found in {lexicon_dir}."
         )
-        logger.warning(msg)
-        _logger_finish("No files found.", success=False, details={"lexicon_dir": str(lexicon_dir)})
+        if machine_stdout_json:
+            print(json.dumps({"error": msg, "lexicon_dir": str(lexicon_dir), "langs": args.langs or []}, indent=2))
+        else:
+            _call_if_exists(log, "warning", msg)
+            _call_if_exists(log, "finish", "No files found.", success=False, details={"lexicon_dir": str(lexicon_dir)})
         sys.exit(0)
 
-    logger.info(f"Lexicon directory: {lexicon_dir}")
-    logger.info(f"Languages found: {', '.join(sorted(lang_files.keys()))}")
+    if not machine_stdout_json:
+        _call_if_exists(log, "info", f"Lexicon directory: {lexicon_dir}")
+        _call_if_exists(log, "info", f"Languages found: {', '.join(sorted(lang_files.keys()))}")
 
     all_lang_stats: List[LangStats] = []
     global_lemmas = 0
@@ -366,6 +398,9 @@ def main(argv: List[str] | None = None) -> None:
     global_invalid_entries = 0
 
     for lang, files in sorted(lang_files.items(), key=lambda kv: kv[0]):
+        if not machine_stdout_json:
+            _call_if_exists(log, "stage", "Merge", f"{lang}: {len(files)} file(s)")
+
         lemmas, merge_info = load_lemmas_from_files(files)
         stats = compute_stats_for_lang(lang, lemmas, merge_info)
         stats.files = files
@@ -376,8 +411,8 @@ def main(argv: List[str] | None = None) -> None:
         global_invalid_entries += stats.invalid_entries
         langs_processed += 1
 
-        if args.format == "text":
-            print_stats(stats)
+        if args.format == "text" and not machine_stdout_json:
+            print_stats(stats, base_dir=lexicon_dir)
 
     summary_data = {
         "lexicon_dir": str(lexicon_dir),
@@ -385,7 +420,7 @@ def main(argv: List[str] | None = None) -> None:
         "total_lemmas_found": global_lemmas,
         "total_merge_overrides": global_overrides,
         "total_invalid_entries": global_invalid_entries,
-        "per_language": [asdict(s) for s in all_lang_stats],
+        "per_language": [s.to_json_dict() for s in all_lang_stats],
     }
 
     if args.format == "json":
@@ -394,19 +429,24 @@ def main(argv: List[str] | None = None) -> None:
             out_path = Path(args.out).expanduser().resolve()
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_path.write_text(payload, encoding="utf-8")
-            logger.info(f"Wrote JSON stats to: {out_path}")
+            if not machine_stdout_json:
+                _call_if_exists(log, "info", f"Wrote JSON stats to: {out_path}")
         else:
+            # Machine-readable stdout (no logger output mixed in)
             print(payload)
 
-    _logger_finish(
-        message=f"Stats dump complete. Found {global_lemmas} entries across {langs_processed} languages.",
-        details={
-            "languages_scanned": langs_processed,
-            "total_lemmas_found": global_lemmas,
-            "total_merge_overrides": global_overrides,
-            "total_invalid_entries": global_invalid_entries,
-        },
-    )
+    if not machine_stdout_json:
+        _call_if_exists(
+            log,
+            "finish",
+            f"Stats dump complete. Found {global_lemmas} entries across {langs_processed} languages.",
+            details={
+                "languages_scanned": langs_processed,
+                "total_lemmas_found": global_lemmas,
+                "total_merge_overrides": global_overrides,
+                "total_invalid_entries": global_invalid_entries,
+            },
+        )
 
 
 if __name__ == "__main__":

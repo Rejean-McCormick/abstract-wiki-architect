@@ -164,7 +164,7 @@ def build_registry() -> Dict[str, ToolSpec]:
         ),
         "build_lexicon_wikidata": py_script(
             "build_lexicon_wikidata",
-            "tools/build_lexicon_from_wikidata.py",
+            "utils/build_lexicon_from_wikidata.py",
             "Builds lexicon shards directly from Wikidata (online).",
             timeout_sec=1800,
             allow_args=True,

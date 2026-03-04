@@ -64,12 +64,14 @@ if PROJECT_ROOT not in sys.path:
 
 # [REFACTOR] Use the standardized ToolLogger for GUI-compatible output
 try:
-    from utils.tool_logger import ToolLogger
+    from utils.tool_logger import ToolLogger  # type: ignore
+
     logger = ToolLogger(__file__)
-except ImportError:
+except Exception:
     # Fallback for standalone runs without the new logger module
     import logging
-    logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
+
+    logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
     logger = logging.getLogger("migrate_schema")
 
 # ---------------------------------------------------------------------------
@@ -126,7 +128,9 @@ def _ensure_meta_block(
     if "language" not in meta or not meta.get("language"):
         inferred = _infer_language_from_filename(path)
         if inferred:
-            logger.info(f"  - meta.language missing; inferring '{inferred}' from filename.")
+            logger.info(
+                f"  - meta.language missing; inferring '{inferred}' from filename."
+            )
             meta["language"] = inferred
         else:
             logger.warning(
@@ -210,9 +214,7 @@ def _migrate_sections(
         logger.info(f"  - Normalizing section '{section}' ({len(entries)} entries)")
         for key, entry in entries.items():
             if not isinstance(entry, dict):
-                logger.warning(
-                    f"    • Skipping non-dict entry under '{section}[{key}]'"
-                )
+                logger.warning(f"    • Skipping non-dict entry under '{section}[{key}]'")
                 continue
             _ensure_base_entry_fields(
                 entry=entry,
@@ -240,9 +242,7 @@ def _migrate_sections(
     # name_templates: ensure key
     templates = data.get("name_templates")
     if isinstance(templates, dict):
-        logger.info(
-            f"  - Normalizing section 'name_templates' ({len(templates)} entries)"
-        )
+        logger.info(f"  - Normalizing section 'name_templates' ({len(templates)} entries)")
         for key, entry in templates.items():
             if not isinstance(entry, dict):
                 logger.warning(f"    • Skipping non-dict template '{key}'")
@@ -382,7 +382,7 @@ def main(argv: Optional[List[str]] = None) -> None:
         if not os.path.isfile(path):
             logger.warning(f"Skipping non-file path: {path}")
             continue
-        
+
         scanned_count += 1
         changed = migrate_file(
             path,
@@ -398,13 +398,13 @@ def main(argv: Optional[List[str]] = None) -> None:
     summary_data = {
         "scanned_files": scanned_count,
         "modified_files": modified_count,
-        "target_version": args.target_version
+        "target_version": args.target_version,
     }
-    
+
     if hasattr(logger, "finish"):
         logger.finish(
             message=f"{status_msg}. Modified {modified_count}/{scanned_count} files.",
-            details=summary_data
+            details=summary_data,
         )
     else:
         # Fallback logging

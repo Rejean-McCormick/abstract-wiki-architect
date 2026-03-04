@@ -19,22 +19,28 @@ Notes
 Key reliability guarantees in this runner:
 - The GFGrammarEngine is lazy-loaded; we *must* call health_check()/generate() once to load PGF.
 - Async calls are executed via a dedicated background event loop thread (safe even if caller has a running loop).
+
+CLI compatibility notes (GUI/tool-runner):
+- --langs accepts BOTH: "--langs en fr" and "--langs en,fr"
+- --print-failures accepts BOTH:
+    * integer N (print first N failures per file, 0 = none)
+    * a file path (write all FAIL/CRASH cases to that file)
 """
 
 from __future__ import annotations
 
 import argparse
+import asyncio
 import csv
 import json
 import os
 import re
 import sys
-import time
-import asyncio
 import threading
-from dataclasses import dataclass, asdict
+import time
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Callable, TypeVar, Coroutine
+from typing import Any, Callable, Coroutine, Dict, List, Optional, Tuple, TypeVar
 
 T = TypeVar("T")
 
@@ -58,7 +64,6 @@ if PROJECT_ROOT and str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 # Ensure relative paths (like ".env") resolve as expected when tools execute from elsewhere.
-# This is safe for CLI tooling and prevents “works locally, fails in tool runner” drift.
 if PROJECT_ROOT:
     try:
         os.chdir(str(PROJECT_ROOT))
@@ -66,14 +71,40 @@ if PROJECT_ROOT:
         pass
 
 # [REFACTOR] Use standardized logger
+IS_TOOL_LOGGER = False
 try:
-    from utils.tool_logger import ToolLogger
-    logger = ToolLogger(__file__)
-except ImportError:
+    from utils.tool_logger import ToolLogger  # type: ignore
+
+    logger = ToolLogger(__file__)  # type: ignore
+    IS_TOOL_LOGGER = True
+except Exception:
     import logging
 
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    # IMPORTANT: GUI reads stdout; keep fallback logger on stdout too.
+    logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
     logger = logging.getLogger("TestRunner")
+
+
+def _log_info(msg: str = "") -> None:
+    if hasattr(logger, "info"):
+        logger.info(msg)  # type: ignore[attr-defined]
+    else:
+        print(msg)
+
+
+def _log_error(msg: str) -> None:
+    if IS_TOOL_LOGGER and hasattr(logger, "error"):
+        logger.error(msg)  # type: ignore[attr-defined]
+    else:
+        # keep "Error:" prefix for compatibility with grep-based consumers
+        _log_info(f"Error: {msg}")
+
+
+def _log_warning(msg: str) -> None:
+    if IS_TOOL_LOGGER and hasattr(logger, "warning"):
+        logger.warning(msg)  # type: ignore[attr-defined]
+    else:
+        _log_info(f"Warning: {msg}")
 
 
 # -----------------------------------------------------------------------------
@@ -445,6 +476,31 @@ def _extract_inputs_from_row(
     return test_id, frame_type, name, gender, profession, nationality, expected
 
 
+def _write_failures_report(path: Path, results: List[CaseResult], summary: RunSummary) -> None:
+    fails = [r for r in results if r.status in {"FAIL", "CRASH"}]
+    lines: List[str] = []
+    lines.append("UNIVERSAL TEST RUNNER - FAILURES REPORT")
+    lines.append(f"Finished: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(summary.finished_at))}")
+    lines.append(f"Failed: {summary.failed} | Crashed: {summary.crashed} | Total cases: {summary.total}")
+    lines.append("")
+
+    if not fails:
+        lines.append("(No failures/crashes)")
+    else:
+        for r in fails:
+            lines.append(f"[{r.status}] {r.file} :: {r.test_id} (lang={r.lang}, frame={r.frame_type})")
+            if r.detail:
+                lines.append(f"  Detail:   {r.detail}")
+            if r.expected:
+                lines.append(f"  Expected: {r.expected}")
+            if r.actual:
+                lines.append(f"  Actual:   {r.actual}")
+            lines.append("")
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
 def run_universal_tests(
     *,
     dataset_dir: Path,
@@ -454,53 +510,61 @@ def run_universal_tests(
     fail_fast: bool,
     strict: bool,
     max_failures_to_print: int,
+    failures_report_path: Optional[Path],
     json_report_path: Optional[Path],
     verbose: bool,
     diagnose_only: bool,
     list_languages: bool,
 ) -> int:
-    logger.info("========================================")
-    logger.info("   UNIVERSAL TEST RUNNER (Enterprise)   ")
-    logger.info("========================================")
-    logger.info(f"Dataset dir: {dataset_dir}")
-    logger.info(f"Pattern:     {pattern}")
+    if hasattr(logger, "header"):
+        try:
+            logger.header("Universal Test Runner")  # type: ignore[attr-defined]
+        except Exception:
+            pass
+    else:
+        _log_info("========================================")
+        _log_info("   UNIVERSAL TEST RUNNER (Enterprise)   ")
+        _log_info("========================================")
+
+    _log_info(f"Dataset dir: {dataset_dir}")
+    _log_info(f"Pattern:     {pattern}")
     if lang_filter:
-        logger.info(f"Lang filter: {', '.join(lang_filter)}")
+        _log_info(f"Lang filter: {', '.join(lang_filter)}")
 
     renderer = _Renderer()
     try:
         if list_languages or diagnose_only:
             diag = renderer.diagnostics()
-            logger.info("")
-            logger.info("---- ENGINE DIAGNOSTICS ----")
-            logger.info(json.dumps(diag, ensure_ascii=False, indent=2))
+            _log_info("")
+            _log_info("---- ENGINE DIAGNOSTICS ----")
+            _log_info(json.dumps(diag, ensure_ascii=False, indent=2))
             if list_languages:
-                logger.info("")
-                logger.info("---- SUPPORTED LANGUAGES (sample) ----")
+                _log_info("")
+                _log_info("---- SUPPORTED LANGUAGES (sample) ----")
                 for x in diag.get("supported_languages_sample", []):
-                    logger.info(f"- {x}")
+                    _log_info(f"- {x}")
             return 0 if renderer.available() else 2
 
         if not dataset_dir.exists():
-            logger.error(f"Test directory not found: {dataset_dir}")
-            logger.info("Hint: Run tools/qa/test_suite_generator.py first, or set SKA_TEST_DATASET_DIR.")
+            _log_error(f"Test directory not found: {dataset_dir}")
+            _log_info("Hint: Run tools/qa/test_suite_generator.py first, or set SKA_TEST_DATASET_DIR.")
             return 2
 
         csv_files = _iter_csv_files(dataset_dir, pattern)
         if not csv_files:
-            logger.error("No CSV files found.")
-            logger.info("Hint: Run tools/qa/test_suite_generator.py first.")
+            _log_error("No CSV files found.")
+            _log_info("Hint: Run tools/qa/test_suite_generator.py first.")
             return 2
 
         if not renderer.available():
-            logger.error("Grammar Engine not available.")
-            logger.info(f"Diagnostics: {json.dumps(renderer.diagnostics(), ensure_ascii=False)}")
-            logger.info("Hint: Check if semantik_architect.pgf exists in 'gf/' and 'pgf' library is installed.")
+            _log_error("Grammar Engine not available.")
+            _log_info(f"Diagnostics: {json.dumps(renderer.diagnostics(), ensure_ascii=False)}")
+            _log_info("Hint: Check if semantik_architect.pgf exists in 'gf/' and 'pgf' library is installed.")
             return 2
 
         lexicon = _LexiconResolver()
         if verbose:
-            logger.info(f"Lexicon resolver: {'ON' if lexicon.available() else 'OFF'}")
+            _log_info(f"Lexicon resolver: {'ON' if lexicon.available() else 'OFF'}")
 
         started = time.time()
         results: List[CaseResult] = []
@@ -513,17 +577,17 @@ def run_universal_tests(
             if lang_filter and lang.lower() not in {x.lower() for x in lang_filter}:
                 continue
 
-            logger.info("")
-            logger.info("----------------------------------------")
-            logger.info(f"Suite: {fpath.name}  [lang={lang}]")
-            logger.info("----------------------------------------")
+            _log_info("")
+            _log_info("----------------------------------------")
+            _log_info(f"Suite: {fpath.name}  [lang={lang}]")
+            _log_info("----------------------------------------")
 
             file_pass = file_fail = file_skip = file_crash = 0
 
             with fpath.open("r", encoding="utf-8", newline="") as fh:
                 reader = csv.DictReader(fh)
                 if not reader.fieldnames:
-                    logger.error("CSV has no headers.")
+                    _log_error("CSV has no headers.")
                     continue
 
                 fieldnames = list(reader.fieldnames)
@@ -592,7 +656,10 @@ def run_universal_tests(
                             continue
 
                         if not name or not profession or not nationality:
-                            msg = f"Missing inputs (name={bool(name)}, profession={bool(profession)}, nationality={bool(nationality)})"
+                            msg = (
+                                f"Missing inputs (name={bool(name)}, profession={bool(profession)}, "
+                                f"nationality={bool(nationality)})"
+                            )
                             if strict:
                                 file_fail += 1
                                 total_failed += 1
@@ -668,10 +735,10 @@ def run_universal_tests(
                             )
 
                             if max_failures_to_print > 0 and file_fail <= max_failures_to_print:
-                                logger.error(f"FAIL {test_id}")
-                                logger.info(f"  Input:    {name} ({gender}) | {profession} | {nationality}")
-                                logger.info(f"  Expected: {expected}")
-                                logger.info(f"  Actual:   {actual}")
+                                _log_error(f"FAIL {test_id}")
+                                _log_info(f"  Input:    {name} ({gender}) | {profession} | {nationality}")
+                                _log_info(f"  Expected: {expected}")
+                                _log_info(f"  Actual:   {actual}")
 
                             if fail_fast:
                                 raise RuntimeError("Fail-fast: first mismatch encountered.")
@@ -691,18 +758,18 @@ def run_universal_tests(
                                 detail=str(e),
                             )
                         )
-                        logger.error(f"CRASH: {str(e)}")
+                        _log_error(f"CRASH: {str(e)}")
                         if fail_fast:
                             break
 
             denom = file_pass + file_fail
             if denom > 0:
                 rate = (file_pass / denom) * 100.0
-                logger.info(
+                _log_info(
                     f"Result: {file_pass} passed, {file_fail} failed, {file_skip} skipped, {file_crash} crashed  ({rate:.1f}% pass)"
                 )
             else:
-                logger.info(f"Result: {file_pass} passed, {file_fail} failed, {file_skip} skipped, {file_crash} crashed")
+                _log_info(f"Result: {file_pass} passed, {file_fail} failed, {file_skip} skipped, {file_crash} crashed")
 
             if fail_fast and (file_fail > 0 or file_crash > 0):
                 break
@@ -710,15 +777,15 @@ def run_universal_tests(
         finished = time.time()
         duration = finished - started
 
-        logger.info("")
-        logger.info("========================================")
-        logger.info(f"RUN COMPLETE in {duration:.2f}s")
-        logger.info("========================================")
-        logger.info(f"Passed:  {total_passed}")
-        logger.info(f"Failed:  {total_failed}")
-        logger.info(f"Skipped: {total_skipped}")
-        logger.info(f"Crashed: {total_crashed}")
-        logger.info(f"Active:  {total_active}")
+        _log_info("")
+        _log_info("========================================")
+        _log_info(f"RUN COMPLETE in {duration:.2f}s")
+        _log_info("========================================")
+        _log_info(f"Passed:  {total_passed}")
+        _log_info(f"Failed:  {total_failed}")
+        _log_info(f"Skipped: {total_skipped}")
+        _log_info(f"Crashed: {total_crashed}")
+        _log_info(f"Active:  {total_active}")
 
         summary = RunSummary(
             started_at=started,
@@ -739,7 +806,11 @@ def run_universal_tests(
             }
             json_report_path.parent.mkdir(parents=True, exist_ok=True)
             json_report_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-            logger.info(f"\nWrote JSON report: {json_report_path}")
+            _log_info(f"\nWrote JSON report: {json_report_path}")
+
+        if failures_report_path:
+            _write_failures_report(failures_report_path, results, summary)
+            _log_info(f"Wrote failures report: {failures_report_path}")
 
         exit_code = 0
         if total_failed > 0 or total_crashed > 0:
@@ -749,7 +820,10 @@ def run_universal_tests(
 
         summary_msg = f"Passed: {total_passed}, Failed: {total_failed}, Crashed: {total_crashed}."
         if hasattr(logger, "finish"):
-            logger.finish(message=summary_msg, success=(exit_code == 0), details=asdict(summary))
+            try:
+                logger.finish(message=summary_msg, success=(exit_code == 0), details=asdict(summary))  # type: ignore[attr-defined]
+            except Exception:
+                pass
 
         return exit_code
 
@@ -764,24 +838,65 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Universal CSV Test Runner (Enterprise)")
     p.add_argument("--dataset-dir", default=None, help="Directory containing CSV suites.")
     p.add_argument("--pattern", default="test_suite_*.csv", help="Glob pattern for CSV files.")
-    p.add_argument("--langs", default=None, help="Comma-separated language filter (e.g., en,fr,it).")
+    p.add_argument(
+        "--langs",
+        nargs="*",
+        default=None,
+        help="Language filter (e.g., --langs en fr OR --langs en,fr,it).",
+    )
     p.add_argument("--limit", type=int, default=None, help="Max rows per file.")
     p.add_argument("--fail-fast", action="store_true", help="Stop on first FAIL/CRASH.")
     p.add_argument("--strict", action="store_true", help="Treat missing EXPECTED or inputs as FAIL (not SKIP).")
-    p.add_argument("--print-failures", type=int, default=10, help="Print first N failures per file (0 = none).")
+
+    # GUI expects this to accept a value; support both int and path
+    p.add_argument(
+        "--print-failures",
+        default="10",
+        help="Either N (print first N failures per file; 0=none) OR a file path to write all FAIL/CRASH cases.",
+    )
+
     p.add_argument("--json-report", default=None, help="Write a JSON report to this path.")
     p.add_argument("--verbose", action="store_true", help="Verbose diagnostics.")
 
-    # New: demo-friendly + production-friendly diagnostics/overrides
+    # Demo-friendly + production-friendly diagnostics/overrides
     p.add_argument("--pgf", default=None, help="Override PGF path (file or directory). Sets PGF_PATH env for this run.")
     p.add_argument("--diagnose", action="store_true", help="Print engine diagnostics and exit (0 if ready, else 2).")
     p.add_argument("--list-languages", action="store_true", help="List supported languages (requires engine ready).")
     return p.parse_args(argv)
 
 
+def _parse_lang_filter(langs_arg: Optional[List[str]]) -> Optional[List[str]]:
+    if not langs_arg:
+        return None
+    out: List[str] = []
+    for item in langs_arg:
+        if not item:
+            continue
+        # allow "en,fr" or "en fr"
+        parts = re.split(r"[,\s]+", str(item).strip())
+        for p in parts:
+            p = p.strip()
+            if p:
+                out.append(p)
+    return out or None
+
+
+def _parse_print_failures(value: str) -> Tuple[int, Optional[Path]]:
+    v = (value or "").strip()
+    if not v:
+        return 10, None
+    if re.fullmatch(r"\d+", v):
+        return max(0, int(v)), None
+    # treat as path
+    return 0, Path(v).expanduser().resolve()
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     if hasattr(logger, "start"):
-        logger.start("Universal Test Runner")
+        try:
+            logger.start("Universal Test Runner")  # type: ignore[attr-defined]
+        except Exception:
+            pass
 
     args = _parse_args(argv)
 
@@ -796,7 +911,9 @@ def main(argv: Optional[List[str]] = None) -> int:
             os.environ["PGF_PATH"] = str(p)
 
     dataset_dir = _resolve_dataset_dir(args.dataset_dir)
-    lang_filter = [x.strip() for x in (args.langs or "").split(",") if x.strip()] or None
+    lang_filter = _parse_lang_filter(args.langs)
+
+    max_failures_to_print, failures_report_path = _parse_print_failures(str(args.print_failures))
     json_report_path = Path(args.json_report).expanduser().resolve() if args.json_report else None
 
     return run_universal_tests(
@@ -806,7 +923,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         limit_per_file=args.limit,
         fail_fast=bool(args.fail_fast),
         strict=bool(args.strict),
-        max_failures_to_print=max(0, int(args.print_failures)),
+        max_failures_to_print=max_failures_to_print,
+        failures_report_path=failures_report_path,
         json_report_path=json_report_path,
         verbose=bool(args.verbose),
         diagnose_only=bool(args.diagnose),

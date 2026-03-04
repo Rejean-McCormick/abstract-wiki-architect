@@ -59,5 +59,41 @@
       "masculine_form": "presidente",
       "semantic_field": "politics"
     }
+  },
+  "douglas adams": {
+    "lemma": "Douglas Adams",
+    "qid": "Q42",
+    "source": "wikidata",
+    "domain": "people",
+    "sense": "escritor de ciencia ficción y humorista inglés",
+    "facts": {
+      "profession": "guionista",
+      "nationality": "Reino Unido"
+    },
+    "collisions": 7
+  },
+  "marie curie": {
+    "lemma": "Marie Curie",
+    "qid": "Q7186",
+    "source": "wikidata",
+    "domain": "people",
+    "sense": "física y química polaca nacionalizada francesa",
+    "facts": {
+      "profession": "físico",
+      "nationality": "Francia"
+    },
+    "collisions": 8
+  },
+  "alan turing": {
+    "lemma": "Alan Turing",
+    "qid": "Q7251",
+    "source": "wikidata",
+    "domain": "people",
+    "sense": "matemático, filósofo y criptógrafo británico (1912-1954)",
+    "facts": {
+      "profession": "informático teórico",
+      "nationality": "Reino Unido"
+    },
+    "collisions": 1
   }
 }

@@ -35,11 +35,11 @@ from typing import Any, Dict, Iterable, Iterator, Optional, Tuple
 # Ensure project root is on path for imports
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
-    sys.path.append(PROJECT_ROOT)
+    sys.path.insert(0, PROJECT_ROOT)
 
-from utils.logging_setup import get_logger, init_logging  # noqa: E402
+from utils.tool_logger import ToolLogger  # noqa: E402
 
-log = get_logger(__name__)
+log = ToolLogger(__file__)
 
 # [FIX] Schema version for runtime loader expectations (meta.schema_version must be int)
 SCHEMA_VERSION = 2
@@ -95,7 +95,7 @@ def _is_dump_wrapper(obj: Any) -> bool:
 
 def _iter_lexemes_from_dump(path: str) -> Iterator[Dict[str, Any]]:
     """Yield Lexeme-like objects from a dump file (JSONL or big JSON wrapper)."""
-    log.info("Reading lexeme dump from %s", path)
+    log.stage("Ingest", f"Reading lexeme dump: {path}")
     lines = _open_maybe_gzip(path)
 
     try:
@@ -311,6 +311,8 @@ def build_lexicon_from_dump(
         "entries": {...},  # preferred
       }
     """
+    log.stage("Classify", "Extracting lemmas/POS and assigning domains")
+
     lexicon: Dict[str, Any] = {
         "meta": {
             "language": lang_code,
@@ -371,6 +373,7 @@ def save_shards(lexicon: Dict[str, Any], out_dir: str, lang_code: str) -> None:
         "entries": {...}
       }
     """
+    log.stage("Write", f"Writing domain shards to: {out_dir}")
     os.makedirs(out_dir, exist_ok=True)
 
     meta_base = lexicon.get("meta") if isinstance(lexicon.get("meta"), dict) else {}
@@ -406,8 +409,6 @@ def save_shards(lexicon: Dict[str, Any], out_dir: str, lang_code: str) -> None:
 
 
 def main() -> None:
-    init_logging()
-
     parser = argparse.ArgumentParser(
         description="Build domain-sharded lexicon JSONs from Wikidata Lexeme dump."
     )
@@ -420,14 +421,39 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    if not os.path.isfile(args.dump):
-        print(f"❌ Dump file not found: {args.dump}")
-        sys.exit(1)
+    log.header(
+        {
+            "language": args.lang,
+            "dump": os.path.basename(args.dump),
+            "out_dir": args.out_dir,
+            "limit": args.limit if args.limit is not None else "none",
+            "schema_version": SCHEMA_VERSION,
+            "source": SOURCE_NAME,
+        }
+    )
 
-    log.info("Building lexicon for %s...", args.lang)
+    if not os.path.isfile(args.dump):
+        log.error(f"Dump file not found: {args.dump}", fatal=True)
 
     lexicon = build_lexicon_from_dump(args.lang, args.dump, args.limit)
     save_shards(lexicon, args.out_dir, args.lang)
+
+    # lightweight standardized tail
+    domain_counts = {}
+    domains = lexicon.get("domains") or {}
+    if isinstance(domains, dict):
+        for d, e in domains.items():
+            if isinstance(e, dict) and e:
+                domain_counts[f"{d}_entries"] = len(e)
+
+    log.summary(
+        {
+            "entries_used": int((lexicon.get("meta") or {}).get("entries_used") or 0),
+            **domain_counts,
+        },
+        success=True,
+    )
+    log.finish(success=True)
 
 
 if __name__ == "__main__":

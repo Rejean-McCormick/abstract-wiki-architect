@@ -327,8 +327,8 @@ export const BACKEND_TOOL_REGISTRY = {
 
   build_lexicon_wikidata: {
     title: "Build Lexicon from Wikidata",
-    path: "tools/build_lexicon_from_wikidata.py",
-    cmd: ["python", "tools/build_lexicon_from_wikidata.py"],
+    path: "utils/build_lexicon_from_wikidata.py",
+    cmd: ["python", "utils/build_lexicon_from_wikidata.py"],
     category: "Lexicon & Data",
     group: "Schema & Index",
     risk: "moderate",

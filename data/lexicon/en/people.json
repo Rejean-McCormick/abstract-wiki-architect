@@ -54,5 +54,41 @@
       "P106": [],
       "P27": []
     }
+  },
+  "douglas adams": {
+    "lemma": "Douglas Adams",
+    "qid": "Q42",
+    "source": "wikidata",
+    "domain": "people",
+    "sense": "British science fiction writer and humorist (1952–2001)",
+    "facts": {
+      "profession": "screenwriter",
+      "nationality": "United Kingdom"
+    },
+    "collisions": 7
+  },
+  "marie curie": {
+    "lemma": "Marie Curie",
+    "qid": "Q7186",
+    "source": "wikidata",
+    "domain": "people",
+    "sense": "Polish-French physicist and chemist (1867–1934)",
+    "facts": {
+      "profession": "physicist",
+      "nationality": "France"
+    },
+    "collisions": 8
+  },
+  "alan turing": {
+    "lemma": "Alan Turing",
+    "qid": "Q7251",
+    "source": "wikidata",
+    "domain": "people",
+    "sense": "English computer scientist (1912–1954)",
+    "facts": {
+      "profession": "computer scientist",
+      "nationality": "United Kingdom"
+    },
+    "collisions": 1
   }
 }

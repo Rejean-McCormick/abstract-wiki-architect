@@ -46,7 +46,7 @@ const BACKEND_WIRED_TOOLS = {
   "tools/cleanup_root.py": "Cleans root artifacts and moves loose GF files into expected folders.",
   "tools/bootstrap_tier1.py": "Bootstraps Tier 1 language scaffolding using discovered RGL modules.",
   "tools/harvest_lexicon.py": "Bulk lexicon mining/harvesting into shard JSON files.",
-  "tools/build_lexicon_from_wikidata.py": "Builds lexicon artifacts from Wikidata input.",
+  "utils/build_lexicon_from_wikidata.py": "Builds lexicon artifacts from Wikidata input.",
   "tools/ai_refiner.py": "AI-assisted refiner for build/quality tasks (gated).",
 } satisfies Record<string, string>;
 
