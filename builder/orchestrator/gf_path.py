@@ -19,13 +19,27 @@ def _dedupe_keep_order(items: List[str]) -> List[str]:
     return out
 
 
+def _safe_resolve(p: Path) -> Path:
+    try:
+        return p.resolve()
+    except Exception:
+        return p
+
+
+def _safe_is_dir(p: Path) -> bool:
+    try:
+        return p.exists() and p.is_dir()
+    except Exception:
+        return False
+
+
 def discover_rgl_lang_dirs() -> List[Path]:
     """
     GF does not recurse into directories in -path.
     Include all first-level dirs under gf-rgl/src that contain any .gf file somewhere inside.
     """
     rgl_src = config.RGL_SRC
-    if not rgl_src.exists():
+    if not _safe_is_dir(rgl_src):
         return []
 
     def has_gf_files(d: Path) -> bool:
@@ -37,44 +51,56 @@ def discover_rgl_lang_dirs() -> List[Path]:
         return False
 
     dirs: List[Path] = []
-    for p in sorted(rgl_src.iterdir(), key=lambda x: x.name):
-        if not p.is_dir():
+    try:
+        entries = sorted(rgl_src.iterdir(), key=lambda x: x.name)
+    except Exception:
+        return []
+
+    for p in entries:
+        if not _safe_is_dir(p):
             continue
         if p.name == "api":
             continue
         if has_gf_files(p):
-            dirs.append(p)
+            dirs.append(_safe_resolve(p))
     return dirs
 
 
 def discover_contrib_dirs() -> List[Path]:
     """Find all language subdirectories inside gf/contrib/ (ADR 006)."""
     contrib = config.CONTRIB_DIR
-    if not contrib.exists():
+    if not _safe_is_dir(contrib):
         return []
-    return [p for p in contrib.iterdir() if p.is_dir()]
+
+    out: List[Path] = []
+    try:
+        for p in contrib.iterdir():
+            if _safe_is_dir(p):
+                out.append(_safe_resolve(p))
+    except Exception:
+        return []
+    return out
 
 
 def generated_src_candidates() -> List[Path]:
     """
     Order matters for -path and file shadowing.
-    Prefer canonical repo_root/generated/src over repo_root/gf/generated/src.
-    SAFE_MODE is always first (isolated).
+
+    Straight-only policy:
+      - SAFE_MODE is first (isolated).
+      - canonical generated/src is second.
+      - NO legacy gf/generated/src fallback.
     """
     cands = [
         config.SAFE_MODE_SRC,
         config.GENERATED_SRC_DEFAULT,
         config.GENERATED_SRC_ROOT,
-        config.GENERATED_SRC_GF,
     ]
 
     uniq: List[Path] = []
     seen: set[Path] = set()
     for p in cands:
-        try:
-            rp = p.resolve()
-        except Exception:
-            rp = p
+        rp = _safe_resolve(p)
         if rp in seen:
             continue
         seen.add(rp)
@@ -88,23 +114,37 @@ def gf_path_args() -> str:
 
     CRITICAL: include:
       - gf-rgl/src + gf-rgl/src/api
-      - all first-level language dirs under gf-rgl/src (Prelude/SyntaxXXX/etc)
+      - all first-level language dirs under gf-rgl/src
       - gf/contrib/{lang}/ (ADR 006)
       - gf/ (local modules like SemantikArchitect.gf and Wiki*.gf)
-      - generated/src dirs (SAFE_MODE + both legacy locations)
+      - generated/src dirs (SAFE_MODE + canonical only)
       - repo root (last resort)
     """
-    rgl_lang_dirs = discover_rgl_lang_dirs()
+    parts: List[str] = []
 
-    parts: List[str] = [
-        str(config.RGL_SRC.resolve()) if config.RGL_SRC.exists() else str(config.RGL_SRC),
-        str(config.RGL_API.resolve()) if config.RGL_API.exists() else str(config.RGL_API),
-        *[str(d.resolve()) for d in rgl_lang_dirs if d.exists()],
-        *[str(d.resolve()) for d in discover_contrib_dirs() if d.exists()],
-        str(config.GF_DIR.resolve()) if config.GF_DIR.exists() else str(config.GF_DIR),
-        *[str(d) for d in generated_src_candidates() if d.exists()],
-        str(config.ROOT_DIR.resolve()),
-    ]
+    if _safe_is_dir(config.RGL_SRC):
+        parts.append(str(_safe_resolve(config.RGL_SRC)))
+    else:
+        parts.append(str(config.RGL_SRC))
+
+    if _safe_is_dir(config.RGL_API):
+        parts.append(str(_safe_resolve(config.RGL_API)))
+    else:
+        parts.append(str(config.RGL_API))
+
+    parts.extend(str(d) for d in discover_rgl_lang_dirs())
+    parts.extend(str(d) for d in discover_contrib_dirs())
+
+    if _safe_is_dir(config.GF_DIR):
+        parts.append(str(_safe_resolve(config.GF_DIR)))
+    else:
+        parts.append(str(config.GF_DIR))
+
+    for d in generated_src_candidates():
+        if _safe_is_dir(d):
+            parts.append(str(d))
+
+    parts.append(str(_safe_resolve(config.ROOT_DIR)))
 
     return os.pathsep.join(_dedupe_keep_order(parts))
 

@@ -1,8 +1,8 @@
 {
   "meta": {
     "scanner": "rgl_scanner/2.4",
-    "generated_at": 1772247761,
-    "generated_at_iso": "2026-02-28T03:02:41Z",
+    "generated_at": 1772906875,
+    "generated_at_iso": "2026-03-07T18:07:55Z",
     "inventory_key_mode": "iso2",
     "rgl_base_path": "gf-rgl/src",
     "iso_map_file": "data/config/iso_to_wiki.json"

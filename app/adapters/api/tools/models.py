@@ -1,9 +1,21 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, ClassVar, Dict, List, Optional, Sequence, Tuple
+from typing import Any, ClassVar, Dict, List, Literal, Optional, Tuple
 
 from pydantic import BaseModel, Field
+
+
+WorkflowId = Literal[
+    "recommended",
+    "language_integration",
+    "lexicon_work",
+    "build_matrix",
+    "qa_validation",
+    "debug_recovery",
+    "ai_assist",
+    "all",
+]
 
 
 @dataclass(frozen=True)
@@ -13,6 +25,7 @@ class ToolSpec:
     rel_target: str
     cmd: Tuple[str, ...]  # supports "{target}" placeholder
     timeout_sec: int
+
     allow_args: bool = False
     allowed_flags: Tuple[str, ...] = ()
     allow_positionals: bool = False
@@ -20,6 +33,19 @@ class ToolSpec:
 
     flags_with_value: Tuple[str, ...] = ()        # consumes exactly 1 value token
     flags_with_multi_value: Tuple[str, ...] = ()  # consumes 1+ value tokens until next flag
+
+    # UI / registry metadata
+    label: Optional[str] = None
+    category: str = "maintenance"
+    hidden: bool = False
+    legacy: bool = False
+    internal: bool = False
+    heavy: bool = False
+    is_test: bool = False
+
+    # Workflow metadata
+    workflow_tags: Tuple[WorkflowId, ...] = ()
+    workflow_order: int = 1000
 
 
 # ---- Pydantic models (request/response) ----
@@ -46,6 +72,8 @@ class ToolSummary(BaseModel):
     label: str
     description: str
     timeout_sec: int
+    category: Optional[str] = None
+    workflow_tags: List[WorkflowId] = Field(default_factory=list)
 
 
 class ToolRunEvent(BaseModel):
@@ -96,10 +124,41 @@ class ToolRunResponse(BaseModel):
     events: List[ToolRunEvent]
 
 
+class ToolWorkflowGuide(BaseModel):
+    workflow_id: WorkflowId
+    label: str
+    summary: Optional[str] = None
+    steps: List[str] = Field(default_factory=list)
+    tool_ids: List[str] = Field(default_factory=list)
+    power_user_addons: List[str] = Field(default_factory=list)
+
+
 class ToolMeta(BaseModel):
     tool_id: str
+    label: Optional[str] = None
     description: str
     timeout_sec: int
+
     allow_args: bool
     requires_ai_enabled: bool
     available: bool
+
+    category: str = "maintenance"
+    hidden: bool = False
+    legacy: bool = False
+    internal: bool = False
+    heavy: bool = False
+    is_test: bool = False
+
+    allowed_flags: List[str] = Field(default_factory=list)
+    allow_positionals: bool = False
+    flags_with_value: List[str] = Field(default_factory=list)
+    flags_with_multi_value: List[str] = Field(default_factory=list)
+
+    workflow_tags: List[WorkflowId] = Field(default_factory=list)
+    workflow_order: int = 1000
+
+
+class ToolRegistryResponse(BaseModel):
+    tools: List[ToolMeta] = Field(default_factory=list)
+    workflows: List[ToolWorkflowGuide] = Field(default_factory=list)

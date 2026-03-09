@@ -1,4 +1,3 @@
-# builder/orchestrator/config.py
 from __future__ import annotations
 
 import os
@@ -6,19 +5,20 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+
 # -----------------------------------------------------------------------------
 # Repo Root + sys.path
 # -----------------------------------------------------------------------------
 # builder/orchestrator/config.py -> builder/orchestrator/ -> builder/ -> repo root
 ROOT_DIR = Path(__file__).resolve().parents[2]
 
-# Keep legacy robustness: allow importing from repo-root packages like utils/, app/, etc.
+# Allow importing repo-root packages like utils/, app/, etc.
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 
 # -----------------------------------------------------------------------------
-# GF binary
+# Helpers
 # -----------------------------------------------------------------------------
 def resolve_gf_bin(exe: str) -> str:
     """
@@ -47,6 +47,39 @@ def resolve_gf_bin(exe: str) -> str:
     return exe
 
 
+def _resolve_project_path(raw: str, *, default: Path) -> Path:
+    raw = (raw or "").strip()
+    if not raw:
+        return default.resolve()
+    p = Path(raw)
+    return (p if p.is_absolute() else (ROOT_DIR / p)).resolve()
+
+
+def _legacy_generated_root() -> Path:
+    return (ROOT_DIR / "gf" / "generated").resolve()
+
+
+def _assert_not_legacy_generated(path: Path, *, env_name: str) -> Path:
+    legacy_root = _legacy_generated_root()
+    try:
+        if path == legacy_root or legacy_root in path.parents:
+            raise ValueError(
+                f"{env_name} points to legacy generated path '{path}'. "
+                f"Use '{(ROOT_DIR / 'generated' / 'src').resolve()}' or "
+                f"'{(ROOT_DIR / 'generated' / 'safe_mode' / 'src').resolve()}'."
+            )
+    except RuntimeError:
+        # Very defensive: if parents cannot be resolved cleanly, still reject
+        if str(path).lower().startswith(str(legacy_root).lower()):
+            raise ValueError(
+                f"{env_name} points to legacy generated path '{path}'."
+            )
+    return path
+
+
+# -----------------------------------------------------------------------------
+# GF binary
+# -----------------------------------------------------------------------------
 GF_BIN = resolve_gf_bin(os.getenv("GF_BIN", "gf") or "gf")
 
 
@@ -92,27 +125,32 @@ elif _ENV_ENFORCE in ("0", "false", "no", "off"):
 # -----------------------------------------------------------------------------
 # Generated source locations
 # -----------------------------------------------------------------------------
-# Canonical is repo_root/generated/src; legacy is repo_root/gf/generated/src.
-GENERATED_SRC_ROOT = ROOT_DIR / "generated" / "src"
-GENERATED_SRC_GF = GF_DIR / "generated" / "src"
+# Straight-only layout:
+#   canonical generated bridge grammars  -> repo_root/generated/src
+#   safe-mode generated grammars         -> repo_root/generated/safe_mode/src
+#
+# Legacy path repo_root/gf/generated/src is intentionally unsupported.
+GENERATED_SRC_ROOT = (ROOT_DIR / "generated" / "src").resolve()
 
-# SAFE_MODE MUST be isolated to avoid reusing stale HIGH_ROAD Wiki*.gf that import SyntaxXXX.
-_SAFE_OVERRIDE = (os.getenv("ABSTRACTWIKI_SAFE_MODE_SRC", "") or "").strip()
-if _SAFE_OVERRIDE:
-    p = Path(_SAFE_OVERRIDE)
-    SAFE_MODE_SRC = (p if p.is_absolute() else (ROOT_DIR / p)).resolve()
-else:
-    SAFE_MODE_SRC = (ROOT_DIR / "generated" / "safe_mode" / "src").resolve()
+_SAFE_OVERRIDE = _resolve_project_path(
+    os.getenv("ABSTRACTWIKI_SAFE_MODE_SRC", ""),
+    default=ROOT_DIR / "generated" / "safe_mode" / "src",
+)
+SAFE_MODE_SRC = _assert_not_legacy_generated(
+    _SAFE_OVERRIDE,
+    env_name="ABSTRACTWIKI_SAFE_MODE_SRC",
+)
 
 SAFE_MODE_MARKER = "-- GENERATED_BY_ABSTRACTWIKI_SAFE_MODE"
 
-# Default generated location (non-safe-mode)
-_GENERATED_OVERRIDE = (os.getenv("ABSTRACTWIKI_GENERATED_SRC", "") or "").strip()
-if _GENERATED_OVERRIDE:
-    p = Path(_GENERATED_OVERRIDE)
-    GENERATED_SRC_DEFAULT = (p if p.is_absolute() else (ROOT_DIR / p)).resolve()
-else:
-    GENERATED_SRC_DEFAULT = GENERATED_SRC_ROOT
+_GENERATED_OVERRIDE = _resolve_project_path(
+    os.getenv("ABSTRACTWIKI_GENERATED_SRC", ""),
+    default=GENERATED_SRC_ROOT,
+)
+GENERATED_SRC_DEFAULT = _assert_not_legacy_generated(
+    _GENERATED_OVERRIDE,
+    env_name="ABSTRACTWIKI_GENERATED_SRC",
+)
 
 
 # -----------------------------------------------------------------------------
@@ -123,10 +161,13 @@ def ensure_dirs_exist() -> None:
     Create expected directories. Call early in CLI/programmatic entrypoints.
     Kept explicit (not import-time) to reduce side effects in library imports.
     """
-    LOG_DIR.mkdir(parents=True, exist_ok=True)
-    CONTRIB_DIR.mkdir(parents=True, exist_ok=True)
+    dirs = {
+        LOG_DIR.resolve(),
+        CONTRIB_DIR.resolve(),
+        GENERATED_SRC_ROOT.resolve(),
+        GENERATED_SRC_DEFAULT.resolve(),
+        SAFE_MODE_SRC.resolve(),
+    }
 
-    GENERATED_SRC_ROOT.mkdir(parents=True, exist_ok=True)
-    GENERATED_SRC_GF.mkdir(parents=True, exist_ok=True)
-    GENERATED_SRC_DEFAULT.mkdir(parents=True, exist_ok=True)
-    SAFE_MODE_SRC.mkdir(parents=True, exist_ok=True)
+    for d in dirs:
+        d.mkdir(parents=True, exist_ok=True)

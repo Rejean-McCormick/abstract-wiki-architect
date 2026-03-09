@@ -105,7 +105,13 @@
       "gender": "f",
       "number": "sg",
       "proper": true,
-      "qid": "Q7186"
+      "qid": "Q7186",
+      "metadata": {
+        "wikidata_id": "Q7186",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "person": {
       "lemma": "personne",
@@ -114,7 +120,13 @@
       "human": true,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "personnes"
+      "plural_lemma": "personnes",
+      "metadata": {
+        "wikidata_id": "Q215627",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "man": {
       "lemma": "homme",
@@ -123,7 +135,13 @@
       "human": true,
       "gender": "m",
       "number": "sg",
-      "plural_lemma": "hommes"
+      "plural_lemma": "hommes",
+      "metadata": {
+        "wikidata_id": "Q8441",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "woman": {
       "lemma": "femme",
@@ -132,7 +150,13 @@
       "human": true,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "femmes"
+      "plural_lemma": "femmes",
+      "metadata": {
+        "wikidata_id": "Q467",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "scientist": {
       "lemma": "scientifique",
@@ -142,7 +166,13 @@
       "gender": "common",
       "number": "sg",
       "plural_lemma": "scientifiques",
-      "note": "Identical form for masculine and feminine."
+      "note": "Identical form for masculine and feminine.",
+      "metadata": {
+        "wikidata_id": "Q901",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "physicist": {
       "lemma": "physicien",
@@ -163,7 +193,13 @@
       "gender": "common",
       "number": "sg",
       "plural_lemma": "chimistes",
-      "semantic_field": "chemistry"
+      "semantic_field": "chemistry",
+      "metadata": {
+        "wikidata_id": "Q593644",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "writer": {
       "lemma": "écrivain",
@@ -183,7 +219,13 @@
       "gender": "m",
       "number": "sg",
       "feminine_lemma": "autrice",
-      "plural_lemma": "auteurs"
+      "plural_lemma": "auteurs",
+      "metadata": {
+        "wikidata_id": "Q482980",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "professor": {
       "lemma": "professeur",
@@ -193,7 +235,13 @@
       "gender": "m",
       "number": "sg",
       "feminine_lemma": "professeure",
-      "plural_lemma": "professeurs"
+      "plural_lemma": "professeurs",
+      "metadata": {
+        "wikidata_id": "Q121594",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "politician": {
       "lemma": "politique",
@@ -203,7 +251,13 @@
       "gender": "common",
       "number": "sg",
       "plural_lemma": "politiques",
-      "note": "Often 'homme politique' / 'femme politique'."
+      "note": "Often 'homme politique' / 'femme politique'.",
+      "metadata": {
+        "wikidata_id": "Q7163",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "nobel_prize": {
       "lemma": "Prix Nobel",
@@ -356,7 +410,13 @@
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "années"
+      "plural_lemma": "années",
+      "metadata": {
+        "wikidata_id": "Q577",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "city": {
       "lemma": "ville",
@@ -365,7 +425,13 @@
       "human": false,
       "gender": "f",
       "number": "sg",
-      "plural_lemma": "villes"
+      "plural_lemma": "villes",
+      "metadata": {
+        "wikidata_id": "Q515",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "country": {
       "lemma": "pays",
@@ -375,7 +441,13 @@
       "gender": "m",
       "number": "sg",
       "plural_lemma": "pays",
-      "note": "Invariant in singular/plural."
+      "note": "Invariant in singular/plural.",
+      "metadata": {
+        "wikidata_id": "Q6256",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "river_small": {
       "lemma": "rivière",
@@ -384,7 +456,13 @@
       "human": false,
       "gender": "f",
       "semantic_class": "natural_feature",
-      "plural_lemma": "rivières"
+      "plural_lemma": "rivières",
+      "metadata": {
+        "wikidata_id": "Q112340485",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "river_large": {
       "lemma": "fleuve",
@@ -393,7 +471,13 @@
       "human": false,
       "gender": "m",
       "semantic_class": "natural_feature",
-      "plural_lemma": "fleuves"
+      "plural_lemma": "fleuves",
+      "metadata": {
+        "wikidata_id": "Q573344",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "statue": {
       "lemma": "statue",
@@ -402,7 +486,13 @@
       "human": false,
       "gender": "f",
       "semantic_class": "artifact",
-      "plural_lemma": "statues"
+      "plural_lemma": "statues",
+      "metadata": {
+        "wikidata_id": "Q179700",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "programming_language": {
       "lemma": "langage de programmation",
@@ -412,7 +502,13 @@
       "gender": "m",
       "multiword": true,
       "semantic_class": "class",
-      "plural_lemma": "langages de programmation"
+      "plural_lemma": "langages de programmation",
+      "metadata": {
+        "wikidata_id": "Q9143",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "physics": {
       "lemma": "physique",
@@ -421,7 +517,13 @@
       "human": false,
       "gender": "f",
       "number": "mass",
-      "semantic_class": "field_of_study"
+      "semantic_class": "field_of_study",
+      "metadata": {
+        "wikidata_id": "Q413",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "France": {
       "lemma": "France",
@@ -430,7 +532,13 @@
       "human": false,
       "proper": true,
       "gender": "f",
-      "qid": "Q142"
+      "qid": "Q142",
+      "metadata": {
+        "wikidata_id": "Q142",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "Poland": {
       "lemma": "Pologne",
@@ -439,7 +547,13 @@
       "human": false,
       "proper": true,
       "gender": "f",
-      "qid": "Q36"
+      "qid": "Q36",
+      "metadata": {
+        "wikidata_id": "Q36",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "Paris": {
       "lemma": "Paris",
@@ -448,7 +562,13 @@
       "human": false,
       "proper": true,
       "gender": "m",
-      "qid": "Q90"
+      "qid": "Q90",
+      "metadata": {
+        "wikidata_id": "Q90",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "statistician": {
       "lemma": "statisticien",
@@ -474,7 +594,13 @@
       "gloss": "astronomer",
       "human": true,
       "gender": "common",
-      "semantic_field": "astronomy"
+      "semantic_field": "astronomy",
+      "metadata": {
+        "wikidata_id": "Q11063",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "geologist": {
       "lemma": "géologue",
@@ -482,7 +608,13 @@
       "gloss": "geologist",
       "human": true,
       "gender": "common",
-      "semantic_field": "geology"
+      "semantic_field": "geology",
+      "metadata": {
+        "wikidata_id": "Q520549",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "scientific_theory": {
       "lemma": "théorie scientifique",
@@ -491,7 +623,13 @@
       "human": false,
       "gender": "f",
       "multiword": true,
-      "semantic_field": "science_meta"
+      "semantic_field": "science_meta",
+      "metadata": {
+        "wikidata_id": "Q3239681",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "research": {
       "lemma": "recherche",
@@ -500,7 +638,13 @@
       "human": false,
       "gender": "f",
       "number": "mass",
-      "semantic_field": "science_meta"
+      "semantic_field": "science_meta",
+      "metadata": {
+        "wikidata_id": "Q42240",
+        "source": "wikidata_label_match",
+        "linked_at": "2026-03-05T19:28:37Z",
+        "match_lang": "fr"
+      }
     },
     "to_publish": {
       "lemma": "publier",

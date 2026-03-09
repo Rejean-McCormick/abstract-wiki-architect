@@ -13,6 +13,84 @@ export type ToolKind =
   | "agent"
   | "prototype";
 
+export const WORKFLOW_FILTERS = [
+  "recommended",
+  "language_integration",
+  "lexicon_work",
+  "build_matrix",
+  "qa_validation",
+  "debug_recovery",
+  "ai_assist",
+  "all",
+] as const;
+
+export type WorkflowFilter = (typeof WORKFLOW_FILTERS)[number];
+export type WorkflowTag = Exclude<WorkflowFilter, "all">;
+
+export const DEFAULT_WORKFLOW_FILTER: WorkflowFilter = "recommended";
+
+export const WORKFLOW_LABELS: Readonly<Record<WorkflowFilter, string>> = Object.freeze({
+  recommended: "Recommended",
+  language_integration: "Language Integration",
+  lexicon_work: "Lexicon Work",
+  build_matrix: "Build & Matrix",
+  qa_validation: "QA & Validation",
+  debug_recovery: "Debug & Recovery",
+  ai_assist: "AI Assist",
+  all: "All",
+});
+
+export const WORKFLOW_STEPS: Readonly<Record<WorkflowFilter, readonly string[]>> = Object.freeze({
+  recommended: [
+    "Build Index",
+    "Compile PGF",
+    "Language Health",
+    "Generate sentence",
+    "Run Judge",
+  ],
+  language_integration: [
+    "Add or update language files",
+    "Build Index",
+    "Validate lexicon",
+    "Compile PGF",
+    "Language Health",
+    "Generate sentence",
+    "Run Judge",
+  ],
+  lexicon_work: [
+    "Harvest or seed data",
+    "Fill gaps",
+    "Validate lexicon coverage",
+    "Refresh indices",
+    "Re-run health checks",
+  ],
+  build_matrix: [
+    "Refresh Everything Matrix",
+    "Compile PGF",
+    "Validate health",
+  ],
+  qa_validation: [
+    "Language Health",
+    "Generate sentence",
+    "Run Judge",
+    "Profile if needed",
+  ],
+  debug_recovery: [
+    "Run diagnostics",
+    "Use targeted scanner or test",
+    "Fix",
+    "Rebuild",
+    "Re-validate",
+  ],
+  ai_assist: [
+    "Use deterministic tools first",
+    "Invoke AI assist only for the gap",
+    "Rebuild",
+    "Re-validate",
+  ],
+  all: [],
+});
+
 // ----------------------------------------------------------------------------
 // Small helpers (fast + consistent)
 // ----------------------------------------------------------------------------
@@ -30,6 +108,8 @@ const includesAny = (s: string, needles: readonly string[]) => {
 
 const riskRank = (r: Risk): number => (r === "heavy" ? 3 : r === "moderate" ? 2 : 1);
 const maxRisk = (a: Risk, b: Risk): Risk => (riskRank(a) >= riskRank(b) ? a : b);
+
+const dedupe = <T extends string>(xs: readonly T[]): T[] => Array.from(new Set(xs));
 
 // ----------------------------------------------------------------------------
 // Backend registry helpers (one-time derived maps)
@@ -69,6 +149,148 @@ const BACKEND_BY_PATH_LOWER: ReadonlyMap<string, { hidden: boolean; risk?: Risk 
 export const isPowerUserToolId = (toolId?: string): boolean => {
   if (!toolId) return false;
   return Boolean(BACKEND_BY_ID[toolId]?.hidden);
+};
+
+// ----------------------------------------------------------------------------
+// Workflow helpers
+// ----------------------------------------------------------------------------
+const WORKFLOW_TAGS_BY_TOOL_ID: Readonly<Record<string, readonly WorkflowTag[]>> = Object.freeze({
+  build_index: ["recommended", "language_integration", "build_matrix"],
+  compile_pgf: ["recommended", "language_integration", "build_matrix"],
+  language_health: ["recommended", "language_integration", "qa_validation"],
+  run_judge: ["recommended", "language_integration", "qa_validation"],
+  lexicon_coverage: ["language_integration", "lexicon_work"],
+  harvest_lexicon: ["language_integration", "lexicon_work"],
+  gap_filler: ["language_integration", "lexicon_work"],
+  bootstrap_tier1: ["language_integration", "build_matrix", "debug_recovery"],
+  diagnostic_audit: ["debug_recovery"],
+  profiler: ["qa_validation"],
+  ai_refiner: ["ai_assist", "debug_recovery"],
+  rgl_scanner: ["build_matrix", "debug_recovery"],
+  lexicon_scanner: ["build_matrix", "debug_recovery"],
+  app_scanner: ["build_matrix", "debug_recovery"],
+  qa_scanner: ["build_matrix", "debug_recovery"],
+  refresh_lexicon_index: ["lexicon_work"],
+  migrate_lexicon_schema: ["lexicon_work"],
+  dump_lexicon_stats: ["lexicon_work"],
+  seed_lexicon_ai: ["lexicon_work", "ai_assist"],
+  build_lexicon_from_wikidata: ["lexicon_work"],
+  ambiguity_detector: ["qa_validation"],
+  batch_test_generator: ["qa_validation"],
+  generate_lexicon_regression_tests: ["qa_validation"],
+  test_api_smoke: ["qa_validation", "debug_recovery"],
+  test_gf_dynamic: ["qa_validation", "debug_recovery"],
+  test_multilingual_generation: ["qa_validation", "debug_recovery"],
+  run_smoke_tests: ["qa_validation", "debug_recovery"],
+});
+
+const workflowTagsFromPath = (path: string): WorkflowTag[] => {
+  const p = lc(path);
+  const tags: WorkflowTag[] = [];
+
+  if (includesAny(p, ["build_index"])) {
+    tags.push("recommended", "language_integration", "build_matrix");
+  }
+
+  if (includesAny(p, ["compile_pgf", "build_orchestrator"]) || p.startsWith("gf/")) {
+    tags.push("recommended", "language_integration", "build_matrix");
+  }
+
+  if (includesAny(p, ["language_health"])) {
+    tags.push("recommended", "language_integration", "qa_validation");
+  }
+
+  if (includesAny(p, ["run_judge"])) {
+    tags.push("recommended", "language_integration", "qa_validation");
+  }
+
+  if (
+    includesAny(p, [
+      "lexicon_coverage",
+      "harvest_lexicon",
+      "gap_filler",
+      "refresh_lexicon_index",
+      "migrate_lexicon_schema",
+      "dump_lexicon_stats",
+      "build_lexicon_from_wikidata",
+    ])
+  ) {
+    tags.push("lexicon_work");
+  }
+
+  if (includesAny(p, ["lexicon_coverage", "harvest_lexicon", "gap_filler", "bootstrap_tier1"])) {
+    tags.push("language_integration");
+  }
+
+  if (p.startsWith("tools/everything_matrix/")) {
+    tags.push("build_matrix", "debug_recovery");
+  }
+
+  if (
+    p.startsWith("tools/qa/") ||
+    p.startsWith("tests/") ||
+    includesAny(p, ["run_judge", "profiler", "ambiguity_detector", "batch_test_generator"])
+  ) {
+    tags.push("qa_validation");
+  }
+
+  if (
+    includesAny(p, [
+      "diagnostic_audit",
+      "cleanup_root",
+      "smoke",
+      "test_api",
+      "test_gf",
+      "test_multilingual",
+      "rgl_scanner",
+      "lexicon_scanner",
+      "app_scanner",
+      "qa_scanner",
+    ])
+  ) {
+    tags.push("debug_recovery");
+  }
+
+  if (includesAny(p, ["ai_refiner", "seed_lexicon_ai"]) || p.startsWith("ai_services/")) {
+    tags.push("ai_assist");
+  }
+
+  return dedupe(tags);
+};
+
+export const workflowTagsFor = (path: string, toolId?: string): WorkflowTag[] => {
+  const fromId = toolId ? WORKFLOW_TAGS_BY_TOOL_ID[toolId] ?? [] : [];
+  const fromPath = workflowTagsFromPath(path);
+  const out = dedupe([...fromId, ...fromPath]);
+
+  if (out.length) return out;
+
+  const p = lc(path);
+  if (p.startsWith("tools/qa/") || p.startsWith("tests/")) return ["qa_validation"];
+  if (p.startsWith("tools/everything_matrix/") || p.startsWith("gf/")) return ["build_matrix"];
+  if (includesAny(p, ["lexicon", "harvest", "wikidata", "gap_filler"])) return ["lexicon_work"];
+  if (includesAny(p, ["ai_refiner", "seed_lexicon", "ai_"]) || p.startsWith("ai_services/"))
+    return ["ai_assist"];
+
+  return [];
+};
+
+export const workflowPrimaryFor = (path: string, toolId?: string): WorkflowTag => {
+  const tags = workflowTagsFor(path, toolId);
+  if (tags.length) return tags[0];
+
+  const p = lc(path);
+  if (p.startsWith("tools/everything_matrix/") || p.startsWith("gf/")) return "build_matrix";
+  if (p.startsWith("tests/")) return "qa_validation";
+  return "recommended";
+};
+
+export const matchesWorkflowFilter = (
+  filter: WorkflowFilter,
+  workflowTags: readonly WorkflowTag[]
+): boolean => {
+  if (filter === "all") return true;
+  return workflowTags.includes(filter);
 };
 
 // ----------------------------------------------------------------------------
@@ -221,6 +443,8 @@ type Classification = {
   excludeFromUI: boolean;
   notes: string[];
   uiSteps: string[];
+  workflowPrimary: WorkflowTag;
+  workflowTags: WorkflowTag[];
 };
 
 const mk = (base: Omit<Classification, "hideByDefault"> & { hideByDefault?: boolean }): Classification => ({
@@ -230,7 +454,8 @@ const mk = (base: Omit<Classification, "hideByDefault"> & { hideByDefault?: bool
 
 export const classify = (
   inventoryRootEntrypoints: readonly string[],
-  path: string
+  path: string,
+  opts?: { toolId?: string }
 ): Classification => {
   const p = lc(path);
   const rootSet = getRootSet(inventoryRootEntrypoints);
@@ -241,6 +466,9 @@ export const classify = (
 
   const backend = BACKEND_BY_PATH_LOWER.get(p);
   const hideBecauseBackend = Boolean(backend?.hidden);
+
+  const workflowTags = workflowTagsFor(path, opts?.toolId);
+  const workflowPrimary = workflowPrimaryFor(path, opts?.toolId);
 
   const backendNote = hideBecauseBackend
     ? ["Backend-wired but hidden: visible only in Power user (debug) mode."]
@@ -258,6 +486,8 @@ export const classify = (
       excludeFromUI: true,
       notes: ["Hidden from Tools UI (non-actionable file / artifact)."],
       uiSteps: ["(Hidden)"],
+      workflowPrimary: "debug_recovery",
+      workflowTags: ["debug_recovery"],
     });
   }
 
@@ -271,12 +501,14 @@ export const classify = (
       excludeFromUI,
       notes: ["Prefer these entrypoints over ad-hoc runs when possible.", ...backendNote],
       uiSteps: ["Select the entrypoint.", "Open in Repo for parameters.", "Run only if backend wiring exists."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
   if (p.startsWith("gf/")) {
     return mk({
-      category: "Build System",
+      category: "Build & Matrix",
       group: "GF Build",
       kind: "tool",
       riskOverride: backend?.risk ?? "heavy",
@@ -289,12 +521,14 @@ export const classify = (
         ...backendNote,
       ],
       uiSteps: ["Click Run and monitor console output.", "On failure, copy logs and inspect the tool."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
   if (p.startsWith("tools/everything_matrix/")) {
     return mk({
-      category: "Build System",
+      category: "Build & Matrix",
       group: "Everything Matrix",
       kind: "tool",
       visibility,
@@ -302,12 +536,14 @@ export const classify = (
       excludeFromUI,
       notes: ["Scanners used to compute everything_matrix.json and maturity/QA signals.", ...backendNote],
       uiSteps: ["Prefer running build_index unless debugging a specific scanner."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
   if (p.startsWith("tools/qa/")) {
     return mk({
-      category: "QA & Testing",
+      category: "QA & Validation",
       group: "QA Tools",
       kind: "tool",
       visibility,
@@ -315,11 +551,13 @@ export const classify = (
       excludeFromUI,
       notes: ["QA utilities (runners/generators/reports). Batch generators can be long-running.", ...backendNote],
       uiSteps: ["Click Run and monitor output.", "If it generates files, check git status and review diffs."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
   if (p.startsWith("tools/")) {
-    if (/(diagnostic|cleanup|health|doctor)/.test(p)) {
+    if (/(diagnostic|cleanup|health|doctor|profiler)/.test(p)) {
       return mk({
         category: "Diagnostics & Maintenance",
         group: "Health & Cleanup",
@@ -329,10 +567,12 @@ export const classify = (
         excludeFromUI,
         notes: ["Safe to run frequently; use first when debugging.", ...backendNote],
         uiSteps: ["Click Run and review warnings/errors.", "If files changed, verify via git diff."],
+        workflowPrimary,
+        workflowTags,
       });
     }
 
-    if (/(lexicon|wikidata|harvest)/.test(p)) {
+    if (/(lexicon|wikidata|harvest|gap_filler)/.test(p)) {
       return mk({
         category: "Lexicon & Data",
         group: "Mining & Harvesting",
@@ -345,12 +585,14 @@ export const classify = (
           ...backendNote,
         ],
         uiSteps: ["Click Run and monitor output.", "Inspect generated artifacts and indices afterward."],
+        workflowPrimary,
+        workflowTags,
       });
     }
 
     if (/(ai_refiner)/.test(p)) {
       return mk({
-        category: "AI Tools & Services",
+        category: "AI Assist",
         group: "Agents",
         kind: "tool",
         riskOverride: backend?.risk ?? "heavy",
@@ -359,12 +601,14 @@ export const classify = (
         excludeFromUI,
         notes: ["AI tools may require credentials and can be costly; run on a branch.", ...backendNote],
         uiSteps: ["Confirm credentials/config.", "Click Run and monitor output carefully."],
+        workflowPrimary,
+        workflowTags,
       });
     }
 
     if (/(bootstrap_tier1)/.test(p)) {
       return mk({
-        category: "Build System",
+        category: "Build & Matrix",
         group: "Tier Bootstrapping",
         kind: "tool",
         riskOverride: backend?.risk ?? "moderate",
@@ -373,6 +617,8 @@ export const classify = (
         excludeFromUI,
         notes: ["Bootstraps Tier 1 scaffolding; may create or update code/artifacts.", ...backendNote],
         uiSteps: ["Click Run.", "Review console output and git diffs afterward."],
+        workflowPrimary,
+        workflowTags,
       });
     }
 
@@ -385,6 +631,8 @@ export const classify = (
       excludeFromUI,
       notes: ["General-purpose tool script.", ...backendNote],
       uiSteps: ["Click Run and review console output."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
@@ -399,6 +647,8 @@ export const classify = (
       excludeFromUI,
       notes: ["Legacy DB-era scripts (reference only unless DB pipeline exists)."],
       uiSteps: ["Open in Repo to confirm environment assumptions.", "Run only in the intended legacy environment."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
@@ -413,12 +663,14 @@ export const classify = (
         excludeFromUI,
         notes: ["Local demos. Useful for manual validation."],
         uiSteps: ["Prefer running via CLI for interactive output."],
+        workflowPrimary,
+        workflowTags,
       });
     }
 
     if (p.includes("test_")) {
       return mk({
-        category: "QA & Testing",
+        category: "QA & Validation",
         group: "Diagnostic Scripts",
         kind: "script",
         statusOverride: status,
@@ -427,6 +679,8 @@ export const classify = (
         excludeFromUI,
         notes: ["Ad-hoc diagnostic scripts; prefer pytest for repeatable regression."],
         uiSteps: ["Open in Repo to confirm args; run from CLI when needed."],
+        workflowPrimary,
+        workflowTags,
       });
     }
 
@@ -439,6 +693,8 @@ export const classify = (
       excludeFromUI,
       notes: ["Ad-hoc scripts; prefer tools/ or manage.py for standardized ops."],
       uiSteps: ["Open in Repo to confirm args; run from CLI when needed."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
@@ -448,7 +704,7 @@ export const classify = (
       const hideBecausePowerUser = p.includes("seed_lexicon_ai") || p.includes("seed_lexicon");
 
       return mk({
-        category: hideBecausePowerUser ? "AI Tools & Services" : "Lexicon & Data",
+        category: hideBecausePowerUser ? "AI Assist" : "Lexicon & Data",
         group: hideBecausePowerUser ? "AI Utilities" : "Schema & Index",
         kind: "utility",
         visibility: hideBecausePowerUser ? "debug" : "default",
@@ -461,12 +717,14 @@ export const classify = (
         uiSteps: hideBecausePowerUser
           ? ["Confirm credentials/config. Run and monitor output carefully."]
           : ["Run carefully; if it writes files, check git status and review diffs."],
+        workflowPrimary,
+        workflowTags,
       });
     }
 
     if (/(seed_lexicon|ai)/.test(p)) {
       return mk({
-        category: "AI Tools & Services",
+        category: "AI Assist",
         group: "AI Utilities",
         kind: "utility",
         visibility,
@@ -475,6 +733,8 @@ export const classify = (
         riskOverride: backend?.risk,
         notes: ["AI utilities may require credentials and can be costly; run on a branch.", ...backendNote],
         uiSteps: ["Confirm credentials/config. Run and monitor output carefully."],
+        workflowPrimary,
+        workflowTags,
       });
     }
 
@@ -487,12 +747,14 @@ export const classify = (
       excludeFromUI,
       notes: ["Mostly library modules; not all are meant to be executed directly."],
       uiSteps: ["Use Open in Repo to confirm if it is executable."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
   if (p.startsWith("ai_services/")) {
     return mk({
-      category: "AI Tools & Services",
+      category: "AI Assist",
       group: "Agents",
       kind: "agent",
       visibility,
@@ -501,6 +763,8 @@ export const classify = (
       riskOverride: backend?.risk,
       notes: ["AI services/agents may require credentials/config and can be costly. Run on a branch.", ...backendNote],
       uiSteps: ["Confirm credentials/config. Prefer invoking via backend service layer."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
@@ -514,6 +778,8 @@ export const classify = (
       excludeFromUI,
       notes: ["NLG experiments and supporting modules."],
       uiSteps: ["Prefer CLI for interactive workflows."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
@@ -528,6 +794,8 @@ export const classify = (
       excludeFromUI,
       notes: ["Experimental code. Not guaranteed stable."],
       uiSteps: ["Prefer CLI and isolate changes."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
@@ -541,7 +809,7 @@ export const classify = (
     else if (p.includes("integration")) group = "Pytest • Integration";
 
     return mk({
-      category: "QA & Testing",
+      category: "QA & Validation",
       group,
       kind: "test",
       visibility,
@@ -549,6 +817,8 @@ export const classify = (
       excludeFromUI,
       notes: ["Prefer running via pytest for consistent, repeatable results."],
       uiSteps: ["Copy the pytest command from CLI equivalents and run locally/CI."],
+      workflowPrimary,
+      workflowTags,
     });
   }
 
@@ -561,5 +831,7 @@ export const classify = (
     excludeFromUI,
     notes: ["Unclassified item.", ...backendNote],
     uiSteps: ["Open in Repo for details."],
+    workflowPrimary,
+    workflowTags,
   });
 };

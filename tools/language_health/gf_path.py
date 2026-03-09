@@ -2,15 +2,20 @@
 """
 GF path helpers for the language health tooling.
 
+Straight-only policy:
+  - Canonical generated bridge grammars live in: repo_root/generated/src
+  - Hand-maintained grammars live in:        repo_root/gf
+  - Legacy path repo_root/gf/generated/src is intentionally NOT used
+
 Centralizes:
   - repo root detection (robust across CWDs / CI)
-  - compile source dir detection (generated/src vs gf/generated/src vs gf/)
+  - compile source dir detection (generated/src vs gf)
   - Prelude.gf discovery (to make gf compilation succeed reliably)
   - building the GF -path string (os.pathsep-separated)
 
 Key behaviors:
-  - Prefer the *best* compile source dir by sampling/counting language-like Wiki???.gf modules.
-  - Always include both repo_root/generated/src and repo_root/gf/generated/src on the GF path if present.
+  - Prefer the best compile source dir by sampling/counting language-like Wiki???.gf modules.
+  - Never probe or include repo_root/gf/generated/src.
   - IMPORTANT: GF does not search recursively. For the RGL, we must include leaf dirs under gf-rgl/src
     (e.g. gf-rgl/src/abstract) so imports like Cat.gf resolve correctly.
 """
@@ -25,11 +30,10 @@ from typing import Iterable, List, Optional, Sequence, Tuple, Union
 # Environment overrides (useful in CI / when invoked from an installed package)
 _REPO_ROOT_ENV_VARS: Tuple[str, ...] = ("LANGUAGE_HEALTH_REPO_ROOT", "REPO_ROOT")
 
-# Canonical compile source candidates (repo-relative)
+# Straight-only compile source candidates (repo-relative)
 _DEFAULT_COMPILE_SRC_REL: Tuple[str, ...] = (
-    "generated/src",      # canonical "repo_root/generated/src"
-    "gf/generated/src",   # legacy / build-copied location
-    "gf",                 # hand-maintained grammars live here too
+    "generated/src",  # canonical generated bridge grammars
+    "gf",             # hand-maintained grammars
 )
 
 # Roots to search for Prelude.gf if fast paths don’t hit
@@ -86,6 +90,28 @@ def _rel(repo_root: Path, p: Path) -> str:
         return str(p)
 
 
+def _safe_resolve(p: Path) -> Optional[Path]:
+    """
+    Resolve a path defensively.
+
+    Returns None for broken/inaccessible paths instead of raising.
+    """
+    try:
+        return p.expanduser().resolve()
+    except Exception:
+        return None
+
+
+def _is_existing_dir(p: Path) -> bool:
+    """
+    Robust directory check that treats broken/inaccessible paths as absent.
+    """
+    try:
+        return p.exists() and p.is_dir()
+    except Exception:
+        return False
+
+
 def is_language_wiki_file(path: Path) -> bool:
     """
     True for per-language Wiki modules like WikiEng.gf, WikiFre.gf, WikiAra.gf.
@@ -106,6 +132,8 @@ def _sample_language_module_count(dir_path: Path, cap: int = 200) -> int:
     """
     n = 0
     try:
+        if not _is_existing_dir(dir_path):
+            return 0
         for p in dir_path.glob("Wiki*.gf"):
             if is_language_wiki_file(p):
                 n += 1
@@ -133,9 +161,9 @@ def _list_immediate_subdirs(parent: Path, max_count: int) -> List[Path]:
     """
     out: List[Path] = []
     try:
-        if not parent.exists() or not parent.is_dir():
+        if not _is_existing_dir(parent):
             return out
-        subs = [p for p in parent.iterdir() if p.is_dir()]
+        subs = [p for p in parent.iterdir() if _is_existing_dir(p)]
         subs.sort(key=lambda p: p.name)
         for p in subs:
             out.append(p)
@@ -153,7 +181,7 @@ def _rgl_leaf_dirs(repo_root: Path) -> List[Path]:
     """
     repo_root = repo_root.resolve()
     rgl_root = (repo_root / "gf-rgl" / "src").resolve()
-    if not rgl_root.exists() or not rgl_root.is_dir():
+    if not _is_existing_dir(rgl_root):
         return []
 
     max_dirs = _safe_int_env(_RGL_MAX_DIRS_ENV, _RGL_MAX_DIRS_DEFAULT)
@@ -168,7 +196,7 @@ def _rgl_leaf_dirs(repo_root: Path) -> List[Path]:
     # Priority dirs first
     for name in _RGL_PRIORITY_DIRS:
         d = (rgl_root / name).resolve()
-        if d.exists() and d.is_dir():
+        if _is_existing_dir(d):
             out.append(d)
             seen.add(name)
 
@@ -176,7 +204,6 @@ def _rgl_leaf_dirs(repo_root: Path) -> List[Path]:
     for d in _list_immediate_subdirs(rgl_root, max_count=max_dirs):
         if d.name in seen:
             continue
-        # Skip hidden/system dirs
         if d.name.startswith("."):
             continue
         out.append(d)
@@ -209,7 +236,7 @@ def detect_repo_root(start: Optional[Path] = None) -> Path:
         if not v:
             continue
         p = Path(v).expanduser()
-        if p.exists() and p.is_dir():
+        if _is_existing_dir(p):
             return p.resolve()
 
     p0 = (start or Path(__file__)).expanduser()
@@ -217,7 +244,7 @@ def detect_repo_root(start: Optional[Path] = None) -> Path:
 
     for parent in [p, *p.parents]:
         try:
-            if (parent / "tools").is_dir() and (parent / "data").is_dir():
+            if _is_existing_dir(parent / "tools") and _is_existing_dir(parent / "data"):
                 return parent
             if (parent / ".git").exists():
                 return parent
@@ -246,21 +273,26 @@ def detect_compile_src_dir(
       (compile_src_dir, label_relative_to_repo_root)
 
     Selection rule:
-      - Among candidates that exist, pick the one with the *most* language-like Wiki???.gf files.
+      - Among candidates that exist, pick the one with the most language-like Wiki???.gf files.
       - Break ties by the canonical preference order:
-          generated/src > gf/generated/src > gf
+          generated/src > gf
       - If nothing exists, fallback to repo_root/gf.
     """
     repo_root = repo_root.resolve()
 
-    # Build candidate list in the canonical order (for tie-breaks).
     cands: List[Path] = []
     if candidates is None:
-        cands = [(repo_root / rel).resolve() for rel in _DEFAULT_COMPILE_SRC_REL]
+        for rel in _DEFAULT_COMPILE_SRC_REL:
+            p = _safe_resolve(repo_root / rel)
+            if p is not None:
+                cands.append(p)
     else:
         for c in candidates:
             try:
-                cands.append((repo_root / c).resolve() if isinstance(c, str) else c.resolve())
+                raw = (repo_root / c) if isinstance(c, str) else c
+                p = _safe_resolve(raw)
+                if p is not None:
+                    cands.append(p)
             except Exception:
                 continue
 
@@ -268,7 +300,7 @@ def detect_compile_src_dir(
     best_score = -1
 
     for p in cands:
-        if not p.exists() or not p.is_dir():
+        if not _is_existing_dir(p):
             continue
         score = _sample_language_module_count(p, cap=200)
         if score > best_score:
@@ -300,7 +332,6 @@ def _find_prelude_dirs_cached(repo_root_str: str, max_hits: int = 6) -> Tuple[st
     found: List[Path] = []
     seen: set[Path] = set()
 
-    # Fast-path common locations in this repo layout.
     common = [
         repo_root / "gf-rgl" / "src" / "prelude" / "Prelude.gf",
         repo_root / "gf-rgl" / "src" / "Prelude.gf",
@@ -319,9 +350,8 @@ def _find_prelude_dirs_cached(repo_root_str: str, max_hits: int = 6) -> Tuple[st
     if len(found) >= max_hits:
         return tuple(str(p) for p in found[:max_hits])
 
-    # Bounded rglob over a few roots; keep max_hits low.
     for root in _default_prelude_search_roots(repo_root):
-        if not root.exists():
+        if not _is_existing_dir(root):
             continue
         try:
             for prelude in root.rglob("Prelude.gf"):
@@ -353,13 +383,12 @@ def find_prelude_dirs(repo_root: Path, max_hits: int = 6) -> List[Path]:
     seen: set[Path] = set()
 
     def add_dir(d: Path) -> None:
-        try:
-            rp = d.expanduser().resolve()
-        except Exception:
+        rp = _safe_resolve(d)
+        if rp is None:
             return
         if rp in seen:
             return
-        if not rp.exists() or not rp.is_dir():
+        if not _is_existing_dir(rp):
             return
         seen.add(rp)
         out.append(rp)
@@ -389,7 +418,6 @@ def build_gf_path(
       - discovered Prelude.gf parent dirs
       - gf-rgl/src and gf-rgl/src/* leaf dirs (priority order then sorted; bounded)
       - repo_root/generated/src (if present)
-      - repo_root/gf/generated/src (if present)
       - repo_root/gf
       - compile_src_dir
       - repo_root
@@ -397,12 +425,14 @@ def build_gf_path(
       - env GF_PATH_EXTRA (os.pathsep-separated) appended last
 
     Only existing directories are included; duplicates removed preserving order.
+
+    Straight-only note:
+      - repo_root/gf/generated/src is intentionally excluded.
     """
     repo_root = repo_root.resolve()
     compile_src_dir = compile_src_dir.resolve()
 
     gen_src_root = (repo_root / "generated" / "src").resolve()
-    gen_src_under_gf = (repo_root / "gf" / "generated" / "src").resolve()
     gf_dir = (repo_root / "gf").resolve()
 
     parts: List[Path] = []
@@ -413,8 +443,8 @@ def build_gf_path(
     # RGL paths (must include leaf dirs like gf-rgl/src/abstract)
     parts.extend(_rgl_leaf_dirs(repo_root))
 
-    # Include both generated locations if they exist.
-    parts.extend([gen_src_root, gen_src_under_gf])
+    # Straight-only generated location
+    parts.append(gen_src_root)
 
     # Always include gf + compile src + repo root
     parts.extend([gf_dir, compile_src_dir, repo_root])
@@ -427,13 +457,12 @@ def build_gf_path(
     out: List[str] = []
     seen: set[Path] = set()
     for p in parts:
-        try:
-            rp = p.expanduser().resolve()
-        except Exception:
+        rp = _safe_resolve(p)
+        if rp is None:
             continue
         if rp in seen:
             continue
-        if not rp.exists() or not rp.is_dir():
+        if not _is_existing_dir(rp):
             continue
         seen.add(rp)
         out.append(str(rp))
