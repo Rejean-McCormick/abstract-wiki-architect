@@ -51,6 +51,18 @@ function fmtScore(value: unknown, digits = 1): string {
   return n.toFixed(digits);
 }
 
+function numOrNull(value: unknown): number | null {
+  const n = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function legacyDetail(value: unknown, isLegacy01: boolean): number | undefined {
+  if (!isLegacy01) return undefined;
+  const n = numOrNull(value);
+  if (n === null) return undefined;
+  return n;
+}
+
 export default function LanguageRow({ entry }: LanguageRowProps) {
   const { meta, zones, verdict } = entry;
 
@@ -94,6 +106,12 @@ export default function LanguageRow({ entry }: LanguageRowProps) {
 
   const cLegacy01 = zoneLooksLegacy01(C, ["PROF", "ASST", "ROUT"], refABMax);
   const dLegacy01 = zoneLooksLegacy01(D, ["BIN", "TEST"], refABMax);
+
+  const cProf = normScore(C.PROF, { scale01to10: cLegacy01 });
+  const cAsst = normScore(C.ASST, { scale01to10: cLegacy01 });
+  const cRout = normScore(C.ROUT, { scale01to10: cLegacy01 });
+  const dBin = normScore(D.BIN, { scale01to10: dLegacy01 });
+  const dTest = normScore(D.TEST, { scale01to10: dLegacy01 });
 
   return (
     <tr className={`hover:bg-slate-50 transition-colors ${rowOpacityClass}`}>
@@ -159,46 +177,51 @@ export default function LanguageRow({ entry }: LanguageRowProps) {
       </td>
 
       {/* ZONE A */}
-      <ScoreCell score={normScore(A.CAT)} detail={A.CAT} detailLabel="CAT" />
-      <ScoreCell score={normScore(A.NOUN)} detail={A.NOUN} detailLabel="NOUN" />
-      <ScoreCell score={normScore(A.PARA)} detail={A.PARA} detailLabel="PARA" />
-      <ScoreCell score={normScore(A.GRAM)} detail={A.GRAM} detailLabel="GRAM" />
-      <ScoreCell score={normScore(A.SYN)} detail={A.SYN} detailLabel="SYN" isZoneEnd />
+      <ScoreCell score={normScore(A.CAT)} scale="0-10" />
+      <ScoreCell score={normScore(A.NOUN)} scale="0-10" />
+      <ScoreCell score={normScore(A.PARA)} scale="0-10" />
+      <ScoreCell score={normScore(A.GRAM)} scale="0-10" />
+      <ScoreCell score={normScore(A.SYN)} scale="0-10" isZoneEnd />
 
       {/* ZONE B */}
-      <ScoreCell score={normScore(B.SEED)} detail={B.SEED} detailLabel="SEED" />
-      <ScoreCell score={normScore(B.CONC)} detail={B.CONC} detailLabel="CONC" />
-      <ScoreCell score={normScore(B.WIDE)} detail={B.WIDE} detailLabel="WIDE" />
-      <ScoreCell score={normScore(B.SEM)} detail={B.SEM} detailLabel="SEM" isZoneEnd />
+      <ScoreCell score={normScore(B.SEED)} scale="0-10" />
+      <ScoreCell score={normScore(B.CONC)} scale="0-10" />
+      <ScoreCell score={normScore(B.WIDE)} scale="0-10" />
+      <ScoreCell score={normScore(B.SEM)} scale="0-10" isZoneEnd />
 
       {/* ZONE C (canonical 0..10; legacy 0..1 scaled if detected) */}
       <ScoreCell
-        score={normScore(C.PROF, { scale01to10: cLegacy01 })}
-        detail={C.PROF}
-        detailLabel={cLegacy01 ? "PROF (legacy 0..1)" : "PROF"}
+        score={cProf}
+        scale="0-10"
+        detail={legacyDetail(C.PROF, cLegacy01)}
+        detailLabel={cLegacy01 ? "raw 0..1" : undefined}
       />
       <ScoreCell
-        score={normScore(C.ASST, { scale01to10: cLegacy01 })}
-        detail={C.ASST}
-        detailLabel={cLegacy01 ? "ASST (legacy 0..1)" : "ASST"}
+        score={cAsst}
+        scale="0-10"
+        detail={legacyDetail(C.ASST, cLegacy01)}
+        detailLabel={cLegacy01 ? "raw 0..1" : undefined}
       />
       <ScoreCell
-        score={normScore(C.ROUT, { scale01to10: cLegacy01 })}
-        detail={C.ROUT}
-        detailLabel={cLegacy01 ? "ROUT (legacy 0..1)" : "ROUT"}
+        score={cRout}
+        scale="0-10"
+        detail={legacyDetail(C.ROUT, cLegacy01)}
+        detailLabel={cLegacy01 ? "raw 0..1" : undefined}
         isZoneEnd
       />
 
       {/* ZONE D (canonical 0..10; legacy 0..1 scaled if detected) */}
       <ScoreCell
-        score={normScore(D.BIN, { scale01to10: dLegacy01 })}
-        detail={D.BIN}
-        detailLabel={dLegacy01 ? "BIN (legacy 0..1)" : "BIN"}
+        score={dBin}
+        scale="0-10"
+        detail={legacyDetail(D.BIN, dLegacy01)}
+        detailLabel={dLegacy01 ? "raw 0..1" : undefined}
       />
       <ScoreCell
-        score={normScore(D.TEST, { scale01to10: dLegacy01 })}
-        detail={D.TEST}
-        detailLabel={dLegacy01 ? "TEST (legacy 0..1)" : "TEST"}
+        score={dTest}
+        scale="0-10"
+        detail={legacyDetail(D.TEST, dLegacy01)}
+        detailLabel={dLegacy01 ? "raw 0..1" : undefined}
       />
     </tr>
   );

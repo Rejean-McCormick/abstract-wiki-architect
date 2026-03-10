@@ -1,6 +1,6 @@
 // architect_frontend/src/app/tools/types.ts
 
-import type { Risk, ToolParameter } from "./backendRegistry";
+import type { BackendToolId, Risk, ToolParameter } from "./backendRegistry";
 import type { Status, ToolKind, Visibility } from "./classify";
 
 // ----------------------------------------------------------------------------
@@ -27,6 +27,51 @@ export type ToolVisibility = Visibility;
 export type ConsoleStatus = "success" | "warning" | "error" | null;
 
 // ----------------------------------------------------------------------------
+// Workflow filters / recommended workflows
+// ----------------------------------------------------------------------------
+
+export type WorkflowFilterId =
+  | "recommended"
+  | "language_integration"
+  | "lexicon_work"
+  | "build_matrix"
+  | "qa_validation"
+  | "debug_recovery"
+  | "ai_assist"
+  | "all";
+
+export type WorkflowFilterOption = {
+  id: WorkflowFilterId;
+  label: string;
+  description?: string;
+};
+
+export type WorkflowStep = {
+  id: string;
+  title: string;
+  description?: string;
+  toolIds?: string[];
+  argsHint?: string;
+  optional?: boolean;
+};
+
+export type WorkflowDefinition = {
+  id: WorkflowFilterId;
+  label: string;
+  description: string;
+  toolIds: string[];
+  powerUserToolIds?: string[];
+  steps: WorkflowStep[];
+  emptyStateTitle?: string;
+  emptyStateBody?: string;
+};
+
+export type WorkflowSelection = {
+  id: WorkflowFilterId;
+  powerUser: boolean;
+};
+
+// ----------------------------------------------------------------------------
 // Inventory (frontend-local)
 // ----------------------------------------------------------------------------
 
@@ -36,10 +81,12 @@ export type Tool = {
   description: string;
   category: string;
   defaultArgs?: string;
+  workflowIds?: WorkflowFilterId[];
+  recommended?: boolean;
 };
 
 // ----------------------------------------------------------------------------
-// Canonical UI ToolItem (local definition; avoids hard dependency on ./lib/*)
+// Canonical UI ToolItem
 // ----------------------------------------------------------------------------
 
 export type ToolItem = {
@@ -53,12 +100,12 @@ export type ToolItem = {
   path: string;
 
   /** Short human description. */
-  desc: string;
+  desc?: string;
 
   /** CLI hint / example invocation. */
-  cli: string;
+  cli: readonly string[];
 
-  /** Grouping metadata for sidebar panels. */
+  /** Grouping metadata for panels and filters. */
   category: string;
   group: string;
 
@@ -73,16 +120,20 @@ export type ToolItem = {
   hiddenInNormalMode?: boolean;
 
   /** Optional richer help */
-  notes?: string[];
-  uiSteps?: string[];
+  notes: string[];
+  uiSteps: string[];
 
   /** Dynamic parameter definitions for UI checkboxes/inputs */
   parameterDocs?: ToolParameter[];
 
   /** Wiring helpers */
   commandPreview?: string;
-  toolIdGuess?: string;
-  wiredToolId?: string | null;
+  toolIdGuess: string;
+  wiredToolId?: BackendToolId | null;
+
+  /** Workflow metadata */
+  workflowIds?: WorkflowFilterId[];
+  recommended?: boolean;
 };
 
 // ----------------------------------------------------------------------------

@@ -2,15 +2,16 @@
 "use client";
 
 import React from "react";
-import { 
-  Search, 
-  Filter, 
-  Activity, 
-  RefreshCw, 
-  Server, 
-  Database, 
-  Cpu, 
-  Settings2
+import {
+  Search,
+  Filter,
+  Activity,
+  RefreshCw,
+  Server,
+  Database,
+  Cpu,
+  Settings2,
+  GitBranch,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,34 +20,43 @@ import type { HealthReady } from "../types";
 
 // --- Sub-components ---
 
-function StatusIndicator({ 
-  label, 
-  value, 
-  icon: Icon 
-}: { 
-  label: string; 
-  value?: string; 
-  icon: React.ElementType 
+function StatusIndicator({
+  label,
+  value,
+  icon: Icon,
+}: {
+  label: string;
+  value?: string;
+  icon: React.ElementType;
 }) {
   const v = (value || "").toLowerCase();
   const ok = ["ok", "ready", "up", "healthy"].includes(v);
   const bad = ["down", "unhealthy", "error", "fail"].includes(v);
-  
-  let colorClass = "bg-slate-200 text-slate-500";
+
+  let colorClass = "bg-slate-200 text-slate-500 border-slate-200";
   if (ok) colorClass = "bg-emerald-100 text-emerald-700 border-emerald-200";
   else if (bad) colorClass = "bg-red-100 text-red-700 border-red-200";
   else if (v) colorClass = "bg-amber-100 text-amber-700 border-amber-200";
 
   return (
-    <div 
+    <div
       className={`flex items-center gap-1.5 px-2 py-1 rounded-md border text-[10px] font-medium uppercase tracking-wide transition-colors ${colorClass}`}
       title={`${label}: ${value ?? "unknown"}`}
     >
       <Icon className="w-3 h-3" />
       <span className="hidden sm:inline">{label}</span>
-      {v && <span className="font-bold border-l pl-1.5 ml-0.5 border-current/20">{v}</span>}
+      {v && (
+        <span className="font-bold border-l pl-1.5 ml-0.5 border-current/20">
+          {v}
+        </span>
+      )}
     </div>
   );
+}
+
+interface WorkflowOption {
+  value: string;
+  label: string;
 }
 
 // --- Main Component ---
@@ -57,6 +67,11 @@ interface ToolsToolbarProps {
 
   query: string;
   setQuery: (v: string) => void;
+
+  workflowFilter: string;
+  setWorkflowFilter: (v: string) => void;
+  workflowOptions: WorkflowOption[];
+  workflowSummary?: string;
 
   powerUser: boolean;
   setPowerUser: (v: boolean) => void;
@@ -86,6 +101,10 @@ export function ToolsToolbar(props: ToolsToolbarProps) {
     repoUrl,
     query,
     setQuery,
+    workflowFilter,
+    setWorkflowFilter,
+    workflowOptions,
+    workflowSummary,
     powerUser,
     setPowerUser,
     wiredOnly,
@@ -104,13 +123,19 @@ export function ToolsToolbar(props: ToolsToolbarProps) {
     refreshHealth,
   } = props;
 
+  let apiHost = apiBase;
+  try {
+    apiHost = new URL(apiBase).host;
+  } catch {
+    apiHost = apiBase;
+  }
+
   return (
     <Card className="border-slate-200 shadow-sm bg-white">
       <CardContent className="p-3 space-y-3">
-        
-        {/* Top Row: Search & Mode Toggle */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
+        {/* Top Row: Search / Workflow / Mode */}
+        <div className="flex flex-col lg:flex-row gap-3">
+          <div className="relative flex-1 min-w-0">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
             <input
               value={query}
@@ -120,20 +145,39 @@ export function ToolsToolbar(props: ToolsToolbarProps) {
             />
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <label 
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
+            <div className="relative min-w-[220px]">
+              <Filter className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400 pointer-events-none" />
+              <select
+                value={workflowFilter}
+                onChange={(e) => setWorkflowFilter(e.target.value)}
+                className="w-full h-9 appearance-none rounded-md border border-slate-200 bg-white pl-9 pr-8 text-sm text-slate-700 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-all"
+                aria-label="Workflow filter"
+                title="Filter tools by workflow or task set"
+              >
+                {workflowOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <label
               className={`
-                flex items-center gap-2 text-xs font-medium px-3 py-2 rounded-md border cursor-pointer select-none transition-colors
-                ${powerUser 
-                  ? "bg-blue-50 border-blue-200 text-blue-700" 
-                  : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                flex items-center gap-2 text-xs font-medium px-3 py-2 rounded-md border cursor-pointer select-none transition-colors whitespace-nowrap
+                ${
+                  powerUser
+                    ? "bg-blue-50 border-blue-200 text-blue-700"
+                    : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
                 }
               `}
+              title="Reveal hidden, debug, and internal tools within the selected workflow"
             >
-              <input 
-                type="checkbox" 
-                checked={powerUser} 
-                onChange={(e) => setPowerUser(e.target.checked)} 
+              <input
+                type="checkbox"
+                checked={powerUser}
+                onChange={(e) => setPowerUser(e.target.checked)}
                 className="accent-blue-600"
               />
               <Settings2 className="w-3.5 h-3.5" />
@@ -142,27 +186,46 @@ export function ToolsToolbar(props: ToolsToolbarProps) {
           </div>
         </div>
 
-        {/* Middle Row: Advanced Filters (Conditional) */}
+        {/* Workflow Summary */}
+        {workflowSummary && (
+          <div className="flex items-start gap-2 rounded-md border border-blue-100 bg-blue-50/60 px-3 py-2">
+            <GitBranch className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+            <div className="min-w-0">
+              <div className="text-[10px] uppercase tracking-wide font-bold text-blue-700">
+                Recommended workflow
+              </div>
+              <div className="text-xs text-slate-700 leading-relaxed">
+                {workflowSummary}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Advanced Filters */}
         {powerUser && (
           <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-50/50 rounded-md border border-slate-100 animate-in fade-in slide-in-from-top-1 duration-200">
             <div className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1 pr-2 border-r border-slate-200 mr-1">
               <Filter className="w-3 h-3" /> Filters
             </div>
-            
+
             {[
               { label: "Wired Only", checked: wiredOnly, set: setWiredOnly },
               { label: "Show Legacy", checked: showLegacy, set: setShowLegacy },
               { label: "Show Tests", checked: showTests, set: setShowTests },
-              { label: "Show Internal", checked: showInternal, set: setShowInternal },
+              {
+                label: "Show Internal",
+                checked: showInternal,
+                set: setShowInternal,
+              },
             ].map((f) => (
-              <label 
-                key={f.label} 
+              <label
+                key={f.label}
                 className="flex items-center gap-1.5 text-xs text-slate-600 bg-white px-2 py-1 rounded border border-slate-200 hover:border-slate-300 cursor-pointer select-none"
               >
-                <input 
-                  type="checkbox" 
-                  checked={f.checked} 
-                  onChange={(e) => f.set(e.target.checked)} 
+                <input
+                  type="checkbox"
+                  checked={f.checked}
+                  onChange={(e) => f.set(e.target.checked)}
                   className="rounded border-slate-300 text-blue-600 focus:ring-blue-600/20"
                 />
                 {f.label}
@@ -173,28 +236,37 @@ export function ToolsToolbar(props: ToolsToolbarProps) {
 
         {/* Bottom Row: Stats & Health */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 pt-1">
-          
           {/* Stats */}
           <div className="text-xs text-slate-500 flex flex-wrap items-center gap-x-3 gap-y-1">
             <span title={apiBase}>
-              API: <span className="font-mono text-slate-700">{new URL(apiBase).host}</span>
+              API: <span className="font-mono text-slate-700">{apiHost}</span>
             </span>
+
             <span className="text-slate-300">|</span>
+
             <span>
-              Visible: <span className="font-mono font-medium text-slate-700">{visibleCount}</span>
+              Visible:{" "}
+              <span className="font-mono font-medium text-slate-700">
+                {visibleCount}
+              </span>
               <span className="text-slate-400 mx-0.5">/</span>
               {totalCount}
             </span>
+
             <span className="text-slate-300">|</span>
+
             <span title="Tools explicitly wired to backend">
-              Wired: <span className="font-mono font-medium text-slate-700">{wiredCount}</span>
+              Wired:{" "}
+              <span className="font-mono font-medium text-slate-700">
+                {wiredCount}
+              </span>
             </span>
-            
+
             {!repoUrl && (
               <>
                 <span className="text-slate-300">|</span>
                 <span className="text-amber-600 flex items-center gap-1">
-                   Repo URL missing
+                  Repo URL missing
                 </span>
               </>
             )}
@@ -208,19 +280,22 @@ export function ToolsToolbar(props: ToolsToolbarProps) {
               <StatusIndicator label="Eng" value={health?.engine} icon={Cpu} />
             </div>
 
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-7 w-7 text-slate-400 hover:text-blue-600" 
-              onClick={refreshHealth} 
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-slate-400 hover:text-blue-600"
+              onClick={refreshHealth}
               disabled={healthLoading}
               title="Refresh System Health"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${healthLoading ? "animate-spin text-blue-600" : ""}`} />
+              <RefreshCw
+                className={`w-3.5 h-3.5 ${
+                  healthLoading ? "animate-spin text-blue-600" : ""
+                }`}
+              />
             </Button>
           </div>
         </div>
-
       </CardContent>
     </Card>
   );

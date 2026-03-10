@@ -1,9 +1,23 @@
 from __future__ import annotations
 
-from typing import Dict, Sequence
+from typing import Dict, Sequence, Tuple
 
 from .config import DEFAULT_TIMEOUT_SEC, PYTHON_EXE
 from .models import ToolSpec
+
+
+def _wf(*names: str) -> Tuple[str, ...]:
+    seen = set()
+    out = []
+    for name in names:
+        v = (name or "").strip()
+        if not v or v in seen:
+            continue
+        seen.add(v)
+        out.append(v)
+    if "all" not in seen:
+        out.append("all")
+    return tuple(out)
 
 
 def py_script(
@@ -18,6 +32,13 @@ def py_script(
     requires_ai_enabled: bool = False,
     flags_with_value: Sequence[str] = (),
     flags_with_multi_value: Sequence[str] = (),
+    category: str = "qa",
+    hidden: bool = False,
+    internal: bool = False,
+    heavy: bool = False,
+    legacy: bool = False,
+    test_tool: bool = False,
+    workflow_tags: Sequence[str] = (),
 ) -> ToolSpec:
     return ToolSpec(
         tool_id=tool_id,
@@ -31,6 +52,13 @@ def py_script(
         requires_ai_enabled=requires_ai_enabled,
         flags_with_value=tuple(flags_with_value),
         flags_with_multi_value=tuple(flags_with_multi_value),
+        category=category,
+        hidden=hidden,
+        internal=internal,
+        heavy=heavy,
+        legacy=legacy,
+        test_tool=test_tool,
+        workflow_tags=tuple(workflow_tags),
     )
 
 
@@ -43,6 +71,12 @@ def pytest_file(
     allow_args: bool = False,
     allowed_flags: Sequence[str] = (),
     flags_with_value: Sequence[str] = (),
+    category: str = "qa",
+    hidden: bool = True,
+    internal: bool = False,
+    heavy: bool = False,
+    legacy: bool = False,
+    workflow_tags: Sequence[str] = (),
 ) -> ToolSpec:
     return ToolSpec(
         tool_id=tool_id,
@@ -56,12 +90,18 @@ def pytest_file(
         requires_ai_enabled=False,
         flags_with_value=tuple(flags_with_value),
         flags_with_multi_value=(),
+        category=category,
+        hidden=hidden,
+        internal=internal,
+        heavy=heavy,
+        legacy=legacy,
+        test_tool=True,
+        workflow_tags=tuple(workflow_tags),
     )
 
 
 def qa_registry() -> Dict[str, ToolSpec]:
     return {
-        # --- QA & TESTING ---
         "ambiguity_detector": py_script(
             "ambiguity_detector",
             "tools/qa/ambiguity_detector.py",
@@ -72,24 +112,35 @@ def qa_registry() -> Dict[str, ToolSpec]:
             allow_positionals=False,
             requires_ai_enabled=True,
             flags_with_value=("--lang", "--sentence", "--topic", "--json-out"),
+            category="qa",
+            hidden=True,
+            heavy=True,
+            workflow_tags=_wf("qa_validation", "debug_recovery", "ai_assist"),
         ),
         "run_smoke_tests": pytest_file(
             "run_smoke_tests",
             "tests/test_lexicon_smoke.py",
-            "Lexicon schema/syntax smoke tests.",
+            "Lexicon schema and syntax smoke tests.",
             timeout_sec=900,
             allow_args=True,
             allowed_flags=("-q", "-vv", "-k", "-m", "--maxfail", "--disable-warnings"),
             flags_with_value=("-k", "-m", "--maxfail"),
+            category="qa",
+            hidden=True,
+            workflow_tags=_wf("qa_validation", "debug_recovery"),
         ),
         "run_judge": pytest_file(
             "run_judge",
             "tests/integration/test_quality.py",
-            "Executes Golden Standard regression checks (AI Judge integration).",
+            "Executes golden-standard regression checks (AI Judge integration).",
             timeout_sec=1800,
             allow_args=True,
             allowed_flags=("-q", "-vv", "-k", "-m", "--maxfail", "--disable-warnings"),
             flags_with_value=("-k", "-m", "--maxfail"),
+            category="qa",
+            hidden=False,
+            heavy=True,
+            workflow_tags=_wf("recommended", "language_integration", "qa_validation"),
         ),
         "eval_bios": py_script(
             "eval_bios",
@@ -101,6 +152,9 @@ def qa_registry() -> Dict[str, ToolSpec]:
             allow_positionals=False,
             flags_with_value=("--limit", "--out"),
             flags_with_multi_value=("--langs",),
+            category="qa",
+            hidden=True,
+            workflow_tags=_wf("qa_validation"),
         ),
         "lexicon_coverage": py_script(
             "lexicon_coverage",
@@ -129,13 +183,14 @@ def qa_registry() -> Dict[str, ToolSpec]:
                 "--out",
             ),
             flags_with_multi_value=(),
+            category="data",
+            hidden=False,
+            workflow_tags=_wf("recommended", "language_integration", "lexicon_work"),
         ),
-
-        # UPDATED: universal_test_runner flags now match tools/qa/universal_test_runner.py
         "universal_test_runner": py_script(
             "universal_test_runner",
             "tools/qa/universal_test_runner.py",
-            "Advanced CSV test runner (supports more complex constructions).",
+            "Advanced CSV test runner for more complex constructions.",
             timeout_sec=1800,
             allow_args=True,
             allowed_flags=(
@@ -163,6 +218,10 @@ def qa_registry() -> Dict[str, ToolSpec]:
                 "--pgf",
             ),
             flags_with_multi_value=(),
+            category="qa",
+            hidden=True,
+            heavy=True,
+            workflow_tags=_wf("qa_validation", "debug_recovery"),
         ),
         "test_runner": py_script(
             "test_runner",
@@ -195,8 +254,12 @@ def qa_registry() -> Dict[str, ToolSpec]:
                 "--pgf",
             ),
             flags_with_multi_value=(),
+            category="qa",
+            hidden=True,
+            heavy=True,
+            legacy=True,
+            workflow_tags=_wf("qa_validation", "debug_recovery"),
         ),
-
         "batch_test_generator": py_script(
             "batch_test_generator",
             "tools/qa/batch_test_generator.py",
@@ -207,35 +270,44 @@ def qa_registry() -> Dict[str, ToolSpec]:
             allow_positionals=False,
             flags_with_value=("--out", "--limit", "--seed"),
             flags_with_multi_value=("--langs",),
+            category="qa",
+            hidden=True,
+            heavy=True,
+            workflow_tags=_wf("qa_validation"),
         ),
         "test_suite_generator": py_script(
             "test_suite_generator",
             "tools/qa/test_suite_generator.py",
-            "Generates empty CSV templates for manual/AI fill-in.",
+            "Generates empty CSV templates for manual or AI fill-in.",
             timeout_sec=900,
             allow_args=True,
             allowed_flags=("--langs", "--out", "--verbose"),
             allow_positionals=False,
             flags_with_value=("--out",),
             flags_with_multi_value=("--langs",),
+            category="qa",
+            hidden=True,
+            workflow_tags=_wf("qa_validation"),
         ),
         "generate_lexicon_regression_tests": py_script(
             "generate_lexicon_regression_tests",
             "tools/qa/generate_lexicon_regression_tests.py",
-            "Builds regression tests from lexicon for CI/QA.",
+            "Builds regression tests from lexicon for CI and QA.",
             timeout_sec=1800,
             allow_args=True,
             allowed_flags=("--langs", "--out", "--limit", "--verbose", "--lexicon-dir"),
             allow_positionals=False,
             flags_with_value=("--out", "--limit", "--lexicon-dir"),
             flags_with_multi_value=("--langs",),
+            category="qa",
+            hidden=True,
+            heavy=True,
+            workflow_tags=_wf("lexicon_work", "qa_validation"),
         ),
-
-        # --- AI SERVICES (gated) ---
         "seed_lexicon": py_script(
             "seed_lexicon",
             "utils/seed_lexicon_ai.py",
-            "Uses LLM to generate core vocabulary for new languages.",
+            "Uses AI to generate core vocabulary for new languages.",
             timeout_sec=3600,
             allow_args=True,
             allowed_flags=("--langs", "--limit", "--dry-run", "--verbose"),
@@ -243,6 +315,10 @@ def qa_registry() -> Dict[str, ToolSpec]:
             requires_ai_enabled=True,
             flags_with_value=("--limit",),
             flags_with_multi_value=("--langs",),
+            category="ai",
+            hidden=True,
+            heavy=True,
+            workflow_tags=_wf("lexicon_work", "ai_assist"),
         ),
         "ai_refiner": py_script(
             "ai_refiner",
@@ -254,9 +330,11 @@ def qa_registry() -> Dict[str, ToolSpec]:
             allow_positionals=True,
             requires_ai_enabled=True,
             flags_with_multi_value=("--langs",),
+            category="ai",
+            hidden=True,
+            heavy=True,
+            workflow_tags=_wf("language_integration", "debug_recovery", "ai_assist"),
         ),
-
-        # --- TESTS (Inventory) ---
         "test_api_smoke": pytest_file(
             "test_api_smoke",
             "tests/test_api_smoke.py",
@@ -265,15 +343,21 @@ def qa_registry() -> Dict[str, ToolSpec]:
             allow_args=True,
             allowed_flags=("-q", "-vv", "-k", "-m", "--maxfail", "--disable-warnings"),
             flags_with_value=("-k", "-m", "--maxfail"),
+            category="qa",
+            hidden=True,
+            workflow_tags=_wf("qa_validation", "debug_recovery"),
         ),
         "test_gf_dynamic": pytest_file(
             "test_gf_dynamic",
             "tests/test_gf_dynamic.py",
-            "Validates dynamic loading/linearization of GF grammars.",
+            "Validates dynamic loading and linearization of GF grammars.",
             timeout_sec=900,
             allow_args=True,
             allowed_flags=("-q", "-vv", "-k", "-m", "--maxfail", "--disable-warnings"),
             flags_with_value=("-k", "-m", "--maxfail"),
+            category="qa",
+            hidden=True,
+            workflow_tags=_wf("qa_validation", "debug_recovery"),
         ),
         "test_multilingual_generation": pytest_file(
             "test_multilingual_generation",
@@ -283,5 +367,8 @@ def qa_registry() -> Dict[str, ToolSpec]:
             allow_args=True,
             allowed_flags=("-q", "-vv", "-k", "-m", "--maxfail", "--disable-warnings"),
             flags_with_value=("-k", "-m", "--maxfail"),
+            category="qa",
+            hidden=True,
+            workflow_tags=_wf("qa_validation", "debug_recovery"),
         ),
     }

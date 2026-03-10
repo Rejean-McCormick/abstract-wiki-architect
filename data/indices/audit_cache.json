@@ -2,6 +2,11 @@
   "gf/WikiEng.gf": {
     "status": "VALID",
     "hash": "6e6a7236e78edf879478bd01f73ac0caa98806a00b5d34b8fda0281ec84aac32",
-    "last_check": 1772567630.0970292
+    "last_check": 1772888893.3721406
+  },
+  "gf/WikiFre.gf": {
+    "status": "VALID",
+    "hash": "b257203563f5dc6534db65d37a53c07ba10573de12148dca5bc4f8297bb673f0",
+    "last_check": 1772888893.3721423
   }
 }

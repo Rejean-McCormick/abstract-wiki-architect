@@ -1,0 +1,2501 @@
+{
+  "generated_at": "2026-03-07T17:53:53Z",
+  "lexicon_dir": "C:\\MyCode\\SemantiK_Architect\\Semantik_architect\\data\\lexicon",
+  "targets": {
+    "core": 150,
+    "conc": 500,
+    "bio_min": 50
+  },
+  "languages": [
+    {
+      "lang": "af",
+      "dir_rel": "data/lexicon/af",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/af/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 63
+          },
+          "total_items": 63,
+          "qid_items": 5,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 63
+      },
+      "total_lexemes": 63,
+      "total_qids": 5,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 4.2,
+        "CONC": 0.0,
+        "BIO": 1.0
+      }
+    },
+    {
+      "lang": "ar",
+      "dir_rel": "data/lexicon/ar",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ar/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 51
+          },
+          "total_items": 51,
+          "qid_items": 5,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ar/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 9
+          },
+          "total_items": 9,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ar/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ar/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 51,
+        "geography": 9,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 60,
+      "total_qids": 5,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 3.4,
+        "CONC": 0.18,
+        "BIO": 1.0
+      }
+    },
+    {
+      "lang": "bg",
+      "dir_rel": "data/lexicon/bg",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/bg/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 55
+          },
+          "total_items": 55,
+          "qid_items": 5,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 55
+      },
+      "total_lexemes": 55,
+      "total_qids": 5,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 3.67,
+        "CONC": 0.0,
+        "BIO": 1.0
+      }
+    },
+    {
+      "lang": "bn",
+      "dir_rel": "data/lexicon/bn",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/bn/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 49
+          },
+          "total_items": 49,
+          "qid_items": 6,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/bn/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 4
+          },
+          "total_items": 4,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/bn/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/bn/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 49,
+        "geography": 4,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 53,
+      "total_qids": 6,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 3.27,
+        "CONC": 0.08,
+        "BIO": 1.2
+      }
+    },
+    {
+      "lang": "ca",
+      "dir_rel": "data/lexicon/ca",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ca/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 64
+          },
+          "total_items": 64,
+          "qid_items": 5,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 64
+      },
+      "total_lexemes": 64,
+      "total_qids": 5,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 4.27,
+        "CONC": 0.0,
+        "BIO": 1.0
+      }
+    },
+    {
+      "lang": "cs",
+      "dir_rel": "data/lexicon/cs",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/cs/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 58
+          },
+          "total_items": 58,
+          "qid_items": 8,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/cs/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 10
+          },
+          "total_items": 10,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/cs/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/cs/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 1
+          },
+          "total_items": 1,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 58,
+        "geography": 10,
+        "people": 0,
+        "science": 1
+      },
+      "total_lexemes": 69,
+      "total_qids": 8,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 3.87,
+        "CONC": 0.22,
+        "BIO": 1.6
+      }
+    },
+    {
+      "lang": "cy",
+      "dir_rel": "data/lexicon/cy",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/cy/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 56
+          },
+          "total_items": 56,
+          "qid_items": 5,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/cy/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 8
+          },
+          "total_items": 8,
+          "qid_items": 8,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/cy/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 13
+          },
+          "total_items": 13,
+          "qid_items": 13,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/cy/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 56,
+        "geography": 8,
+        "people": 13,
+        "science": 0
+      },
+      "total_lexemes": 77,
+      "total_qids": 26,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 3.73,
+        "CONC": 0.42,
+        "BIO": 5.2
+      }
+    },
+    {
+      "lang": "da",
+      "dir_rel": "data/lexicon/da",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/da/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 1
+          },
+          "total_items": 1,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/da/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/da/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 13
+          },
+          "total_items": 13,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/da/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 8
+          },
+          "total_items": 8,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 1,
+        "geography": 0,
+        "people": 13,
+        "science": 8
+      },
+      "total_lexemes": 22,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 0.07,
+        "CONC": 0.42,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "de",
+      "dir_rel": "data/lexicon/de",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/de/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 65
+          },
+          "total_items": 65,
+          "qid_items": 6,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/de/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 7
+          },
+          "total_items": 7,
+          "qid_items": 7,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/de/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 13
+          },
+          "total_items": 13,
+          "qid_items": 12,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/de/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 65,
+        "geography": 7,
+        "people": 13,
+        "science": 0
+      },
+      "total_lexemes": 85,
+      "total_qids": 25,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 4.33,
+        "CONC": 0.4,
+        "BIO": 5.0
+      }
+    },
+    {
+      "lang": "el",
+      "dir_rel": "data/lexicon/el",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/el/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 63
+          },
+          "total_items": 63,
+          "qid_items": 6,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 63
+      },
+      "total_lexemes": 63,
+      "total_qids": 6,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 4.2,
+        "CONC": 0.0,
+        "BIO": 1.2
+      }
+    },
+    {
+      "lang": "en",
+      "dir_rel": "data/lexicon/en",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/en/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 67,
+            "lemmas": 67
+          },
+          "total_items": 134,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/en/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 67,
+            "lemmas": 67
+          },
+          "total_items": 134,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/en/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {},
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/en/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0,
+            "lemmas": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/en/wide.json",
+          "shard": "wide",
+          "kind": "lexeme",
+          "counts": {},
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 134,
+        "geography": 134,
+        "people": 0,
+        "science": 0,
+        "wide": 0
+      },
+      "total_lexemes": 134,
+      "total_qids": 0,
+      "collisions": 67,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 8.93,
+        "CONC": 2.68,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "es",
+      "dir_rel": "data/lexicon/es",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/es/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 60
+          },
+          "total_items": 60,
+          "qid_items": 5,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/es/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 23
+          },
+          "total_items": 23,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/es/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 6
+          },
+          "total_items": 6,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/es/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 9
+          },
+          "total_items": 9,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 60,
+        "geography": 23,
+        "people": 6,
+        "science": 9
+      },
+      "total_lexemes": 98,
+      "total_qids": 5,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 4.0,
+        "CONC": 0.76,
+        "BIO": 1.0
+      }
+    },
+    {
+      "lang": "et",
+      "dir_rel": "data/lexicon/et",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/et/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 26
+          },
+          "total_items": 26,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 26
+      },
+      "total_lexemes": 26,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.73,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "fa",
+      "dir_rel": "data/lexicon/fa",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/fa/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 36
+          },
+          "total_items": 36,
+          "qid_items": 4,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fa/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 5
+          },
+          "total_items": 5,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fa/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fa/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 36,
+        "geography": 5,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 41,
+      "total_qids": 4,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.4,
+        "CONC": 0.1,
+        "BIO": 0.8
+      }
+    },
+    {
+      "lang": "fi",
+      "dir_rel": "data/lexicon/fi",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/fi/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 1
+          },
+          "total_items": 1,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fi/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fi/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 13
+          },
+          "total_items": 13,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fi/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 8
+          },
+          "total_items": 8,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 1,
+        "geography": 0,
+        "people": 13,
+        "science": 8
+      },
+      "total_lexemes": 22,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 0.07,
+        "CONC": 0.42,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "fr",
+      "dir_rel": "data/lexicon/fr",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/fr/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 55
+          },
+          "total_items": 55,
+          "qid_items": 4,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fr/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 9
+          },
+          "total_items": 9,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fr/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 8
+          },
+          "total_items": 8,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fr/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 1
+          },
+          "total_items": 1,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/fr/wide.json",
+          "shard": "wide",
+          "kind": "lexeme",
+          "counts": {},
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 55,
+        "geography": 9,
+        "people": 8,
+        "science": 1,
+        "wide": 0
+      },
+      "total_lexemes": 73,
+      "total_qids": 4,
+      "collisions": 2,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 3.67,
+        "CONC": 0.36,
+        "BIO": 0.8
+      }
+    },
+    {
+      "lang": "he",
+      "dir_rel": "data/lexicon/he",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/he/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 21
+          },
+          "total_items": 21,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/he/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 10
+          },
+          "total_items": 10,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/he/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/he/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 21,
+        "geography": 10,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 31,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.4,
+        "CONC": 0.2,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "hi",
+      "dir_rel": "data/lexicon/hi",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/hi/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 36
+          },
+          "total_items": 36,
+          "qid_items": 3,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/hi/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 4
+          },
+          "total_items": 4,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/hi/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/hi/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 36,
+        "geography": 4,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 40,
+      "total_qids": 3,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.4,
+        "CONC": 0.08,
+        "BIO": 0.6
+      }
+    },
+    {
+      "lang": "hu",
+      "dir_rel": "data/lexicon/hu",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/hu/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/hu/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/hu/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/hu/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 0,
+        "geography": 0,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 0,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 0.0,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "id",
+      "dir_rel": "data/lexicon/id",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/id/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 28
+          },
+          "total_items": 28,
+          "qid_items": 3,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/id/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 7
+          },
+          "total_items": 7,
+          "qid_items": 4,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/id/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/id/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 28,
+        "geography": 7,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 35,
+      "total_qids": 7,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.87,
+        "CONC": 0.14,
+        "BIO": 1.4
+      }
+    },
+    {
+      "lang": "it",
+      "dir_rel": "data/lexicon/it",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/it/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 52
+          },
+          "total_items": 52,
+          "qid_items": 3,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/it/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 6
+          },
+          "total_items": 6,
+          "qid_items": 6,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/it/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 12
+          },
+          "total_items": 12,
+          "qid_items": 12,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/it/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 52,
+        "geography": 6,
+        "people": 12,
+        "science": 0
+      },
+      "total_lexemes": 70,
+      "total_qids": 21,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 3.47,
+        "CONC": 0.36,
+        "BIO": 4.2
+      }
+    },
+    {
+      "lang": "iu",
+      "dir_rel": "data/lexicon/iu",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/iu/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/iu/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/iu/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/iu/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 0,
+        "geography": 0,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 0,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 0.0,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "ja",
+      "dir_rel": "data/lexicon/ja",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ja/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 60
+          },
+          "total_items": 60,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ja/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ja/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ja/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 3
+          },
+          "total_items": 3,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 60,
+        "geography": 0,
+        "people": 0,
+        "science": 3
+      },
+      "total_lexemes": 63,
+      "total_qids": 0,
+      "collisions": 2,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 4.0,
+        "CONC": 0.06,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "ko",
+      "dir_rel": "data/lexicon/ko",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ko/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 1
+          },
+          "total_items": 1,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ko/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ko/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 13
+          },
+          "total_items": 13,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ko/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 8
+          },
+          "total_items": 8,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 1,
+        "geography": 0,
+        "people": 13,
+        "science": 8
+      },
+      "total_lexemes": 22,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 0.07,
+        "CONC": 0.42,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "la",
+      "dir_rel": "data/lexicon/la",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/la/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 26
+          },
+          "total_items": 26,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 26
+      },
+      "total_lexemes": 26,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.73,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "lv",
+      "dir_rel": "data/lexicon/lv",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/lv/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 24
+          },
+          "total_items": 24,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 24
+      },
+      "total_lexemes": 24,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.6,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "ml",
+      "dir_rel": "data/lexicon/ml",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ml/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ml/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ml/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ml/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 0,
+        "geography": 0,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 0,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 0.0,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "mn",
+      "dir_rel": "data/lexicon/mn",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/mn/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 24
+          },
+          "total_items": 24,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 24
+      },
+      "total_lexemes": 24,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.6,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "mt",
+      "dir_rel": "data/lexicon/mt",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/mt/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 25
+          },
+          "total_items": 25,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 25
+      },
+      "total_lexemes": 25,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.67,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "nl",
+      "dir_rel": "data/lexicon/nl",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/nl/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 36
+          },
+          "total_items": 36,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/nl/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 8
+          },
+          "total_items": 8,
+          "qid_items": 8,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/nl/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 13
+          },
+          "total_items": 13,
+          "qid_items": 13,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/nl/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 36,
+        "geography": 8,
+        "people": 13,
+        "science": 0
+      },
+      "total_lexemes": 57,
+      "total_qids": 21,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.4,
+        "CONC": 0.42,
+        "BIO": 4.2
+      }
+    },
+    {
+      "lang": "no",
+      "dir_rel": "data/lexicon/no",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/no/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 30
+          },
+          "total_items": 30,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/no/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/no/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/no/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 30,
+        "geography": 0,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 30,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.0,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "pl",
+      "dir_rel": "data/lexicon/pl",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/pl/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 28
+          },
+          "total_items": 28,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/pl/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 6
+          },
+          "total_items": 6,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/pl/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/pl/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 1
+          },
+          "total_items": 1,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 28,
+        "geography": 6,
+        "people": 0,
+        "science": 1
+      },
+      "total_lexemes": 35,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.87,
+        "CONC": 0.14,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "pt",
+      "dir_rel": "data/lexicon/pt",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/pt/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 39
+          },
+          "total_items": 39,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/pt/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 6
+          },
+          "total_items": 6,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/pt/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/pt/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 39,
+        "geography": 6,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 45,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.6,
+        "CONC": 0.12,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "ro",
+      "dir_rel": "data/lexicon/ro",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ro/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 30
+          },
+          "total_items": 30,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ro/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 4
+          },
+          "total_items": 4,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ro/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 7
+          },
+          "total_items": 7,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ro/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 30,
+        "geography": 4,
+        "people": 7,
+        "science": 0
+      },
+      "total_lexemes": 41,
+      "total_qids": 0,
+      "collisions": 5,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.0,
+        "CONC": 0.22,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "ru",
+      "dir_rel": "data/lexicon/ru",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ru/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 37
+          },
+          "total_items": 37,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ru/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 8
+          },
+          "total_items": 8,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ru/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ru/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 37,
+        "geography": 8,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 45,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.47,
+        "CONC": 0.16,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "sv",
+      "dir_rel": "data/lexicon/sv",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/sv/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 30
+          },
+          "total_items": 30,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/sv/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 9
+          },
+          "total_items": 9,
+          "qid_items": 9,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/sv/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 11
+          },
+          "total_items": 11,
+          "qid_items": 11,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/sv/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 30,
+        "geography": 9,
+        "people": 11,
+        "science": 0
+      },
+      "total_lexemes": 50,
+      "total_qids": 20,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.0,
+        "CONC": 0.4,
+        "BIO": 4.0
+      }
+    },
+    {
+      "lang": "sw",
+      "dir_rel": "data/lexicon/sw",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/sw/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 26
+          },
+          "total_items": 26,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/sw/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 4
+          },
+          "total_items": 4,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/sw/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {},
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/sw/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 26,
+        "geography": 4,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 30,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.73,
+        "CONC": 0.08,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "ta",
+      "dir_rel": "data/lexicon/ta",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ta/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 14
+          },
+          "total_items": 14,
+          "qid_items": 1,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ta/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 3
+          },
+          "total_items": 3,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ta/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/ta/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 14,
+        "geography": 3,
+        "people": 0,
+        "science": 0
+      },
+      "total_lexemes": 17,
+      "total_qids": 1,
+      "collisions": 0,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 0.93,
+        "CONC": 0.06,
+        "BIO": 0.2
+      }
+    },
+    {
+      "lang": "th",
+      "dir_rel": "data/lexicon/th",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/th/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 31
+          },
+          "total_items": 31,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 31
+      },
+      "total_lexemes": 31,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.07,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "tr",
+      "dir_rel": "data/lexicon/tr",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/tr/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 27
+          },
+          "total_items": 27,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/tr/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 5
+          },
+          "total_items": 5,
+          "qid_items": 5,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/tr/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 11
+          },
+          "total_items": 11,
+          "qid_items": 11,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/tr/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 27,
+        "geography": 5,
+        "people": 11,
+        "science": 0
+      },
+      "total_lexemes": 43,
+      "total_qids": 16,
+      "collisions": 1,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.8,
+        "CONC": 0.32,
+        "BIO": 3.2
+      }
+    },
+    {
+      "lang": "ur",
+      "dir_rel": "data/lexicon/ur",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/ur/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 27
+          },
+          "total_items": 27,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 27
+      },
+      "total_lexemes": 27,
+      "total_qids": 0,
+      "collisions": 0,
+      "missing_shards": [
+        "people",
+        "science",
+        "geography"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 1.8,
+        "CONC": 0.0,
+        "BIO": 0.0
+      }
+    },
+    {
+      "lang": "zh",
+      "dir_rel": "data/lexicon/zh",
+      "shard_files": [
+        {
+          "rel_path": "data/lexicon/zh/core.json",
+          "shard": "core",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 30
+          },
+          "total_items": 30,
+          "qid_items": 0,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/zh/geography.json",
+          "shard": "geography",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 7
+          },
+          "total_items": 7,
+          "qid_items": 7,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/zh/people.json",
+          "shard": "people",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 6
+          },
+          "total_items": 6,
+          "qid_items": 6,
+          "issues": []
+        },
+        {
+          "rel_path": "data/lexicon/zh/science.json",
+          "shard": "science",
+          "kind": "lexeme",
+          "counts": {
+            "entries": 0
+          },
+          "total_items": 0,
+          "qid_items": 0,
+          "issues": []
+        }
+      ],
+      "shard_totals": {
+        "core": 30,
+        "geography": 7,
+        "people": 6,
+        "science": 0
+      },
+      "total_lexemes": 43,
+      "total_qids": 13,
+      "collisions": 2,
+      "missing_shards": [],
+      "errors": 0,
+      "warnings": 0,
+      "scores": {
+        "CORE": 2.0,
+        "CONC": 0.26,
+        "BIO": 2.6
+      }
+    }
+  ],
+  "totals": {
+    "languages": 42,
+    "sum_lexemes": 1859,
+    "sum_qids": 206,
+    "sum_collisions": 79,
+    "sum_errors": 0,
+    "sum_warnings": 0,
+    "missing_core": []
+  }
+}

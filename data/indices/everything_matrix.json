@@ -1,14 +1,14 @@
 {
-  "timestamp": 1773149875.6768568,
-  "timestamp_iso": "2026-03-10T13:37:55Z",
+  "timestamp": 1772906878.46416,
+  "timestamp_iso": "2026-03-07T18:07:58Z",
   "scoring_version": "2.4",
   "stats": {
     "total_languages": 68,
     "production_ready": 0,
-    "high_road": 30,
-    "safe_mode": 26,
+    "high_road": 31,
+    "safe_mode": 25,
     "skipped": 12,
-    "runnable": 34
+    "runnable": 35
   },
   "languages": {
     "af": {
@@ -667,8 +667,8 @@
           "SYN": 10.0
         },
         "B_LEX": {
-          "SEED": 0.0,
-          "CONC": 0.7,
+          "SEED": 7.8,
+          "CONC": 6.0,
           "WIDE": 10.0,
           "SEM": 5.0
         },
@@ -692,13 +692,13 @@
         },
         "zone_averages": {
           "A_RGL": 10.0,
-          "B_LEX": 3.92,
+          "B_LEX": 7.2,
           "C_APP": 2.33,
           "D_QA": 0.0
         },
-        "maturity_score": 5.7,
-        "build_strategy": "SAFE_MODE",
-        "runnable": false
+        "maturity_score": 6.9,
+        "build_strategy": "HIGH_ROAD",
+        "runnable": true
       }
     },
     "es": {
@@ -1044,8 +1044,8 @@
         "B_LEX": {
           "SEED": 5.2,
           "CONC": 1.8,
-          "WIDE": 0.0,
-          "SEM": 1.0
+          "WIDE": 10.0,
+          "SEM": 5.0
         },
         "C_APP": {
           "PROF": 6.0,
@@ -1067,11 +1067,11 @@
         },
         "zone_averages": {
           "A_RGL": 10.0,
-          "B_LEX": 2.0,
+          "B_LEX": 5.5,
           "C_APP": 2.33,
           "D_QA": 0.0
         },
-        "maturity_score": 5.0,
+        "maturity_score": 6.3,
         "build_strategy": "HIGH_ROAD",
         "runnable": true
       }

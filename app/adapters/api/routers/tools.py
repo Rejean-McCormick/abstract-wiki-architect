@@ -40,6 +40,104 @@ router = APIRouter(dependencies=[Depends(verify_api_key)])
 
 
 # -----------------------------------------------------------------------------
+# WORKFLOW TAXONOMY (backend source of truth for registry consumers)
+# -----------------------------------------------------------------------------
+WORKFLOW_FILTERS = (
+    "recommended",
+    "language_integration",
+    "lexicon_work",
+    "build_matrix",
+    "qa_validation",
+    "debug_recovery",
+    "ai_assist",
+    "all",
+)
+WORKFLOW_FILTER_SET = set(WORKFLOW_FILTERS)
+DEFAULT_WORKFLOW = "recommended"
+
+_DEFAULT_WORKFLOW_STEPS: Dict[str, List[str]] = {
+    "recommended": [
+        "Build Index",
+        "Compile PGF",
+        "Language Health",
+        "Generate sentence",
+        "Run Judge",
+    ],
+    "language_integration": [
+        "Add or update language files",
+        "Build Index",
+        "Validate lexicon",
+        "Compile PGF",
+        "Language Health",
+        "Generate sentence",
+        "Run Judge",
+    ],
+    "lexicon_work": [
+        "Harvest or seed data",
+        "Fill gaps",
+        "Validate lexicon coverage",
+        "Refresh indices",
+        "Re-run health checks",
+    ],
+    "build_matrix": [
+        "Refresh Everything Matrix",
+        "Compile PGF",
+        "Validate health",
+    ],
+    "qa_validation": [
+        "Language Health",
+        "Generate sentence",
+        "Run Judge",
+        "Profile if needed",
+    ],
+    "debug_recovery": [
+        "Run diagnostics",
+        "Use targeted scanner or test",
+        "Fix",
+        "Rebuild",
+        "Re-validate",
+    ],
+    "ai_assist": [
+        "Use deterministic tools first",
+        "Invoke AI assist only for the gap",
+        "Rebuild",
+        "Re-validate",
+    ],
+    "all": [],
+}
+
+_TOOL_ID_WORKFLOWS: Dict[str, Tuple[str, ...]] = {
+    "build_index": ("recommended", "language_integration", "build_matrix"),
+    "compile_pgf": ("recommended", "language_integration", "build_matrix"),
+    "language_health": ("recommended", "language_integration", "qa_validation"),
+    "run_judge": ("recommended", "language_integration", "qa_validation"),
+    "lexicon_coverage": ("language_integration", "lexicon_work"),
+    "harvest_lexicon": ("language_integration", "lexicon_work"),
+    "gap_filler": ("language_integration", "lexicon_work"),
+    "bootstrap_tier1": ("language_integration", "build_matrix", "debug_recovery"),
+    "diagnostic_audit": ("debug_recovery",),
+    "profiler": ("qa_validation",),
+    "ai_refiner": ("ai_assist", "debug_recovery"),
+    "rgl_scanner": ("build_matrix", "debug_recovery"),
+    "lexicon_scanner": ("build_matrix", "debug_recovery"),
+    "app_scanner": ("build_matrix", "debug_recovery"),
+    "qa_scanner": ("build_matrix", "debug_recovery"),
+    "refresh_lexicon_index": ("lexicon_work",),
+    "migrate_lexicon_schema": ("lexicon_work",),
+    "dump_lexicon_stats": ("lexicon_work",),
+    "seed_lexicon_ai": ("lexicon_work", "ai_assist"),
+    "build_lexicon_from_wikidata": ("lexicon_work",),
+    "ambiguity_detector": ("qa_validation",),
+    "batch_test_generator": ("qa_validation",),
+    "generate_lexicon_regression_tests": ("qa_validation",),
+    "test_api_smoke": ("qa_validation", "debug_recovery"),
+    "test_gf_dynamic": ("qa_validation", "debug_recovery"),
+    "test_multilingual_generation": ("qa_validation", "debug_recovery"),
+    "run_smoke_tests": ("qa_validation", "debug_recovery"),
+}
+
+
+# -----------------------------------------------------------------------------
 # REDACTION (avoid leaking secrets via events/response/command strings)
 # -----------------------------------------------------------------------------
 _SENSITIVE_FLAG_EXACT = {
@@ -85,8 +183,6 @@ def redact_argv(args: Sequence[str]) -> List[str]:
         t = str(tok)
 
         if expecting_value_for_sensitive:
-            # Only redact non-flag values; if user omitted the value and next token is a flag,
-            # don't redact the flag.
             if t.startswith("-"):
                 out.append(t)
             else:
@@ -158,10 +254,210 @@ def model_dump(m) -> Dict[str, Any]:
     return m.dict()
 
 
+def _model_field_names(model_cls: Any) -> set[str]:
+    fields = getattr(model_cls, "model_fields", None)
+    if fields is not None:
+        return set(fields.keys())
+    fields = getattr(model_cls, "__fields__", None)
+    if fields is not None:
+        return set(fields.keys())
+    return set()
+
+
+_TOOLMETA_FIELDS = _model_field_names(ToolMeta)
+_TOOLSUMMARY_FIELDS = _model_field_names(ToolSummary)
+
+
+def _coerce_str_list(value: Any) -> List[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        s = value.strip()
+        return [s] if s else []
+    if isinstance(value, (list, tuple, set)):
+        out: List[str] = []
+        for x in value:
+            if x is None:
+                continue
+            s = str(x).strip()
+            if s:
+                out.append(s)
+        return out
+    s = str(value).strip()
+    return [s] if s else []
+
+
+def _dedupe_strs(values: Sequence[str]) -> List[str]:
+    seen = set()
+    out: List[str] = []
+    for v in values:
+        if v not in seen:
+            seen.add(v)
+            out.append(v)
+    return out
+
+
+def _workflow_steps_for(workflow: str) -> List[str]:
+    return list(_DEFAULT_WORKFLOW_STEPS.get(workflow, []))
+
+
+def _workflow_tags_from_path(path: str) -> List[str]:
+    p = path.lower()
+    tags: List[str] = []
+
+    if "build_index" in p:
+        tags.extend(["recommended", "language_integration", "build_matrix"])
+
+    if "compile_pgf" in p or "build_orchestrator" in p or p.startswith("gf/"):
+        tags.extend(["recommended", "language_integration", "build_matrix"])
+
+    if "language_health" in p:
+        tags.extend(["recommended", "language_integration", "qa_validation"])
+
+    if "run_judge" in p:
+        tags.extend(["recommended", "language_integration", "qa_validation"])
+
+    if any(k in p for k in ("lexicon_coverage", "harvest_lexicon", "gap_filler", "refresh_lexicon_index",
+                            "migrate_lexicon_schema", "dump_lexicon_stats", "build_lexicon_from_wikidata")):
+        tags.append("lexicon_work")
+
+    if any(k in p for k in ("lexicon_coverage", "harvest_lexicon", "gap_filler", "bootstrap_tier1")):
+        tags.append("language_integration")
+
+    if p.startswith("tools/everything_matrix/"):
+        tags.extend(["build_matrix", "debug_recovery"])
+
+    if p.startswith("tools/qa/") or p.startswith("tests/") or any(
+        k in p for k in ("run_judge", "profiler", "ambiguity_detector", "batch_test_generator")
+    ):
+        tags.append("qa_validation")
+
+    if any(
+        k in p
+        for k in (
+            "diagnostic_audit",
+            "cleanup_root",
+            "smoke",
+            "test_api",
+            "test_gf",
+            "test_multilingual",
+            "rgl_scanner",
+            "lexicon_scanner",
+            "app_scanner",
+            "qa_scanner",
+        )
+    ):
+        tags.append("debug_recovery")
+
+    if any(k in p for k in ("ai_refiner", "seed_lexicon_ai")) or p.startswith("ai_services/"):
+        tags.append("ai_assist")
+
+    return _dedupe_strs([t for t in tags if t in WORKFLOW_FILTER_SET and t != "all"])
+
+
+def _workflows_for_spec(spec: ToolSpec) -> List[str]:
+    explicit = []
+    for attr in ("workflows", "workflow_tags"):
+        explicit.extend(_coerce_str_list(getattr(spec, attr, None)))
+    explicit = [w for w in explicit if w in WORKFLOW_FILTER_SET and w != "all"]
+
+    if explicit:
+        return _dedupe_strs(explicit)
+
+    mapped = list(_TOOL_ID_WORKFLOWS.get(spec.tool_id, ()))
+    if mapped:
+        return _dedupe_strs(mapped)
+
+    derived = _workflow_tags_from_path(spec.rel_target)
+    if derived:
+        return derived
+
+    return [DEFAULT_WORKFLOW]
+
+
+def _workflow_primary_for_spec(spec: ToolSpec, workflows: Sequence[str]) -> str:
+    explicit = str(getattr(spec, "workflow_primary", "") or "").strip()
+    if explicit in WORKFLOW_FILTER_SET and explicit != "all":
+        return explicit
+    return workflows[0] if workflows else DEFAULT_WORKFLOW
+
+
+def _workflow_steps_map_for_spec(spec: ToolSpec, workflows: Sequence[str]) -> Dict[str, List[str]]:
+    explicit = getattr(spec, "workflow_steps", None)
+    if isinstance(explicit, dict):
+        out: Dict[str, List[str]] = {}
+        for key, value in explicit.items():
+            k = str(key).strip()
+            if k not in WORKFLOW_FILTER_SET:
+                continue
+            out[k] = _coerce_str_list(value)
+        if out:
+            return out
+
+    return {wf: _workflow_steps_for(wf) for wf in workflows}
+
+
+def _tool_meta_payload(spec: ToolSpec, available: bool) -> Dict[str, Any]:
+    workflows = _workflows_for_spec(spec)
+    workflow_primary = _workflow_primary_for_spec(spec, workflows)
+    workflow_steps = _workflow_steps_map_for_spec(spec, workflows)
+
+    payload: Dict[str, Any] = {
+        "tool_id": spec.tool_id,
+        "description": spec.description,
+        "timeout_sec": spec.timeout_sec,
+        "allow_args": spec.allow_args,
+        "requires_ai_enabled": spec.requires_ai_enabled,
+        "available": available,
+    }
+
+    optional_values: Dict[str, Any] = {
+        "label": getattr(spec, "label", spec.tool_id),
+        "hidden": bool(getattr(spec, "hidden", False)),
+        "power_user": bool(getattr(spec, "hidden", False)),
+        "risk": getattr(spec, "risk", None),
+        "category": getattr(spec, "category", None),
+        "group": getattr(spec, "group", None),
+        "notes": _coerce_str_list(getattr(spec, "notes", None)),
+        "ui_steps": _coerce_str_list(getattr(spec, "ui_steps", None)),
+        "workflows": workflows,
+        "workflow_primary": workflow_primary,
+        "workflow_steps": workflow_steps,
+    }
+
+    for key, value in optional_values.items():
+        if key in _TOOLMETA_FIELDS:
+            payload[key] = value
+
+    return payload
+
+
 def tool_summary_from_spec(spec: Optional[ToolSpec], tool_id: str) -> ToolSummary:
     if spec is None:
-        return ToolSummary(id=tool_id, label=tool_id, description="", timeout_sec=0)
-    return ToolSummary(id=spec.tool_id, label=spec.tool_id, description=spec.description, timeout_sec=spec.timeout_sec)
+        label = tool_id
+        payload = {"id": tool_id, "label": label, "description": "", "timeout_sec": 0}
+        if "workflows" in _TOOLSUMMARY_FIELDS:
+            payload["workflows"] = [DEFAULT_WORKFLOW]
+        if "workflow_primary" in _TOOLSUMMARY_FIELDS:
+            payload["workflow_primary"] = DEFAULT_WORKFLOW
+        return ToolSummary(**payload)
+
+    label = getattr(spec, "label", spec.tool_id)
+    payload = {
+        "id": spec.tool_id,
+        "label": label,
+        "description": spec.description,
+        "timeout_sec": spec.timeout_sec,
+    }
+    workflows = _workflows_for_spec(spec)
+    workflow_primary = _workflow_primary_for_spec(spec, workflows)
+
+    if "workflows" in _TOOLSUMMARY_FIELDS:
+        payload["workflows"] = workflows
+    if "workflow_primary" in _TOOLSUMMARY_FIELDS:
+        payload["workflow_primary"] = workflow_primary
+
+    return ToolSummary(**payload)
 
 
 def error_envelope(
@@ -179,7 +475,6 @@ def error_envelope(
     args_accepted: List[str],
     args_rejected: List[ToolRunArgsRejected],
 ) -> JSONResponse:
-    # Defensive: ensure envelope never leaks secrets even if caller forgot to redact.
     args_received_r = redact_argv(args_received or [])
     args_accepted_r = redact_argv(args_accepted or [])
     args_rejected_r = _redact_rejected(args_rejected or [])
@@ -238,7 +533,6 @@ def _parse_listish_string(s: str) -> Optional[List[str]]:
     if not ((ss.startswith("[") and ss.endswith("]")) or (ss.startswith("(") and ss.endswith(")"))):
         return None
 
-    # 1) JSON
     try:
         lit = json.loads(ss)
         as_list = _safe_str_list(lit)
@@ -247,7 +541,6 @@ def _parse_listish_string(s: str) -> Optional[List[str]]:
     except Exception:
         pass
 
-    # 2) Python literal
     try:
         lit = ast.literal_eval(ss)
         as_list = _safe_str_list(lit)
@@ -256,7 +549,6 @@ def _parse_listish_string(s: str) -> Optional[List[str]]:
     except Exception:
         pass
 
-    # 3) Bracketed comma tokens
     inner = ss[1:-1].strip()
     if not inner:
         return []
@@ -292,7 +584,6 @@ def normalize_args(raw: Optional[Union[Sequence[str], str]]) -> List[str]:
         return shlex.split(s)
 
     if isinstance(raw, (list, tuple)):
-        # unwrap single composite string
         if len(raw) == 1 and isinstance(raw[0], str):
             one = raw[0].strip()
             if not one:
@@ -394,7 +685,6 @@ def validate_args(spec: ToolSpec, args: Sequence[str]) -> Tuple[List[str], List[
 
             accepted.append(a)
 
-            # --flag=value includes its value
             if "=" in a:
                 i += 1
                 continue
@@ -423,7 +713,6 @@ def validate_args(spec: ToolSpec, args: Sequence[str]) -> Tuple[List[str], List[
             i += 1
             continue
 
-        # positional
         if not spec.allow_positionals:
             rejected.append(ToolRunArgsRejected(arg=a, reason="Positional arguments not allowed."))
         else:
@@ -445,16 +734,7 @@ async def list_tools() -> List[ToolMeta]:
         except Exception:
             available = False
 
-        metas.append(
-            ToolMeta(
-                tool_id=spec.tool_id,
-                description=spec.description,
-                timeout_sec=spec.timeout_sec,
-                allow_args=spec.allow_args,
-                requires_ai_enabled=spec.requires_ai_enabled,
-                available=available,
-            )
-        )
+        metas.append(ToolMeta(**_tool_meta_payload(spec, available)))
     return metas
 
 
@@ -466,7 +746,6 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
 
     emit_event(events, "INFO", "request_received", "Tool run request received", {"tool_id": payload.tool_id})
 
-    # Normalize args FIRST so args_received is always list[str]
     try:
         normalized_args = normalize_args(payload.args)  # type: ignore[arg-type]
     except HTTPException as e:
@@ -489,7 +768,6 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
     normalized_args_log = redact_argv(normalized_args)
 
     if normalized_args != (payload.args or []):
-        # Do NOT include raw payload.args here (it may contain secrets).
         emit_event(
             events,
             "INFO",
@@ -498,7 +776,6 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
             {"normalized_count": len(normalized_args_log), "normalized": normalized_args_log},
         )
 
-    # Validate tool_id
     try:
         validate_tool_id(payload.tool_id)
     except HTTPException as e:
@@ -556,7 +833,6 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
             args_rejected=[],
         )
 
-    # Expand --multi=a,b,c convenience BEFORE validation
     normalized_args = _expand_equals_multi_flags(normalized_args, spec)
     normalized_args_log = redact_argv(normalized_args)
 
@@ -591,7 +867,6 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
             {"accepted_count": len(args_accepted), "rejected_count": len(args_rejected)},
         )
 
-        # IMPORTANT: if user provided args but none were accepted, don't run defaults (avoids timeouts)
         if normalized_args and not args_accepted:
             msg = "All provided arguments were rejected; refusing to execute tool with defaults."
             emit_event(events, "ERROR", "args_rejected_abort", msg)
@@ -668,8 +943,6 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
 
     env_vars = {"TOOL_TRACE_ID": trace_id}
     try:
-        # subprocess.run() is blocking; run it in a threadpool so the API
-        # can still serve requests while a tool executes.
         exit_code, stdout, stderr, duration_ms = await run_in_threadpool(
             run_process_extended,
             final_cmd_list,
@@ -680,7 +953,6 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
         ended_at = iso_now()
         msg = f"Tool runner crashed while executing subprocess: {type(e).__name__}: {e}"
         emit_event(events, "ERROR", "process_failed", msg)
-        # cmd_for_response is already redacted if needed
         return error_envelope(
             http_status=500,
             trace_id=trace_id,
@@ -730,3 +1002,4 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
         truncation=ToolRunTruncation(stdout=out_was_trunc, stderr=err_was_trunc, limit_chars=MAX_OUTPUT_CHARS),
         events=events,
     )
+

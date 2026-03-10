@@ -2,9 +2,28 @@
 "use client";
 
 import React, { memo, useCallback, useMemo } from "react";
-import { Info, Search, Filter, PlugZap, Loader2, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
+import {
+  Info,
+  Search,
+  Filter,
+  PlugZap,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  AlertTriangle,
+  GitBranch,
+  ListChecks,
+} from "lucide-react";
+
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export type HealthReady = {
   broker?: string;
@@ -20,6 +39,27 @@ export type ControlsFilters = {
   showHeavy: boolean;
 };
 
+export type WorkflowFilter =
+  | "recommended"
+  | "language_integration"
+  | "lexicon_work"
+  | "build_matrix"
+  | "qa_validation"
+  | "debug_recovery"
+  | "ai_assist"
+  | "all";
+
+export type WorkflowOption = {
+  value: WorkflowFilter;
+  label: string;
+};
+
+export type WorkflowGuide = {
+  title: string;
+  summary?: string;
+  steps: string[];
+};
+
 type ControlsCardProps = {
   apiV1: string;
   repoUrl?: string;
@@ -30,6 +70,11 @@ type ControlsCardProps = {
 
   query: string;
   onQueryChange: (value: string) => void;
+
+  workflow: WorkflowFilter;
+  workflowOptions: readonly WorkflowOption[];
+  onWorkflowChange: (value: WorkflowFilter) => void;
+  workflowGuide?: WorkflowGuide | null;
 
   powerUser: boolean;
   onPowerUserChange: (value: boolean) => void;
@@ -90,6 +135,42 @@ function FilterToggle({
   );
 }
 
+const WorkflowGuideCard = memo(function WorkflowGuideCard({
+  workflowGuide,
+}: {
+  workflowGuide?: WorkflowGuide | null;
+}) {
+  if (!workflowGuide) return null;
+
+  return (
+    <div className="rounded-lg border border-blue-100 bg-blue-50/50 p-3">
+      <div className="flex items-start gap-2">
+        <GitBranch className="mt-0.5 h-4 w-4 text-blue-600" />
+        <div className="min-w-0">
+          <div className="text-sm font-semibold text-slate-900">{workflowGuide.title}</div>
+          {workflowGuide.summary ? (
+            <div className="mt-1 text-xs text-slate-600">{workflowGuide.summary}</div>
+          ) : null}
+        </div>
+      </div>
+
+      {workflowGuide.steps.length > 0 ? (
+        <div className="mt-3 flex items-start gap-2">
+          <ListChecks className="mt-0.5 h-4 w-4 text-slate-500" />
+          <ol className="space-y-1 text-sm text-slate-700">
+            {workflowGuide.steps.map((step, idx) => (
+              <li key={`${idx}-${step}`} className="flex gap-2">
+                <span className="w-5 shrink-0 text-slate-400">{idx + 1}.</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
+    </div>
+  );
+});
+
 export const ControlsCard = memo(function ControlsCard(props: ControlsCardProps) {
   const {
     apiV1,
@@ -101,6 +182,11 @@ export const ControlsCard = memo(function ControlsCard(props: ControlsCardProps)
 
     query,
     onQueryChange,
+
+    workflow,
+    workflowOptions,
+    onWorkflowChange,
+    workflowGuide,
 
     powerUser,
     onPowerUserChange,
@@ -135,8 +221,8 @@ export const ControlsCard = memo(function ControlsCard(props: ControlsCardProps)
       </CardHeader>
 
       <CardContent className="space-y-3">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-3">
+          <div className="xl:col-span-5">
             <div className="text-xs text-slate-500 mb-1 flex items-center gap-2">
               <Search className="w-3 h-3" />
               Search
@@ -149,7 +235,26 @@ export const ControlsCard = memo(function ControlsCard(props: ControlsCardProps)
             />
           </div>
 
-          <div className="flex items-end gap-3 flex-wrap">
+          <div className="xl:col-span-3">
+            <div className="text-xs text-slate-500 mb-1 flex items-center gap-2">
+              <GitBranch className="w-3 h-3" />
+              Workflow / Tool Set
+            </div>
+            <Select value={workflow} onValueChange={(value) => onWorkflowChange(value as WorkflowFilter)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a workflow" />
+              </SelectTrigger>
+              <SelectContent>
+                {workflowOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="xl:col-span-4 flex items-end gap-3 flex-wrap">
             <label className="flex items-center gap-2 text-sm text-slate-700 font-medium">
               <input
                 type="checkbox"
@@ -196,6 +301,8 @@ export const ControlsCard = memo(function ControlsCard(props: ControlsCardProps)
             )}
           </div>
         </div>
+
+        <WorkflowGuideCard workflowGuide={workflowGuide} />
 
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="text-xs text-slate-500">

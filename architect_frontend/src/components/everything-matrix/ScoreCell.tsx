@@ -1,4 +1,3 @@
-// architect_frontend/src/components/everything-matrix/ScoreCell.tsx
 import React from "react";
 
 type ScoreScale = "auto" | "0-10" | "0-1";
@@ -26,9 +25,12 @@ interface ScoreCellProps {
 
   /**
    * Score scale:
-   *  - "0-10": treat score as 0..10 (default intended)
+   *  - "0-10": treat score as 0..10
    *  - "0-1" : treat score as 0..1 and render scaled to 0..10
-   *  - "auto": if score is a non-integer in [0,1], assume 0..1; otherwise assume 0..10
+   *  - "auto": conservative default; treat as 0..10
+   *
+   * We do NOT silently rescale fractional values in auto mode anymore,
+   * because that caused mixed-unit rendering like "8" over "0.8".
    */
   scale?: ScoreScale;
 
@@ -55,12 +57,8 @@ function normalizeScore(raw: number, scale: ScoreScale): number {
   const s = Number.isFinite(raw) ? raw : 0;
 
   if (scale === "0-1") return clamp(s * 10, 0, 10);
-  if (scale === "0-10") return clamp(s, 0, 10);
 
-  // auto
-  // If it's a non-integer in [0,1], it's almost certainly a pass-rate (0..1) => scale to 0..10.
-  // Keep 0 and 1 unscaled to avoid turning "Planned=1" into "10" accidentally.
-  if (s > 0 && s < 1 && !Number.isInteger(s)) return clamp(s * 10, 0, 10);
+  // "0-10" and "auto" are both conservative now.
   return clamp(s, 0, 10);
 }
 
@@ -69,8 +67,40 @@ function fmtScore(s: number, decimals: number): string {
   if (Number.isInteger(s)) return String(s);
   const d = Math.max(0, Math.min(3, decimals));
   const f = Number(s.toFixed(d));
-  // avoid trailing ".0"
   return Number.isInteger(f) ? String(f) : String(f);
+}
+
+function approxEqual(a: number, b: number, epsilon = 0.05): boolean {
+  return Math.abs(a - b) <= epsilon;
+}
+
+// Suppress misleading secondary numbers when they are just the same metric
+// repeated raw/normalized, e.g. "10 / 10" or "8 / 0.8".
+function shouldShowDetail(
+  detail: number | string | undefined,
+  score: number,
+  normalized: number,
+  decimals: number,
+): boolean {
+  if (detail === undefined || detail === null) return false;
+
+  const detailText = fmtDetail(detail);
+  if (!detailText) return false;
+
+  const normalizedText = fmtScore(normalized, decimals);
+  const rawScoreText = fmtDetail(score);
+
+  if (detailText === normalizedText) return false;
+  if (detailText === rawScoreText) return false;
+
+  if (typeof detail === "number" && Number.isFinite(detail)) {
+    if (approxEqual(detail, score)) return false;
+    if (approxEqual(detail, normalized)) return false;
+    if (approxEqual(detail * 10, normalized)) return false;
+    if (approxEqual(detail, normalized / 10)) return false;
+  }
+
+  return true;
 }
 
 // Ladder-aligned bands (0 absent → 1 planned → 3 scaffolded → 5 draft → 7 beta → 8 pre-final → 10 final)
@@ -83,7 +113,6 @@ function scoreBand(s: number): { label: string; bg: string; text: string } {
     };
   }
 
-  // 1–2 planned
   if (s > 0 && s < 3) {
     return {
       label: "Planned",
@@ -92,7 +121,6 @@ function scoreBand(s: number): { label: string; bg: string; text: string } {
     };
   }
 
-  // 3–4 scaffolded
   if (s >= 3 && s < 5) {
     return {
       label: "Scaffolded",
@@ -101,7 +129,6 @@ function scoreBand(s: number): { label: string; bg: string; text: string } {
     };
   }
 
-  // 5–6 draft
   if (s >= 5 && s < 7) {
     return {
       label: "Draft",
@@ -110,7 +137,6 @@ function scoreBand(s: number): { label: string; bg: string; text: string } {
     };
   }
 
-  // 7 beta
   if (s >= 7 && s < 8) {
     return {
       label: "Beta",
@@ -119,7 +145,6 @@ function scoreBand(s: number): { label: string; bg: string; text: string } {
     };
   }
 
-  // 8 pre-final
   if (s >= 8 && s < 9) {
     return {
       label: "Pre-final",
@@ -128,7 +153,6 @@ function scoreBand(s: number): { label: string; bg: string; text: string } {
     };
   }
 
-  // 9 near-final
   if (s >= 9 && s < 10) {
     return {
       label: "Near-final",
@@ -137,7 +161,6 @@ function scoreBand(s: number): { label: string; bg: string; text: string } {
     };
   }
 
-  // 10 final
   return {
     label: "Final",
     bg: "bg-emerald-100",
@@ -151,23 +174,23 @@ export default function ScoreCell({
   detail,
   detailLabel,
   showZero = false,
-  scale = "auto",
+  scale = "0-10",
   decimals = 1,
 }: ScoreCellProps) {
   const normalized = normalizeScore(score, scale);
   const band = scoreBand(normalized);
 
-  const hasDetail = detail !== undefined && detail !== null && fmtDetail(detail) !== "";
-  const detailText = hasDetail ? fmtDetail(detail) : "";
+  const showDetail = shouldShowDetail(detail, score, normalized, decimals);
+  const detailText = showDetail ? fmtDetail(detail as number | string) : "";
 
-  // Tooltip: always include band + numeric score; optionally include detail.
   const titleParts: string[] = [];
   titleParts.push(`${band.label} (${fmtScore(normalized, decimals)}/10)`);
-  if (hasDetail) {
+
+  if (showDetail) {
     titleParts.push(`${detailLabel ? `${detailLabel}: ` : ""}${detailText}`);
   }
-  const title = titleParts.join(" • ");
 
+  const title = titleParts.join(" • ");
   const mainText = normalized === 0 && !showZero ? "—" : fmtScore(normalized, decimals);
 
   return (
@@ -183,8 +206,7 @@ export default function ScoreCell({
       <div className="flex flex-col items-center justify-center leading-tight">
         <span className={band.text}>{mainText}</span>
 
-        {/* Optional: small secondary line for counts/percentages */}
-        {hasDetail && (
+        {showDetail && (
           <span
             className={`
               mt-0.5 text-[10px]
@@ -196,7 +218,6 @@ export default function ScoreCell({
         )}
       </div>
 
-      {/* Tiny visual indicator for perfect scores */}
       {normalized === 10 && (
         <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-emerald-600 opacity-60" />
       )}
