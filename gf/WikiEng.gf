@@ -1,1 +1,5 @@
-concrete WikiEng of SemantikArchitect = WikiI with (Syntax = SyntaxEng) ** open SyntaxEng, ParadigmsEng in { flags coding=utf8 ; };
+concrete WikiEng of SemantikArchitect =
+  WikiI with (Syntax = SyntaxEng), (Symbolic = SymbolicEng) **
+  open SyntaxEng, ParadigmsEng, SymbolicEng in {
+    flags coding = utf8 ;
+  };

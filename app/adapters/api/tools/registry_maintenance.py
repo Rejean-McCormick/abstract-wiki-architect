@@ -33,9 +33,20 @@ def py_script(
     supports_verbose: bool = False,
     supports_json: bool = False,
 ) -> ToolSpec:
+    # Keep richer metadata in the helper signature for now, but only pass
+    # fields supported by the current ToolSpec model.
+    _ = (
+        group,
+        long_description,
+        parameter_docs,
+        common_failure_modes,
+        supports_verbose,
+        supports_json,
+    )
+
     return ToolSpec(
         tool_id=tool_id,
-        title=title,
+        label=title,
         description=description,
         rel_target=rel_script,
         cmd=(PYTHON_EXE, "-u", "{target}"),
@@ -47,16 +58,10 @@ def py_script(
         flags_with_value=tuple(flags_with_value),
         flags_with_multi_value=tuple(flags_with_multi_value),
         category=category,
-        group=group,
-        risk=risk,
         hidden=hidden,
-        recommended=recommended,
-        workflow_ids=tuple(workflow_ids),
-        long_description=long_description,
-        parameter_docs=tuple(parameter_docs),
-        common_failure_modes=tuple(common_failure_modes),
-        supports_verbose=supports_verbose,
-        supports_json=supports_json,
+        heavy=(risk == "heavy"),
+        workflow_tags=tuple(workflow_ids),
+        workflow_order=10 if recommended else 1000,
     )
 
 
@@ -236,7 +241,7 @@ def maintenance_registry() -> Dict[str, ToolSpec]:
             ),
             parameter_docs=(
                 {"flag": "--lang", "description": "Language code", "example": "--lang en"},
-                {"flag": "--sentence", "description": "Sentence to parse", "example": '--sentence "Marie Curie was a physicist."' },
+                {"flag": "--sentence", "description": "Sentence to parse", "example": '--sentence "Marie Curie was a physicist."'},
                 {"flag": "--ast", "description": "Explicit AST input"},
                 {"flag": "--pgf", "description": "Override PGF path", "example": "--pgf gf/semantik_architect.pgf"},
             ),
@@ -248,4 +253,3 @@ def maintenance_registry() -> Dict[str, ToolSpec]:
             supports_json=True,
         ),
     }
-

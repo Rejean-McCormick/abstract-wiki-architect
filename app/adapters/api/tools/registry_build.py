@@ -10,6 +10,10 @@ def _supports_flag(flag: str, allowed_flags: Sequence[str]) -> bool:
     return flag in set(allowed_flags)
 
 
+def _is_heavy(risk: str) -> bool:
+    return (risk or "").strip().lower() == "heavy"
+
+
 def py_script(
     tool_id: str,
     rel_script: str,
@@ -31,9 +35,12 @@ def py_script(
     supports_verbose: bool | None = None,
     supports_json: bool | None = None,
 ) -> ToolSpec:
+    _ = group
+    _ = supports_verbose
+    _ = supports_json
+
     return ToolSpec(
         tool_id=tool_id,
-        title=title,
         description=description,
         rel_target=rel_script,
         cmd=(PYTHON_EXE, "-u", "{target}"),
@@ -44,13 +51,11 @@ def py_script(
         requires_ai_enabled=requires_ai_enabled,
         flags_with_value=tuple(flags_with_value),
         flags_with_multi_value=tuple(flags_with_multi_value),
+        label=title,
         category=category,
-        group=group,
-        risk=risk,
         hidden=hidden,
+        heavy=_is_heavy(risk),
         workflow_tags=tuple(workflow_tags),
-        supports_verbose=_supports_flag("--verbose", allowed_flags) if supports_verbose is None else supports_verbose,
-        supports_json=_supports_flag("--json", allowed_flags) if supports_json is None else supports_json,
     )
 
 
@@ -76,9 +81,12 @@ def py_module(
     supports_verbose: bool | None = None,
     supports_json: bool | None = None,
 ) -> ToolSpec:
+    _ = group
+    _ = supports_verbose
+    _ = supports_json
+
     return ToolSpec(
         tool_id=tool_id,
-        title=title,
         description=description,
         rel_target=rel_check_path,
         cmd=(PYTHON_EXE, "-u", "-m", module),
@@ -89,13 +97,11 @@ def py_module(
         requires_ai_enabled=requires_ai_enabled,
         flags_with_value=tuple(flags_with_value),
         flags_with_multi_value=tuple(flags_with_multi_value),
+        label=title,
         category=category,
-        group=group,
-        risk=risk,
         hidden=hidden,
+        heavy=_is_heavy(risk),
         workflow_tags=tuple(workflow_tags),
-        supports_verbose=_supports_flag("--verbose", allowed_flags) if supports_verbose is None else supports_verbose,
-        supports_json=_supports_flag("--json", allowed_flags) if supports_json is None else supports_json,
     )
 
 

@@ -5,16 +5,27 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export const WORKFLOW_FILTER_VALUES = [
   "recommended",
-  "languageIntegration",
-  "lexiconWork",
-  "buildMatrix",
-  "qaValidation",
-  "debugRecovery",
-  "aiAssist",
+  "language_integration",
+  "lexicon_work",
+  "build_matrix",
+  "qa_validation",
+  "debug_recovery",
+  "ai_assist",
   "all",
 ] as const;
 
 export type WorkflowFilter = (typeof WORKFLOW_FILTER_VALUES)[number];
+
+const LEGACY_WORKFLOW_ALIASES: Readonly<Record<string, WorkflowFilter>> = Object.freeze({
+  recommended: "recommended",
+  languageIntegration: "language_integration",
+  lexiconWork: "lexicon_work",
+  buildMatrix: "build_matrix",
+  qaValidation: "qa_validation",
+  debugRecovery: "debug_recovery",
+  aiAssist: "ai_assist",
+  all: "all",
+});
 
 export type ToolsPrefs = {
   workflowFilter: WorkflowFilter;
@@ -26,6 +37,7 @@ export type ToolsPrefs = {
   showHeavy: boolean;
   leftCollapsed: boolean;
   autoScrollConsole: boolean;
+  dryRun: boolean;
 };
 
 const DEFAULT_PREFS: ToolsPrefs = {
@@ -38,19 +50,23 @@ const DEFAULT_PREFS: ToolsPrefs = {
   showHeavy: true,
   leftCollapsed: false,
   autoScrollConsole: true,
+  dryRun: false,
 };
 
 // Keep in sync with page.tsx / tools workflow UI
-export const TOOLS_PREFS_STORAGE_KEY = "tools_dashboard_prefs_v3";
+export const TOOLS_PREFS_STORAGE_KEY = "tools_dashboard_prefs_v4";
 
 // Optional older keys you may have used previously
 const LEGACY_KEYS = [
+  "tools_dashboard_prefs_v3",
   "tools_dashboard_prefs_v2",
   "tools_dashboard_prefs_v1",
   "tools_dashboard_prefs",
 ] as const;
 
-function safeJsonParse<T>(raw: string | null): { ok: true; value: T } | { ok: false; error: unknown } {
+function safeJsonParse<T>(
+  raw: string | null
+): { ok: true; value: T } | { ok: false; error: unknown } {
   if (!raw) return { ok: false, error: new Error("empty") };
   try {
     return { ok: true, value: JSON.parse(raw) as T };
@@ -63,8 +79,18 @@ function isRecord(v: unknown): v is Record<string, unknown> {
   return !!v && typeof v === "object" && !Array.isArray(v);
 }
 
+function normalizeWorkflowFilter(v: unknown): WorkflowFilter | null {
+  if (typeof v !== "string") return null;
+
+  if ((WORKFLOW_FILTER_VALUES as readonly string[]).includes(v)) {
+    return v as WorkflowFilter;
+  }
+
+  return LEGACY_WORKFLOW_ALIASES[v] ?? null;
+}
+
 function isWorkflowFilter(v: unknown): v is WorkflowFilter {
-  return typeof v === "string" && (WORKFLOW_FILTER_VALUES as readonly string[]).includes(v);
+  return normalizeWorkflowFilter(v) !== null;
 }
 
 function coercePrefs(input: unknown, defaults: ToolsPrefs): ToolsPrefs {
@@ -72,14 +98,17 @@ function coercePrefs(input: unknown, defaults: ToolsPrefs): ToolsPrefs {
 
   const out: ToolsPrefs = { ...defaults };
 
-  if (isWorkflowFilter(input.workflowFilter)) {
-    out.workflowFilter = input.workflowFilter;
+  const normalizedWorkflow = normalizeWorkflowFilter(input.workflowFilter);
+  if (normalizedWorkflow) {
+    out.workflowFilter = normalizedWorkflow;
   }
 
   (Object.keys(defaults) as (keyof ToolsPrefs)[]).forEach((k) => {
     if (k === "workflowFilter") return;
     const val = input[k];
-    if (typeof val === "boolean") out[k] = val as ToolsPrefs[typeof k];
+    if (typeof val === "boolean") {
+      out[k] = val as ToolsPrefs[typeof k];
+    }
   });
 
   return out;
@@ -88,22 +117,21 @@ function coercePrefs(input: unknown, defaults: ToolsPrefs): ToolsPrefs {
 function readPrefsFromStorage(storageKey: string, defaults: ToolsPrefs): ToolsPrefs {
   if (typeof window === "undefined") return defaults;
 
-  // 1) Current key
-  const current = safeJsonParse<unknown>(window.localStorage.getItem(storageKey));
-  if (current.ok) return coercePrefs(current.value, defaults);
+  const keysToTry = [storageKey, ...LEGACY_KEYS.filter((k) => k !== storageKey)];
 
-  // 2) Migrate from legacy keys if present
-  for (const k of LEGACY_KEYS) {
-    const legacy = safeJsonParse<unknown>(window.localStorage.getItem(k));
-    if (legacy.ok) {
-      const merged = coercePrefs(legacy.value, defaults);
-      try {
-        window.localStorage.setItem(storageKey, JSON.stringify(merged));
-      } catch {
-        // ignore
-      }
-      return merged;
+  for (const key of keysToTry) {
+    const parsed = safeJsonParse<unknown>(window.localStorage.getItem(key));
+    if (!parsed.ok) continue;
+
+    const merged = coercePrefs(parsed.value, defaults);
+
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(merged));
+    } catch {
+      // ignore
     }
+
+    return merged;
   }
 
   return defaults;
@@ -120,17 +148,18 @@ type BooleanPrefKey = {
 
 export function useToolsPrefs(options?: UseToolsPrefsOptions) {
   const storageKey = options?.storageKey ?? TOOLS_PREFS_STORAGE_KEY;
+  const defaultsOverride = options?.defaults;
 
   const defaults = useMemo<ToolsPrefs>(() => {
-    const merged = { ...DEFAULT_PREFS, ...(options?.defaults ?? {}) };
+    const merged = { ...DEFAULT_PREFS, ...(defaultsOverride ?? {}) };
+
     return {
       ...merged,
       workflowFilter: isWorkflowFilter(merged.workflowFilter)
         ? merged.workflowFilter
         : DEFAULT_PREFS.workflowFilter,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey]); // treat key change like a “profile” change
+  }, [storageKey, defaultsOverride]);
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [prefs, setPrefs] = useState<ToolsPrefs>(() => defaults);
@@ -153,6 +182,7 @@ export function useToolsPrefs(options?: UseToolsPrefsOptions) {
     if (serialized === lastSerializedRef.current) return;
 
     let cancelled = false;
+
     const write = () => {
       if (cancelled) return;
       try {
@@ -163,9 +193,10 @@ export function useToolsPrefs(options?: UseToolsPrefsOptions) {
       }
     };
 
-    const ric = (window as any).requestIdleCallback as
-      | ((cb: () => void, opts?: { timeout: number }) => number)
-      | undefined;
+    const ric = (window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    }).requestIdleCallback;
 
     let handle: number | null = null;
 
@@ -174,18 +205,20 @@ export function useToolsPrefs(options?: UseToolsPrefsOptions) {
       return () => {
         cancelled = true;
         try {
-          (window as any).cancelIdleCallback?.(handle);
+          (window as Window & {
+            cancelIdleCallback?: (id: number) => void;
+          }).cancelIdleCallback?.(handle!);
         } catch {
-          /* ignore */
+          // ignore
         }
       };
-    } else {
-      handle = window.setTimeout(write, 0);
-      return () => {
-        cancelled = true;
-        if (handle) window.clearTimeout(handle);
-      };
     }
+
+    handle = window.setTimeout(write, 0);
+    return () => {
+      cancelled = true;
+      if (handle !== null) window.clearTimeout(handle);
+    };
   }, [prefs, storageKey, isLoaded]);
 
   const setPref = useCallback(<K extends keyof ToolsPrefs>(key: K, value: ToolsPrefs[K]) => {

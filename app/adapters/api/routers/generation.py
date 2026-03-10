@@ -5,8 +5,6 @@ import structlog
 from fastapi import APIRouter, Body, Depends, Header, HTTPException, Request, status
 
 # Core Domain Imports
-from app.core.domain.models import Frame, Sentence
-from app.core.domain.frame import BioFrame
 from app.core.domain.context import DiscourseEntity
 from app.core.domain.exceptions import (
     DomainError,
@@ -14,6 +12,8 @@ from app.core.domain.exceptions import (
     LanguageNotFoundError,
     UnsupportedFrameTypeError,
 )
+from app.core.domain.frame import BioFrame
+from app.core.domain.models import Frame, Sentence
 from app.core.use_cases.generate_text import GenerateText
 
 # Adapters & Infrastructure
@@ -32,9 +32,19 @@ router = APIRouter(
     dependencies=[Depends(verify_api_key)],
 )
 
+_BIOISH_FRAME_TYPES = {
+    "bio",
+    "biography",
+    "entity.person",
+    "entity_person",
+    "person",
+    "entity.person.v1",
+    "entity.person.v2",
+}
+
 
 @router.post(
-    "",  # <-- NEW: allows POST /api/v1/generate (lang in payload)
+    "",
     response_model=Sentence,
     status_code=status.HTTP_200_OK,
     summary="Generate Text (language in payload)",
@@ -55,6 +65,9 @@ async def generate_text_from_payload(
 
     This matches the GUI Dynamic Test Bench request shape.
     """
+    _ = request
+    lang_raw: Optional[str] = None
+
     try:
         lang_raw = _extract_lang_from_payload(payload)
         if not lang_raw:
@@ -65,14 +78,11 @@ async def generate_text_from_payload(
         lang = _normalize_lang_code(lang_raw)
         cleaned_payload = _strip_lang_fields(payload)
 
-        # 1) ADAPTER LAYER: Input Normalization (JSON -> Domain Entity)
         frame = _parse_payload(cleaned_payload, lang)
 
-        # 2) CONTEXT LAYER: Discourse Planning (Stateful Logic)
         if x_session_id and isinstance(frame, BioFrame):
             await _apply_discourse_context(x_session_id, frame)
 
-        # 3) USE CASE LAYER: Execution
         sentence = await use_case.execute(lang, frame)
         return sentence
 
@@ -126,10 +136,10 @@ async def generate_text(
     - Discourse Planning: Handles pronominalization context via X-Session-ID.
     - Validation: Enforces domain constraints via the Use Case.
     """
+    _ = request
     lang = _normalize_lang_code(lang_code)
 
     try:
-        # If the payload also provides lang, enforce consistency to avoid silent mismatch.
         payload_lang_raw = _extract_lang_from_payload(payload)
         if payload_lang_raw:
             payload_lang = _normalize_lang_code(payload_lang_raw)
@@ -141,14 +151,11 @@ async def generate_text(
 
         cleaned_payload = _strip_lang_fields(payload)
 
-        # 1) ADAPTER LAYER: Input Normalization (JSON -> Domain Entity)
         frame = _parse_payload(cleaned_payload, lang)
 
-        # 2) CONTEXT LAYER: Discourse Planning (Stateful Logic)
         if x_session_id and isinstance(frame, BioFrame):
             await _apply_discourse_context(x_session_id, frame)
 
-        # 3) USE CASE LAYER: Execution
         sentence = await use_case.execute(lang, frame)
         return sentence
 
@@ -196,13 +203,11 @@ def _extract_lang_from_payload(payload: Dict[str, Any]) -> Optional[str]:
     if not isinstance(payload, dict):
         return None
 
-    # 1) top-level
     for k in ("lang", "language", "lang_code"):
         v = payload.get(k)
         if isinstance(v, str) and v.strip():
             return v.strip()
 
-    # 2) inside inputs
     inputs = payload.get("inputs")
     if isinstance(inputs, dict):
         for k in ("language", "lang", "lang_code"):
@@ -223,11 +228,9 @@ def _strip_lang_fields(payload: Dict[str, Any]) -> Dict[str, Any]:
 
     cleaned = dict(payload)
 
-    # remove top-level language helpers
     for k in ("lang", "language", "lang_code", "lang_name"):
         cleaned.pop(k, None)
 
-    # remove language helpers from inputs too
     inputs = cleaned.get("inputs")
     if isinstance(inputs, dict):
         new_inputs = dict(inputs)
@@ -238,6 +241,80 @@ def _strip_lang_fields(payload: Dict[str, Any]) -> Dict[str, Any]:
     return cleaned
 
 
+def _is_non_empty_scalar(value: Any) -> bool:
+    if value is None:
+        return False
+    if isinstance(value, str):
+        return bool(value.strip())
+    return True
+
+
+def _is_bioish_frame_type(frame_type: Any) -> bool:
+    ft = str(frame_type or "").strip().lower()
+    return ft in _BIOISH_FRAME_TYPES or (ft.startswith("entity.") and "person" in ft)
+
+
+def _coerce_bio_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Accept both canonical BioFrame payloads and flat GUI/test-bench person payloads.
+
+    Supported inputs:
+      - canonical:
+          {"frame_type":"bio","subject":{"name":"Alan Turing", ...}}
+      - flat:
+          {"frame_type":"entity.person","name":"Alan Turing","profession":"Mathematician", ...}
+      - mixed:
+          {"frame_type":"bio","subject":{"name":"Alan Turing"},"profession":"Mathematician"}
+      - inputs-wrapped:
+          {"frame_type":"entity.person","inputs":{"name":"Alan Turing", ...}}
+    """
+    if not isinstance(payload, dict):
+        raise InvalidFrameError("Payload must be a JSON object.")
+
+    normalized = dict(payload)
+    inputs = normalized.get("inputs")
+    properties = normalized.get("properties")
+
+    subject: Dict[str, Any] = {}
+
+    if isinstance(inputs, dict):
+        inputs_subject = inputs.get("subject")
+        if isinstance(inputs_subject, dict):
+            subject.update(inputs_subject)
+
+    raw_subject = normalized.get("subject")
+    if isinstance(raw_subject, dict):
+        subject.update(raw_subject)
+
+    def _fill_from(source: Any, source_key: str, subject_key: str) -> None:
+        if not isinstance(source, dict):
+            return
+        value = source.get(source_key)
+        if _is_non_empty_scalar(value) and not _is_non_empty_scalar(subject.get(subject_key)):
+            subject[subject_key] = value
+
+    for source in (inputs, normalized, properties):
+        _fill_from(source, "name", "name")
+        _fill_from(source, "label", "name")
+        _fill_from(source, "profession", "profession")
+        _fill_from(source, "occupation", "profession")
+        _fill_from(source, "nationality", "nationality")
+        _fill_from(source, "citizenship", "nationality")
+        _fill_from(source, "gender", "gender")
+        _fill_from(source, "sex", "gender")
+        _fill_from(source, "qid", "qid")
+
+    if not _is_non_empty_scalar(subject.get("name")):
+        raise InvalidFrameError(
+            "Bio/person payload requires a subject name. "
+            "Provide `subject.name` or top-level `name`/`label`."
+        )
+
+    normalized["frame_type"] = "bio"
+    normalized["subject"] = subject
+    return normalized
+
+
 def _parse_payload(payload: Dict[str, Any], lang_code: str) -> Union[BioFrame, Frame]:
     """
     Determines if the payload is Ninai Protocol or a standard Frame
@@ -246,7 +323,6 @@ def _parse_payload(payload: Dict[str, Any], lang_code: str) -> Union[BioFrame, F
     if not isinstance(payload, dict):
         raise InvalidFrameError("Payload must be a JSON object.")
 
-    # A) Ninai Protocol (Recursive Object Tree)
     if "function" in payload:
         logger.info("ninai_protocol_detected", lang=lang_code)
         try:
@@ -254,17 +330,25 @@ def _parse_payload(payload: Dict[str, Any], lang_code: str) -> Union[BioFrame, F
         except ValueError as e:
             raise InvalidFrameError(f"Ninai Parsing Error: {str(e)}") from e
 
-    # B) Standard Flat Frame
     frame_type = payload.get("frame_type")
     if not frame_type:
         raise InvalidFrameError("Missing required field: frame_type")
 
     try:
-        if frame_type == "bio":
-            return BioFrame(**payload)
+        if _is_bioish_frame_type(frame_type):
+            normalized = _coerce_bio_payload(payload)
+            logger.info(
+                "bio_payload_normalized",
+                lang=lang_code,
+                original_frame_type=str(frame_type),
+                subject_keys=sorted(normalized["subject"].keys()),
+            )
+            return BioFrame(**normalized)
 
         return Frame(**payload)
 
+    except InvalidFrameError:
+        raise
     except Exception as e:
         raise InvalidFrameError(f"Invalid Frame format: {str(e)}") from e
 
@@ -273,17 +357,23 @@ def _extract_subject_qid(frame: BioFrame) -> Optional[str]:
     """
     Best-effort extraction of the entity identifier used for discourse focus.
     """
-    qid = getattr(frame, "context_id", None)
-    if qid:
-        return qid
-
     subj = getattr(frame, "subject", None)
     if isinstance(subj, dict):
-        return subj.get("qid")
-    if subj is not None:
-        return getattr(subj, "qid", None)
+        qid = subj.get("qid")
+        if isinstance(qid, str) and qid.strip():
+            return qid.strip()
+        return None
 
-    return getattr(frame, "qid", None)
+    if subj is not None:
+        qid = getattr(subj, "qid", None)
+        if isinstance(qid, str) and qid.strip():
+            return qid.strip()
+
+    qid = getattr(frame, "qid", None)
+    if isinstance(qid, str) and qid.strip():
+        return qid.strip()
+
+    return None
 
 
 async def _apply_discourse_context(session_id: str, frame: BioFrame) -> None:
@@ -296,8 +386,6 @@ async def _apply_discourse_context(session_id: str, frame: BioFrame) -> None:
         return
 
     subject_qid = _extract_subject_qid(frame)
-
-    # If we don't have a stable identifier (QID), skip context updates.
     if not subject_qid:
         return
 
@@ -311,12 +399,15 @@ async def _apply_discourse_context(session_id: str, frame: BioFrame) -> None:
 
         gender_map = {
             "f": ("She", "she_Pron"),
+            "female": ("She", "she_Pron"),
             "m": ("He", "he_Pron"),
+            "male": ("He", "he_Pron"),
             "n": ("It", "it_Pron"),
+            "neuter": ("It", "it_Pron"),
         }
 
         focus_gender = getattr(context.current_focus, "gender", None)
-        pronoun_label, gf_arg = gender_map.get(focus_gender, ("It", "it_Pron"))
+        pronoun_label, gf_arg = gender_map.get(str(focus_gender or "").strip().lower(), ("It", "it_Pron"))
 
         frame.name = pronoun_label
         frame.meta["gf_function"] = "UsePron"

@@ -1,9 +1,9 @@
 {
-  "id": "generate_bio_en_shaka",
-  "label": "Generate Bio (English: Shaka)",
+  "id": "generate_person_en",
+  "label": "Generate Person (English)",
   "method": "POST",
   "endpoint": "/api/v1/generate/en",
-  "description": "Runs generation for bio frame in English (nested subject payload).",
+  "description": "Runs generation for a person-style payload using the backend-compatible bio frame with nested subject.",
   "payload": {
     "frame_type": "bio",
     "subject": {

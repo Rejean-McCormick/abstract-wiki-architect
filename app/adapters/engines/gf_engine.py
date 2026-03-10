@@ -5,15 +5,15 @@ import json
 import os
 import subprocess
 from pathlib import Path
-from typing import Optional, Any, Dict
+from typing import Any, Dict, Mapping, Optional
 
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
-
-import structlog
 import pgf  # GF Python Bindings
+import structlog
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
+from app.core.domain.exceptions import DomainError, ExternalServiceError, LanguageNotReadyError
+from app.core.domain.frame import BioFrame
 from app.core.domain.models import Frame, Sentence
-from app.core.domain.exceptions import LanguageNotReadyError, DomainError, ExternalServiceError
 from app.core.ports.grammar_engine import IGrammarEngine
 from app.shared.config import settings
 
@@ -21,8 +21,18 @@ logger = structlog.get_logger()
 
 GF_TIMEOUT_SECONDS = 30
 
-# Exceptions we will retry on (e.g., transient network/GF errors)
+# Exceptions we will retry on (e.g., transient GF/runtime errors)
 RETRYABLE_EXCEPTIONS = (ExternalServiceError, subprocess.TimeoutExpired)
+
+_BIO_FRAME_TYPES = {
+    "bio",
+    "biography",
+    "entity.person",
+    "entity_person",
+    "person",
+    "entity.person.v1",
+    "entity.person.v2",
+}
 
 
 def _normalize_pgf_path(value: str) -> str:
@@ -46,7 +56,7 @@ def _effective_pgf_path() -> str:
 
 
 def _repo_root() -> Path:
-    for attr in ("REPO_ROOT", "ROOT_DIR", "PROJECT_ROOT"):
+    for attr in ("REPO_ROOT", "ROOT_DIR", "PROJECT_ROOT", "FILESYSTEM_REPO_PATH"):
         if hasattr(settings, attr):
             val = getattr(settings, attr)
             if val:
@@ -97,24 +107,48 @@ def _extract_wiki_suffix(raw_val: Any) -> Optional[str]:
     return s.replace("Wiki", "").strip() or None
 
 
+def _safe_str(value: Any) -> Optional[str]:
+    if value is None:
+        return None
+    s = str(value).strip()
+    return s if s else None
+
+
+def _escape_gf_string(value: str) -> str:
+    return (value or "").replace("\\", "\\\\").replace('"', '\\"')
+
+
+def _mapping_get_str(data: Any, key: str) -> Optional[str]:
+    if isinstance(data, Mapping):
+        return _safe_str(data.get(key))
+    return None
+
+
 class GFEngine(IGrammarEngine):
     """
     Adapter implementation for IGrammarEngine using the Grammatical Framework (GF)
-    C++ library via the Python 'pgf' bindings.
+    Python 'pgf' bindings.
+
+    This version aligns with the current semantic/domain layer:
+      - BioFrame uses nested subject data
+      - legacy Frame uses subject/properties dicts
+      - abstract GF exposes mkBioProf / mkBioFull / mkBioNat
     """
 
     def __init__(self):
         self._iso_map: Dict[str, Any] = _load_iso_to_wiki_map()
-        # Build reverse lookup: "Eng" -> "en"
+
+        # Reverse lookup: "Eng" -> "en"
         self._wiki_to_iso2: Dict[str, str] = {}
         for k, v in self._iso_map.items():
             suf = _extract_wiki_suffix(v)
             if suf:
                 self._wiki_to_iso2[suf] = str(k).lower()
+                self._wiki_to_iso2[suf.lower()] = str(k).lower()
 
         self._pgf = self._load_pgf()
         self._supported_gf_langs = self._get_supported_gf_langs()
-        self._supported_languages = self._get_supported_languages()  # ISO2 where possible
+        self._supported_languages = self._get_supported_languages()
 
     def _load_pgf(self) -> Optional[pgf.PGF]:
         """Loads the master PGF file (semantik_architect.pgf) into memory."""
@@ -132,22 +166,22 @@ class GFEngine(IGrammarEngine):
             return None
 
     def _get_supported_gf_langs(self) -> set[str]:
-        """Raw GF concrete module names: {'WikiEng', 'WikiGer', ...}."""
+        """Raw GF concrete module names: {'WikiEng', 'WikiFre', ...}."""
         if self._pgf:
             return set(self._pgf.languages.keys())
         return set()
 
     def _get_supported_languages(self) -> set[str]:
         """
-        Preferred output: ISO-2 codes (e.g. {'en','de',...}) when iso_to_wiki.json provides a reverse map.
-        Fallback: wiki suffix lowercased (e.g. {'eng','ger',...}) if reverse map is unavailable.
+        Preferred output: ISO-2 codes (e.g. {'en','fr',...}) when iso_to_wiki.json
+        provides a reverse map. Fallback: wiki suffix lowercased.
         """
         out: set[str] = set()
         for name in self._supported_gf_langs:
             suf = str(name).replace("Wiki", "").strip()
             if not suf:
                 continue
-            iso2 = self._wiki_to_iso2.get(suf)
+            iso2 = self._wiki_to_iso2.get(suf) or self._wiki_to_iso2.get(suf.lower())
             out.add(iso2 if iso2 else suf.lower())
         return out
 
@@ -155,9 +189,9 @@ class GFEngine(IGrammarEngine):
         """
         Convert incoming language code into a GF concrete module name.
         Accepts:
-          - ISO2 ('de')
-          - existing wiki suffix ('Ger')
-          - existing GF module name ('WikiGer')
+          - ISO2 ('fr')
+          - existing wiki suffix ('Fre')
+          - existing GF module name ('WikiFre')
         """
         code = (lang_code or "").strip()
         if not code:
@@ -166,22 +200,53 @@ class GFEngine(IGrammarEngine):
         if code.startswith("Wiki") and len(code) > 4:
             return code
 
-        # Try authoritative iso_to_wiki.json mapping first (keyed by ISO2 in this project)
         raw_val = self._iso_map.get(code) or self._iso_map.get(code.lower())
         suf = _extract_wiki_suffix(raw_val)
 
-        # If mapping isn't present, fall back to TitleCase heuristic
         if not suf:
-            suf = code.replace("Wiki", "").strip().title()
+            stripped = code.replace("Wiki", "").strip()
+            if len(stripped) == 2:
+                suf = stripped.upper()
+            else:
+                suf = stripped[:1].upper() + stripped[1:]
 
         return f"Wiki{suf}"
+
+    def _resolve_loaded_gf_lang_name(self, lang_code: str) -> Optional[str]:
+        """
+        Resolve a language code against currently loaded grammar languages.
+        """
+        if not self._pgf:
+            return None
+
+        # Exact / already concrete
+        candidate = self._gf_lang_name(lang_code)
+        if candidate in self._pgf.languages:
+            return candidate
+
+        lower_to_actual = {k.lower(): k for k in self._pgf.languages.keys()}
+        if candidate.lower() in lower_to_actual:
+            return lower_to_actual[candidate.lower()]
+
+        raw = (lang_code or "").strip()
+        if raw in self._pgf.languages:
+            return raw
+        if raw.lower() in lower_to_actual:
+            return lower_to_actual[raw.lower()]
+
+        # Suffix fallback: "fre" -> WikiFre, "eng" -> WikiEng, etc.
+        suffix = raw.replace("Wiki", "").strip().lower()
+        for concrete in self._pgf.languages.keys():
+            if concrete.lower() == f"wiki{suffix}" or concrete.lower().endswith(suffix):
+                return concrete
+
+        return None
 
     def is_language_ready(self, lang_code: str) -> bool:
         """Checks if the required concrete syntax is loaded in the PGF."""
         if not self._pgf:
             return False
-        gf_lang_name = self._gf_lang_name(lang_code)
-        return gf_lang_name in self._pgf.languages
+        return self._resolve_loaded_gf_lang_name(lang_code) is not None
 
     @retry(
         stop=stop_after_attempt(3),
@@ -194,48 +259,163 @@ class GFEngine(IGrammarEngine):
         if not self._pgf:
             raise ExternalServiceError("GF Engine is not initialized. PGF file missing or corrupt.")
 
-        gf_lang_name = self._gf_lang_name(lang_code)
-
-        if gf_lang_name not in self._pgf.languages:
+        gf_lang_name = self._resolve_loaded_gf_lang_name(lang_code)
+        if not gf_lang_name:
+            expected = self._gf_lang_name(lang_code)
             raise LanguageNotReadyError(
-                f"Language '{lang_code}' not found (expected concrete '{gf_lang_name}')."
+                f"Language '{lang_code}' not found (expected concrete '{expected}')."
             )
 
-        # 1) Map Frame -> AST
         try:
             ast_string = self._map_frame_to_ast(frame)
             if not ast_string:
-                raise DomainError(f"Frame mapping failed for type: {frame.frame_type}")
+                raise DomainError(f"Frame mapping failed for type: {getattr(frame, 'frame_type', 'unknown')}")
             ast_expr = pgf.readExpr(ast_string)
+        except DomainError:
+            raise
         except Exception as e:
-            logger.error("ast_mapping_failed", frame_type=frame.frame_type, error=str(e))
+            logger.error(
+                "ast_mapping_failed",
+                frame_type=getattr(frame, "frame_type", "unknown"),
+                error=str(e),
+            )
             raise DomainError(f"Failed to convert frame to AST: {str(e)}")
 
-        # 2) Linearization
         concrete_syntax = self._pgf.languages[gf_lang_name]
         try:
             text = concrete_syntax.linearize(ast_expr)
-
             return Sentence(
                 text=text,
                 lang_code=lang_code,
-                source_engine="gf",
+                debug_info={"ast": ast_string, "gf_lang": gf_lang_name},
             )
         except pgf.ParseError as e:
             logger.error("gf_linearization_failed", lang=lang_code, ast=ast_string, error=str(e))
             raise DomainError(f"GF Linearization failed (ParseError): {str(e)}")
         except Exception as e:
-            logger.error("gf_runtime_error", lang=lang_code, error=str(e))
+            logger.error("gf_runtime_error", lang=lang_code, ast=ast_string, error=str(e))
             raise ExternalServiceError(f"GF Runtime Error during linearization: {str(e)}")
 
-    def _map_frame_to_ast(self, frame: Frame) -> Optional[str]:
+    def _frame_type(self, frame: Any) -> str:
+        return str(getattr(frame, "frame_type", "") or "").strip().lower()
+
+    def _extract_bio_fields(self, frame: Any) -> tuple[str, Optional[str], Optional[str]]:
         """
-        [PLACEHOLDER] Maps a Pydantic Frame object into a GF Abstract Syntax Tree string.
+        Supports:
+          - BioFrame(subject={name, profession, nationality, ...})
+          - legacy Frame(subject={}, properties={})
+          - dict-like payloads if they ever reach this layer
         """
-        if frame.frame_type == "bio":
-            concept = frame.subject.get("name", "John")
-            return f"SimpNP {concept}_N"
-        return None
+        name: Optional[str] = None
+        profession: Optional[str] = None
+        nationality: Optional[str] = None
+
+        if isinstance(frame, BioFrame):
+            subject = getattr(frame, "subject", None)
+
+            if isinstance(subject, Mapping):
+                name = _mapping_get_str(subject, "name")
+                profession = _mapping_get_str(subject, "profession")
+                nationality = _mapping_get_str(subject, "nationality")
+            else:
+                name = _safe_str(getattr(subject, "name", None))
+                profession = _safe_str(getattr(subject, "profession", None))
+                nationality = _safe_str(getattr(subject, "nationality", None))
+
+            return (
+                name or "Unknown",
+                profession,
+                nationality,
+            )
+
+        if isinstance(frame, Frame):
+            subject = getattr(frame, "subject", {}) or {}
+            properties = getattr(frame, "properties", {}) or {}
+
+            if isinstance(subject, Mapping):
+                name = _mapping_get_str(subject, "name")
+                profession = _mapping_get_str(subject, "profession")
+                nationality = _mapping_get_str(subject, "nationality")
+
+            if isinstance(properties, Mapping):
+                profession = profession or _mapping_get_str(properties, "profession")
+                nationality = nationality or _mapping_get_str(properties, "nationality")
+                name = name or _mapping_get_str(properties, "label")
+
+            return (
+                name or "Unknown",
+                profession,
+                nationality,
+            )
+
+        if isinstance(frame, Mapping):
+            subject = frame.get("subject")
+            properties = frame.get("properties")
+
+            if isinstance(subject, Mapping):
+                name = _mapping_get_str(subject, "name")
+                profession = _mapping_get_str(subject, "profession")
+                nationality = _mapping_get_str(subject, "nationality")
+
+            if isinstance(properties, Mapping):
+                profession = profession or _mapping_get_str(properties, "profession")
+                nationality = nationality or _mapping_get_str(properties, "nationality")
+                name = name or _mapping_get_str(properties, "label")
+
+            name = name or _mapping_get_str(frame, "name")
+            profession = profession or _mapping_get_str(frame, "profession")
+            nationality = nationality or _mapping_get_str(frame, "nationality")
+
+            return (
+                name or "Unknown",
+                profession,
+                nationality,
+            )
+
+        raise DomainError(f"Unsupported frame object for bio extraction: {type(frame).__name__}")
+
+    def _map_frame_to_ast(self, frame: Any) -> Optional[str]:
+        """
+        Map a semantic frame to the current abstract GF API.
+
+        Grammar contract:
+          mkEntityStr : String -> Entity
+          strProf     : String -> Profession
+          strNat      : String -> Nationality
+          mkBioProf   : Entity -> Profession -> Statement
+          mkBioNat    : Entity -> Nationality -> Statement
+          mkBioFull   : Entity -> Profession -> Nationality -> Statement
+        """
+        frame_type = self._frame_type(frame)
+
+        if frame_type not in _BIO_FRAME_TYPES:
+            return None
+
+        name, profession, nationality = self._extract_bio_fields(frame)
+
+        entity_expr = f'mkEntityStr "{_escape_gf_string(name)}"'
+        prof_val = _safe_str(profession)
+        nat_val = _safe_str(nationality)
+
+        # Best-effort semantics:
+        # - profession + nationality -> mkBioFull
+        # - profession only          -> mkBioProf
+        # - nationality only         -> mkBioNat
+        # - nothing                  -> fallback profession "person"
+        if prof_val and nat_val:
+            prof_expr = f'strProf "{_escape_gf_string(prof_val)}"'
+            nat_expr = f'strNat "{_escape_gf_string(nat_val)}"'
+            return f"mkBioFull ({entity_expr}) ({prof_expr}) ({nat_expr})"
+
+        if prof_val:
+            prof_expr = f'strProf "{_escape_gf_string(prof_val)}"'
+            return f"mkBioProf ({entity_expr}) ({prof_expr})"
+
+        if nat_val:
+            nat_expr = f'strNat "{_escape_gf_string(nat_val)}"'
+            return f"mkBioNat ({entity_expr}) ({nat_expr})"
+
+        return f'mkBioProf ({entity_expr}) (strProf "person")'
 
     async def health_check(self) -> bool:
         """Verifies the engine is initialized and the PGF file is accessible."""

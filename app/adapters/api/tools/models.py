@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, ClassVar, Dict, List, Literal, Optional, Tuple
 
 from pydantic import BaseModel, Field
@@ -35,17 +35,72 @@ class ToolSpec:
     flags_with_multi_value: Tuple[str, ...] = ()  # consumes 1+ value tokens until next flag
 
     # UI / registry metadata
+    title: Optional[str] = None
     label: Optional[str] = None
     category: str = "maintenance"
+    group: Optional[str] = None
+    risk: str = "safe"
+
     hidden: bool = False
     legacy: bool = False
     internal: bool = False
     heavy: bool = False
     is_test: bool = False
+    test_tool: bool = False
+    recommended: bool = False
+
+    # Rich metadata
+    long_description: Optional[str] = None
+    parameter_docs: Tuple[Dict[str, Any], ...] = ()
+    common_failure_modes: Tuple[str, ...] = ()
+    supports_verbose: bool = False
+    supports_json: bool = False
+    notes: Tuple[str, ...] = ()
+    ui_steps: Tuple[str, ...] = ()
 
     # Workflow metadata
     workflow_tags: Tuple[WorkflowId, ...] = ()
+    workflow_ids: Tuple[WorkflowId, ...] = ()
+    workflows: Tuple[WorkflowId, ...] = ()
+    workflow_primary: Optional[WorkflowId] = None
+    workflow_steps: Dict[str, List[str]] = field(default_factory=dict)
     workflow_order: int = 1000
+    recommended_order: Optional[int] = None
+    power_user_only: bool = False
+    normal_path: bool = True
+
+    def __post_init__(self) -> None:
+        if self.label is None and self.title is not None:
+            object.__setattr__(self, "label", self.title)
+        if self.title is None and self.label is not None:
+            object.__setattr__(self, "title", self.label)
+
+        if self.test_tool and not self.is_test:
+            object.__setattr__(self, "is_test", True)
+        if self.is_test and not self.test_tool:
+            object.__setattr__(self, "test_tool", True)
+
+        if self.risk == "heavy" and not self.heavy:
+            object.__setattr__(self, "heavy", True)
+
+        if not self.workflow_tags:
+            if self.workflow_ids:
+                object.__setattr__(self, "workflow_tags", tuple(self.workflow_ids))
+            elif self.workflows:
+                object.__setattr__(self, "workflow_tags", tuple(self.workflows))
+
+        if not self.workflow_ids and self.workflow_tags:
+            object.__setattr__(self, "workflow_ids", tuple(self.workflow_tags))
+        if not self.workflows and self.workflow_tags:
+            object.__setattr__(self, "workflows", tuple(self.workflow_tags))
+
+        if self.recommended_order is None and self.workflow_order != 1000:
+            object.__setattr__(self, "recommended_order", self.workflow_order)
+        if self.recommended_order is not None and self.workflow_order == 1000:
+            object.__setattr__(self, "workflow_order", self.recommended_order)
+
+        if self.power_user_only and not self.hidden:
+            object.__setattr__(self, "hidden", True)
 
 
 # ---- Pydantic models (request/response) ----
@@ -69,11 +124,17 @@ class ToolRunRequest(BaseModel):
 
 class ToolSummary(BaseModel):
     id: str
+    title: Optional[str] = None
     label: str
     description: str
     timeout_sec: int
     category: Optional[str] = None
+    group: Optional[str] = None
+    risk: Optional[str] = None
+
     workflow_tags: List[WorkflowId] = Field(default_factory=list)
+    workflows: List[WorkflowId] = Field(default_factory=list)
+    workflow_primary: Optional[WorkflowId] = None
 
 
 class ToolRunEvent(BaseModel):
@@ -135,6 +196,7 @@ class ToolWorkflowGuide(BaseModel):
 
 class ToolMeta(BaseModel):
     tool_id: str
+    title: Optional[str] = None
     label: Optional[str] = None
     description: str
     timeout_sec: int
@@ -144,11 +206,19 @@ class ToolMeta(BaseModel):
     available: bool
 
     category: str = "maintenance"
+    group: Optional[str] = None
+    risk: str = "safe"
+
     hidden: bool = False
+    power_user: bool = False
     legacy: bool = False
     internal: bool = False
     heavy: bool = False
     is_test: bool = False
+    test_tool: bool = False
+    recommended: bool = False
+    normal_path: bool = True
+    power_user_only: bool = False
 
     allowed_flags: List[str] = Field(default_factory=list)
     allow_positionals: bool = False
@@ -156,7 +226,20 @@ class ToolMeta(BaseModel):
     flags_with_multi_value: List[str] = Field(default_factory=list)
 
     workflow_tags: List[WorkflowId] = Field(default_factory=list)
+    workflows: List[WorkflowId] = Field(default_factory=list)
+    workflow_primary: Optional[WorkflowId] = None
+    workflow_steps: Dict[str, List[str]] = Field(default_factory=dict)
     workflow_order: int = 1000
+    recommended_order: Optional[int] = None
+
+    notes: List[str] = Field(default_factory=list)
+    ui_steps: List[str] = Field(default_factory=list)
+
+    long_description: Optional[str] = None
+    parameter_docs: List[Dict[str, Any]] = Field(default_factory=list)
+    common_failure_modes: List[str] = Field(default_factory=list)
+    supports_verbose: bool = False
+    supports_json: bool = False
 
 
 class ToolRegistryResponse(BaseModel):

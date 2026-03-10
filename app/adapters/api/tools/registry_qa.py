@@ -37,7 +37,7 @@ def py_script(
     internal: bool = False,
     heavy: bool = False,
     legacy: bool = False,
-    test_tool: bool = False,
+    is_test: bool = False,
     workflow_tags: Sequence[str] = (),
 ) -> ToolSpec:
     return ToolSpec(
@@ -57,7 +57,7 @@ def py_script(
         internal=internal,
         heavy=heavy,
         legacy=legacy,
-        test_tool=test_tool,
+        is_test=is_test,
         workflow_tags=tuple(workflow_tags),
     )
 
@@ -95,7 +95,7 @@ def pytest_file(
         internal=internal,
         heavy=heavy,
         legacy=legacy,
-        test_tool=True,
+        is_test=True,
         workflow_tags=tuple(workflow_tags),
     )
 

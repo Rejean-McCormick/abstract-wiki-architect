@@ -1,22 +1,20 @@
 # app/shared/container.py
 from dependency_injector import containers, providers
+
 from app.shared.config import settings
 
 # --- Adapters ---
 from app.adapters.messaging.redis_broker import RedisMessageBroker
 from app.adapters.persistence.filesystem_repo import FileSystemLexiconRepository
-from app.adapters.task_queue import ArqTaskQueue  # <-- ADDED
+from app.adapters.task_queue import ArqTaskQueue
+from app.adapters.engines.gf_wrapper import GFGrammarEngine
+from app.adapters.engines.python_engine_wrapper import PythonGrammarEngine
 
-# Note: Only import S3 repo if you actually have that file, otherwise comment it out
 try:
     from app.adapters.s3_repo import S3LanguageRepo
 except ImportError:
     S3LanguageRepo = None
 
-from app.adapters.engines.gf_wrapper import GFGrammarEngine
-# [FIX] Swapped out the legacy/empty 'Pidgin' engine for the robust Python Wrapper
-from app.adapters.engines.python_engine_wrapper import PythonGrammarEngine
-from app.adapters.llm_adapter import GeminiAdapter
 
 # --- Use Cases ---
 from app.core.use_cases.generate_text import GenerateText
@@ -24,13 +22,20 @@ from app.core.use_cases.build_language import BuildLanguage
 from app.core.use_cases.onboard_language_saga import OnboardLanguageSaga
 
 
+_STORAGE_BACKEND = (settings.STORAGE_BACKEND or "").strip().lower()
+_USE_S3_REPO = _STORAGE_BACKEND == "s3" and S3LanguageRepo is not None
+
+
 class Container(containers.DeclarativeContainer):
     """
-    Dependency Injection Container.
-    Acts as the "Switchboard" connecting Adapters to Use Cases.
+    Dependency Injection container.
+
+    Notes:
+    - PGF_PATH is the source of truth for the compiled grammar.
+    - Do NOT pass settings.GF_LIB_PATH into GFGrammarEngine; that points at the
+      GF library tree, not the compiled semantik_architect.pgf artifact.
     """
 
-    # 1. Wiring Configuration
     wiring_config = containers.WiringConfiguration(
         modules=[
             "app.adapters.api.routers.generation",
@@ -41,16 +46,19 @@ class Container(containers.DeclarativeContainer):
         ]
     )
 
-    # 2. Infrastructure Gateways
+    # Optional: expose settings to providers/tests
+    config = providers.Object(settings)
 
-    # Message Broker
+    # --- Infrastructure ---
     message_broker = providers.Singleton(RedisMessageBroker)
 
-    # Task Queue (ARQ)
-    task_queue = providers.Singleton(ArqTaskQueue)
+    task_queue = providers.Singleton(
+        ArqTaskQueue,
+        redis_dsn=settings.REDIS_URL,
+        queue_name=settings.REDIS_QUEUE_NAME,
+    )
 
-    # Persistence (Selector: S3 vs FileSystem)
-    if settings.STORAGE_BACKEND == "s3" and S3LanguageRepo:
+    if _USE_S3_REPO:
         language_repo = providers.Singleton(S3LanguageRepo)
     else:
         language_repo = providers.Singleton(
@@ -58,27 +66,21 @@ class Container(containers.DeclarativeContainer):
             base_path=settings.FILESYSTEM_REPO_PATH,
         )
 
-    # Aliases for clarity
+    # Alias retained for compatibility/readability
     lexicon_repository = language_repo
 
-    # Grammar Engine
     if settings.USE_MOCK_GRAMMAR:
         grammar_engine = providers.Singleton(PythonGrammarEngine)
     else:
-        grammar_engine = providers.Singleton(GFGrammarEngine, lib_path=settings.GF_LIB_PATH)
+        # Let GFGrammarEngine resolve settings.PGF_PATH by itself.
+        grammar_engine = providers.Singleton(GFGrammarEngine)
 
-    # LLM Client (Gemini BYOK)
-    llm_client = providers.Singleton(GeminiAdapter)
-
-    # 3. Use Cases (Application Logic)
-
+    # --- Use Cases ---
     generate_text_use_case = providers.Factory(
         GenerateText,
         engine=grammar_engine,
-        # llm=llm_client
     )
 
-    # ✅ FIX: inject BOTH the task queue and the broker
     build_language_use_case = providers.Factory(
         BuildLanguage,
         task_queue=task_queue,

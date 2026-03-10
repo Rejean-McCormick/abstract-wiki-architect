@@ -4,9 +4,10 @@ import json
 import os
 import re
 import threading
-import structlog
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+import structlog
 
 try:
     import pgf
@@ -28,6 +29,12 @@ class GFGrammarEngine:
     - Async (API server): lazy-load via await _ensure_grammar() (non-blocking startup).
     - Sync (CLI/tools): first access to .grammar triggers a safe synchronous load.
       This fixes tools like universal_test_runner which check engine.grammar is not None.
+
+    Payload tolerance:
+    - Canonical BioFrame instances
+    - Legacy flat bio payloads
+    - Flat entity.person payloads from the Dev GUI
+    - Dicts that place fields in subject / main_entity / properties / top-level
     """
 
     _BIO_FRAME_TYPES = {
@@ -40,9 +47,16 @@ class GFGrammarEngine:
         "entity.person.v2",
     }
 
+    _NAME_KEYS = ("name", "label", "title")
+    _PROF_KEYS = ("profession", "occupation", "profession_lemma", "prof_lemma")
+    _NAT_KEYS = ("nationality", "citizenship", "nationality_lemma", "nat_lemma")
+    _GENDER_KEYS = ("gender", "sex")
+    _QID_KEYS = ("qid", "id", "wikidata_qid")
+
     def __init__(self, lib_path: str | None = None):
         configured = (
-            os.getenv("PGF_PATH")
+            lib_path
+            or os.getenv("PGF_PATH")
             or getattr(settings, "PGF_PATH", None)
             or os.getenv("AW_PGF_PATH")
             or getattr(settings, "AW_PGF_PATH", "gf/semantik_architect.pgf")
@@ -194,7 +208,6 @@ class GFGrammarEngine:
                 if isinstance(v, dict):
                     iso2 = v.get("iso2")
                     if not (isinstance(iso2, str) and len(iso2.strip()) == 2):
-                        # if the key itself is iso2, accept it
                         if len(kk) == 2 and kk.isalpha():
                             iso2 = kk
                         else:
@@ -215,7 +228,6 @@ class GFGrammarEngine:
                             iso3_code = iso3c
 
                     if iso2 and len(iso2) == 2:
-                        # iso2 always maps to itself
                         self.wiki_to_iso2[iso2] = iso2
                         self.wiki_to_iso2[f"wiki{iso2}"] = iso2
 
@@ -226,7 +238,6 @@ class GFGrammarEngine:
 
                         if iso3_code:
                             self.iso2_to_iso3[iso2] = iso3_code
-                            # allow iso3 normalization
                             self.wiki_to_iso2[iso3_code] = iso2
                             self.wiki_to_iso2[f"wiki{iso3_code}"] = iso2
 
@@ -235,7 +246,7 @@ class GFGrammarEngine:
                     if not vv:
                         continue
 
-                    # Case A: alias -> iso2 (common normalization map shape)
+                    # Case A: alias -> iso2
                     if len(vv) == 2 and vv.isalpha():
                         self.wiki_to_iso2[kk] = vv
                         if kk.startswith("wiki") and len(kk) > 4:
@@ -244,7 +255,7 @@ class GFGrammarEngine:
                         self.wiki_to_iso2[f"wiki{vv}"] = vv
                         continue
 
-                    # Case B: iso2 -> wiki suffix (string form)
+                    # Case B: iso2 -> wiki suffix
                     if len(kk) == 2 and kk.isalpha():
                         iso2 = kk
                         wiki_code = _strip_wiki_prefix(v.strip())
@@ -339,7 +350,7 @@ class GFGrammarEngine:
                 await asyncio.to_thread(self._load_grammar_sync)
 
     # ----------------------------
-    # Public API (IGrammarEngine)
+    # Public API
     # ----------------------------
     async def status(self) -> Dict[str, Any]:
         await self._ensure_grammar()
@@ -364,24 +375,39 @@ class GFGrammarEngine:
             }
             return Sentence(text="<GF Runtime Not Loaded>", lang_code=lang_code, debug_info=dbg)
 
-        # 1) Ninai/UniversalNode dict
+        # 1) Ninai / UniversalNode-like dict
         if isinstance(frame, dict) and ("function" in frame or "args" in frame):
             ast_str = self._convert_to_gf_ast(frame, lang_code)
             text = self.linearize(ast_str, lang_code)
             if not text:
                 text = "<LinearizeError>"
-            return Sentence(text=text, lang_code=lang_code, debug_info={"ast": ast_str})
+            return Sentence(
+                text=text,
+                lang_code=lang_code,
+                debug_info={
+                    "ast": ast_str,
+                    "resolved_language": self._resolve_concrete_name(lang_code),
+                },
+            )
 
         # 2) Bio-ish domain object or dict payload
         bio = self._coerce_to_bio_frame(frame)
         ast_str = self._convert_to_gf_ast(bio, lang_code)
         text = self.linearize(ast_str, lang_code)
 
+        # Only soft-fallback on empty / placeholder-ish outputs, not on explicit runtime errors.
         if not text or text.strip() in {"[]", ""}:
             name = (bio.name or "").strip() or "<Unknown>"
             text = name
 
-        return Sentence(text=text, lang_code=lang_code, debug_info={"ast": ast_str})
+        return Sentence(
+            text=text,
+            lang_code=lang_code,
+            debug_info={
+                "ast": ast_str,
+                "resolved_language": self._resolve_concrete_name(lang_code),
+            },
+        )
 
     def parse(self, sentence: str, language: str):
         g = self.grammar
@@ -465,7 +491,6 @@ class GFGrammarEngine:
         if isinstance(hit, str) and len(hit) == 2:
             return hit
 
-        # last resort: accept raw iso2
         if len(k) == 2 and k.isalpha():
             return k
 
@@ -489,11 +514,9 @@ class GFGrammarEngine:
         if not raw:
             return None
 
-        # 0) Exact match
         if raw in g.languages:
             return raw
 
-        # 1) Case-insensitive exact match
         lower_to_key = {k.lower(): k for k in g.languages.keys()}
         rl = raw.lower()
         if rl in lower_to_key:
@@ -516,7 +539,6 @@ class GFGrammarEngine:
 
         candidates: List[str] = []
 
-        # Primary: iso2 -> Wiki{wikiSuffix}
         if wiki:
             s = wiki.strip()
             candidates.extend(
@@ -531,7 +553,6 @@ class GFGrammarEngine:
                 ]
             )
 
-        # Secondary: iso2 -> Wiki{iso3}
         if iso3:
             s3 = iso3.strip()
             candidates.extend(
@@ -544,7 +565,6 @@ class GFGrammarEngine:
                 ]
             )
 
-        # Tertiary: try iso2 shapes (some PGFs use WikiEn / WikiFr, etc)
         if iso2:
             candidates.extend([f"Wiki{iso2.upper()}", f"Wiki{iso2.capitalize()}", iso2])
 
@@ -552,7 +572,6 @@ class GFGrammarEngine:
         if hit:
             return hit
 
-        # Heuristic: suffix matching across available grammar.languages
         probes: List[str] = []
         if wiki:
             probes.append(wiki.casefold())
@@ -572,98 +591,230 @@ class GFGrammarEngine:
         return None
 
     # ----------------------------
-    # Conversion helpers
+    # Small payload helpers
     # ----------------------------
     @staticmethod
     def _escape_gf_str(s: str) -> str:
         return (s or "").replace("\\", "\\\\").replace('"', '\\"')
 
+    @staticmethod
+    def _clean_str(value: Any) -> Optional[str]:
+        if value is None:
+            return None
+        if isinstance(value, str):
+            s = value.strip()
+            return s or None
+        s = str(value).strip()
+        return s or None
+
+    @staticmethod
+    def _as_dict(value: Any) -> Dict[str, Any]:
+        return dict(value) if isinstance(value, dict) else {}
+
+    def _first_non_empty(self, *sources: Any) -> Optional[str]:
+        for src in sources:
+            if isinstance(src, dict):
+                for v in src.values():
+                    s = self._clean_str(v)
+                    if s:
+                        return s
+            else:
+                s = self._clean_str(src)
+                if s:
+                    return s
+        return None
+
+    def _pick(self, source: Dict[str, Any], keys: tuple[str, ...]) -> Optional[str]:
+        for key in keys:
+            val = self._clean_str(source.get(key))
+            if val:
+                return val
+        return None
+
+    def _normalize_gender(self, value: Any) -> Optional[str]:
+        s = self._clean_str(value)
+        if not s:
+            return None
+        sl = s.lower()
+        if sl in {"male", "man", "masculine"}:
+            return "m"
+        if sl in {"female", "woman", "feminine"}:
+            return "f"
+        if sl in {"neuter"}:
+            return "n"
+        if sl in {"m", "f", "n"}:
+            return sl
+        return s
+
+    def _subject_from_payload(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Merge bio-relevant fields from:
+          - payload.subject
+          - payload.main_entity
+          - payload.properties
+          - payload top-level flat keys
+
+        Precedence: top-level > properties > main_entity > subject
+        """
+        subject = self._as_dict(payload.get("subject"))
+        main_entity = self._as_dict(payload.get("main_entity"))
+        props = self._as_dict(payload.get("properties"))
+
+        merged: Dict[str, Any] = {}
+        merged.update(subject)
+        merged.update(main_entity)
+
+        name = self._pick(payload, self._NAME_KEYS) or self._pick(props, self._NAME_KEYS)
+        profession = self._pick(payload, self._PROF_KEYS) or self._pick(props, self._PROF_KEYS)
+        nationality = self._pick(payload, self._NAT_KEYS) or self._pick(props, self._NAT_KEYS)
+        gender = self._normalize_gender(self._pick(payload, self._GENDER_KEYS) or self._pick(props, self._GENDER_KEYS))
+        qid = self._pick(payload, self._QID_KEYS) or self._pick(props, self._QID_KEYS)
+
+        if not self._pick(merged, self._NAME_KEYS):
+            fallback_name = self._pick(main_entity, self._NAME_KEYS) or self._pick(subject, self._NAME_KEYS)
+            if fallback_name:
+                merged["name"] = fallback_name
+        if name:
+            merged["name"] = name
+
+        if not self._pick(merged, self._PROF_KEYS):
+            fallback_prof = self._pick(main_entity, self._PROF_KEYS) or self._pick(subject, self._PROF_KEYS)
+            if fallback_prof:
+                merged["profession"] = fallback_prof
+        if profession:
+            merged["profession"] = profession
+
+        if not self._pick(merged, self._NAT_KEYS):
+            fallback_nat = self._pick(main_entity, self._NAT_KEYS) or self._pick(subject, self._NAT_KEYS)
+            if fallback_nat:
+                merged["nationality"] = fallback_nat
+        if nationality:
+            merged["nationality"] = nationality
+
+        if not self._pick(merged, self._GENDER_KEYS):
+            fallback_gender = self._normalize_gender(
+                self._pick(main_entity, self._GENDER_KEYS) or self._pick(subject, self._GENDER_KEYS)
+            )
+            if fallback_gender:
+                merged["gender"] = fallback_gender
+        if gender:
+            merged["gender"] = gender
+
+        if not self._pick(merged, self._QID_KEYS):
+            fallback_qid = self._pick(main_entity, self._QID_KEYS) or self._pick(subject, self._QID_KEYS)
+            if fallback_qid:
+                merged["qid"] = fallback_qid
+        if qid:
+            merged["qid"] = qid
+
+        return merged
+
+    def _is_bio_like_payload(self, payload: Dict[str, Any]) -> bool:
+        frame_type_raw = payload.get("frame_type") or payload.get("type") or ""
+        frame_type = str(frame_type_raw).lower().strip() if frame_type_raw is not None else ""
+
+        if frame_type in self._BIO_FRAME_TYPES:
+            return True
+        if frame_type.startswith("entity.") and "person" in frame_type:
+            return True
+
+        merged = self._subject_from_payload(payload)
+        return bool(
+            self._pick(merged, self._NAME_KEYS)
+            or self._pick(merged, self._PROF_KEYS)
+            or self._pick(merged, self._NAT_KEYS)
+            or self._pick(merged, self._GENDER_KEYS)
+        )
+
+    # ----------------------------
+    # Conversion helpers
+    # ----------------------------
     def _coerce_to_bio_frame(self, obj: Any) -> BioFrame:
         if isinstance(obj, BioFrame):
             return obj
 
         if isinstance(obj, Frame):
+            payload: Dict[str, Any] = {
+                "frame_type": getattr(obj, "frame_type", "bio") or "bio",
+                "subject": dict(getattr(obj, "subject", {}) or {}),
+                "properties": dict(getattr(obj, "properties", {}) or {}),
+                "meta": dict(getattr(obj, "meta", {}) or {}),
+                "context_id": getattr(obj, "context_id", "") or "",
+            }
+            subject = self._subject_from_payload(payload)
             return BioFrame(
                 frame_type="bio",
-                subject=obj.subject,
-                properties=getattr(obj, "properties", {}) or {},
-                context_id=getattr(obj, "context_id", "") or "",
-                meta=getattr(obj, "meta", {}) or {},
+                subject=subject,
+                context_id=payload["context_id"] or "",
+                meta=payload["meta"] or {},
             )
 
         if isinstance(obj, dict):
-            frame_type_raw = obj.get("frame_type") or obj.get("type") or ""
-            frame_type = str(frame_type_raw).lower().strip() if frame_type_raw is not None else ""
+            if not self._is_bio_like_payload(obj):
+                raise ValueError("Unsupported frame payload for Bio generation")
 
-            looks_like_person = any(k in obj for k in ("name", "profession", "nationality", "gender", "subject"))
-
-            if (
-                frame_type in self._BIO_FRAME_TYPES
-                or (frame_type.startswith("entity.") and "person" in frame_type)
-                or looks_like_person
-            ):
-                subject = obj.get("subject") if isinstance(obj.get("subject"), dict) else {}
-                props = obj.get("properties") if isinstance(obj.get("properties"), dict) else {}
-
-                if isinstance(subject, dict):
-                    if obj.get("name"):
-                        subject = {**subject, "name": obj.get("name")}
-                    if obj.get("profession"):
-                        subject = {**subject, "profession": obj.get("profession")}
-                    if obj.get("nationality"):
-                        subject = {**subject, "nationality": obj.get("nationality")}
-                    if obj.get("gender"):
-                        subject = {**subject, "gender": obj.get("gender")}
-
-                return BioFrame(
-                    frame_type="bio",
-                    subject=subject,
-                    properties=props,
-                    context_id=obj.get("context_id") or "",
-                    meta=obj.get("meta") or {},
-                )
+            subject = self._subject_from_payload(obj)
+            return BioFrame(
+                frame_type="bio",
+                subject=subject,
+                context_id=obj.get("context_id") or "",
+                meta=obj.get("meta") or {},
+            )
 
         raise ValueError("Unsupported frame payload for Bio generation")
 
     def _bio_fields(self, frame: BioFrame) -> tuple[str, Optional[str], Optional[str], Optional[str]]:
-        name = (getattr(frame, "name", None) or "").strip()
-        gender = getattr(frame, "gender", None)
+        name = self._clean_str(getattr(frame, "name", None)) or ""
+        gender = self._normalize_gender(getattr(frame, "gender", None))
 
-        profession = None
-        nationality = None
+        profession: Optional[str] = None
+        nationality: Optional[str] = None
 
         subj = getattr(frame, "subject", None)
         if isinstance(subj, dict):
-            profession = subj.get("profession")
-            nationality = subj.get("nationality")
+            profession = self._pick(subj, self._PROF_KEYS)
+            nationality = self._pick(subj, self._NAT_KEYS)
+
             if not name:
-                name = (subj.get("name") or "").strip()
+                name = self._pick(subj, self._NAME_KEYS) or ""
             if gender is None:
-                gender = subj.get("gender")
+                gender = self._normalize_gender(self._pick(subj, self._GENDER_KEYS))
         else:
-            profession = getattr(subj, "profession", None)
-            nationality = getattr(subj, "nationality", None)
+            profession = self._clean_str(getattr(subj, "profession", None))
+            nationality = self._clean_str(getattr(subj, "nationality", None))
+
             if not name:
-                name = (getattr(subj, "name", None) or "").strip()
+                name = self._clean_str(getattr(subj, "name", None)) or ""
             if gender is None:
-                gender = getattr(subj, "gender", None)
+                gender = self._normalize_gender(getattr(subj, "gender", None))
 
         return name, profession, nationality, gender
 
     def _convert_to_gf_ast(self, node: Any, lang_code: str) -> str:
         if isinstance(node, BioFrame):
             name, prof, nat, _gender = self._bio_fields(node)
+
             name_esc = self._escape_gf_str(name or "Unknown")
-            prof_esc = self._escape_gf_str(prof or "person")
+            prof_esc = self._escape_gf_str(prof or "")
             nat_esc = self._escape_gf_str(nat or "")
 
             entity = f'mkEntityStr "{name_esc}"'
-            prof_expr = f'strProf "{prof_esc}"'
 
-            if nat_esc:
+            # Most specific first:
+            # - profession + nationality -> mkBioFull
+            # - nationality only         -> mkBioNat
+            # - profession only          -> mkBioProf
+            # - nothing                  -> mkBioProf(..., "person")
+            if prof_esc and nat_esc:
+                prof_expr = f'strProf "{prof_esc}"'
                 nat_expr = f'strNat "{nat_esc}"'
                 return f"mkBioFull ({entity}) ({prof_expr}) ({nat_expr})"
 
+            if nat_esc:
+                nat_expr = f'strNat "{nat_esc}"'
+                return f"mkBioNat ({entity}) ({nat_expr})"
+
+            prof_expr = f'strProf "{self._escape_gf_str(prof or 'person')}"'
             return f"mkBioProf ({entity}) ({prof_expr})"
 
         if isinstance(node, dict):
@@ -687,9 +838,8 @@ class GFGrammarEngine:
             arg_str = " ".join([f"({a})" if needs_parens(a) else a for a in processed]).strip()
             candidate = f"{func} {arg_str}".strip()
 
-            if func == "mkCl":
-                if self._linearizes_as_placeholder(candidate, lang_code):
-                    return self._flatten_ninai_to_literal(node)
+            if func == "mkCl" and self._linearizes_as_placeholder(candidate, lang_code):
+                return self._flatten_ninai_to_literal(node)
 
             return candidate
 

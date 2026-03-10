@@ -3,11 +3,17 @@
   "label": "Generate Person (French)",
   "method": "POST",
   "endpoint": "/api/v1/generate/fr",
-  "description": "Runs generation for entity.person in French.",
+  "description": "Runs generation for a bio/person frame in French.",
   "payload": {
-    "frame_type": "entity.person",
-    "name": "Alan Turing",
-    "profession": "Mathematician",
-    "nationality": "British"
+    "frame_type": "bio",
+    "subject": {
+      "name": "Alan Turing",
+      "qid": "Q7251",
+      "profession": "Mathematician",
+      "nationality": "British"
+    },
+    "properties": {
+      "label": "Alan Turing"
+    }
   }
 }

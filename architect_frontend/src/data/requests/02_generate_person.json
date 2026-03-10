@@ -3,11 +3,14 @@
   "label": "Generate Person (English)",
   "method": "POST",
   "endpoint": "/api/v1/generate/en",
-  "description": "Runs generation for entity.person in English.",
+  "description": "Runs generation for a person bio in English.",
   "payload": {
-    "frame_type": "entity.person",
-    "name": "Alan Turing",
-    "profession": "Mathematician",
-    "nationality": "British"
+    "frame_type": "bio",
+    "subject": {
+      "name": "Alan Turing",
+      "profession": "Mathematician",
+      "nationality": "British",
+      "gender": "m"
+    }
   }
 }

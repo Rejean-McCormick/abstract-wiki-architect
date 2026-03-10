@@ -1,1 +1,5 @@
-concrete WikiFre of SemantikArchitect = WikiI with (Syntax = SyntaxFre) ** open SyntaxFre, ParadigmsFre in { flags coding=utf8 ; };
+concrete WikiFre of SemantikArchitect =
+  WikiI with (Syntax = SyntaxFre), (Symbolic = SymbolicFre) **
+  open SyntaxFre, ParadigmsFre, SymbolicFre in {
+    flags coding = utf8 ;
+  };

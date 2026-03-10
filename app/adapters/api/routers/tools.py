@@ -109,27 +109,33 @@ _DEFAULT_WORKFLOW_STEPS: Dict[str, List[str]] = {
 _TOOL_ID_WORKFLOWS: Dict[str, Tuple[str, ...]] = {
     "build_index": ("recommended", "language_integration", "build_matrix"),
     "compile_pgf": ("recommended", "language_integration", "build_matrix"),
-    "language_health": ("recommended", "language_integration", "qa_validation"),
+    "language_health": ("recommended", "language_integration", "build_matrix", "qa_validation"),
     "run_judge": ("recommended", "language_integration", "qa_validation"),
     "lexicon_coverage": ("language_integration", "lexicon_work"),
     "harvest_lexicon": ("language_integration", "lexicon_work"),
     "gap_filler": ("language_integration", "lexicon_work"),
     "bootstrap_tier1": ("language_integration", "build_matrix", "debug_recovery"),
     "diagnostic_audit": ("debug_recovery",),
+    "cleanup_root": ("debug_recovery",),
     "profiler": ("qa_validation",),
-    "ai_refiner": ("ai_assist", "debug_recovery"),
-    "rgl_scanner": ("build_matrix", "debug_recovery"),
-    "lexicon_scanner": ("build_matrix", "debug_recovery"),
+    "visualize_ast": ("debug_recovery",),
+    "ai_refiner": ("language_integration", "debug_recovery", "ai_assist"),
+    "rgl_scanner": ("build_matrix", "debug_recovery", "language_integration"),
+    "lexicon_scanner": ("build_matrix", "debug_recovery", "lexicon_work"),
     "app_scanner": ("build_matrix", "debug_recovery"),
-    "qa_scanner": ("build_matrix", "debug_recovery"),
-    "refresh_lexicon_index": ("lexicon_work",),
-    "migrate_lexicon_schema": ("lexicon_work",),
-    "dump_lexicon_stats": ("lexicon_work",),
-    "seed_lexicon_ai": ("lexicon_work", "ai_assist"),
-    "build_lexicon_from_wikidata": ("lexicon_work",),
-    "ambiguity_detector": ("qa_validation",),
+    "qa_scanner": ("build_matrix", "debug_recovery", "qa_validation"),
+    "refresh_index": ("lexicon_work", "debug_recovery"),
+    "migrate_schema": ("lexicon_work", "debug_recovery"),
+    "dump_stats": ("lexicon_work", "debug_recovery"),
+    "seed_lexicon": ("lexicon_work", "ai_assist"),
+    "build_lexicon_wikidata": ("lexicon_work", "debug_recovery"),
+    "ambiguity_detector": ("qa_validation", "debug_recovery", "ai_assist"),
+    "eval_bios": ("qa_validation",),
+    "universal_test_runner": ("qa_validation", "debug_recovery"),
+    "test_runner": ("qa_validation", "debug_recovery"),
     "batch_test_generator": ("qa_validation",),
-    "generate_lexicon_regression_tests": ("qa_validation",),
+    "test_suite_generator": ("qa_validation",),
+    "generate_lexicon_regression_tests": ("lexicon_work", "qa_validation"),
     "test_api_smoke": ("qa_validation", "debug_recovery"),
     "test_gf_dynamic": ("qa_validation", "debug_recovery"),
     "test_multilingual_generation": ("qa_validation", "debug_recovery"),
@@ -297,6 +303,72 @@ def _dedupe_strs(values: Sequence[str]) -> List[str]:
     return out
 
 
+def _display_label_for_spec(spec: ToolSpec) -> str:
+    for attr in ("label", "title"):
+        raw = getattr(spec, attr, None)
+        if raw is None:
+            continue
+        value = str(raw).strip()
+        if value:
+            return value
+    return spec.tool_id
+
+
+def _display_title_for_spec(spec: ToolSpec) -> Optional[str]:
+    for attr in ("title", "label"):
+        raw = getattr(spec, attr, None)
+        if raw is None:
+            continue
+        value = str(raw).strip()
+        if value:
+            return value
+    return None
+
+
+def _recommended_order_for_spec(spec: ToolSpec) -> Optional[int]:
+    raw = getattr(spec, "recommended_order", None)
+    if isinstance(raw, int):
+        return raw
+    if isinstance(raw, str):
+        try:
+            return int(raw)
+        except Exception:
+            pass
+
+    raw = getattr(spec, "workflow_order", None)
+    if isinstance(raw, int) and raw != 1000:
+        return raw
+    if isinstance(raw, str):
+        try:
+            value = int(raw)
+            if value != 1000:
+                return value
+        except Exception:
+            pass
+
+    if bool(getattr(spec, "recommended", False)):
+        return 10
+
+    return None
+
+
+def _workflow_order_for_spec(spec: ToolSpec) -> int:
+    raw = getattr(spec, "workflow_order", None)
+    if isinstance(raw, int):
+        return raw
+    if isinstance(raw, str):
+        try:
+            return int(raw)
+        except Exception:
+            pass
+
+    recommended_order = _recommended_order_for_spec(spec)
+    if recommended_order is not None:
+        return recommended_order
+
+    return 1000
+
+
 def _workflow_steps_for(workflow: str) -> List[str]:
     return list(_DEFAULT_WORKFLOW_STEPS.get(workflow, []))
 
@@ -317,8 +389,18 @@ def _workflow_tags_from_path(path: str) -> List[str]:
     if "run_judge" in p:
         tags.extend(["recommended", "language_integration", "qa_validation"])
 
-    if any(k in p for k in ("lexicon_coverage", "harvest_lexicon", "gap_filler", "refresh_lexicon_index",
-                            "migrate_lexicon_schema", "dump_lexicon_stats", "build_lexicon_from_wikidata")):
+    if any(
+        k in p
+        for k in (
+            "lexicon_coverage",
+            "harvest_lexicon",
+            "gap_filler",
+            "refresh_index",
+            "migrate_schema",
+            "dump_stats",
+            "build_lexicon_wikidata",
+        )
+    ):
         tags.append("lexicon_work")
 
     if any(k in p for k in ("lexicon_coverage", "harvest_lexicon", "gap_filler", "bootstrap_tier1")):
@@ -337,6 +419,7 @@ def _workflow_tags_from_path(path: str) -> List[str]:
         for k in (
             "diagnostic_audit",
             "cleanup_root",
+            "visualize_ast",
             "smoke",
             "test_api",
             "test_gf",
@@ -349,17 +432,21 @@ def _workflow_tags_from_path(path: str) -> List[str]:
     ):
         tags.append("debug_recovery")
 
-    if any(k in p for k in ("ai_refiner", "seed_lexicon_ai")) or p.startswith("ai_services/"):
+    if any(k in p for k in ("ai_refiner", "seed_lexicon")) or p.startswith("ai_services/"):
         tags.append("ai_assist")
 
     return _dedupe_strs([t for t in tags if t in WORKFLOW_FILTER_SET and t != "all"])
 
 
 def _workflows_for_spec(spec: ToolSpec) -> List[str]:
-    explicit = []
-    for attr in ("workflows", "workflow_tags"):
+    explicit: List[str] = []
+    for attr in ("workflows", "workflow_tags", "workflow_ids"):
         explicit.extend(_coerce_str_list(getattr(spec, attr, None)))
+
     explicit = [w for w in explicit if w in WORKFLOW_FILTER_SET and w != "all"]
+
+    if bool(getattr(spec, "recommended", False)) and "recommended" not in explicit:
+        explicit.insert(0, "recommended")
 
     if explicit:
         return _dedupe_strs(explicit)
@@ -401,6 +488,9 @@ def _tool_meta_payload(spec: ToolSpec, available: bool) -> Dict[str, Any]:
     workflows = _workflows_for_spec(spec)
     workflow_primary = _workflow_primary_for_spec(spec, workflows)
     workflow_steps = _workflow_steps_map_for_spec(spec, workflows)
+    title = _display_title_for_spec(spec)
+    label = _display_label_for_spec(spec)
+    recommended_order = _recommended_order_for_spec(spec)
 
     payload: Dict[str, Any] = {
         "tool_id": spec.tool_id,
@@ -412,17 +502,38 @@ def _tool_meta_payload(spec: ToolSpec, available: bool) -> Dict[str, Any]:
     }
 
     optional_values: Dict[str, Any] = {
-        "label": getattr(spec, "label", spec.tool_id),
-        "hidden": bool(getattr(spec, "hidden", False)),
-        "power_user": bool(getattr(spec, "hidden", False)),
-        "risk": getattr(spec, "risk", None),
-        "category": getattr(spec, "category", None),
+        "title": title,
+        "label": label,
+        "category": getattr(spec, "category", "maintenance"),
         "group": getattr(spec, "group", None),
-        "notes": _coerce_str_list(getattr(spec, "notes", None)),
-        "ui_steps": _coerce_str_list(getattr(spec, "ui_steps", None)),
+        "risk": getattr(spec, "risk", "safe"),
+        "hidden": bool(getattr(spec, "hidden", False)),
+        "power_user": bool(getattr(spec, "hidden", False) or getattr(spec, "power_user_only", False)),
+        "legacy": bool(getattr(spec, "legacy", False)),
+        "internal": bool(getattr(spec, "internal", False)),
+        "heavy": bool(getattr(spec, "heavy", False) or getattr(spec, "risk", "") == "heavy"),
+        "is_test": bool(getattr(spec, "is_test", False) or getattr(spec, "test_tool", False)),
+        "test_tool": bool(getattr(spec, "test_tool", False) or getattr(spec, "is_test", False)),
+        "recommended": bool(getattr(spec, "recommended", False)),
+        "normal_path": bool(getattr(spec, "normal_path", True)),
+        "power_user_only": bool(getattr(spec, "power_user_only", False)),
+        "allowed_flags": list(getattr(spec, "allowed_flags", ()) or ()),
+        "allow_positionals": bool(getattr(spec, "allow_positionals", False)),
+        "flags_with_value": list(getattr(spec, "flags_with_value", ()) or ()),
+        "flags_with_multi_value": list(getattr(spec, "flags_with_multi_value", ()) or ()),
+        "workflow_tags": workflows,
         "workflows": workflows,
         "workflow_primary": workflow_primary,
         "workflow_steps": workflow_steps,
+        "workflow_order": _workflow_order_for_spec(spec),
+        "recommended_order": recommended_order,
+        "notes": _coerce_str_list(getattr(spec, "notes", None)),
+        "ui_steps": _coerce_str_list(getattr(spec, "ui_steps", None)),
+        "long_description": getattr(spec, "long_description", None),
+        "parameter_docs": list(getattr(spec, "parameter_docs", ()) or ()),
+        "common_failure_modes": _coerce_str_list(getattr(spec, "common_failure_modes", None)),
+        "supports_verbose": bool(getattr(spec, "supports_verbose", False)),
+        "supports_json": bool(getattr(spec, "supports_json", False)),
     }
 
     for key, value in optional_values.items():
@@ -434,24 +545,50 @@ def _tool_meta_payload(spec: ToolSpec, available: bool) -> Dict[str, Any]:
 
 def tool_summary_from_spec(spec: Optional[ToolSpec], tool_id: str) -> ToolSummary:
     if spec is None:
-        label = tool_id
-        payload = {"id": tool_id, "label": label, "description": "", "timeout_sec": 0}
+        payload: Dict[str, Any] = {
+            "id": tool_id,
+            "label": tool_id,
+            "description": "",
+            "timeout_sec": 0,
+        }
+        if "title" in _TOOLSUMMARY_FIELDS:
+            payload["title"] = tool_id
+        if "category" in _TOOLSUMMARY_FIELDS:
+            payload["category"] = None
+        if "group" in _TOOLSUMMARY_FIELDS:
+            payload["group"] = None
+        if "risk" in _TOOLSUMMARY_FIELDS:
+            payload["risk"] = None
+        if "workflow_tags" in _TOOLSUMMARY_FIELDS:
+            payload["workflow_tags"] = [DEFAULT_WORKFLOW]
         if "workflows" in _TOOLSUMMARY_FIELDS:
             payload["workflows"] = [DEFAULT_WORKFLOW]
         if "workflow_primary" in _TOOLSUMMARY_FIELDS:
             payload["workflow_primary"] = DEFAULT_WORKFLOW
         return ToolSummary(**payload)
 
-    label = getattr(spec, "label", spec.tool_id)
+    workflows = _workflows_for_spec(spec)
+    workflow_primary = _workflow_primary_for_spec(spec, workflows)
+    title = _display_title_for_spec(spec)
+    label = _display_label_for_spec(spec)
+
     payload = {
         "id": spec.tool_id,
         "label": label,
         "description": spec.description,
         "timeout_sec": spec.timeout_sec,
     }
-    workflows = _workflows_for_spec(spec)
-    workflow_primary = _workflow_primary_for_spec(spec, workflows)
 
+    if "title" in _TOOLSUMMARY_FIELDS:
+        payload["title"] = title
+    if "category" in _TOOLSUMMARY_FIELDS:
+        payload["category"] = getattr(spec, "category", None)
+    if "group" in _TOOLSUMMARY_FIELDS:
+        payload["group"] = getattr(spec, "group", None)
+    if "risk" in _TOOLSUMMARY_FIELDS:
+        payload["risk"] = getattr(spec, "risk", None)
+    if "workflow_tags" in _TOOLSUMMARY_FIELDS:
+        payload["workflow_tags"] = workflows
     if "workflows" in _TOOLSUMMARY_FIELDS:
         payload["workflows"] = workflows
     if "workflow_primary" in _TOOLSUMMARY_FIELDS:
@@ -1002,4 +1139,3 @@ async def run_tool(payload: ToolRunRequest) -> ToolRunResponse:
         truncation=ToolRunTruncation(stdout=out_was_trunc, stderr=err_was_trunc, limit_chars=MAX_OUTPUT_CHARS),
         events=events,
     )
-

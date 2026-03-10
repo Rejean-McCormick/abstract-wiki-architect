@@ -5,7 +5,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # Unify Frame definition by importing from the authoritative source
 from app.core.domain.frame import BaseFrame, BioFrame, EventFrame
@@ -22,20 +22,101 @@ SemanticFrame = Union[BioFrame, EventFrame, BaseFrame]
 FrameType = str
 
 
+_BIOISH_FRAME_TYPES = {
+    "bio",
+    "biography",
+    "entity.person",
+    "entity_person",
+    "person",
+    "entity.person.v1",
+    "entity.person.v2",
+}
+
+
 class Frame(BaseModel):
     """
     Backward-compatible Frame model used in tests and older API payloads.
 
-    NOTE:
-    - This is intentionally a lightweight container that matches tests expecting:
-      Frame(frame_type="bio", subject={...}, properties={...}, meta={...})
-    - The canonical frame types used by the generator are in app.core.domain.frame
-      (BioFrame/EventFrame/BaseFrame) and are represented by SemanticFrame above.
+    Supports both:
+      1) Canonical nested payloads:
+         Frame(frame_type="bio", subject={...}, properties={...}, meta={...})
+
+      2) Legacy / GUI flat payloads:
+         {
+           "frame_type": "entity.person",
+           "name": "Alan Turing",
+           "profession": "Mathematician",
+           "nationality": "British",
+           "gender": "m",
+           ...
+         }
+
+    For bio-like frame types, flat top-level person fields are normalized into
+    `subject` so downstream code can rely on a stable shape.
     """
+
     frame_type: FrameType
-    subject: Dict[str, Any]
+    subject: Dict[str, Any] = Field(default_factory=dict)
     properties: Dict[str, Any] = Field(default_factory=dict)
     meta: Dict[str, Any] = Field(default_factory=dict)
+
+    # Optional compatibility fields sometimes sent by the GUI / legacy callers.
+    # These are normalized into `subject` for bio-like frames but still accepted
+    # here so they are not silently dropped before normalization.
+    context_id: Optional[str] = None
+    style: str = "simple"
+
+    name: Optional[str] = None
+    profession: Optional[str] = None
+    nationality: Optional[str] = None
+    gender: Optional[str] = None
+    qid: Optional[str] = None
+
+    model_config = ConfigDict(extra="ignore")
+
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_legacy_person_payload(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+
+        raw = dict(data)
+        frame_type = str(raw.get("frame_type") or "").strip().lower()
+
+        # Start from existing nested subject if present.
+        subject_in = raw.get("subject")
+        subject: Dict[str, Any] = dict(subject_in) if isinstance(subject_in, dict) else {}
+
+        # Merge common flat legacy fields into subject.
+        for key in ("name", "profession", "nationality", "gender", "qid"):
+            value = raw.get(key)
+            if isinstance(value, str):
+                value = value.strip()
+                if value:
+                    subject.setdefault(key, value)
+
+        # Preserve the normalized subject if anything meaningful was found.
+        if subject:
+            raw["subject"] = subject
+
+        # For bio/person-like frames, require at least some subject data.
+        if frame_type in _BIOISH_FRAME_TYPES and not raw.get("subject"):
+            raise ValueError(
+                "Bio/person frames require `subject`, or flat fields such as "
+                "`name`, `profession`, `nationality`, `gender`, `qid`."
+            )
+
+        return raw
+
+    @property
+    def subject_name(self) -> Optional[str]:
+        value = self.subject.get("name")
+        return value if isinstance(value, str) and value.strip() else None
+
+    @property
+    def subject_qid(self) -> Optional[str]:
+        value = self.subject.get("qid")
+        return value if isinstance(value, str) and value.strip() else None
 
 
 # --- Enums ---
