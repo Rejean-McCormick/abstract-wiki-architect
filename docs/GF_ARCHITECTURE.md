@@ -90,7 +90,7 @@ This project relies on a pinned RGL state to avoid “API drift” errors in `Sy
 
 - Treat `gf-rgl/` as a normal git repo clone (submodule configuration is not assumed).
 - Pin by **ref** (tag/branch/commit), not a “magic commit prefix”.
-- Prefer a stable ref such as `release-3.12` (or the project’s configured ref), overridable via `ABSTRACTWIKI_RGL_REF`.
+- Prefer a stable ref such as `release-3.12` (or the project’s configured ref), overridable via `SEMANTIK_ARCHITECT_RGL_REF`.
 
 ---
 

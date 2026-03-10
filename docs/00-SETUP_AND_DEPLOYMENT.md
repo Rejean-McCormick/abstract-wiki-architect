@@ -1,199 +1,252 @@
 # 🛠️ Setup & Deployment Guide
 
-**SemantiK Architect v2.5**
+**SemantiK Architect — current repository layout**
 
-This guide covers installation, configuration, and deployment of the SemantiK Architect. Because the core engine depends on **Grammatical Framework (GF)** C-libraries (`libpgf`), the backend **must run in a Linux environment**.
+This guide covers installation, configuration, local development, and Docker deployment for the current repository.
 
-For developers on Windows, the recommended setup is a **Hybrid Architecture**:
+Because the backend depends on **Grammatical Framework (GF)** and the Python `pgf` bindings, the backend must run in a **Linux environment**. On Windows, the recommended setup is hybrid:
 
-1. **Windows 11:** Source code editing (VS Code), Git operations, Frontend execution.
-2. **WSL 2 (Ubuntu):** Backend execution, Python environment, Redis, and GF compilation.
+1. **Windows 11**: editing, Git, frontend
+2. **WSL 2 (Ubuntu)**: backend, Python environment, Redis, GF
 
 ---
 
 ## 1. Prerequisites
 
-Ensure you have:
+Recommended host setup:
 
-* **Windows 10/11** with **WSL 2** enabled.
-* **Ubuntu 22.04 LTS** (or newer) installed from the Microsoft Store.
-* **Docker Desktop** (configured to use the WSL 2 backend).
-* **VS Code** with the **"WSL"** extension installed.
-* **Node.js 18+** installed on Windows (Frontend).
+- **Windows 10/11** with **WSL 2**
+- **Ubuntu** installed in WSL
+- **VS Code** with the **WSL** extension
+- **Node.js 18+** on Windows for the frontend
+- **Docker Desktop** if you want Redis via Docker and/or full-stack Docker deployment
 
----
-
-## 2. Directory Structure & Pathing
-
-To avoid path issues, keep the repo on your Windows drive so both Windows and WSL can access it.
-
-* **Windows Path:** `C:\MyCode\SemantiK_Architect\`
-* **WSL Path:** `/mnt/c/MyCode/SemantiK_Architect/`
-
-**Recommended Layout:**
-
-```text
-/mnt/c/MyCode/SemantiK_Architect/
-├── abstract-wiki-architect/      <-- [REPO ROOT]
-│   ├── .env                      <-- Env variables (WSL-side)
-│   ├── config/                   <-- Preferred config location (if present)
-│   ├── data/
-│   │   ├── config/               <-- Fallback config location (if used)
-│   │   ├── indices/              <-- Everything Matrix outputs
-│   │   │   └── everything_matrix.json
-│   │   └── lexicon/              <-- Lexicon store (by ISO-2)
-│   │       ├── en/
-│   │       ├── fr/
-│   │       └── ...
-│   ├── gf/
-│   │   └── semantik_architect.pgf      <-- Generated binary
-│   └── ...
-└── gf-rgl/                       <-- [EXTERNAL] GF Resource Grammar Library
-    └── src/
-```
-
-> **⚠️ CRITICAL:** If you plan to edit files in Windows, do not clone the repo into the Linux-native filesystem (`~/...`). Clone it on `C:` so both OSs share the same working tree.
-
----
-
-## 3. System Initialization (WSL)
-
-Open **Ubuntu/WSL Terminal** (not PowerShell) and go to the repo root:
-
-```bash
-cd /mnt/c/MyCode/SemantiK_Architect/Semantik_architect
-```
-
-### Step A: Install C-Library Dependencies
+Inside WSL, install the base Linux packages you need for Python builds and GF-related tooling:
 
 ```bash
 sudo apt update
-sudo apt install -y python3-venv python3-dev build-essential libgmp-dev
-sudo apt install -y dos2unix
+sudo apt install -y \
+  python3-venv python3-dev \
+  build-essential libgmp-dev \
+  git curl wget dos2unix
+````
+
+> Keep the repository on your Windows drive if you want both Windows and WSL to share the same working tree.
+
+---
+
+## 2. Repository Layout
+
+Use the repository root that contains `manage.py`, `pyproject.toml`, `requirements.txt`, `app/`, and `architect_frontend/`.
+
+Recommended layout:
+
+```text
+C:\MyCode\SemantiK_Architect\
+└── SemantiK_Architect\                 <-- repo root
+    ├── .env
+    ├── .venv/                          <-- local Python environment
+    ├── manage.py
+    ├── pyproject.toml
+    ├── requirements.txt
+    ├── app/
+    ├── architect_frontend/
+    ├── builder/
+    ├── data/
+    ├── docs/
+    ├── gf/
+    │   └── semantik_architect.pgf
+    ├── gf-rgl/                         <-- clone or place gf-rgl here
+    ├── schemas/
+    └── tools/
 ```
 
-### Step B: Install the GF Compiler
+In WSL, the same repo will usually be visible as:
 
 ```bash
-wget https://www.grammaticalframework.org/download/gf-3.12-ubuntu-22.04.deb
-sudo apt install ./gf-3.12-ubuntu-22.04.deb
+/mnt/c/MyCode/SemantiK_Architect/SemantiK_Architect
+```
+
+> `gf-rgl/` is expected inside the repo root for the current toolchain and Docker setup.
+
+---
+
+## 3. GF / RGL Setup (WSL)
+
+Open a **WSL terminal** and go to the repo root:
+
+```bash
+cd /mnt/c/MyCode/SemantiK_Architect/SemantiK_Architect
+```
+
+### A. Install GF
+
+Install a GF package appropriate for your Ubuntu release, then verify:
+
+```bash
 gf --version
 ```
 
-### Step C: Setup the Resource Grammar Library (RGL)
+If `gf` is already available in your WSL environment, you can skip this step.
+
+### B. Ensure `gf-rgl/` exists in the repo root
+
+If `gf-rgl/` is not already present:
 
 ```bash
-cd ..
 git clone https://github.com/GrammaticalFramework/gf-rgl.git
+```
 
-cd gf-rgl
-dos2unix Setup.sh
-chmod +x Setup.sh
-sudo ./Setup.sh
+This should create:
+
+```text
+<repo-root>/gf-rgl/
 ```
 
 ---
 
 ## 4. Python Environment (WSL)
 
-Run inside `abstract-wiki-architect`:
+For the current repository state, keep local installation simple: **one Python environment at the repo root**.
+
+Preferred:
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+uv venv .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+```
+
+Fallback if you are not using `uv`:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+> For now, install from `requirements.txt`. The repo also contains a `pyproject.toml`, but the current worker Docker image still installs from `requirements.txt`, so this is the least surprising local setup.
+
 ---
 
-## 5. Configuration (`.env`)
+## 5. Environment Configuration (`.env`)
 
 Create a `.env` file in the repo root.
 
 **File:** `.env`
 
 ```ini
-# --- Application Meta ---
-APP_NAME=abstract-wiki-architect
+# --- App ---
+APP_NAME=Semantik Architect
 APP_ENV=development
 DEBUG=true
-LOG_LEVEL=INFO
-LOG_FORMAT=console
 
-# --- Persistence ---
-# Repo root used by the Tools Router to confine execution to this directory
-FILESYSTEM_REPO_PATH=/mnt/c/MyCode/SemantiK_Architect/Semantik_architect
+# --- Repo / Filesystem ---
+FILESYSTEM_REPO_PATH=/mnt/c/MyCode/SemantiK_Architect/SemantiK_Architect
 
-# --- Grammar Engine ---
-GF_LIB_PATH=/mnt/c/MyCode/SemantiK_Architect/gf-rgl
-PGF_PATH=/mnt/c/MyCode/SemantiK_Architect/Semantik_architect/gf/semantik_architect.pgf
+# --- GF / PGF ---
+GF_LIB_PATH=/mnt/c/MyCode/SemantiK_Architect/SemantiK_Architect/gf-rgl
+PGF_PATH=/mnt/c/MyCode/SemantiK_Architect/SemantiK_Architect/gf/semantik_architect.pgf
 
-# --- Messaging & State (Redis) ---
+# Legacy compatibility only (optional)
+AW_PGF_PATH=/mnt/c/MyCode/SemantiK_Architect/SemantiK_Architect/gf/semantik_architect.pgf
+
+# --- Redis / Worker ---
 REDIS_URL=redis://localhost:6379/0
-SESSION_TTL_SEC=600
+REDIS_QUEUE_NAME=architect_tasks
 
-# --- Worker ---
-WORKER_CONCURRENCY=2
+# --- Local browser dev ---
+ARCHITECT_CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 
-# --- Tools Router (Admin-only execution) ---
-# Output + timeout controls for tool subprocess runs
-ARCHITECT_TOOLS_MAX_OUTPUT_CHARS=200000
-ARCHITECT_TOOLS_DEFAULT_TIMEOUT_SEC=600
+# --- Optional: only set this when backend is mounted behind a reverse proxy ---
+# ARCHITECT_API_ROOT_PATH=/semantik_architect
 
-# AI-gated tools (e.g., ambiguity_detector, seed_lexicon, ai_refiner)
-ARCHITECT_ENABLE_AI_TOOLS=0
-
-# --- DevOps / AI (only if you use these features) ---
-GITHUB_TOKEN=your_github_pat_token
-REPO_URL=https://github.com/your-org/abstract-wiki-architect
-GOOGLE_API_KEY=your_gemini_api_key
-AI_MODEL_NAME=gemini-1.5-pro
+# --- Optional API auth ---
+# API_KEY=change-me
+# API_SECRET=change-me
 ```
 
 Notes:
 
-* Lexicon directories are stored under `data/lexicon/{iso2}/…` (ISO-639-1 / ISO-2).
-* Some tools load language mappings from `config/iso_to_wiki.json` if present; otherwise they fall back to `data/config/iso_to_wiki.json`.
+* Prefer **`PGF_PATH`**. `AW_PGF_PATH` is legacy compatibility.
+* `FILESYSTEM_REPO_PATH` should point to the repo root visible from the backend runtime.
+* `ARCHITECT_API_ROOT_PATH` is only needed when the backend is mounted behind a prefix such as `/semantik_architect`.
 
 ---
 
-## 6. Running Locally (Hybrid Mode)
+## 6. Local Development
 
-You can run the stack manually, or use the launcher.
+There are three practical ways to run the stack.
 
-### Option A: Unified launcher (recommended)
+### Option A — Windows launcher (recommended on Windows)
 
-Run:
+From **PowerShell** at the repo root:
 
 ```powershell
 .\Run-Architect.ps1
 ```
 
-This handles process cleanup and spawns API, Worker, and Frontend in separate windows.
+What it does:
 
-### Option B: Manual (4 terminals)
+* starts the API in WSL
+* starts the worker in WSL
+* starts the frontend on Windows
+* probes backend readiness
+* opens the default tools UI URL
 
-#### Terminal 1: Redis (PowerShell or WSL)
+Useful flags:
 
 ```powershell
+.\Run-Architect.ps1 -NoPortClear
+.\Run-Architect.ps1 -EnableReload -EnableWatch
+.\Run-Architect.ps1 -SkipFrontend
+```
+
+### Option B — Canonical CLI orchestrator (WSL)
+
+From WSL at the repo root:
+
+```bash
+source .venv/bin/activate
+python manage.py doctor
+python manage.py start
+```
+
+Useful commands:
+
+```bash
+python manage.py build --align
+python manage.py clean
+python manage.py doctor
+```
+
+### Option C — Manual run (4 terminals)
+
+#### Terminal 1 — Redis
+
+With Docker:
+
+```bash
 docker run -p 6379:6379 --name aw_redis -d redis:alpine
 ```
 
-#### Terminal 2: API Backend (WSL)
+#### Terminal 2 — API backend (WSL)
 
 ```bash
-source venv/bin/activate
-uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port 8000 --reload
+cd /mnt/c/MyCode/SemantiK_Architect/SemantiK_Architect
+source .venv/bin/activate
+python -m uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### Terminal 3: Async Worker (WSL)
+#### Terminal 3 — Async worker (WSL)
 
 ```bash
-source venv/bin/activate
-arq app.workers.worker.WorkerSettings --watch app
+cd /mnt/c/MyCode/SemantiK_Architect/SemantiK_Architect
+source .venv/bin/activate
+python -m arq app.workers.worker.WorkerSettings --watch app
 ```
 
-#### Terminal 4: Frontend (Windows PowerShell)
+#### Terminal 4 — Frontend (Windows PowerShell)
 
 ```powershell
 cd architect_frontend
@@ -201,114 +254,226 @@ npm install
 npm run dev
 ```
 
-UI:
+### Local URLs
+
+Frontend:
 
 * `http://localhost:3000/semantik_architect`
-  Developer Console:
 * `http://localhost:3000/semantik_architect/dev`
-  Tools Dashboard:
 * `http://localhost:3000/semantik_architect/tools`
+
+Backend:
+
+* `http://localhost:8000/docs`
+* `http://localhost:8000/health/ready`
+* `http://localhost:8000/api/v1/health/ready`
 
 ---
 
-## 7. Production Deployment (Docker)
+## 7. API Notes
 
-Use `docker-compose` for production or full-stack container testing.
+Current backend behavior:
 
-Key differences:
+* Canonical API prefix: **`/api/v1`**
+* Local dev frontend expects backend on `:8000`
+* Local dev frontend origin `:3000` is allowed by default in development
+* The generate endpoint is available at **`POST /api/v1/generate/{lang_code}`**
+* A payload-based variant also exists at **`POST /api/v1/generate`**
 
-* **Pathing:** compose mounts the repo into the backend container.
-* **Networking:** services use hostnames (`redis`, `backend`, `frontend`), not `localhost`.
-* **Base path:** UI served under `/semantik_architect`; API under `/semantik_architect/api/v1`.
+For the safest smoke tests, use the language-path form:
 
-### Build and run
+```bash
+curl -X POST "http://localhost:8000/api/v1/generate/en" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: ${API_KEY}" \
+  -d '{
+        "frame_type": "bio",
+        "subject": { "name": "Marie Curie", "qid": "Q7186" },
+        "properties": { "label": "Marie Curie" }
+      }'
+```
+
+If your local environment does **not** enforce API auth, you can omit `X-API-Key`.
+
+Expected response shape:
+
+```json
+{
+  "text": "…",
+  "lang_code": "en"
+}
+```
+
+---
+
+## 8. Docker Deployment
+
+The repo includes:
+
+* `docker/Dockerfile.backend`
+* `docker/Dockerfile.worker`
+* `docker/Dockerfile.frontend`
+* `docker-compose.yml`
+* `deploy/nginx.conf`
+
+### Full stack
+
+Run from the repo root:
 
 ```bash
 docker-compose up --build -d
 ```
 
-### Verify
+### What starts
 
-```bash
-docker-compose ps
-```
+* `redis`
+* `backend`
+* `worker`
+* `frontend`
+* `nginx`
 
----
+### Public URLs
 
-## 8. Troubleshooting
+The reverse proxy publishes the app here:
 
-### "pgf module not found"
+* `http://localhost:4000/semantik_architect/`
+* `http://localhost:4000/semantik_architect/tools`
+* `http://localhost:4000/semantik_architect/api/v1/...`
 
-* Cause: running Python on Windows or failing to compile the C-extension.
-* Fix: run inside WSL; ensure `libgmp-dev` is installed; reinstall `pgf` if needed.
+### Docker notes
 
-### "Line endings / Syntax error near unexpected token"
+* Inside containers, the repo is mounted at `/app`
+* The frontend is served under `/semantik_architect`
+* Nginx proxies `/semantik_architect/api/*` to the backend
+* Docker currently uses:
 
-* Cause: file saved with Windows CRLF.
-* Fix:
-
-  ```bash
-  dos2unix <filename>
-  ```
-
-### "404 Not Found" on /generate
-
-* Cause: hitting a non-versioned endpoint.
-* Fix: use the `/api/v1` prefix (example below).
-
-### "Tools run fails with invalid path / missing repo root"
-
-* Cause: `FILESYSTEM_REPO_PATH` missing/incorrect or tool path resolves outside repo root.
-* Fix: set `FILESYSTEM_REPO_PATH` to the repo root inside the backend runtime environment.
-
-### "AI tool returns 403"
-
-* Cause: AI tools are gated.
-* Fix: set `ARCHITECT_ENABLE_AI_TOOLS=1` in the backend environment and restart.
+  * backend on port `8000`
+  * frontend on port `3000`
+  * nginx on host port `4000`
 
 ---
 
-## 9. Verification (Smoke Test)
+## 9. Troubleshooting
 
-Run in WSL to verify end-to-end generation.
+### `pgf` module not found
 
-### Test A: Standard BioFrame
+Cause:
 
-```bash
-curl -X POST "http://localhost:8000/api/v1/generate/en" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "frame_type": "bio",
-           "name": "Alan Turing",
-           "profession": "computer scientist",
-           "nationality": "british",
-           "gender": "m"
-         }'
-```
+* backend running on Windows instead of Linux/WSL
+* missing build prerequisites such as `libgmp-dev`
 
-### Test B: Ninai Protocol
+Fix:
 
 ```bash
-curl -X POST "http://localhost:8000/api/v1/generate/en" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "function": "ninai.constructors.Statement",
-           "args": [
-             { "function": "ninai.types.Bio" },
-             { "function": "ninai.constructors.List", "args": ["physicist", "chemist"] }
-           ]
-         }'
+sudo apt install -y libgmp-dev build-essential python3-dev
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Expected response shape (example):
+### `gf-rgl/ folder missing`
 
-```json
-{
-  "surface_text": "Alan Turing is a physicist and chemist.",
-  "meta": {
-    "engine": "WikiEng",
-    "adapter": "NinaiAdapter",
-    "strategy": "SimpNP"
-  }
-}
+Cause:
+
+* repo root does not contain `gf-rgl/`
+
+Fix:
+
+```bash
+cd <repo-root>
+git clone https://github.com/GrammaticalFramework/gf-rgl.git
+```
+
+### Frontend says `Failed to fetch`
+
+Cause:
+
+* backend is not running
+* CORS is misconfigured
+* frontend is trying to hit the wrong API base
+
+Fix:
+
+* confirm backend on `http://localhost:8000`
+* confirm `ARCHITECT_CORS_ORIGINS` includes `http://localhost:3000`
+* confirm you are using the canonical `/api/v1` routes
+
+### `404 Not Found` on the API
+
+Cause:
+
+* missing `/api/v1` prefix
+* wrong base path under Docker/reverse proxy
+
+Fix:
+
+* local dev backend: use `/api/v1/...`
+* behind Nginx: use `/semantik_architect/api/v1/...`
+
+### Build artifacts end up in the wrong place
+
+Cause:
+
+* generated GF files or PGF are being written outside the expected repo locations
+
+Fix:
+
+* keep generated grammar artifacts under `gf/`
+* keep `PGF_PATH` pointing to `gf/semantik_architect.pgf`
+
+---
+
+## 10. Verification Checklist
+
+From WSL:
+
+```bash
+source .venv/bin/activate
+python manage.py doctor
+```
+
+Then verify:
+
+1. `gf --version` works
+2. `gf-rgl/` exists at repo root
+3. `gf/semantik_architect.pgf` exists after a build
+4. `http://localhost:8000/api/v1/health/ready` returns 200
+5. `http://localhost:3000/semantik_architect/tools` loads
+6. `curl` to `/api/v1/generate/en` returns 200 or a clear auth/validation response
+
+---
+
+## 11. Minimal Day-to-Day Commands
+
+### Start everything (Windows hybrid)
+
+```powershell
+.\Run-Architect.ps1
+```
+
+### Start everything from WSL
+
+```bash
+source .venv/bin/activate
+python manage.py start
+```
+
+### Rebuild grammar layer
+
+```bash
+source .venv/bin/activate
+python manage.py build --align
+```
+
+### Frontend only
+
+```powershell
+cd architect_frontend
+npm run dev
+```
+
+### Backend only
+
+```bash
+source .venv/bin/activate
+python -m uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port 8000 --reload
 ```

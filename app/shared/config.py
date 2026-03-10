@@ -90,7 +90,7 @@ class Settings(BaseSettings):
 
     # GitHub Integration
     GITHUB_TOKEN: Optional[str] = None
-    REPO_URL: str = "https://github.com/your-org/abstract-wiki-architect"
+    REPO_URL: str = "https://github.com/your-org/semantik-architect"
 
     # --- Persistence ---
     STORAGE_BACKEND: StorageBackend = StorageBackend.FILESYSTEM

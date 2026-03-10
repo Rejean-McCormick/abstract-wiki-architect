@@ -2,8 +2,8 @@
 #
 # Multi-stage build for the Semantik Architect Next.js frontend.
 # Exposes port 80 inside the container so you can map it to 4000 on the host:
-#   docker build -f docker/Dockerfile.frontend -t abstractwiki-architect-frontend .
-#   docker run -d -p 127.0.0.1:4000:80 abstractwiki-architect-frontend
+#   docker build -f docker/Dockerfile.frontend -t semantik-architect-frontend .
+#   docker run -d -p 127.0.0.1:4000:80 semantik-architect-frontend
 
 # ----------------------------
 # 1) Install dependencies

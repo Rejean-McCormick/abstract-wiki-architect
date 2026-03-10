@@ -75,8 +75,8 @@ DEFAULT_BRIDGE_OUT = ROOT_DIR / "generated" / "src"
 DEFAULT_APP_OUT = ROOT_DIR / "gf"
 
 # Env overrides (highest priority)
-ENV_RGL_REF = (os.getenv("ABSTRACTWIKI_RGL_REF") or "").strip()
-ENV_RGL_COMMIT = (os.getenv("ABSTRACTWIKI_RGL_COMMIT") or "").strip()  # backwards compat name
+ENV_RGL_REF = (os.getenv("SEMANTIK_ARCHITECT_RGL_REF") or "").strip()
+ENV_RGL_COMMIT = (os.getenv("SEMANTIK_ARCHITECT_RGL_COMMIT") or "").strip()  # backwards compat name
 
 
 # ---------------------------------------------------------------------
@@ -364,7 +364,7 @@ def _select_pin_ref(user_ref: Optional[str]) -> str:
 
     Priority:
       1) explicit CLI --ref/--commit (unless "auto")
-      2) env ABSTRACTWIKI_RGL_REF / ABSTRACTWIKI_RGL_COMMIT
+      2) env SEMANTIK_ARCHITECT_RGL_REF / SEMANTIK_ARCHITECT_RGL_COMMIT
       3) last pinned data/config/rgl_pin.json (if still resolvable)
       4) auto-pick based on gf --version + available tags
     """
@@ -706,7 +706,7 @@ def main() -> None:
                 raise SystemExit(
                     "AUTO pin could not determine a usable gf-rgl ref.\n"
                     "Run: git -C gf-rgl tag -l\n"
-                    "Then re-run with: python manage.py align --force  (and set ABSTRACTWIKI_RGL_REF)\n"
+                    "Then re-run with: python manage.py align --force  (and set SEMANTIK_ARCHITECT_RGL_REF)\n"
                     f"Or pass an explicit ref: --ref <tag/branch/commit>\n"
                     f"Detected gf --version: {gf_ver}\n"
                     f"Auto suggestion: {suggestion}\n"

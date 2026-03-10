@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://abstractwiki.org/schemas/frames/entity_geopolitical_entity.schema.json",
+  "$id": "urn:semantik-architect:schemas:frames:entity_geopolitical_entity",
   "title": "Geopolitical Entity Frame",
   "description": "Frame JSON for geopolitical entities such as countries, regions, cities, municipalities and similar administrative units.",
   "type": "object",

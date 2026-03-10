@@ -141,7 +141,7 @@ Expected layout:
 
 ```text
 /ProjectRoot/
-├── abstract-wiki-architect/
+├── semantik-architect/
 │   ├── tools/everything_matrix/build_index.py
 │   ├── data/config/everything_matrix_config.json
 │   └── data/indices/rgl_inventory.json

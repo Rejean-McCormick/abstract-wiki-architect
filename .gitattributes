@@ -1,6 +1,7 @@
 * text=auto eol=lf
 *.bat text eol=crlf
 *.ps1 text eol=crlf
+*.sh text eol=lf
 
 *.png -text
 *.jpg -text
@@ -13,3 +14,4 @@
 *.woff -text
 *.woff2 -text
 *.ico -text
+

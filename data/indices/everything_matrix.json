@@ -1,6 +1,6 @@
 {
-  "timestamp": 1772479280.4937162,
-  "timestamp_iso": "2026-03-02T19:21:20Z",
+  "timestamp": 1773149875.6768568,
+  "timestamp_iso": "2026-03-10T13:37:55Z",
   "scoring_version": "2.4",
   "stats": {
     "total_languages": 68,
@@ -668,7 +668,7 @@
         },
         "B_LEX": {
           "SEED": 0.0,
-          "CONC": 0.4,
+          "CONC": 0.7,
           "WIDE": 10.0,
           "SEM": 5.0
         },
@@ -692,7 +692,7 @@
         },
         "zone_averages": {
           "A_RGL": 10.0,
-          "B_LEX": 3.85,
+          "B_LEX": 3.92,
           "C_APP": 2.33,
           "D_QA": 0.0
         },

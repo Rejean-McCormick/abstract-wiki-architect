@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://abstractwiki.org/schemas/frames/entity_competition_league.schema.json",
+  "$id": "urn:semantik-architect:schemas:frames:entity_competition_league",
   "title": "Entity Competition / League Frame",
   "description": "JSON schema for sports competition / tournament / league frames (`competition_league`).",
   "type": "object",

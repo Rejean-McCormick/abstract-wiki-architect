@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://abstractwiki.example.org/schemas/frames/entity_person.schema.json",
+  "$id": "urn:semantik-architect:schemas:frames:entity_person",
   "title": "Person / Biography Frame (PersonFrame / BioFrame)",
   "description": "JSON representation of a person / biography frame (PersonFrame, backed by BioFrame in semantics.types).",
   "type": "object",

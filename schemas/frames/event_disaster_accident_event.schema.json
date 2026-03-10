@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://abstractwiki.org/schemas/frames/event_disaster_accident_event.schema.json",
+  "$id": "urn:semantik-architect:schemas:frames:event_disaster_accident_event",
   "title": "Disaster / Accident Event Frame",
   "description": "JSON schema for disaster / accident event frames (`event.disaster`). Covers natural disasters (earthquakes, floods, storms, epidemics) and major accidents (industrial accidents, crashes, spills, etc.).",
   "type": "object",

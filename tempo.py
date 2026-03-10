@@ -17,7 +17,7 @@ TARGET_FILES = [
     "10-GLOSSARY.md",
     "11-CONTRIBUTING.md",
     "17-TOOLS_AND_TESTS_INVENTORY.md",
-    "Abstract_Wiki_Architect_Build_and_Launch_System.md",
+    "semantik_architect_Build_and_Launch_System.md",
     "everythingMatrixUpgrade.md",
     "GF_ARCHITECTURE.md",
     "UPGRADE v2-0 Omni-Upgrade Architecture Specification.md"

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://abstractwiki.org/schemas/frames/entity_discipline_theory.schema.json",
+  "$id": "urn:semantik-architect:schemas:frames:entity_discipline_theory",
   "title": "Academic Discipline / Field / Theory Frame",
   "description": "JSON schema for academic discipline / field / theory frames (`discipline-theory`).",
   "type": "object",

@@ -1,5 +1,5 @@
 # docker/Dockerfile.worker
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Environment Variables
 # - Standardize on PGF_PATH (v2 spec + docker-compose), keep AW_PGF_PATH only as legacy back-compat
@@ -7,20 +7,10 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     DEBIAN_FRONTEND=noninteractive \
-    \
     FILESYSTEM_REPO_PATH=/app \
-    \
-    # Prefer the RGL in-repo (matches docker-compose). If you run the image standalone,
-    # this will work because we COPY gf-rgl below.
     GF_LIB_PATH=/app/gf-rgl \
-    \
-    # Canonical path (v2): services should set/override PGF_PATH, not AW_PGF_PATH
     PGF_PATH=/app/gf/semantik_architect.pgf \
-    \
-    # Legacy compatibility (remove once app/shared/config.py stops reading AW_PGF_PATH)
     AW_PGF_PATH=/app/gf/semantik_architect.pgf \
-    \
-    # Add local bin to path
     PATH="/root/.local/bin:$PATH"
 
 WORKDIR /app
@@ -45,17 +35,26 @@ RUN apt-get update && apt-get install -y /tmp/gf.deb \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Install Python Dependencies
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# Canonical source: pyproject.toml
+# Temporary compatibility add-ons are kept here until pyproject.toml fully absorbs
+# the legacy/runtime deps still only listed in requirements.txt.
+COPY pyproject.toml README.md ./
+RUN pip install --no-cache-dir ".[api,wikidata]" \
+    "pgf==1.1" \
+    "google-genai>=1.0.0" \
+    "python-dotenv>=1.0.0" \
+    "boto3>=1.34.0"
 
-# 4. Copy Application Source Code
+# 4. Copy Application + Build Source Code
+# The worker does more than import app/: it can trigger the build pipeline.
 COPY app ./app
+COPY builder ./builder
+COPY ai_services ./ai_services
+COPY tools ./tools
 
-# 5. Copy Grammars + Config Data (worker needs Wiki*.gf and iso_to_wiki.json)
+# 5. Copy Grammars + Config Data
 COPY gf ./gf
 COPY data ./data
-
-# 5b. Copy RGL sources into the image so the worker can compile without relying on a bind-mount
 COPY gf-rgl ./gf-rgl
 
 # Ensure output directory exists (PGF_PATH points into /app/gf by default)

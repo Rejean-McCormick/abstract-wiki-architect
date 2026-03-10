@@ -1,145 +1,168 @@
+# Semantik Architect
 
+**Industrial-grade NLG system for Abstract Wikipedia, Wikifunctions, and standalone API use.**
 
-# Semantik Architect (V2)
+Semantik Architect is a data-driven Natural Language Generation (NLG) system built around a modular Python backend, GF-based grammar assets, language-specific schema/config data, and a separate Next.js frontend.
 
-**Industrial-grade NLG system for Abstract Wikipedia and Wikifunctions.**
+Instead of maintaining one monolithic renderer per language, the project combines:
 
-Semantik Architect is a family-based, data-driven Natural Language Generation (NLG) toolkit. Instead of writing one renderer per language (“300 scripts for 300 languages”), this project builds:
+- **A modular Python backend** for API, orchestration, persistence, and generation
+- **GF grammars and PGF artifacts** for high-precision generation
+- **Family-oriented engines and morphology modules** for rule-based text realization
+- **Frame schemas and structured payloads** for language-agnostic input
+- **A background worker** for long-running build and onboarding tasks
+- **A separate frontend** for tools, dashboards, and operator workflows
 
-* **Shared Family Engines:** ~15 universal engines (Romance, Slavic, Bantu, etc.) implemented as Adapters.
-* **Configuration Cards:** Hundreds of per-language JSON configurations (grammar matrices).
-* **Hexagonal Core:** A pure Python domain layer containing semantic frames and cross-linguistic constructions.
-* **Lexicon Subsystem:** A robust persistence layer with bridges to Wikidata.
-* **Background Worker:** An async system for compiling and onboarding languages.
-
-The goal is to provide a professional, testable architecture for rule-based NLG, aligned with Abstract Wikipedia but usable as a standalone API service.
+The result is a practical architecture for rule-based NLG that can run as a standalone service while staying aligned with the broader Abstract Wikipedia workflow.
 
 ---
 
-## 🏛️ Architecture Overview (Hexagonal)
+## Architecture Overview
 
-The system has moved from a flat script structure to a **Modular Monolith** organized by technical capability.
+Semantik Architect is best understood as a **modular monolith** on the Python side, with a **separate frontend application**.
 
 ```text
-app/
-├── core/                   # 🧠 THE BRAIN (Pure Python, No Infrastructure)
-│   ├── domain/             # Models (Frames, Sentences) & Events
-│   ├── ports/              # Interfaces (IMessageBroker, IGrammarEngine)
-│   └── use_cases/          # Business Logic (GenerateText, BuildLanguage)
+SemantiK_Architect/
+├── app/                       # Python backend
+│   ├── core/                 # Domain logic, constructions, ports, use cases
+│   ├── adapters/             # API, worker, engines, persistence, messaging
+│   └── shared/               # Config, DI container, observability, utilities
 │
-├── adapters/               # 🔌 THE PLUGS (Infrastructure)
-│   ├── api/                # FastAPI (Driving Adapter)
-│   ├── worker/             # Background Worker (Driving Adapter)
-│   ├── messaging/          # Redis Pub/Sub (Driven Adapter)
-│   ├── persistence/        # FileSystem & Wikidata (Driven Adapters)
-│   └── engines/            # Grammar Engines (GF & Python Wrappers)
-│
-└── shared/                 # 🛠️ SHARED UTILITIES
-    ├── container.py        # Dependency Injection
-    └── config.py           # Settings (Pydantic)
+├── architect_frontend/       # Next.js frontend
+├── gf/                       # GF source grammars and compiled artifacts
+├── schemas/                  # JSON schemas for frame payloads
+├── tools/                    # Diagnostics, audits, QA, indexing, health tools
+├── builder/                  # Grammar/build orchestration
+├── ai_services/              # Optional AI-assisted services
+└── docs/                     # Architecture and operational documentation
+````
 
-```
+### Backend responsibilities
 
-### 💡 Intuition: Consoles, Cartridges, and the Router
+* **`app/core/`** contains the domain model, semantic constructions, ports, and use cases
+* **`app/adapters/`** contains FastAPI routes, generation engines, repositories, and infrastructure adapters
+* **`app/shared/`** contains configuration, dependency injection, logging, and observability helpers
 
-Think of each sentence as a game you want to play.
+### Frontend responsibilities
 
-* **Old way:** Build one console per game (one monolithic renderer per language).
-* **Semantik Architect:**
-1. **The Console (Core/Engine):** Universal logic (Romance, Slavic, etc.).
-2. **The Cartridge (Config/Lexicon):** Per-language JSON files loaded dynamically.
-3. **The Router (API/Use Case):** Plugs the right cartridge into the console based on the request.
+* **`architect_frontend/`** is a separate Node/Next.js application
+* It talks to the backend through the canonical API under **`/api/v1`**
+* In local development it usually runs on **`:3000`**, while the backend runs on **`:8000`**
 
+### Runtime topology
 
+In containerized mode, the stack is split into:
 
-**Example (Romance Family):**
+* **Redis**
+* **API backend**
+* **ARQ worker**
+* **Next.js frontend**
+* **Nginx reverse proxy**
 
-* The **Romance Engine (Adapter)** knows how to feminize nouns and apply plural rules generically.
-* The **Italian Cartridge** (`data/lexicon/it.json`) tells it: `"-o" -> "-a"` for feminine.
-* The **Spanish Cartridge** tweaks only what differs: Indefinite articles differ, but pluralization is similar.
+The reverse proxy exposes the app under:
+
+* **UI:** `/semantik_architect/`
+* **API:** `/semantik_architect/api/v1`
 
 ---
 
-## 🧩 Components
+## Core Concepts
 
-### 1. Semantic Frames (The Input)
+### 1. Semantic Frames
 
-Located in `app/core/domain/models.py`. These are the abstract representations of intent, independent of language.
+Semantic frames are the language-agnostic inputs to the generator. They describe *what* should be said before any language-specific realization happens.
 
-* **Entity Frames:** People, Organizations, Places.
-* **Event Frames:** Actions with participants and time.
-* **Relational Frames:** Definitions, attributes, measurements.
+Examples include:
 
-**Example Payload:**
+* biographical facts
+* entity descriptions
+* relational/classification payloads
+* event payloads
+
+Example:
 
 ```json
 {
   "frame_type": "bio",
   "subject": { "name": "Marie Curie", "qid": "Q7186" },
-  "properties": { "profession": "physicist", "nationality": "polish" }
+  "properties": {
+    "profession": "physicist",
+    "nationality": "polish"
+  }
 }
-
 ```
 
-### 2. Constructions (Sentence Patterns)
+### 2. Constructions
 
-Located in `app/core/domain/constructions/` (Conceptually). These are family-agnostic patterns that orchestrate the generation:
+The backend contains reusable constructions for common meaning patterns, such as:
 
-* `copula_equative`: "X is Y"
-* `transitive_event`: "X did Y to Z"
-* `passive_event`: "Z was done by X"
+* copular classification
+* transitive events
+* passive events
+* topic-comment structures
+* relative clauses
+* possession and existential forms
 
-### 3. Grammar Engines (The Generators)
+These constructions let the system stay semantic-first rather than language-script-first.
 
-Located in `app/adapters/engines/`. We support multiple backend engines:
+### 3. Generation Engines
 
-* **GF (Grammatical Framework):** For high-precision, resource-heavy generation (Full Strategy).
-* **Python/Jinja (Simple):** For rapid prototyping and pidgin generation (Fast Strategy).
+Semantik Architect supports multiple realization strategies:
 
-### 4. Lexicon Subsystem
+* **GF-backed generation** for higher-precision, grammar-driven output
+* **Python family/morphology engines** for rule-based realization paths and fallback strategies
 
-Located in `app/adapters/persistence/`.
+### 4. Schemas and Configuration
 
-* **FileSystemRepo:** Loads local JSON lexicons.
-* **WikidataAdapter:** Fetches live data from SPARQL endpoints to hydrate missing lexemes.
+The repository includes a dedicated `schemas/` directory with JSON Schemas for structured frame payloads. These schemas are separate from the Python packaging layer and act as contracts for incoming content and tooling.
+
+### 5. Background Work
+
+Long-running operations such as onboarding or building language resources are handled asynchronously through the worker stack rather than blocking the API process.
 
 ---
 
-## 🚀 Quick Start (Docker)
+## Quick Start (Docker)
 
-The easiest way to run the full stack (API + Worker + Redis) is via Docker Compose.
+The easiest way to run the full stack is Docker Compose.
 
-### 1. Start the System
+### Start everything
 
 ```bash
-docker-compose up --build
-
+docker compose up --build
 ```
 
-* **Unified UI:** `http://localhost:4000/semantik_architect/`
-* **API Docs:** `http://localhost:8000/docs`
+### Main endpoints
+
+* **Reverse-proxied UI:** `http://localhost:4000/semantik_architect/`
+* **Backend docs:** `http://localhost:8000/docs`
+* **Direct frontend container port:** `http://localhost:3000`
 * **Redis:** `localhost:6379`
 
-### 2. Verify Health
+### Health check
 
 ```bash
 curl http://localhost:8000/api/v1/health/ready
-# {"broker":"up", "storage":"up", "engine":"up"}
+```
 
+You can also use the direct health route outside the API prefix:
+
+```bash
+curl http://localhost:8000/health/ready
 ```
 
 ---
 
-## 💻 API Usage
+## API Usage
 
-Instead of calling Python functions directly, you now interact via REST API.
+The canonical backend contract lives under **`/api/v1`**.
 
-### 1. Generate Text (Synchronous)
+### Generate text
 
-**`POST /api/v1/generate/{lang_code}`**
+Path-style language selection:
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/generate/fra \
+curl -X POST http://localhost:8000/api/v1/generate/eng \
   -H "x-api-key: secret" \
   -H "Content-Type: application/json" \
   -d '{
@@ -147,125 +170,176 @@ curl -X POST http://localhost:8000/api/v1/generate/fra \
     "subject": {"name": "Marie Curie"},
     "properties": {"profession": "physicist", "nationality": "polish"}
   }'
-
 ```
 
-> **Response:** *Marie Curie est une physicienne polonaise.*
+There is also a payload-driven generation route for clients that send language inside the request body.
 
-### 2. Onboard New Language (Async Saga)
+### Supported languages
 
-**`POST /api/v1/languages/`**
+```bash
+curl http://localhost:8000/api/v1/languages
+```
 
-Triggers the Onboarding Saga which:
+### Onboard or manage languages
 
-1. Registers the language in the system.
-2. Scaffolds initial JSON configuration files.
-3. Dispatches a build event to the Background Worker.
+Administrative language lifecycle operations live under the management layer and are intended to be protected.
+
+Example:
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/languages/ \
   -H "x-api-key: secret" \
   -H "Content-Type: application/json" \
   -d '{"code": "zul", "name": "Zulu", "family": "Bantu"}'
-
 ```
 
 ---
 
-## 🛠️ Development (Local)
+## Local Development
 
-If you are developing core logic without Docker:
+### Recommended mental model
+
+Keep local development simple:
+
+* **one Python environment at the repo root**
+* **one Node environment in `architect_frontend/`**
+
+Do **not** create a separate Python virtual environment for every subdirectory unless you intentionally refactor the repo into multiple installable Python packages.
+
+### Backend setup
+
+Run the backend in **WSL/Linux or Docker**. The GF runtime and related dependencies are not a good fit for native Windows execution.
 
 ```bash
-# 1. Install
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev,api]"
+pip install -r requirements.txt
+```
 
-# 2. Run API (Shim)
-python -m app.main
+### Frontend setup
 
-# 3. Run Worker (Requires Redis)
-# Use 'arq' CLI to watch for file changes
+```bash
+cd architect_frontend
+npm install
+npm run dev
+```
+
+### Run services manually
+
+Backend:
+
+```bash
+source .venv/bin/activate
+uvicorn app.adapters.api.main:create_app --factory --host 0.0.0.0 --port 8000 --reload
+```
+
+Worker:
+
+```bash
+source .venv/bin/activate
 arq app.workers.worker.WorkerSettings --watch app
+```
 
+Frontend:
+
+```bash
+cd architect_frontend
+npm run dev
+```
+
+### Unified orchestration
+
+For lifecycle operations such as build, doctor, align, and service startup, **`manage.py`** is the canonical orchestrator.
+
+Examples:
+
+```bash
+python manage.py doctor
+python manage.py align --force
+python manage.py build --langs en fr
 ```
 
 ---
 
-## 🧪 Testing
+## Testing
 
-We use `pytest` with a strict separation of Unit and Integration tests.
+The test suite is organized into:
+
+* **unit** tests for core/domain behavior
+* **integration** tests for adapters and infrastructure-aware flows
+* **e2e** tests for API behavior
+
+Typical commands:
 
 ```bash
-# Run all tests
 pytest
-
-# Run only Core Unit tests (Fast, Mocked Infrastructure)
-pytest tests/core
-
-# Run Integration tests (Requires Redis/Internet)
+pytest tests/unit
 pytest tests/integration
-
 ```
 
 ---
 
-## 🗺️ Mapping to Wikifunctions
+## Build and Grammar Layer
 
-The system includes utilities to mock Wikifunctions Z-Objects, facilitating future export.
+Semantik Architect includes a GF build/orchestration pipeline and a compiled PGF runtime artifact.
 
-### Z-Object Mock
+Important directories:
 
-Located in `app/shared/wikifunctions_mock.py`. Wraps Python dictionaries in Z-Object structures (Z6 for strings, Z9 for references) to simulate how the Abstract Wikipedia renderer calls functions.
+* `gf/` for grammar sources and compiled output
+* `builder/` for build orchestration
+* `tools/` for audits, inventory, diagnostics, and health checks
 
-### Config Extraction
-
-You can extract the internal JSON configurations to use as Z-Data on Wikifunctions:
-
-```bash
-python -m app.utils.config_extractor it
-
-```
-
-*Outputs the Italian configuration JSON compatible with Z-Function inputs.*
+If you are working on the grammar layer, prefer the documented build flow through `manage.py` and the builder/orchestrator tooling rather than ad hoc commands.
 
 ---
 
-## 🌐 Related Projects & Ecosystem
+## Tools and Operator Workflows
 
-Semantik Architect is designed to work in concert with a suite of tools for information deconstruction and secure exchange.
+The backend also exposes a protected **Tools API** used by the frontend dashboard.
 
-* **SenTient:** A powerful integration of Falcon 2.0, OpenTapioca, and OpenRefine. It deconstructs information to improve system circulation and acts as the intelligence layer alongside Architect.
-* **Orgo:** A closed-loop, secure application for resilience. Architect and SenTient operate within Orgo to ensure robust internal operations. (Note: Orgo is an independent project with distinct organizational affiliations outside the scope of the Wikimedia Foundation).
-* **Konnaxion:** The open counterpart to Orgo, focused on constructive, philanthropic exchanges solidly anchored in ethical principles.
-* **The Senior Architect's Codex:** Advanced Jupyter notebooks and utilities for AI empowerment.
-* **Core Modules:** Ariane (Navigation) and Ame-Artificielle.
+This layer is designed around:
 
+* an allowlisted registry of tool commands
+* repo-root path confinement
+* argument allowlisting
+* output truncation and timeouts
+* optional AI-gated tools
 
-
----
-
-## 🔮 Roadmap & Status
-
-**Current Status (V2.1 - Dec 2025):**
-
-* ✅ **Hexagonal Architecture:** Full separation of concerns.
-* ✅ **Async Worker:** Long-running compilations no longer block the API.
-* ✅ **Unified API:** One canonical entrypoint (`/api/v1`) for all clients.
-* ✅ **Biography Generation:** BioFrame supported across Romance and Germanic families.
-* ✅ **Dockerized:** One-command deploy.
-
-**Upcoming:**
-
-* [ ] **LLM Refiner:** Post-processing step to smooth rule-based output.
-* [ ] **Web UI:** Next.js frontend for managing languages (In Progress).
-* [ ] **Observability:** OpenTelemetry tracing.
+This keeps operational tooling usable from the UI without turning the backend into a generic remote shell.
 
 ---
 
-### 🔗 Links
+## Status
 
-* **Repository:** [github.com/Rejean-McCormick/abstract-wiki-architect](https://www.google.com/search?q=https://github.com/Rejean-McCormick/abstract-wiki-architect)
-* **Wiki:** Architecture deep dives and frame definitions.
-* **Meta-Wiki:** Abstract Wikipedia Tools Hub
+Current repository direction:
+
+* canonical FastAPI backend under **`app/adapters/api/main.py`**
+* canonical API contract under **`/api/v1`**
+* separate Next.js frontend under **`architect_frontend/`**
+* async worker for background processing
+* Dockerized multi-service deployment
+* schema-driven input contracts
+* observability hooks for structured logging and tracing
+
+---
+
+## Repository Map
+
+* **Backend:** `app/`
+* **Frontend:** `architect_frontend/`
+* **Grammars:** `gf/`
+* **Schemas:** `schemas/`
+* **Operational tools:** `tools/`
+* **Build orchestration:** `builder/`
+* **AI helpers:** `ai_services/`
+* **Docs:** `docs/`
+
+---
+
+## Links
+
+* **Repository:** `README.md`, `docs/`, and the Docker files in this repo are the best current source of truth
+* **Setup guide:** `docs/00-SETUP_AND_DEPLOYMENT.md`
+* **Tools inventory:** `docs/17-TOOLS_AND_TESTS_INVENTORY.md`
+* **API/UI unification notes:** `docs/APIUI Unification Update.txt`
+

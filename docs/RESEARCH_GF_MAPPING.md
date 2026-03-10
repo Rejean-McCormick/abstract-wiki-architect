@@ -470,7 +470,7 @@ Provenance columns:
 Proposed additions:
 
 ```text
-abstract-wiki-architect/
+semantik-architect/
   gf_integration/
     __init__.py
     mappings.py

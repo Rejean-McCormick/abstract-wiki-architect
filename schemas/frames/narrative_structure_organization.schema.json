@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://abstractwiki.org/schemas/frames/narrative_structure_organization.schema.json",
+  "$id": "urn:semantik-architect:schemas:frames:narrative_structure_organization",
   "title": "StructureOrganizationFrame",
   "description": "Narrative frame describing the internal structure of an entity such as an organization, government, academic department, large project, or document.",
   "type": "object",

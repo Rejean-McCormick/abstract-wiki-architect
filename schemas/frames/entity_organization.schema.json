@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://abstractwiki.org/schemas/frames/entity_organization.schema.json",
+  "$id": "urn:semantik-architect:schemas:frames:entity_organization",
   "title": "OrganizationFrame",
   "description": "Semantic frame for organizations, companies, parties, clubs, and similar group entities.",
   "type": "object",

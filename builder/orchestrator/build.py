@@ -30,7 +30,7 @@ PGF_BASENAME = "semantik_architect"
 # Known legacy names we might encounter from older runs.
 LEGACY_PGF_FILENAMES = (
     "SemantikArchitect.pgf",
-    "AbstractWiki.pgf",
+    "semantik_architect.pgf",
 )
 
 
@@ -341,13 +341,13 @@ def _require_alignment(tasks: List[Tuple[str, str]]) -> None:
                 f"  ref: {expected_ref or '(none)'}\n"
                 "Fix:\n"
                 "  git -C gf-rgl fetch --tags --prune\n"
-                "  (or set ABSTRACTWIKI_RGL_REF to a valid tag/branch/commit)\n"
+                "  (or set SEMANTIK_ARCHITECT_RGL_REF to a valid tag/branch/commit)\n"
                 f"{tags_msg}\n"
             )
     else:
         if not (env_rgl_ref or config.RGL_PIN_FILE.exists()):
             logger.warning(
-                "⚠️  RGL pin not configured (no data/config/rgl_pin.json and no ABSTRACTWIKI_RGL_REF). "
+                "⚠️  RGL pin not configured (no data/config/rgl_pin.json and no SEMANTIK_ARCHITECT_RGL_REF). "
                 "Build will proceed without deterministic pin enforcement."
             )
 

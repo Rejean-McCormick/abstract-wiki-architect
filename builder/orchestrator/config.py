@@ -72,15 +72,15 @@ ISO_MAP_FILE = ROOT_DIR / "data" / "config" / "iso_to_wiki.json"
 RGL_PIN_FILE = ROOT_DIR / "data" / "config" / "rgl_pin.json"
 
 _ENV_RGL_REF = (
-    os.getenv("ABSTRACTWIKI_RGL_REF")
-    or os.getenv("ABSTRACTWIKI_RGL_COMMIT")
+    os.getenv("SEMANTIK_ARCHITECT_RGL_REF")
+    or os.getenv("SEMANTIK_ARCHITECT_RGL_COMMIT")
     or ""
 ).strip()
 
 # Public export used by build.py (compat)
 ENV_RGL_REF: str = _ENV_RGL_REF
 
-_ENV_ENFORCE = (os.getenv("ABSTRACTWIKI_ENFORCE_RGL_PIN", "") or "").strip().lower()
+_ENV_ENFORCE = (os.getenv("SEMANTIK_ARCHITECT_ENFORCE_RGL_PIN", "") or "").strip().lower()
 
 ENFORCE_RGL_PIN: Optional[bool] = None
 if _ENV_ENFORCE in ("1", "true", "yes", "on"):
@@ -97,17 +97,17 @@ GENERATED_SRC_ROOT = ROOT_DIR / "generated" / "src"
 GENERATED_SRC_GF = GF_DIR / "generated" / "src"
 
 # SAFE_MODE MUST be isolated to avoid reusing stale HIGH_ROAD Wiki*.gf that import SyntaxXXX.
-_SAFE_OVERRIDE = (os.getenv("ABSTRACTWIKI_SAFE_MODE_SRC", "") or "").strip()
+_SAFE_OVERRIDE = (os.getenv("SEMANTIK_ARCHITECT_SAFE_MODE_SRC", "") or "").strip()
 if _SAFE_OVERRIDE:
     p = Path(_SAFE_OVERRIDE)
     SAFE_MODE_SRC = (p if p.is_absolute() else (ROOT_DIR / p)).resolve()
 else:
     SAFE_MODE_SRC = (ROOT_DIR / "generated" / "safe_mode" / "src").resolve()
 
-SAFE_MODE_MARKER = "-- GENERATED_BY_ABSTRACTWIKI_SAFE_MODE"
+SAFE_MODE_MARKER = "-- GENERATED_BY_SEMANTIK_ARCHITECT_SAFE_MODE"
 
 # Default generated location (non-safe-mode)
-_GENERATED_OVERRIDE = (os.getenv("ABSTRACTWIKI_GENERATED_SRC", "") or "").strip()
+_GENERATED_OVERRIDE = (os.getenv("SEMANTIK_ARCHITECT_GENERATED_SRC", "") or "").strip()
 if _GENERATED_OVERRIDE:
     p = Path(_GENERATED_OVERRIDE)
     GENERATED_SRC_DEFAULT = (p if p.is_absolute() else (ROOT_DIR / p)).resolve()

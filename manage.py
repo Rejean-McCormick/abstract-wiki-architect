@@ -73,8 +73,8 @@ CONTRIB_DIR = ROOT_DIR / "gf" / "contrib"
 BUILD_LOGS = ROOT_DIR / "gf" / "build_logs"
 
 # Alignment defaults (ref-first; overridable)
-RGL_REF_ENV = "ABSTRACTWIKI_RGL_REF"
-RGL_COMMIT_ENV = "ABSTRACTWIKI_RGL_COMMIT"
+RGL_REF_ENV = "SEMANTIK_ARCHITECT_RGL_REF"
+RGL_COMMIT_ENV = "SEMANTIK_ARCHITECT_RGL_COMMIT"
 DEFAULT_RGL_REF = os.environ.get(RGL_REF_ENV) or os.environ.get(RGL_COMMIT_ENV) or "GF-3.10"
 
 
