@@ -1,289 +1,800 @@
-# THEORY_NOTES.md  
+# THEORY_NOTES.md
+
 SemantiK Architect – Theoretical Positioning
 
 This document explains how the architecture in this repository relates to
-existing ideas in NLG and linguistic theory. It is not an implementation
-spec; it is a map of **where the design is coming from** and **what it is
-compatible with**.
+existing ideas in NLG and linguistic theory. It is **not** an implementation
+spec, API contract, or schema definition. It is a conceptual map of:
+
+* where the design is coming from,
+* what theoretical traditions it is compatible with,
+* what kind of multilingual NLG system it is trying to become.
+
+It also clarifies a central architectural point:
+
+> SemantiK Architect is **not** fundamentally a biography generator.
+
+Biography is only one early domain. The intended architecture is
+**planner-first**, **construction-centered**, **lexically mediated**,
+and **multi-backend**.
+
+The core runtime picture is:
+
+```text
+semantic input
+  -> normalization
+  -> frame-to-construction bridging
+  -> planning
+  -> ConstructionPlan
+  -> lexical resolution
+  -> realization backend
+  -> SurfaceResult
+  -> API response
+```
+
+That theoretical stance matters because it defines what the system is
+allowed to become as it scales across domains, languages, and realization
+technologies.
 
 ---
 
 ## 1. Purpose
 
-SemantiK Architect is designed as a **practical NLG stack** for Abstract Wikipedia, but its internal structure is informed by:
+SemantiK Architect is designed as a **practical multilingual NLG stack**
+for Abstract Wikipedia and related structured-content workflows.
 
-- **Grammar engineering / grammar matrix approaches**
-- **Construction grammar / frame semantics**
-- **Abstract semantic formalisms** (UMR, Ninai-style representations)
-- **Typological “language family” thinking**
+Its internal design is informed by:
+
+* **grammar engineering**
+* **construction grammar**
+* **frame semantics**
+* **abstract semantic representations**
+* **typological and language-family modeling**
+* **hybrid symbolic generation architectures**
+* **microplanning / discourse-aware NLG**
 
 The goal is to be:
 
-- **Engineered enough** for large-scale deployment, and  
-- **Theory-aware enough** that it can cooperate with research-grade tools and ideas.
+* **engineered enough** for large-scale deployment,
+* **theory-aware enough** to stay compatible with research-grade ideas,
+* **modular enough** to support many languages and multiple realization backends.
+
+The project is therefore best understood as a **construction-centered runtime**
+with:
+
+* semantic inputs,
+* planner/discourse decisions,
+* reusable constructions,
+* explicit slot mapping,
+* lexical resolution,
+* family-aware realization,
+* optional GF-based realization where it is strong.
 
 ---
 
 ## 2. High-level analogy: where this sits
 
-Very roughly:
+Very roughly, SemantiK Architect sits near several known traditions,
+without being reducible to any one of them.
 
-- Like **Grammatical Framework (GF)**:
-  - We distinguish *family-level* grammar logic and *language-specific* data.
-  - We use shared, language-agnostic constructions (patterns) plus per-language realizations.
+* Like **Grammatical Framework (GF)**:
 
-- Like a **Grammar Matrix** project:
-  - We factor out cross-language patterns into configurable “matrices” and “cards”, instead of writing each language from scratch.
-  - We have family templates that are parameterized by language data.
+  * it separates language-independent structural intent from language-specific realization,
+  * it treats many sentence patterns as reusable across languages,
+  * it benefits from explicit abstract-to-concrete separation.
 
-- Like **frame semantics / construction grammar**:
-  - We model recurrent *constructions* (e.g. “X is a Y”, “X has Y”, relative clauses) as reusable blocks.
-  - Constructions are not tied to any single language; they are parameterized by an engine and a language profile.
+* Like a **Grammar Matrix** style project:
 
-- Like **UMR / Ninai / abstract semantic notations**:
-  - We accept frame-like semantic inputs (`BioFrame` etc.).
-  - We assume we can map richer AW formalisms onto these frames later.
+  * it factors cross-language regularities into reusable machinery,
+  * it assumes many languages share deeper structural behavior,
+  * it uses configuration and structured linguistic data rather than rewriting everything per language.
 
-This project does **not** try to re-implement those formalisms directly; it borrows their *separation of concerns* and *modular structure*.
+* Like **construction grammar** and **frame semantics**:
+
+  * it treats recurrent clause and sentence patterns as reusable constructions,
+  * it assumes meaning is realized through structural packaging, not isolated words alone,
+  * it allows the same content to surface differently across constructions and languages.
+
+* Like **AMR / UMR / Ninai-style abstract representations**:
+
+  * it assumes there is a meaning layer distinct from wording,
+  * it allows input notation to evolve independently from realization code,
+  * it treats normalization and bridging as explicit architectural responsibilities.
+
+What SemantiK Architect does **not** try to do is reproduce any one of these
+traditions in pure form.
+
+Instead, it borrows their core strengths:
+
+* separation of concerns,
+* explicit interfaces,
+* reusable abstractions,
+* cross-linguistic scaling,
+* traceable runtime structure.
 
 ---
 
-## 3. Relation to specific ideas / traditions
+## 3. What kind of system this is
 
-### 3.1 Grammatical Framework (GF)
+At the theoretical level, the intended architecture is:
+
+```text
+semantic input
+  -> normalization
+  -> frame-to-construction bridge
+  -> planning
+  -> ConstructionPlan / slot_map
+  -> lexical resolution
+  -> realization backend
+  -> SurfaceResult
+```
+
+This is important.
+
+The central unit is **not** a bio payload and **not** a specific grammar engine.
+The central unit is a **planned constructional sentence**:
+a sentence whose semantic roles, information structure, and construction choice
+have already been determined before realization begins.
+
+That means the system should be understood as:
+
+* **planner-first**, not renderer-first,
+* **construction-centric**, not domain-centric,
+* **backend-agnostic**, not GF-only,
+* **family-scalable**, not per-language handcrafted only,
+* **lexically mediated**, not raw-string driven.
+
+---
+
+## 4. Relation to specific ideas and traditions
+
+### 4.1 Grammatical Framework (GF)
 
 GF separates:
 
-- **Abstract syntax** (language-independent structures, e.g. `Predication subj pred`)
-- **Concrete syntaxes** (per-language mappings to surface strings)
+* **abstract syntax**
 
-In this project:
+  * language-independent structures,
+  * typed constructors,
+  * compositional meaning-to-form mapping,
 
-- `semantics/types.py` + `constructions/*.py` play the role of **abstract syntax and linearization rules**:
-  - Frames and roles (AGENT, PATIENT, TOPIC, etc.)
-  - Constructions that map frames to clause-level structures.
+from:
 
-- `engines/*.py` + `data/morphology_configs/*.json` + `data/<family>/<lang>.json` play the role of **concrete syntax/morphology**:
-  - Word order,
-  - Morphological realization,
-  - Agreement patterns.
+* **concrete syntax**
 
-Key difference:
+  * language-specific realization,
+  * morphology,
+  * word order,
+  * agreement.
 
-- We do **not** define a full GF-style type system.
-- We aim for a *lighter-weight, JSON-driven* approach that fits Wikifunctions constraints and is easier to maintain by non-experts.
+SemantiK Architect is strongly compatible with that way of thinking.
 
-### 3.2 Grammar Matrix / broad-coverage grammars
+In SKA terms, the nearest equivalents are:
 
-Grammar matrix projects (e.g. HPSG-based) build:
+* normalized semantic frames,
+* construction classes,
+* planner output,
+* `ConstructionPlan`,
+* language-family and language-specific realization logic.
 
-- A **cross-linguistic core**, and
-- Language-specific “slugs” or configurations that plug into it.
+#### Similarities to GF
 
-In this project:
+* There is an effort to keep meaning separate from realization.
+* There is a desire to reuse structural patterns across languages.
+* There is room for language-specific grammars or realizers.
+* GF can function as one realization backend.
 
-- The “matrix” idea appears as:
+#### Differences from GF
 
-  - Family matrices in `data/morphology_configs/*.json`
-  - Language cards in `data/<family>/<lang>.json`
-  - Shared constructions in `constructions/*.py`
+* SKA is not built around a single abstract-syntax formalism.
+* SKA allows multiple realization backends, not one privileged formalism.
+* SKA uses Python, structured runtime objects, and explicit contracts as primary engineering media.
+* SKA is intended to stay accessible to mixed teams of engineers and linguistically informed contributors.
 
-- Each family engine is, conceptually, a **parameterized grammar sketch**:
-  - It knows what kinds of inflection and syntax the family has (cases, noun classes, harmony, etc.),
-  - It pulls concrete parameters from JSON.
+So the correct theoretical stance is:
 
-We do not implement a full constraint-based grammar formalism, but we:
+> SKA is **GF-compatible in spirit**, but not a pure GF system.
 
-- Encapsulate **morphosyntactic parameters** in structured data,
-- Make it possible to **derive many languages from a single family template**.
+GF is best treated as:
 
-### 3.3 Construction Grammar and Frame Semantics
-
-The constructions modules are explicitly constructional:
-
-- Each file in `constructions/` describes a **reusable mapping** from roles and features to syntactic structure, e.g.:
-
-  - Predicate nominals, locatives, existentials,
-  - Possession with “have” vs “be + genitive”,
-  - Relative clauses (subject gap, object gap),
-  - Topic–comment structures.
-
-- They operate on **semantic role labels** (subject, possessor, theme, etc.) and **information structure labels** (topic/focus).
-
-This is closely aligned with:
-
-- **Construction grammar**:
-  - Constructions are the primary units, not just rules about individual words.
-- **Frame semantics**:
-  - Certain constructions correspond to lexical or grammatical frames (e.g. `Being_born`, `Possession`, `Residence`).
-
-We keep the representation pragmatic:
-
-- Roles are simple strings,
-- Frames are Python dataclasses (e.g. `BioFrame`),
-- But the design is open to being mapped to richer framebanks or AW’s own abstract representations.
-
-### 3.4 Abstract semantic formalisms (UMR, Ninai, etc.)
-
-Abstract Wikipedia has explored notations such as:
-
-- **Ninai** (a compact notation for abstract content),
-- Mappings from structured Wikidata statements to abstract meaning representations,
-- Other AMR-like or UMR-like representations.
-
-In this project:
-
-- `semantics/types.py` defines *implementation-oriented frames* for now (e.g. biography-centric).
-- `semantics/aw_bridge.py` / `semantics/normalization.py` are intended to be the place where:
-
-  - AW’s chosen notation (Ninai, UMR, etc.) is mapped into internal frame types.
-  - We lose as little information as possible, but we adapt to what constructions/engines expect.
-
-The philosophy is:
-
-- Keep the **NLG architecture** stable,
-- Allow **input formalisms** to change or evolve,
-- Provide clear mapping points rather than baking in any specific notation forever.
+* a powerful grammar-engineering tool,
+* a strong realization backend for some constructions and languages,
+* not the sole architectural center of the system.
 
 ---
 
-## 4. Internal abstractions and why they look like this
+### 4.2 Grammar Matrix and configurable grammar engineering
 
-### 4.1 Family Engines
+Broad-coverage grammar matrix projects usually separate:
 
-Assumption:
+* a cross-linguistic core,
+* a structured parameter space,
+* language-specific configurations and lexica.
 
-- A large number of languages share **core structural properties**:
+This is one of the strongest analogies for SKA.
 
-  - Agglutinative vs fusional vs isolating,
-  - Case vs classifier vs noun class,
-  - Topic–comment vs subject–predicate orientation.
+In SemantiK Architect:
 
-Family engines:
+* family engines act like reusable realization sketches,
+* language cards and configs act like parameter sets,
+* constructions act like reusable structural templates,
+* lexical subsystems capture per-language and per-lexeme variation.
 
-- Capture these recurring patterns once (e.g. “agglutinative + harmony + suffix chaining”),
-- Parameterize the specifics via JSON and lexicon data.
+SKA is not a full HPSG-style grammar matrix and not a typed feature-structure workbench.
+But it is aligned with the grammar-matrix idea in one important sense:
 
-This is a typological, not purely genetic, grouping:
+> many languages should be derivable from shared machinery plus structured variation.
 
-- “Agglutinative” includes Turkic, Uralic, Dravidian, Koreanic features,
-- “Bantu” groups noun class systems with concord,
-- “Isolating” covers Chinese-like analytic grammars.
-
-The design is influenced by:
-
-- WALS-style typology (word order, morph type),
-- Practical “language family” divisions that linguists and engineers already use.
-
-### 4.2 Constructions vs Engines
-
-Reason for splitting:
-
-- Engines know **how** a language inflects and orders elements.
-- Constructions know **what configuration** of elements a clause needs.
-
-This separation:
-
-- Allows the same construction code to be reused across families,
-- Keeps engines agnostic about specific predicate types (e.g. biographies vs locations vs events),
-- Encourages **compositionality**: semantics → construction → morphology.
-
-### 4.3 Semantics and Discourse
-
-We deliberately use:
-
-- Simple dataclasses (`BioFrame`, `Event`, `Entity`, `TimeSpan`) instead of a full logical language.
-- A **minimal DiscourseState** with:
-
-  - salience,
-  - last-mention position,
-  - topic tracking.
-
-The idea is:
-
-- Capture just enough information to make **real discourse decisions**:
-  - pronoun vs full NP,
-  - topic markers vs canonical word order,
-  - sentence ordering for short texts.
-
-This keeps the system usable for production while leaving room to:
-
-- Align with richer discourse and anaphora theories later,
-- Plug in more elaborate centering or information-structure models if needed.
+That is one of the project’s central scaling ideas.
 
 ---
 
-## 5. Design tradeoffs
+### 4.3 Construction Grammar
 
-### 5.1 Expressiveness vs maintainability
+The closest linguistic affinity of the architecture is probably **construction grammar**.
 
-We deliberately do **not**:
+Why:
 
-- Implement full-blown HPSG or LFG-style grammars,
-- Implement a full type system à la GF abstract syntax,
-- Enforce a single deep semantic formalism.
+* sentence patterns are treated as reusable units,
+* constructions package structure and discourse choices together,
+* the same semantic content can be realized via different constructions,
+* reusable sentence logic lives in a construction inventory rather than in flat templates or individual lexemes.
 
-Instead, we choose:
+Examples of constructional thinking in SKA include:
 
-- JSON-encoded parameters and lexica,
-- Python constructions and engines that can be read by non-specialists,
-- A design that is understandable by both linguists and software engineers.
+* equative and classificatory patterns,
+* attributive copular patterns,
+* locatives,
+* existentials,
+* possession structures,
+* relative clauses,
+* topic-comment structures,
+* eventive clause patterns,
+* biography-lead patterns as one construction family among many.
 
-### 5.2 Family-based generalization vs per-language precision
+This matters theoretically because it means the system is not best described as:
 
-- Using family engines risks **over-generalization**: some languages are typological hybrids or have idiosyncrasies.
-- The architecture counters this by:
-  - Allowing language cards to override or extend family patterns,
-  - Using the lexicon to encode idiosyncratic behavior,
-  - Letting constructions ask for language-specific flags where needed.
+* a lexicon plus morphology stack,
+* a flat template engine,
+* or raw semantic frames mapped directly to wording.
 
-### 5.3 NLG-first vs parsing-first
+A better description is:
 
-This project is **NLG-first**:
+> **frame-informed constructional NLG**
 
-- All modules are oriented toward generation, not parsing.
-- But the separation into semantics, constructions, morphology, and lexicon means:
-  - A future parsing side could re-use portions of the same data,
-  - Or at least be developed in parallel with consistent categories.
-
----
-
-## 6. Future theoretical directions
-
-This architecture is intended to be a **bridge** between practical AW deployments and more research-oriented work. Natural extensions include:
-
-1. **Richer frame inventory**  
-   - Generalize `BioFrame` into a set of core frames:
-     - Birth, death, office holding, discovery, award, location, membership, etc.
-   - Align those with AW’s semantic notations and Wikidata schema.
-
-2. **Closer integration with UMR / Ninai**  
-   - Define explicit mappings from UMR/Ninai structures to internal frames.
-   - Track information-structure annotations in those notations.
-
-3. **More powerful discourse models**  
-   - Add centering-based or game-theoretic models for anaphora and topic shifts.
-   - Support longer multi-sentence texts while preserving coherence.
-
-4. **Learned components on top of rule-based scaffolding**  
-   - Keep rules as the **backbone** for grammar,
-   - Explore learned models for:
-     - lexical choice within a frame,
-     - micro-variation in word order,
-     - style control.
-
-5. **Closer alignment with GF / grammar engineering tools**  
-   - Export parts of the matrices/cards as GF lexica or vice versa.
-   - Treat the family engines as “GF light” where appropriate.
+Frames provide content and semantic roles.
+Constructions decide how that content is packaged as a sentence.
 
 ---
 
-## 7. Summary
+### 4.4 Frame Semantics
 
-- The architecture is **inspired by** GF, Grammar Matrix projects, construction grammar, and frame semantics, but implemented in a pragmatic, JSON-driven, Python-based form suitable for Abstract Wikipedia and Wikifunctions.
-- It aims to:
-  - Separate **semantics** from **constructions** from **morphosyntax** from **lexicon**,
-  - Share as much logic as possible across **language families**,
-  - Allow both linguists and engineers to collaborate on a shared code/data base.
+Frame semantics is relevant because SKA assumes that structured semantic roles matter.
 
-These notes are here to make explicit that the system is not “just a pile of scripts”, but a conscious engineering interpretation of long-standing ideas in formal and computational linguistics.
+The architecture expects inputs that distinguish things like:
+
+* actor / patient,
+* possessor / possessed,
+* theme / location,
+* subject / predicate nominal,
+* topic / focus,
+* event / participant / circumstance.
+
+That is close to the core intuition of frame semantics:
+
+* meaning comes with participant structure,
+* grammatical realization depends on that structure,
+* multiple surface forms may express overlapping frame content.
+
+However, SKA uses frame semantics in a practical engineering sense:
+
+* roles are simplified,
+* frame objects are designed for runtime use,
+* internal structures need not mirror any published framebank exactly.
+
+So the correct claim is:
+
+> SKA is **compatible with frame semantics**, but not bound to a single external frame inventory.
+
+---
+
+### 4.5 AMR, UMR, Ninai, and other abstract notations
+
+Abstract semantic notations matter because the architecture assumes:
+
+* meaning can be represented before wording,
+* input notation can evolve,
+* realization should not be permanently tied to one external formalism.
+
+That makes systems such as:
+
+* Ninai,
+* UMR,
+* AMR-like graphs,
+* Abstract Wikipedia internal semantic forms,
+
+relevant upstream inputs.
+
+Their correct place in SKA is **before planning**.
+
+That means:
+
+* external semantic notations should be normalized,
+* planning should operate on normalized semantic content,
+* realization should consume a sentence-level constructional plan rather than raw external notation.
+
+The theoretical position is:
+
+> input formalisms are replaceable;
+> the constructional runtime architecture should remain stable.
+
+That is a strong commitment to separation of concerns.
+
+---
+
+## 5. Internal abstractions and why they look like this
+
+### 5.1 Family engines
+
+A major design assumption is that many languages share **deep structural tendencies**.
+
+Not perfectly, and not without exceptions, but enough to justify reusable family-level logic.
+
+Examples include:
+
+* analytic vs fusional vs agglutinative tendencies,
+* case-heavy vs adposition-heavy marking,
+* noun-class agreement,
+* topic-prominent packaging,
+* article systems,
+* adjective placement patterns,
+* possession strategies,
+* relative clause strategies.
+
+These families are partly genealogical, partly typological, and above all
+**engineering abstractions**.
+
+This is not a claim that every language in a family behaves the same.
+It is a claim that:
+
+> many realization decisions can be shared above the individual-language level.
+
+That is essential for scale.
+
+So family engines are theoretically justified as:
+
+* a practical typological abstraction layer,
+* a middle ground between universalism and per-language handcrafting,
+* a reusable realization layer behind one construction runtime contract.
+
+---
+
+### 5.2 Constructions vs engines
+
+This split is fundamental.
+
+* **Constructions** decide what sentence configuration is needed.
+* **Engines / realizers** decide how that configuration is expressed in a given language.
+
+Constructions answer questions like:
+
+* Is this an equative?
+* Is this a classification?
+* Is this an attributive copular clause?
+* Is this a locative?
+* Is this an existential?
+* Is this a possession structure?
+* Is this a topic-comment clause?
+* Is this a bio-lead identity sentence?
+
+Engines answer questions like:
+
+* Is there an article?
+* How is agreement marked?
+* What is the default word order?
+* How is possession expressed in this language?
+* How are topic and focus surfaced?
+* What morphology or function words are required?
+
+Without this split, multilingual generation collapses into either:
+
+* too much language-specific logic inside every construction,
+* or too much semantic logic hidden inside realization backends.
+
+So this separation is both:
+
+* linguistically motivated,
+* architecturally necessary.
+
+---
+
+### 5.3 Planning and discourse
+
+The architecture also implies a planner/discourse layer.
+
+This matters because sentence generation is not just:
+
+* selecting words,
+* inflecting them,
+* placing them in order.
+
+It also includes:
+
+* deciding which construction to use,
+* choosing canonical vs topic-prominent packaging,
+* deciding which entity is discourse-prominent,
+* deciding which role should be foregrounded,
+* determining how the same semantic content should become a sentence.
+
+This makes the system compatible with ideas from:
+
+* information structure,
+* discourse planning,
+* centering-style approaches,
+* microplanning in NLG.
+
+The system does not need a full discourse theory to justify this.
+Even a light planner already changes the architecture substantially.
+
+The key theoretical point is:
+
+> planning belongs between semantics and realization.
+
+---
+
+### 5.4 Slot mapping as an explicit layer
+
+The architecture also benefits from making **slot mapping** explicit.
+
+A construction is not just a label.
+It expects semantically named inputs such as:
+
+* `subject`
+* `predicate_nominal`
+* `predicate_adjective`
+* `location`
+* `agent`
+* `patient`
+* `theme`
+* `topic`
+* `comment`
+
+This matters theoretically because it avoids collapsing:
+
+* frame roles,
+* construction roles,
+* lexical items,
+* backend arguments
+
+into one undifferentiated structure.
+
+Explicit slot mapping makes it clearer that:
+
+* semantics provides role content,
+* constructions define the packaging,
+* realization consumes already-packaged inputs.
+
+That is good both linguistically and architecturally.
+
+---
+
+### 5.5 Lexical resolution as a separate layer
+
+The architecture also assumes that lexical choice and lexical normalization
+must not be hidden inside whichever renderer happens to run.
+
+This is theoretically important because:
+
+* semantic content is not identical to lexical form,
+* raw strings are not enough for high-quality multilingual realization,
+* lexical provenance matters,
+* lexical uncertainty matters,
+* language-specific realization often depends on more than a label.
+
+So lexical resolution is not just preprocessing.
+It is a proper layer between construction planning and surface realization.
+
+That makes the system more compatible with both:
+
+* classical lexicalist insights,
+* practical multilingual NLG requirements.
+
+---
+
+### 5.6 Realization backends as interchangeable surface technologies
+
+Another important abstraction is that realization technology is not the same thing
+as architecture.
+
+SKA allows multiple backends, such as:
+
+* family-oriented realizers,
+* GF-based realizers,
+* safe-mode fallback realization,
+* future hybrid systems.
+
+This means the system’s conceptual center cannot be any one backend.
+The stable architectural object is the construction-level plan,
+not the backend’s internal representation.
+
+So the correct theoretical reading is:
+
+> realization backends are interchangeable surface technologies operating over one shared construction runtime.
+
+---
+
+## 6. What this system is not
+
+It is useful to state clearly what SemantiK Architect is **not** trying to be.
+
+### 6.1 Not a pure template system
+
+It can contain templates and reusable surface patterns,
+but the intended architecture is richer than static string templating.
+
+### 6.2 Not a pure semantic formalism
+
+It is not trying to be a full logical language or graph formalism in itself.
+
+### 6.3 Not a pure grammar formalism
+
+It is not a GF clone, not an HPSG workbench, not an LFG implementation,
+and not a single-formalism grammar laboratory.
+
+### 6.4 Not an LLM-only generation stack
+
+Learned components may become useful later,
+but the architecture is fundamentally built around explicit structure,
+traceability, and deterministic runtime behavior.
+
+### 6.5 Not a biography-only system
+
+Biography is one early domain and one useful test case.
+It must not become the hidden architectural center.
+
+This point is crucial.
+
+### 6.6 Not a renderer-first architecture
+
+No renderer should become the place where sentence meaning,
+construction choice, and discourse packaging are secretly decided.
+
+That would undo the central architectural separation.
+
+---
+
+## 7. Core theoretical tradeoffs
+
+### 7.1 Expressiveness vs maintainability
+
+The architecture deliberately avoids:
+
+* maximal formal elegance,
+* maximal notational purity,
+* maximal linguistic detail everywhere.
+
+Instead it chooses:
+
+* explicit layers,
+* typed-enough structures,
+* configurable data,
+* readable runtime code,
+* testable constructions,
+* debuggable contracts.
+
+This is a standard engineering tradeoff:
+less theoretical purity, more maintainable multilingual infrastructure.
+
+---
+
+### 7.2 Family-level generalization vs per-language accuracy
+
+Family engines risk overgeneralization.
+
+That risk is real.
+
+But the alternative is also costly:
+fully bespoke logic per language does not scale.
+
+So the system adopts a pragmatic compromise:
+
+* share what can be shared,
+* isolate what must be language-specific,
+* allow override points,
+* keep capability tiering explicit.
+
+The theory here is practical:
+typological reuse is worth it if the override model is real.
+
+---
+
+### 7.3 Planner-first vs renderer-first architecture
+
+This is one of the most important theoretical choices in the repository.
+
+A renderer-first system tends to collapse:
+
+* semantics,
+* construction choice,
+* lexical assumptions,
+* and wording
+
+into one backend.
+
+A planner-first system keeps them apart.
+
+SKA is more coherent when understood as planner-first.
+
+That means:
+
+* sentence structure should be selected before realization,
+* renderers should realize plans, not invent them,
+* no backend should become the semantic center of the system.
+
+---
+
+### 7.4 Generic runtime vs domain-specific shortcuts
+
+There is always pressure in multilingual systems to special-case a successful early domain.
+Biography is the obvious example.
+
+Theoretical caution:
+
+* domain-specific shortcuts are tempting,
+* but when they become architecture, they distort the whole system.
+
+So early domains should be treated as:
+
+* motivating examples,
+* coverage targets,
+* not architectural masters.
+
+---
+
+### 7.5 Strong contracts vs implementation flexibility
+
+The architecture benefits from strong shared contracts:
+
+* normalized frames,
+* `ConstructionPlan`,
+* `slot_map`,
+* lexical references,
+* `SurfaceResult`.
+
+At the same time, it needs implementation flexibility underneath those contracts.
+
+This tradeoff is central:
+
+* contracts should be stable enough to prevent architectural drift,
+* implementations should be flexible enough to support multiple backends and gradual migration.
+
+That combination is what allows both rigor and evolution.
+
+---
+
+## 8. Theoretical view of the target runtime
+
+The most coherent theoretical reading of the intended system is:
+
+### 8.1 Semantic layer
+
+Represents content and role structure.
+
+### 8.2 Normalization layer
+
+Converts upstream payloads or notations into stable internal frame objects.
+
+### 8.3 Frame-to-construction bridge
+
+Maps normalized semantic content toward construction-oriented planning.
+
+### 8.4 Planning layer
+
+Selects information packaging, topic/focus behavior, and construction choice.
+
+### 8.5 Construction layer
+
+Defines reusable sentence patterns independent of any single language.
+
+### 8.6 Slot-mapping layer
+
+Assigns construction-specific semantic inputs into explicit realization slots.
+
+### 8.7 Lexical resolution layer
+
+Connects planned slots to lexical identities, lexical features, and provenance.
+
+### 8.8 Realization layer
+
+Implements family- and language-specific wording, morphology, and surface order.
+
+### 8.9 Backend layer
+
+Allows different realization technologies:
+
+* GF,
+* family engines,
+* safe-mode fallback,
+* future hybrid systems.
+
+This layered reading best matches both:
+
+* the design intent,
+* the practical needs of a multilingual NLG system,
+* the need to keep architecture stable while implementations evolve.
+
+---
+
+## 9. Future theoretical directions
+
+This architecture can grow in several research-compatible directions.
+
+### 9.1 Richer frame inventories
+
+Expand beyond narrow early domains into broader semantic frame families.
+
+### 9.2 Stronger construction inventories
+
+Make construction classes, slot contracts, and construction capabilities more explicit and reusable.
+
+### 9.3 Better discourse models
+
+Add more principled topic, salience, anaphora, aggregation, and sentence-ordering models.
+
+### 9.4 Stronger lexical semantics
+
+Use richer lexical references, lexical typing, provenance tracking, and confidence-aware fallback.
+
+### 9.5 Hybrid symbolic and learned systems
+
+Use learned components for ranking, lexical choice, or variation,
+while preserving explicit constructional planning and debuggable runtime structure.
+
+### 9.6 Closer GF and grammar-engineering interoperability
+
+Use GF where it is a strong backend, without turning the entire architecture into a single-formalism system.
+
+### 9.7 Stronger contract-centered evaluation
+
+Evaluate systems not only by output quality, but also by whether they preserve:
+
+* construction identity,
+* slot integrity,
+* lexical traceability,
+* fallback transparency,
+* backend-independent semantics.
+
+---
+
+## 10. Summary
+
+SemantiK Architect should be understood as:
+
+* a **construction-centered multilingual NLG architecture**,
+* informed by **GF**, **grammar matrix thinking**, **construction grammar**, **frame semantics**, and **abstract semantic formalisms**,
+* implemented in a pragmatic, runtime-oriented way,
+* with explicit separation between:
+
+  * semantics,
+  * normalization,
+  * planning,
+  * constructions,
+  * slot mapping,
+  * lexical resolution,
+  * realization.
+
+Its theoretical identity is therefore not:
+
+* just templates,
+* not just GF,
+* not just semantic frames,
+* not just language-family rules,
+
+but rather:
+
+> a practical multilingual NLG system whose central abstraction is the
+> **planned constructional sentence**, expressed as a stable construction-level plan
+> and realized through configurable, family-aware, backend-agnostic mechanisms.
+
+These notes exist to make that theoretical identity explicit,
+so the system can evolve without losing its conceptual center.

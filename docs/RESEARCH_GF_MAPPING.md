@@ -1,596 +1,893 @@
-
 # GF Integration Design
 
-Status: draft  
-Owner: (TBD)  
-Scope: integrate selected parts of **Grammatical Framework (GF)** into **SemantiK Architect (SKA)** without changing SKA’s core architecture.
+Status: proposed
+Owner: SKA runtime maintainers
+Scope: integrate selected parts of **Grammatical Framework (GF)** into **SemantiK Architect (SKA)** while preserving SKA’s planner-first, construction-centered runtime.
 
 ---
 
-## 1. Goals and Non-Goals
+## 1. Purpose
 
-### 1.1 Goals
+This document defines how GF fits into SKA’s runtime and tooling model.
 
-1. **Leverage GF’s linguistic work** without adopting GF as the core platform:
-   - Reuse GF’s **morphology paradigms** (RGL) to strengthen SKA’s morphology configs.
-   - Borrow **syntactic patterns** and **test cases** to improve constructions and QA.
+The key decision is:
 
-2. **Keep SKA’s architecture intact**:
-   - Still use **family engines + JSON configs + lexicon subsystem + frames**.
-   - No dependency on GF in the runtime generation pipeline.
+> **GF is a renderer backend and an offline enrichment source, not the architecture itself.**
 
-3. **Make integration repeatable and auditable**:
-   - Clear tooling to re-import/refresh GF-derived resources.
-   - All GF-derived data carries provenance metadata (version, module, language).
+This document exists to remove drift between:
 
-4. **Stay license-clean and modular**:
-   - GF is BSD-style; we must preserve attribution.
-   - GF integration must be optional and clearly separated in the repo.
+* the documented planner/construction architecture,
+* the current runtime generation stack,
+* GF-backed realization,
+* family-engine realization,
+* safe-mode fallback,
+* offline GF-derived morphology, syntax, and QA assets.
 
-### 1.2 Non-Goals
+It makes explicit what is already true in the repository:
 
-- Do **not**:
-  - Port GF’s compiler or AST model into SKA.
-  - Make SKA dependent on GF for runtime generation.
-  - Implement parsing or reversible grammars.
-  - Port full GF concrete syntaxes per language.
-
-- We only use GF as:
-  - an **offline source of paradigms, rule patterns, and test cases**, and
-  - conceptual inspiration for constructions.
+* GF/PGF is already part of the generation stack,
+* family engines remain first-class,
+* lexical resolution remains a shared SKA concern,
+* runtime authority belongs to planner + construction contracts, not to a backend.
 
 ---
 
-## 2. Scope Overview
+## 2. Goals and Non-Goals
 
-The integration is split into three phases (loosely independent):
+## 2.1 Goals
 
-1. **Phase 1 – Morphology integration (high priority)**  
-   Toolchain to import GF’s noun/adj/verb paradigms into SKA’s JSON morphology configs and/or language cards.
+1. **Use GF where it actually fits**
 
-2. **Phase 2 – Syntax pattern harvesting (medium priority)**  
-   Human-guided extraction of word order and construction patterns from RGL; ported into SKA constructions and family engines.
+   * as an **optional runtime renderer backend** for selected constructions and languages,
+   * as an **offline source** of morphology paradigms, syntactic patterns, and QA examples,
+   * as a **grammar-engineering reference** for improving SKA’s constructions and family engines.
 
-3. **Phase 3 – Test case integration (medium priority)**  
-   Use GF grammars to generate contrastive test pairs for morphology and syntax; import them as CSV rows into SKA’s QA suites.
+2. **Keep SKA’s architecture intact**
 
----
+   SKA remains centered on:
 
-## 3. Current SKA Architecture (Short Recap)
+   * semantic frames,
+   * discourse/planning,
+   * construction selection,
+   * construction plans,
+   * lexical resolution,
+   * family engines,
+   * language/morphology data.
 
-Core elements relevant for integration:
+3. **Keep planning authoritative**
 
-- `engines/` – **family engines** orchestrating:
-  - morphology (`morphology/<family>.py`),
-  - constructions (`constructions/...`),
-  - lexicon (`lexicon/...`).
+   Runtime generation remains:
 
-- `data/morphology_configs/` – **family grammar matrices**:
-  - e.g. `romance_grammar_matrix.json`, `slavic_matrix.json`.
-  - Capture family-level paradigms, morphological category space, default rules.
+   ```text
+   frame -> planner -> construction plan -> lexical resolution -> renderer backend -> surface result
+   ```
 
-- `data/<family>/<lang>.json` – **language cards**:
-  - overrides and language-specific morphological parameters.
+   GF consumes the same runtime contract as other renderers.
 
-- `data/lexicon/*.json` – lexica:
-  - `lemma`, `pos`, features (gender, number, etc.), IDs.
+4. **Support mixed backend capability**
 
-- QA pipeline:
-  - `qa_tools/test_suite_generator.py` → CSV templates.
-  - `qa/test_runner.py` → SKA generation vs expected outputs.
-  - `qa_tools/lexicon_coverage_report.py` → lexicon coverage.
+   * some languages/constructions may use GF,
+   * some may use family engines,
+   * some may fall back to safe mode.
 
-GF integration will feed into:
+   All three must coexist without semantic drift.
 
-- `data/morphology_configs/*`  
-- `data/<family>/*`  
-- `qa_tools/generated_datasets/*` (test CSVs)
+5. **Make integration auditable**
 
-Nothing in the runtime core (router, engines, constructions) should require GF at runtime.
+   * clear capability metadata,
+   * clear runtime traces when GF is selected,
+   * versioned and reviewable offline imports,
+   * explicit provenance on GF-derived artifacts.
 
----
+6. **Keep GF optional**
 
-## 4. GF Overview (Only What We Use)
-
-- GF provides:
-  - **Resource Grammar Library (RGL)**:
-    - per-language morphology and syntax modules,
-    - lexical categories, inflection paradigms, function signatures.
-
-- Relevant pieces for us:
-  1. **Morphology paradigms** (inflection tables, rules).
-  2. **Syntactic constructors** (clause building, phrase building).
-  3. **Regression tests** and examples used to validate RGL.
-
-We will treat GF as an **offline tool** installed locally (or in CI) for generation of intermediate artifacts.
+   * runtime does not require GF unless the selected backend is GF,
+   * offline tooling is isolated,
+   * non-GF languages continue to work through family or safe-mode backends.
 
 ---
 
-## 5. High-Level Integration Architecture
+## 2.2 Non-Goals
 
-### 5.1 Components
+This design does **not**:
 
-1. **GF Export Layer** (external dependency, optional)
-   - Small GF scripts or commands to dump:
-     - paradigm tables (lemma → forms),
-     - sample sentences for constructions.
+* make GF the core architecture of SKA,
+* make all runtime generation dependent on GF,
+* adopt GF ASTs as SKA’s primary internal contract,
+* require every language to have a GF runtime path,
+* replace family engines, lexicon resolution, or JSON language/morphology data.
 
-2. **Conversion Layer (`gf_integration/`)** (new in SKA)
-   - Python utilities to transform GF exports into:
-     - SKA morphology JSON (grammar matrix + language cards),
-     - SKA QA CSV rows,
-     - optional helper JSON/YAML for syntactic patterns.
+This design also does **not** require:
 
-3. **Consumption Layer** (existing SKA code)
-   - SKA family engines and morphology modules continue to read:
-     - `data/morphology_configs/*`,
-     - `data/<family>/*.json`,
-     - `qa_tools/generated_datasets/*.csv`.
+* parsing,
+* reversible grammar support,
+* full concrete GF coverage for every language,
+* direct exposure of GF ASTs to API clients.
 
-### 5.2 Data Flow (Morphology)
+---
+
+## 3. Executive Summary
+
+GF has two valid roles in SKA:
+
+1. **Runtime role**
+
+   * GF is a renderer backend for selected `(lang_code, construction_id)` pairs.
+
+2. **Offline role**
+
+   * GF resources can be harvested into morphology data, syntax notes, QA material, and coverage/provenance artifacts.
+
+GF is therefore:
+
+* **not** the architecture,
+* **not** offline-only,
+* **not** mandatory,
+* **not** the semantic or planning layer.
+
+The authoritative SKA runtime remains:
 
 ```text
-GF RGL .gf files
-     │
-     ├─[gf export scripts]───────────────►  gf_morph_export.json  (intermediate)
-     │
-     └─[gf_integration/convert_morphology.py]►
-             data/morphology_configs/<family>_gf_enriched.json
-             data/<family>/<lang>_gf_card.json
-````
-
-### 5.3 Data Flow (QA Tests)
-
-```text
-GF grammars + test ASTs
-     │
-     ├─[gf export tests]─────────────────►  gf_test_sentences.csv
-     │
-     └─[gf_integration/convert_tests.py]─►
-             qa_tools/generated_datasets/test_suite_<lang>_gf.csv
+API payload
+  -> frame normalization
+  -> planner
+  -> construction plan
+  -> lexical resolution
+  -> renderer backend
+  -> surface result
 ```
 
-### 5.4 Isolation
-
-* All GF-dependent scripts live under:
-
-  * `gf_integration/` and/or `tools/gf/`.
-* Generated artifacts are:
-
-  * committed to `data/*` and `qa_tools/generated_datasets/*` as plain JSON/CSV.
-* Runtime never calls GF; it only reads JSON/CSV.
+GF participates inside the **renderer backend** layer at runtime and inside the **offline enrichment** layer outside runtime.
 
 ---
 
-## 6. Phase 1 – Morphology Integration
+## 4. Current Architectural Position
 
-### 6.1 Target: morphology configs and language cards
+SKA already contains the main ingredients required for this integration:
 
-We want to:
+* semantic/domain frames,
+* discourse/planning,
+* `PlannedSentence`,
+* `construction_id`,
+* construction inventory,
+* family-oriented engines,
+* lexicon and lexical normalization,
+* GF integration in the current generation stack.
 
-* enrich `data/morphology_configs/<family>_grammar_matrix.json` with:
+The current architectural tension is that the repository contains both:
 
-  * more complete paradigms,
-  * better irregular rules,
-  * more accurate stem/affix patterns;
-* optionally create/extend `data/<family>/<lang>.json` from GF data.
+* the intended planner/construction architecture, and
+* a still-existing direct generation path that can bypass the shared runtime contract.
 
-### 6.2 Source: GF morphology
+This document resolves that tension by making GF subordinate to the same runtime boundary used by other backends.
 
-For each language `L`:
+---
 
-* GF RGL module typically has:
+## 5. Architectural Decision
 
-  * categories like `N`, `A`, `V`, `Adv`, `Det`,
-  * inflection functions like:
+## 5.1 Authoritative runtime contract
 
-    * `mkN` (noun paradigm),
-    * `mkA` (adjective paradigm),
-    * `mkV` (verb paradigm),
-    * plus irregular entries.
+The authoritative runtime flow is:
 
-* We treat these as describing:
-
-  * paradigm type,
-  * inflection slots (e.g. `Mas Sg`, `Fem Pl`, person/tense endings),
-  * phonological adjustments.
-
-### 6.3 Intermediate model
-
-Define an intermediate JSON schema, e.g. `gf_morph_export.json`:
-
-```json
-{
-  "language": "it",
-  "gf_version": "3.12",
-  "paradigms": [
-    {
-      "category": "N",
-      "name": "Noun_o_a",
-      "slots": ["Masc_Sg", "Fem_Sg", "Masc_Pl", "Fem_Pl"],
-      "examples": [
-        {
-          "lemma": "amico",
-          "forms": {
-            "Masc_Sg": "amico",
-            "Fem_Sg": "amica",
-            "Masc_Pl": "amici",
-            "Fem_Pl": "amiche"
-          }
-        }
-      ],
-      "rules": {
-        "stem_pattern": ".*o",
-        "transformations": [
-          { "from": "o", "to": "a", "slot": "Fem_Sg" },
-          { "from": "o", "to": "i", "slot": "Masc_Pl" },
-          { "from": "co", "to": "che", "slot": "Fem_Pl", "condition": "..."}
-        ]
-      }
-    }
-  ]
-}
+```text
+API payload
+  -> normalized frame
+  -> planner
+  -> construction plan
+  -> lexical resolution
+  -> renderer backend
+  -> surface result
 ```
 
-The exact structure can be adapted, but we need:
+This implies:
 
-* category,
-* slot inventory,
-* transformation rules,
-* at least one exemplar per paradigm.
+* GF must consume a `ConstructionPlan`, not raw API payloads as its primary contract.
+* family engines must consume the same plan.
+* safe mode must consume the same plan.
+* direct frame-to-GF generation is compatibility behavior only.
 
-This file is produced by GF export scripts (outside SKA Python).
+## 5.2 GF’s place in the runtime
 
-### 6.4 Conversion to SKA grammar matrices
+GF sits in the **renderer layer**.
 
-Create `gf_integration/convert_morphology.py`:
+GF is **not**:
 
-Responsibilities:
+* the planner,
+* the semantic model,
+* the API contract,
+* the lexicon subsystem,
+* the source of construction truth.
 
-1. **Read intermediate export** (`gf_morph_export.json`).
-2. **Map GF categories and slots to SKA categories and features**:
+GF **is**:
 
-   * e.g. `category="N"` → SKA `pos="NOUN"`.
-   * `slot="Masc_Sg"` → `{"gender": "masc", "number": "sg"}`.
-3. **Inject/merge into SKA family matrix**:
+* a renderer backend for supported `(lang_code, construction_id)` pairs.
 
-   * open `data/morphology_configs/romance_grammar_matrix.json`,
-   * update or extend:
+## 5.3 GF’s place in offline tooling
 
-     * paradigm definitions,
-     * suffix rules,
-     * phonological rules.
-4. **Emit enriched config files**:
+GF also sits in the **offline enrichment layer**.
 
-   * either overwrite the existing matrix, or
-   * generate `*_gf_enriched.json` and then manually promote.
+GF can provide:
 
-#### 6.4.1 Mapping table (sketch)
+* morphology paradigms,
+* syntax references,
+* example sets,
+* test material,
+* coverage data,
+* provenance metadata.
 
-Create a static mapping in `gf_integration/mappings.py`:
+---
+
+## 6. Canonical Runtime Boundary for GF
+
+GF integration must use the same canonical runtime objects as the rest of Batch 1.
+
+## 6.1 Renderer input
+
+GF consumes a `ConstructionPlan` with at least:
+
+* `construction_id`
+* `lang_code`
+* `slot_map`
+* optional `topic_entity_id`
+* optional `focus_role`
+* `metadata`
+
+Renderer-safe realization options belong under:
 
 ```python
-GF_POS_TO_SKA = {
-    "N": "NOUN",
-    "A": "ADJ",
-    "V": "VERB",
-    "Adv": "ADV",
-    # ...
-}
-
-GF_SLOT_TO_FEATURES = {
-    "Masc_Sg": {"gender": "masc", "number": "sg"},
-    "Fem_Sg":  {"gender": "fem",  "number": "sg"},
-    "Masc_Pl": {"gender": "masc", "number": "pl"},
-    "Fem_Pl":  {"gender": "fem",  "number": "pl"},
-    # ...
-}
+metadata["generation_options"]
 ```
 
-These mappings are family-specific and may be extended as we add more languages.
+Typical option families include:
 
-### 6.5 Language cards
+* `tense`
+* `aspect`
+* `polarity`
+* `register`
+* `definiteness`
+* `voice`
+* `style`
+* `allow_fallback`
+* `force_backend`
+* `debug`
 
-Where GF provides language-specific quirks that should not live in the shared family matrix (e.g. special elision, clitic binding, orthographic niceties), we record them in:
+GF may also consume normalized lexical content already prepared by lexical resolution.
 
-* `data/<family>/<lang>_gf_card.json` or merge into existing `data/<family>/<lang>.json`.
+## 6.2 Renderer output
 
-Example fields:
+GF returns a `SurfaceResult` with:
 
-```json
-{
-  "language": "it",
-  "source": "gf-rgl-3.12",
-  "article_elision": [
-    { "before_vowel": true, "article": "lo", "elided": "l'" }
-  ],
-  "special_clusters": [
-    { "pattern": "s + consonant", "article": "uno" }
-  ]
-}
-```
+* `text`
+* `lang_code`
+* `construction_id`
+* `renderer_backend = "gf"`
+* `debug_info`
 
-### 6.6 Integration with existing morphology code
+Required debug keys include:
 
-After generating the enriched configs:
+* `construction_id`
+* `renderer_backend`
+* `lang_code`
+* `fallback_used`
 
-1. Update `morphology/<family>.py` to:
+Typical optional GF-specific debug fields include:
 
-   * recognise new paradigm IDs,
-   * apply the newly imported transformations.
+* `resolved_language`
+* `gf_function`
+* `ast`
+* `backend_trace`
+* `warnings`
+* `timings_ms`
 
-2. Add regression tests in `qa/test_*.py`:
+## 6.3 Boundary rule
 
-   * for languages where GF data is integrated,
-   * verifying a few paradigms end-to-end.
+GF may choose:
 
-3. Update `docs/LEXICON_ARCHITECTURE.md` and `docs/LEXICON_WORKFLOW.md`:
+* backend-specific AST construction,
+* concrete grammar selection,
+* local linearization strategy.
 
-   * note that some paradigms are GF-derived,
-   * specify refresh steps.
+GF may **not**:
 
-### 6.7 Versioning and provenance
-
-Every GF-derived file must include provenance in its `meta`:
-
-```json
-{
-  "_meta": {
-    "source": "gf-rgl",
-    "gf_version": "3.12",
-    "gf_modules": ["Italian/Noun.gf", "Italian/Adjective.gf"],
-    "generated_at": "2025-12-06T12:00:00Z"
-  },
-  "paradigms": [ ... ]
-}
-```
+* change `construction_id`,
+* reinterpret slot meanings,
+* invent missing semantic structure,
+* become the planner by stealth.
 
 ---
 
-## 7. Phase 2 – Syntax Pattern Harvesting
+## 7. GF Integration Modes
 
-This phase is more manual and conceptual than Phase 1.
+GF is integrated in two distinct modes.
 
-### 7.1 Objective
+## 7.1 Mode A — Runtime renderer backend
 
-Use GF’s syntactic design to refine SKA’s:
+In this mode, GF is used during request-time generation.
 
-* constructions (word order, phrase structure),
-* family engine logic (clitics, argument order, topicalisation).
+Requirements:
 
-We **do not** import GF syntax code directly. Instead, we:
+* compiled PGF is available,
+* `(lang_code, construction_id)` capability is declared,
+* renderer dispatch selects GF,
+* the GF adapter consumes the shared `ConstructionPlan` contract.
 
-* inspect GF modules (RGL `Syntax`, `Paradigms`, `Sentence`),
-* translate key patterns into SKA constructions.
+Typical use:
 
-### 7.2 Workflow
+* high-fidelity realization for selected constructions,
+* controlled multilingual generation,
+* deterministic output where GF support is strong.
 
-1. **Identify focus constructions** in SKA:
+## 7.2 Mode B — Offline knowledge provider
 
-   * simple copula (`copula_equative_simple`, `copula_equative_classification`),
-   * basic clauses (`intransitive_event`, `transitive_event`),
-   * relative clauses (`relative_clause_subject_gap`),
-   * coordination, comparatives, existentials.
+In this mode, GF is not used in request-time generation.
 
-2. For each construction:
+Requirements:
 
-   * review corresponding GF RGL functions (e.g. `mkCl`, `mkS`, `mkRS`, etc.) for several languages,
-   * document word-order rules and parameterization:
+* GF tools are available offline or in CI,
+* export/harvest scripts produce intermediate artifacts,
+* SKA conversion tools transform them into JSON/CSV/Markdown artifacts,
+* provenance is preserved.
 
-     * SVO vs SOV,
-     * adjective position (pre/post),
-     * negation particles, clitics.
+Typical use:
 
-3. Amend SKA constructions:
-
-   * add configuration hooks in `constructions/base.py` for:
-
-     * clause skeleton templates,
-     * slot reordering (subject, verb, object, adverbials),
-     * optional positions for topic markers or clitics.
-   * set defaults per family/language in `language_profiles/profiles.json` and/or family matrices.
-
-4. Add examples to docs:
-
-   * for each major pattern, include a brief note in `docs/FRAMES_NARRATIVE.md` or separate `docs/SYNTAX_NOTES.md`.
-
-### 7.3 Deliverables
-
-* `docs/GF_SYNTAX_NOTES_<family>.md`:
-
-  * summary of imported GF insights per language family.
-* Adjusted constructions and engines:
-
-  * more accurate word order,
-  * more consistent cross-language parameterisation.
+* morphology enrichment,
+* syntax notes,
+* construction review,
+* test generation,
+* regression support.
 
 ---
 
-## 8. Phase 3 – Test Case Integration
+## 8. High-Level Integration Architecture
 
-### 8.1 Objective
+## 8.1 Planning layer
 
-Use GF’s grammars as a **test oracle** to generate:
+Authoritative planner-side responsibilities:
 
-* contrastive examples for morphology (correct vs wrong forms),
-* syntactic minimal pairs (e.g. clitic placement, agreement).
+* normalized frames,
+* discourse/planning,
+* construction selection,
+* `construction_id`,
+* sentence packaging,
+* topic/focus metadata.
 
-These become rows in SKA’s CSV test suites.
+## 8.2 Construction runtime contract
 
-### 8.2 Data Flow
+Shared runtime objects include:
+
+* `PlannedSentence`
+* `ConstructionPlan`
+* `SlotMap`
+* `EntityRef`
+* `LexemeRef`
+* `SurfaceResult`
+
+This layer is the required boundary between planning and realization.
+
+## 8.3 Renderer layer
+
+Runtime renderer backends are:
+
+* family backend,
+* GF backend,
+* safe-mode backend.
+
+All must implement the same logical runtime surface:
+
+```python
+async def realize(construction_plan: ConstructionPlan) -> SurfaceResult
+```
+
+## 8.4 Offline GF layer
+
+Offline GF tooling includes:
+
+* export scripts,
+* conversion scripts,
+* provenance capture,
+* import into JSON/CSV/docs,
+* capability review material,
+* QA artifact generation.
+
+---
+
+## 9. Runtime Data Flow
+
+## 9.1 Runtime path
 
 ```text
-GF test grammars / examples
-     │
-     ├─[gf generate tests]────────────►  gf_test_sentences.csv
-     │      (lang, phenomenon, input parameters, output_strings[])
-     │
-     └─[gf_integration/convert_tests.py]►
-             qa_tools/generated_datasets/test_suite_<lang>_gf.csv
+Request JSON
+  -> semantic frame normalization
+  -> planner
+  -> construction plan
+  -> lexical resolution
+  -> renderer dispatch
+       -> gf backend
+       -> family backend
+       -> safe_mode backend
+  -> surface result
+  -> API response
 ```
 
-Example intermediate CSV:
-
-```csv
-lang,phenomenon,input,good,bad1,bad2
-it,adj_agreement,"Adj=grande,N=ragazzo", "il grande ragazzo","il grande ragazza","i grande ragazzo"
-```
-
-`convert_tests.py` then:
-
-* maps each row to one or more SKA test rows:
-
-  * build the corresponding `BioFrame` or other frame,
-  * place `good` as `EXPECTED_OUTPUT`,
-  * optionally use `badX` as negative examples or comments.
-
-### 8.3 Integration with QA
-
-* `qa_tools/test_suite_generator.py`:
-
-  * extended to optionally include GF-derived tests when generating new CSVs.
-* `qa/test_runner.py`:
-
-  * treat GF-derived test suites the same as human-authored ones.
-* Optionally, dedicated GF-specific suites:
-
-  * `test_suite_<lang>_gf_morph.csv`,
-  * `test_suite_<lang>_gf_syntax.csv`.
-
-Provenance columns:
-
-* `SOURCE=gf_rgl`,
-* `GF_VERSION`,
-* `GF_MODULE`.
-
----
-
-## 9. Repo Layout Changes
-
-Proposed additions:
+## 9.2 Offline path
 
 ```text
-semantik-architect/
-  gf_integration/
-    __init__.py
-    mappings.py
-    convert_morphology.py
-    convert_tests.py
-    README.md           # how to install GF, run exporters, etc.
-
-  tools/gf/             # optional
-    export_morphology.gf
-    export_tests.gf
-
-  docs/
-    GF_INTEGRATION.md   # this document
-    GF_SYNTAX_NOTES_romance.md
-    GF_SYNTAX_NOTES_slavic.md
-    ...
+GF grammars / RGL / examples
+   -> export scripts
+   -> intermediate GF artifacts
+   -> SKA conversion tools
+   -> morphology data / syntax notes / QA datasets / provenance docs
 ```
 
----
+## 9.3 Isolation rule
 
-## 10. Implementation Plan
-
-### Milestone 1 – Skeleton and one language (Romance: Italian)
-
-1. Add `gf_integration/` skeleton and mappings.
-2. Write minimal GF exporter:
-
-   * `tools/gf/export_morphology.gf` for Italian.
-3. Generate `gf_morph_export_it.json`.
-4. Implement `convert_morphology.py` → update `romance_grammar_matrix.json` and `data/romance/it.json`.
-5. Extend `morphology/romance.py` to use new paradigms.
-6. Add a small GF-based test suite for Italian morphology.
-7. Verify tests; update docs.
-
-### Milestone 2 – Additional languages in same family
-
-1. Repeat for Spanish, French, Portuguese, Romanian.
-2. Consolidate mappings for Romance.
-3. Add shared `GF_SYNTAX_NOTES_romance.md` and adjust constructions as needed.
-
-### Milestone 3 – Another family (Slavic, Germanic, etc.)
-
-Repeat Milestone 1–2 pattern per family.
-
-### Milestone 4 – Test integration
-
-1. Implement `export_tests.gf` for at least one language.
-2. Generate test CSV and integrate via `convert_tests.py`.
-3. Wire into QA generator/runner.
-4. Document process in `docs/GF_INTEGRATION.md`.
+* runtime does not require GF unless GF is selected,
+* languages without GF support continue to work,
+* offline GF tooling remains isolated from normal runtime execution,
+* generated artifacts are stored as normal SKA assets, not as hidden backend state.
 
 ---
 
-## 11. Risks and Mitigations
+## 10. Backend Selection Policy
 
-### 11.1 Risk: mismatch between GF and SKA feature sets
+## 10.1 Selection inputs
 
-* GF may have richer morphological categories or slightly different category splits.
-* Mitigation:
+Renderer dispatch should be based on:
 
-  * design explicit mappings in `gf_integration/mappings.py`,
-  * allow partial import (ignore unused categories),
-  * add validation to flag unmapped slots.
+* `(lang_code, construction_id)` capability,
+* backend health/readiness,
+* configuration flags,
+* allowed fallback policy,
+* explicit debug/test overrides when requested.
 
-### 11.2 Risk: overfitting to GF assumptions
+## 10.2 Recommended priority
 
-* GF grammars reflect specific theoretical choices that may not align with AW needs.
-* Mitigation:
+1. **GF backend**
 
-  * GF is used as **one source**, not authoritative truth,
-  * manual review of paradigm and pattern imports per language.
+   * when the requested `(lang_code, construction_id)` is supported and healthy.
 
-### 11.3 Risk: maintenance burden
+2. **Family backend**
 
-* GF may evolve; re-importing paradigms might break configs.
-* Mitigation:
+   * when family realization is supported.
 
-  * capture GF version in meta,
-  * treat imports as semi-manual: run scripts, inspect diffs, then commit,
-  * do not auto-refresh GF imports in CI without human review.
+3. **Safe-mode backend**
+
+   * when deterministic fallback is allowed.
+
+## 10.3 Semantic guarantee
+
+Backend choice may change:
+
+* phrasing quality,
+* morphology richness,
+* debug detail,
+* local idiomatic realization.
+
+Backend choice must **not** silently change:
+
+* `construction_id`,
+* semantic role assignment,
+* truth-conditional content,
+* planner-authorized information packaging.
 
 ---
 
-## 12. Licensing and Attribution
+## 11. GF Runtime Backend Requirements
 
-* GF is BSD-licensed; include:
+## 11.1 Input requirements
 
-  * a pointer to GF’s LICENSE in `docs/GF_INTEGRATION.md`,
-  * explicit note in generated files’ `_meta.source` fields.
+The GF adapter must consume:
 
-Example meta snippet:
+* `construction_id`
+* `lang_code`
+* normalized `slot_map`
+* lexicalized or lexicalizable slot values
+* optional planner metadata
+* `metadata["generation_options"]`
+
+The GF adapter must **not** require:
+
+* raw API request shape,
+* router-specific payload hacks,
+* domain-specific direct frame flattening as its long-term contract.
+
+## 11.2 Output requirements
+
+The GF adapter must return a `SurfaceResult` with:
+
+* `text`
+* `lang_code`
+* `construction_id`
+* `renderer_backend = "gf"`
+* truthful `debug_info`
+
+Recommended GF debug fields:
+
+* `resolved_language`
+* `gf_function`
+* `ast`
+* `slot_keys`
+* `fallback_used`
+* `backend_trace`
+
+## 11.3 Legacy compatibility rule
+
+If direct frame-to-GF behavior exists in legacy code, it must be treated as:
+
+* compatibility-only behavior,
+* isolated adapter logic,
+* temporary migration support.
+
+It must not remain the canonical runtime boundary.
+
+---
+
+## 12. Construction-Centered GF Capability
+
+GF support must be tracked by **construction**, not just by language.
+
+Correct capability unit:
+
+```text
+(lang_code, construction_id)
+```
+
+Examples:
+
+* `("fr", "copula_equative_simple")`
+* `("fr", "copula_locative")`
+* `("en", "topic_comment_eventive")`
+
+This matters because:
+
+* a language may have GF assets but only partial construction coverage,
+* different constructions may require different mapping quality,
+* backend choice must be explicit and testable.
+
+GF presence for a language is therefore **not enough** to claim runtime support.
+
+---
+
+## 13. Relationship to Family Engines
+
+## 13.1 Family engines remain first-class
+
+GF integration does **not** replace family engines.
+
+Family engines remain necessary because they:
+
+* scale across larger language inventories,
+* encode SKA-native morphology/configuration,
+* work where GF coverage is absent,
+* support constructions beyond current GF coverage.
+
+## 13.2 Division of responsibility
+
+* **Planner / construction layer**
+
+  * chooses structure and semantic packaging.
+
+* **Lexical resolution**
+
+  * normalizes entities and lexemes for realization.
+
+* **GF backend**
+
+  * realizes supported constructions for supported languages.
+
+* **Family backends**
+
+  * realize supported constructions using family-native morphology and language data.
+
+* **Safe-mode backend**
+
+  * provides deterministic fallback when stronger backends are unavailable.
+
+---
+
+## 14. Relationship to Lexical Resolution
+
+GF integration must not collapse lexical handling into a grammar-only model.
+
+Lexical resolution remains a shared SKA concern because it is reused by:
+
+* multiple constructions,
+* multiple backends,
+* multiple languages,
+* QA/coverage tooling,
+* entity/lexicon bridges.
+
+GF may contribute lexical insights and examples, but runtime lexical normalization remains outside the GF adapter.
+
+Practical rule:
+
+* renderers consume lexical decisions,
+* they do not own canonical lexical classification.
+
+---
+
+## 15. Offline Morphology Integration
+
+## 15.1 Objective
+
+Use GF morphology resources to enrich SKA morphology data without forcing GF at runtime for every language.
+
+## 15.2 Target outputs
+
+GF exports may enrich:
+
+* language/family morphology configs,
+* language cards,
+* lexicon-side feature data where appropriate,
+* construction capability metadata.
+
+## 15.3 Intermediate representation
+
+Intermediate export files should preserve:
+
+* language,
+* GF version,
+* module provenance,
+* category names,
+* slot inventories,
+* paradigm examples,
+* transformation rules.
+
+## 15.4 Conversion responsibilities
+
+Conversion tooling should:
+
+1. read GF exports,
+2. map GF categories/features to SKA categories/features,
+3. generate or merge SKA artifacts,
+4. attach provenance metadata,
+5. flag unmapped or suspicious items for review.
+
+---
+
+## 16. Offline Syntax Pattern Harvesting
+
+## 16.1 Objective
+
+Use GF analyses and examples to improve SKA constructions and family-engine defaults.
+
+## 16.2 What is harvested
+
+Potential harvest outputs include:
+
+* construction insights,
+* parameterization patterns,
+* word-order options,
+* feature interactions,
+* curated examples,
+* regression examples.
+
+GF syntax code is **not** imported as SKA’s primary runtime logic.
+
+## 16.3 Deliverables
+
+* family-specific syntax notes,
+* construction adjustments,
+* updated language/family configuration where justified,
+* regression example sets.
+
+---
+
+## 17. Offline Test Integration
+
+## 17.1 Objective
+
+Use GF grammars and generated examples to create high-value QA material.
+
+## 17.2 Target outputs
+
+* JSON/CSV QA rows,
+* minimal pairs,
+* agreement tests,
+* construction-specific regression suites,
+* backend parity checks where feasible.
+
+## 17.3 Provenance requirements
+
+Each GF-derived test artifact should record:
+
+* source = GF/RGL
+* GF version
+* modules used
+* language
+* generation date
+* transformation script version
+
+---
+
+## 18. Repo Alignment
+
+GF integration work should align with the actual runtime adapter and grammar locations in the repository.
+
+Relevant runtime/backend paths include:
+
+```text
+app/adapters/engines/construction_realizer.py
+app/adapters/engines/family_construction_adapter.py
+app/adapters/engines/gf_construction_adapter.py
+app/adapters/engines/safe_mode_construction_adapter.py
+app/adapters/engines/gf_wrapper.py
+app/adapters/engines/gf_engine.py
+app/adapters/engines/python_engine_wrapper.py
+```
+
+Relevant contract/runtime docs include:
+
+```text
+docs/RESEARCH_GF_MAPPING.md
+docs/contracts/construction_runtime_contract.md
+docs/contracts/planner_realizer_interfaces.md
+docs/grammar/construction_renderer_contract.md
+docs/architecture/construction_runtime_alignment.md
+docs/architecture/construction_runtime_flow.md
+```
+
+Relevant grammar/runtime surface files include:
+
+```text
+gf/SemantikArchitect.gf
+gf/WikiI.gf
+gf/WikiEng.gf
+gf/WikiFre.gf
+```
+
+This document is about how those areas fit together, not about creating a separate parallel architecture.
+
+---
+
+## 19. Implementation Plan
+
+## Milestone 0 — Runtime alignment
+
+1. make the shared construction runtime contract authoritative,
+2. ensure planner output is authoritative,
+3. adapt GF to consume `ConstructionPlan`,
+4. isolate direct frame-to-GF generation as compatibility behavior only.
+
+## Milestone 1 — First canonical runtime GF slice
+
+1. pick one construction family,
+2. support one or two languages through the GF backend,
+3. add standardized debug/provenance fields,
+4. validate semantic parity against family realization.
+
+## Milestone 2 — Offline morphology and syntax harvesting
+
+1. add or formalize GF export/conversion tooling,
+2. export one language slice,
+3. convert it into SKA-native artifacts,
+4. document provenance and review workflow.
+
+## Milestone 3 — QA integration
+
+1. export GF-derived test cases,
+2. convert them into SKA QA suites,
+3. add construction-aware regression tests,
+4. track backend parity where possible.
+
+## Milestone 4 — Broader construction coverage
+
+1. expand GF support by construction,
+2. expand capability metadata,
+3. expand offline harvest coverage where useful,
+4. keep backend behavior explicit and reviewable.
+
+---
+
+## 20. Risks and Mitigations
+
+## 20.1 Risk: GF becomes hidden architecture
+
+If more logic drifts into the GF adapter, planner/construction authority erodes.
+
+**Mitigation**
+
+* keep `ConstructionPlan` authoritative,
+* keep backend interfaces shared,
+* forbid backend-private construction semantics.
+
+## 20.2 Risk: mismatch between GF and SKA feature systems
+
+GF categories and SKA feature inventories will not always align directly.
+
+**Mitigation**
+
+* use explicit mapping tables,
+* allow partial imports,
+* validate unmapped features,
+* require human review for promoted changes.
+
+## 20.3 Risk: semantic drift across backends
+
+Different backends may realize the same construction differently enough to alter meaning or discourse packaging.
+
+**Mitigation**
+
+* compare outputs at the construction level,
+* keep `slot_map` explicit,
+* require debug traces showing construction and backend.
+
+## 20.4 Risk: maintenance burden
+
+GF updates, module changes, or grammar drift may create import or runtime instability.
+
+**Mitigation**
+
+* record GF version in every derived artifact,
+* treat offline imports as reviewable diffs,
+* isolate capability metadata per `(lang_code, construction_id)`.
+
+## 20.5 Risk: overfitting to GF assumptions
+
+GF is powerful, but not the only valid linguistic representation for SKA.
+
+**Mitigation**
+
+* treat GF as one backend and one source,
+* preserve family-engine and lexicon-centered architecture,
+* avoid baking GF-specific assumptions into public runtime contracts.
+
+---
+
+## 21. Licensing and Attribution
+
+GF-derived artifacts and GF-backed runtime components must preserve attribution metadata.
+
+At minimum, track:
+
+* source
+* GF version
+* relevant modules
+* license note
+* generation timestamp
+
+Example:
 
 ```json
 {
   "_meta": {
     "source": "GF Resource Grammar Library",
     "license": "BSD-style",
-    "url": "https://www.grammaticalframework.org/",
-    "gf_version": "3.12"
+    "gf_version": "3.12",
+    "generated_at": "2026-03-10T00:00:00Z"
   }
 }
 ```
 
+Runtime debug info may also expose non-sensitive GF provenance when useful for testing or review.
+
 ---
 
-## 13. Summary
+## 22. Summary
 
-* We **do not** adopt GF’s architecture.
+SKA does **not** adopt GF’s architecture as SKA’s architecture.
 
-* We **do** import:
+SKA does **use GF in two roles**:
 
-  * morphology paradigms,
-  * syntactic insights,
-  * test cases.
+1. **runtime renderer backend** for selected `(lang_code, construction_id)` pairs,
+2. **offline knowledge source** for morphology, syntax insights, and QA material.
 
-* Runtime remains:
+The authoritative SKA runtime remains:
 
-  * frames → discourse → constructions → family engines → SKA morphology + lexicon.
+```text
+frame -> planner -> construction plan -> lexical resolution -> renderer backend -> surface result
+```
 
-GF becomes an **offline knowledge provider** for richer paradigms and tests, under clear versioning and provenance.
+GF is therefore:
 
-This design keeps SemantiK Architect aligned with Abstract Wikipedia/Wikifunctions needs while leveraging decades of grammar-engineering work in GF.
+* useful,
+* optional,
+* construction-aware,
+* runtime-valid,
+* architecturally subordinate to SKA’s shared runtime contract.
 
+The main design correction relative to the older draft is explicit:
+
+* GF is **not** forced into an offline-only role,
+* GF is already part of the actual generation stack,
+* but GF still remains **one backend among several**, not the runtime center.
