@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:semantik-architect:schemas:contracts:slot_map",
+  "title": "Semantik Architect Contract — SlotMap",
+  "description": "Canonical semantic slot map attached to a ConstructionPlan. This is a plain semantic mapping from slot names (e.g. subject, profession, location) to normalized slot values. It is not the legacy serialized slot-map envelope and must not contain ConstructionPlan-level metadata.",
+  "type": "object",
+  "additionalProperties": {
+    "$ref": "#/definitions/SlotValue"
+  },
+  "propertyNames": {
+    "type": "string",
+    "minLength": 1,
+    "pattern": "^[a-z][a-z0-9_]*$",
+    "not": {
+      "enum": [
+        "construction_id",
+        "lang_code",
+        "generation_options",
+        "topic_entity_id",
+        "focus_role",
+        "lexical_bindings",
+        "provenance",
+        "debug_info"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "subject": {
+        "label": "Marie Curie",
+        "qid": "Q7186",
+        "entity_type": "person",
+        "source": "entity_index",
+        "confidence": 1.0
+      },
+      "profession": {
+        "lemma": "physicist",
+        "pos": "NOUN",
+        "qid": "Q169470",
+        "source": "lexicon",
+        "confidence": 0.95
+      },
+      "nationality": {
+        "lemma": "Polish",
+        "pos": "ADJ",
+        "source": "lexicon",
+        "confidence": 0.95
+      }
+    },
+    {
+      "subject": {
+        "label": "Nobel Prize in Physics",
+        "qid": "Q38104",
+        "entity_type": "award",
+        "source": "entity_index",
+        "confidence": 1.0
+      },
+      "time": "1903",
+      "recipient": [
+        {
+          "label": "Marie Curie",
+          "qid": "Q7186",
+          "entity_type": "person",
+          "source": "entity_index",
+          "confidence": 1.0
+        },
+        {
+          "label": "Pierre Curie",
+          "qid": "Q7187",
+          "entity_type": "person",
+          "source": "entity_index",
+          "confidence": 1.0
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "ReservedPlanLevelFieldName": {
+      "type": "string",
+      "enum": [
+        "construction_id",
+        "lang_code",
+        "generation_options",
+        "topic_entity_id",
+        "focus_role",
+        "lexical_bindings",
+        "provenance",
+        "debug_info"
+      ]
+    },
+    "SlotScalar": {
+      "description": "Literal-preserving scalar value allowed directly in a slot.",
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "EntityRef": {
+      "$ref": "./entity_ref.schema.json"
+    },
+    "LexemeRef": {
+      "$ref": "./lexeme_ref.schema.json"
+    },
+    "SlotAtom": {
+      "description": "Preferred normalized atomic slot value.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/EntityRef"
+        },
+        {
+          "$ref": "#/definitions/LexemeRef"
+        },
+        {
+          "$ref": "#/definitions/SlotScalar"
+        }
+      ]
+    },
+    "SlotSequence": {
+      "description": "Ordered sequence of atomic slot values. Use only when a construction explicitly allows a multi-valued slot.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/SlotAtom"
+      }
+    },
+    "StructuredSlotObject": {
+      "description": "Structured semantic payload retained for compatibility with the runtime SlotMap implementation. Prefer EntityRef, LexemeRef, scalars, or SlotSequence where possible.",
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/SlotValue"
+      }
+    },
+    "SlotValue": {
+      "description": "Any value allowed in a canonical slot map.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SlotAtom"
+        },
+        {
+          "$ref": "#/definitions/SlotSequence"
+        },
+        {
+          "$ref": "#/definitions/StructuredSlotObject"
+        }
+      ]
+    }
+  }
+}

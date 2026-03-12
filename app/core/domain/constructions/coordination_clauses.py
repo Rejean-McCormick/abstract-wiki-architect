@@ -1,5 +1,4 @@
-# app\core\domain\constructions\coordination_clauses.py
-# constructions\coordination_clauses.py
+# app/core/domain/constructions/coordination_clauses.py
 """
 COORDINATION_CLAUSES CONSTRUCTION
 ---------------------------------
@@ -15,196 +14,292 @@ Abstract pattern (for N >= 2):
     CLAUSE_1 , CLAUSE_2 , ... , CLAUSE_{N-1} [serial comma] CONJ CLAUSE_N
 
 This module:
-- Takes a list of *already realized* clause strings.
+- Takes a list of already realized clause strings.
 - Optionally strips sentence-final punctuation from each clause.
 - Joins them using language-specific conjunction(s) and comma rules.
 - Optionally delegates whitespace normalization and sentence-final
   punctuation to the morphology layer.
 
-It does *not* build clauses from abstract semantics; that is the job of
+It does not build clauses from abstract semantics; that is the job of
 other constructions. Here, we are purely combining strings.
 
-Expected external interfaces
-============================
+Canonical runtime notes
+=======================
 
-1) `lang_profile` (dict-like):
+- Stable construction ID: ``coordination_clauses``
+- Canonical slot-map shape:
 
-    lang_profile["coordination_clauses"] = {
-        "default_conjunction": "and",       # fallback conjunction label
-        "conjunctions": {
-            "and": "and",
-            "or": "or",
-            "but": "but"
-        },
-        "serial_comma": True,               # Oxford comma for N >= 3
-        "strip_final_punctuation": True     # remove final . ! ? from input clauses
+    {
+        "clauses": ["Clause one", "Clause two", ...],   # required
+        "conj_type": "and"                              # optional
     }
 
-All keys are optional; reasonable defaults are provided.
-
-2) `morph_api` (object):
-
-Optionally implements:
-
-    morph_api.normalize_whitespace(text: str) -> str
-    morph_api.finalize_sentence(text: str) -> str
-
-If `finalize_sentence` is not present, this module will add a trailing
-period "." if the final string does not already end in punctuation.
-
-3) `clauses` (list of strings):
-
-A non-empty list of surface clause strings. For best results, callers
-should pass raw clauses without final punctuation, or enable the
-`strip_final_punctuation` option so that this module can safely control
-the final sentence punctuation.
+This keeps plan-level fields out of the slot map and preserves a stable,
+backend-agnostic construction boundary.
 """
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from dataclasses import dataclass, field
+from typing import Any, Mapping, Protocol
+
+
+__all__ = [
+    "MorphologyAPI",
+    "CoordinationClausesSlots",
+    "CoordinationClausesConstruction",
+    "realize_coordination_clauses",
+]
 
 
 _PUNCTUATION_CHARS = ".!?"
 
 
-def _get_coordination_cfg(lang_profile: Dict[str, Any]) -> Dict[str, Any]:
+class MorphologyAPI(Protocol):
+    """
+    Optional post-processing protocol used by this construction.
+
+    Concrete morphology/rendering layers may implement either or both hooks.
+    """
+
+    def normalize_whitespace(self, text: str) -> str:
+        ...
+
+    def finalize_sentence(self, text: str) -> str:
+        ...
+
+
+@dataclass(slots=True)
+class CoordinationClausesSlots:
+    """
+    Canonical slot bundle for ``coordination_clauses``.
+
+    Required:
+        clauses:
+            Ordered clause surfaces to coordinate.
+
+    Optional:
+        conj_type:
+            Logical conjunction label, e.g. "and", "or", "but".
+    """
+
+    clauses: list[str] = field(default_factory=list)
+    conj_type: str = "and"
+
+    @classmethod
+    def from_mapping(cls, slots: Mapping[str, Any]) -> "CoordinationClausesSlots":
+        if not isinstance(slots, Mapping):
+            raise TypeError("slots must be a mapping")
+
+        raw_clauses = slots.get("clauses")
+        if raw_clauses is None:
+            raise ValueError("coordination_clauses requires slot 'clauses'")
+
+        if not isinstance(raw_clauses, list):
+            raise TypeError("slot 'clauses' must be a list of strings")
+
+        clauses = [str(item) for item in raw_clauses if isinstance(item, str)]
+        conj_type = str(slots.get("conj_type", "and") or "and").strip() or "and"
+
+        return cls(clauses=clauses, conj_type=conj_type)
+
+
+def _get_coordination_cfg(lang_profile: Mapping[str, Any] | None) -> dict[str, Any]:
     """Return configuration for coordination of clauses."""
-    cfg = lang_profile.get("coordination_clauses", {}) or {}
-    if not isinstance(cfg, dict):
+    profile = lang_profile if isinstance(lang_profile, Mapping) else {}
+    cfg = profile.get("coordination_clauses", {}) or {}
+    if not isinstance(cfg, Mapping):
         cfg = {}
 
     conjunctions = cfg.get("conjunctions", {}) or {}
-    if not isinstance(conjunctions, dict):
+    if not isinstance(conjunctions, Mapping):
         conjunctions = {}
 
     return {
-        "default_conjunction": cfg.get("default_conjunction", "and"),
-        "conjunctions": conjunctions,
+        "default_conjunction": str(cfg.get("default_conjunction", "and") or "and"),
+        "conjunctions": {
+            str(key): str(value)
+            for key, value in conjunctions.items()
+            if isinstance(key, str) and isinstance(value, str) and value.strip()
+        },
         "serial_comma": bool(cfg.get("serial_comma", True)),
         "strip_final_punctuation": bool(cfg.get("strip_final_punctuation", True)),
     }
 
 
-def _select_conjunction(cfg: Dict[str, Any], conj_type: str) -> str:
+def _select_conjunction(cfg: Mapping[str, Any], conj_type: str) -> str:
     """
     Select the surface conjunction string for a given logical type.
 
-    conj_type: a key like "and", "or", "but".
+    ``conj_type`` is a key like ``and``, ``or``, or ``but``.
     """
-    conj_map = cfg["conjunctions"]
-    if conj_type in conj_map and isinstance(conj_map[conj_type], str):
-        return conj_map[conj_type]
-    # Fallback to default_conjunction
-    default_label = cfg["default_conjunction"]
+    conj_label = str(conj_type or "").strip() or "and"
+    conj_map = cfg.get("conjunctions", {}) or {}
+
+    if conj_label in conj_map and isinstance(conj_map[conj_label], str):
+        return conj_map[conj_label]
+
+    default_label = str(cfg.get("default_conjunction", "and") or "and")
     if default_label in conj_map and isinstance(conj_map[default_label], str):
         return conj_map[default_label]
-    # Final fallback: use the label itself
-    return conj_type
+
+    return conj_label
 
 
 def _strip_trailing_punctuation(text: str) -> str:
     """Strip a single trailing punctuation mark (., !, ?) if present."""
-    if not text:
-        return text
     stripped = text.rstrip()
     if stripped and stripped[-1] in _PUNCTUATION_CHARS:
         return stripped[:-1].rstrip()
     return stripped
 
 
+def _clean_clauses(clauses: list[str], *, strip_final_punctuation: bool) -> list[str]:
+    cleaned = [c.strip() for c in clauses if isinstance(c, str) and c.strip()]
+    if not cleaned:
+        return []
+
+    if strip_final_punctuation:
+        return [_strip_trailing_punctuation(c) for c in cleaned]
+    return cleaned
+
+
 def _join_with_conjunction(
-    clauses: List[str],
+    clauses: list[str],
     conjunction: str,
     serial_comma: bool,
-) -> str:
+) -> tuple[str, list[str]]:
     """
     Join a list of clauses using a conjunction and optional serial comma.
 
-    For N=1: returns the single clause.
-    For N=2: "A CONJ B"
-    For N>=3:
-        if serial_comma: "A, B, C, CONJ D"
-        else:            "A, B, C CONJ D"
+    Returns:
+        (surface_text, token_list)
     """
     n = len(clauses)
+
     if n == 0:
-        return ""
+        return "", []
+
     if n == 1:
-        return clauses[0]
+        return clauses[0], [clauses[0]]
 
     if n == 2:
-        return " ".join([clauses[0], conjunction, clauses[1]])
+        tokens = [clauses[0], conjunction, clauses[1]]
+        return " ".join(tokens), tokens
 
-    # N >= 3
-    *initial, last = clauses
+    initial = clauses[:-1]
+    last = clauses[-1]
+
     if serial_comma:
-        # comma before final conjunction (Oxford comma)
-        initial_str = ", ".join(initial)
-        return " ".join([initial_str + ",", conjunction, last])
-    else:
-        # no comma before final conjunction
-        initial_str = ", ".join(initial[:-1] + [initial[-1]])
-        return " ".join([initial_str, conjunction, last])
+        initial_str = ", ".join(initial) + ","
+        tokens = [initial_str, conjunction, last]
+        return " ".join(tokens), tokens
+
+    initial_str = ", ".join(initial)
+    tokens = [initial_str, conjunction, last]
+    return " ".join(tokens), tokens
+
+
+def _finalize_text(text: str, morph_api: Any) -> str:
+    if not text:
+        return ""
+
+    if hasattr(morph_api, "normalize_whitespace"):
+        text = morph_api.normalize_whitespace(text)
+
+    if hasattr(morph_api, "finalize_sentence"):
+        return morph_api.finalize_sentence(text)
+
+    text = text.strip()
+    if not text:
+        return ""
+    if text[-1] in _PUNCTUATION_CHARS:
+        return text
+    return text + "."
+
+
+class CoordinationClausesConstruction:
+    """
+    Construction-centered runtime wrapper for clause coordination.
+
+    This class keeps a stable runtime identity and returns a JSON-friendly
+    realization bundle suitable for renderer/debug plumbing.
+    """
+
+    id = "coordination_clauses"
+    required_slots = ("clauses",)
+    optional_slots = ("conj_type",)
+
+    def realize(
+        self,
+        slots: Mapping[str, Any] | CoordinationClausesSlots,
+        lang_profile: Mapping[str, Any] | None,
+        morph_api: Any,
+    ) -> dict[str, Any]:
+        if isinstance(slots, CoordinationClausesSlots):
+            slot_bundle = slots
+        else:
+            slot_bundle = CoordinationClausesSlots.from_mapping(slots)
+
+        cfg = _get_coordination_cfg(lang_profile)
+        cleaned_clauses = _clean_clauses(
+            slot_bundle.clauses,
+            strip_final_punctuation=cfg["strip_final_punctuation"],
+        )
+
+        if not cleaned_clauses:
+            return {
+                "construction_id": self.id,
+                "text": "",
+                "tokens": [],
+                "clauses": [],
+                "conjunction": "",
+                "meta": {
+                    "clause_count": 0,
+                    "conj_type": slot_bundle.conj_type,
+                    "serial_comma": cfg["serial_comma"],
+                    "strip_final_punctuation": cfg["strip_final_punctuation"],
+                },
+            }
+
+        conjunction = _select_conjunction(cfg, slot_bundle.conj_type)
+        core_text, tokens = _join_with_conjunction(
+            cleaned_clauses,
+            conjunction,
+            cfg["serial_comma"],
+        )
+        text = _finalize_text(core_text, morph_api)
+
+        return {
+            "construction_id": self.id,
+            "text": text,
+            "tokens": tokens,
+            "clauses": cleaned_clauses,
+            "conjunction": conjunction,
+            "meta": {
+                "clause_count": len(cleaned_clauses),
+                "conj_type": slot_bundle.conj_type,
+                "serial_comma": cfg["serial_comma"],
+                "strip_final_punctuation": cfg["strip_final_punctuation"],
+            },
+        }
 
 
 def realize_coordination_clauses(
-    clauses: List[str],
-    lang_profile: Dict[str, Any],
+    clauses: list[str],
+    lang_profile: Mapping[str, Any] | None,
     morph_api: Any,
     conj_type: str = "and",
 ) -> str:
     """
-    Realize a coordinated clause string from a list of clause strings.
+    Backward-compatible functional interface.
 
-    Args:
-        clauses:
-            List of already-realized clause strings (surface forms).
-        lang_profile:
-            Language profile config containing a "coordination_clauses"
-            section (see module docstring).
-        morph_api:
-            Morphology / post-processing API. May provide:
-                - normalize_whitespace(text: str) -> str
-                - finalize_sentence(text: str) -> str
-        conj_type:
-            Logical conjunction type label (e.g. "and", "or", "but").
-            Mapped to a surface form using lang_profile.
-
-    Returns:
-        A single coordinated sentence string.
+    Returns only the final text surface, matching the legacy API that existing
+    callers expect.
     """
-    if not isinstance(clauses, list):
-        raise TypeError("clauses must be a list of strings")
-
-    # Filter out empty / whitespace-only clauses
-    cleaned_clauses = [c.strip() for c in clauses if isinstance(c, str) and c.strip()]
-    if not cleaned_clauses:
-        return ""
-
-    cfg = _get_coordination_cfg(lang_profile)
-
-    # Optionally strip final punctuation from each clause
-    if cfg["strip_final_punctuation"]:
-        stripped = [_strip_trailing_punctuation(c) for c in cleaned_clauses]
-    else:
-        stripped = cleaned_clauses
-
-    conj_surface = _select_conjunction(cfg, conj_type)
-    core = _join_with_conjunction(stripped, conj_surface, cfg["serial_comma"])
-
-    # Optional whitespace normalization
-    if hasattr(morph_api, "normalize_whitespace"):
-        core = morph_api.normalize_whitespace(core)
-
-    # Delegate final punctuation if available
-    if hasattr(morph_api, "finalize_sentence"):
-        return morph_api.finalize_sentence(core)
-
-    # Fallback: add a period if no final punctuation
-    text = core.strip()
-    if not text:
-        return text
-    if text[-1] in _PUNCTUATION_CHARS:
-        return text
-    return text + "."
+    result = CoordinationClausesConstruction().realize(
+        {"clauses": clauses, "conj_type": conj_type},
+        lang_profile,
+        morph_api,
+    )
+    return str(result.get("text", "")) or ""

@@ -1,7 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Semantik Architect Frame Schema: Relational – Membership / affiliation",
-  "description": "Schema for the rel.membership-affiliation frame: group membership and affiliation relations (member–group).",
+  "$id": "schemas/frames/relational_membership_affiliation.schema.json",
+  "title": "Semantik Architect Frame: Relational membership / affiliation",
+  "description": "Canonical semantic frame for group membership and affiliation relations between an entity and a group, organization, party, team, institution, or similar collective. This schema preserves legacy field compatibility while normalizing toward the current relational-family contracts.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -12,68 +13,151 @@
   "properties": {
     "frame_type": {
       "type": "string",
-      "const": "rel.membership-affiliation",
-      "description": "Canonical frame type identifier for membership / affiliation relations."
+      "description": "Frame type identifier. New data should prefer `relation.membership`. Legacy aliases remain accepted during migration.",
+      "enum": [
+        "relation.membership",
+        "rel.membership",
+        "rel.membership-affiliation",
+        "relational_membership_affiliation"
+      ]
     },
+
     "frame_family": {
       "type": "string",
+      "description": "Optional high-level frame family label. For this schema it is always relational.",
       "enum": [
         "relational"
-      ],
-      "description": "Optional high-level family label; always relational for this frame."
+      ]
     },
-    "member": {
-      "$ref": "#/definitions/entity",
-      "description": "The entity that is a member or affiliate (X)."
-    },
-    "group": {
-      "$ref": "#/definitions/entity",
-      "description": "The group, organization, party, or team that X belongs to (Y)."
-    },
+
     "id": {
-      "type": "string",
-      "description": "Optional identifier for this membership relation (e.g. upstream statement ID)."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional stable identifier for this frame instance, such as a statement cluster ID or upstream assertion ID."
     },
+
+    "member": {
+      "$ref": "#/definitions/EntityRef",
+      "description": "The entity that belongs to or is affiliated with the group."
+    },
+
+    "group": {
+      "$ref": "#/definitions/EntityRef",
+      "description": "The collective, organization, party, club, institution, movement, or team to which the member belongs."
+    },
+
     "relation_type": {
-      "type": "string",
-      "description": "High-level label for the relation, e.g. member, player, supporter, employee."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Coarse label describing the membership relation, e.g. `member`, `affiliate`, `employee`, `player`, `supporter`, `fellow`, `alumnus`."
     },
+
     "role_label": {
-      "type": "string",
-      "description": "Optional more specific role label within the group, e.g. goalkeeper, chairperson."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional more specific role or function within the group, e.g. `goalkeeper`, `chairperson`, `research_fellow`, `captain`."
     },
+
+    "time_span": {
+      "description": "Preferred canonical time span during which the membership or affiliation holds.",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+
     "start": {
-      "$ref": "#/definitions/timespan",
-      "description": "Optional coarse timespan indicating when the membership or affiliation begins."
+      "description": "Legacy compatibility field for the beginning of the membership relation. Prefer `time_span` for new data.",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
+
     "end": {
-      "$ref": "#/definitions/timespan",
-      "description": "Optional coarse timespan indicating when the membership or affiliation ends."
+      "description": "Legacy compatibility field for the end of the membership relation. Prefer `time_span` for new data.",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
+
     "status": {
-      "type": "string",
-      "description": "Optional status label such as current, former, honorary."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional status label such as `current`, `former`, `honorary`, `acting`, `suspended`, or `inactive`."
     },
+
     "certainty": {
-      "type": "number",
-      "minimum": 0.0,
-      "maximum": 1.0,
-      "description": "Confidence in the fact, between 0.0 and 1.0."
+      "description": "Optional confidence or certainty marker for the relation.",
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
+
     "source_id": {
-      "type": "string",
-      "description": "Optional identifier for the upstream source (e.g. Wikidata statement ID) from which this relation was derived."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional identifier for the source record from which this relation was derived."
     },
+
+    "source_entities": {
+      "type": "array",
+      "description": "Optional source or asserting entities relevant to the relation, such as the organization itself, a registry body, or an authoritative dataset publisher.",
+      "items": {
+        "$ref": "#/definitions/EntityRef"
+      }
+    },
+
+    "attributes": {
+      "type": "object",
+      "description": "Free-form structured attributes for membership-specific details not yet promoted to top-level fields, such as `membership_number`, `team_number`, `portfolio`, `electoral_list_position`, or `selection_method`.",
+      "additionalProperties": true
+    },
+
     "extra": {
       "type": "object",
-      "description": "Free-form metadata bag for project-specific extensions.",
+      "description": "Free-form metadata preserved for provenance, normalization traces, raw-source values, or debugging.",
       "additionalProperties": true
     }
   },
+
   "definitions": {
-    "entity": {
+    "EntityRef": {
       "type": "object",
-      "description": "Generic entity reference (person, organization, place, etc.).",
+      "description": "Lightweight reference to an entity used inside relational frames. At least one stable identifier or label should be present.",
       "additionalProperties": true,
       "properties": {
         "id": {
@@ -81,86 +165,251 @@
             "string",
             "null"
           ],
-          "description": "Local identifier for the entity, if any."
+          "description": "Opaque internal identifier for the entity."
+        },
+        "entity_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Canonical or planner-stable entity identifier when different from `id`."
         },
         "qid": {
           "type": [
             "string",
             "null"
           ],
-          "description": "External identifier such as a Wikidata QID."
+          "description": "Optional Wikidata QID or similar external knowledge-base identifier."
         },
         "name": {
           "type": [
             "string",
             "null"
           ],
-          "description": "Human-readable label for the entity."
+          "description": "Preferred human-readable label for the entity."
+        },
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional alternative surface label. Kept for compatibility with slot-map style entity objects."
+        },
+        "surface_key": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional planner-stable discourse key for this entity reference."
+        },
+        "entity_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional coarse type hint such as `person`, `organization`, `party`, `team`, `institution`, or `movement`."
         },
         "kind": {
           "type": [
             "string",
             "null"
           ],
-          "description": "Optional kind label (e.g. person, organization, party, team)."
+          "description": "Optional looser kind label retained for compatibility with older schema shapes."
+        },
+        "gender": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional coarse gender category for human entities."
+        },
+        "human": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the referenced entity is human."
+        },
+        "lemmas": {
+          "type": "array",
+          "description": "Optional associated lemma strings useful during lexical resolution or realization.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "features": {
+          "type": "object",
+          "description": "Arbitrary structured features used by normalization, lexical resolution, or morphology.",
+          "additionalProperties": true
         },
         "extra": {
           "type": "object",
-          "description": "Arbitrary metadata attached to the entity.",
+          "description": "Arbitrary metadata attached to the entity reference.",
           "additionalProperties": true
         }
-      }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "id"
+          ]
+        },
+        {
+          "required": [
+            "entity_id"
+          ]
+        },
+        {
+          "required": [
+            "qid"
+          ]
+        },
+        {
+          "required": [
+            "name"
+          ]
+        },
+        {
+          "required": [
+            "label"
+          ]
+        }
+      ]
     },
-    "timespan": {
+
+    "TimeSpan": {
       "type": "object",
-      "description": "Coarse time span with optional year, month, and day fields.",
+      "description": "Coarse or exact temporal span. Supports both the repo's year/month/day compatibility shape and a more explicit start/end/point string form.",
       "additionalProperties": false,
       "properties": {
+        "start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional interval start in ISO-8601-like string form."
+        },
+        "end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional interval end in ISO-8601-like string form."
+        },
+        "point": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional single time point in ISO-8601-like string form."
+        },
+        "precision": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional precision hint such as `year`, `month`, `day`, or `approximate`."
+        },
         "start_year": {
           "type": [
             "integer",
             "null"
-          ]
+          ],
+          "description": "Optional coarse start year."
         },
         "end_year": {
           "type": [
             "integer",
             "null"
-          ]
+          ],
+          "description": "Optional coarse end year."
         },
         "start_month": {
           "type": [
             "integer",
             "null"
-          ]
+          ],
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Optional coarse start month."
         },
         "start_day": {
           "type": [
             "integer",
             "null"
-          ]
+          ],
+          "minimum": 1,
+          "maximum": 31,
+          "description": "Optional coarse start day."
         },
         "end_month": {
           "type": [
             "integer",
             "null"
-          ]
+          ],
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Optional coarse end month."
         },
         "end_day": {
           "type": [
             "integer",
             "null"
-          ]
+          ],
+          "minimum": 1,
+          "maximum": 31,
+          "description": "Optional coarse end day."
         },
         "approximate": {
-          "type": "boolean"
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the time span is approximate."
         },
         "extra": {
           "type": "object",
+          "description": "Arbitrary source-specific temporal metadata.",
           "additionalProperties": true
         }
       }
     }
-  }
-}
+  },
 
+  "examples": [
+    {
+      "frame_type": "relation.membership",
+      "member": {
+        "qid": "Q937",
+        "name": "Albert Einstein",
+        "entity_type": "person"
+      },
+      "group": {
+        "qid": "Q43229",
+        "name": "Prussian Academy of Sciences",
+        "entity_type": "organization"
+      },
+      "relation_type": "member",
+      "role_label": "professor",
+      "time_span": {
+        "start_year": 1914,
+        "end_year": 1933
+      },
+      "status": "former"
+    },
+    {
+      "frame_type": "rel.membership-affiliation",
+      "member": {
+        "name": "FC Barcelona",
+        "entity_type": "sports_team"
+      },
+      "group": {
+        "name": "La Liga",
+        "entity_type": "competition"
+      },
+      "relation_type": "participant",
+      "certainty": 1.0,
+      "source_id": "row_1234"
+    }
+  ]
+}

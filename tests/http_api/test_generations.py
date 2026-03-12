@@ -1,151 +1,248 @@
 # tests/http_api/test_generations.py
-from typing import Any, Dict
+from __future__ import annotations
+
+from typing import Any
+
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import AsyncMock  # kept (even though unused)
 
+from app.adapters.api.dependencies import get_generate_text_use_case, verify_api_key
 from app.adapters.api.main import create_app
-from app.adapters.api.dependencies import get_generate_text_use_case
 from app.core.domain.models import Sentence
 
-# Correct v2.1 API Prefix
 API_PREFIX = "/api/v1"
+
 
 class FakeGenerateTextUseCase:
     """
-    Mock implementation of the GenerateText Use Case.
-    Bypasses the complex Grammar Engine and LLM logic for API testing.
-    """
-    async def execute(self, lang_code: str, frame: Any) -> Sentence:
-        # Simulate successful generation logic
-        subject_name = "Unknown"
+    Lightweight fake for HTTP API tests.
 
-        # [FIX] Handle both BioFrame objects and Ninai (recursive dicts)
-        # 1. Pydantic Model (BioFrame)
-        if hasattr(frame, "subject"):
-            if isinstance(frame.subject, dict):
-                subject_name = frame.subject.get("name", "Unknown")
-            elif hasattr(frame.subject, "name"):
-                subject_name = frame.subject.name
+    It records every call so tests can assert language normalization and
+    payload mapping behavior without depending on the real planner / renderer
+    stack.
+    """
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, Any]] = []
+
+    async def execute(self, lang_code: str, frame: Any) -> Sentence:
+        self.calls.append((lang_code, frame))
+        subject_name = self._extract_subject_name(frame)
+
+        text = f"Fake generated text for {subject_name} in {lang_code}"
 
         return Sentence(
-            text=f"Fake generated text for {subject_name} in {lang_code}",
+            text=text,
             lang_code=lang_code,
-            debug_info={"source": "FakeGenerateTextUseCase"}
+            construction_id="copula_equative_simple",
+            renderer_backend="safe_mode",
+            fallback_used=False,
+            tokens=text.split(),
+            generation_time_ms=1.25,
+            debug_info={
+                "source": "FakeGenerateTextUseCase",
+                "planner_mode": "stubbed",
+            },
         )
+
+    @staticmethod
+    def _extract_subject_name(frame: Any) -> str:
+        # Common case: BioFrame / compatibility Frame with .subject
+        subject = getattr(frame, "subject", None)
+        if isinstance(subject, dict):
+            value = subject.get("name") or subject.get("label")
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+
+        if subject is not None:
+            value = getattr(subject, "name", None) or getattr(subject, "label", None)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+
+        # Fallbacks for other frame/object shapes
+        for attr in ("name", "label"):
+            value = getattr(frame, attr, None)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+
+        if isinstance(frame, dict):
+            value = frame.get("name") or frame.get("label")
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+
+        return "Unknown"
+
 
 @pytest.fixture()
 def fake_use_case() -> FakeGenerateTextUseCase:
     return FakeGenerateTextUseCase()
 
+
 @pytest.fixture()
 def client(fake_use_case: FakeGenerateTextUseCase) -> TestClient:
     """
-    Creates a TestClient with the GenerateText dependency overridden.
+    Create a TestClient with generation/auth dependencies overridden.
+
+    Overriding verify_api_key keeps the test independent from environment
+    configuration while still exercising the mounted router.
     """
     app = create_app()
-
-    # Override the dependency in the FastAPI app
     app.dependency_overrides[get_generate_text_use_case] = lambda: fake_use_case
+    app.dependency_overrides[verify_api_key] = lambda: "test-api-key"
 
     with TestClient(app) as c:
         yield c
 
-    # Cleanup overrides
     app.dependency_overrides.clear()
 
-def _valid_bio_payload() -> Dict[str, Any]:
-    """Returns a valid v2.1 BioFrame payload."""
+
+def _valid_bio_payload() -> dict[str, Any]:
     return {
         "frame_type": "bio",
         "subject": {
             "name": "Ada Lovelace",
             "gender": "f",
-            "qid": "Q7259"
+            "qid": "Q7259",
         },
         "properties": {
             "profession": "mathematician",
-            "nationality": "British"
+            "nationality": "British",
         },
         "meta": {
-            "register": "neutral"
-        }
+            "register": "neutral",
+        },
     }
 
-def test_generate_endpoint_success(client: TestClient) -> None:
+
+def test_generate_from_payload_success_top_level_lang(
+    client: TestClient,
+    fake_use_case: FakeGenerateTextUseCase,
+) -> None:
     """
-    Verifies that POST /generate/{lang} returns 200 OK and the expected structure.
+    POST /generate should accept language in the payload, normalize aliases,
+    and preserve promoted runtime metadata in debug_info.
+    """
+    payload = {
+        "lang": "eng",
+        **_valid_bio_payload(),
+    }
+
+    response = client.post(f"{API_PREFIX}/generate", json=payload)
+
+    assert response.status_code == 200, response.text
+    data = response.json()
+
+    assert fake_use_case.calls, "Expected fake use case to be invoked."
+    assert fake_use_case.calls[-1][0] == "en"
+
+    assert data["lang_code"] == "en"
+    assert "Ada Lovelace" in data["text"]
+
+    debug = data["debug_info"]
+    assert debug["source"] == "FakeGenerateTextUseCase"
+    assert debug["lang_code"] == "en"
+    assert debug["construction_id"] == "copula_equative_simple"
+    assert debug["renderer_backend"] == "safe_mode"
+    assert debug["fallback_used"] is False
+    assert debug["planner_mode"] == "stubbed"
+
+
+def test_generate_from_payload_accepts_language_inside_inputs(
+    client: TestClient,
+    fake_use_case: FakeGenerateTextUseCase,
+) -> None:
+    """
+    POST /generate should also accept language nested under inputs.language.
+    """
+    payload = {
+        **_valid_bio_payload(),
+        "inputs": {
+            "language": "eng",
+        },
+    }
+
+    response = client.post(f"{API_PREFIX}/generate", json=payload)
+
+    assert response.status_code == 200, response.text
+    data = response.json()
+
+    assert fake_use_case.calls[-1][0] == "en"
+    assert data["lang_code"] == "en"
+    assert "Ada Lovelace" in data["text"]
+
+
+def test_generate_from_payload_requires_language(client: TestClient) -> None:
+    """
+    POST /generate should reject payloads that do not specify language either
+    top-level or inside inputs.
     """
     payload = _valid_bio_payload()
 
-    # The API normalizes ISO-639-3 aliases like "eng" to the canonical ISO-639-1 "en".
-    request_lang_code = "eng"
-    expected_lang_code = "en"
-
-    # [FIX] Add Auth Header (pytest default key)
-    headers = {"x-api-key": "test-api-key"}
-
-    response = client.post(
-        f"{API_PREFIX}/generate/{request_lang_code}",
-        json=payload,
-        headers=headers
-    )
-
-    assert response.status_code == 200
-    data = response.json()
-
-    # Verify Domain Entity (Sentence) serialization
-    assert data["lang_code"] == expected_lang_code
-    assert "Ada Lovelace" in data["text"]
-    assert "text" in data
-    assert data["debug_info"]["source"] == "FakeGenerateTextUseCase"
-
-def test_generate_validation_error(client: TestClient) -> None:
-    """
-    Verifies that sending an invalid payload raises 422.
-    """
-    # Missing 'frame_type' and 'subject'
-    invalid_payload = {"broken": "data"}
-
-    # Use a canonical code here (doesn't matter for 422, but keeps tests consistent).
-    lang_code = "en"
-
-    # [FIX] Add Auth Header (pytest default key)
-    headers = {"x-api-key": "test-api-key"}
-
-    response = client.post(
-        f"{API_PREFIX}/generate/{lang_code}",
-        json=invalid_payload,
-        headers=headers
-    )
+    response = client.post(f"{API_PREFIX}/generate", json=payload)
 
     assert response.status_code == 422
+    detail = response.json()["detail"]
+    assert "Missing language" in detail
 
-def test_generate_ninai_protocol_detection(client: TestClient) -> None:
+
+def test_generate_path_route_rejects_language_mismatch(client: TestClient) -> None:
     """
-    Verifies that the router correctly accepts Ninai Protocol payloads.
+    When both URL and payload specify language, the URL is authoritative and
+    mismatches must raise 422.
     """
-    # Minimal valid Ninai payload (recursive tree)
+    payload = {
+        "lang": "fr",
+        **_valid_bio_payload(),
+    }
+
+    response = client.post(f"{API_PREFIX}/generate/en", json=payload)
+
+    assert response.status_code == 422
+    detail = response.json()["detail"]
+    assert "Language mismatch" in detail
+
+
+def test_generate_path_route_supports_ninai_protocol(
+    client: TestClient,
+    fake_use_case: FakeGenerateTextUseCase,
+) -> None:
+    """
+    POST /generate/{lang_code} should accept Ninai payloads and forward the
+    normalized language to the use case.
+    """
     ninai_payload = {
         "function": "ninai.constructors.Statement",
         "args": [
             {"type": "ninai.types.Bio"},
-            {"function": "ninai.constructors.Entity", "args": ["Q7259", "Ada Lovelace"]},
+            {
+                "function": "ninai.constructors.Entity",
+                "args": ["Q7259", "Ada Lovelace"],
+            },
             "mathematician",
-            "british"
-        ]
+            "british",
+        ],
     }
 
-    # [FIX] Add Auth Header (pytest default key)
-    headers = {"x-api-key": "test-api-key"}
+    response = client.post(f"{API_PREFIX}/generate/en", json=ninai_payload)
 
-    # Use canonical code: API expects /generate/{lang} and normalizes aliases anyway.
-    response = client.post(
-        f"{API_PREFIX}/generate/en",
-        json=ninai_payload,
-        headers=headers
-    )
+    assert response.status_code == 200, response.text
+    data = response.json()
 
-    # Should succeed (200) if adapter works
-    assert response.status_code == 200
-    assert "Ada Lovelace" in response.json()["text"]
+    assert fake_use_case.calls[-1][0] == "en"
+    assert data["lang_code"] == "en"
+    assert "text" in data
+    assert data["debug_info"]["source"] == "FakeGenerateTextUseCase"
+
+
+def test_generate_path_route_invalid_payload_returns_422(client: TestClient) -> None:
+    """
+    Missing frame_type / missing Ninai function should be treated as a bad
+    generation request.
+    """
+    invalid_payload = {"broken": "data"}
+
+    response = client.post(f"{API_PREFIX}/generate/en", json=invalid_payload)
+
+    assert response.status_code == 422
+    detail = response.json()["detail"]
+    assert "frame_type" in detail.lower() or "invalid" in detail.lower()

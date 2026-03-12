@@ -1,9 +1,7 @@
-# app\core\domain\constructions\ditransitive_event.py
-# constructions\ditransitive_event.py
-# constructions/ditransitive_event.py
+# app/core/domain/constructions/ditransitive_event.py
 
 """
-DITRANSITIVE_EVENT CONSTRUCTION
+DITRANSITIVE EVENT CONSTRUCTION
 -------------------------------
 
 Language-independent clause template for ditransitive events of the form:
@@ -58,14 +56,16 @@ Language profile (`lang_profile` dict) with typical keys:
       "basic_word_order": "SVO" | "SOV" | "VSO" | "VOS" | "OVS" | "OSV",
       "ditransitive": {
         "strategy": "prepositional_to"
+                     | "prepositional_for"
+                     | "prepositional"
                      | "double_object"
                      | "dative_case",
-        "recipient_adposition": "to",         # for 'prepositional_to'
-        "recipient_position": "before_theme"  # or "after_theme" (for double_object)
+        "recipient_adposition": "to",         # for prepositional strategies
+        "recipient_position": "before_theme"  # or "after_theme" (for double object)
       }
     }
 
-Morphology API (`morph_api` object) is expected to implement:
+Morphology API (`morph_api`) is expected to implement:
 
     realize_np(np_spec: dict, role: str, lang_profile: dict) -> str
     realize_verb(verb_spec: dict, lang_profile: dict) -> str
@@ -77,7 +77,7 @@ then be joined by spaces by the caller.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Protocol
+from typing import Any, Dict, List, Mapping, Optional, Protocol
 
 
 class MorphAPI(Protocol):
@@ -94,8 +94,27 @@ class MorphAPI(Protocol):
     ) -> str: ...
 
 
+def _require_mapping(value: Any, *, field_name: str) -> Dict[str, Any]:
+    if not isinstance(value, Mapping):
+        raise ValueError(f"{field_name} must be a mapping/object.")
+    return dict(value)
+
+
+def _require_role_mapping(sem: Mapping[str, Any], role_name: str) -> Dict[str, Any]:
+    value = sem.get(role_name)
+    if not isinstance(value, Mapping):
+        raise ValueError(f"Missing required role: {role_name}")
+    normalized = dict(value)
+    lemma = normalized.get("lemma") or normalized.get("surface")
+    if not isinstance(lemma, str) or not lemma.strip():
+        raise ValueError(
+            f"Role '{role_name}' must provide a non-empty 'lemma' or 'surface'."
+        )
+    return normalized
+
+
 def _merge_verb_features(
-    verb_spec: Dict[str, Any], sem: Dict[str, Any]
+    verb_spec: Dict[str, Any], sem: Mapping[str, Any]
 ) -> Dict[str, Any]:
     """
     Merge tense/aspect/mood/negation from `sem` into the verb spec.
@@ -103,7 +122,6 @@ def _merge_verb_features(
     spec = dict(verb_spec) if verb_spec is not None else {}
     features = dict(spec.get("features", {}) or {})
 
-    # Copy TAM / polarity from semantic layer if present.
     for key in ("tense", "aspect", "mood", "negated"):
         if key in sem:
             features[key] = sem[key]
@@ -113,7 +131,7 @@ def _merge_verb_features(
 
 
 def _prepare_np_spec(
-    np_sem: Optional[Dict[str, Any]], case: Optional[str] = None
+    np_sem: Optional[Mapping[str, Any]], case: Optional[str] = None
 ) -> Optional[Dict[str, Any]]:
     """
     Prepare an NP spec for the morphology API, optionally adding a case feature.
@@ -131,6 +149,46 @@ def _prepare_np_spec(
     return spec
 
 
+def _normalize_strategy(raw_strategy: Any) -> str:
+    strategy = str(raw_strategy or "prepositional_to").strip().lower()
+
+    alias_map = {
+        "prepositional": "prepositional_to",
+        "prepositional_recipient": "prepositional_to",
+        "to_recipient": "prepositional_to",
+        "for_recipient": "prepositional_for",
+    }
+    strategy = alias_map.get(strategy, strategy)
+
+    if strategy not in {
+        "prepositional_to",
+        "prepositional_for",
+        "double_object",
+        "dative_case",
+    }:
+        return "prepositional_to"
+
+    return strategy
+
+
+def _resolve_recipient_adposition(strategy: str, ditr_cfg: Mapping[str, Any]) -> str:
+    explicit = ditr_cfg.get("recipient_adposition")
+    if isinstance(explicit, str) and explicit.strip():
+        return explicit.strip()
+
+    if strategy == "prepositional_for":
+        return "for"
+
+    return "to"
+
+
+def _clean_surface(text: Any) -> Optional[str]:
+    if text is None:
+        return None
+    value = str(text).strip()
+    return value or None
+
+
 def _linearize(
     subject: str,
     verb: str,
@@ -142,33 +200,33 @@ def _linearize(
     Linearize subject, verb, theme, and recipient according to `basic_word_order`.
 
     `basic_word_order` is one of: SVO, SOV, VSO, VOS, OVS, OSV.
-    We treat the theme+recipient pair as an "object cluster" and keep their
-    internal order as passed in (theme first, then recipient).
+    We treat the theme+recipient pair as an object cluster and keep their
+    internal order as passed in.
     """
-    # Object cluster (theme, recipient); allow either to be None.
     objs: List[str] = []
     if theme:
         objs.append(theme)
     if recipient:
         objs.append(recipient)
 
-    order = basic_word_order.upper()
+    order = str(basic_word_order or "SVO").upper()
 
     if order == "SVO":
-        return [x for x in (subject, verb, *objs) if x]
-    if order == "SOV":
-        return [x for x in (subject, *objs, verb) if x]
-    if order == "VSO":
-        return [x for x in (verb, subject, *objs) if x]
-    if order == "VOS":
-        return [x for x in (verb, *objs, subject) if x]
-    if order == "OVS":
-        return [x for x in (*objs, verb, subject) if x]
-    if order == "OSV":
-        return [x for x in (*objs, subject, verb) if x]
+        parts = [subject, verb, *objs]
+    elif order == "SOV":
+        parts = [subject, *objs, verb]
+    elif order == "VSO":
+        parts = [verb, subject, *objs]
+    elif order == "VOS":
+        parts = [verb, *objs, subject]
+    elif order == "OVS":
+        parts = [*objs, verb, subject]
+    elif order == "OSV":
+        parts = [*objs, subject, verb]
+    else:
+        parts = [subject, verb, *objs]
 
-    # Fallback to SVO if we get something unexpected.
-    return [x for x in (subject, verb, *objs) if x]
+    return [part for part in parts if _clean_surface(part)]
 
 
 @dataclass
@@ -177,90 +235,95 @@ class DitransitiveEventConstruction:
     Realizer for ditransitive events: AGENT V THEME (to/for) RECIPIENT.
     """
 
-    id: str = "DITRANSITIVE_EVENT"
+    id: str = "ditransitive_event"
 
     def realize(
         self,
-        sem: Dict[str, Any],
-        lang_profile: Dict[str, Any],
+        sem: Mapping[str, Any],
+        lang_profile: Mapping[str, Any],
         morph_api: MorphAPI,
     ) -> List[str]:
         """
         Realize a ditransitive event as a list of surface tokens.
 
-        Args:
-            sem:
-                Semantic structure (see module docstring).
-            lang_profile:
-                Language profile with word-order + ditransitive strategy.
-            morph_api:
-                Object implementing MorphAPI.
+        Raises:
+            ValueError: when required roles are missing or malformed.
         """
-        # 1. Extract semantic pieces.
-        verb_sem = sem.get("verb", {}) or {}
-        agent_sem = sem.get("agent", {}) or {}
-        theme_sem = sem.get("theme", {}) or {}
-        recip_sem = sem.get("recipient", {}) or {}
+        sem_map = _require_mapping(sem, field_name="sem")
+        profile = _require_mapping(lang_profile, field_name="lang_profile")
 
-        # 2. Prepare verb spec with TAM / polarity.
-        verb_spec = _merge_verb_features(verb_sem, sem)
+        verb_sem = _require_role_mapping(sem_map, "verb")
+        agent_sem = _require_role_mapping(sem_map, "agent")
+        theme_sem = _require_role_mapping(sem_map, "theme")
+        recip_sem = _require_role_mapping(sem_map, "recipient")
 
-        # 3. Determine ditransitive strategy.
-        ditr_cfg = lang_profile.get("ditransitive", {}) or {}
-        strategy = ditr_cfg.get("strategy", "prepositional_to")
-        recipient_position = ditr_cfg.get("recipient_position", "after_theme")
-        recipient_adp = ditr_cfg.get("recipient_adposition", "to")
+        verb_spec = _merge_verb_features(verb_sem, sem_map)
 
-        # 4. Prepare NP specs (with case where needed).
-        theme_spec: Optional[Dict[str, Any]] = theme_sem
-        recip_spec: Optional[Dict[str, Any]] = recip_sem
+        ditr_cfg = profile.get("ditransitive", {}) or {}
+        if not isinstance(ditr_cfg, Mapping):
+            ditr_cfg = {}
 
-        theme_form: Optional[str] = None
-        recip_form: Optional[str] = None
+        strategy = _normalize_strategy(ditr_cfg.get("strategy"))
+        recipient_position = str(
+            ditr_cfg.get("recipient_position", "after_theme")
+        ).strip().lower()
+        recipient_adp = _resolve_recipient_adposition(strategy, ditr_cfg)
 
         if strategy == "dative_case":
-            # Recipient gets a dative case feature; theme is usually accusative or bare.
             theme_spec = _prepare_np_spec(theme_sem, case=None)
             recip_spec = _prepare_np_spec(recip_sem, case="DAT")
         else:
-            # No special case marking; use whatever features are present.
             theme_spec = _prepare_np_spec(theme_sem, case=None)
             recip_spec = _prepare_np_spec(recip_sem, case=None)
 
-        # 5. Realize subject NP and verb.
-        subject_form = morph_api.realize_np(
-            agent_sem, role="agent", lang_profile=lang_profile
+        subject_form = _clean_surface(
+            morph_api.realize_np(agent_sem, role="agent", lang_profile=dict(profile))
         )
-        verb_form = morph_api.realize_verb(verb_spec, lang_profile=lang_profile)
+        verb_form = _clean_surface(
+            morph_api.realize_verb(verb_spec, lang_profile=dict(profile))
+        )
 
-        # 6. Realize theme NP.
+        if not subject_form:
+            raise ValueError("Failed to realize required role: agent")
+        if not verb_form:
+            raise ValueError("Failed to realize required role: verb")
+
+        theme_form: Optional[str] = None
         if theme_spec:
-            theme_form = morph_api.realize_np(
-                theme_spec, role="theme", lang_profile=lang_profile
+            theme_form = _clean_surface(
+                morph_api.realize_np(
+                    theme_spec,
+                    role="theme",
+                    lang_profile=dict(profile),
+                )
             )
+        if not theme_form:
+            raise ValueError("Failed to realize required role: theme")
 
-        # 7. Realize recipient NP according to strategy.
+        recip_form: Optional[str] = None
         if recip_spec:
-            recip_np_form = morph_api.realize_np(
-                recip_spec, role="recipient", lang_profile=lang_profile
+            recip_np_form = _clean_surface(
+                morph_api.realize_np(
+                    recip_spec,
+                    role="recipient",
+                    lang_profile=dict(profile),
+                )
             )
-            if strategy == "prepositional_to":
-                # Add adposition before recipient NP.
-                recip_form = f"{recipient_adp} {recip_np_form}"
+            if not recip_np_form:
+                raise ValueError("Failed to realize required role: recipient")
+
+            if strategy in {"prepositional_to", "prepositional_for"}:
+                recip_form = _clean_surface(f"{recipient_adp} {recip_np_form}")
             else:
-                # double_object or dative_case: bare NP (case already encoded in spec if needed).
                 recip_form = recip_np_form
 
-        # 8. For double_object strategy, we may want recipient before theme.
         if strategy == "double_object" and recipient_position == "before_theme":
-            # Switch the order: recipient, then theme.
             primary_obj, secondary_obj = recip_form, theme_form
         else:
-            # Default: theme, then recipient.
             primary_obj, secondary_obj = theme_form, recip_form
 
-        basic_word_order = lang_profile.get("basic_word_order", "SVO")
-        tokens = _linearize(
+        basic_word_order = str(profile.get("basic_word_order", "SVO"))
+        return _linearize(
             subject_form,
             verb_form,
             primary_obj,
@@ -268,13 +331,10 @@ class DitransitiveEventConstruction:
             basic_word_order=basic_word_order,
         )
 
-        # Strip out any accidental empty segments.
-        return [t for t in tokens if t]
-
 
 def realize_ditransitive_event(
-    sem: Dict[str, Any],
-    lang_profile: Dict[str, Any],
+    sem: Mapping[str, Any],
+    lang_profile: Mapping[str, Any],
     morph_api: MorphAPI,
 ) -> List[str]:
     """

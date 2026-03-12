@@ -1,86 +1,197 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Semantik Architect  Frame: Relational relation bundle",
+  "title": "Semantik Architect Frame Schema: Relational – Relation bundle",
+  "description": "Schema for relation.bundle / rel.bundle frames: a bundle of multiple relation-level facts about the same subject, used for planning, ordering, and grouped realization.",
   "type": "object",
   "additionalProperties": false,
+  "required": [
+    "frame_type",
+    "subject",
+    "items"
+  ],
   "properties": {
     "frame_type": {
       "type": "string",
-      "description": "Stable string label used by routers / planners to recognize this as a relation-bundle frame.",
+      "description": "Stable frame identifier for relation-bundle frames.",
       "enum": [
         "relation.bundle",
         "rel.bundle",
         "relational_relation_bundle"
       ]
     },
-
-    "subject": {
-      "type": "object",
-      "description": "Entity about which the bundle of facts is stated (city, country, organization, person, etc.). Shape follows semantics.types.Entity.",
-      "additionalProperties": true
+    "id": {
+      "type": "string",
+      "description": "Optional stable identifier for this bundle instance (e.g. cluster ID, source row ID, statement-group ID)."
     },
-
+    "subject": {
+      "$ref": "../contracts/entity_ref.schema.json",
+      "description": "Entity about which the bundled relation facts are stated."
+    },
     "items": {
       "type": "array",
-      "description": "List of RelationBundleItem entries, each wrapping a more specific relational frame together with a coarse type and optional salience / ordering hints.",
+      "description": "Ordered list of bundled relation entries. Each entry wraps a specific relational frame plus lightweight planning metadata such as type, salience, and ordering hints.",
+      "minItems": 1,
       "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "relation_type": {
-            "type": "string",
-            "description": "Coarse label describing the kind of relation, used for ordering and planning heuristics (e.g. 'definition', 'classification', 'attribute', 'quantitative', 'membership', 'part_whole', 'location', 'role')."
-          },
-          "relation": {
-            "description": "Underlying relation object. Typically one of the specific relational frames (membership, quantitative measure, etc.).",
-            "oneOf": [
-              {
-                "type": "object",
-                "additionalProperties": true
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "salience": {
-            "type": ["number", "null"],
-            "description": "Optional numeric score indicating importance of this relation within the bundle. Higher = more important.",
-            "default": 1.0
-          },
-          "order_hint": {
-            "type": ["integer", "null"],
-            "description": "Optional integer suggesting preferred ordering among relations of similar type. Lower values are typically placed earlier."
-          }
-        },
-        "required": [
-          "relation_type",
-          "relation"
-        ]
+        "$ref": "#/definitions/RelationBundleItem"
       }
     },
-
+    "bundle_strategy": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional high-level realization/planning hint for the bundle, e.g. 'single_sentence', 'multi_sentence', 'group_by_type', 'lead_then_details'."
+    },
+    "max_items_per_sentence": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "description": "Optional planner hint limiting how many bundled relations should be realized in one sentence."
+    },
     "info_structure": {
-      "type": ["object", "null"],
-      "description": "Optional information-structure annotation (topic/focus/background hints for subject vs. predicate roles). Shape follows semantics.normalization.InfoStructure.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Optional information-structure annotation for topic/focus/background behavior at bundle level.",
       "additionalProperties": true
     },
-
     "attributes": {
       "type": "object",
-      "description": "Open-ended attribute map for bundle-level metadata useful to downstream components (e.g. 'max_items_per_sentence', 'preferred_pattern').",
+      "description": "Open attribute bag for bundle-level metadata useful to downstream planning or realization.",
       "additionalProperties": true
     },
-
     "extra": {
       "type": "object",
-      "description": "Free-form metadata preserved but not interpreted by core NLG logic (e.g. original IDs, provenance, pipeline-debug info).",
+      "description": "Free-form metadata preserved for provenance, debugging, or source-specific needs.",
       "additionalProperties": true
     }
   },
-  "required": [
-    "frame_type",
-    "subject",
-    "items"
-  ]
+  "definitions": {
+    "RelationFrame": {
+      "description": "Underlying relation frame carried by a bundle item. Prefer one of the concrete relational frame schemas listed here. A generic object is still accepted for compatibility with partially migrated data.",
+      "oneOf": [
+        {
+          "$ref": "./relational_definition_classification.schema.json"
+        },
+        {
+          "$ref": "./relational_attribute_property.schema.json"
+        },
+        {
+          "$ref": "./relational_quantitative_measure.schema.json"
+        },
+        {
+          "$ref": "./relational_comparative_ranking.schema.json"
+        },
+        {
+          "$ref": "./relational_membership_affiliation.schema.json"
+        },
+        {
+          "$ref": "./relational_role_position_office.schema.json"
+        },
+        {
+          "$ref": "./relational_part_whole_composition.schema.json"
+        },
+        {
+          "$ref": "./relational_ownership_control.schema.json"
+        },
+        {
+          "$ref": "./relational_spatial_relation.schema.json"
+        },
+        {
+          "$ref": "./relational_temporal_relation.schema.json"
+        },
+        {
+          "$ref": "./relational_causal_influence.schema.json"
+        },
+        {
+          "$ref": "./relational_change_of_state.schema.json"
+        },
+        {
+          "$ref": "./relational_communication_statement.schema.json"
+        },
+        {
+          "$ref": "./relational_opinion_evaluation.schema.json"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Compatibility fallback for relation objects not yet migrated to a dedicated schema."
+        }
+      ]
+    },
+    "RelationBundleItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relation_type",
+        "relation"
+      ],
+      "properties": {
+        "relation_type": {
+          "type": "string",
+          "description": "Coarse relation label used for ordering and planning heuristics.",
+          "enum": [
+            "definition",
+            "classification",
+            "attribute",
+            "quantitative",
+            "comparative",
+            "membership",
+            "role",
+            "part_whole",
+            "ownership",
+            "spatial",
+            "temporal",
+            "causal",
+            "change_of_state",
+            "communication",
+            "opinion",
+            "other"
+          ]
+        },
+        "relation": {
+          "$ref": "#/definitions/RelationFrame",
+          "description": "Underlying specific relation frame."
+        },
+        "salience": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Optional normalized importance score for this relation within the bundle. Higher means more important."
+        },
+        "order_hint": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Optional preferred ordering hint among bundled relations. Lower values are typically realized earlier."
+        },
+        "group_key": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional grouping key used by planners to cluster related bundle items together."
+        },
+        "optional": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether this bundled relation may be dropped if realization budgets are tight."
+        },
+        "attributes": {
+          "type": "object",
+          "description": "Additional item-level planning or provenance metadata.",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
 }

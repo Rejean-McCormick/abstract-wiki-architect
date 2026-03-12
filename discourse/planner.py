@@ -1,115 +1,62 @@
-# discourse\planner.py
 """
 discourse/planner.py
 --------------------
 
-Lightweight discourse planner for multi-sentence output.
+Compatibility discourse planner built on the canonical core planning contract.
 
-Goal
-====
-Given a list of *semantic frames* (e.g. for a biography), decide:
-
-- In which order to realize them as sentences.
-- Which construction to use for each frame (at a coarse level).
-- Basic information-structure hints (who is topic, what is focus).
+Purpose
+=======
+This module keeps the existing `plan_biography(...)` / `plan_generic(...)`
+entrypoints available while migrating sentence planning onto the shared
+runtime contract in `app.core.domain.planning.planned_sentence`.
 
 The planner is intentionally:
 
-- Domain-focused: for now, primarily tuned for **biographical** data.
-- Heuristic: no heavy AI / statistics; just sensible rule-based ordering.
-- Decoupled: it does NOT render text and does NOT depend on router;
-  it only returns a structured plan that the caller can render.
+- heuristic and deterministic,
+- construction-oriented rather than renderer-oriented,
+- generic across sentence families, with biography-specific ordering as a
+  specialized policy,
+- backward-friendly for current call sites.
 
-Expected frame shape
-====================
+What this module does
+=====================
 
-We assume each frame is a dict-like object with at least:
+Given semantic frames, it decides:
 
-    {
-        "frame_type": "definition" | "birth" | "death" | "career" | ...,
-        "main_entity_id": "Q123",     # optional
-        "subject_id": "Q123",         # optional (fallback)
-        "priority": 0,                # optional, int; lower = earlier
-        ...
-    }
+- linear sentence order,
+- a coarse `construction_id`,
+- discourse topic anchoring,
+- coarse focus/discourse hints,
+- planner-level metadata and generation options.
 
-This is intentionally loose; you can adapt your semantic layer to produce
-whatever fields you need as long as they satisfy these conventions.
+What this module does NOT do
+============================
 
-Output shape
-============
+- build slot maps,
+- perform lexical resolution,
+- realize text,
+- own backend-specific syntax or morphology.
 
-The planner returns a list of `PlannedSentence` objects, each containing:
-
-- `frame`: the original frame object
-- `construction_id`: string, e.g. "copula_equative_simple"
-- `topic_entity_id`: who is the discourse topic for this sentence (if any)
-- `focus_role`: simple label of what is focussed ("role", "event", etc.)
-- `metadata`: free-form dict for additional hints (e.g. "sentence_kind")
-
-Rendering
-=========
-
-A typical call chain is:
-
-    frames = [ ... ]  # semantic frames for a person
-    plan = plan_biography(frames, lang_code="fr")
-    for sentence in plan:
-        surface = router.render(
-            construction_id=sentence.construction_id,
-            slots=build_slots(sentence.frame, sentence.topic_entity_id),
-            lang_code="fr",
-        )
-
-The exact slot-building logic is up to your semantics → constructions bridge.
+Those steps belong downstream in the planner-centered runtime path.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+import inspect
+from collections import Counter
+from typing import Any, Iterable, Mapping, Optional, Sequence
+
+from app.core.domain.planning.planned_sentence import PlannedSentence
 
 
 # ---------------------------------------------------------------------------
-# Data structures
+# Default planning policy
 # ---------------------------------------------------------------------------
 
-
-@dataclass
-class PlannedSentence:
-    """
-    A single sentence-level plan.
-
-    Attributes:
-        frame:
-            The original semantic frame (dict-like or object).
-        construction_id:
-            Which construction to use, e.g. "copula_equative_simple".
-        topic_entity_id:
-            Optional ID of the discourse topic for this sentence.
-        focus_role:
-            Optional label for what is in focus (e.g. "role", "achievement").
-        metadata:
-            Extra hints (e.g. {"sentence_kind": "definition"}).
-    """
-
-    frame: Any
-    construction_id: str
-    topic_entity_id: Optional[str] = None
-    focus_role: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-# ---------------------------------------------------------------------------
-# Internal helpers
-# ---------------------------------------------------------------------------
-
-
-# Default order for biography-oriented frame types
-BIO_FRAME_ORDER: List[str] = [
-    "definition",  # core identity: "X is a Y"
-    "biographical-definition",  # alias / more specific label
-    "birth",  # "X was born in Y in YEAR"
+BIO_FRAME_ORDER: tuple[str, ...] = (
+    "definition",
+    "biographical-definition",
+    "birth",
     "education",
     "career",
     "achievement",
@@ -117,116 +64,460 @@ BIO_FRAME_ORDER: List[str] = [
     "position",
     "death",
     "other",
-]
+)
+
+BIO_DEFINITION_TYPES: frozenset[str] = frozenset(
+    {"definition", "biographical-definition"}
+)
+
+DEFAULT_CONSTRUCTION_BY_FRAME_TYPE: dict[str, str] = {
+    # Copular / identity-ish
+    "definition": "copula_equative_simple",
+    "biographical-definition": "copula_equative_simple",
+    "position": "copula_equative_simple",
+    "classification": "copula_equative_classification",
+    "class-membership": "copula_equative_classification",
+    "instance-of": "copula_equative_classification",
+    # Locative / existential / possession
+    "location": "copula_locative",
+    "located-in": "copula_locative",
+    "residence": "copula_locative",
+    "headquarters": "copula_locative",
+    "existence": "copula_existential",
+    "existential": "copula_existential",
+    "possession": "possession_have",
+    "ownership": "possession_have",
+    "has": "possession_have",
+    # Topic-comment
+    "topic-comment-copular": "topic_comment_copular",
+    "topic-comment-eventive": "topic_comment_eventive",
+    # Eventive
+    "birth": "intransitive_event",
+    "death": "intransitive_event",
+    "career": "intransitive_event",
+    "education": "intransitive_event",
+    "appointment": "intransitive_event",
+    "achievement": "transitive_event",
+    "award": "ditransitive_event",
+    # Relative clauses
+    "relative-clause-subject": "relative_clause_subject_gap",
+    "relative-clause-object": "relative_clause_object_gap",
+}
+
+DEFAULT_FOCUS_ROLE_BY_CONSTRUCTION: dict[str, str] = {
+    "copula_equative_simple": "predicate_nominal",
+    "copula_equative_classification": "predicate_nominal",
+    "copula_locative": "location",
+    "copula_existential": "existent",
+    "possession_have": "possessed",
+    "possession_existential": "possessed",
+    "topic_comment_copular": "comment",
+    "topic_comment_eventive": "comment",
+    "intransitive_event": "event",
+    "transitive_event": "patient",
+    "ditransitive_event": "theme",
+    "relative_clause_subject_gap": "head",
+    "relative_clause_object_gap": "head",
+}
+
+
+# ---------------------------------------------------------------------------
+# Generic frame access helpers
+# ---------------------------------------------------------------------------
+
+
+def _get_field(frame: Any, *names: str, default: Any = None) -> Any:
+    for name in names:
+        if isinstance(frame, Mapping):
+            if name in frame:
+                return frame[name]
+        else:
+            if hasattr(frame, name):
+                return getattr(frame, name)
+    return default
 
 
 def _frame_type(frame: Any) -> str:
-    """
-    Extract frame_type from a frame.
-
-    We treat any non-string / missing type as "other".
-    """
-    if isinstance(frame, dict):
-        ft = frame.get("frame_type")
-    else:
-        ft = getattr(frame, "frame_type", None)
-    if not isinstance(ft, str):
+    raw = _get_field(frame, "frame_type", "type", default="other")
+    if not isinstance(raw, str):
         return "other"
-    return ft
+    value = raw.strip()
+    return value if value else "other"
 
 
 def _main_entity_id(frame: Any) -> Optional[str]:
-    """
-    Extract the main entity ID for a frame.
+    raw = _get_field(
+        frame,
+        "main_entity_id",
+        "subject_id",
+        "entity_id",
+        "topic_entity_id",
+        default=None,
+    )
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    return text or None
 
-    We try common keys in order:
-        - "main_entity_id"
-        - "subject_id"
-        - "entity_id"
-    """
-    if isinstance(frame, dict):
-        for key in ("main_entity_id", "subject_id", "entity_id"):
-            val = frame.get(key)
-            if val:
-                return str(val)
-    else:
-        for attr in ("main_entity_id", "subject_id", "entity_id"):
-            if hasattr(frame, attr):
-                val = getattr(frame, attr)
-                if val:
-                    return str(val)
-    return None
+
+def _frame_id(frame: Any) -> Optional[str]:
+    raw = _get_field(
+        frame,
+        "frame_id",
+        "id",
+        "source_frame_id",
+        "source_id",
+        default=None,
+    )
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    return text or None
+
+
+def _source_frame_ids(frame: Any) -> list[str] | None:
+    raw = _get_field(frame, "source_frame_ids", default=None)
+    if isinstance(raw, Sequence) and not isinstance(raw, (str, bytes, bytearray)):
+        values = [str(v).strip() for v in raw if str(v).strip()]
+        return values or None
+
+    single = _frame_id(frame)
+    return [single] if single else None
 
 
 def _explicit_priority(frame: Any) -> Optional[int]:
-    """
-    Read an explicit 'priority' field if present.
-
-    Lower numbers are scheduled earlier. If not present, returns None.
-    """
-    if isinstance(frame, dict):
-        val = frame.get("priority")
-    else:
-        val = getattr(frame, "priority", None)
-    if isinstance(val, int):
-        return val
-    # treat numeric strings as ints as well
+    raw = _get_field(frame, "priority", default=None)
+    if isinstance(raw, int):
+        return raw
     try:
-        return int(val)  # type: ignore[arg-type]
+        return int(raw)  # type: ignore[arg-type]
     except Exception:
         return None
 
 
-def _frame_type_rank(ftype: str, order: Sequence[str]) -> int:
-    """
-    Map a frame_type string to a rank index in a given type order.
-    Unknown types are placed after all known types.
-    """
+def _frame_type_rank(frame_type: str, order: Sequence[str]) -> int:
     try:
-        return order.index(ftype)
+        return order.index(frame_type)
     except ValueError:
         return len(order)
 
 
+def _frame_metadata(frame: Any) -> dict[str, Any]:
+    raw = _get_field(frame, "metadata", default=None)
+    if isinstance(raw, Mapping):
+        return dict(raw)
+    return {}
+
+
+def _frame_generation_options(frame: Any) -> dict[str, Any]:
+    raw = _get_field(frame, "generation_options", default=None)
+    if isinstance(raw, Mapping):
+        return dict(raw)
+    return {}
+
+
+def _frame_discourse_mode(frame: Any) -> Optional[str]:
+    raw = _get_field(frame, "discourse_mode", default=None)
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    return text or None
+
+
+def _preferred_construction_id(frame: Any) -> Optional[str]:
+    raw = _get_field(
+        frame,
+        "construction_id",
+        "preferred_construction_id",
+        default=None,
+    )
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    return text or None
+
+
+# ---------------------------------------------------------------------------
+# Construction and focus heuristics
+# ---------------------------------------------------------------------------
+
+
 def _guess_construction_id(frame_type: str) -> str:
-    """
-    Guess a construction ID from a biography-oriented frame_type.
+    if frame_type in DEFAULT_CONSTRUCTION_BY_FRAME_TYPE:
+        return DEFAULT_CONSTRUCTION_BY_FRAME_TYPE[frame_type]
 
-    This mapping is deliberately simple and can be extended as needed.
-    """
-    mapping = {
-        "definition": "copula_equative_simple",
-        "biographical-definition": "copula_equative_simple",
-        "position": "copula_equative_simple",
-        "birth": "intransitive_event",
-        "death": "intransitive_event",
-        "career": "intransitive_event",
-        "achievement": "transitive_event",
-        "award": "ditransitive_event",
-    }
-    return mapping.get(frame_type, "copula_equative_simple")
+    normalized = frame_type.lower().replace("_", "-")
+
+    if any(token in normalized for token in ("relative", "relcl")):
+        if "object" in normalized:
+            return "relative_clause_object_gap"
+        return "relative_clause_subject_gap"
+
+    if any(token in normalized for token in ("locative", "location", "located", "residence")):
+        return "copula_locative"
+
+    if any(token in normalized for token in ("existential", "existence")):
+        return "copula_existential"
+
+    if any(token in normalized for token in ("possession", "ownership", "possess", "has-")):
+        return "possession_have"
+
+    if any(token in normalized for token in ("award", "recipient", "grant")):
+        return "ditransitive_event"
+
+    if any(token in normalized for token in ("achievement", "accomplishment", "won", "authored", "founded")):
+        return "transitive_event"
+
+    if any(token in normalized for token in ("birth", "death", "career", "education", "event", "appointment")):
+        return "intransitive_event"
+
+    if any(token in normalized for token in ("class", "instance", "type-of")):
+        return "copula_equative_classification"
+
+    return "copula_equative_simple"
 
 
-def _guess_focus_role(frame_type: str) -> Optional[str]:
+def select_construction_id(
+    frame: Any,
+    *,
+    domain: str = "auto",
+    is_lead_sentence: bool = False,
+) -> str:
     """
-    Provide a coarse label for what is in focus in this sentence.
+    Choose a construction ID for a frame.
 
-    This is primarily meant as a hint for downstream constructions
-    (e.g. for focus particles or sentence packaging).
+    Rules:
+    - explicit per-frame construction override wins,
+    - otherwise use frame-type heuristics,
+    - keep the result in the canonical runtime identifier space.
     """
-    if frame_type in ("definition", "biographical-definition", "position"):
-        return "role"
-    if frame_type in ("birth", "death"):
+    declared = _preferred_construction_id(frame)
+    if declared:
+        return declared
+
+    frame_type = _frame_type(frame)
+
+    # Keep the lead-sentence hook explicit but conservative.
+    # We only emit a specialized biography lead when the frame opts in.
+    if (
+        domain == "bio"
+        and is_lead_sentence
+        and frame_type in BIO_DEFINITION_TYPES
+        and bool(_get_field(frame, "use_bio_lead", default=False))
+    ):
+        return "bio_lead_identity"
+
+    return _guess_construction_id(frame_type)
+
+
+def _guess_focus_role(
+    *,
+    frame_type: str,
+    construction_id: str,
+) -> Optional[str]:
+    explicit = DEFAULT_FOCUS_ROLE_BY_CONSTRUCTION.get(construction_id)
+    if explicit is not None:
+        return explicit
+
+    if frame_type in BIO_DEFINITION_TYPES or frame_type == "position":
+        return "predicate_nominal"
+    if frame_type in {"birth", "death"}:
         return "event_time_place"
-    if frame_type in ("achievement", "award"):
-        return "achievement"
     if frame_type == "career":
-        return "career"
+        return "event"
+    if frame_type in {"achievement", "award"}:
+        return "achievement"
     return None
 
 
 # ---------------------------------------------------------------------------
-# Public planner API
+# Planning internals
+# ---------------------------------------------------------------------------
+
+
+def _looks_like_biography(frames: Sequence[Any]) -> bool:
+    bioish = {"definition", "biographical-definition", "birth", "death", "career"}
+    return any(_frame_type(frame) in bioish for frame in frames)
+
+
+def _sorted_frames(
+    frames: Sequence[Any],
+    *,
+    frame_order: Sequence[str],
+) -> list[Any]:
+    keyed: list[tuple[tuple[int, int, int], Any]] = []
+
+    for original_index, frame in enumerate(frames):
+        frame_type = _frame_type(frame)
+        explicit_priority = _explicit_priority(frame)
+        type_rank = _frame_type_rank(frame_type, frame_order)
+
+        # Explicit priority, when present, replaces the default order rank.
+        primary = explicit_priority if explicit_priority is not None else type_rank
+        keyed.append(((primary, type_rank, original_index), frame))
+
+    keyed.sort(key=lambda item: item[0])
+    return [frame for _, frame in keyed]
+
+
+def _infer_topic_anchor_entity_id(
+    frames: Sequence[Any],
+    *,
+    preferred_frame_types: Optional[set[str]] = None,
+) -> Optional[str]:
+    if not frames:
+        return None
+
+    if preferred_frame_types:
+        for frame in frames:
+            if _frame_type(frame) in preferred_frame_types:
+                entity_id = _main_entity_id(frame)
+                if entity_id:
+                    return entity_id
+
+    entity_ids = [_main_entity_id(frame) for frame in frames]
+    entity_ids = [entity_id for entity_id in entity_ids if entity_id]
+
+    if not entity_ids:
+        return None
+
+    counts = Counter(entity_ids)
+    most_common_entity, count = counts.most_common(1)[0]
+    if count >= 2:
+        return most_common_entity
+
+    return entity_ids[0]
+
+
+def _planned_sentence_param_names() -> frozenset[str]:
+    try:
+        signature = inspect.signature(PlannedSentence)
+    except (TypeError, ValueError):
+        return frozenset()
+    return frozenset(signature.parameters.keys())
+
+
+def _make_planned_sentence(
+    *,
+    frame: Any,
+    construction_id: str,
+    lang_code: str,
+    topic_entity_id: Optional[str],
+    focus_role: Optional[str],
+    discourse_mode: Optional[str],
+    generation_options: Mapping[str, Any],
+    metadata: Mapping[str, Any],
+    source_frame_ids: list[str] | None,
+    priority: Optional[int],
+) -> PlannedSentence:
+    """
+    Instantiate the canonical PlannedSentence while tolerating temporary
+    constructor-shape differences during migration.
+    """
+    param_names = _planned_sentence_param_names()
+
+    common_kwargs: dict[str, Any] = {
+        "construction_id": construction_id,
+        "lang_code": lang_code,
+        "topic_entity_id": topic_entity_id,
+        "focus_role": focus_role,
+        "discourse_mode": discourse_mode,
+        "generation_options": dict(generation_options),
+        "metadata": dict(metadata),
+        "source_frame_ids": list(source_frame_ids) if source_frame_ids else None,
+        "priority": priority,
+        "frame": frame,  # legacy compatibility if supported
+    }
+
+    if param_names:
+        filtered = {k: v for k, v in common_kwargs.items() if k in param_names}
+        try:
+            return PlannedSentence(**filtered)
+        except TypeError:
+            pass
+
+    # Fallback for transitional shapes.
+    legacy_kwargs = {
+        "construction_id": construction_id,
+        "topic_entity_id": topic_entity_id,
+        "focus_role": focus_role,
+        "metadata": dict(metadata),
+    }
+    if not param_names or "frame" in param_names:
+        legacy_kwargs["frame"] = frame
+    if not param_names or "lang_code" in param_names:
+        legacy_kwargs["lang_code"] = lang_code
+    if not param_names or "discourse_mode" in param_names:
+        legacy_kwargs["discourse_mode"] = discourse_mode
+    if not param_names or "generation_options" in param_names:
+        legacy_kwargs["generation_options"] = dict(generation_options)
+    if not param_names or "source_frame_ids" in param_names:
+        legacy_kwargs["source_frame_ids"] = list(source_frame_ids) if source_frame_ids else None
+    if not param_names or "priority" in param_names:
+        legacy_kwargs["priority"] = priority
+
+    return PlannedSentence(**legacy_kwargs)
+
+
+def _build_planned_sentence(
+    frame: Any,
+    *,
+    lang_code: str,
+    domain: str,
+    order_index: int,
+    topic_anchor_entity_id: Optional[str],
+    is_lead_sentence: bool,
+) -> PlannedSentence:
+    frame_type = _frame_type(frame)
+    main_entity_id = _main_entity_id(frame)
+    construction_id = select_construction_id(
+        frame,
+        domain=domain,
+        is_lead_sentence=is_lead_sentence,
+    )
+    focus_role = _guess_focus_role(
+        frame_type=frame_type,
+        construction_id=construction_id,
+    )
+    discourse_mode = _frame_discourse_mode(frame) or "declarative"
+
+    generation_options = _frame_generation_options(frame)
+    metadata = _frame_metadata(frame)
+
+    metadata.setdefault("sentence_kind", frame_type)
+    metadata.setdefault("frame_type", frame_type)
+    metadata.setdefault("planner_domain", domain)
+    metadata.setdefault("planner_module", "discourse.planner")
+    metadata.setdefault("order_index", order_index)
+    metadata.setdefault("is_lead_sentence", is_lead_sentence)
+    metadata.setdefault("main_entity_id", main_entity_id)
+
+    sentence_topic = (
+        topic_anchor_entity_id
+        if (
+            topic_anchor_entity_id is not None
+            and main_entity_id is not None
+            and main_entity_id == topic_anchor_entity_id
+        )
+        else None
+    )
+
+    return _make_planned_sentence(
+        frame=frame,
+        construction_id=construction_id,
+        lang_code=lang_code,
+        topic_entity_id=sentence_topic,
+        focus_role=focus_role,
+        discourse_mode=discourse_mode,
+        generation_options=generation_options,
+        metadata=metadata,
+        source_frame_ids=_source_frame_ids(frame),
+        priority=_explicit_priority(frame),
+    )
+
+
+# ---------------------------------------------------------------------------
+# Public API
 # ---------------------------------------------------------------------------
 
 
@@ -234,84 +525,45 @@ def plan_biography(
     frames: Iterable[Any],
     *,
     lang_code: str,
-) -> List[PlannedSentence]:
+) -> list[PlannedSentence]:
     """
-    Plan a multi-sentence biography from a sequence of frames.
+    Plan a biography-oriented multi-sentence output.
 
-    Heuristics:
-        - Sort frames primarily by:
-            1. explicit `priority` (if provided),
-            2. default BIO_FRAME_ORDER,
-            3. original input order (stable tiebreak).
-        - For each frame, choose:
-            - a default construction_id,
-            - a simple focus label.
-        - Topic:
-            - The main entity of the *first* definition-like frame is treated
-              as the discourse topic for all subsequent sentences that share
-              the same entity id.
-            - Other frames may have topic_entity_id left as None.
+    Heuristics
+    ----------
+    - Sort primarily by explicit `priority`, else by BIO_FRAME_ORDER,
+      with original input order as a stable tiebreak.
+    - Prefer the first definition-like entity as the biography topic anchor.
+    - Reuse that topic anchor for later sentences that share the same entity.
+    - Choose a canonical runtime `construction_id` for each sentence.
 
-    Args:
-        frames:
-            Iterable of semantic frames (dict-like or objects).
-        lang_code:
-            Currently unused by the planner, but reserved for future
-            language-specific ordering tweaks.
-
-    Returns:
-        List of `PlannedSentence` objects in the intended linear order.
+    This function remains intentionally lightweight. It decides sentence-level
+    packaging, not slot realization.
     """
     frame_list = list(frames)
-    indexed: List[Tuple[int, Any]] = list(enumerate(frame_list))
+    sorted_frames = _sorted_frames(frame_list, frame_order=BIO_FRAME_ORDER)
+    topic_anchor_entity_id = _infer_topic_anchor_entity_id(
+        sorted_frames,
+        preferred_frame_types=set(BIO_DEFINITION_TYPES),
+    )
 
-    # Compute sort keys
-    sort_keys: List[Tuple[Tuple[int, int, int], Any]] = []
+    planned: list[PlannedSentence] = []
+    lead_assigned = False
 
-    for idx, frame in indexed:
-        ftype = _frame_type(frame)
-        fprio = _explicit_priority(frame)
-        type_rank = _frame_type_rank(ftype, BIO_FRAME_ORDER)
-        # explicit priority beats type rank, both beat original index
-        priority = fprio if fprio is not None else type_rank
-        sort_keys.append(((priority, type_rank, idx), frame))
-
-    # Stable sort by composite key
-    sort_keys.sort(key=lambda kv: kv[0])
-    sorted_frames = [frame for (_, frame) in sort_keys]
-
-    # Determine the main entity for definition-like frames
-    topic_entity_id: Optional[str] = None
-    for frame in sorted_frames:
-        ftype = _frame_type(frame)
-        if ftype in ("definition", "biographical-definition"):
-            topic_entity_id = _main_entity_id(frame)
-            if topic_entity_id:
-                break
-
-    planned: List[PlannedSentence] = []
-
-    for frame in sorted_frames:
-        ftype = _frame_type(frame)
-        main_entity = _main_entity_id(frame)
-
-        construction_id = _guess_construction_id(ftype)
-        focus_role = _guess_focus_role(ftype)
-
-        # Topic decision:
-        #   If main_entity matches the biography's main topic (if any),
-        #   we mark it as topic; otherwise we leave it None.
-        sent_topic: Optional[str] = None
-        if topic_entity_id and main_entity and main_entity == topic_entity_id:
-            sent_topic = topic_entity_id
+    for order_index, frame in enumerate(sorted_frames):
+        frame_type = _frame_type(frame)
+        is_lead_sentence = not lead_assigned and frame_type in BIO_DEFINITION_TYPES
+        if is_lead_sentence:
+            lead_assigned = True
 
         planned.append(
-            PlannedSentence(
-                frame=frame,
-                construction_id=construction_id,
-                topic_entity_id=sent_topic,
-                focus_role=focus_role,
-                metadata={"sentence_kind": ftype},
+            _build_planned_sentence(
+                frame,
+                lang_code=lang_code,
+                domain="bio",
+                order_index=order_index,
+                topic_anchor_entity_id=topic_anchor_entity_id,
+                is_lead_sentence=is_lead_sentence,
             )
         )
 
@@ -323,53 +575,43 @@ def plan_generic(
     *,
     lang_code: str,
     domain: str = "auto",
-) -> List[PlannedSentence]:
+) -> list[PlannedSentence]:
     """
-    Generic entrypoint for discourse planning.
+    Generic discourse planning entrypoint.
 
-    For now, this is a thin wrapper:
-
-        - If domain == "bio" or we detect biography-oriented frames,
-          delegate to `plan_biography`.
-        - Otherwise, keep the original order and assign a default
-          construction to each frame.
-
-    This allows you to plug in other planners later (e.g. news, sports).
+    Behavior
+    --------
+    - If `domain == "bio"` or the frames look biography-like, use the
+      biography-oriented ordering policy.
+    - Otherwise preserve input order and assign conservative construction /
+      discourse hints sentence by sentence.
     """
     frame_list = list(frames)
 
-    if domain == "bio" or _looks_like_biography(frame_list):
+    if domain == "bio" or (domain == "auto" and _looks_like_biography(frame_list)):
         return plan_biography(frame_list, lang_code=lang_code)
 
-    # Fallback: preserve input order, use a neutral construction
-    planned: List[PlannedSentence] = []
-    for frame in frame_list:
-        ftype = _frame_type(frame)
+    topic_anchor_entity_id = _infer_topic_anchor_entity_id(frame_list)
+
+    planned: list[PlannedSentence] = []
+    for order_index, frame in enumerate(frame_list):
         planned.append(
-            PlannedSentence(
-                frame=frame,
-                construction_id=_guess_construction_id(ftype),
-                topic_entity_id=_main_entity_id(frame),
-                focus_role=_guess_focus_role(ftype),
-                metadata={"sentence_kind": ftype},
+            _build_planned_sentence(
+                frame,
+                lang_code=lang_code,
+                domain=domain if domain != "auto" else "generic",
+                order_index=order_index,
+                topic_anchor_entity_id=topic_anchor_entity_id,
+                is_lead_sentence=(order_index == 0),
             )
         )
     return planned
 
 
-def _looks_like_biography(frames: Sequence[Any]) -> bool:
-    """
-    Heuristic detection of a biographical domain based on frame types.
-    """
-    bioish = {"definition", "biographical-definition", "birth", "death", "career"}
-    for frame in frames:
-        if _frame_type(frame) in bioish:
-            return True
-    return False
-
-
 __all__ = [
     "PlannedSentence",
+    "BIO_FRAME_ORDER",
     "plan_biography",
     "plan_generic",
+    "select_construction_id",
 ]

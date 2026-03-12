@@ -5,143 +5,119 @@ DRAVIDIAN LANGUAGE ENGINE
 -------------------------
 A data-driven renderer for Dravidian languages (TA, ML, TE, KN).
 
-Key features distinguished from Indo-European:
-1. Agglutinative + Inflectional: Suffixes are added, but stems often change (Sandhi).
-2. Rational vs. Irrational: Gender usually applies only to "Rational" (Human) nouns.
-   (Biographies imply Rational subjects).
-3. Pronominal Suffixes: The verb "to be" is often realized as a suffix attached
-   to the predicate noun (Profession), agreeing with the subject's gender/person.
-4. Zero Copula: Common in Malayalam and informal Tamil.
+This module orchestrates the generation of sentences by:
+1. Delegating morphology (copular suffixes, light sandhi, agreement) to
+   `morphology.dravidian.DravidianMorphology`.
+2. Handling sentence structure and assembly.
+
+Notes
+-----
+- Dravidian biography predicates are often realized with a predicative noun
+  carrying the copular/agreement suffix.
+- Nationality is typically passed through as a bare modifier; constructions or
+  templates decide ordering.
+- Zero-copula languages/templates are supported naturally because the
+  morphology layer may return the bare noun when no copular suffix is configured.
 """
+
+from __future__ import annotations
+
+try:
+    from morphology.dravidian import DravidianMorphology
+except ImportError:  # pragma: no cover - compatibility with app package layout
+    from app.core.domain.morphology.dravidian import DravidianMorphology
+
+
+def _normalize_gender(gender) -> str:
+    """
+    Normalize common gender labels to the compact forms expected by morphology.
+    """
+    if not gender:
+        return ""
+
+    if isinstance(gender, str):
+        g = gender.strip().lower()
+        if g in {"m", "male", "masc", "masculine"}:
+            return "male"
+        if g in {"f", "female", "fem", "feminine"}:
+            return "female"
+        if g in {"n", "neuter", "neutral"}:
+            return "neut"
+        return g
+
+    return str(gender).strip().lower()
 
 
 def render_bio(name, gender, prof_lemma, nat_lemma, config):
     """
-    Main Entry Point.
+    Main Entry Point for Dravidian Biographies.
 
     Args:
         name (str): The subject's name.
-        gender (str): 'Male' or 'Female'.
-        prof_lemma (str): Profession (Base/Masculine Singular).
-        nat_lemma (str): Nationality (Base/Masculine Singular).
+        gender (str): 'Male' or 'Female' (case-insensitive; other values passed through).
+        prof_lemma (str): Profession (base lemma).
+        nat_lemma (str): Nationality/demonym modifier (base lemma).
         config (dict): The JSON configuration card.
 
     Returns:
         str: The fully inflected sentence.
     """
+    # 1. Initialize Morphology Engine
+    morph = DravidianMorphology(config)
 
-    # 1. Normalize Inputs
-    gender = gender.lower().strip()
-    prof_lemma = prof_lemma.strip()
-    nat_lemma = nat_lemma.strip()
+    norm_gender = _normalize_gender(gender)
+    profession_lemma = (prof_lemma or "").strip()
+    nationality_lemma = (nat_lemma or "").strip()
 
-    morph_rules = config.get("morphology", {})
-    structure = config.get(
-        "structure", "{name} {nationality} {profession}{copula_suffix}."
+    # 2. Ask morphology for the predicative profession form.
+    # DravidianMorphology already handles:
+    # - copular / agreement suffixes
+    # - light configurable sandhi
+    # - zero-copula fallback when no suffix is configured
+    bio_tense = config.get("syntax", {}).get("bio_default_tense", "past")
+
+    parts = morph.render_simple_bio_predicates(
+        profession_lemma,
+        nationality_lemma or None,
+        person=3,
+        number="sg",
+        gender=norm_gender or None,
+        tense=bio_tense,
     )
 
-    # =================================================================
-    # HELPER 1: Gender Inflection (Noun Class Switching)
-    # =================================================================
-    # Dravidian languages often switch the final gender marker.
-    # Tamil Example: -an (Male) -> -i (Female) or -aL (Female).
-    # Telugu Example: -uDu (Male) -> -uralu (Female).
+    profession = parts.get("profession", "") or ""
+    nationality = parts.get("nationality", "") or ""
 
-    def inflect_gender(word, target_gender):
-        if target_gender == "male":
-            return word
+    # Some templates may prefer a single predicate slot.
+    predicate = " ".join(part for part in (nationality, profession) if part)
 
-        # Check Irregulars
-        irregulars = morph_rules.get("irregulars", {})
-        if word in irregulars:
-            return irregulars[word]
-
-        # Apply Suffix Replacement Rules
-        # config['morphology']['gender_suffixes']
-        suffixes = morph_rules.get("gender_suffixes", [])
-        # Sort by length descending
-        sorted_suffixes = sorted(
-            suffixes, key=lambda x: len(x.get("ends_with", "")), reverse=True
-        )
-
-        for rule in sorted_suffixes:
-            ending = rule.get("ends_with", "")
-            replacement = rule.get("replace_with", "")
-
-            if word.endswith(ending):
-                base = word[: -len(ending)]
-                return base + replacement
-
-        # Generic Fallback (Language specific defaults)
-        # e.g. Tamil often adds 'i' for feminization of Sanskrit loans
-        default_suffix = morph_rules.get("default_fem_suffix", "")
-        if default_suffix:
-            return word + default_suffix
-
-        return word
-
-    final_prof = inflect_gender(prof_lemma, gender)
-    # Nationalities in Dravidian are often invariant adjectives or behave like nouns.
-    # We check config to see if they need inflection.
-    if config.get("syntax", {}).get("inflect_adjectives", False):
-        final_nat = inflect_gender(nat_lemma, gender)
-    else:
-        final_nat = nat_lemma
-
-    # =================================================================
-    # HELPER 2: Pronominal Suffixes / Copula
-    # =================================================================
-    # Logic:
-    # 1. Check if language uses Zero Copula (Malayalam).
-    # 2. Check if language uses Pronominal Suffixes (Tamil/Telugu/Kannada).
-    #    This attaches the "be" verb directly to the noun.
-
-    copula_str = ""  # Standalone copula
-    suffix_str = ""  # Suffix copula
-
-    syntax = config.get("syntax", {})
-    copula_type = syntax.get("copula_type", "zero")  # zero, standalone, suffix
-
-    if copula_type == "standalone":
-        # Look up verb table (like Indo-Aryan engine)
-        verbs = config.get("verbs", {}).get("copula", {})
-        copula_str = verbs.get(gender, verbs.get("default", ""))
-
-    elif copula_type == "suffix":
-        # Look up pronominal suffixes
-        # e.g. Tamil: Male -> -aan, Female -> -aal
-        suffixes = config.get("morphology", {}).get("predicative_suffixes", {})
-        raw_suffix = suffixes.get(gender, "")
-
-        if raw_suffix:
-            # SANDHI CHECK: Buffer insertion
-            # If word ends in vowel and suffix starts with vowel, add buffer (v/y)
-            # Simplified logic for prototype:
-            vowels = "aeiou"
-            if final_prof[-1].lower() in vowels and raw_suffix[0].lower() in vowels:
-                buffer_char = config.get("phonetics", {}).get("buffer_char", "v")
-                suffix_str = buffer_char + raw_suffix
-            else:
-                suffix_str = raw_suffix
-
-    # =================================================================
-    # 3. ASSEMBLY
-    # =================================================================
-
-    # We merge the suffix into the profession if it exists
-    # e.g. "Maanavan" + "aan" -> "Maanavanaan"
-    if suffix_str:
-        final_prof = final_prof + suffix_str
+    # 3. Assembly
+    #
+    # Default keeps nationality separate because the morphology layer deliberately
+    # leaves it as a bare modifier while inflecting only the predicative noun.
+    structure = config.get(
+        "structure",
+        "{name} {nationality} {profession}.",
+    )
 
     sentence = structure.replace("{name}", name)
-    sentence = sentence.replace("{nationality}", final_nat)
-    sentence = sentence.replace("{profession}", final_prof)
-    sentence = sentence.replace("{copula}", copula_str)  # Often empty if suffix used
+    sentence = sentence.replace("{predicate}", predicate)
+    sentence = sentence.replace("{nationality}", nationality)
+    sentence = sentence.replace("{profession}", profession)
 
-    # Clean up (replace internal placeholder {copula_suffix} if it was in structure)
+    # Legacy placeholders: older templates may still contain these.
+    # In the newer morphology-driven path, the copular material is usually already
+    # attached to `profession`, so these collapse to empty strings.
+    sentence = sentence.replace("{copula}", "")
+    sentence = sentence.replace("{is_verb}", "")
     sentence = sentence.replace("{copula_suffix}", "")
 
-    # Standard cleanup
+    # Cleanup extra whitespace (important for zero-copula languages/templates)
     sentence = " ".join(sentence.split())
+
+    # Align with neighboring engines that honor configurable punctuation.
+    punctuation = config.get("syntax", {}).get("punctuation", ".")
+    if punctuation and not sentence.endswith(punctuation):
+        sentence += punctuation
 
     return sentence

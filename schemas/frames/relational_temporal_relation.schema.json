@@ -1,7 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Abstract Wikipedia Frame Schema — Relational: Temporal Relation",
-  "description": "JSON shape for the temporal relation frame, corresponding to the `relation.temporal` family in the frame inventory and the TemporalRelationFrame dataclass from docs/FRAMES_RELATIONAL.md. This frame captures ordering and duration relations between events, states, entities, or abstract time spans (e.g. 'X happened before Y', 'X has been ongoing since 2010').",
+  "$id": "urn:semantik-architect:schemas:frames:relational_temporal_relation",
+  "title": "Semantik Architect Frame Schema — Relational: Temporal Relation",
+  "description": "JSON shape for the temporal relation frame, corresponding to the temporal relation family in the frame inventory and the TemporalRelationFrame semantic type. This frame captures ordering, anchoring, duration, and recurrence relations between events, states, entities standing for eventive states, or explicit time spans (e.g. 'X happened before Y', 'X has been ongoing since 2010', 'X takes place every July').",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,244 +14,524 @@
   "properties": {
     "frame_type": {
       "type": "string",
-      "description": "Frame family identifier. For temporal relation frames the canonical value is `relation.temporal`.",
+      "description": "Canonical frame family identifier. `relation.temporal` is the preferred value. Short/legacy aliases are accepted for compatibility with existing routing and older payloads.",
       "enum": [
-        "relation.temporal"
+        "relation.temporal",
+        "rel.temporal",
+        "relational_temporal_relation"
       ]
     },
-
     "id": {
-      "type": "string",
-      "description": "Optional stable identifier for this frame instance (e.g. an internal ID, page ID, or statement cluster ID)."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional stable identifier for this relation instance (e.g. statement cluster ID, row ID, or source key)."
     },
-
     "left": {
-      "description": "Left-side argument of the temporal relation. May be an event, an entity standing for an implicit event/state (e.g. 'the war'), or a TimeSpan-like temporal anchor.",
-      "oneOf": [
-        { "$ref": "#/definitions/EventRef" },
-        { "$ref": "#/definitions/EntityRef" },
-        { "$ref": "#/definitions/TimeSpan" }
+      "description": "Left-side argument of the temporal relation. This may be an event, an entity standing for an implicit event/state (e.g. 'the war', 'the treaty', 'the presidency'), or an explicit temporal anchor / span.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/EventRef"
+        },
+        {
+          "$ref": "#/definitions/EntityRef"
+        },
+        {
+          "$ref": "#/definitions/TimeSpan"
+        }
       ]
     },
-
     "right": {
-      "description": "Right-side argument of the temporal relation. May be an event, an entity standing for an implicit event/state, or a TimeSpan-like temporal anchor.",
-      "oneOf": [
-        { "$ref": "#/definitions/EventRef" },
-        { "$ref": "#/definitions/EntityRef" },
-        { "$ref": "#/definitions/TimeSpan" }
+      "description": "Right-side argument of the temporal relation. This may be an event, an entity standing for an implicit event/state, or an explicit temporal anchor / span.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/EventRef"
+        },
+        {
+          "$ref": "#/definitions/EntityRef"
+        },
+        {
+          "$ref": "#/definitions/TimeSpan"
+        }
       ]
     },
-
     "relation": {
       "type": "string",
-      "description": "Temporal relation between left and right. Typical values include 'before', 'after', 'since', 'until', 'during', 'around', 'overlapping'. The schema does not enforce a closed set, but downstream logic may normalize these."
+      "minLength": 1,
+      "description": "Temporal relation label between `left` and `right`. Typical values include `before`, `after`, `since`, `until`, `during`, `throughout`, `overlapping`, `around`, `by`, and `contemporary_with`. The inventory remains intentionally open; downstream logic may normalize these into a smaller canonical set."
     },
-
     "left_time": {
-      "$ref": "#/definitions/TimeSpan",
-      "description": "Optional explicit time span associated with the left argument, if not already encoded in the referenced event or entity."
+      "description": "Optional explicit time span associated with the left argument, when `left` itself is an entity/event without a populated time field or when a normalized anchor should be attached separately.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
-
     "right_time": {
-      "$ref": "#/definitions/TimeSpan",
-      "description": "Optional explicit time span associated with the right argument, if not already encoded in the referenced event or entity."
+      "description": "Optional explicit time span associated with the right argument, when `right` itself does not fully encode the needed temporal anchor.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
-
     "recurrence": {
-      "type": "string",
-      "description": "Optional recurrence label for seasonal or periodic relations (e.g. 'annual', 'monthly', 'every_July')."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional recurrence label for seasonal or periodic relations, such as `annual`, `monthly`, `weekly`, `every_July`, or `every_spring`."
     },
-
     "certainty": {
-      "type": "number",
-      "description": "Confidence score in the relation, between 0 and 1. Used for soft / approximate temporal facts.",
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Optional confidence score for the relation in the range [0, 1]. `1.0` means fully trusted / asserted.",
       "minimum": 0.0,
       "maximum": 1.0,
       "default": 1.0
     },
-
     "source_id": {
-      "type": "string",
-      "description": "Optional source identifier for this relation (e.g. citation key, dataset row ID)."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional identifier for the source statement, record, or provenance bundle from which this relation was derived."
     },
-
+    "attributes": {
+      "type": "object",
+      "description": "Optional structured attribute bag for temporal details that do not yet warrant dedicated top-level fields, such as calendar system, granularity, seasonality notes, or normalization hints.",
+      "additionalProperties": true
+    },
     "extra": {
       "type": "object",
-      "description": "Arbitrary extra metadata carried through normalization; not interpreted by the generic NLG layer but preserved for traceability and debugging.",
+      "description": "Opaque metadata preserved for traceability, debugging, provenance, or source-system round-tripping. This should not affect generic realization directly.",
       "additionalProperties": true
     }
   },
-
   "definitions": {
     "EntityRef": {
       "type": "object",
-      "description": "Lightweight reference to a discourse entity, following the shape of semantics.types.Entity.",
+      "description": "Lightweight reference to a discourse entity compatible with the project’s core semantic Entity shape.",
       "additionalProperties": true,
       "properties": {
         "id": {
-          "type": "string",
-          "description": "Stable identifier for the entity, e.g. a Wikidata QID ('Q42'), local database ID, or URI."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Stable identifier for the entity, e.g. a Wikidata QID, local database ID, or URI."
+        },
+        "qid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional explicit Wikidata-style identifier kept for compatibility with existing semantic objects and legacy payloads."
         },
         "name": {
-          "type": "string",
-          "description": "Preferred surface name or label, such as 'World War II' or 'Treaty of Paris'."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Preferred surface label or canonical display name."
         },
         "gender": {
-          "type": "string",
-          "description": "Coarse gender category for human entities (e.g. 'female', 'male', 'nonbinary', 'unknown')."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Coarse gender category for human entities (e.g. `female`, `male`, `nonbinary`, `unknown`)."
         },
         "human": {
-          "type": "boolean",
-          "description": "Whether this entity is a human (useful for pronoun selection)."
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether this entity denotes a human."
         },
         "entity_type": {
-          "type": "string",
-          "description": "Optional coarse type hint such as 'person', 'organization', 'place', 'event', 'concept'."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional coarse type hint such as `person`, `organization`, `place`, `event`, or `concept`."
         },
         "lemmas": {
           "type": "array",
-          "description": "Optional list of lemma-like labels associated with the entity.",
+          "description": "Optional language-neutral lexical hints associated with the entity.",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "features": {
           "type": "object",
-          "description": "Arbitrary feature dictionary for morphology / constructions (e.g. grammatical person, number, animacy).",
+          "description": "Arbitrary feature dictionary for downstream morphology or construction logic.",
           "additionalProperties": true
         },
         "extra": {
           "type": "object",
-          "description": "Arbitrary metadata (IDs, codes, raw source row, etc.).",
+          "description": "Arbitrary metadata such as source-system fields, aliases, or raw normalization traces.",
           "additionalProperties": true
         }
-      }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "id"
+          ]
+        },
+        {
+          "required": [
+            "qid"
+          ]
+        },
+        {
+          "required": [
+            "name"
+          ]
+        },
+        {
+          "required": [
+            "entity_type"
+          ]
+        },
+        {
+          "required": [
+            "lemmas"
+          ]
+        },
+        {
+          "required": [
+            "features"
+          ]
+        },
+        {
+          "required": [
+            "extra"
+          ]
+        }
+      ]
     },
-
     "LocationRef": {
       "type": "object",
-      "description": "Reference to a location, following the shape of semantics.types.Location. May appear inside referenced events, but is not used directly in the temporal frame properties.",
+      "description": "Reference to a location compatible with the project’s core Location shape.",
       "additionalProperties": true,
       "properties": {
         "id": {
-          "type": "string",
-          "description": "Stable identifier for the location (e.g. QID, geocode)."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Stable identifier for the location."
         },
         "name": {
-          "type": "string",
-          "description": "Human-readable label (e.g. 'Paris', 'Europe')."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Human-readable label such as `Paris` or `Europe`."
         },
         "kind": {
-          "type": "string",
-          "description": "Optional location kind, such as 'city', 'country', 'region'."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional coarse location kind such as `city`, `country`, `region`, or `venue`."
         },
         "country_code": {
-          "type": "string",
-          "description": "Optional ISO country code, such as 'FR'."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional ISO-like country code."
         },
         "features": {
           "type": "object",
-          "description": "Arbitrary feature dictionary, e.g. for preposition choice.",
+          "description": "Optional feature dictionary for preposition choice or geographic subtyping.",
           "additionalProperties": true
         },
         "extra": {
           "type": "object",
-          "description": "Arbitrary metadata.",
+          "description": "Arbitrary location metadata.",
           "additionalProperties": true
         }
-      }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "id"
+          ]
+        },
+        {
+          "required": [
+            "name"
+          ]
+        },
+        {
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "required": [
+            "country_code"
+          ]
+        },
+        {
+          "required": [
+            "features"
+          ]
+        },
+        {
+          "required": [
+            "extra"
+          ]
+        }
+      ]
     },
-
     "TimeSpan": {
       "type": "object",
-      "description": "Coarse time span or single date, following semantics.types.TimeSpan. Used to represent explicit temporal anchors and durations.",
+      "description": "Coarse time span or single date compatible with the project’s core TimeSpan shape. Use this for explicit temporal anchors, date-like points, and rough durations.",
       "additionalProperties": false,
       "properties": {
         "start_year": {
-          "type": "integer",
-          "description": "Starting year, e.g. 1914. For a single date, this is the main year of interest."
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Starting year, or the main year of interest for a point-like anchor."
         },
         "end_year": {
-          "type": "integer",
-          "description": "Optional end year (for multi-year spans)."
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Optional end year for a range."
         },
         "start_month": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 1,
           "maximum": 12,
           "description": "Optional start month (1–12)."
         },
         "start_day": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 1,
           "maximum": 31,
           "description": "Optional start day (1–31)."
         },
         "end_month": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 1,
           "maximum": 12,
           "description": "Optional end month (1–12)."
         },
         "end_day": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 1,
           "maximum": 31,
           "description": "Optional end day (1–31)."
         },
         "approximate": {
-          "type": "boolean",
-          "description": "If true, the timespan is approximate (e.g. 'around 1800')."
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the time span is approximate or inferred."
         },
         "extra": {
           "type": "object",
-          "description": "Arbitrary metadata or source-specific fields.",
+          "description": "Arbitrary metadata such as full ISO strings, calendar system, original source strings, or normalization details.",
           "additionalProperties": true
         }
-      }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "start_year"
+          ]
+        },
+        {
+          "required": [
+            "end_year"
+          ]
+        },
+        {
+          "required": [
+            "start_month"
+          ]
+        },
+        {
+          "required": [
+            "start_day"
+          ]
+        },
+        {
+          "required": [
+            "end_month"
+          ]
+        },
+        {
+          "required": [
+            "end_day"
+          ]
+        },
+        {
+          "required": [
+            "approximate"
+          ]
+        },
+        {
+          "required": [
+            "extra"
+          ]
+        }
+      ]
     },
-
     "EventRef": {
       "type": "object",
-      "description": "Lightweight reference to a semantic event (semantics.types.Event), such as a war, treaty, project, or festival.",
+      "description": "Lightweight reference to a semantic event or state compatible with the project’s core Event shape.",
       "additionalProperties": true,
       "properties": {
         "id": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Stable identifier for the event."
         },
         "event_type": {
-          "type": "string",
-          "description": "Free-form event type label, such as 'war', 'treaty', 'project', 'festival'."
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Free-form event or state type label, such as `war`, `treaty`, `project`, `festival`, or `presidency`."
         },
         "time": {
-          "$ref": "#/definitions/TimeSpan",
-          "description": "When the event took place (optional if represented elsewhere)."
+          "description": "When the event took place or holds.",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/TimeSpan"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "location": {
-          "description": "Where the event took place (entity or location).",
-          "oneOf": [
-            { "$ref": "#/definitions/EntityRef" },
-            { "$ref": "#/definitions/LocationRef" }
+          "description": "Where the event took place, if location is relevant and known.",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/EntityRef"
+            },
+            {
+              "$ref": "#/definitions/LocationRef"
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "participants": {
           "type": "object",
-          "description": "Optional mapping from participant roles (e.g. 'subject', 'belligerent', 'signatory') to entities involved in the event.",
+          "description": "Optional role-to-participant mapping. Values may be a single entity or an array of entities.",
           "additionalProperties": {
-            "$ref": "#/definitions/EntityRef"
+            "anyOf": [
+              {
+                "$ref": "#/definitions/EntityRef"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/EntityRef"
+                }
+              }
+            ]
           }
+        },
+        "properties": {
+          "type": "object",
+          "description": "Optional structured event properties preserved from semantic normalization.",
+          "additionalProperties": true
+        },
+        "meta": {
+          "type": "object",
+          "description": "Optional event metadata bag for project-specific semantic annotations.",
+          "additionalProperties": true
         },
         "extra": {
           "type": "object",
-          "description": "Arbitrary event metadata.",
+          "description": "Arbitrary event metadata and source-system fields.",
           "additionalProperties": true
         }
-      }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "id"
+          ]
+        },
+        {
+          "required": [
+            "event_type"
+          ]
+        },
+        {
+          "required": [
+            "time"
+          ]
+        },
+        {
+          "required": [
+            "location"
+          ]
+        },
+        {
+          "required": [
+            "participants"
+          ]
+        },
+        {
+          "required": [
+            "properties"
+          ]
+        },
+        {
+          "required": [
+            "meta"
+          ]
+        },
+        {
+          "required": [
+            "extra"
+          ]
+        }
+      ]
     }
   },
-
   "examples": [
     {
       "frame_type": "relation.temporal",
@@ -277,7 +558,7 @@
       "certainty": 1.0
     },
     {
-      "frame_type": "relation.temporal",
+      "frame_type": "rel.temporal",
       "left": {
         "id": "E_Project_X",
         "event_type": "project"
@@ -292,6 +573,22 @@
       "recurrence": null,
       "certainty": 0.9,
       "source_id": "row_1234"
+    },
+    {
+      "frame_type": "relation.temporal",
+      "left": {
+        "name": "the festival",
+        "entity_type": "event_series"
+      },
+      "right": {
+        "start_month": 7,
+        "approximate": false
+      },
+      "relation": "during",
+      "recurrence": "annual",
+      "attributes": {
+        "seasonality": "every_July"
+      }
     }
   ]
 }

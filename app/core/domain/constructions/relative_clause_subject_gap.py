@@ -1,102 +1,331 @@
-# app\core\domain\constructions\relative_clause_subject_gap.py
-# constructions\relative_clause_subject_gap.py
+# app/core/domain/constructions/relative_clause_subject_gap.py
 """
 RELATIVE_CLAUSE_SUBJECT_GAP CONSTRUCTION
 ----------------------------------------
 
-Language-family-agnostic construction for *subject-gap* relative clauses,
+Language-family-agnostic construction for subject-gap relative clauses,
 where the head noun phrase is interpreted as the SUBJECT of the verb
 inside the relative clause.
 
-Typical examples:
+Examples:
     - "the scientist who discovered polonium"
     - "the woman that won the prize"
 
-This construction returns a *single NP* that includes the head and its
-relative clause (i.e. a complex NP), not a full independent clause.
-
-RESPONSIBILITIES
-----------------
-- Attach a relative clause whose subject position is filled by the head NP.
-- Choose relative-clause position:
-    - postnominal: "HEAD [REL_MARKER] VERB (OBJ)"
-    - prenominal:  "[REL_MARKER] VERB (OBJ) HEAD"
-- Optionally insert a resumptive pronoun in subject position inside the RC
-  (for languages that do not allow a pure gap).
-
-NOT RESPONSIBLE FOR
--------------------
-- Inflecting the verb (tense, agreement, polarity).
-- Internal morphology of NPs (plural, classifiers, etc.).
-- Global sentence word order (matrix clause).
-
-Those are delegated to the morphology / language-specific layer via
-`morph_api`.
-
-----------------------------------------------------------------------
-EXPECTED INPUTS
-----------------------------------------------------------------------
-
-Slots (first argument: `slots`)
-
-A dictionary with at least:
-
-    {
-        "head": {
-            "lemma": str,
-            "features": dict   # optional
-        },
-        "rel_verb": str | {"lemma": str, "features": dict},
-        "rel_object": {
-            "lemma": str,
-            "features": dict   # optional
-        } or None,
-        "rel_tense": "pres" | "past" | "fut" | ... (optional, default "past"),
-        "rel_polarity": "pos" | "neg"               (optional, default "pos")
-    }
-
-- "head": semantics for the head NP being modified.
-- "rel_verb": lemma (or dictionary with "lemma") of the verb inside the RC.
-- "rel_object": optional object NP semantics inside the RC (for transitive verbs).
-- "rel_tense" / "rel_polarity": verbal features for the RC.
-
-Language profile (second argument: `lang_profile`)
-
-A dictionary providing relative-clause-specific parameters. Suggested shape:
-
-    "relative_clause_subject_gap": {
-        "position": "postnominal" | "prenominal",
-        "rel_marker": str | None,           # e.g. "who", "that", "qui"
-        "uses_resumptive_pronoun": bool,
-        "resumptive_pronoun_lemma": str | None,
-        "rel_marker_before_clause": bool    # if True, marker precedes entire RC
-    }
-
-Defaults:
-    position                 = "postnominal"
-    rel_marker               = None
-    uses_resumptive_pronoun  = False
-    resumptive_pronoun_lemma = None
-    rel_marker_before_clause = True
-
-Morph API (third argument: `morph_api`)
-
-An object providing at least:
-
-    morph_api.realize_np(sem: dict, role: str, features: dict | None) -> str
-        - Used for the head, object, and (if needed) resumptive pronoun.
-
-    morph_api.realize_verb(lemma: str, features: dict) -> str
-        - Used for the verb inside the relative clause.
-
-    morph_api.join_tokens(tokens: list[str]) -> str
-        - Combines tokens into a single string (handles spacing, scripts, etc.).
-
-This construction never assumes spaces; it delegates token joining to
-`morph_api.join_tokens`.
+This construction returns a single NP that includes the head and its
+relative clause (a complex NP), not a full independent clause.
 """
 
-from typing import Any, Dict
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Any, Dict, Mapping, Optional, Protocol
+
+
+__all__ = [
+    "MorphologyAPI",
+    "RelativeClauseSubjectGapSlots",
+    "realize_relative_clause_subject_gap",
+    "realize",
+]
+
+
+class MorphologyAPI(Protocol):
+    """
+    Minimal morphology interface used by this construction.
+
+    The implementation is intentionally permissive because the repository
+    currently contains more than one calling convention for NP realization.
+    """
+
+    def realize_np(self, *args: Any, **kwargs: Any) -> str:
+        ...
+
+    def realize_verb(self, lemma: str, features: Mapping[str, Any]) -> str:
+        ...
+
+    def join_tokens(self, tokens: list[str]) -> str:
+        ...
+
+
+@dataclass
+class RelativeClauseSubjectGapSlots:
+    """
+    Canonical input slots for subject-gap relative clauses.
+
+    Required:
+        head:
+            Semantic spec for the head NP.
+        rel_verb:
+            Either a verb lemma string or a mapping with at least "lemma".
+
+    Optional:
+        rel_object:
+            Object semantics for a transitive relative clause.
+        rel_tense / rel_polarity:
+            Verbal features for the relative clause.
+        head_surface / rel_object_surface:
+            Direct surface overrides.
+        head_role / rel_object_role:
+            Roles passed into the morphology layer.
+        pattern_marker_override:
+            Per-call override for the relative marker.
+        extra_verb_features:
+            Additional verbal features for the relative clause verb.
+        rel_subject_resumptive_surface:
+            Direct surface override for the resumptive pronoun.
+    """
+
+    head: Dict[str, Any]
+    rel_verb: str | Dict[str, Any]
+    rel_object: Optional[Dict[str, Any]] = None
+
+    rel_tense: str = "past"
+    rel_polarity: str = "pos"
+
+    head_surface: Optional[str] = None
+    rel_object_surface: Optional[str] = None
+    rel_subject_resumptive_surface: Optional[str] = None
+
+    head_role: str = "head"
+    rel_object_role: str = "rel_object"
+    resumptive_role: str = "rel_resumptive_subj"
+
+    pattern_marker_override: Optional[str] = None
+    extra_verb_features: Dict[str, Any] = field(default_factory=dict)
+
+
+def _coerce_slots(
+    slots: Mapping[str, Any] | RelativeClauseSubjectGapSlots,
+) -> RelativeClauseSubjectGapSlots:
+    if isinstance(slots, RelativeClauseSubjectGapSlots):
+        return slots
+
+    data = dict(slots or {})
+    return RelativeClauseSubjectGapSlots(
+        head=data.get("head") or {},
+        rel_verb=data.get("rel_verb") or data.get("rel_verb_lemma") or "",
+        rel_object=data.get("rel_object"),
+        rel_tense=str(data.get("rel_tense", "past")),
+        rel_polarity=str(data.get("rel_polarity", "pos")),
+        head_surface=data.get("head_surface"),
+        rel_object_surface=data.get("rel_object_surface"),
+        rel_subject_resumptive_surface=data.get("rel_subject_resumptive_surface"),
+        head_role=str(data.get("head_role", "head")),
+        rel_object_role=str(data.get("rel_object_role", "rel_object")),
+        resumptive_role=str(data.get("resumptive_role", "rel_resumptive_subj")),
+        pattern_marker_override=data.get("pattern_marker_override"),
+        extra_verb_features=dict(data.get("extra_verb_features") or {}),
+    )
+
+
+def _get_rc_cfg(lang_profile: Mapping[str, Any]) -> Dict[str, Any]:
+    cfg = dict(lang_profile.get("relative_clause_subject_gap") or {})
+    return {
+        "position": str(cfg.get("position", "postnominal")),
+        "rel_marker": str(cfg.get("rel_marker", "") or ""),
+        "uses_resumptive_pronoun": bool(cfg.get("uses_resumptive_pronoun", False)),
+        "resumptive_pronoun_lemma": str(cfg.get("resumptive_pronoun_lemma", "") or ""),
+        "rel_marker_before_clause": bool(cfg.get("rel_marker_before_clause", True)),
+        "extra_verb_features": dict(cfg.get("verb_features") or {}),
+    }
+
+
+def _surface_from_sem(sem: Any) -> str:
+    if isinstance(sem, str):
+        return sem.strip()
+    if not isinstance(sem, Mapping):
+        return ""
+    return str(
+        sem.get("surface")
+        or sem.get("lemma")
+        or sem.get("name")
+        or sem.get("text")
+        or ""
+    ).strip()
+
+
+def _realize_np(
+    morph_api: Any,
+    sem: Any,
+    *,
+    role: str,
+    surface_override: Optional[str] = None,
+) -> str:
+    if surface_override and str(surface_override).strip():
+        return str(surface_override).strip()
+
+    if not sem:
+        return ""
+
+    if isinstance(sem, str):
+        return sem.strip()
+
+    if not isinstance(sem, Mapping):
+        return str(sem).strip()
+
+    features = dict(sem.get("features") or {})
+    lemma = str(sem.get("lemma") or sem.get("name") or sem.get("surface") or "").strip()
+
+    if hasattr(morph_api, "realize_np"):
+        call_variants = (
+            lambda: morph_api.realize_np(sem=sem, role=role, features=features),
+            lambda: morph_api.realize_np(role=role, lemma=lemma, features=features),
+            lambda: morph_api.realize_np(role, lemma, features),
+            lambda: morph_api.realize_np(role, sem),
+            lambda: morph_api.realize_np(sem),
+        )
+        for call in call_variants:
+            try:
+                value = call()
+            except TypeError:
+                continue
+            if value:
+                return str(value).strip()
+
+    return _surface_from_sem(sem)
+
+
+def _realize_verb(
+    morph_api: Any,
+    *,
+    lemma: str,
+    features: Mapping[str, Any],
+) -> str:
+    if hasattr(morph_api, "realize_verb"):
+        try:
+            value = morph_api.realize_verb(lemma=lemma, features=features)
+        except TypeError:
+            try:
+                value = morph_api.realize_verb(lemma, features)
+            except TypeError:
+                value = lemma
+        return str(value).strip()
+
+    return lemma.strip()
+
+
+def _join_tokens(morph_api: Any, tokens: list[str]) -> str:
+    cleaned = [str(t).strip() for t in tokens if str(t).strip()]
+    if not cleaned:
+        return ""
+
+    if hasattr(morph_api, "join_tokens"):
+        try:
+            return str(morph_api.join_tokens(cleaned)).strip()
+        except TypeError:
+            pass
+
+    if hasattr(morph_api, "normalize_whitespace"):
+        return str(morph_api.normalize_whitespace(" ".join(cleaned))).strip()
+
+    return " ".join(cleaned)
+
+
+def _resolve_rel_verb(
+    rel_verb: str | Dict[str, Any],
+) -> tuple[str, Dict[str, Any]]:
+    if isinstance(rel_verb, Mapping):
+        lemma = str(rel_verb.get("lemma") or "").strip()
+        features = dict(rel_verb.get("features") or {})
+        return lemma, features
+
+    return str(rel_verb).strip(), {}
+
+
+def realize_relative_clause_subject_gap(
+    slots: Mapping[str, Any] | RelativeClauseSubjectGapSlots,
+    lang_profile: Mapping[str, Any],
+    morph_api: MorphologyAPI,
+) -> str:
+    """
+    Realize a head noun phrase modified by a subject-gap relative clause.
+    """
+    slot_obj = _coerce_slots(slots)
+    if not slot_obj.head:
+        return ""
+
+    head_np = _realize_np(
+        morph_api,
+        slot_obj.head,
+        role=slot_obj.head_role,
+        surface_override=slot_obj.head_surface,
+    )
+    if not head_np:
+        return ""
+
+    verb_lemma, verb_overrides = _resolve_rel_verb(slot_obj.rel_verb)
+    if not verb_lemma:
+        return head_np
+
+    cfg = _get_rc_cfg(lang_profile)
+
+    verb_features: Dict[str, Any] = {
+        "tense": slot_obj.rel_tense,
+        "polarity": slot_obj.rel_polarity,
+        "verb_role": "relative_main",
+        "subject_features": dict(slot_obj.head.get("features") or {}),
+    }
+    verb_features.update(cfg["extra_verb_features"])
+    verb_features.update(verb_overrides)
+    verb_features.update(slot_obj.extra_verb_features)
+
+    verb = _realize_verb(
+        morph_api,
+        lemma=verb_lemma,
+        features=verb_features,
+    )
+
+    object_np = _realize_np(
+        morph_api,
+        slot_obj.rel_object,
+        role=slot_obj.rel_object_role,
+        surface_override=slot_obj.rel_object_surface,
+    )
+
+    resumptive_np = ""
+    if cfg["uses_resumptive_pronoun"] and cfg["resumptive_pronoun_lemma"]:
+        resumptive_sem = {
+            "lemma": cfg["resumptive_pronoun_lemma"],
+            "features": dict(slot_obj.head.get("features") or {}),
+        }
+        resumptive_np = _realize_np(
+            morph_api,
+            resumptive_sem,
+            role=slot_obj.resumptive_role,
+            surface_override=slot_obj.rel_subject_resumptive_surface,
+        )
+
+    rel_marker = (
+        slot_obj.pattern_marker_override
+        if slot_obj.pattern_marker_override is not None
+        else cfg["rel_marker"]
+    )
+
+    rc_tokens: list[str] = []
+
+    if cfg["rel_marker_before_clause"] and rel_marker:
+        rc_tokens.append(rel_marker)
+
+    if resumptive_np:
+        rc_tokens.append(resumptive_np)
+
+    if verb:
+        rc_tokens.append(verb)
+
+    if object_np:
+        rc_tokens.append(object_np)
+
+    if not cfg["rel_marker_before_clause"] and rel_marker:
+        rc_tokens.append(rel_marker)
+
+    rc_string = _join_tokens(morph_api, rc_tokens)
+    if not rc_string:
+        return head_np
+
+    if cfg["position"] == "prenominal":
+        return _join_tokens(morph_api, [rc_string, head_np])
+
+    return _join_tokens(morph_api, [head_np, rc_string])
 
 
 def realize(
@@ -105,145 +334,6 @@ def realize(
     morph_api: Any,
 ) -> str:
     """
-    Realize a head noun phrase modified by a subject-gap relative clause.
-
-    Args:
-        slots:
-            Dictionary of semantic slots (see module docstring).
-        lang_profile:
-            Language profile with relative-clause settings.
-        morph_api:
-            Morphological / surface-realization API.
-
-    Returns:
-        A surface string for the complex NP (head + RC), or an empty string
-        if required information is missing.
+    Backward-compatible entry point retained for legacy callers.
     """
-    head_sem = slots.get("head")
-    if not head_sem or not isinstance(head_sem, dict):
-        return ""
-
-    rel_verb_info = slots.get("rel_verb")
-    if not rel_verb_info:
-        return ""
-
-    rel_object_sem = slots.get("rel_object")
-
-    rel_tense = slots.get("rel_tense", "past")
-    rel_polarity = slots.get("rel_polarity", "pos")
-
-    # --- Language-specific configuration ---
-
-    rc_cfg: Dict[str, Any] = lang_profile.get("relative_clause_subject_gap", {}) or {}
-
-    position: str = rc_cfg.get("position", "postnominal")
-    rel_marker: str = rc_cfg.get("rel_marker", "") or ""
-    uses_resumptive: bool = bool(rc_cfg.get("uses_resumptive_pronoun", False))
-    resumptive_lemma: str = rc_cfg.get("resumptive_pronoun_lemma", "") or ""
-    marker_before_clause: bool = bool(rc_cfg.get("rel_marker_before_clause", True))
-
-    # --- Realize head NP ---
-
-    head_np = morph_api.realize_np(
-        sem=head_sem,
-        role="head",
-        features=head_sem.get("features", {}),
-    )
-
-    # --- Resolve verb lemma & features for the RC ---
-
-    if isinstance(rel_verb_info, dict):
-        verb_lemma = rel_verb_info.get("lemma")
-        verb_feature_overrides = rel_verb_info.get("features", {})
-    else:
-        verb_lemma = str(rel_verb_info)
-        verb_feature_overrides = {}
-
-    if not verb_lemma:
-        return ""
-
-    verb_features = {
-        "tense": rel_tense,
-        "polarity": rel_polarity,
-        "verb_role": "relative_main",
-        "subject_features": head_sem.get("features", {}),
-    }
-    verb_features.update(verb_feature_overrides)
-
-    verb = morph_api.realize_verb(lemma=verb_lemma, features=verb_features)
-
-    # --- Realize object NP (if any) ---
-
-    object_np = ""
-    if rel_object_sem and isinstance(rel_object_sem, dict):
-        object_np = morph_api.realize_np(
-            sem=rel_object_sem,
-            role="rel_object",
-            features=rel_object_sem.get("features", {}),
-        )
-
-    # --- Optional resumptive pronoun (subject position in RC) ---
-
-    resumptive_np = ""
-    if uses_resumptive and resumptive_lemma:
-        resumptive_sem = {
-            "lemma": resumptive_lemma,
-            "features": head_sem.get("features", {}),
-        }
-        resumptive_np = morph_api.realize_np(
-            sem=resumptive_sem,
-            role="rel_resumptive_subj",
-            features=resumptive_sem.get("features", {}),
-        )
-
-    # --- Build the internal relative clause token sequence ---
-
-    rc_tokens: list[str] = []
-
-    # 1. Marker placement
-    # If marker_before_clause is True, place it at the beginning of RC.
-    if marker_before_clause and rel_marker:
-        rc_tokens.append(rel_marker)
-
-    # 2. Subject position: gap vs resumptive pronoun.
-    #    For a subject-gap RC, the subject slot is a gap; but some languages
-    #    realize a resumptive pronoun here.
-    if resumptive_np:
-        rc_tokens.append(resumptive_np)
-
-    # 3. Verb
-    rc_tokens.append(verb)
-
-    # 4. Object, if present
-    if object_np:
-        rc_tokens.append(object_np)
-
-    # If marker should not precede the clause, but be attached later, we
-    # interpret that as "postposed marker" (e.g. some particles). For now
-    # we simply append it at the end of RC.
-    if not marker_before_clause and rel_marker:
-        rc_tokens.append(rel_marker)
-
-    rc_tokens = [t for t in rc_tokens if t]
-
-    if not rc_tokens:
-        # If we somehow failed to build any relative-clause material,
-        # fall back to just the head NP.
-        return head_np
-
-    rc_string = morph_api.join_tokens(rc_tokens)
-
-    # --- Attach RC to head according to position ---
-
-    if position == "prenominal":
-        # [RC] + HEAD
-        combined_tokens = [rc_string, head_np]
-    else:
-        # Default: postnominal → HEAD + [RC]
-        combined_tokens = [head_np, rc_string]
-
-    combined_tokens = [t for t in combined_tokens if t]
-    if not combined_tokens:
-        return ""
-
-    return morph_api.join_tokens(combined_tokens)
+    return realize_relative_clause_subject_gap(slots, lang_profile, morph_api)

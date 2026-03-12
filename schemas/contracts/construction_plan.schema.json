@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:semantik-architect:schemas:contracts:construction_plan",
+  "title": "Semantik Architect Contract Schema — ConstructionPlan",
+  "description": "Canonical planner-to-renderer runtime handoff object. A ConstructionPlan represents one clause/sentence realization unit after planning and slot-building, and before backend realization.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "construction_id",
+    "lang_code",
+    "slot_map",
+    "generation_options"
+  ],
+  "properties": {
+    "construction_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Canonical planner-selected construction identifier. New runtime plans use backend-independent snake_case IDs such as copula_equative_simple or relational_membership_affiliation."
+    },
+    "lang_code": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z]{2,3}(?:-[a-z0-9]+)*$",
+      "description": "Normalized lower-case language code for realization, e.g. eng, fra, ar, en."
+    },
+    "slot_map": {
+      "$ref": "./slot_map.schema.json",
+      "description": "Canonical semantic role/value mapping for this construction. Plan-level fields such as construction_id, lang_code, generation_options, lexical_bindings, provenance, and metadata must not be embedded here."
+    },
+    "generation_options": {
+      "type": "object",
+      "description": "Renderer-facing generation controls selected by planning or orchestration, such as tense, register, sentence_kind, or allow_fallback.",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": true,
+      "default": {}
+    },
+    "topic_entity_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional discourse/topic anchor for the sentence, usually a stable entity identifier such as a Wikidata QID."
+    },
+    "focus_role": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Optional discourse focus role, expressed as a canonical semantic slot name such as profession, nationality, subject, predicate_nominal, or location."
+    },
+    "lexical_bindings": {
+      "type": "object",
+      "description": "Optional planner/lexical-resolution output mapping semantic slot names to normalized lexical references. In the common case, values are LexemeRef objects keyed by slot name.",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "$ref": "./lexeme_ref.schema.json"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "./lexeme_ref.schema.json"
+            }
+          },
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "default": {}
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Optional provenance / traceability bag carried with the plan, for example source frame IDs, extraction notes, statement IDs, or lexical-resolution metadata.",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": true,
+      "default": {}
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional migration / diagnostics metadata bag retained by the current runtime implementation for wrapper/base construction information and other non-canonical plan annotations.",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": true,
+      "default": {}
+    }
+  },
+  "examples": [
+    {
+      "construction_id": "copula_equative_classification",
+      "lang_code": "fra",
+      "slot_map": {
+        "subject": {
+          "id": "Q7186",
+          "qid": "Q7186",
+          "label": "Marie Curie",
+          "name": "Marie Curie",
+          "entity_type": "person"
+        },
+        "profession": {
+          "lemma": "écrivain",
+          "pos": "NOUN",
+          "source": "lexicon",
+          "confidence": 0.94
+        },
+        "nationality": {
+          "lemma": "français",
+          "pos": "ADJ",
+          "source": "lexicon",
+          "confidence": 0.95
+        }
+      },
+      "generation_options": {
+        "tense": "present",
+        "register": "neutral",
+        "allow_fallback": true
+      },
+      "topic_entity_id": "Q7186",
+      "focus_role": "profession",
+      "lexical_bindings": {
+        "profession": {
+          "lemma": "écrivain",
+          "pos": "NOUN",
+          "source": "lexicon",
+          "confidence": 0.94
+        },
+        "nationality": {
+          "lemma": "français",
+          "pos": "ADJ",
+          "source": "lexicon",
+          "confidence": 0.95
+        }
+      },
+      "provenance": {
+        "source_frame_type": "rel.definition-classification",
+        "source_system": "planner"
+      }
+    }
+  ]
+}

@@ -1,177 +1,177 @@
-# app\core\domain\constructions\topic_comment_copular.py
-# constructions\topic_comment_copular.py
+# app/core/domain/constructions/topic_comment_copular.py
 """
 constructions/topic_comment_copular.py
 
-A family-agnostic construction module for **topic–comment copular clauses**.
+A family-agnostic construction module for topic-comment copular clauses.
 
 Canonical pattern:
 
     [TOPIC], (SUBJECT) COPULA PREDICATE
 
-Examples (in different languages/strategies):
+Examples:
 
     - "As for Marie Curie, she was a Polish physicist."
     - "Marie Curie wa, Pōrando no butsuri-gakusha desu."
     - "Quanto a Marie Curie, ela foi uma física polonesa."
 
-This construction **wraps** a simple equative copular clause (implemented in
-`copula_equative_simple`) with a topic phrase.
+This construction wraps a simple equative copular clause
+(implemented in ``copula_equative_simple``) with a topic phrase.
 
-Responsibilities:
+Canonical runtime notes
+=======================
 
-- This module:
-    - Decides how to combine TOPIC and COMMENT (equative clause) at clause level.
-    - Calls the simple equative construction for the comment part.
-- `morph_api`:
-    - Builds the topic phrase surface form (with markers, if any).
-    - Builds subject, predicate, and copula via the equative construction.
-- `lang_profile`:
-    - Encodes whether topic–comment is enabled.
-    - Encodes ordering of TOPIC vs COMMENT.
-
---------------------
-INTERFACES
---------------------
-
-1. abstract_slots (dict)
-
-Minimal expected shape:
-
-    abstract_slots = {
-        "topic": {
-            "name": "Marie Curie",
-            # optional extra features for topic:
-            "features": {...}
-        },
-        "subject": {
-            # subject of the comment clause; may be:
-            # - same entity as topic
-            # - a pronoun
-            # - null (pro-drop) handled by morph_api
-            "name": "Marie Curie",   # or "she", etc.
-            "person": 3,
-            "number": "sg",
-            "features": {...}
-        },
-        "predicate": {
-            # free-form structure; passed directly to morph_api:
-            "role": "profession+nationality",
-            "profession_lemma": "physicist",
-            "nationality_lemma": "polish",
-            "gender": "female",
-            "features": {...}
-        },
-        "tense": "present",        # or "past", "future", etc.
-        "polarity": "affirmative"  # reserved for future use
-    }
-
-If `"topic"` is missing, this construction will fall back to using `"subject"`
-as the topic as well.
-
-2. lang_profile (dict)
-
-Expected keys relevant to this construction:
-
-    lang_profile = {
-        "language_code": "ja",
-        "copula": {
-            # (used by the inner equative construction)
-            "lemma": "be",
-            "present_zero": False,
-            "past_zero": False,
-            "order": "S-COP-PRED"
-        },
-        "topic": {
-            # if False/absent, this construction transparently
-            # degrades to a simple equative clause
-            "enabled": True,
-
-            # TOPIC–COMMENT or COMMENT–TOPIC (rare but supported)
-            # Supported values:
-            #   "TOPIC-COMMENT"
-            #   "COMMENT-TOPIC"
-            "order": "TOPIC-COMMENT",
-
-            # (Optional) hint for punctuation; this module does
-            # not enforce punctuation, but makes it available for
-            # callers that care.
-            # e.g. "comma", "none"
-            "separator": "comma",
-        }
-    }
-
-3. morph_api (object)
-
-This module expects:
-
-    - realize_topic(topic_data: dict, lang_profile: dict) -> str
-        *If absent*, we fall back to `realize_subject(topic_data, lang_profile)`
-
-    - realize_subject(subject_data: dict, lang_profile: dict) -> str
-    - realize_predicate(predicate_data: dict, lang_profile: dict) -> str
-    - realize_copula(tense: str, subject_data: dict, lang_profile: dict) -> str
-
-The last three are used indirectly via `copula_equative_simple.realize`.
-
---------------------
-RETURN VALUE
---------------------
-
-The main entry point is `realize`, which returns:
+- Stable construction ID: ``topic_comment_copular``
+- This is a wrapper construction.
+- The wrapped base construction defaults to ``copula_equative_simple``.
+- Canonical slot-map shape:
 
     {
-        "tokens":        [...],
-        "text":          "...",
-        "topic":         "<topic phrase>",
-        "comment":       "<inner equative clause>",
-        "comment_parts": {  # full result from copula_equative_simple
-            "tokens":   [...],
-            "text":     "...",
-            "subject":  "...",
-            "copula":   "...",
-            "predicate":"..."
-        }
+        "topic": {...},         # optional; falls back to "subject"
+        "subject": {...},       # optional but typically present
+        "predicate": {...},     # forwarded to inner copular construction
+        "tense": "present",     # optional
+        "polarity": "affirmative"  # optional
     }
 
-If topics are disabled in `lang_profile["topic"]["enabled"]`, `realize`
-returns the same shape but with `"topic"` empty and `"tokens"` / `"text"`
-matching a simple equative clause.
+This module is responsible for:
+- deciding how TOPIC and COMMENT are combined at clause level,
+- realizing the topic phrase,
+- delegating the comment clause to the base copular construction.
+
+It does not perform language-specific morphology itself.
 """
 
-from typing import Any, Dict, List
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Any, Mapping, Protocol
 
 from . import copula_equative_simple
 
 
-def _get_topic_config(lang_profile: Dict[str, Any]) -> Dict[str, Any]:
+__all__ = [
+    "MorphologyAPI",
+    "TopicCommentCopularSlots",
+    "TopicCommentCopularConstruction",
+    "realize",
+    "realize_topic_comment_copular",
+]
+
+
+class MorphologyAPI(Protocol):
     """
-    Safe accessor for the topic configuration.
+    Optional protocol for topic realization.
+
+    The inner copular construction is responsible for subject/predicate/copula
+    realization. This wrapper only needs a topic surface form.
     """
-    topic_cfg = lang_profile.get("topic") or {}
-    if not isinstance(topic_cfg, dict):
+
+    def realize_topic(self, topic_data: Mapping[str, Any], lang_profile: Mapping[str, Any]) -> str:
+        ...
+
+    def realize_subject(self, subject_data: Mapping[str, Any], lang_profile: Mapping[str, Any]) -> str:
+        ...
+
+
+@dataclass(slots=True)
+class TopicCommentCopularSlots:
+    """
+    Canonical slot bundle for ``topic_comment_copular``.
+    """
+
+    topic: dict[str, Any] = field(default_factory=dict)
+    subject: dict[str, Any] = field(default_factory=dict)
+    predicate: dict[str, Any] = field(default_factory=dict)
+    tense: str = "present"
+    polarity: str = "affirmative"
+    extras: dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_mapping(cls, slots: Mapping[str, Any]) -> "TopicCommentCopularSlots":
+        if not isinstance(slots, Mapping):
+            raise TypeError("slots must be a mapping")
+
+        topic = _mapping_or_empty(slots.get("topic"))
+        subject = _mapping_or_empty(slots.get("subject"))
+        predicate = _mapping_or_empty(slots.get("predicate"))
+
+        tense = _as_nonempty_text(slots.get("tense"), default="present")
+        polarity = _as_nonempty_text(slots.get("polarity"), default="affirmative")
+
+        known_keys = {"topic", "subject", "predicate", "tense", "polarity"}
+        extras = {
+            str(key): value
+            for key, value in slots.items()
+            if str(key) not in known_keys
+        }
+
+        return cls(
+            topic=topic,
+            subject=subject,
+            predicate=predicate,
+            tense=tense,
+            polarity=polarity,
+            extras=extras,
+        )
+
+    def to_comment_slots(self) -> dict[str, Any]:
+        """
+        Build the slot map for the wrapped base construction.
+        """
+        payload: dict[str, Any] = {
+            "subject": dict(self.subject),
+            "predicate": dict(self.predicate),
+            "tense": self.tense,
+            "polarity": self.polarity,
+        }
+        payload.update(self.extras)
+        return payload
+
+    def effective_topic(self) -> dict[str, Any]:
+        """
+        Use the explicit topic if present, otherwise fall back to subject.
+        """
+        if self.topic:
+            return dict(self.topic)
+        return dict(self.subject)
+
+
+def _mapping_or_empty(value: Any) -> dict[str, Any]:
+    if value is None:
         return {}
-    return topic_cfg
+    if not isinstance(value, Mapping):
+        raise TypeError("expected a mapping for structured slot content")
+    return {str(k): v for k, v in value.items()}
 
 
-def _get_separator(topic_cfg: Dict[str, Any]) -> str:
-    """
-    Get a hint for how topic and comment should be separated.
+def _as_nonempty_text(value: Any, *, default: str) -> str:
+    if value is None:
+        return default
+    text = str(value).strip()
+    return text or default
 
-    This construction does not enforce punctuation, but callers can use
-    this value (e.g. to insert a comma or particle).
-    """
-    sep = topic_cfg.get("separator", "comma")
-    if not isinstance(sep, str):
-        return "comma"
-    return sep.lower()
+
+def _get_topic_config(lang_profile: Mapping[str, Any] | None) -> dict[str, Any]:
+    topic_cfg = {}
+    if isinstance(lang_profile, Mapping):
+        raw = lang_profile.get("topic") or {}
+        if isinstance(raw, Mapping):
+            topic_cfg = {str(k): v for k, v in raw.items()}
+
+    return {
+        "enabled": bool(topic_cfg.get("enabled", False)),
+        "order": _as_nonempty_text(topic_cfg.get("order"), default="TOPIC-COMMENT").upper().replace(" ", ""),
+        "separator": _as_nonempty_text(topic_cfg.get("separator"), default="comma").lower(),
+    }
 
 
 def _realize_topic_phrase(
-    topic_data: Dict[str, Any], lang_profile: Dict[str, Any], morph_api: Any
+    topic_data: Mapping[str, Any],
+    lang_profile: Mapping[str, Any] | None,
+    morph_api: Any,
 ) -> str:
     """
-    Realize the topic phrase using morph_api.
+    Realize the topic phrase using ``morph_api``.
 
     Preferred method:
         morph_api.realize_topic(topic_data, lang_profile)
@@ -179,107 +179,156 @@ def _realize_topic_phrase(
     Fallback:
         morph_api.realize_subject(topic_data, lang_profile)
     """
-    # Try dedicated topic realizer, if present
+    profile = lang_profile if isinstance(lang_profile, Mapping) else {}
+
     if hasattr(morph_api, "realize_topic"):
-        topic_str = morph_api.realize_topic(topic_data, lang_profile)
+        topic_str = morph_api.realize_topic(topic_data, profile)
+    elif hasattr(morph_api, "realize_subject"):
+        topic_str = morph_api.realize_subject(topic_data, profile)
     else:
-        # Degrade gracefully: many languages will simply reuse subject form
-        topic_str = morph_api.realize_subject(topic_data, lang_profile)
+        topic_str = str(topic_data.get("name", "")).strip()
 
-    return topic_str.strip()
+    return str(topic_str or "").strip()
 
 
-def _prepare_comment_slots(abstract_slots: Dict[str, Any]) -> Dict[str, Any]:
+def _coerce_comment_result(value: Any) -> dict[str, Any]:
     """
-    Strip out topic-specific fields and pass everything else to the
-    inner copula equative construction.
+    Normalize the wrapped construction result to a dict.
+
+    Older implementations may return a dict; this helper preserves that
+    shape and supplies sensible defaults if needed.
     """
-    comment_slots = dict(abstract_slots)  # shallow copy is enough
-    comment_slots.pop("topic", None)
-    # The equative construction expects "subject", "predicate", "tense", etc.
-    return comment_slots
+    if isinstance(value, Mapping):
+        return {str(k): v for k, v in value.items()}
+
+    text = str(value or "").strip()
+    return {
+        "construction_id": "copula_equative_simple",
+        "tokens": [text] if text else [],
+        "text": text,
+    }
+
+
+class TopicCommentCopularConstruction:
+    """
+    Stable wrapper construction for topic-comment copular clauses.
+    """
+
+    id = "topic_comment_copular"
+    base_construction_id = "copula_equative_simple"
+    required_slots: tuple[str, ...] = ()
+    optional_slots: tuple[str, ...] = ("topic", "subject", "predicate", "tense", "polarity")
+
+    def realize(
+        self,
+        slots: Mapping[str, Any] | TopicCommentCopularSlots,
+        lang_profile: Mapping[str, Any] | None,
+        morph_api: Any,
+    ) -> dict[str, Any]:
+        slot_bundle = (
+            slots if isinstance(slots, TopicCommentCopularSlots)
+            else TopicCommentCopularSlots.from_mapping(slots)
+        )
+
+        profile = lang_profile if isinstance(lang_profile, Mapping) else {}
+        topic_cfg = _get_topic_config(profile)
+
+        comment_slots = slot_bundle.to_comment_slots()
+        comment_result = _coerce_comment_result(
+            copula_equative_simple.realize(comment_slots, profile, morph_api)
+        )
+        comment_text = str(comment_result.get("text", "") or "").strip()
+        comment_tokens = [
+            str(token).strip()
+            for token in comment_result.get("tokens", [])
+            if str(token).strip()
+        ]
+
+        topic_enabled = topic_cfg["enabled"]
+
+        if not topic_enabled:
+            return {
+                "construction_id": self.id,
+                "tokens": comment_tokens,
+                "text": comment_text,
+                "topic": "",
+                "comment": comment_text,
+                "comment_parts": comment_result,
+                "separator_hint": topic_cfg["separator"],
+                "metadata": {
+                    "wrapper_construction_id": self.id,
+                    "base_construction_id": str(
+                        comment_result.get("construction_id", self.base_construction_id)
+                    ),
+                    "topic_enabled": False,
+                    "order": topic_cfg["order"],
+                },
+            }
+
+        topic_data = slot_bundle.effective_topic()
+        topic_str = _realize_topic_phrase(topic_data, profile, morph_api)
+
+        order = topic_cfg["order"]
+        tokens: list[str] = []
+
+        if order == "COMMENT-TOPIC":
+            if comment_text:
+                tokens.append(comment_text)
+            if topic_str:
+                tokens.append(topic_str)
+        else:
+            if topic_str:
+                tokens.append(topic_str)
+            if comment_text:
+                tokens.append(comment_text)
+
+        tokens = [t.strip() for t in tokens if t and t.strip()]
+        text = " ".join(tokens)
+
+        return {
+            "construction_id": self.id,
+            "tokens": tokens,
+            "text": text,
+            "topic": topic_str,
+            "comment": comment_text,
+            "comment_parts": comment_result,
+            "separator_hint": topic_cfg["separator"],
+            "metadata": {
+                "wrapper_construction_id": self.id,
+                "base_construction_id": str(
+                    comment_result.get("construction_id", self.base_construction_id)
+                ),
+                "topic_enabled": True,
+                "order": order,
+            },
+        }
 
 
 def realize(
-    abstract_slots: Dict[str, Any],
-    lang_profile: Dict[str, Any],
+    abstract_slots: Mapping[str, Any],
+    lang_profile: Mapping[str, Any] | None,
     morph_api: Any,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
-    Realize a topic–comment copular clause.
-
-    The comment is always realized as a simple equative clause by
-    calling `copula_equative_simple.realize`.
-
-    If `lang_profile["topic"]["enabled"]` is False or absent, this
-    construction transparently degrades to a simple equative clause.
+    Backward-compatible legacy entrypoint.
     """
-    topic_cfg = _get_topic_config(lang_profile)
-    topic_enabled = bool(topic_cfg.get("enabled", False))
-
-    # If topics are not enabled, just return a simple equative clause.
-    if not topic_enabled:
-        comment_slots = _prepare_comment_slots(abstract_slots)
-        comment_result = copula_equative_simple.realize(
-            comment_slots, lang_profile, morph_api
-        )
-        return {
-            "tokens": comment_result["tokens"],
-            "text": comment_result["text"],
-            "topic": "",
-            "comment": comment_result["text"],
-            "comment_parts": comment_result,
-        }
-
-    # Topic data; fallback to subject if no explicit topic is given
-    topic_data = abstract_slots.get("topic")
-    if not topic_data:
-        topic_data = abstract_slots.get("subject", {}) or {}
-
-    # 1. Realize the topic phrase
-    topic_str = _realize_topic_phrase(topic_data, lang_profile, morph_api)
-
-    # 2. Realize the comment as a simple equative clause
-    comment_slots = _prepare_comment_slots(abstract_slots)
-    comment_result = copula_equative_simple.realize(
-        comment_slots, lang_profile, morph_api
+    return TopicCommentCopularConstruction().realize(
+        abstract_slots,
+        lang_profile,
+        morph_api,
     )
-    comment_text = comment_result["text"].strip()
 
-    # 3. Decide order: "TOPIC-COMMENT" vs "COMMENT-TOPIC"
-    order = topic_cfg.get("order", "TOPIC-COMMENT")
-    if not isinstance(order, str):
-        order = "TOPIC-COMMENT"
-    order = order.upper().replace(" ", "")
 
-    separator_hint = _get_separator(topic_cfg)
-    tokens: List[str] = []
-
-    # We deliberately do not hard-code punctuation here; we simply
-    # split topic/comment into distinct tokens. A higher-level layer
-    # can turn ["TOPIC", "COMMENT"] into "TOPIC, COMMENT" or
-    # "TOPIC wa COMMENT" according to its own rules.
-    if order == "COMMENT-TOPIC":
-        if comment_text:
-            tokens.append(comment_text)
-        if topic_str:
-            tokens.append(topic_str)
-    else:
-        # Default: "TOPIC-COMMENT"
-        if topic_str:
-            tokens.append(topic_str)
-        if comment_text:
-            tokens.append(comment_text)
-
-    # Strip empties and redundant whitespace
-    tokens = [t.strip() for t in tokens if t and t.strip()]
-    text = " ".join(tokens)
-
-    return {
-        "tokens": tokens,
-        "text": text,
-        "topic": topic_str,
-        "comment": comment_text,
-        "comment_parts": comment_result,
-        "separator_hint": separator_hint,
-    }
+def realize_topic_comment_copular(
+    slots: Mapping[str, Any] | TopicCommentCopularSlots,
+    lang_profile: Mapping[str, Any] | None,
+    morph_api: Any,
+) -> dict[str, Any]:
+    """
+    Explicit named entrypoint for newer callers.
+    """
+    return TopicCommentCopularConstruction().realize(
+        slots,
+        lang_profile,
+        morph_api,
+    )

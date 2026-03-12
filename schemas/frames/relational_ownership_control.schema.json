@@ -1,13 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Semantik Architect – Relational: ownership / control frame",
-  "description": "Canonical semantic frame for ownership and control relations between two entities (e.g. company–subsidiary, state–enterprise, operator–facility) used by Semantik Architect.",
+  "title": "Semantik Architect Frame Schema — Relational: Ownership / Control",
+  "description": "Canonical semantic frame for ownership, control, operation, or management relations between two entities. This is a frame schema, not a planner/runtime payload. Entity references are shared-contract refs; the frame itself remains backend-agnostic.",
   "type": "object",
   "additionalProperties": false,
+  "required": [
+    "frame_type",
+    "owner",
+    "asset"
+  ],
   "properties": {
     "frame_type": {
       "type": "string",
-      "description": "Canonical frame type name. Normalization code can accept several aliases, but JSON authored against this schema should prefer 'relational.ownership_control'.",
+      "description": "Canonical frame type. Authored JSON should prefer \"relational.ownership_control\"; legacy aliases remain accepted for compatibility.",
       "enum": [
         "relational.ownership_control",
         "relational_ownership_control",
@@ -15,14 +20,38 @@
       ]
     },
 
+    "frame_family": {
+      "type": "string",
+      "description": "Optional high-level family label for indexing or diagnostics.",
+      "enum": [
+        "relational"
+      ]
+    },
+
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional stable identifier for this relation instance, such as an internal row ID, statement cluster ID, or normalized fact ID."
+    },
+
     "owner": {
-      "description": "The owning or controlling entity. This may be a person, organization, state, etc.",
-      "$ref": "#/definitions/Entity"
+      "description": "The owning, controlling, operating, or managing entity.",
+      "allOf": [
+        {
+          "$ref": "../contracts/entity_ref.schema.json"
+        }
+      ]
     },
 
     "asset": {
-      "description": "The entity that is owned, controlled, operated, or managed by 'owner' (e.g. company, facility, brand).",
-      "$ref": "#/definitions/Entity"
+      "description": "The entity that is owned, controlled, operated, or managed by the owner.",
+      "allOf": [
+        {
+          "$ref": "../contracts/entity_ref.schema.json"
+        }
+      ]
     },
 
     "relation_type": {
@@ -30,7 +59,15 @@
         "string",
         "null"
       ],
-      "description": "Coarse label describing the nature of the relation, typically one of 'ownership', 'majority_ownership', 'minority_ownership', 'control', 'operation', 'management'."
+      "description": "Coarse semantic label for the relation, for example: ownership, majority_ownership, minority_ownership, control, operation, management, joint_control."
+    },
+
+    "control_basis": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional description of how control is exercised, for example: equity, voting_rights, contractual, statutory, operational, beneficial."
     },
 
     "ownership_share_pct": {
@@ -38,7 +75,29 @@
         "number",
         "null"
       ],
-      "description": "Optional approximate ownership share as a percentage (0–100), e.g. 51.0 for a 51% stake."
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Optional approximate ownership share as a percentage from 0 to 100."
+    },
+
+    "voting_rights_pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Optional voting-rights share as a percentage from 0 to 100."
+    },
+
+    "economic_interest_pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Optional economic-interest share as a percentage from 0 to 100."
     },
 
     "control_level": {
@@ -46,11 +105,11 @@
         "string",
         "null"
       ],
-      "description": "Optional qualitative description of control level, e.g. 'full', 'majority', 'minority', 'operational_only'."
+      "description": "Optional qualitative description of control level, for example: full, majority, minority, joint, indirect, operational_only, de_facto, de_jure."
     },
 
     "time_span": {
-      "description": "Optional time span during which the ownership / control relation holds.",
+      "description": "Optional coarse time span during which the ownership / control relation holds.",
       "anyOf": [
         {
           "$ref": "#/definitions/TimeSpan"
@@ -62,10 +121,10 @@
     },
 
     "jurisdiction": {
-      "description": "Optional jurisdiction in which the ownership / control relation is relevant (typically a country or region).",
+      "description": "Optional jurisdiction in which the ownership / control relation is especially relevant, typically a country, region, or legal domain entity.",
       "anyOf": [
         {
-          "$ref": "#/definitions/Entity"
+          "$ref": "../contracts/entity_ref.schema.json"
         },
         {
           "type": "null"
@@ -73,84 +132,50 @@
       ]
     },
 
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional status label such as current, former, pending, disputed, dissolved."
+    },
+
+    "certainty": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Optional confidence score between 0.0 and 1.0."
+    },
+
+    "source_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional upstream source or statement identifier, such as a Wikidata statement ID."
+    },
+
     "attributes": {
       "type": "object",
-      "description": "Free-form attribute bag for extensibility (e.g. voting_rights_pct, economic_interest_pct, listing_status). Keys should be snake_case strings.",
+      "description": "Free-form attribute bag for non-core extensibility, for example: listing_status, beneficial_owner_type, voting_arrangement, holding_structure, board_control_notes.",
+      "additionalProperties": true
+    },
+
+    "extra": {
+      "type": "object",
+      "description": "Arbitrary metadata preserved through normalization for traceability or migration compatibility.",
       "additionalProperties": true
     }
   },
 
-  "required": [
-    "frame_type",
-    "owner",
-    "asset"
-  ],
-
   "definitions": {
-    "Entity": {
-      "description": "Lightweight entity reference used inside frames. It mirrors semantics.common.entity_base.Entity.",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "id": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Stable identifier, typically a Wikidata QID such as 'Q42', or another project-specific ID."
-        },
-        "name": {
-          "type": "string",
-          "description": "Canonical surface label for the entity in the working language."
-        },
-        "gender": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Optional gender code for human entities, e.g. 'male', 'female', 'unknown'."
-        },
-        "human": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "description": "Whether this entity is a human individual."
-        },
-        "entity_type": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Optional coarse type hint such as 'organization', 'person', 'place', 'company', 'state'."
-        },
-        "lemmas": {
-          "type": "array",
-          "description": "Optional list of lemma strings associated with the entity, e.g. profession or role lemmas.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "features": {
-          "type": "object",
-          "description": "Arbitrary feature dictionary (e.g. grammatical, semantic, or domain-specific flags).",
-          "additionalProperties": true
-        },
-        "extra": {
-          "type": "object",
-          "description": "Arbitrary metadata attached to the entity.",
-          "additionalProperties": true
-        }
-      },
-      "required": [
-        "name"
-      ]
-    },
-
     "TimeSpan": {
-      "description": "Coarse time span representation as used in semantics.common.entity_base.TimeSpan.",
       "type": "object",
-      "additionalProperties": true,
+      "description": "Coarse time span representation used in frame schemas when no standalone shared time-span contract is available.",
+      "additionalProperties": false,
       "properties": {
         "start_year": {
           "type": [
@@ -173,7 +198,7 @@
           ],
           "minimum": 1,
           "maximum": 12,
-          "description": "Optional starting month (1-12)."
+          "description": "Optional starting month (1–12)."
         },
         "start_day": {
           "type": [
@@ -182,7 +207,7 @@
           ],
           "minimum": 1,
           "maximum": 31,
-          "description": "Optional starting day of month (1-31)."
+          "description": "Optional starting day of month (1–31)."
         },
         "end_month": {
           "type": [
@@ -191,7 +216,7 @@
           ],
           "minimum": 1,
           "maximum": 12,
-          "description": "Optional end month (1-12)."
+          "description": "Optional ending month (1–12)."
         },
         "end_day": {
           "type": [
@@ -200,14 +225,14 @@
           ],
           "minimum": 1,
           "maximum": 31,
-          "description": "Optional end day of month (1-31)."
+          "description": "Optional ending day of month (1–31)."
         },
         "approximate": {
           "type": [
             "boolean",
             "null"
           ],
-          "description": "Whether the dates are approximate or inferred."
+          "description": "Whether the date or span is approximate, inferred, or fuzzy."
         },
         "extra": {
           "type": "object",
@@ -216,5 +241,50 @@
         }
       }
     }
-  }
+  },
+
+  "examples": [
+    {
+      "frame_type": "relational.ownership_control",
+      "frame_family": "relational",
+      "owner": {
+        "id": "Q95",
+        "name": "Google",
+        "entity_type": "organization"
+      },
+      "asset": {
+        "id": "Q312",
+        "name": "YouTube",
+        "entity_type": "organization"
+      },
+      "relation_type": "ownership",
+      "control_level": "full",
+      "ownership_share_pct": 100,
+      "time_span": {
+        "start_year": 2006
+      },
+      "source_id": "wd:statement/example",
+      "attributes": {
+        "acquisition_mode": "purchase"
+      }
+    },
+    {
+      "frame_type": "relational.ownership_control",
+      "owner": {
+        "name": "State Grid Corporation of China",
+        "entity_type": "organization"
+      },
+      "asset": {
+        "name": "national transmission network",
+        "entity_type": "infrastructure_system"
+      },
+      "relation_type": "operation",
+      "control_basis": "statutory",
+      "jurisdiction": {
+        "name": "China",
+        "entity_type": "state"
+      },
+      "status": "current"
+    }
+  ]
 }

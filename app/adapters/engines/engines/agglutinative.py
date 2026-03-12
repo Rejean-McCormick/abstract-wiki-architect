@@ -1,139 +1,103 @@
 # app\adapters\engines\engines\agglutinative.py
-# engines\agglutinative.py
 """
 AGGLUTINATIVE LANGUAGE ENGINE
 -----------------------------
-A data-driven renderer for Agglutinative languages (TR, HU, FI, ET).
+A data-driven renderer for agglutinative languages (TR, HU, FI, ET).
 
-Key features:
-1. Vowel Harmony: Suffixes change form based on the root word's vowels.
-   - 2-Way (Low Harmony): e.g., Turkish Plural (lar/ler)
-   - 4-Way (High Harmony): e.g., Turkish Question (mı/mi/mu/mü)
-2. Suffix Chaining: Words are built like LEGOs (Root + Plural + Possessive + Copula).
-3. No Grammatical Gender: Most languages in this family ignore the 'gender' input.
+This module orchestrates the generation of sentences by:
+1. Delegating suffix selection / harmony logic to
+   `morphology.agglutinative.AgglutinativeMorphology`.
+2. Handling sentence structure and assembly.
+3. Preserving the legacy `render_bio(...)` engine surface used by the
+   family adapter/runtime.
+
+Notes
+-----
+- Natural gender is usually not grammatical in this family, so `gender`
+  is accepted for compatibility but normally ignored.
+- Copular meaning is typically realized inside the predicative noun form,
+  not as a free-standing verb token.
 """
 
+from __future__ import annotations
 
-def render_bio(name, gender, prof_lemma, nat_lemma, config):
+from typing import Any, Dict
+
+from morphology.agglutinative import AgglutinativeMorphology
+
+
+def render_bio(
+    name: str,
+    gender: str,
+    prof_lemma: str,
+    nat_lemma: str,
+    config: Dict[str, Any],
+) -> str:
     """
-    Main Entry Point.
+    Main entry point for agglutinative biography sentences.
 
     Args:
-        name (str): The subject's name.
-        gender (str): 'Male' or 'Female' (Usually ignored in this family).
-        prof_lemma (str): Profession root word.
-        nat_lemma (str): Nationality root word.
-        config (dict): The JSON configuration card.
+        name:
+            The subject's name.
+        gender:
+            Compatibility-only input. Usually ignored for grammar in this family.
+        prof_lemma:
+            Profession/root noun (dictionary form).
+        nat_lemma:
+            Nationality/root modifier (dictionary form).
+        config:
+            Per-language configuration card.
 
     Returns:
-        str: The fully inflected sentence.
+        Fully assembled sentence.
     """
+    # 1. Normalize inputs
+    del gender  # accepted for compatibility with the shared family-engine surface
 
-    # 1. Normalize Inputs
-    prof_lemma = prof_lemma.strip()
-    nat_lemma = nat_lemma.strip()
+    name = str(name or "").strip()
+    prof_lemma = str(prof_lemma or "").strip()
+    nat_lemma = str(nat_lemma or "").strip()
+    config = config or {}
 
-    # Load Harmony Rules
-    vowels = config.get("phonetics", {}).get("vowels", "aeiou")
-    harmony_groups = config.get("phonetics", {}).get("harmony_groups", {})
+    # 2. Delegate morphology
+    morph = AgglutinativeMorphology(config)
+    parts = morph.render_simple_predicate(prof_lemma, nat_lemma)
+
+    profession = (parts.get("profession") or "").strip()
+    nationality = (parts.get("nationality") or "").strip()
+
+    # Build a combined predicate for templates that prefer a single slot.
+    # In simple agglutinative bios the nationality typically stays bare
+    # and modifies the profession block.
+    predicate = " ".join(part for part in (nationality, profession) if part).strip()
+
+    # 3. Assembly
+    #
+    # Preferred default stays compatible with the current file:
+    #   "{name} {nationality} {profession}."
+    #
+    # We also support newer templates that use {predicate}, and tolerate
+    # legacy placeholders that are irrelevant for this family runtime.
     structure = config.get("structure", "{name} {nationality} {profession}.")
 
-    # =================================================================
-    # HELPER 1: Vowel Analysis
-    # =================================================================
-    def get_last_vowel(word):
-        """Finds the last vowel in a word to trigger harmony."""
-        for char in reversed(word):
-            if char.lower() in vowels:
-                return char.lower()
-        # Fallback if no vowels (e.g. acronyms), usually default to back vowel logic
-        return config.get("phonetics", {}).get("default_vowel", "a")
-
-    # =================================================================
-    # HELPER 2: Suffix Resolver (The Core Logic)
-    # =================================================================
-    def get_suffix(word, suffix_type):
-        """
-        Determines the correct suffix variant based on Vowel Harmony.
-
-        Args:
-            word (str): The word being attached to.
-            suffix_type (str): The abstract name of the suffix (e.g., 'copula', 'plural').
-        """
-        trigger_vowel = get_last_vowel(word)
-
-        # 1. Find which harmony group the trigger vowel belongs to
-        # e.g., 'a' might be in group 'back', 'i' in group 'front'
-        active_group = None
-        for group_name, group_vowels in harmony_groups.items():
-            if trigger_vowel in group_vowels:
-                active_group = group_name
-                break
-
-        if not active_group:
-            return ""
-
-        # 2. Look up the suffix for this type and group
-        # config['morphology']['suffixes']['copula']['back'] -> "dır"
-        suffix_rules = config.get("morphology", {}).get("suffixes", {})
-
-        if suffix_type in suffix_rules:
-            variants = suffix_rules[suffix_type]
-
-            # Check if this suffix uses the specific group (e.g. 'front_rounded')
-            # or a broader fallback (e.g. just 'front') if the language simplifies
-            if active_group in variants:
-                return variants[active_group]
-
-            # Fallback logic for 2-way harmony trying to read 4-way groups
-            # (Simplistic mapping for this prototype)
-            if "default" in variants:
-                return variants["default"]
-
-        return ""
-
-    # =================================================================
-    # HELPER 3: Chain Builder
-    # =================================================================
-    # Agglutinative languages often require a "Copula" (to be) attached
-    # to the end of the sentence predicates.
-
-    def apply_predicative_suffixes(root_word):
-        """
-        Attaches the necessary suffixes to make a noun a predicate.
-        e.g., "Student" -> "is a student" (Öğrenci -> Öğrencidir)
-        """
-        result = root_word
-
-        # 1. Check Buffer Letter (Y-insertion)
-        # If word ends in vowel and suffix starts with vowel, add buffer
-        # (This is complex, represented simply here)
-
-        # 2. Apply Copula (The "is" suffix)
-        # Turkish: -dir/-dır/-dur/-dür
-        copula_suffix = get_suffix(result, "copula")
-
-        # Check buffer logic (e.g., Turkish 'y' buffer isn't usually for copula 'd',
-        # but might be for other suffixes defined in config)
-
-        return result + copula_suffix
-
-    # Apply logic to the Profession (assuming SOV structure where Prof is last)
-    # Note: In Hungarian/Turkish, Nationality usually acts as a raw adjective
-    # and doesn't take suffixes when modifying the profession.
-
-    final_nat = nat_lemma  # Adjectives usually don't change in simple Noun Phrases
-    final_prof = apply_predicative_suffixes(prof_lemma)
-
-    # =================================================================
-    # 4. ASSEMBLY
-    # =================================================================
-
     sentence = structure.replace("{name}", name)
-    sentence = sentence.replace("{nationality}", final_nat)
-    sentence = sentence.replace("{profession}", final_prof)
+    sentence = sentence.replace("{predicate}", predicate)
+    sentence = sentence.replace("{nationality}", nationality)
+    sentence = sentence.replace("{profession}", profession)
 
-    # Cleanup
+    # Agglutinative predicate copula is usually already fused into
+    # `profession`, so standalone copula slots collapse to empty.
+    sentence = sentence.replace("{copula}", "")
+    sentence = sentence.replace("{copula_suffix}", "")
+    sentence = sentence.replace("{is_verb}", "")
+    sentence = sentence.replace("{article}", "")
+
+    # 4. Cleanup
     sentence = " ".join(sentence.split())
+
+    punctuation = config.get("syntax", {}).get("punctuation", ".")
+    if sentence and not sentence.endswith(punctuation):
+        if sentence[-1] not in ".!?。":
+            sentence += punctuation
 
     return sentence

@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:semantik-architect:schemas:contracts:entity_ref",
+  "title": "Semantik Architect Contract Schema — EntityRef",
+  "description": "Canonical normalized entity reference used in ConstructionPlan slot_map values and lexical/runtime handoff objects. This schema reflects the planner/runtime contract shape rather than older frame-local compatibility shapes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "label"
+  ],
+  "properties": {
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Required canonical display label for the referenced entity, used as the default surface form if no more specific realization override is available."
+    },
+    "entity_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional stable internal or external entity identifier. Often a database ID, URI, or other normalized entity key."
+    },
+    "qid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional Wikidata-style QID or equivalent knowledge-base identifier."
+    },
+    "entity_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional coarse semantic type hint such as 'person', 'organization', 'place', 'event', or 'artifact'."
+    },
+    "gender": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional gender feature for downstream agreement or pronoun selection."
+    },
+    "number": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional grammatical number feature, typically values such as 'sg' or 'pl'."
+    },
+    "person": {
+      "description": "Optional grammatical person feature for downstream realization.",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "surface_hint": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional preferred surface realization hint, distinct from the canonical label."
+    },
+    "features": {
+      "type": "object",
+      "description": "Optional arbitrary feature bag carried with the entity reference for realization, agreement, discourse, or construction-specific needs.",
+      "additionalProperties": true,
+      "default": {}
+    }
+  },
+  "examples": [
+    {
+      "label": "Marie Curie",
+      "entity_id": "Q7186",
+      "qid": "Q7186",
+      "entity_type": "person",
+      "gender": "female",
+      "number": "sg",
+      "person": 3,
+      "surface_hint": "Curie",
+      "features": {
+        "human": true,
+        "animacy": "animate"
+      }
+    },
+    {
+      "label": "Académie française",
+      "entity_id": "Q123512",
+      "qid": "Q123512",
+      "entity_type": "organization",
+      "features": {
+        "definiteness_preference": "definite"
+      }
+    },
+    {
+      "label": "Paris",
+      "qid": "Q90",
+      "entity_type": "place",
+      "features": {
+        "location_kind": "city"
+      }
+    }
+  ]
+}

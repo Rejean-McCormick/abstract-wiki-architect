@@ -1,188 +1,355 @@
-# app\core\domain\constructions\copula_equative_simple.py
-# constructions\copula_equative_simple.py
-"""
-constructions/copula_equative_simple.py
+# app/core/domain/constructions/copula_equative_simple.py
 
-A family-agnostic construction module for the simple equative pattern:
+from __future__ import annotations
 
-    X is Y
+from dataclasses import dataclass
+from typing import Any, Dict, Mapping, Protocol
 
-This construction expresses **class membership / identity** with a copula:
-
-    - "Marie Curie is a physicist."
-    - "Python is a programming language."
-
-It does **not** implement morphology itself. Instead, it delegates all
-word-form and NP-building logic to a `morph_api` object.
-
-Expected responsibilities:
-
-- This module:
-    - Decides *whether* to use an overt copula (zero vs non-zero).
-    - Decides shallow *ordering* of SUBJ / COP / PRED.
-    - Assembles the linear sequence of surface strings.
-
-- `morph_api`:
-    - Builds the subject NP surface form.
-    - Builds the predicate NP surface form.
-    - Inflects and returns the copula form.
-
-- `lang_profile`:
-    - Encodes language-specific parameters for copula behavior and word order.
-
---------------------
-INTERFACES
---------------------
-
-1. abstract_slots (dict)
-
-Minimal expected shape (you can add more fields as needed):
-
-    abstract_slots = {
-        "subject": {
-            # at minimum:
-            "name": "Marie Curie",
-            # optional:
-            "person": 3,
-            "number": "sg",
-            "features": {...}  # anything your morph API wants
-        },
-        "predicate": {
-            # free-form structure; passed directly to morph_api:
-            # e.g. profession/nationality info
-            "role": "profession+nationality",
-            "profession_lemma": "physicist",
-            "nationality_lemma": "polish",
-            "gender": "female",
-            "features": {...}
-        },
-        "tense": "present",  # or "past", "future", etc.
-        # optional:
-        "polarity": "affirmative"  # reserved for future use
-    }
-
-2. lang_profile (dict)
-
-Recommended keys (you can extend this):
-
-    lang_profile = {
-        "language_code": "en",
-
-        "copula": {
-            "lemma": "be",
-
-            # zero-copula flags (equative/attributive present):
-            "present_zero": False,
-            "past_zero": False,
-
-            # basic position/word order for this construction:
-            # supported values:
-            #   "S-COP-PRED"
-            #   "S-PRED"        (used when copula is always zero)
-            #   "PRED-COP-S"    (some languages / stylistic variants)
-            "order": "S-COP-PRED",
-        }
-    }
-
-3. morph_api (object)
-
-This module expects that `morph_api` exposes three methods:
-
-    - realize_subject(subject_data: dict, lang_profile: dict) -> str
-    - realize_predicate(predicate_data: dict, lang_profile: dict) -> str
-    - realize_copula(
-          tense: str,
-          subject_data: dict,
-          lang_profile: dict
-      ) -> str
-
-All three methods should return **surface strings** (already inflected,
-with any required internal spacing handled by the morph layer).
-
---------------------
-RETURN VALUE
---------------------
-
-The main entry point is `realize`, which returns:
-
-    {
-        "tokens":   [ "Marie Curie", "is", "a Polish physicist" ],
-        "text":     "Marie Curie is a Polish physicist",
-        "subject":  "Marie Curie",
-        "copula":   "is",
-        "predicate":"a Polish physicist"
-    }
-
-The caller can then drop `"text"` directly into a larger sentence,
-or further process the `"tokens"` if needed.
-"""
-
-from typing import Any, Dict, List
+from .base import ClauseInput, ClauseOutput, Construction
 
 
-def _get_tense(abstract_slots: Dict[str, Any]) -> str:
+__all__ = [
+    "CONSTRUCTION_ID",
+    "CopulaEquativeSimpleConstruction",
+    "realize",
+]
+
+
+CONSTRUCTION_ID = "copula_equative_simple"
+
+
+class MorphologyAPI(Protocol):
     """
-    Helper: extract tense from abstract slots with a sensible default.
+    Minimal morphology interface expected by this construction.
+
+    This module remains family-agnostic: the morphology layer owns NP building,
+    predicate realization, and copula inflection.
     """
-    tense = abstract_slots.get("tense", "present")
+
+    def realize_subject(
+        self,
+        subject_data: Mapping[str, Any],
+        lang_profile: Mapping[str, Any],
+    ) -> str:
+        ...
+
+    def realize_predicate(
+        self,
+        predicate_data: Mapping[str, Any],
+        lang_profile: Mapping[str, Any],
+    ) -> str:
+        ...
+
+    def realize_copula(
+        self,
+        tense: str,
+        subject_data: Mapping[str, Any],
+        lang_profile: Mapping[str, Any],
+    ) -> str:
+        ...
+
+    # Optional helpers
+    def join_tokens(self, tokens: list[str]) -> str:
+        ...
+
+    def normalize_whitespace(self, text: str) -> str:
+        ...
+
+
+def _clean_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def _normalize_mapping(value: Any) -> Dict[str, Any]:
+    if isinstance(value, Mapping):
+        return dict(value)
+    if value is None:
+        return {}
+    if isinstance(value, str):
+        cleaned = value.strip()
+        return {"surface": cleaned} if cleaned else {}
+    return {"value": value}
+
+
+def _subject_from_roles(roles: Mapping[str, Any]) -> Dict[str, Any]:
+    """
+    Normalize the subject slot into a morphology-friendly dict.
+
+    Supported semantic / legacy inputs:
+    - subject
+    - subject_name (+ subject_features)
+    """
+    subject = roles.get("subject")
+    if isinstance(subject, Mapping):
+        return dict(subject)
+    if isinstance(subject, str) and subject.strip():
+        return {"name": subject.strip()}
+
+    subject_name = _clean_text(roles.get("subject_name"))
+    subject_features = _normalize_mapping(roles.get("subject_features"))
+
+    if subject_name:
+        payload: Dict[str, Any] = {"name": subject_name}
+        if subject_features:
+            payload["features"] = subject_features
+        return payload
+
+    return {}
+
+
+def _predicate_from_roles(roles: Mapping[str, Any]) -> Dict[str, Any]:
+    """
+    Normalize semantic slots into one predicate payload.
+
+    Preferred semantic inputs:
+    - predicate
+    - predicate_nominal
+    - profession
+    - nationality
+
+    Legacy / convenience inputs still accepted:
+    - predicate_surface
+    - profession_lemma
+    - nationality_lemma
+    """
+    predicate = roles.get("predicate")
+    if isinstance(predicate, Mapping):
+        normalized = dict(predicate)
+    elif isinstance(predicate, str) and predicate.strip():
+        normalized = {"surface": predicate.strip()}
+    else:
+        normalized = {}
+
+    predicate_nominal = roles.get("predicate_nominal")
+    if isinstance(predicate_nominal, Mapping):
+        normalized.setdefault("predicate_nominal", dict(predicate_nominal))
+    elif isinstance(predicate_nominal, str) and predicate_nominal.strip():
+        normalized.setdefault("predicate_nominal", {"surface": predicate_nominal.strip()})
+
+    profession = roles.get("profession")
+    if isinstance(profession, Mapping):
+        normalized.setdefault("profession", dict(profession))
+    elif isinstance(profession, str) and profession.strip():
+        normalized.setdefault("profession", {"lemma": profession.strip()})
+
+    nationality = roles.get("nationality")
+    if isinstance(nationality, Mapping):
+        normalized.setdefault("nationality", dict(nationality))
+    elif isinstance(nationality, str) and nationality.strip():
+        normalized.setdefault("nationality", {"lemma": nationality.strip()})
+
+    # Legacy convenience keys still folded into the semantic predicate payload.
+    profession_lemma = _clean_text(roles.get("profession_lemma"))
+    if profession_lemma and "profession" not in normalized:
+        normalized["profession"] = {"lemma": profession_lemma}
+
+    nationality_lemma = _clean_text(roles.get("nationality_lemma"))
+    if nationality_lemma and "nationality" not in normalized:
+        normalized["nationality"] = {"lemma": nationality_lemma}
+
+    predicate_surface = _clean_text(roles.get("predicate_surface"))
+    if predicate_surface and not normalized:
+        normalized["surface"] = predicate_surface
+
+    predicate_features = _normalize_mapping(roles.get("predicate_features"))
+    if predicate_features:
+        merged_features = dict(normalized.get("features", {}))
+        merged_features.update(predicate_features)
+        normalized["features"] = merged_features
+
+    return normalized
+
+
+def _get_tense(features: Mapping[str, Any]) -> str:
+    tense = features.get("tense", "present")
     if not isinstance(tense, str):
         return "present"
-    return tense.lower()
+    tense = tense.strip().lower()
+    return tense or "present"
 
 
-def _copula_is_zero(tense: str, lang_profile: Dict[str, Any]) -> bool:
+def _copula_is_zero(tense: str, lang_profile: Mapping[str, Any]) -> bool:
     """
-    Decide whether the copula should be **zero** for this tense
-    in this language profile.
-
-    Uses:
-
-        lang_profile["copula"]["present_zero"]  (bool)
-        lang_profile["copula"]["past_zero"]     (bool)
-
-    You can extend this logic as needed (e.g. conditional, future, etc.).
+    Decide whether the copula should be omitted in this tense.
     """
-    cop_cfg = (
-        (lang_profile.get("copula") or {})
-        if isinstance(lang_profile.get("copula"), dict)
-        else {}
-    )
+    cop_cfg = lang_profile.get("copula")
+    cop_cfg = dict(cop_cfg) if isinstance(cop_cfg, Mapping) else {}
 
+    # Newer explicit switch wins if present.
+    zero_cfg = cop_cfg.get("zero_copula")
+    if isinstance(zero_cfg, Mapping):
+        enabled = bool(zero_cfg.get("enabled", False))
+        present_only = bool(zero_cfg.get("present_only", False))
+        if enabled:
+            return tense == "present" if present_only else True
+
+    # Legacy flags still supported.
     if tense == "present":
         return bool(cop_cfg.get("present_zero", False))
     if tense == "past":
         return bool(cop_cfg.get("past_zero", False))
 
-    # Default: no zero-copula
     return False
 
 
-def _get_order(lang_profile: Dict[str, Any], copula_zero: bool) -> str:
+def _get_order(lang_profile: Mapping[str, Any], *, copula_zero: bool) -> str:
     """
     Resolve the linearization order for this construction.
 
-    If a zero-copula is enforced, we can simplify "S-COP-PRED" → "S-PRED".
+    Supported patterns:
+    - S-COP-PRED
+    - S-PRED
+    - PRED-COP-S
     """
-    cop_cfg = (
-        (lang_profile.get("copula") or {})
-        if isinstance(lang_profile.get("copula"), dict)
-        else {}
-    )
+    cop_cfg = lang_profile.get("copula")
+    cop_cfg = dict(cop_cfg) if isinstance(cop_cfg, Mapping) else {}
 
-    order = cop_cfg.get("order") or "S-COP-PRED"
+    order = cop_cfg.get("order") or lang_profile.get("equative_template") or "S-COP-PRED"
     order = str(order).upper().replace(" ", "")
 
     if copula_zero and order == "S-COP-PRED":
         return "S-PRED"
 
-    # Only support a small, explicit set of patterns for this simple
-    # equative construction. More exotic patterns belong to a different
-    # construction (e.g. topic-comment).
     if order in {"S-COP-PRED", "S-PRED", "PRED-COP-S"}:
         return order
 
-    # Fallback
-    return "S-COP-PRED" if not copula_zero else "S-PRED"
+    return "S-PRED" if copula_zero else "S-COP-PRED"
+
+
+def _join_tokens(tokens: list[str], morph_api: Any) -> str:
+    cleaned = [t.strip() for t in tokens if isinstance(t, str) and t.strip()]
+    if not cleaned:
+        return ""
+
+    if hasattr(morph_api, "join_tokens"):
+        text = morph_api.join_tokens(cleaned)
+    else:
+        text = " ".join(cleaned)
+
+    if hasattr(morph_api, "normalize_whitespace"):
+        text = morph_api.normalize_whitespace(text)
+    else:
+        text = " ".join(text.split())
+
+    return text.strip()
+
+
+def _coerce_clause_input(abstract_slots: Mapping[str, Any]) -> ClauseInput:
+    """
+    Convert the module's compatibility dict shape into ClauseInput.
+
+    This keeps legacy callers working while moving the implementation toward
+    the shared construction runtime vocabulary.
+    """
+    roles: Dict[str, Any] = {
+        "subject": _subject_from_roles(abstract_slots),
+        "predicate": _predicate_from_roles(abstract_slots),
+    }
+
+    # Preserve extra semantic slots if callers already send them directly.
+    for key in ("predicate_nominal", "profession", "nationality"):
+        if key in abstract_slots and key not in roles:
+            roles[key] = abstract_slots[key]
+
+    features: Dict[str, Any] = {}
+    for key in ("tense", "polarity", "person", "number"):
+        if key in abstract_slots:
+            features[key] = abstract_slots[key]
+
+    return ClauseInput(roles=roles, features=features)
+
+
+@dataclass(slots=True)
+class CopulaEquativeSimpleConstruction(Construction):
+    """
+    Language-agnostic construction for simple equative clauses:
+
+        SUBJECT (COPULA) PREDICATE
+    """
+
+    id: str = CONSTRUCTION_ID
+
+    def realize_clause(
+        self,
+        abstract: ClauseInput,
+        lang_profile: Dict[str, Any],
+        morph: MorphologyAPI,
+    ) -> ClauseOutput:
+        subject_data = _normalize_mapping(abstract.roles.get("subject"))
+        predicate_data = _normalize_mapping(abstract.roles.get("predicate"))
+
+        tense = _get_tense(abstract.features)
+        copula_zero = _copula_is_zero(tense, lang_profile)
+
+        subject_str = _clean_text(morph.realize_subject(subject_data, lang_profile))
+        predicate_str = _clean_text(morph.realize_predicate(predicate_data, lang_profile))
+
+        copula_str = ""
+        if not copula_zero:
+            copula_str = _clean_text(morph.realize_copula(tense, subject_data, lang_profile))
+
+        order = _get_order(lang_profile, copula_zero=copula_zero)
+
+        tokens: list[str] = []
+        if order == "S-PRED":
+            if subject_str:
+                tokens.append(subject_str)
+            if predicate_str:
+                tokens.append(predicate_str)
+        elif order == "PRED-COP-S":
+            if predicate_str:
+                tokens.append(predicate_str)
+            if copula_str:
+                tokens.append(copula_str)
+            if subject_str:
+                tokens.append(subject_str)
+        else:
+            if subject_str:
+                tokens.append(subject_str)
+            if copula_str:
+                tokens.append(copula_str)
+            if predicate_str:
+                tokens.append(predicate_str)
+
+        text = _join_tokens(tokens, morph)
+
+        return ClauseOutput(
+            tokens=[t for t in tokens if t],
+            text=text,
+            metadata={
+                "construction_id": self.id,
+                "subject": subject_str,
+                "copula": copula_str,
+                "predicate": predicate_str,
+                "slot_keys": sorted(k for k, v in abstract.roles.items() if v),
+                "tense": tense,
+                "copula_zero": copula_zero,
+                "order": order,
+            },
+        )
+
+    # Compatibility layer for older direct-dict callers.
+    def realize(
+        self,
+        abstract_slots: Mapping[str, Any],
+        lang_profile: Mapping[str, Any],
+        morph_api: MorphologyAPI,
+    ) -> Dict[str, Any]:
+        abstract = _coerce_clause_input(abstract_slots)
+        result = self.realize_clause(abstract, dict(lang_profile or {}), morph_api)
+        return {
+            "tokens": result.tokens,
+            "text": result.text,
+            "subject": result.metadata.get("subject", ""),
+            "copula": result.metadata.get("copula", ""),
+            "predicate": result.metadata.get("predicate", ""),
+            "metadata": result.metadata,
+        }
+
+
+_CONSTRUCTION = CopulaEquativeSimpleConstruction()
 
 
 def realize(
@@ -191,95 +358,13 @@ def realize(
     morph_api: Any,
 ) -> Dict[str, Any]:
     """
-    Realize a simple copular equative clause of the form:
+    Backward-compatible module entry point.
 
-        SUBJECT (COPULA) PREDICATE
-
-    This construction intentionally ignores topic-marking, focus movement,
-    or additional adverbials; those belong to other constructions.
-
-    Parameters
-    ----------
-    abstract_slots:
-        Dict describing at least "subject", "predicate", and optionally "tense".
-    lang_profile:
-        Language-specific configuration for copula behavior and word order.
-    morph_api:
-        Object exposing:
-            - realize_subject(...)
-            - realize_predicate(...)
-            - realize_copula(...)
-
-    Returns
-    -------
-    Dict with:
-        - "tokens":   list of surface tokens (already spaced at the phrase level)
-        - "text":     single surface string
-        - "subject":  subject NP string
-        - "copula":   copula string (possibly "")
-        - "predicate":predicate NP string
+    Accepts the legacy dict-shaped payload but normalizes into shared semantic
+    roles before realization.
     """
-    subject_data = abstract_slots.get("subject", {}) or {}
-    predicate_data = abstract_slots.get("predicate", {}) or {}
-
-    # 1. Tense and zero-copula decision
-    tense = _get_tense(abstract_slots)
-    copula_zero = _copula_is_zero(tense, lang_profile)
-
-    # 2. Realize subject and predicate via morphology API
-    subject_str = morph_api.realize_subject(subject_data, lang_profile)
-    predicate_str = morph_api.realize_predicate(predicate_data, lang_profile)
-
-    subject_str = subject_str.strip()
-    predicate_str = predicate_str.strip()
-
-    # 3. Realize copula (if not zero)
-    if copula_zero:
-        copula_str = ""
-    else:
-        copula_str = morph_api.realize_copula(tense, subject_data, lang_profile).strip()
-
-    # 4. Determine linear order
-    order = _get_order(lang_profile, copula_zero)
-
-    tokens: List[str] = []
-
-    if order == "S-PRED":
-        # SUBJECT PREDICATE
-        if subject_str:
-            tokens.append(subject_str)
-        if predicate_str:
-            tokens.append(predicate_str)
-
-    elif order == "PRED-COP-S":
-        # PREDICATE COPULA SUBJECT
-        if predicate_str:
-            tokens.append(predicate_str)
-        if copula_str:
-            tokens.append(copula_str)
-        if subject_str:
-            tokens.append(subject_str)
-
-    else:  # default "S-COP-PRED"
-        # SUBJECT COPULA PREDICATE
-        if subject_str:
-            tokens.append(subject_str)
-        if copula_str:
-            tokens.append(copula_str)
-        if predicate_str:
-            tokens.append(predicate_str)
-
-    # Remove any accidental empties and extra whitespace in tokens
-    tokens = [t.strip() for t in tokens if t and t.strip()]
-
-    # Join with single spaces; punctuation (if needed) should be added by the
-    # caller or a higher-level clause-assembly layer.
-    text = " ".join(tokens)
-
-    return {
-        "tokens": tokens,
-        "text": text,
-        "subject": subject_str,
-        "copula": copula_str,
-        "predicate": predicate_str,
-    }
+    return _CONSTRUCTION.realize(
+        abstract_slots=abstract_slots or {},
+        lang_profile=lang_profile or {},
+        morph_api=morph_api,
+    )

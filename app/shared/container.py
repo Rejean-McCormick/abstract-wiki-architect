@@ -4,6 +4,7 @@ from dependency_injector import containers, providers
 from app.shared.config import settings
 
 # --- Adapters ---
+from app.adapters.llm_adapter import GeminiAdapter
 from app.adapters.messaging.redis_broker import RedisMessageBroker
 from app.adapters.persistence.filesystem_repo import FileSystemLexiconRepository
 from app.adapters.task_queue import ArqTaskQueue
@@ -34,6 +35,8 @@ class Container(containers.DeclarativeContainer):
     - PGF_PATH is the source of truth for the compiled grammar.
     - Do NOT pass settings.GF_LIB_PATH into GFGrammarEngine; that points at the
       GF library tree, not the compiled semantik_architect.pgf artifact.
+    - GeminiAdapter is request-scoped. API dependencies should pass a per-request
+      adapter into `generate_text_use_case(...)` when BYOK headers are present.
     """
 
     wiring_config = containers.WiringConfiguration(
@@ -75,7 +78,14 @@ class Container(containers.DeclarativeContainer):
         # Let GFGrammarEngine resolve settings.PGF_PATH by itself.
         grammar_engine = providers.Singleton(GFGrammarEngine)
 
+    # Request-scoped adapter factory.
+    # Usage from dependencies.py:
+    #   llm = container.llm_adapter(user_api_key=user_key)
+    llm_adapter = providers.Factory(GeminiAdapter)
+
     # --- Use Cases ---
+    # Keep this override-friendly: request-specific LLM instances can be supplied
+    # at call time, e.g. container.generate_text_use_case(llm=llm).
     generate_text_use_case = providers.Factory(
         GenerateText,
         engine=grammar_engine,

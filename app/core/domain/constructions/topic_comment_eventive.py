@@ -1,126 +1,16 @@
-# app\core\domain\constructions\topic_comment_eventive.py
-# constructions\topic_comment_eventive.py
-# constructions/topic_comment_eventive.py
-
-"""
-TOPIC–COMMENT EVENTIVE CONSTRUCTION
------------------------------------
-
-This module implements the TOPIC_COMMENT_EVENTIVE construction, i.e.
-sentences of the form:
-
-    "As for X, (eventive clause about X or something related to X)"
-
-Examples:
-    "As for Marie Curie, she discovered polonium."
-    "As for the experiment, it failed."
-    "As for the conference, it took place in Paris."
-
-The construction is *language-family agnostic*. It delegates all morphology
-and language-specific details to a MorphologyAPI and an optional language
-profile.
-
-Core idea:
-    1. Build a TOPIC NP ("Marie Curie", "the experiment").
-    2. Optionally attach a topic marker ("wa", "as for", particle, etc.).
-    3. Build an EVENT CLAUSE (subject + finite verb [+ optional object]).
-    4. Optionally drop the event subject if it is coreferent with the topic
-       (common in topic-prominent / pro-drop languages).
-    5. Linearize according to language-profile templates.
-
-This module does not know about specific word orders, case systems,
-topic particles, etc. Those are expressed as feature bundles and passed
-to `morph_api`, and by templates in `lang_profile`.
-"""
-
+# app/core/domain/constructions/topic_comment_eventive.py
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Mapping, Optional, Protocol
+from typing import Any, Dict, Mapping, Optional
+
+from .base import ClauseInput, ClauseOutput, Construction
 
 
-__all__ = [
-    "MorphologyAPI",
-    "TopicCommentEventiveSlots",
-    "realize_topic_comment_eventive",
-]
-
-
-class MorphologyAPI(Protocol):
-    """
-    Minimal protocol that any morphology layer must implement in order to be
-    used by this construction.
-
-    A concrete implementation will typically wrap one of your existing
-    family engines (Romance, Slavic, Agglutinative, etc.).
-    """
-
-    def realize_np(self, role: str, lemma: str, features: Mapping[str, Any]) -> str:
-        """
-        Realize a noun phrase.
-
-        Args:
-            role: Logical role in the clause (e.g. 'topic', 'subject', 'object').
-            lemma: Base form / dictionary form of the head.
-            features: Arbitrary feature bundle (gender, number, case,
-                      definiteness, etc.), interpreted by the engine.
-
-        Returns:
-            Surface string for the NP (without surrounding punctuation).
-        """
-        ...
-
-    def realize_verb(self, lemma: str, features: Mapping[str, Any]) -> str:
-        """
-        Realize a finite verb form for the main event predicate.
-
-        Args:
-            lemma: Base verb lemma, e.g. "discover", "fail", "take place".
-            features: Arbitrary feature bundle (tense, aspect, mood, polarity,
-                      person, number, transitivity flags, etc.), interpreted by
-                      the engine.
-
-        Returns:
-            Surface string for the verb (may be a multi-word form).
-        """
-        ...
-
-
-@dataclass
+@dataclass(slots=True)
 class TopicCommentEventiveSlots:
     """
-    Input slots for the TOPIC_COMMENT_EVENTIVE construction.
-
-    Required:
-        topic_name:
-            Surface string for the topic NP (already lexicalized),
-            e.g. "Marie Curie", "the experiment", "the conference".
-        verb_lemma:
-            Lemma for the main event verb, e.g. "discover", "fail",
-            "take place".
-
-    Optional:
-        event_subject_name:
-            Surface string for the subject of the event clause.
-            If None, the subject is assumed to be coreferent with the topic
-            (and may be realized as a pronoun or dropped, depending on the
-            language profile and morphology engine).
-
-        object_lemma:
-            Lemma for a direct object (for simple transitive events),
-            e.g. "polonium", "the prize". If None, treated as intransitive.
-
-    Feature-like metadata (passed straight through to MorphologyAPI):
-        topic_gender, topic_number:
-            Features for the topic NP (and often for the event subject).
-        subject_gender, subject_number:
-            Explicit subject features; if not provided, fall back to
-            topic_gender/topic_number.
-        tense, aspect, polarity, person:
-            Features for the finite verb of the event clause.
-
-    All of these are simply forwarded to the morphology engine; this
-    construction does not assign fixed semantics to their values.
+    Legacy compatibility input model for topic-comment eventive clauses.
     """
 
     topic_name: str
@@ -140,208 +30,433 @@ class TopicCommentEventiveSlots:
     polarity: str = "affirmative"
     person: int = 3
 
-    # Extra arbitrary features that a particular language/engine may want
     extra_topic_features: Dict[str, Any] = field(default_factory=dict)
     extra_subject_features: Dict[str, Any] = field(default_factory=dict)
     extra_object_features: Dict[str, Any] = field(default_factory=dict)
     extra_verb_features: Dict[str, Any] = field(default_factory=dict)
 
 
-def _normalize_spaces(text: str) -> str:
+class TopicCommentEventiveConstruction(Construction):
     """
-    Collapse multiple spaces and strip leading/trailing whitespace.
+    Planner/runtime-friendly topic-comment wrapper around a simple eventive clause.
+
+    Canonical runtime ID:
+        topic_comment_eventive
+
+    ClauseInput.roles:
+        - "topic"
+        - "subject"   (optional; falls back to topic when omitted)
+        - "object"    (optional)
+
+    ClauseInput.features:
+        - "verb_lemma" (required)
+        - "tense"
+        - "aspect"
+        - "polarity"
+        - "person"
+        - "drop_event_subject_if_same_as_topic" (optional override)
     """
-    return " ".join(text.split())
+
+    id: str = "topic_comment_eventive"
+
+    def realize_clause(
+        self,
+        abstract: ClauseInput,
+        lang_profile: Dict[str, Any],
+        morph: Any,
+    ) -> ClauseOutput:
+        roles = abstract.roles or {}
+        features = abstract.features or {}
+        profile = lang_profile or {}
+
+        topic_value = roles.get("topic") or roles.get("subject")
+        topic_surface = self._realize_np_or_text(
+            topic_value,
+            role="topic",
+            morph=morph,
+            fallback_features={},
+        )
+
+        subject_value = roles.get("subject")
+        subject_corefers_topic = self._corefers_topic(subject_value, topic_value)
+        if subject_value is None:
+            subject_corefers_topic = True
+            subject_value = topic_value
+
+        drop_subj = bool(
+            features.get(
+                "drop_event_subject_if_same_as_topic",
+                profile.get("drop_event_subject_if_same_as_topic", False),
+            )
+        )
+
+        if drop_subj and subject_corefers_topic:
+            subject_surface = ""
+        else:
+            subject_surface = self._realize_np_or_text(
+                subject_value,
+                role="subject",
+                morph=morph,
+                fallback_features={
+                    "person": features.get("person", 3),
+                },
+            )
+
+        object_surface = self._realize_np_or_text(
+            roles.get("object"),
+            role="object",
+            morph=morph,
+            fallback_features={},
+        )
+
+        verb_surface = self._realize_verb(
+            features=features,
+            has_object=bool(object_surface),
+            morph=morph,
+        )
+
+        topic_marker = str(profile.get("topic_marker", "") or "").strip()
+
+        topic_phrase_template = str(
+            profile.get("topic_phrase_template", "{TOPIC} {TOPIC_MARKER}")
+        )
+        event_clause_template = str(
+            profile.get("event_clause_template", "{SUBJ} {VERB} {OBJ}")
+        )
+        outer_template = profile.get("topic_eventive_template")
+
+        topic_phrase = self._normalize_spaces(
+            topic_phrase_template.format(
+                TOPIC=topic_surface,
+                TOPIC_MARKER=topic_marker,
+            )
+        )
+
+        clause = self._normalize_spaces(
+            event_clause_template.format(
+                SUBJ=subject_surface,
+                VERB=verb_surface,
+                OBJ=object_surface,
+            )
+        )
+
+        order = str(profile.get("topic_comment_order", "TOPIC-COMMENT") or "").upper()
+        separator_hint = str(profile.get("topic_separator_hint", ",") or "")
+
+        if outer_template:
+            text = self._normalize_spaces(
+                str(outer_template).format(
+                    TOPIC_PHRASE=topic_phrase,
+                    CLAUSE=clause,
+                )
+            )
+            if order == "COMMENT-TOPIC":
+                tokens = [t for t in [clause, topic_phrase] if t]
+            else:
+                tokens = [t for t in [topic_phrase, clause] if t]
+        else:
+            text, tokens = self._join_topic_comment(
+                topic_phrase=topic_phrase,
+                clause=clause,
+                order=order,
+                separator_hint=separator_hint,
+                morph=morph,
+            )
+
+        return ClauseOutput(
+            tokens=tokens,
+            text=text,
+            metadata={
+                "construction_id": self.id,
+                "topic": topic_phrase,
+                "comment": clause,
+                "comment_parts": {
+                    "subject": subject_surface,
+                    "verb": verb_surface,
+                    "object": object_surface,
+                },
+                "separator_hint": separator_hint,
+                "topic_marker": topic_marker,
+                "topic_comment_order": order or "TOPIC-COMMENT",
+                "dropped_subject": bool(drop_subj and subject_corefers_topic),
+                "subject_corefers_topic": subject_corefers_topic,
+                "transitivity": "transitive" if object_surface else "intransitive",
+            },
+        )
+
+    def realize(
+        self,
+        slots: TopicCommentEventiveSlots | Mapping[str, Any],
+        lang_profile: Optional[Mapping[str, Any]],
+        morph_api: Any,
+    ) -> str:
+        """
+        Legacy compatibility shim returning plain text.
+        """
+        abstract = self._legacy_slots_to_clause_input(slots)
+        return self.realize_clause(abstract, dict(lang_profile or {}), morph_api).text
+
+    def _legacy_slots_to_clause_input(
+        self,
+        slots: TopicCommentEventiveSlots | Mapping[str, Any],
+    ) -> ClauseInput:
+        if isinstance(slots, TopicCommentEventiveSlots):
+            topic_ref: Dict[str, Any] = {
+                "name": slots.topic_name,
+                "features": {
+                    "gender": slots.topic_gender,
+                    "number": slots.topic_number,
+                    **dict(slots.extra_topic_features),
+                },
+            }
+
+            if slots.event_subject_name is None:
+                subject_ref: Dict[str, Any] = dict(topic_ref)
+            else:
+                subject_ref = {
+                    "name": slots.event_subject_name,
+                    "features": {
+                        "gender": (
+                            slots.subject_gender
+                            if slots.subject_gender is not None
+                            else slots.topic_gender
+                        ),
+                        "number": (
+                            slots.subject_number
+                            if slots.subject_number is not None
+                            else slots.topic_number
+                        ),
+                        "person": slots.person,
+                        **dict(slots.extra_subject_features),
+                    },
+                }
+
+            object_ref: Optional[Dict[str, Any]] = None
+            if slots.object_lemma:
+                object_ref = {
+                    "lemma": slots.object_lemma,
+                    "features": dict(slots.extra_object_features),
+                }
+
+            return ClauseInput(
+                roles={
+                    "topic": topic_ref,
+                    "subject": subject_ref,
+                    "object": object_ref,
+                },
+                features={
+                    "verb_lemma": slots.verb_lemma,
+                    "tense": slots.tense,
+                    "aspect": slots.aspect,
+                    "polarity": slots.polarity,
+                    "person": slots.person,
+                    **dict(slots.extra_verb_features),
+                },
+            )
+
+        if isinstance(slots, Mapping):
+            raw = dict(slots)
+            return ClauseInput(
+                roles={
+                    "topic": raw.get("topic"),
+                    "subject": raw.get("subject"),
+                    "object": raw.get("object"),
+                },
+                features={
+                    "verb_lemma": raw.get("verb_lemma") or raw.get("verb"),
+                    "tense": raw.get("tense", "past"),
+                    "aspect": raw.get("aspect", "simple"),
+                    "polarity": raw.get("polarity", "affirmative"),
+                    "person": raw.get("person", 3),
+                    "drop_event_subject_if_same_as_topic": raw.get(
+                        "drop_event_subject_if_same_as_topic"
+                    ),
+                },
+            )
+
+        raise TypeError("slots must be TopicCommentEventiveSlots or a mapping")
+
+    def _join_topic_comment(
+        self,
+        *,
+        topic_phrase: str,
+        clause: str,
+        order: str,
+        separator_hint: str,
+        morph: Any,
+    ) -> tuple[str, list[str]]:
+        if order == "COMMENT-TOPIC":
+            parts = [p for p in [clause, topic_phrase] if p]
+        else:
+            parts = [p for p in [topic_phrase, clause] if p]
+
+        if not parts:
+            return "", []
+
+        if len(parts) == 1:
+            return parts[0], parts
+
+        if separator_hint:
+            text = f"{parts[0]}{separator_hint} {parts[1]}"
+        else:
+            text = " ".join(parts)
+
+        text = self._normalize_spaces(text)
+        if hasattr(morph, "normalize_whitespace"):
+            try:
+                text = morph.normalize_whitespace(text)
+            except Exception:
+                pass
+
+        return text, parts
+
+    def _realize_np_or_text(
+        self,
+        value: Any,
+        *,
+        role: str,
+        morph: Any,
+        fallback_features: Mapping[str, Any],
+    ) -> str:
+        if value is None:
+            return ""
+
+        if isinstance(value, str):
+            return value.strip()
+
+        if isinstance(value, Mapping):
+            payload = dict(value)
+            features = {}
+            raw_features = payload.get("features")
+            if isinstance(raw_features, Mapping):
+                features.update(dict(raw_features))
+            features.update(dict(fallback_features))
+
+            lemma = self._first_text(
+                payload,
+                "surface",
+                "name",
+                "label",
+                "lemma",
+                "text",
+                "surface_hint",
+            )
+
+            if hasattr(morph, "realize_np"):
+                try:
+                    return str(
+                        morph.realize_np(
+                            sem=payload,
+                            role=role,
+                            features=features,
+                        )
+                    ).strip()
+                except TypeError:
+                    if lemma:
+                        try:
+                            return str(
+                                morph.realize_np(
+                                    role=role,
+                                    lemma=lemma,
+                                    features=features,
+                                )
+                            ).strip()
+                        except TypeError:
+                            try:
+                                return str(
+                                    morph.realize_np(role, lemma, features)
+                                ).strip()
+                            except Exception:
+                                pass
+                except Exception:
+                    pass
+
+            return lemma or ""
+
+        return str(value).strip()
+
+    def _realize_verb(
+        self,
+        *,
+        features: Mapping[str, Any],
+        has_object: bool,
+        morph: Any,
+    ) -> str:
+        verb_lemma = str(features.get("verb_lemma") or "").strip()
+        if not verb_lemma:
+            return ""
+
+        verb_features: Dict[str, Any] = {
+            "tense": features.get("tense", "past"),
+            "aspect": features.get("aspect", "simple"),
+            "polarity": features.get("polarity", "affirmative"),
+            "person": features.get("person", 3),
+            "transitivity": "transitive" if has_object else "intransitive",
+            "verb_role": "topic_comment_eventive",
+        }
+
+        if hasattr(morph, "realize_verb"):
+            try:
+                return str(
+                    morph.realize_verb(lemma=verb_lemma, features=verb_features)
+                ).strip()
+            except TypeError:
+                try:
+                    return str(morph.realize_verb(verb_lemma, verb_features)).strip()
+                except Exception:
+                    pass
+            except Exception:
+                pass
+
+        return verb_lemma
+
+    def _corefers_topic(self, subject_value: Any, topic_value: Any) -> bool:
+        if subject_value is None:
+            return True
+
+        subj = self._comparable_surface(subject_value)
+        topic = self._comparable_surface(topic_value)
+        return bool(subj and topic and subj == topic)
+
+    @staticmethod
+    def _comparable_surface(value: Any) -> str:
+        if value is None:
+            return ""
+        if isinstance(value, str):
+            return value.strip().casefold()
+        if isinstance(value, Mapping):
+            for key in ("surface", "name", "label", "lemma", "text"):
+                raw = value.get(key)
+                if isinstance(raw, str) and raw.strip():
+                    return raw.strip().casefold()
+        return str(value).strip().casefold()
+
+    @staticmethod
+    def _first_text(mapping: Mapping[str, Any], *keys: str) -> str:
+        for key in keys:
+            raw = mapping.get(key)
+            if isinstance(raw, str) and raw.strip():
+                return raw.strip()
+        return ""
+
+    @staticmethod
+    def _normalize_spaces(text: str) -> str:
+        return " ".join((text or "").split()).strip()
 
 
 def realize_topic_comment_eventive(
-    slots: TopicCommentEventiveSlots,
+    slots: TopicCommentEventiveSlots | Mapping[str, Any],
     lang_profile: Optional[Mapping[str, Any]],
-    morph_api: MorphologyAPI,
+    morph_api: Any,
 ) -> str:
     """
-    Realize a TOPIC_COMMENT_EVENTIVE sentence.
-
-    Args:
-        slots:
-            Structured inputs for the construction (topic, event, features).
-        lang_profile:
-            Optional language profile dict. Used for:
-                - topic markers
-                - whether to drop the event subject if same as topic
-                - clause and outer templates
-
-            Recognized keys (all optional):
-
-                topic_marker: str
-                    A language-specific marker attached to the topic,
-                    e.g. "wa", "については", "as for", etc.
-                    Default: "" (no explicit marker).
-
-                drop_event_subject_if_same_as_topic: bool
-                    If True and event_subject_name is None or equal to
-                    topic_name, the event subject may be omitted from the
-                    surface string. Default: False.
-
-                topic_phrase_template: str
-                    Template for constructing the topic phrase, with:
-                        "{TOPIC}"        -> realized topic NP
-                        "{TOPIC_MARKER}" -> topic marker string
-                    Default: "{TOPIC} {TOPIC_MARKER}"
-
-                event_clause_template: str
-                    Template for the internal event clause, with:
-                        "{SUBJ}"  -> realized subject NP (may be empty)
-                        "{VERB}"  -> realized finite verb
-                        "{OBJ}"   -> realized object NP (may be empty)
-                    Default: "{SUBJ} {VERB} {OBJ}"
-
-                topic_eventive_template: str
-                    Outer template combining topic phrase and event clause, with:
-                        "{TOPIC_PHRASE}" -> result of topic_phrase_template
-                        "{CLAUSE}"       -> result of event_clause_template
-                    Default: "{TOPIC_PHRASE}, {CLAUSE}"
-
-        morph_api:
-            Implementation of MorphologyAPI that knows how to turn feature
-            bundles into surface forms for a specific language.
-
-    Returns:
-        A fully realized sentence string (no trailing space, but *without*
-        final punctuation, which can be added by a higher layer).
+    Legacy convenience wrapper.
     """
-    lang_profile = lang_profile or {}
+    return TopicCommentEventiveConstruction().realize(slots, lang_profile, morph_api)
 
-    # ---------------------------------------------------------------------
-    # 1. Build TOPIC NP
-    # ---------------------------------------------------------------------
-    topic_features: Dict[str, Any] = {
-        "role": "topic",
-        "gender": slots.topic_gender,
-        "number": slots.topic_number,
-    }
-    topic_features.update(slots.extra_topic_features)
 
-    topic_np = morph_api.realize_np(
-        role="topic",
-        lemma=slots.topic_name,
-        features=topic_features,
-    )
-
-    # Topic marker (may be empty; could be a bare particle or a phrase)
-    topic_marker: str = str(lang_profile.get("topic_marker", "")).strip()
-
-    # Topic phrase template
-    topic_phrase_template: str = lang_profile.get(
-        "topic_phrase_template",
-        "{TOPIC} {TOPIC_MARKER}",
-    )
-
-    topic_phrase = topic_phrase_template.format(
-        TOPIC=topic_np,
-        TOPIC_MARKER=topic_marker,
-    )
-
-    # ---------------------------------------------------------------------
-    # 2. Build EVENT SUBJECT NP (or possibly drop it)
-    # ---------------------------------------------------------------------
-    # Decide on subject features, falling back to topic features if needed
-    subj_gender = (
-        slots.subject_gender if slots.subject_gender is not None else slots.topic_gender
-    )
-    subj_number = (
-        slots.subject_number if slots.subject_number is not None else slots.topic_number
-    )
-
-    subject_features: Dict[str, Any] = {
-        "role": "subject",
-        "gender": subj_gender,
-        "number": subj_number,
-        "person": slots.person,
-    }
-    subject_features.update(slots.extra_subject_features)
-
-    # Decide which lemma to use as subject:
-    if slots.event_subject_name is None:
-        # Semantically same as topic; concrete realization (pronoun vs name vs zero)
-        # is left to the morphology engine and language profile.
-        subject_lemma = slots.topic_name
-        subject_corefers_topic = True
-    else:
-        subject_lemma = slots.event_subject_name
-        subject_corefers_topic = slots.event_subject_name == slots.topic_name
-
-    # Should we drop the event subject?
-    drop_subj = bool(lang_profile.get("drop_event_subject_if_same_as_topic", False))
-    if drop_subj and subject_corefers_topic:
-        subject_np = ""
-    else:
-        subject_np = morph_api.realize_np(
-            role="subject",
-            lemma=subject_lemma,
-            features=subject_features,
-        )
-
-    # ---------------------------------------------------------------------
-    # 3. Build OBJECT NP (optional)
-    # ---------------------------------------------------------------------
-    if slots.object_lemma:
-        object_features: Dict[str, Any] = {
-            "role": "object",
-        }
-        object_features.update(slots.extra_object_features)
-
-        object_np = morph_api.realize_np(
-            role="object",
-            lemma=slots.object_lemma,
-            features=object_features,
-        )
-    else:
-        object_np = ""
-
-    # ---------------------------------------------------------------------
-    # 4. Build VERB
-    # ---------------------------------------------------------------------
-    verb_features: Dict[str, Any] = {
-        "tense": slots.tense,
-        "aspect": slots.aspect,
-        "polarity": slots.polarity,
-        "person": slots.person,
-        "number": subj_number,
-        "transitivity": "transitive" if slots.object_lemma else "intransitive",
-    }
-    verb_features.update(slots.extra_verb_features)
-
-    verb_form = morph_api.realize_verb(
-        lemma=slots.verb_lemma,
-        features=verb_features,
-    )
-
-    # ---------------------------------------------------------------------
-    # 5. Build INNER EVENT CLAUSE
-    # ---------------------------------------------------------------------
-    event_clause_template: str = lang_profile.get(
-        "event_clause_template",
-        "{SUBJ} {VERB} {OBJ}",
-    )
-
-    clause = event_clause_template.format(
-        SUBJ=subject_np,
-        VERB=verb_form,
-        OBJ=object_np,
-    )
-
-    # ---------------------------------------------------------------------
-    # 6. Combine TOPIC PHRASE + CLAUSE
-    # ---------------------------------------------------------------------
-    topic_eventive_template: str = lang_profile.get(
-        "topic_eventive_template",
-        "{TOPIC_PHRASE}, {CLAUSE}",
-    )
-
-    sentence = topic_eventive_template.format(
-        TOPIC_PHRASE=topic_phrase,
-        CLAUSE=clause,
-    )
-
-    return _normalize_spaces(sentence)
+__all__ = [
+    "TopicCommentEventiveSlots",
+    "TopicCommentEventiveConstruction",
+    "realize_topic_comment_eventive",
+]

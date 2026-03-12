@@ -1,169 +1,206 @@
-# app\adapters\engines\engines\germanic.py
-# engines\germanic.py
+# app/adapters/engines/engines/germanic.py
 """
 GERMANIC LANGUAGE ENGINE
 ------------------------
-A data-driven renderer for Germanic languages (EN, DE, NL, SV, DA, NO).
+Compatibility renderer for Germanic languages (EN, DE, NL, SV, DA, NO).
 
-This module orchestrates the generation of sentences by:
-1. Delegating morphology to `morphology.germanic.GermanicMorphology`.
-2. Handling sentence structure and assembly, using data from:
-   - family matrix:  data/morphology_configs/germanic_grammar_matrix.json
-   - language card:  data/germanic/<lang>.json
+This module stays on the legacy family-engine surface:
+
+    render_bio(name, gender, prof_lemma, nat_lemma, config) -> str
+
+It delegates morphology to `GermanicMorphology` and performs only
+syntax-level assembly. The Batch 6 runtime contract lives one layer up in
+the construction adapters; this file remains a narrow compatibility shim.
 """
 
-from morphology.germanic import GermanicMorphology
+from __future__ import annotations
+
+from typing import Any, Mapping
+
+from app.core.domain.morphology.germanic import GermanicMorphology
 
 
-def _select_copula_from_config(config, tense: str) -> str:
+def _clean_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def _normalize_gender(value: Any) -> str:
+    raw = _clean_text(value).lower()
+    if raw in {"m", "male", "masc", "masculine", "man"}:
+        return "male"
+    if raw in {"f", "female", "fem", "feminine", "woman"}:
+        return "female"
+    return raw
+
+
+def _collapse_ws(text: str) -> str:
+    text = " ".join(str(text).split())
+    text = text.replace(" ,", ",").replace(" .", ".")
+    text = text.replace(" ;", ";").replace(" :", ":")
+    text = text.replace("( ", "(").replace(" )", ")")
+    return text.strip()
+
+
+def _compose_predicate(article: str, nationality: str, profession: str) -> str:
+    return " ".join(part for part in (article, nationality, profession) if part)
+
+
+def _select_copula_from_config(config: Mapping[str, Any], tense: str) -> str:
     """
-    Fallback copula selector, used if the morphology layer does not
-    provide `realize_verb`. It understands both the old, simpler
-    per-language cards and the new grammar-matrix style.
+    Fallback copula selector for old/new config shapes.
 
-    Supported shapes:
+    Supported examples:
 
-    1) Old-style (string per tense):
-       "verbs": {
-         "copula": {
-           "present": "ist",
-           "past": "war"
-         }
-       }
+    Old-style:
+        "verbs": {
+          "copula": {
+            "present": "ist",
+            "past": "war"
+          }
+        }
 
-    2) Matrix-style (person/number table):
-       "verbs": {
-         "copula": {
-           "present": {
-             "3sg": "ist",
-             "default": "ist"
-           },
-           "past": {
-             "3sg": "war",
-             "default": "war"
-           },
-           "zero_present": false
-         }
-       }
+    Matrix-style:
+        "verbs": {
+          "copula": {
+            "present": {
+              "3sg": "ist",
+              "default": "ist"
+            },
+            "past": {
+              "3sg": "war",
+              "default": "war"
+            },
+            "zero_present": false
+          }
+        }
     """
-    verbs_cfg = config.get("verbs", {})
-    cop_cfg = verbs_cfg.get("copula", {})
+    verbs_cfg = config.get("verbs", {}) or {}
+    cop_cfg = verbs_cfg.get("copula", {}) or {}
 
-    # default if everything fails
     default_present = "is"
     default_past = "was"
 
     if isinstance(cop_cfg, str):
-        # Extremely old / simplified form: single string
         return cop_cfg
 
-    if not isinstance(cop_cfg, dict):
-        # No usable config, fall back to English-ish defaults
+    if not isinstance(cop_cfg, Mapping):
         return default_present if tense == "present" else default_past
 
-    # Try to get the tense bucket (present/past), falling back to present
     tense_cfg = cop_cfg.get(tense) or cop_cfg.get("present") or cop_cfg
 
     if isinstance(tense_cfg, str):
-        # Old-style: "present": "ist"
         return tense_cfg
 
-    if isinstance(tense_cfg, dict):
-        # Matrix-style: pick 3sg, default, or first available form
+    if isinstance(tense_cfg, Mapping):
         form = (
             tense_cfg.get("3sg")
             or tense_cfg.get("default")
-            or (next(iter(tense_cfg.values())) if tense_cfg else None)
+            or next((v for v in tense_cfg.values() if isinstance(v, str) and v.strip()), None)
         )
         if form:
-            return form
+            return str(form)
 
-    # Last-resort fallback
     return default_present if tense == "present" else default_past
 
 
-def render_bio(name, gender, prof_lemma, nat_lemma, config):
+def _realize_copula(
+    morph: GermanicMorphology,
+    config: Mapping[str, Any],
+    *,
+    tense: str,
+) -> str:
     """
-    Main Entry Point for Germanic Biographies.
-
-    Args:
-        name (str): The subject's name.
-        gender (str): 'Male' or 'Female' (case-insensitive; other values passed through).
-        prof_lemma (str): The profession (e.g., "Lehrer" / "teacher"), base lemma.
-        nat_lemma (str): The nationality adjective (e.g., "deutsch" / "German"), base lemma.
-        config (dict): The merged configuration card for the specific language
-                       (family matrix + language card).
-
-    Returns:
-        str: The fully inflected sentence, e.g.:
-             "Marie Curie war eine polnische Physikerin."
-             "Marie Curie was a Polish physicist."
+    Prefer morphology-layer verb realization when available; otherwise fall back
+    to raw config lookup.
     """
-    # 1. Initialize Morphology Engine
+    if hasattr(morph, "realize_verb"):
+        try:
+            realized = morph.realize_verb(
+                "be",
+                {
+                    "tense": tense,
+                    "number": "sg",
+                    "person": "3",
+                },
+            )
+            realized = _clean_text(realized)
+            if realized:
+                return realized
+        except Exception:
+            pass
+
+    return _select_copula_from_config(config, tense)
+
+
+class _SafeFormatDict(dict):
+    def __missing__(self, key: str) -> str:
+        return ""
+
+
+def render_bio(
+    name: str,
+    gender: str,
+    prof_lemma: str,
+    nat_lemma: str,
+    config: Mapping[str, Any],
+) -> str:
+    """
+    Main entry point for Germanic biography sentences.
+
+    Expected output examples:
+        "Marie Curie war eine polnische Physikerin."
+        "Marie Curie was a Polish physicist."
+    """
+    config = dict(config or {})
     morph = GermanicMorphology(config)
 
-    # Normalize gender a bit for safety; morphology layer can refine this further.
-    if isinstance(gender, str):
-        g = gender.strip().lower()
-        if g in {"m", "male", "masc", "masculine"}:
-            norm_gender = "male"
-        elif g in {"f", "female", "fem", "feminine"}:
-            norm_gender = "female"
-        else:
-            norm_gender = g
-    else:
-        norm_gender = gender
+    subject_name = _clean_text(name)
+    profession_lemma = _clean_text(prof_lemma)
+    nationality_lemma = _clean_text(nat_lemma)
+    norm_gender = _normalize_gender(gender)
 
-    # 2. Get Predicate Components (Profession, Nationality, Article)
-    # This handles gender inflection, adjective declension, and article selection.
-    # Expected return shape (dict):
-    #   {
-    #     "profession": <inflected profession>,
-    #     "nationality": <inflected nationality>,
-    #     "article": <indefinite/definite article or "">
-    #   }
-    parts = morph.render_simple_bio_predicates(prof_lemma, nat_lemma, norm_gender)
-
-    article = parts.get("article", "") or ""
-    nationality = parts.get("nationality", "") or ""
-    profession = parts.get("profession", "") or ""
-
-    # 3. Get Verb (Copula)
-    # Default to the language's configured tense for bios; if missing, fall back to "past".
-    bio_tense = config.get("syntax", {}).get("bio_default_tense", "past")
-
-    if hasattr(morph, "realize_verb"):
-        # Use the unified verb API if available (preferred).
-        copula = morph.realize_verb(
-            "be",
-            {
-                "tense": bio_tense,
-                "number": "sg",
-                "person": "3",
-            },
-        )
-    else:
-        # Fallback: read directly from config (supports old/new copula encodings).
-        copula = _select_copula_from_config(config, bio_tense)
-
-    # 4. Assembly
-    #
-    # We support both the new `{copula}` placeholder and the legacy `{is_verb}` one.
-    # Default template if none is provided:
-    #   "{name} {copula} {article} {nationality} {profession}."
-    structure = config.get(
-        "structure",
-        "{name} {copula} {article} {nationality} {profession}.",
+    parts = morph.render_simple_bio_predicates(
+        profession_lemma,
+        nationality_lemma,
+        norm_gender,
     )
 
-    sentence = structure.replace("{name}", name)
-    sentence = sentence.replace("{copula}", copula)
-    sentence = sentence.replace("{is_verb}", copula)  # legacy placeholder
-    sentence = sentence.replace("{article}", article)
-    sentence = sentence.replace("{nationality}", nationality)
-    sentence = sentence.replace("{profession}", profession)
+    article = _clean_text(parts.get("article"))
+    nationality = _clean_text(parts.get("nationality"))
+    profession = _clean_text(parts.get("profession"))
+    predicate = _compose_predicate(article, nationality, profession)
 
-    # Cleanup extra whitespace (e.g., if article is empty)
-    sentence = " ".join(sentence.split())
+    bio_tense = _clean_text(config.get("syntax", {}).get("bio_default_tense")) or "past"
+    copula = _realize_copula(morph, config, tense=bio_tense)
 
-    return sentence
+    structure = _clean_text(config.get("structure")) or "{name} {copula} {predicate}."
+
+    values = _SafeFormatDict(
+        name=subject_name,
+        copula=copula,
+        is_verb=copula,  # legacy placeholder
+        predicate=predicate,
+        article=article,
+        nationality=nationality,
+        profession=profession,
+    )
+
+    if "{" in structure and "}" in structure:
+        sentence = structure.format_map(values)
+    else:
+        sentence = (
+            structure.replace("{name}", subject_name)
+            .replace("{copula}", copula)
+            .replace("{is_verb}", copula)
+            .replace("{predicate}", predicate)
+            .replace("{article}", article)
+            .replace("{nationality}", nationality)
+            .replace("{profession}", profession)
+        )
+
+    return _collapse_ws(sentence)
+
+
+__all__ = ["render_bio"]

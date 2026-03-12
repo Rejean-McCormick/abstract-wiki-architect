@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schemas:contracts:lexeme_ref",
+  "title": "LexemeRef",
+  "description": "Canonical normalized lexical reference used in ConstructionPlan slot maps and lexical-resolution outputs.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "lemma": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical lemma text for the lexical item. This is the only required field."
+    },
+    "lexeme_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional stable lexeme identifier from a lexicon source (for example a Wikidata Lexeme ID or local lexicon key)."
+    },
+    "qid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^Q[1-9][0-9]*$",
+      "description": "Optional Wikidata QID associated with the lexical meaning or matched concept."
+    },
+    "pos": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional part-of-speech hint such as NOUN, ADJ, VERB, or a repository-specific POS label."
+    },
+    "surface_hint": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Optional preferred surface form or display hint for realization."
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "default": "raw",
+      "description": "Origin of the reference, for example raw_string, shared_lexicon, existing_mapping, or predicate_resolution."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "default": 0.0,
+      "description": "Confidence score assigned by lexical resolution."
+    },
+    "features": {
+      "type": "object",
+      "default": {},
+      "description": "Optional open-ended feature map for inflectional forms, grammar features, GF fun names, source metadata, or other resolver/runtime annotations.",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "lemma"
+  ],
+  "examples": [
+    {
+      "lemma": "scientist",
+      "lexeme_id": "L12345",
+      "qid": "Q901",
+      "pos": "NOUN",
+      "surface_hint": "scientist",
+      "source": "lexicon_index",
+      "confidence": 0.98,
+      "features": {
+        "default": "scientist",
+        "plural": "scientists",
+        "gf_fun": "scientist_N"
+      }
+    },
+    {
+      "lemma": "French",
+      "qid": "Q150",
+      "pos": "ADJ",
+      "surface_hint": "French",
+      "source": "shared_lexicon",
+      "confidence": 0.87,
+      "features": {
+        "default": "French"
+      }
+    },
+    {
+      "lemma": "detective",
+      "pos": "NOUN",
+      "surface_hint": "detective",
+      "source": "raw_string",
+      "confidence": 0.25,
+      "features": {}
+    }
+  ]
+}

@@ -1,188 +1,431 @@
-# app\core\domain\constructions\possession_existential.py
-# constructions\possession_existential.py
+# app/core/domain/constructions/possession_existential.py
+
 """
-POSSESSION_EXISTENTIAL CONSTRUCTION
+POSSESSION EXISTENTIAL CONSTRUCTION
 -----------------------------------
 
-Family-agnostic construction for encoding possession via an existential
-pattern, e.g.:
+Family-agnostic construction for possession expressed via an existential
+strategy, e.g.:
 
     "To Marie Curie there existed two daughters."
     "У Марии Кюри было двое детей."
     "マリー・キュリーには二人の娘がいた。"
-    "Laha ibnatān."  (Arabic: 'to-her two daughters')
+    "Laha ibnatān."
 
-Abstract pattern:
+Canonical semantic slots:
+    - possessor
+    - possessed
 
-    POSSESSOR (in oblique/locative/dative form) + EXIST_VERB + POSSESSED_NP
+This module now provides:
+    - a stable construction id,
+    - typed slots for new planner/runtime code,
+    - a backward-compatible wrapper for legacy dict callers.
 
-This module does *not* handle any morphology directly. Instead, it
-delegates to a language-specific morphology API and uses a language
-profile to determine ordering and which verb to use.
-
-Expected external interfaces
-============================
-
-1) `lang_profile` (dict-like)
-
-    lang_profile["possession_existential"] = {
-        "exist_verb_lemma": "exist",          # or language-specific lemma key
-        "possessor_role": "possessor_obl",    # role passed to morph_api
-        "possessed_role": "possessed",        # role passed to morph_api
-        "role_order": ["possessor", "verb", "possessed"]
-    }
-
-    All keys are optional; reasonable defaults are used if missing.
-
-2) `morph_api` (object)
-
-The morphology API is expected to implement at least:
-
-    morph_api.realize_np(role: str, concept: dict) -> str
-    morph_api.realize_verb(lemma: str, features: dict) -> str
-
-Optionally, it may implement:
-
-    morph_api.finalize_sentence(text: str) -> str
-
-If `finalize_sentence` is not present, a plain space-joined string with
-a trailing period "." will be returned.
-
-3) `slots` (dict)
-
-Expected structure (keys are conventional, but you can pass extra keys):
-
-    slots = {
-        "possessor": {...},     # concept dict for possessor
-        "possessed": {...},     # concept dict for possessed entity
-        "tense": "past",        # optional, default "present"
-        "polarity": "affirmative",   # optional, default "affirmative"
-        "aspect": "perfective",      # optional, passed through to morph_api
-        ...
-    }
-
-The exact internal structure of the `possessor` and `possessed` concepts
-is up to the calling code and the morphology layer; this construction
-only forwards them unchanged.
+Legacy compatibility remains for the older interface built around:
+    slots["possessor"]
+    slots["possessed"]
+    slots["tense"]
+    slots["polarity"]
+    slots["aspect"]
 """
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from dataclasses import dataclass, field
+from typing import Any, Dict, Mapping, Optional, Protocol, Sequence
+
+CONSTRUCTION_ID = "possession_existential"
+
+CANONICAL_SLOT_NAMES = (
+    "possessor",
+    "possessed",
+)
+
+LEGACY_SLOT_ALIASES = {
+    "possessor": "possessor",
+    "possessed": "possessed",
+    "tense": "tense",
+    "polarity": "polarity",
+    "aspect": "aspect",
+}
+
+__all__ = [
+    "CONSTRUCTION_ID",
+    "CANONICAL_SLOT_NAMES",
+    "LEGACY_SLOT_ALIASES",
+    "MorphologyAPI",
+    "PossessionExistentialSlots",
+    "realize_possession_existential",
+    "render",
+    "realize",
+]
 
 
-def _get_possession_cfg(lang_profile: Dict[str, Any]) -> Dict[str, Any]:
-    """Return the possession-existential configuration for a language."""
-    cfg = lang_profile.get("possession_existential", {}) or {}
-    if not isinstance(cfg, dict):
-        cfg = {}
+class MorphologyAPI(Protocol):
+    """
+    Minimal protocol for morphology backends used by this construction.
+    Implementations may support stricter or looser signatures; helpers below
+    are defensive about call shapes.
+    """
 
-    # Default configuration
+    def realize_np(self, *args: Any, **kwargs: Any) -> str:
+        ...
+
+    def realize_verb(self, *args: Any, **kwargs: Any) -> str:
+        ...
+
+    def join_tokens(self, tokens: list[str]) -> str:
+        ...
+
+    def finalize_sentence(self, text: str) -> str:
+        ...
+
+
+@dataclass
+class PossessionExistentialSlots:
+    """
+    Typed input for existential possession.
+
+    New planner/runtime code should prefer this shape. Legacy dict payloads
+    are still supported through `render(...)`.
+    """
+
+    possessor: Any
+    possessed: Any
+
+    tense: str = "present"
+    polarity: str = "affirmative"
+    aspect: Optional[str] = None
+    mood: Optional[str] = None
+    evidentiality: Optional[str] = None
+    modality: Optional[str] = None
+
+    exist_verb_lemma: Optional[str] = None
+
+    extra_possessor_features: Dict[str, Any] = field(default_factory=dict)
+    extra_possessed_features: Dict[str, Any] = field(default_factory=dict)
+    extra_verb_features: Dict[str, Any] = field(default_factory=dict)
+
+
+def _mapping_or_empty(value: Any) -> Dict[str, Any]:
+    return dict(value) if isinstance(value, Mapping) else {}
+
+
+def _normalize_spaces(text: str) -> str:
+    return " ".join(str(text or "").split())
+
+
+def _get_possession_cfg(lang_profile: Mapping[str, Any]) -> Dict[str, Any]:
+    """
+    Return the possession-existential configuration for a language.
+
+    Supported keys:
+        lang_profile["possession_existential"] = {
+            "exist_verb_lemma": "exist",
+            "possessor_role": "possessor_oblique",
+            "possessed_role": "possessed",
+            "role_order": ["possessor", "verb", "possessed"],
+        }
+    """
+    cfg = _mapping_or_empty(lang_profile.get("possession_existential"))
     return {
-        "exist_verb_lemma": cfg.get("exist_verb_lemma", "exist"),
-        "possessor_role": cfg.get("possessor_role", "possessor_oblique"),
-        "possessed_role": cfg.get("possessed_role", "possessed"),
-        "role_order": cfg.get(
-            "role_order",
-            ["possessor", "verb", "possessed"],
-        ),
+        "exist_verb_lemma": str(cfg.get("exist_verb_lemma") or "exist"),
+        "possessor_role": str(cfg.get("possessor_role") or "possessor_oblique"),
+        "possessed_role": str(cfg.get("possessed_role") or "possessed"),
+        "role_order": cfg.get("role_order") or ["possessor", "verb", "possessed"],
+        "template": cfg.get("template"),
     }
 
 
-def _build_verb_features(slots: Dict[str, Any]) -> Dict[str, Any]:
+def _coerce_slots(
+    slots: Mapping[str, Any] | PossessionExistentialSlots,
+) -> PossessionExistentialSlots:
     """
-    Assemble a feature bundle for the existential verb from slots.
-
-    We keep this very permissive: any extra keys are passed through
-    unchanged, but we ensure that common features like tense, polarity,
-    and aspect have defaults.
+    Accept both the new typed slots object and the legacy dict shape.
     """
-    features: Dict[str, Any] = {}
+    if isinstance(slots, PossessionExistentialSlots):
+        return slots
 
-    # Basic features with defaults
-    features["tense"] = slots.get("tense", "present")
-    features["polarity"] = slots.get("polarity", "affirmative")
-    if "aspect" in slots:
-        features["aspect"] = slots["aspect"]
+    data = dict(slots or {})
 
-    # Copy any additional feature-like keys if provided explicitly
-    for key in ("mood", "evidentiality", "modality"):
-        if key in slots:
-            features[key] = slots[key]
+    return PossessionExistentialSlots(
+        possessor=data.get("possessor"),
+        possessed=data.get("possessed"),
+        tense=str(data.get("tense") or "present"),
+        polarity=str(data.get("polarity") or "affirmative"),
+        aspect=data.get("aspect"),
+        mood=data.get("mood"),
+        evidentiality=data.get("evidentiality"),
+        modality=data.get("modality"),
+        exist_verb_lemma=data.get("exist_verb_lemma"),
+        extra_possessor_features=_mapping_or_empty(data.get("possessor_features")),
+        extra_possessed_features=_mapping_or_empty(data.get("possessed_features")),
+        extra_verb_features=_mapping_or_empty(data.get("verb_features")),
+    )
 
+
+def _build_verb_features(slots: PossessionExistentialSlots) -> Dict[str, Any]:
+    """
+    Assemble the feature bundle passed to the existential verb realization.
+    """
+    features: Dict[str, Any] = {
+        "tense": slots.tense or "present",
+        "polarity": slots.polarity or "affirmative",
+    }
+
+    if slots.aspect is not None:
+        features["aspect"] = slots.aspect
+    if slots.mood is not None:
+        features["mood"] = slots.mood
+    if slots.evidentiality is not None:
+        features["evidentiality"] = slots.evidentiality
+    if slots.modality is not None:
+        features["modality"] = slots.modality
+
+    features.update(slots.extra_verb_features)
     return features
 
 
-def realize_possession_existential(
-    slots: Dict[str, Any],
-    lang_profile: Dict[str, Any],
-    morph_api: Any,
+def _realize_np(
+    concept: Any,
+    *,
+    role: str,
+    morph_api: MorphologyAPI,
+    lang_profile: Mapping[str, Any],
+    extra_features: Mapping[str, Any],
 ) -> str:
     """
-    Realize a possessive statement using an existential pattern.
+    Realize a nominal participant.
 
-    Args:
-        slots:
-            A dict containing at least "possessor" and "possessed"
-            concept objects. May also contain "tense", "polarity",
-            "aspect", etc.
-        lang_profile:
-            Language profile configuration for the target language,
-            including a "possession_existential" section.
-        morph_api:
-            Language-specific morphology object implementing:
-                - realize_np(role: str, concept: dict) -> str
-                - realize_verb(lemma: str, features: dict) -> str
-              Optionally:
-                - finalize_sentence(text: str) -> str
-
-    Returns:
-        A surface string representing an existential possessive clause.
+    Supports:
+      - pre-surfaced strings,
+      - concept mappings,
+      - multiple morphology API signatures.
     """
-    if not isinstance(slots, dict):
-        raise TypeError("slots must be a dict")
-    if "possessor" not in slots or "possessed" not in slots:
-        raise ValueError("slots must contain 'possessor' and 'possessed' keys")
+    if concept is None:
+        return ""
 
-    cfg = _get_possession_cfg(lang_profile)
+    if isinstance(concept, str):
+        return concept.strip()
 
-    # Extract concepts
-    possessor_concept = slots["possessor"]
-    possessed_concept = slots["possessed"]
+    concept_map = _mapping_or_empty(concept)
+    if not concept_map:
+        return str(concept).strip()
 
-    # Realize noun phrases through morphology
-    possessor_np = morph_api.realize_np(cfg["possessor_role"], possessor_concept)
-    possessed_np = morph_api.realize_np(cfg["possessed_role"], possessed_concept)
+    if extra_features:
+        merged = dict(concept_map)
+        features = _mapping_or_empty(concept_map.get("features"))
+        features.update(dict(extra_features))
+        merged["features"] = features
+        concept_map = merged
 
-    # Realize existential verb
-    verb_features = _build_verb_features(slots)
-    exist_verb = morph_api.realize_verb(cfg["exist_verb_lemma"], verb_features)
+    realize_np = getattr(morph_api, "realize_np", None)
+    if not callable(realize_np):
+        return _normalize_spaces(
+            concept_map.get("surface")
+            or concept_map.get("text")
+            or concept_map.get("name")
+            or concept_map.get("lemma")
+            or ""
+        )
 
-    # Assemble according to role_order
-    # Allowed tokens in role_order: "possessor", "verb", "possessed"
-    pieces: List[str] = []
-    for token in cfg["role_order"]:
-        if token == "possessor":
-            pieces.append(possessor_np)
-        elif token == "verb":
-            pieces.append(exist_verb)
-        elif token == "possessed":
-            pieces.append(possessed_np)
-        else:
-            # Unknown token; ignore for forward-compatibility
+    attempts = (
+        lambda: realize_np(role=role, concept=concept_map, lang_profile=lang_profile),
+        lambda: realize_np(role=role, concept=concept_map),
+        lambda: realize_np(sem=concept_map, role=role, features=concept_map.get("features")),
+        lambda: realize_np(concept_map, role=role, lang_profile=lang_profile),
+        lambda: realize_np(concept_map, role=role),
+        lambda: realize_np(role, concept_map),
+    )
+
+    for attempt in attempts:
+        try:
+            return _normalize_spaces(attempt())
+        except TypeError:
             continue
 
-    # Join with spaces; morphology layer can later strip or normalize.
-    raw_sentence = " ".join(p for p in pieces if p)
+    return _normalize_spaces(
+        concept_map.get("surface")
+        or concept_map.get("text")
+        or concept_map.get("name")
+        or concept_map.get("lemma")
+        or ""
+    )
 
-    # Delegate sentence-final normalization if available
-    if hasattr(morph_api, "finalize_sentence"):
-        return morph_api.finalize_sentence(raw_sentence)
 
-    # Fallback: simple punctuation handling
-    text = raw_sentence.strip()
+def _realize_existential_verb(
+    *,
+    lemma: str,
+    features: Mapping[str, Any],
+    morph_api: MorphologyAPI,
+    lang_profile: Mapping[str, Any],
+) -> str:
+    realize_verb = getattr(morph_api, "realize_verb", None)
+    if not callable(realize_verb):
+        return lemma
+
+    attempts = (
+        lambda: realize_verb(lemma=lemma, features=features, lang_profile=lang_profile),
+        lambda: realize_verb(lemma=lemma, features=features),
+        lambda: realize_verb(lemma, features, lang_profile=lang_profile),
+        lambda: realize_verb(lemma, features),
+    )
+
+    for attempt in attempts:
+        try:
+            return _normalize_spaces(attempt())
+        except TypeError:
+            continue
+
+    return lemma
+
+
+def _render_template(
+    *,
+    cfg: Mapping[str, Any],
+    possessor_np: str,
+    exist_verb: str,
+    possessed_np: str,
+) -> str:
+    """
+    Render using either a string template or the legacy role_order list.
+    """
+    template = cfg.get("template")
+    if isinstance(template, str) and template.strip():
+        rendered = template.format(
+            possessor=possessor_np,
+            verb=exist_verb,
+            possessed=possessed_np,
+        )
+        return _normalize_spaces(rendered)
+
+    role_order = cfg.get("role_order") or ["possessor", "verb", "possessed"]
+    if isinstance(role_order, Sequence) and not isinstance(role_order, (str, bytes)):
+        pieces: list[str] = []
+        for token in role_order:
+            if token == "possessor" and possessor_np:
+                pieces.append(possessor_np)
+            elif token == "verb" and exist_verb:
+                pieces.append(exist_verb)
+            elif token == "possessed" and possessed_np:
+                pieces.append(possessed_np)
+        return pieces
+
+    return _normalize_spaces(f"{possessor_np} {exist_verb} {possessed_np}")
+
+
+def _join_surface(text_or_tokens: Any, morph_api: MorphologyAPI) -> str:
+    """
+    Prefer the morphology layer for script-aware token joining.
+    """
+    if isinstance(text_or_tokens, str):
+        return _normalize_spaces(text_or_tokens)
+
+    tokens = [str(t).strip() for t in list(text_or_tokens or []) if str(t).strip()]
+    if not tokens:
+        return ""
+
+    join_tokens = getattr(morph_api, "join_tokens", None)
+    if callable(join_tokens):
+        try:
+            return _normalize_spaces(join_tokens(tokens))
+        except TypeError:
+            pass
+
+    return " ".join(tokens)
+
+
+def _finalize_sentence(text: str, morph_api: MorphologyAPI) -> str:
+    """
+    Preserve legacy fallback behavior: use morphology finalization if present,
+    otherwise add a terminal period if missing.
+    """
+    text = _normalize_spaces(text)
     if not text:
         return text
+
+    finalize_sentence = getattr(morph_api, "finalize_sentence", None)
+    if callable(finalize_sentence):
+        try:
+            return finalize_sentence(text)
+        except TypeError:
+            pass
+
     if text.endswith("."):
         return text
     return text + "."
+
+
+def realize_possession_existential(
+    slots: PossessionExistentialSlots,
+    lang_profile: Optional[Mapping[str, Any]],
+    morph_api: MorphologyAPI,
+) -> str:
+    """
+    Realize a possessive statement using an existential pattern.
+    """
+    if slots.possessor is None or slots.possessed is None:
+        return ""
+
+    profile = dict(lang_profile or {})
+    cfg = _get_possession_cfg(profile)
+
+    possessor_np = _realize_np(
+        slots.possessor,
+        role=str(cfg["possessor_role"]),
+        morph_api=morph_api,
+        lang_profile=profile,
+        extra_features=slots.extra_possessor_features,
+    )
+    possessed_np = _realize_np(
+        slots.possessed,
+        role=str(cfg["possessed_role"]),
+        morph_api=morph_api,
+        lang_profile=profile,
+        extra_features=slots.extra_possessed_features,
+    )
+
+    verb_lemma = slots.exist_verb_lemma or str(cfg["exist_verb_lemma"])
+    verb_features = _build_verb_features(slots)
+    exist_verb = _realize_existential_verb(
+        lemma=verb_lemma,
+        features=verb_features,
+        morph_api=morph_api,
+        lang_profile=profile,
+    )
+
+    assembled = _render_template(
+        cfg=cfg,
+        possessor_np=possessor_np,
+        exist_verb=exist_verb,
+        possessed_np=possessed_np,
+    )
+    surface = _join_surface(assembled, morph_api)
+    return _finalize_sentence(surface, morph_api)
+
+
+def render(
+    slots: Mapping[str, Any],
+    lang_profile: Mapping[str, Any],
+    morph_api: MorphologyAPI,
+) -> str:
+    """
+    Backward-compatible entrypoint for legacy dict callers.
+    """
+    normalized = _coerce_slots(slots)
+    return realize_possession_existential(
+        normalized,
+        lang_profile=lang_profile,
+        morph_api=morph_api,
+    )
+
+
+def realize(
+    slots: Mapping[str, Any],
+    lang_profile: Mapping[str, Any],
+    morph_api: MorphologyAPI,
+) -> str:
+    """
+    Generic convenience alias used by some construction callers.
+    """
+    return render(slots, lang_profile, morph_api)

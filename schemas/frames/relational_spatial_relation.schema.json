@@ -1,78 +1,105 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "schemas/frames/relational_spatial_relation.schema.json",
-  "title": "SpatialRelationFrame",
-  "description": "Schema for SpatialRelationFrame, representing spatial relations between entities/places (e.g. X is in/near/north of Y).",
+  "title": "Abstract Wikipedia Frame Schema — Relational: Spatial Relation",
+  "description": "JSON shape for the spatial relation frame, corresponding to the `relation.spatial` family in the frame inventory. This frame captures locative, topological, directional, and proximity relations between entities or locations (e.g. 'X is in Y', 'X is near Y', 'X is north of Y').",
   "type": "object",
   "additionalProperties": false,
+  "required": [
+    "frame_type",
+    "subject",
+    "reference",
+    "relation"
+  ],
   "properties": {
     "frame_type": {
       "type": "string",
-      "const": "relation.spatial",
-      "description": "Canonical frame family identifier; must be \"relation.spatial\" for spatial relation frames."
+      "description": "Canonical frame family identifier for spatial relation frames.",
+      "enum": [
+        "relation.spatial"
+      ]
     },
+
     "id": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "description": "Optional stable identifier for this relation instance (e.g. a row ID or source key)."
+      "type": "string",
+      "description": "Optional stable identifier for this frame instance (e.g. internal row ID, page ID, or source statement cluster ID)."
     },
+
     "subject": {
-      "description": "Entity/place being located (X).",
+      "description": "Entity or location being located (X). This is the item whose spatial position is being asserted.",
       "anyOf": [
         {
-          "type": "null"
+          "$ref": "#/definitions/EntityRef"
         },
         {
-          "$ref": "#/$defs/entity"
+          "$ref": "#/definitions/LocationRef"
         }
       ]
     },
+
     "reference": {
-      "description": "Reference entity/place (Y), often a country, region, or other geographic feature.",
+      "description": "Reference entity or location (Y) relative to which the subject is located.",
       "anyOf": [
         {
-          "type": "null"
+          "$ref": "#/definitions/EntityRef"
         },
         {
-          "$ref": "#/$defs/entity"
+          "$ref": "#/definitions/LocationRef"
         }
       ]
     },
+
     "relation": {
       "type": "string",
-      "description": "Coarse relation label such as \"in\", \"within\", \"inside\", \"near\", \"adjacent_to\", \"north_of\", \"on\", etc."
+      "minLength": 1,
+      "description": "Coarse spatial relation label such as 'in', 'within', 'inside', 'near', 'adjacent_to', 'north_of', 'south_of', 'east_of', 'west_of', 'on', 'at', 'between', or 'across_from'."
     },
+
     "distance": {
-      "description": "Optional numeric distance between subject and reference, represented as a Quantity-like object (e.g. 50 km).",
-      "anyOf": [
+      "description": "Optional explicit distance between subject and reference, represented as a Quantity-like object (e.g. 50 km).",
+      "oneOf": [
         {
-          "type": "null"
+          "$ref": "#/definitions/Quantity"
         },
         {
-          "$ref": "#/$defs/quantity"
+          "type": "null"
         }
       ]
     },
+
     "region_lemma": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Optional lemma describing a subregion or part of the reference (e.g. \"northern\", \"central\")."
+      "minLength": 1,
+      "description": "Optional lemma-like label describing a salient subregion, sub-area, or directional zone relevant to the relation (e.g. 'northern', 'central', 'coastal', 'downtown')."
     },
-    "time": {
-      "description": "Optional time span indicating when the relation holds (for time-sensitive locative relations).",
-      "anyOf": [
+
+    "time_span": {
+      "description": "Preferred field for the time span during which the relation holds, when the relation is time-sensitive or historical.",
+      "oneOf": [
         {
-          "type": "null"
+          "$ref": "#/definitions/TimeSpan"
         },
         {
-          "$ref": "#/$defs/time_span"
+          "type": "null"
         }
       ]
     },
+
+    "time": {
+      "description": "Legacy alias for `time_span`. Prefer `time_span` for new data.",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+
     "certainty": {
       "type": [
         "number",
@@ -80,234 +107,289 @@
       ],
       "minimum": 0.0,
       "maximum": 1.0,
-      "description": "Optional confidence value in [0, 1]; 1.0 means full confidence."
+      "description": "Optional confidence value in [0,1], where 1.0 indicates maximal confidence."
     },
+
     "source_id": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Optional opaque identifier for the source statement or triple, useful for debugging / traceability."
+      "minLength": 1,
+      "description": "Optional opaque identifier for the source statement, triple, row, or provenance record."
     },
+
+    "qualifiers": {
+      "type": "array",
+      "description": "Optional language-neutral qualifiers or caveats such as 'administratively', 'historically', 'approximately', or 'by_road'.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+
+    "attributes": {
+      "type": "object",
+      "description": "Open-ended structured properties that may influence downstream planning or realization without being promoted to first-class fields.",
+      "additionalProperties": true
+    },
+
     "extra": {
       "type": "object",
-      "description": "Free-form metadata bag for additional information not widely shared across projects.",
+      "description": "Opaque metadata preserved for debugging, traceability, or source-specific payloads.",
       "additionalProperties": true
     }
   },
-  "required": [
-    "frame_type",
-    "subject",
-    "reference",
-    "relation"
-  ],
-  "$defs": {
-    "entity": {
+
+  "definitions": {
+    "EntityRef": {
       "type": "object",
-      "description": "Lightweight entity representation compatible with semantics.types.Entity.",
+      "description": "Lightweight reference to a discourse entity, following the general shape used across frame schemas.",
+      "additionalProperties": true,
       "properties": {
         "id": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Stable identifier for the entity (e.g. Wikidata QID)."
+          "type": "string",
+          "description": "Stable identifier for the entity, e.g. Wikidata QID, local database ID, or URI."
         },
         "name": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Canonical label or surface-form name of the entity."
+          "type": "string",
+          "description": "Preferred surface name or label of the entity."
+        },
+        "gender": {
+          "type": "string",
+          "description": "Optional coarse gender category for human entities."
+        },
+        "human": {
+          "type": "boolean",
+          "description": "Whether the entity is human."
         },
         "entity_type": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Optional coarse type label (e.g. \"country\", \"city\", \"river\")."
+          "type": "string",
+          "description": "Optional coarse type hint such as 'person', 'organization', 'place', 'city', 'country', 'river', or 'mountain'."
+        },
+        "features": {
+          "type": "object",
+          "description": "Optional structured feature dictionary used by downstream components.",
+          "additionalProperties": true
         },
         "extra": {
           "type": "object",
-          "description": "Arbitrary metadata about the entity.",
+          "description": "Arbitrary metadata associated with the entity reference.",
           "additionalProperties": true
         }
-      },
-      "additionalProperties": true
+      }
     },
-    "time_span": {
+
+    "LocationRef": {
       "type": "object",
-      "description": "Time span representation compatible with semantics.types.TimeSpan.",
+      "description": "Lightweight location-oriented reference used when the locative nature of the argument matters explicitly.",
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable identifier for the location (e.g. QID, geocode, URI)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable location label such as 'Paris', 'Lake Victoria', or 'Western Europe'."
+        },
+        "kind": {
+          "type": "string",
+          "description": "Optional location kind such as 'city', 'country', 'region', 'river', 'mountain', or 'building'."
+        },
+        "country_code": {
+          "type": "string",
+          "description": "Optional ISO country code when applicable."
+        },
+        "features": {
+          "type": "object",
+          "description": "Optional structured feature dictionary useful for locative realization or downstream planning.",
+          "additionalProperties": true
+        },
+        "extra": {
+          "type": "object",
+          "description": "Arbitrary metadata associated with the location reference.",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "TimeSpan": {
+      "type": "object",
+      "description": "Coarse time span or single date used to anchor historical or time-sensitive spatial relations.",
+      "additionalProperties": false,
       "properties": {
         "start_year": {
-          "type": [
-            "integer",
-            "null"
-          ]
+          "type": "integer",
+          "description": "Starting year, or the main year of interest for a point-like temporal anchor."
         },
         "end_year": {
-          "type": [
-            "integer",
-            "null"
-          ]
+          "type": "integer",
+          "description": "Optional end year for multi-year spans."
         },
         "start_month": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": "integer",
           "minimum": 1,
-          "maximum": 12
+          "maximum": 12,
+          "description": "Optional start month (1-12)."
         },
         "start_day": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": "integer",
           "minimum": 1,
-          "maximum": 31
+          "maximum": 31,
+          "description": "Optional start day (1-31)."
         },
         "end_month": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": "integer",
           "minimum": 1,
-          "maximum": 12
+          "maximum": 12,
+          "description": "Optional end month (1-12)."
         },
         "end_day": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": "integer",
           "minimum": 1,
-          "maximum": 31
+          "maximum": 31,
+          "description": "Optional end day (1-31)."
         },
         "approximate": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "description": "True if the dates are approximate or inferred."
+          "type": "boolean",
+          "description": "If true, the time span is approximate or inferred."
         },
         "extra": {
           "type": "object",
-          "description": "Arbitrary metadata (e.g. full ISO strings, calendar system).",
+          "description": "Arbitrary metadata or source-specific temporal payload.",
           "additionalProperties": true
         }
-      },
-      "additionalProperties": true
+      }
     },
-    "quantity": {
+
+    "Quantity": {
       "type": "object",
-      "description": "Generic numeric quantity + unit + qualifier, compatible with semantics.common.quantity.Quantity.",
+      "description": "Generic numeric quantity with optional unit, qualifier, and source-facing metadata.",
+      "additionalProperties": true,
       "properties": {
         "kind": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Coarse semantic type of the quantity (e.g. \"measure\", \"count\", \"percentage\")."
+          "type": "string",
+          "description": "Coarse semantic type of the quantity, e.g. 'measure', 'count', or 'percentage'."
         },
         "value": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "Main numeric value, if available."
+          "type": "number",
+          "description": "Main numeric value."
         },
         "min_value": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": "number",
           "description": "Optional lower bound."
         },
         "max_value": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": "number",
           "description": "Optional upper bound."
         },
         "qualifier": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Qualifier such as \"exact\", \"approximate\", \"at_least\", \"at_most\"."
+          "type": "string",
+          "description": "Qualifier such as 'exact', 'approximate', 'at_least', or 'at_most'."
         },
         "unit": {
-          "description": "Optional unit object.",
-          "anyOf": [
+          "description": "Optional measurement unit.",
+          "oneOf": [
             {
-              "type": "null"
+              "$ref": "#/definitions/Unit"
             },
             {
-              "$ref": "#/$defs/unit"
+              "type": "null"
             }
           ]
         },
         "as_of": {
-          "description": "Optional temporal anchor (year/date or similar). Represented loosely as any JSON value.",
-          "nullable": true
+          "description": "Optional temporal anchor or observation context. May be any JSON value, including a year, string label, object, array, or null."
         },
         "scope": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Optional textual scope, e.g. \"per capita\", \"within city limits\"."
+          "type": "string",
+          "description": "Optional textual scope such as 'by_road', 'as_the_crow_flies', or 'within_city_limits'."
         },
         "raw": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Optional raw string representation from the source."
+          "type": "string",
+          "description": "Optional raw source string."
         },
         "meta": {
           "type": "object",
-          "description": "Arbitrary extra metadata for the quantity.",
+          "description": "Arbitrary additional metadata for the quantity.",
           "additionalProperties": true
         }
-      },
-      "additionalProperties": true
+      }
     },
-    "unit": {
+
+    "Unit": {
       "type": "object",
-      "description": "Measurement unit compatible with semantics.common.quantity.Unit.",
-      "properties": {
-        "code": {
-          "type": "string",
-          "description": "Canonical unit code (e.g. \"km\", \"km2\", \"USD\", \"person\", \"percent\")."
-        },
-        "name": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Optional human-readable unit name (e.g. \"kilometre\")."
-        },
-        "system": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Optional system label (e.g. \"SI\", \"USD\", \"EUR\", \"custom\")."
-        },
-        "per": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Optional \"per\" component for rate-like units (e.g. \"year\", \"km2\")."
-        }
-      },
+      "description": "Measurement unit compatible with generic quantity objects.",
+      "additionalProperties": true,
       "required": [
         "code"
       ],
-      "additionalProperties": true
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical unit code such as 'km', 'm', 'mi', or 'ft'."
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional human-readable unit name."
+        },
+        "system": {
+          "type": "string",
+          "description": "Optional system label such as 'SI', 'imperial', or 'custom'."
+        },
+        "per": {
+          "type": "string",
+          "description": "Optional 'per' component for rate-like units."
+        }
+      }
     }
-  }
+  },
+
+  "examples": [
+    {
+      "frame_type": "relation.spatial",
+      "subject": {
+        "id": "Q90",
+        "name": "Paris",
+        "entity_type": "city"
+      },
+      "reference": {
+        "id": "Q142",
+        "name": "France",
+        "kind": "country"
+      },
+      "relation": "in",
+      "certainty": 1.0
+    },
+    {
+      "frame_type": "relation.spatial",
+      "subject": {
+        "id": "Q8502",
+        "name": "Mount Fuji",
+        "kind": "mountain"
+      },
+      "reference": {
+        "id": "Q1490",
+        "name": "Tokyo",
+        "kind": "city"
+      },
+      "relation": "west_of",
+      "distance": {
+        "kind": "measure",
+        "value": 100,
+        "unit": {
+          "code": "km",
+          "name": "kilometre",
+          "system": "SI"
+        },
+        "qualifier": "approximate"
+      },
+      "qualifiers": [
+        "approximately"
+      ],
+      "certainty": 0.9
+    }
+  ]
 }

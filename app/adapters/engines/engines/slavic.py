@@ -1,53 +1,122 @@
-# app\adapters\engines\engines\slavic.py
-# engines\slavic.py
+# app/adapters/engines/engines/slavic.py
 """
 SLAVIC LANGUAGE ENGINE
 ----------------------
-A data-driven renderer for Slavic languages (RU, PL, CS, UK, SR, HR, BG).
+Compatibility renderer for Slavic languages (RU, PL, CS, UK, SR, HR, BG).
 
-This module orchestrates the generation of sentences by:
-1. Delegating morphology to `morphology.slavic.SlavicMorphology`.
-2. Handling sentence structure and assembly.
+This module stays on the legacy family-engine surface:
+
+    render_bio(name, gender, prof_lemma, nat_lemma, config) -> str
+
+It delegates morphology to `SlavicMorphology` and performs only
+syntax-level assembly. The Batch 6 runtime contract lives one layer up in
+the construction adapters; this file remains a narrow compatibility shim.
 """
 
-from morphology.slavic import SlavicMorphology
+from __future__ import annotations
+
+from typing import Any, Mapping
+
+from app.core.domain.morphology.slavic import SlavicMorphology
 
 
-def render_bio(name, gender, prof_lemma, nat_lemma, config):
+def _clean_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def _normalize_gender(value: Any) -> str:
+    raw = _clean_text(value).lower()
+    if raw in {"m", "male", "masc", "masculine", "man"}:
+        return "male"
+    if raw in {"f", "female", "fem", "feminine", "woman"}:
+        return "female"
+    return raw
+
+
+def _collapse_ws(text: str) -> str:
+    text = " ".join(str(text).split())
+    text = text.replace(" ,", ",").replace(" .", ".")
+    text = text.replace(" ;", ";").replace(" :", ":")
+    text = text.replace("( ", "(").replace(" )", ")")
+    return text.strip()
+
+
+def _compose_predicate(nationality: str, profession: str) -> str:
+    return " ".join(part for part in (nationality, profession) if part)
+
+
+class _SafeFormatDict(dict):
+    def __missing__(self, key: str) -> str:
+        return ""
+
+
+def render_bio(
+    name: str,
+    gender: str,
+    prof_lemma: str,
+    nat_lemma: str,
+    config: Mapping[str, Any],
+) -> str:
     """
-    Main Entry Point for Slavic Biographies.
+    Main entry point for Slavic biography sentences.
 
-    Args:
-        name (str): The subject's name.
-        gender (str): 'Male' or 'Female'.
-        prof_lemma (str): Profession in Nominative Singular (Dictionary form).
-        nat_lemma (str): Nationality in Nominative Singular.
-        config (dict): The JSON configuration card.
-
-    Returns:
-        str: The fully inflected sentence.
+    Expected output examples:
+        "Maria Skłodowska była polską fizyczką."
+        "Мария Кюри была польской физиком."
     """
-    # 1. Initialize Morphology Engine
+    config = dict(config or {})
     morph = SlavicMorphology(config)
 
-    # 2. Get Predicate Components (Profession, Nationality, Copula, Case)
-    # This handles gender inflection (feminization), case declension (e.g. Instrumental),
-    # and copula selection (gendered past tense or zero present).
-    parts = morph.render_simple_bio_predicates(prof_lemma, nat_lemma, gender)
+    subject_name = _clean_text(name)
+    profession_lemma = _clean_text(prof_lemma)
+    nationality_lemma = _clean_text(nat_lemma)
+    norm_gender = _normalize_gender(gender)
 
-    # 3. Assembly
-    # Structure typically uses the copula in past tense, or zero in present tense (Russian)
-    structure = config.get("structure", "{name} {verb} {nationality} {profession}.")
+    # SlavicMorphology is responsible for:
+    # - noun/adjective gender derivation
+    # - predicative case inflection
+    # - past-tense copula selection
+    parts = morph.render_simple_bio_predicates(
+        profession_lemma,
+        nationality_lemma,
+        norm_gender,
+    )
 
-    # Map morphology outputs to template placeholders
-    # Note: 'verb' in template usually maps to the copula
-    sentence = structure.replace("{name}", name)
-    sentence = sentence.replace("{verb}", parts["copula"])
-    sentence = sentence.replace("{copula}", parts["copula"])  # Support both keys
-    sentence = sentence.replace("{nationality}", parts["nationality"])
-    sentence = sentence.replace("{profession}", parts["profession"])
+    profession = _clean_text(parts.get("profession"))
+    nationality = _clean_text(parts.get("nationality"))
+    copula = _clean_text(parts.get("copula"))
+    predicate_case = _clean_text(parts.get("case"))
+    predicate = _compose_predicate(nationality, profession)
 
-    # Cleanup extra spaces (e.g. if verb is empty in Russian Present Tense)
-    sentence = " ".join(sentence.split())
+    # Support both modern and legacy placeholders.
+    structure = _clean_text(config.get("structure")) or "{name} {copula} {predicate}."
 
-    return sentence
+    values = _SafeFormatDict(
+        name=subject_name,
+        verb=copula,          # legacy placeholder
+        copula=copula,
+        predicate=predicate,
+        nationality=nationality,
+        profession=profession,
+        case=predicate_case,
+    )
+
+    if "{" in structure and "}" in structure:
+        sentence = structure.format_map(values)
+    else:
+        sentence = (
+            structure.replace("{name}", subject_name)
+            .replace("{verb}", copula)
+            .replace("{copula}", copula)
+            .replace("{predicate}", predicate)
+            .replace("{nationality}", nationality)
+            .replace("{profession}", profession)
+            .replace("{case}", predicate_case)
+        )
+
+    return _collapse_ws(sentence)
+
+
+__all__ = ["render_bio"]

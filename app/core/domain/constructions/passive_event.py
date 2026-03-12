@@ -1,92 +1,339 @@
-# app\core\domain\constructions\passive_event.py
-# constructions\passive_event.py
-"""
-Passive event construction.
-
-This module implements a language-agnostic PASSIVE_EVENT construction, which
-encodes propositions of the form:
-
-    PATIENT is V-ed (by AGENT) (ADVERBIALS...)
-
-The construction is responsible for:
-- Choosing a linear order for PATIENT, VERB, AGENT-PHRASE, ADVERBIALS
-  based on the language profile.
-- Building an optional "by"-phrase (or equivalent) for the agent.
-
-It is deliberately *not* responsible for internal verb morphology; it expects
-a morphology object that can optionally provide a `make_verb_form(...)`
-method. If that method is missing, the raw verb lemma is used as-is.
-"""
+# app/core/domain/constructions/passive_event.py
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Union
 
+from app.core.domain.constructions.base import SlotSignature, SlotSpec, SlotValueKind
 
+
+CONSTRUCTION_ID = "passive_event"
 TokensLike = Union[str, Sequence[str]]
+
+__all__ = [
+    "CONSTRUCTION_ID",
+    "SLOT_SIGNATURE",
+    "TokensLike",
+    "PassiveEventSlots",
+    "coerce_passive_event_slots",
+    "PassiveEventConstruction",
+    "realize_passive_event",
+]
+
+
+SLOT_SIGNATURE = SlotSignature(
+    (
+        SlotSpec(
+            name="patient",
+            required=True,
+            accepted_kinds=(SlotValueKind.ANY,),
+            allow_raw_string_fallback=True,
+            description="Surface or structured patient phrase.",
+        ),
+        SlotSpec(
+            name="verb",
+            required=True,
+            accepted_kinds=(SlotValueKind.ANY,),
+            allow_raw_string_fallback=True,
+            description="Verb lemma or structured verb payload.",
+        ),
+        SlotSpec(
+            name="agent",
+            required=False,
+            accepted_kinds=(SlotValueKind.ANY,),
+            allow_raw_string_fallback=True,
+            description="Optional surface or structured agent phrase.",
+        ),
+        SlotSpec(
+            name="tense",
+            required=False,
+            accepted_kinds=(SlotValueKind.ANY,),
+            allow_raw_string_fallback=True,
+            default_value="past",
+        ),
+        SlotSpec(
+            name="polarity",
+            required=False,
+            accepted_kinds=(SlotValueKind.ANY,),
+            allow_raw_string_fallback=True,
+            default_value="affirmative",
+        ),
+        SlotSpec(
+            name="adverbials",
+            required=False,
+            accepted_kinds=(SlotValueKind.ANY,),
+            allow_sequence=True,
+            allow_raw_string_fallback=True,
+            default_value=[],
+            description="Optional adverbial phrases.",
+        ),
+        SlotSpec(
+            name="patient_features",
+            required=False,
+            accepted_kinds=(SlotValueKind.ANY,),
+            default_value={},
+        ),
+        SlotSpec(
+            name="agent_features",
+            required=False,
+            accepted_kinds=(SlotValueKind.ANY,),
+            default_value={},
+        ),
+        SlotSpec(
+            name="verb_features",
+            required=False,
+            accepted_kinds=(SlotValueKind.ANY,),
+            default_value={},
+        ),
+    )
+)
+
+
+@dataclass(slots=True)
+class PassiveEventSlots:
+    """
+    Canonical runtime inputs for PASSIVE_EVENT.
+
+    Canonical runtime names:
+        - patient
+        - verb
+        - agent
+
+    Legacy aliases preserved:
+        - patient_np
+        - verb_lemma
+        - agent_np
+    """
+
+    patient: TokensLike
+    verb: str
+    agent: Optional[TokensLike] = None
+
+    tense: str = "past"
+    polarity: str = "affirmative"
+    adverbials: List[TokensLike] = field(default_factory=list)
+
+    patient_features: Dict[str, Any] = field(default_factory=dict)
+    agent_features: Dict[str, Any] = field(default_factory=dict)
+    verb_features: Dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def patient_np(self) -> TokensLike:
+        return self.patient
+
+    @property
+    def verb_lemma(self) -> str:
+        return self.verb
+
+    @property
+    def agent_np(self) -> Optional[TokensLike]:
+        return self.agent
 
 
 def _normalize_tokens(value: TokensLike) -> List[str]:
     """
-    Normalize various NP / phrase inputs into a list of tokens.
-
-    Accepted shapes:
-    - string: split on whitespace,
-    - list/tuple of strings: returned as list,
-    - empty/None: returns [] (but this helper is only called on non-None).
+    Normalize a surface phrase into token strings.
     """
     if isinstance(value, str):
-        value = value.strip()
-        if not value:
+        cleaned = value.strip()
+        if not cleaned:
             return []
-        return value.split()
+        return cleaned.split()
 
-    # Assume it's already a sequence of strings
-    return list(value)
+    return [str(item).strip() for item in value if str(item).strip()]
 
 
-@dataclass
+def _mapping_or_empty(value: Any) -> Dict[str, Any]:
+    if value is None:
+        return {}
+    if not isinstance(value, Mapping):
+        return {}
+    return {str(k): v for k, v in value.items()}
+
+
+def _first_non_empty_text(*values: Any) -> Optional[str]:
+    for value in values:
+        if isinstance(value, str):
+            cleaned = value.strip()
+            if cleaned:
+                return cleaned
+    return None
+
+
+def _surface_from_slot_value(value: Any, *, field_name: str) -> TokensLike:
+    """
+    Accept either a ready surface string / token sequence or a shallow mapping.
+
+    Supported mapping keys:
+      - surface
+      - text
+      - name
+      - label
+      - lemma
+      - tokens
+    """
+    if isinstance(value, str):
+        cleaned = value.strip()
+        if cleaned:
+            return cleaned
+        raise ValueError(f"Missing required field: {field_name}")
+
+    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray, Mapping)):
+        tokens = [str(item).strip() for item in value if str(item).strip()]
+        if tokens:
+            return tokens
+        raise ValueError(f"Missing required field: {field_name}")
+
+    if isinstance(value, Mapping):
+        if "tokens" in value:
+            tokens = _normalize_tokens(value["tokens"])
+            if tokens:
+                return tokens
+
+        text = _first_non_empty_text(
+            value.get("surface"),
+            value.get("text"),
+            value.get("name"),
+            value.get("label"),
+            value.get("lemma"),
+        )
+        if text:
+            return text
+
+    raise ValueError(f"Missing required field: {field_name}")
+
+
+def _required_verb_text(value: Any) -> str:
+    if isinstance(value, str):
+        cleaned = value.strip()
+        if cleaned:
+            return cleaned
+
+    if isinstance(value, Mapping):
+        text = _first_non_empty_text(
+            value.get("lemma"),
+            value.get("surface"),
+            value.get("text"),
+            value.get("name"),
+            value.get("label"),
+        )
+        if text:
+            return text
+
+    raise ValueError("Missing required field: verb")
+
+
+def _optional_text(value: Any, default: str) -> str:
+    if value is None:
+        return default
+    if isinstance(value, str):
+        cleaned = value.strip()
+        return cleaned or default
+    return str(value).strip() or default
+
+
+def _coerce_adverbials(value: Any) -> List[TokensLike]:
+    if value is None:
+        return []
+    if isinstance(value, (str, bytes, bytearray)):
+        return [str(value)]
+    if isinstance(value, Sequence):
+        return [item for item in value if item is not None]
+    raise TypeError("adverbials must be a string or a sequence of phrases")
+
+
+def coerce_passive_event_slots(value: PassiveEventSlots | Mapping[str, Any]) -> PassiveEventSlots:
+    """
+    Accept either the typed dataclass or a canonical slot-map/legacy mapping.
+
+    Supported mapping variants:
+      - canonical:
+          {"patient": "polonium", "verb": "discover", "agent": "Marie Curie"}
+      - structured:
+          {"patient": {"text": "polonium"}, "verb": {"lemma": "discover"}}
+      - legacy:
+          {"patient_np": "polonium", "verb_lemma": "discover", "agent_np": "Marie Curie"}
+    """
+    if isinstance(value, PassiveEventSlots):
+        return value
+
+    if not isinstance(value, Mapping):
+        raise TypeError("slots must be PassiveEventSlots or a mapping")
+
+    raw_patient = value.get("patient", value.get("patient_np"))
+    raw_verb = value.get("verb", value.get("verb_lemma"))
+    raw_agent = value.get("agent", value.get("agent_np"))
+
+    if raw_patient is None:
+        raise ValueError("Missing required field: patient")
+    if raw_verb is None:
+        raise ValueError("Missing required field: verb")
+
+    patient_features = _mapping_or_empty(value.get("patient_features"))
+    patient_features.update(_mapping_or_empty(value.get("extra_patient_features")))
+
+    agent_features = _mapping_or_empty(value.get("agent_features"))
+    agent_features.update(_mapping_or_empty(value.get("extra_agent_features")))
+
+    verb_features = _mapping_or_empty(value.get("verb_features"))
+    verb_features.update(_mapping_or_empty(value.get("extra_verb_features")))
+
+    if isinstance(raw_patient, Mapping):
+        patient_features = {
+            **_mapping_or_empty(raw_patient.get("features")),
+            **patient_features,
+        }
+
+    if isinstance(raw_agent, Mapping):
+        agent_features = {
+            **_mapping_or_empty(raw_agent.get("features")),
+            **agent_features,
+        }
+
+    if isinstance(raw_verb, Mapping):
+        verb_features = {
+            **_mapping_or_empty(raw_verb.get("features")),
+            **verb_features,
+        }
+
+    return PassiveEventSlots(
+        patient=_surface_from_slot_value(raw_patient, field_name="patient"),
+        verb=_required_verb_text(raw_verb),
+        agent=None if raw_agent is None else _surface_from_slot_value(raw_agent, field_name="agent"),
+        tense=_optional_text(value.get("tense"), "past"),
+        polarity=_optional_text(value.get("polarity"), "affirmative"),
+        adverbials=_coerce_adverbials(value.get("adverbials")),
+        patient_features=patient_features,
+        agent_features=agent_features,
+        verb_features=verb_features,
+    )
+
+
 class PassiveEventConstruction:
     """
     Language-agnostic passive event construction.
 
-    Interface
-    ---------
-    def realize(
-        slots: Mapping[str, Any],
-        lang_profile: Mapping[str, Any],
-        morph: Any,
-    ) -> Dict[str, Any]
+    Canonical slot names:
+      - patient
+      - verb
+      - agent
+      - tense
+      - polarity
+      - adverbials
 
-    Expected `slots` keys:
-    - "patient_np"  : str | List[str] (required)
-    - "verb_lemma"  : str            (required)
-    - "agent_np"    : str | List[str] (optional; may be omitted for agentless passives)
-    - "tense"       : str (e.g. "past", "present") [optional, default "past"]
-    - "polarity"    : str (e.g. "affirmative", "negative") [optional, default "affirmative"]
-    - "adverbials"  : List[str | List[str]] (optional; e.g. ["in 1903", ["in", "Paris"]])
-
-    Expected `lang_profile["passive"]` keys (all optional):
-    - "agent_marker"    : str  (e.g. "by", "", a case particle, etc.)
-    - "agent_position"  : "postverb" | "preverb" | "final"
-    - "subject_position": "preverb" | "postverb"
-    - "allow_agentless" : bool (default: True)
-
-    The `morph` object may provide:
-    - make_verb_form(lemma: str, *, voice: str, tense: str, polarity: str) -> str
-      If missing, the lemma is used directly.
+    Legacy aliases accepted:
+      - patient_np
+      - verb_lemma
+      - agent_np
     """
 
-    id: str = "PASSIVE_EVENT"
-
-    # ------------------------------------------------------------------ #
-    # Core realization                                                   #
-    # ------------------------------------------------------------------ #
+    id: str = CONSTRUCTION_ID
+    slot_signature: SlotSignature = SLOT_SIGNATURE
 
     def realize(
         self,
-        slots: Mapping[str, Any],
+        slots: PassiveEventSlots | Mapping[str, Any],
         lang_profile: Mapping[str, Any],
         morph: Any,
     ) -> Dict[str, Any]:
@@ -100,101 +347,71 @@ class PassiveEventConstruction:
         - "verb": str
         - "meta": {...}
         """
-        # --- Extract required slots ---
-        try:
-            patient_raw = slots["patient_np"]
-        except KeyError as e:
-            raise KeyError("PASSIVE_EVENT requires 'patient_np' in slots") from e
+        normalized = coerce_passive_event_slots(slots)
 
-        try:
-            verb_lemma = slots["verb_lemma"]
-        except KeyError as e:
-            raise KeyError("PASSIVE_EVENT requires 'verb_lemma' in slots") from e
+        patient_tokens = _normalize_tokens(normalized.patient)
+        if not patient_tokens:
+            raise ValueError("passive_event requires a non-empty patient phrase")
 
-        patient_tokens = _normalize_tokens(patient_raw)
-
-        # --- Optional slots ---
-        agent_raw: Optional[TokensLike] = slots.get("agent_np")
-        tense: str = slots.get("tense", "past")
-        polarity: str = slots.get("polarity", "affirmative")
-        adverbials_raw = slots.get("adverbials", [])
-
-        # Normalize adverbials into list[list[str]]
-        adverbial_chunks: List[List[str]] = []
-        for adv in adverbials_raw:
-            adverbial_chunks.append(_normalize_tokens(adv))
-
-        # --- Language profile for passive ---
         passive_cfg: Mapping[str, Any] = lang_profile.get("passive", {}) or {}
 
-        agent_marker: str = passive_cfg.get("agent_marker", "by")
-        agent_position: str = passive_cfg.get("agent_position", "postverb")
-        subject_position: str = passive_cfg.get("subject_position", "preverb")
-        allow_agentless: bool = passive_cfg.get("allow_agentless", True)
+        agent_marker: str = str(passive_cfg.get("agent_marker", "by") or "")
+        agent_position: str = str(passive_cfg.get("agent_position", "postverb") or "postverb")
+        subject_position: str = str(passive_cfg.get("subject_position", "preverb") or "preverb")
+        allow_agentless: bool = bool(passive_cfg.get("allow_agentless", True))
 
-        # --- Morphology: build verb form (or fallback to lemma) ---
         verb_form = self._make_verb_form(
             morph=morph,
-            lemma=verb_lemma,
-            tense=tense,
-            polarity=polarity,
+            lemma=normalized.verb,
+            tense=normalized.tense,
+            polarity=normalized.polarity,
+            extra_features=normalized.verb_features,
         )
-        verb_tokens = verb_form.split()
+        verb_tokens = _normalize_tokens(verb_form)
 
-        # --- Build agent phrase, if present / required ---
         agent_tokens: Optional[List[str]] = None
-        if agent_raw is not None:
-            base_agent = _normalize_tokens(agent_raw)
-            if agent_marker:
-                agent_tokens = [agent_marker] + base_agent
-            else:
-                agent_tokens = base_agent
-        else:
-            # No explicit agent supplied
-            if not allow_agentless:
-                # Language profile demands an agent; in the absence of data,
-                # we just omit it but mark that it's missing.
-                agent_tokens = None
+        missing_required_agent = False
 
-        # --- Compose final token sequence according to positions ---
+        if normalized.agent is not None:
+            base_agent = _normalize_tokens(normalized.agent)
+            if base_agent:
+                agent_tokens = [agent_marker, *base_agent] if agent_marker else base_agent
+        elif not allow_agentless:
+            missing_required_agent = True
+
+        adverbial_chunks: List[List[str]] = [
+            _normalize_tokens(adv)
+            for adv in normalized.adverbials
+            if _normalize_tokens(adv)
+        ]
+
         tokens: List[str] = []
 
-        # Subject (patient) before verb?
-        if subject_position == "preverb":
-            tokens.extend(patient_tokens)
-            tokens.extend(verb_tokens)
-        else:  # subject_position == "postverb"
+        if subject_position == "postverb":
             tokens.extend(verb_tokens)
             tokens.extend(patient_tokens)
+        else:
+            tokens.extend(patient_tokens)
+            tokens.extend(verb_tokens)
 
-        # Agent phrase placement
         if agent_tokens:
             if agent_position == "preverb":
                 tokens = agent_tokens + tokens
-            elif agent_position == "postverb":
-                # already placed verb; insert agent after verb block
-                # Here we simply append, assuming verb immediately precedes.
-                tokens.extend(agent_tokens)
             elif agent_position == "final":
-                # final position after everything else
-                # We'll append after adverbials.
-                pass  # handled below as "final"
+                pass
             else:
-                # Unknown setting → default to postverb
                 tokens.extend(agent_tokens)
 
-        # Adverbials
         for chunk in adverbial_chunks:
             tokens.extend(chunk)
 
-        # If agent position is explicitly final, add it here
         if agent_tokens and agent_position == "final":
             tokens.extend(agent_tokens)
 
-        # --- Build result structure ---
+        tokens = [token for token in tokens if token]
         text = " ".join(tokens)
 
-        result: Dict[str, Any] = {
+        return {
             "construction_id": self.id,
             "tokens": tokens,
             "text": text,
@@ -204,17 +421,14 @@ class PassiveEventConstruction:
                 "agent": agent_tokens,
             },
             "meta": {
-                "tense": tense,
-                "polarity": polarity,
+                "tense": normalized.tense,
+                "polarity": normalized.polarity,
                 "subject_role": "patient",
                 "agent_included": agent_tokens is not None,
+                "agent_required_but_missing": missing_required_agent,
+                "slot_contract": tuple(spec.name for spec in self.slot_signature.specs),
             },
         }
-        return result
-
-    # ------------------------------------------------------------------ #
-    # Helpers                                                            #
-    # ------------------------------------------------------------------ #
 
     @staticmethod
     def _make_verb_form(
@@ -223,6 +437,7 @@ class PassiveEventConstruction:
         *,
         tense: str,
         polarity: str,
+        extra_features: Mapping[str, Any],
     ) -> str:
         """
         Ask the morphology layer for a passive verb form if possible.
@@ -236,10 +451,32 @@ class PassiveEventConstruction:
                     voice="passive",
                     tense=tense,
                     polarity=polarity,
+                    **dict(extra_features),
                 )
             )
-        # Fallback: no dedicated verb form builder; use lemma.
+
+        realize_verb = getattr(morph, "realize_verb", None)
+        if callable(realize_verb):
+            features = {
+                "voice": "passive",
+                "tense": tense,
+                "polarity": polarity,
+                **dict(extra_features),
+            }
+            try:
+                return str(realize_verb(lemma=lemma, features=features))
+            except TypeError:
+                return str(realize_verb(lemma, features))
+
         return lemma
 
 
-__all__ = ["PassiveEventConstruction"]
+def realize_passive_event(
+    slots: PassiveEventSlots | Mapping[str, Any],
+    lang_profile: Mapping[str, Any],
+    morph: Any,
+) -> Dict[str, Any]:
+    """
+    Convenience functional interface around PassiveEventConstruction.
+    """
+    return PassiveEventConstruction().realize(slots, lang_profile, morph)

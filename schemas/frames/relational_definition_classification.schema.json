@@ -1,7 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Semantik Architect Frame Schema: Relational – Definition / classification",
-  "description": "Schema for the rel.definition-classification frame: definitional and classification relations of the form 'X is a Y' or 'X is a type of Y'.",
+  "$id": "schemas/frames/relational_definition_classification.schema.json",
+  "title": "DefinitionClassificationFrame",
+  "description": "Schema for the rel.definition-classification frame: definitional and classification relations of the form 'X is a Y' or 'X is a type of Y'. This frame models a subject together with one or more supertypes, optional lemma-level modifiers, and an optional fallback gloss.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,59 +17,109 @@
     },
     "frame_family": {
       "type": "string",
-      "enum": [
-        "relational"
-      ],
-      "description": "Optional high-level family label; always relational for this frame."
+      "const": "relational",
+      "description": "Optional high-level family label retained for compatibility with older relational payloads."
     },
     "subject": {
-      "$ref": "#/definitions/entity",
+      "$ref": "#/definitions/EntityRef",
       "description": "The entity being defined or classified (often the article's main subject)."
     },
     "definitional_relation": {
       "type": "string",
-      "description": "High-level label describing the semantic relation between subject and supertype(s), e.g. instance-of, subclass-of, role-of, alias-of."
+      "minLength": 1,
+      "default": "instance-of",
+      "description": "High-level semantic relation between subject and supertype(s). Recommended values include 'instance-of', 'subclass-of', 'role-of', and 'alias-of'."
     },
     "supertype_entities": {
       "type": "array",
-      "description": "Entity-level supertypes that the subject belongs to (e.g. specific organizations, classes, or categories represented as entities).",
+      "minItems": 1,
+      "description": "Entity-level supertypes that the subject belongs to, when the type itself is modeled as an entity (e.g. a named class, category, or organization-like type).",
       "items": {
-        "$ref": "#/definitions/entity"
+        "$ref": "#/definitions/EntityRef"
       }
     },
     "supertype_lemmas": {
       "type": "array",
-      "description": "Lemma-level labels for the type(s) that the subject belongs to (e.g. writer, political party, programming language).",
+      "minItems": 1,
+      "description": "Lemma-level labels for the type(s) that the subject belongs to, such as ['writer'], ['programming language'], or ['family', 'carnivorous mammal'].",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "modifier_lemmas": {
       "type": "array",
-      "description": "Lemma-level modifiers that refine or qualify the supertype(s) (e.g. british, fictional, roman_catholic).",
+      "minItems": 1,
+      "description": "Lemma-level modifiers refining the classification, such as ['british'], ['fictional'], ['roman catholic'], or ['high-level', 'general-purpose'].",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     },
     "gloss": {
-      "type": "string",
-      "description": "Optional short textual gloss or fallback definition snippet when structured classification data is insufficient."
+      "description": "Optional short textual gloss or fallback definition snippet used only when structured classification data is incomplete.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "attributes": {
       "type": "object",
-      "description": "Arbitrary structured attributes related to this definitional fact (e.g. source, source_property, confidence).",
-      "additionalProperties": true
+      "description": "Arbitrary structured attributes related to this definitional fact, such as source, source_property, confidence, or planning hints.",
+      "additionalProperties": true,
+      "default": {}
     },
     "extra": {
       "type": "object",
-      "description": "Free-form metadata / provenance bag passed through unchanged (e.g. original Semantik Architect blobs, Wikidata statements).",
-      "additionalProperties": true
+      "description": "Free-form metadata / provenance bag passed through unchanged, such as upstream statement IDs, raw extraction payloads, or debug notes.",
+      "additionalProperties": true,
+      "default": {}
     }
   },
+  "anyOf": [
+    {
+      "required": [
+        "supertype_entities"
+      ],
+      "properties": {
+        "supertype_entities": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+    {
+      "required": [
+        "supertype_lemmas"
+      ],
+      "properties": {
+        "supertype_lemmas": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+    {
+      "required": [
+        "gloss"
+      ],
+      "properties": {
+        "gloss": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  ],
   "definitions": {
-    "entity": {
+    "EntityRef": {
       "type": "object",
-      "description": "Generic entity reference (person, organization, place, class, etc.).",
+      "description": "Generic lightweight entity reference used across frame schemas.",
       "additionalProperties": true,
       "properties": {
         "id": {
@@ -76,7 +127,7 @@
             "string",
             "null"
           ],
-          "description": "Local identifier for the entity, if any."
+          "description": "Opaque internal or local identifier for the entity."
         },
         "qid": {
           "type": [
@@ -90,22 +141,133 @@
             "string",
             "null"
           ],
-          "description": "Human-readable label for the entity."
+          "description": "Human-readable primary label for the entity."
+        },
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional alternate display label; accepted for compatibility with upstream payloads that use 'label' instead of 'name'."
+        },
+        "entity_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional canonical entity type label, such as 'person', 'organization', 'class', 'language', or 'software'."
         },
         "kind": {
           "type": [
             "string",
             "null"
           ],
-          "description": "Optional kind label (e.g. person, organization, class)."
+          "description": "Optional loose kind label retained for compatibility with older schemas and extracted payloads."
         },
         "extra": {
           "type": "object",
-          "description": "Arbitrary metadata attached to the entity.",
+          "description": "Arbitrary metadata attached to the entity reference.",
           "additionalProperties": true
         }
-      }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "qid"
+          ],
+          "properties": {
+            "qid": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
     }
-  }
+  },
+  "examples": [
+    {
+      "frame_type": "rel.definition-classification",
+      "frame_family": "relational",
+      "subject": {
+        "qid": "Q42",
+        "name": "Douglas Adams",
+        "entity_type": "person"
+      },
+      "definitional_relation": "instance-of",
+      "supertype_lemmas": [
+        "writer"
+      ],
+      "modifier_lemmas": [
+        "british"
+      ],
+      "attributes": {
+        "source": "wikidata",
+        "source_property": "P31"
+      },
+      "extra": {
+        "statement_id": "Q42$abc123"
+      }
+    },
+    {
+      "frame_type": "rel.definition-classification",
+      "subject": {
+        "name": "Python",
+        "entity_type": "software"
+      },
+      "definitional_relation": "instance-of",
+      "supertype_lemmas": [
+        "programming language"
+      ],
+      "modifier_lemmas": [
+        "high-level",
+        "general-purpose"
+      ]
+    },
+    {
+      "frame_type": "rel.definition-classification",
+      "subject": {
+        "name": "Canidae",
+        "entity_type": "taxon"
+      },
+      "definitional_relation": "subclass-of",
+      "supertype_lemmas": [
+        "family",
+        "carnivorous mammal"
+      ]
+    }
+  ]
 }
-

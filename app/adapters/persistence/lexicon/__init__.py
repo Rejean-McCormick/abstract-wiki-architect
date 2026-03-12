@@ -1,27 +1,32 @@
 # app/adapters/persistence/lexicon/__init__.py
 """
-lexicon/__init__.py
--------------------
-
 Public entrypoint for the lexicon subsystem.
 
-This module re-exports the most common APIs so other parts of the system can do:
+This package now exposes two layers of API:
 
-    from lexicon import get_index, lookup_lemma, lookup_form
+1. Legacy / storage-oriented APIs
+   - load_lexicon(...)
+   - get_index(...)
+   - lookup_lemma(...)
+   - lookup_qid(...)
+   - lookup_form(...)
 
-without importing submodules individually.
+2. Batch 5 lexical-resolution APIs
+   - lexical_resolution module namespace
+   - entity_resolution module namespace
+   - predicate_resolution module namespace
 
-Design goals
-============
-- Stable public surface: keep call sites simple.
-- Enterprise-grade robustness: avoid import-time side effects, keep types stable,
-  and provide backwards-compatible aliasing where practical.
-- Explicit separation of concerns:
-    - loader.py: filesystem + JSON merging + normalization
-    - cache.py: in-memory caching of per-language indices
-    - normalization.py: key normalization helpers
-    - schema.py: validation helpers
-    - types.py: lexicon data models (BaseLexicalEntry, Lexeme, etc.)
+The legacy lookup surface remains stable for existing callers, while the new
+planner-first runtime can import the lexical-resolution layer from the same
+package boundary.
+
+Notes
+-----
+- Keep this file import-light and side-effect free.
+- Prefer re-exporting stable public names here rather than forcing callers
+  to know submodule layout.
+- New lexical-resolution submodules are exported as namespaces to avoid
+  overcommitting to exact helper names while the Batch 5 API settles.
 """
 
 from __future__ import annotations
@@ -56,6 +61,13 @@ from .types import (
     TitleEntry,
 )
 
+# Batch 5 bridge / runtime exports
+from .aw_lexeme_bridge import lexeme_from_z_object, lexemes_from_z_list
+from . import lexical_resolution
+from . import entity_resolution
+from . import predicate_resolution
+
+
 # ---------------------------------------------------------------------------
 # Index access
 # ---------------------------------------------------------------------------
@@ -71,7 +83,7 @@ def get_index(lang: str):
 
 
 # ---------------------------------------------------------------------------
-# Convenience wrappers (enterprise-safe, best-effort)
+# Convenience wrappers (legacy-safe, best-effort)
 # ---------------------------------------------------------------------------
 
 
@@ -89,14 +101,12 @@ def lookup_lemma(
     """
     idx = get_index(lang)
 
-    # Prefer a rich method if present (future-proofing)
     if hasattr(idx, "lookup_by_lemma"):
         try:
             return idx.lookup_by_lemma(lemma, pos=pos)  # type: ignore[attr-defined]
         except TypeError:
             return idx.lookup_by_lemma(lemma)  # type: ignore[attr-defined]
 
-    # Fallback to current LexiconIndex API
     if hasattr(idx, "lookup_profession"):
         entry = idx.lookup_profession(lemma)  # type: ignore[attr-defined]
         if entry is not None:
@@ -122,7 +132,6 @@ def lookup_qid(lang: str, qid: str) -> Optional[Any]:
     """
     idx = get_index(lang)
 
-    # Prefer explicit names if present
     if hasattr(idx, "lookup_by_qid"):
         return idx.lookup_by_qid(qid)  # type: ignore[attr-defined]
     if hasattr(idx, "lookup_qid"):
@@ -141,7 +150,7 @@ def lookup_form(
     Look up a surface form for a lemma given morphological features (best-effort).
 
     Notes:
-    - The current LexiconIndex does not expose a morphology API.
+    - The current LexiconIndex does not expose a full morphology API.
       This wrapper supports future indices that implement `lookup_form(...)`.
     """
     idx = get_index(lang)
@@ -151,7 +160,6 @@ def lookup_form(
         try:
             return idx.lookup_form(lemma=lemma, features=feats, pos=pos)  # type: ignore[attr-defined]
         except TypeError:
-            # tolerate older signatures
             return idx.lookup_form(lemma, feats)  # type: ignore[attr-defined]
 
     return None
@@ -161,15 +169,13 @@ def lookup_form(
 # Backwards-compatible aliases
 # ---------------------------------------------------------------------------
 
-# Some codebases use `get_or_build_index` but others use `get_index`.
-# Keep both in the public surface.
-get_or_build_index = get_or_build_index  # re-export (explicit name kept)
-warmup_languages = preload_languages  # match cache.py alias for convenience
+warmup_languages = preload_languages
 
 
 __all__ = [
     # Core access
     "get_index",
+    "get_or_build_index",
     # Convenience lookups
     "lookup_lemma",
     "lookup_qid",
@@ -178,7 +184,6 @@ __all__ = [
     "load_lexicon",
     "available_languages",
     # Cache controls
-    "get_or_build_index",
     "preload_languages",
     "warmup_languages",
     "clear_cache",
@@ -205,4 +210,11 @@ __all__ = [
     "TitleEntry",
     "HonourEntry",
     "NameTemplate",
+    # AW / ingestion bridge
+    "lexeme_from_z_object",
+    "lexemes_from_z_list",
+    # Batch 5 runtime namespaces
+    "lexical_resolution",
+    "entity_resolution",
+    "predicate_resolution",
 ]

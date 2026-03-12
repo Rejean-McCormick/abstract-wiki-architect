@@ -1,8 +1,15 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Semantik Architect  Frame: Relational role / position / office",
+  "$id": "urn:semantik-architect:schemas:frames:relational_role_position_office",
+  "title": "Semantik Architect Frame Schema — Relational: Role / position / office",
+  "description": "Schema for role-, position-, and office-holding relations. This frame models a holder entity together with a title/office label, optional organization or jurisdiction, optional term boundaries, and predecessor/successor context. Entity-shaped fields are normalized through the shared EntityRef contract.",
   "type": "object",
   "additionalProperties": false,
+  "required": [
+    "frame_type",
+    "holder",
+    "title_lemma"
+  ],
   "properties": {
     "frame_type": {
       "type": "string",
@@ -13,65 +20,120 @@
       ]
     },
 
+    "frame_family": {
+      "type": "string",
+      "description": "Optional high-level family label; always relational for this frame.",
+      "enum": [
+        "relational"
+      ]
+    },
+
+    "id": {
+      "type": "string",
+      "description": "Optional stable identifier for this role relation instance, such as a statement ID or normalized relation-cluster ID."
+    },
+
     "holder": {
-      "type": "object",
-      "description": "Entity holding the role or office (typically a person). Shape follows semantics.types.Entity.",
-      "additionalProperties": true
+      "$ref": "../contracts/entity_ref.schema.json",
+      "description": "Entity holding the role or office (typically a person)."
     },
 
     "title_lemma": {
       "type": "string",
-      "description": "Lemma-level label for the role, position, or office, e.g. 'prime minister', 'president', 'professor of physics'."
+      "minLength": 1,
+      "description": "Lemma-level label for the role, position, or office, e.g. 'prime minister', 'president', or 'professor of physics'."
     },
 
     "organization": {
-      "type": ["object", "null"],
-      "description": "Organization, institution, or body associated with the role (e.g. a government, university, or club). Shape follows semantics.types.Entity.",
-      "additionalProperties": true
+      "description": "Organization, institution, or body associated with the role, such as a government, university, company, club, or committee.",
+      "oneOf": [
+        {
+          "$ref": "../contracts/entity_ref.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "jurisdiction": {
-      "type": ["object", "null"],
-      "description": "Jurisdiction or territorial unit over which the office has authority (e.g. country, region, department). Shape follows semantics.types.Entity.",
-      "additionalProperties": true
+      "description": "Jurisdiction or territorial unit over which the office has authority, such as a country, province, municipality, or district.",
+      "oneOf": [
+        {
+          "$ref": "../contracts/entity_ref.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "start": {
-      "type": ["object", "null"],
-      "description": "Time span for the start of the term in office. Shape follows semantics.types.TimeSpan.",
-      "additionalProperties": true
+      "description": "Time span for the start of the term in office.",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "end": {
-      "type": ["object", "null"],
-      "description": "Time span for the end of the term in office, if applicable. Shape follows semantics.types.TimeSpan.",
-      "additionalProperties": true
+      "description": "Time span for the end of the term in office, if applicable.",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "predecessor": {
-      "type": ["object", "null"],
       "description": "Entity representing the predecessor in this role or office, if known.",
-      "additionalProperties": true
+      "oneOf": [
+        {
+          "$ref": "../contracts/entity_ref.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "successor": {
-      "type": ["object", "null"],
       "description": "Entity representing the successor in this role or office, if known.",
-      "additionalProperties": true
+      "oneOf": [
+        {
+          "$ref": "../contracts/entity_ref.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "acting": {
-      "type": ["boolean", "null"],
-      "description": "Whether the role holder is/was serving in an acting or interim capacity."
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Whether the holder is/was serving in an acting, interim, or caretaker capacity."
     },
 
     "status": {
-      "type": ["string", "null"],
-      "description": "Optional status label for the role-holding, such as 'current', 'former', 'designate'."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional status label for the role-holding, such as 'current', 'former', 'designate', 'interim', or 'vacant'."
     },
 
     "certainty": {
-      "description": "Optional certainty / confidence score for this role relation. Numeric scores should be between 0 and 1.",
+      "description": "Optional certainty / confidence score for this role relation. Numeric scores should be between 0.0 and 1.0.",
       "oneOf": [
         {
           "type": "number",
@@ -85,54 +147,173 @@
     },
 
     "source_id": {
-      "type": ["string", "null"],
-      "description": "Optional identifier for the source record from which this role relation was derived."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional identifier for the upstream source record or statement from which this role relation was derived."
     },
 
     "attributes": {
       "type": "object",
-      "description": "Free-form attribute bag for additional, lightly structured information not yet promoted to first-class fields (e.g. method of appointment, portfolio details).",
+      "description": "Free-form attribute bag for additional lightly structured details not yet promoted to first-class fields, such as appointment method, electoral mandate, cabinet portfolio, chamber, constituency, or rank qualifiers.",
       "additionalProperties": true
     },
 
     "extra": {
       "type": "object",
-      "description": "Reserved for pipeline- or source-specific metadata that should not affect generation but may be useful for debugging or analysis.",
+      "description": "Reserved for pipeline- or source-specific metadata that should not affect generation but may be useful for debugging, provenance, or analysis.",
       "additionalProperties": true
     },
 
     "office_lemma": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Legacy field: office title lemma. Prefer 'title_lemma' for new data."
     },
 
     "office_holder": {
-      "type": ["object", "null"],
       "description": "Legacy field: office holder entity. Prefer 'holder' for new data.",
-      "additionalProperties": true
+      "oneOf": [
+        {
+          "$ref": "../contracts/entity_ref.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "body": {
-      "type": ["object", "null"],
       "description": "Legacy field: body or organization associated with the office. Prefer 'organization' and/or 'jurisdiction' for new data.",
-      "additionalProperties": true
+      "oneOf": [
+        {
+          "$ref": "../contracts/entity_ref.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "start_time": {
-      "type": ["object", "null"],
       "description": "Legacy field: term start time. Prefer 'start' (TimeSpan).",
-      "additionalProperties": true
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
 
     "end_time": {
-      "type": ["object", "null"],
       "description": "Legacy field: term end time. Prefer 'end' (TimeSpan).",
-      "additionalProperties": true
+      "oneOf": [
+        {
+          "$ref": "#/definitions/TimeSpan"
+        },
+        {
+          "type": "null"
+        }
+      ]
     }
   },
-  "required": [
-    "frame_type",
-    "holder",
-    "title_lemma"
+
+  "definitions": {
+    "TimeSpan": {
+      "type": "object",
+      "description": "Coarse time span or single date for a term in office. Mirrors the lightweight frame-level time shapes already used elsewhere in the schema set.",
+      "additionalProperties": false,
+      "properties": {
+        "start_year": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Starting year, e.g. 2019."
+        },
+        "end_year": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Optional end year."
+        },
+        "start_month": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Optional start month (1–12)."
+        },
+        "start_day": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 31,
+          "description": "Optional start day (1–31)."
+        },
+        "end_month": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Optional end month (1–12)."
+        },
+        "end_day": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 31,
+          "description": "Optional end day (1–31)."
+        },
+        "approximate": {
+          "type": "boolean",
+          "description": "Whether the temporal information is approximate."
+        },
+        "extra": {
+          "type": "object",
+          "description": "Arbitrary source-specific time metadata.",
+          "additionalProperties": true
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "frame_type": "rel.role",
+      "frame_family": "relational",
+      "holder": {
+        "id": "Q6279",
+        "qid": "Q6279",
+        "name": "Keir Starmer",
+        "entity_type": "person"
+      },
+      "title_lemma": "prime minister",
+      "jurisdiction": {
+        "id": "Q145",
+        "qid": "Q145",
+        "name": "United Kingdom",
+        "entity_type": "country"
+      },
+      "start": {
+        "start_year": 2024
+      },
+      "status": "current",
+      "certainty": 1.0
+    }
   ]
 }
