@@ -1,12 +1,342 @@
 {
   "gf/WikiEng.gf": {
     "status": "VALID",
-    "hash": "6e6a7236e78edf879478bd01f73ac0caa98806a00b5d34b8fda0281ec84aac32",
-    "last_check": 1773166650.960401
+    "hash": "b9791a41c2a56d47bc2df6f162aee619fe3aab861d425dd084f238817d5b9881",
+    "last_check": 1773414464.0196073
   },
   "gf/WikiFre.gf": {
     "status": "VALID",
-    "hash": "b257203563f5dc6534db65d37a53c07ba10573de12148dca5bc4f8297bb673f0",
-    "last_check": 1773166650.9604025
+    "hash": "528f078fa6fa5db4e582877c8ade684f2e3ac9a7e9b00d20fc00f31da834d4c0",
+    "last_check": 1773414464.0196087
+  },
+  "gf/WikiCym.gf": {
+    "status": "BROKEN",
+    "hash": "cea8a965ac9ebf4735dc70b11e258ba249741e33989d719b0d1f5d0c9f545f8d",
+    "last_check": 1773409821.6871862
+  },
+  "gf/WikiBen.gf": {
+    "status": "BROKEN",
+    "hash": "e398a5b91820f6d5e64a2caace2507f0be0bc3e03e568a637d17901a91b99e24",
+    "last_check": 1773409821.6871839
+  },
+  "gf/WikiBel.gf": {
+    "status": "BROKEN",
+    "hash": "d45726cfb1bae9ade6c350c91f4648126858e13acd6f2f340ecb2d5de68adad5",
+    "last_check": 1773409821.6871824
+  },
+  "gf/WikiCze.gf": {
+    "status": "BROKEN",
+    "hash": "a0bf80faea864340c4080201ff3c7bff7cc407a1225be79361d2e57632fe42ac",
+    "last_check": 1773409821.6871858
+  },
+  "gf/WikiFao.gf": {
+    "status": "BROKEN",
+    "hash": "4fb2ac52974f5da6c0264be077ad248248a50dbef6768e39a1976b88d6cea56a",
+    "last_check": 1773409821.6871974
+  },
+  "gf/WikiAfr.gf": {
+    "status": "BROKEN",
+    "hash": "c2b17075190ba149d60ade637bfee83322548893a3de5cf0a960fc7d79401049",
+    "last_check": 1773409821.6871762
+  },
+  "gf/WikiGla.gf": {
+    "status": "BROKEN",
+    "hash": "f31e5f7976406b3115b38712fab8eda7958731e81c814b39c6a507056d4f49f1",
+    "last_check": 1773409821.687199
+  },
+  "gf/WikiPes.gf": {
+    "status": "BROKEN",
+    "hash": "0e60e73fa4d3aebe828687b58724506f77ab3d55df78cba4a1cf518b5aa3b400",
+    "last_check": 1773409821.6871955
+  },
+  "gf/WikiAmh.gf": {
+    "status": "BROKEN",
+    "hash": "2b17a621c9b7093e2b29e6ad021e146f2ca0a08937da076720088aaf2e84daac",
+    "last_check": 1773409821.68718
+  },
+  "gf/WikiHrv.gf": {
+    "status": "BROKEN",
+    "hash": "25399436e21d61e6ee7ec1b5b541f81d22a3a4402f4b4354435d9dc4a7706953",
+    "last_check": 1773409821.6872015
+  },
+  "gf/WikiHye.gf": {
+    "status": "BROKEN",
+    "hash": "e64889788299edebe59d47f5c77ae7dc4874e08a181c47ae618dd85c7fe9a48e",
+    "last_check": 1773409821.6872032
+  },
+  "gf/WikiCat.gf": {
+    "status": "BROKEN",
+    "hash": "d7114f0eecd5fd30f48c4795290440c77e8daec8255b22ab0d0d3ebb7b081625",
+    "last_check": 1773409821.6871846
+  },
+  "gf/WikiInd.gf": {
+    "status": "BROKEN",
+    "hash": "708bacea30561f029b6aeb79f5a91f78de2e04b0e4d11fa5085668ed5a658a9b",
+    "last_check": 1773409821.6872044
+  },
+  "gf/WikiBul.gf": {
+    "status": "BROKEN",
+    "hash": "e65446d6080a0c1c2d7627d6cca19db988a1a529ae8bf2d0dd6d3791d205176d",
+    "last_check": 1773409821.6871831
+  },
+  "gf/WikiHeb.gf": {
+    "status": "BROKEN",
+    "hash": "13b75bbbfb95e71f7d8b07999db9bab030d3a060fbb3ea6d216cdc41f15b6fb3",
+    "last_check": 1773409821.6872
+  },
+  "gf/WikiInu.gf": {
+    "status": "BROKEN",
+    "hash": "198f77adc0bf3a8f11f194f4000c5517ae8f1d509fba5335b45446ff11a486b3",
+    "last_check": 1773409821.6872065
+  },
+  "gf/WikiSpa.gf": {
+    "status": "BROKEN",
+    "hash": "bd704307a8c65396b9f24d35d13304fa7e8b46b7b87d84e806c57fbd32fb7015",
+    "last_check": 1773409821.6871932
+  },
+  "gf/WikiKaz.gf": {
+    "status": "BROKEN",
+    "hash": "0a1af03fcdf392e7aa6b111906ac908259f0a5a56e44a03c7a8280d8d99274b7",
+    "last_check": 1773409821.6872077
+  },
+  "gf/WikiKor.gf": {
+    "status": "BROKEN",
+    "hash": "3c689fa91f8a618fd35f8e5b79b0dd92b1034d7cf70cc35e56b0a83bfdcb563c",
+    "last_check": 1773409821.6872082
+  },
+  "gf/WikiHin.gf": {
+    "status": "BROKEN",
+    "hash": "3b569428bbec3498d496779d9fe5958cbb212493264b478700373e7c369fcef3",
+    "last_check": 1773409821.6872008
+  },
+  "gf/WikiEst.gf": {
+    "status": "BROKEN",
+    "hash": "423cd9fd9a2dc71a979d98056d40575cc3c8751abcd5296cd979b32fe7ad75d4",
+    "last_check": 1773409821.6871939
+  },
+  "gf/WikiIna.gf": {
+    "status": "BROKEN",
+    "hash": "e33ab55511b69d41b4377f85e16d217a78c64b2a10df9ac2c20ddcad2515a005",
+    "last_check": 1773409821.6872036
+  },
+  "gf/WikiLit.gf": {
+    "status": "BROKEN",
+    "hash": "068b351b4197ea2ee7ba1c22a74ee635b1c4a27ec43f199d2929df8535789f19",
+    "last_check": 1773409821.68721
+  },
+  "gf/WikiHun.gf": {
+    "status": "BROKEN",
+    "hash": "211077b0062926bab45f1b116abe93699adcdec8a07799fbf3976c335e6e5e38",
+    "last_check": 1773409821.687202
+  },
+  "gf/WikiMal.gf": {
+    "status": "BROKEN",
+    "hash": "9db25571a90e32de00e3bd82f250f73d2c72c273ce8162a91082e052fcef95f3",
+    "last_check": 1773409821.6872122
+  },
+  "gf/WikiJpn.gf": {
+    "status": "BROKEN",
+    "hash": "a4ef42580349db9401d3c77fbc3144b3c7a55cb352889267b8d020ea1047a415",
+    "last_check": 1773409821.687207
+  },
+  "gf/WikiMkd.gf": {
+    "status": "BROKEN",
+    "hash": "52e2c7addf739a09a64697d8f21934d0466c549e552ba93011a711fb0b51e341",
+    "last_check": 1773409821.6872115
+  },
+  "gf/WikiMay.gf": {
+    "status": "BROKEN",
+    "hash": "6095ed11e373be6f67a7f72bcdac2084e723bc00b97b50fcba29b0df1a36c239",
+    "last_check": 1773409821.6872156
+  },
+  "gf/WikiGre.gf": {
+    "status": "BROKEN",
+    "hash": "9e970eb503eb5802e0f48e073a12a2b1224da8bccd262e8ddabf6b527deff8ca",
+    "last_check": 1773409821.6871884
+  },
+  "gf/WikiGer.gf": {
+    "status": "BROKEN",
+    "hash": "823eea591e8cecfaec60d590addad9a3285bb8c04f540f8b8cbe5873f9bda73f",
+    "last_check": 1773409821.6871877
+  },
+  "gf/WikiDan.gf": {
+    "status": "BROKEN",
+    "hash": "9f0852d09baf457fce1b058615ead54f48aeafba12e2460a4397a5eba87c48cd",
+    "last_check": 1773409821.687187
+  },
+  "gf/WikiLat.gf": {
+    "status": "BROKEN",
+    "hash": "d608389f166fedde4482ce9eccfe8ed430f6e3d27d9aeb019b337b47171804c2",
+    "last_check": 1773409821.6872091
+  },
+  "gf/WikiDut.gf": {
+    "status": "BROKEN",
+    "hash": "88c1dcd992685c8461ed11bdfcf45214785971b58bed4cc38326ac437f02ed21",
+    "last_check": 1773409821.6872187
+  },
+  "gf/WikiMon.gf": {
+    "status": "BROKEN",
+    "hash": "31d5941b84a8d6bb5b71a25bb876b1fda34ae671c38a190144b2d83e2294db55",
+    "last_check": 1773409821.6872127
+  },
+  "gf/WikiPol.gf": {
+    "status": "BROKEN",
+    "hash": "37ff1f8ed7919936a2763372d5f1708860fd0d916642a1893df6ee23d3393ccd",
+    "last_check": 1773409821.687222
+  },
+  "gf/WikiNor.gf": {
+    "status": "BROKEN",
+    "hash": "1ff7495a0ad4af53fdfe4508450cb2b52f7ebd64c8d6e4c44d4741794ff4b0a4",
+    "last_check": 1773409821.6872206
+  },
+  "gf/WikiIce.gf": {
+    "status": "BROKEN",
+    "hash": "109a0a5fccd571cc070555bafd41487bc3f7726205f1e713eedf6eeecf562ae8",
+    "last_check": 1773409821.6872048
+  },
+  "gf/WikiAra.gf": {
+    "status": "BROKEN",
+    "hash": "dd749d654540b8e651d97ef3273f46df844e3bf6e54f8d7cbd89676ca6810066",
+    "last_check": 1773409821.6871812
+  },
+  "gf/WikiSlo.gf": {
+    "status": "BROKEN",
+    "hash": "679fc9bf520343e415c83fc1a92a85e0369d45b54c46741e646e1be617051d84",
+    "last_check": 1773409821.6872253
+  },
+  "gf/WikiRus.gf": {
+    "status": "BROKEN",
+    "hash": "14eb560ae821441d4a2130a5030bc2e2db881c34918e2e71cca6ad0250fde79f",
+    "last_check": 1773409821.687224
+  },
+  "gf/WikiSqi.gf": {
+    "status": "BROKEN",
+    "hash": "806260514d9aca839774e90b40a59edc9c399ce3ce0a5100f30a5f668b0da478",
+    "last_check": 1773409821.6872277
+  },
+  "gf/WikiTam.gf": {
+    "status": "BROKEN",
+    "hash": "9bbb25152789a279c0b8c4979333efc713ae3acfcfed94fd956c8f3289e37280",
+    "last_check": 1773409821.6872299
+  },
+  "gf/WikiPor.gf": {
+    "status": "BROKEN",
+    "hash": "0510974793acaf80507155fdffca5ca3eb1c12706c8a06d3e577230d4fa31115",
+    "last_check": 1773409821.6872225
+  },
+  "gf/WikiSlv.gf": {
+    "status": "BROKEN",
+    "hash": "34cebd2945473a21d0e9fbb1e90b3e06f1a8b33f1e687c5960390b47ffe8e15d",
+    "last_check": 1773409821.687226
+  },
+  "gf/WikiSom.gf": {
+    "status": "BROKEN",
+    "hash": "59e57a74f204a91588f3287d1c00e3552044b5db6c272a677ceea13ac0dfe984",
+    "last_check": 1773409821.6872268
+  },
+  "gf/WikiTel.gf": {
+    "status": "BROKEN",
+    "hash": "5e5478644cfd84689dc35c8a22ba287b9f5d218c21f78095b38d5ccdf1d2ace5",
+    "last_check": 1773409821.6872308
+  },
+  "gf/WikiSwa.gf": {
+    "status": "BROKEN",
+    "hash": "e44b4a6ded987bac3edfcd6be55fef40c50fb1133f4292af7b231c379d28ede6",
+    "last_check": 1773409821.6872294
+  },
+  "gf/WikiTgl.gf": {
+    "status": "BROKEN",
+    "hash": "ddd2cd9248c419f7b26074d2bffbe3ae021e5d71a6b061dd61d350fd60462bb5",
+    "last_check": 1773409821.6872344
+  },
+  "gf/WikiVie.gf": {
+    "status": "BROKEN",
+    "hash": "7e3f0bc8c1b3c1d039e061d4b02fc1e0c919a5f01aaaf099bcd6f01f7e4d9634",
+    "last_check": 1773409821.6872373
+  },
+  "gf/WikiUkr.gf": {
+    "status": "BROKEN",
+    "hash": "177e328492c178ca16109b2fc78450826c594564e0a03b1c56f7b1099840c879",
+    "last_check": 1773409821.687236
+  },
+  "gf/WikiTha.gf": {
+    "status": "BROKEN",
+    "hash": "301e09b2aa0d8dc8c17deb5570684c20058ffce36c8b87ac95e4c54e048b6e1e",
+    "last_check": 1773409821.6872332
+  },
+  "gf/WikiNno.gf": {
+    "status": "BROKEN",
+    "hash": "09d42ee267478bcaab85d3686da575435c3a57b7028209cad3b3606aa6a7cc44",
+    "last_check": 1773409821.6872191
+  },
+  "gf/WikiSwe.gf": {
+    "status": "BROKEN",
+    "hash": "1217f9741fb52abda13aabc000af303cc8de6d31c56d33a4d52bcb164847005a",
+    "last_check": 1773409821.6872287
+  },
+  "gf/WikiZul.gf": {
+    "status": "BROKEN",
+    "hash": "7171ccc9e22a70df01609a81ee6cff5f42a641216e136b9ed6eb067592752e00",
+    "last_check": 1773409821.6872387
+  },
+  "gf/WikiPnb.gf": {
+    "status": "BROKEN",
+    "hash": "5e8481ebb95c89922cfd7378932734e35a79ff86eb7505ffdc0ca423dbd4e6b3",
+    "last_check": 1773409821.6872213
+  },
+  "gf/WikiChi.gf": {
+    "status": "BROKEN",
+    "hash": "912f024593f8bcb17c075704e7927ab1db902fc5211f8e86e66b65ae1505d7b0",
+    "last_check": 1773409821.6872382
+  },
+  "gf/WikiTur.gf": {
+    "status": "BROKEN",
+    "hash": "71a9f36c8024166ae72386e677e4ab7b3260bcb800f557b2bd65eaf8828adf70",
+    "last_check": 1773409821.6872354
+  },
+  "gf/WikiUrd.gf": {
+    "status": "BROKEN",
+    "hash": "2d4b2198a2bf5e34ec77ec0314d6bd4294f4204435a9acc0610585452da39bf0",
+    "last_check": 1773409821.6872368
+  },
+  "gf/WikiSnd.gf": {
+    "status": "BROKEN",
+    "hash": "aca8403787811c2f93682d2a3cd0c99768110e7ccba169d5cf1c6b011e8567ec",
+    "last_check": 1773409821.6872246
+  },
+  "gf/WikiNep.gf": {
+    "status": "BROKEN",
+    "hash": "3ec18877a336716332f1dfdffef916925073909389d511e25802da98c6edfa62",
+    "last_check": 1773409821.6872177
+  },
+  "gf/WikiEus.gf": {
+    "status": "BROKEN",
+    "hash": "b981ce4269a8ccfd1cec6babd1605aae0bd558e3ab1d741fd283b77d0724275f",
+    "last_check": 1773409821.6871948
+  },
+  "gf/WikiFin.gf": {
+    "status": "BROKEN",
+    "hash": "6cb2f20b8e16c21641f075e41905f824d25fca369f2b93636493b28ba96143cb",
+    "last_check": 1773409821.6871965
+  },
+  "gf/WikiIta.gf": {
+    "status": "BROKEN",
+    "hash": "ad84c1de7286a5f948886df73a8bb3d2f35e29e5ca504673c2eb1d495d90074f",
+    "last_check": 1773409821.6872053
+  },
+  "gf/WikiLav.gf": {
+    "status": "BROKEN",
+    "hash": "456998428df56ce60bc4cf114c3a1fbdeae64dbc23bf3153582982a0b40ddc05",
+    "last_check": 1773409821.6872108
+  },
+  "gf/WikiMlt.gf": {
+    "status": "BROKEN",
+    "hash": "b8cd4f2163656241e5dd5c08e0a41c7bb7db79fe4e29a23d7456c1d021e16ef2",
+    "last_check": 1773409821.6872163
+  },
+  "gf/WikiRon.gf": {
+    "status": "BROKEN",
+    "hash": "3ac33839c0831271c478b84fba73daefa7627d9dc67ca6da62c2997a269b34db",
+    "last_check": 1773409821.6872232
   }
 }

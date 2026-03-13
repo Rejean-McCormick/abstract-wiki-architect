@@ -1,20 +1,20 @@
-incomplete concrete WikiI of SemantikArchitect = open Prelude, Syntax, Symbolic in {
+incomplete concrete WikiI of SemantikArchitect = open Prelude in {
 
   lincat
-    Statement   = S ;
-    Entity      = NP ;
-    Profession  = CN ;
-    Nationality = AP ;
-    EventObj    = NP ;
+    Statement   = SS ;
+    Entity      = SS ;
+    Profession  = SS ;
+    Nationality = SS ;
+    EventObj    = SS ;
 
   lin
-    mkEntityStr s = symb s ;
-    strProf s     = mkCN (mkN s) ;
-    strNat s      = mkAP (mkA s) ;
-    strEvent s    = symb s ;
+    mkEntityStr s = s ;
+    strProf s     = s ;
+    strNat s      = s ;
+    strEvent s    = s ;
 
-    mkBioProf e p   = mkS (mkCl e p) ;
-    mkBioNat  e n   = mkS (mkCl e n) ;
-    mkBioFull e p n = mkS (mkCl e (mkCN n p)) ;
-    mkEvent e ev    = mkS (mkCl e ev) ;
+    mkBioProf e p   = ss (e.s ++ "is a" ++ p.s) ;
+    mkBioNat  e n   = ss (e.s ++ "is" ++ n.s) ;
+    mkBioFull e p n = ss (e.s ++ "is a" ++ n.s ++ p.s) ;
+    mkEvent e ev    = ss (e.s ++ "participated in" ++ ev.s) ;
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": 1773166650.9666872,
+  "generated_at": 1773414464.0260115,
   "repo_root": "/mnt/c/mycode/SemantiK_Architect/SemantiK_Architect",
   "summary": {
     "compile_valid_or_skipped": 2,
@@ -19,17 +19,17 @@
         "filename": "gf/WikiEng.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 1.0827243328094482,
-        "file_hash": "6e6a7236e78edf879478bd01f73ac0caa98806a00b5d34b8fda0281ec84aac32",
+        "duration_s": 1.2849962711334229,
+        "file_hash": "b9791a41c2a56d47bc2df6f162aee619fe3aab861d425dd084f238817d5b9881",
         "iso2": "en"
       },
       "runtime": {
         "api_lang": "en",
         "status": "PASS",
         "http_status": 200,
-        "duration_ms": 30.479907989501953,
+        "duration_ms": 7.569313049316406,
         "error": null,
-        "sample_text": "Shaka is a zulu warrior"
+        "sample_text": "Shaka is a warrior ( zulu )"
       }
     },
     {
@@ -41,15 +41,15 @@
         "filename": "gf/WikiFre.gf",
         "status": "VALID",
         "error": null,
-        "duration_s": 3.4362192153930664,
-        "file_hash": "b257203563f5dc6534db65d37a53c07ba10573de12148dca5bc4f8297bb673f0",
+        "duration_s": 3.528824806213379,
+        "file_hash": "528f078fa6fa5db4e582877c8ade684f2e3ac9a7e9b00d20fc00f31da834d4c0",
         "iso2": "fr"
       },
       "runtime": {
         "api_lang": "fr",
         "status": "PASS",
         "http_status": 200,
-        "duration_ms": 29.28757667541504,
+        "duration_ms": 7.916688919067383,
         "error": null,
         "sample_text": "Shaka is a warrior ( zulu )"
       }
