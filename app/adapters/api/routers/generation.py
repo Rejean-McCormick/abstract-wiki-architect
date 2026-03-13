@@ -1,12 +1,12 @@
 # app/adapters/api/routers/generation.py
-from typing import Any, Callable, Dict, NoReturn, Optional, Tuple, Union
+from typing import Any, Callable, Dict, NoReturn, Optional
 
 import structlog
 from fastapi import APIRouter, Body, Depends, Header, HTTPException, status
 
 from app.adapters.api.contracts.generation_request_mapper import (
+    MappedGenerationRequest,
     map_generation_request,
-    map_generation_request_from_payload,
 )
 from app.adapters.api.contracts.generation_response_mapper import (
     map_generation_response,
@@ -21,7 +21,7 @@ from app.core.domain.exceptions import (
     UnsupportedFrameTypeError,
 )
 from app.core.domain.frame import BioFrame
-from app.core.domain.models import Frame, Sentence
+from app.core.domain.models import Sentence
 from app.core.use_cases.generate_text import GenerateText
 
 logger = structlog.get_logger()
@@ -31,9 +31,6 @@ router = APIRouter(
     tags=["Generation"],
     dependencies=[Depends(verify_api_key)],
 )
-
-GenerationFrame = Union[BioFrame, Frame]
-ResolvedGenerationRequest = Tuple[str, GenerationFrame]
 
 
 @router.post(
@@ -59,7 +56,7 @@ async def generate_text_from_payload(
       - or inside inputs: language | lang | lang_code
     """
     return await _execute_generation(
-        request_mapper=lambda: map_generation_request_from_payload(payload),
+        request_mapper=lambda: map_generation_request(payload),
         x_session_id=x_session_id,
         use_case=use_case,
         log_lang=None,
@@ -90,7 +87,10 @@ async def generate_text(
     - Domain validation via the use case
     """
     return await _execute_generation(
-        request_mapper=lambda: map_generation_request(lang_code, payload),
+        request_mapper=lambda: map_generation_request(
+            payload,
+            path_lang_code=lang_code,
+        ),
         x_session_id=x_session_id,
         use_case=use_case,
         log_lang=lang_code,
@@ -99,7 +99,7 @@ async def generate_text(
 
 async def _execute_generation(
     *,
-    request_mapper: Callable[[], ResolvedGenerationRequest],
+    request_mapper: Callable[[], MappedGenerationRequest],
     x_session_id: Optional[str],
     use_case: GenerateText,
     log_lang: Optional[str],
@@ -107,7 +107,9 @@ async def _execute_generation(
     lang: Optional[str] = log_lang
 
     try:
-        lang, frame = request_mapper()
+        mapped = request_mapper()
+        lang = mapped.lang_code
+        frame = mapped.frame
 
         if x_session_id and isinstance(frame, BioFrame):
             await _apply_discourse_context(x_session_id, frame)
@@ -141,7 +143,12 @@ def _raise_generation_http_exception(exc: Exception, *, lang: Optional[str]) -> 
             detail=f"Generation failed: {str(exc)}",
         )
 
-    logger.critical("unexpected_generation_crash", lang=lang, error=str(exc), exc_info=True)
+    logger.critical(
+        "unexpected_generation_crash",
+        lang=lang,
+        error=str(exc),
+        exc_info=True,
+    )
     raise HTTPException(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         detail="An unexpected error occurred during text generation.",
